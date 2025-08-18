@@ -5222,6 +5222,9 @@ components:
         heimatort:
           description: Required nur wenn Land = CH
           type: string
+        heimatPLZ:
+          description: Required nur wenn Land = CH
+          type: string
         niederlassungsstatus:
           $ref: '#/components/schemas/Niederlassungsstatus'
           description: Required wenn Nationalitaet != CH
@@ -5831,6 +5834,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - bildungskategorie
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5844,6 +5848,8 @@ components:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
           type: boolean
+        aktiv:
+          type: boolean
     AusbildungsstaetteSlim:
       type: object
       required:
@@ -5851,6 +5857,7 @@ components:
         - nameDe
         - nameFr
         - ausbildungsgaenge
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5862,6 +5869,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungsgangData'
+        aktiv:
+          type: boolean
     AbschlussSlim:
       type: object
       required:

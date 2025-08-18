@@ -35,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_ID,
   AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_NAME_DE,
   AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_NAME_FR,
-  AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSGAENGE
+  AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSGAENGE,
+  AusbildungsstaetteSlimDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("AusbildungsstaetteSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -51,6 +52,9 @@ public class AusbildungsstaetteSlimDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNGSGAENGE = "ausbildungsgaenge";
   private List<AusbildungsgangDataDtoSpec> ausbildungsgaenge;
+
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public AusbildungsstaetteSlimDtoSpec() {
   }
@@ -166,6 +170,32 @@ public class AusbildungsstaetteSlimDtoSpec {
     this.ausbildungsgaenge = ausbildungsgaenge;
   }
 
+
+  public AusbildungsstaetteSlimDtoSpec aktiv(Boolean aktiv) {
+    
+    this.aktiv = aktiv;
+    return this;
+  }
+
+   /**
+   * Get aktiv
+   * @return aktiv
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -178,12 +208,13 @@ public class AusbildungsstaetteSlimDtoSpec {
     return Objects.equals(this.id, ausbildungsstaetteSlim.id) &&
         Objects.equals(this.nameDe, ausbildungsstaetteSlim.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaetteSlim.nameFr) &&
-        Objects.equals(this.ausbildungsgaenge, ausbildungsstaetteSlim.ausbildungsgaenge);
+        Objects.equals(this.ausbildungsgaenge, ausbildungsstaetteSlim.ausbildungsgaenge) &&
+        Objects.equals(this.aktiv, ausbildungsstaetteSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nameDe, nameFr, ausbildungsgaenge);
+    return Objects.hash(id, nameDe, nameFr, ausbildungsgaenge, aktiv);
   }
 
   @Override
@@ -194,6 +225,7 @@ public class AusbildungsstaetteSlimDtoSpec {
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("    ausbildungsgaenge: ").append(toIndentedString(ausbildungsgaenge)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

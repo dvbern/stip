@@ -48,7 +48,6 @@ public abstract class AusbildungsstaetteMapper {
 
     abstract AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
 
-    @Mapping(source = "aktiveAusbildungsgaenge", target = "ausbildungsgaenge")
     abstract AusbildungsstaetteSlimDto toSlimDto(Ausbildungsstaette ausbildungsstaette);
 
     abstract void partialUpdate(

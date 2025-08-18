@@ -47,6 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_NATIONALITAET_ID,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_HEIMATORT,
+  PersonInAusbildungDtoSpec.JSON_PROPERTY_HEIMAT_P_L_Z,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_NIEDERLASSUNGSSTATUS,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_EINREISEDATUM,
   PersonInAusbildungDtoSpec.JSON_PROPERTY_ZIVILSTAND,
@@ -93,6 +94,9 @@ public class PersonInAusbildungDtoSpec {
 
   public static final String JSON_PROPERTY_HEIMATORT = "heimatort";
   private String heimatort;
+
+  public static final String JSON_PROPERTY_HEIMAT_P_L_Z = "heimatPLZ";
+  private String heimatPLZ;
 
   public static final String JSON_PROPERTY_NIEDERLASSUNGSSTATUS = "niederlassungsstatus";
   private NiederlassungsstatusDtoSpec niederlassungsstatus;
@@ -393,6 +397,32 @@ public class PersonInAusbildungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setHeimatort(String heimatort) {
     this.heimatort = heimatort;
+  }
+
+
+  public PersonInAusbildungDtoSpec heimatPLZ(String heimatPLZ) {
+    
+    this.heimatPLZ = heimatPLZ;
+    return this;
+  }
+
+   /**
+   * Required nur wenn Land &#x3D; CH
+   * @return heimatPLZ
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HEIMAT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getHeimatPLZ() {
+    return heimatPLZ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HEIMAT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHeimatPLZ(String heimatPLZ) {
+    this.heimatPLZ = heimatPLZ;
   }
 
 
@@ -752,6 +782,7 @@ public class PersonInAusbildungDtoSpec {
         Objects.equals(this.geburtsdatum, personInAusbildung.geburtsdatum) &&
         Objects.equals(this.nationalitaetId, personInAusbildung.nationalitaetId) &&
         Objects.equals(this.heimatort, personInAusbildung.heimatort) &&
+        Objects.equals(this.heimatPLZ, personInAusbildung.heimatPLZ) &&
         Objects.equals(this.niederlassungsstatus, personInAusbildung.niederlassungsstatus) &&
         Objects.equals(this.einreisedatum, personInAusbildung.einreisedatum) &&
         Objects.equals(this.zivilstand, personInAusbildung.zivilstand) &&
@@ -769,7 +800,7 @@ public class PersonInAusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigeKESB);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, heimatort, heimatPLZ, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigeKESB);
   }
 
   @Override
@@ -786,6 +817,7 @@ public class PersonInAusbildungDtoSpec {
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    nationalitaetId: ").append(toIndentedString(nationalitaetId)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");
+    sb.append("    heimatPLZ: ").append(toIndentedString(heimatPLZ)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");
     sb.append("    einreisedatum: ").append(toIndentedString(einreisedatum)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");

@@ -39,6 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungBaseDtoSpec.JSON_PROPERTY_PENSUM,
   AusbildungBaseDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE,
   AusbildungBaseDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
+  AusbildungBaseDtoSpec.JSON_PROPERTY_AUSBILDUNGS_P_L_Z,
   AusbildungBaseDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
   AusbildungBaseDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND
 })
@@ -74,6 +75,9 @@ public class AusbildungBaseDtoSpec {
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG = "alternativeAusbildungsgang";
   private String alternativeAusbildungsgang;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGS_P_L_Z = "ausbildungsPLZ";
+  private String ausbildungsPLZ;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
   private String ausbildungsort;
@@ -344,6 +348,32 @@ public class AusbildungBaseDtoSpec {
   }
 
 
+  public AusbildungBaseDtoSpec ausbildungsPLZ(String ausbildungsPLZ) {
+    
+    this.ausbildungsPLZ = ausbildungsPLZ;
+    return this;
+  }
+
+   /**
+   * Not required if isAusbildungAusland &#x3D; true
+   * @return ausbildungsPLZ
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGS_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAusbildungsPLZ() {
+    return ausbildungsPLZ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGS_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsPLZ(String ausbildungsPLZ) {
+    this.ausbildungsPLZ = ausbildungsPLZ;
+  }
+
+
   public AusbildungBaseDtoSpec ausbildungsort(String ausbildungsort) {
     
     this.ausbildungsort = ausbildungsort;
@@ -414,13 +444,14 @@ public class AusbildungBaseDtoSpec {
         Objects.equals(this.pensum, ausbildungBase.pensum) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungBase.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildungBase.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsPLZ, ausbildungBase.ausbildungsPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungBase.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungBase.isAusbildungAusland);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsPLZ, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -437,6 +468,7 @@ public class AusbildungBaseDtoSpec {
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
+    sb.append("    ausbildungsPLZ: ").append(toIndentedString(ausbildungsPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("}");

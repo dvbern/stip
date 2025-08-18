@@ -86,7 +86,8 @@ public class AusbildungsstaetteService {
 
     @Transactional
     public List<AusbildungsstaetteSlimDto> getAllAusbildungsstaetteForAuswahl() {
-        return ausbildungsstaetteRepository.findAllAktiv()
+        return ausbildungsstaetteRepository.findAll()
+            .stream()
             .map(ausbildungsstaetteMapper::toSlimDto)
             .toList();
     }

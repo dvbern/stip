@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.ausbildung.repo;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsgang;
@@ -48,10 +47,5 @@ public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang
             )
             .stream()
             .findFirst();
-    }
-
-    public Stream<Ausbildungsgang> findAllAktive() {
-        final var ausbildungsgang = QAusbildungsgang.ausbildungsgang;
-        return new JPAQueryFactory(em).selectFrom(ausbildungsgang).where(ausbildungsgang.aktiv).stream();
     }
 }
