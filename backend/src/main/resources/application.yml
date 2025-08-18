@@ -141,6 +141,8 @@ quarkus:
       queries-slower-than-ms: 20
       jdbc-warnings: true
     multitenant: 'DISCRIMINATOR'
+    jdbc:
+      timezone: 'Europe/Zurich'
   default-locale: 'de'
   security:
     jaxrs:
