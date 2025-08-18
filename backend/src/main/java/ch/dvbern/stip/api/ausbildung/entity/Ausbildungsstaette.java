@@ -29,7 +29,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -73,9 +72,4 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
     private List<Ausbildungsgang> ausbildungsgaenge = new ArrayList<>();
-
-    @Transient
-    public List<Ausbildungsgang> getAktiveAusbildungsgaenge() {
-        return ausbildungsgaenge.stream().filter(Ausbildungsgang::isAktiv).toList();
-    }
 }

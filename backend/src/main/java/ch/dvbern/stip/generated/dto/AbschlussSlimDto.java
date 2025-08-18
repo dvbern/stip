@@ -24,6 +24,8 @@ public class AbschlussSlimDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
+  private @Valid Boolean aktiv;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
 
   /**
    **/
@@ -101,6 +103,43 @@ public class AbschlussSlimDto  implements Serializable {
     this.ausbildungskategorie = ausbildungskategorie;
   }
 
+  /**
+   **/
+  public AbschlussSlimDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+    return this;
+  }
+
+  
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
+  /**
+   **/
+  public AbschlussSlimDto zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+    return this;
+  }
+
+  
+  @JsonProperty("zusatzfrage")
+  public ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage getZusatzfrage() {
+    return zusatzfrage;
+  }
+
+  @JsonProperty("zusatzfrage")
+  public void setZusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+    this.zusatzfrage = zusatzfrage;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -114,12 +153,14 @@ public class AbschlussSlimDto  implements Serializable {
     return Objects.equals(this.id, abschlussSlim.id) &&
         Objects.equals(this.bezeichnungDe, abschlussSlim.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, abschlussSlim.bezeichnungFr) &&
-        Objects.equals(this.ausbildungskategorie, abschlussSlim.ausbildungskategorie);
+        Objects.equals(this.ausbildungskategorie, abschlussSlim.ausbildungskategorie) &&
+        Objects.equals(this.aktiv, abschlussSlim.aktiv) &&
+        Objects.equals(this.zusatzfrage, abschlussSlim.zusatzfrage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, aktiv, zusatzfrage);
   }
 
   @Override
@@ -131,6 +172,8 @@ public class AbschlussSlimDto  implements Serializable {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
+    sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -30,6 +30,7 @@
                   dvMaxLength
                   (keyup)="filterChangedSig.set(filter.value)"
                   (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()"
                   [attr.aria-label]="
                     'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | translate
                   "

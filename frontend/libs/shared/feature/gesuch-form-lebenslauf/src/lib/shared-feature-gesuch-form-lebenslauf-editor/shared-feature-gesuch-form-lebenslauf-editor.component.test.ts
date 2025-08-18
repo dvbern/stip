@@ -5,13 +5,15 @@ import { render, screen } from '@testing-library/angular';
 import { default as userEvent } from '@testing-library/user-event';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { RolesMap } from '@dv/shared/model/benutzer';
-import { LebenslaufAusbildungsArt } from '@dv/shared/model/gesuch';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
+  TEST_ABSCHLUESSE,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
+  provideSharedPatternVitestTestAusbildungstaetten,
 } from '@dv/shared/pattern/vitest-test-setup';
 import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
@@ -43,24 +45,22 @@ async function setup(type: SharedModelLebenslauf['type']) {
           configs: mockConfigsState(),
         },
       }),
+      provideSharedPatternVitestTestAusbildungstaetten(),
+      AusbildungsstaetteStore,
     ],
   });
 }
 
 describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
   describe('new AUSBILDUNG', () => {
-    it('should initially display bildungsart, ausbildungAbgeschlossen, start and ende', async () => {
+    it('should initially display abschluss, ausbildungAbgeschlossen, start and ende', async () => {
       await setup('AUSBILDUNG');
 
       expect(
-        screen.queryByTestId('lebenslauf-editor-ausbildungsart-select'),
+        screen.queryByTestId('lebenslauf-editor-abschluss-select'),
       ).toBeInTheDocument();
       expect(
-        screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
-      ).toBeNull();
-      expect(screen.queryByTestId('lebenslauf-editor-fachrichtung')).toBeNull();
-      expect(
-        screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
+        screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeNull();
       expect(screen.queryByTestId('lebenslauf-editor-von')).toBeInTheDocument();
       expect(screen.queryByTestId('lebenslauf-editor-bis')).toBeInTheDocument();
@@ -75,296 +75,95 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       ).toBeNull();
     });
 
-    it('should display berufsbezeichnung if one of {EIDGENOESSISCHES_BERUFSATTEST, EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS} is selected', async () => {
-      const { queryByTestId, detectChanges } = await setup('AUSBILDUNG');
+    it('should display berufsbezeichnung/fachrichtung if zusatfrage is set', async () => {
+      const renderResult = await setup('AUSBILDUNG');
+      const { queryByTestId, detectChanges } = renderResult;
 
-      const bildungsartenWhichNeedBerufsbezeichnung = [
-        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
-        LebenslaufAusbildungsArt.EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS,
-      ];
-      const bildsartenWhichDontNeedBerufsbezeichnung = Object.values(
-        LebenslaufAusbildungsArt,
-      ).filter(
-        (ausbildungsart) =>
-          !bildungsartenWhichNeedBerufsbezeichnung.includes(ausbildungsart),
+      await clickMatSelectOption(
+        'lebenslauf-editor-abschluss-select',
+        TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.bezeichnungDe,
       );
 
-      for (const bildungsart of bildungsartenWhichNeedBerufsbezeichnung) {
-        await clickMatSelectOption(
-          'lebenslauf-editor-ausbildungsart-select',
-          bildungsart,
-        );
+      detectChanges();
 
-        detectChanges();
+      expect(
+        queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
+      ).toBeInTheDocument();
 
-        expect(
-          queryByTestId('lebenslauf-editor-berufsbezeichnung'),
-        ).toBeInTheDocument();
-      }
+      await clickMatSelectOption(
+        'lebenslauf-editor-abschluss-select',
+        TEST_ABSCHLUESSE.abschlussFachrichtung1.bezeichnungDe,
+      );
 
-      for (const bildungsart of bildsartenWhichDontNeedBerufsbezeichnung) {
-        await clickMatSelectOption(
-          'lebenslauf-editor-ausbildungsart-select',
-          bildungsart,
-        );
+      detectChanges();
 
-        detectChanges();
-
-        expect(queryByTestId('lebenslauf-editor-berufsbezeichnung')).toBeNull();
-      }
+      expect(
+        queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
+      ).toBeInTheDocument();
     });
 
-    it('should reset berufsbezeichnung if field is hidden', async () => {
-      const { detectChanges } = await setup('AUSBILDUNG');
+    it('should reset fachrichtung/berufsbezeichnung if field is hidden', async () => {
+      const renderResult = await setup('AUSBILDUNG');
+      const { detectChanges } = renderResult;
+
       const user = userEvent.setup();
       const value = 'Mein Beruf';
 
       expect(
-        screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeNull();
 
       detectChanges();
 
       await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
+        'lebenslauf-editor-abschluss-select',
+        TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.bezeichnungDe,
       );
 
       detectChanges();
 
       expect(
-        screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeInTheDocument();
 
       detectChanges();
 
       await user.type(
-        screen.getByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.getByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
         value,
       );
 
       detectChanges();
 
       expect(
-        screen.getByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.getByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toHaveValue(value);
 
       await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.FACHMATURITAET,
+        'lebenslauf-editor-abschluss-select',
+        TEST_ABSCHLUESSE.abschlussWithoutZusatzfrage1.bezeichnungDe,
       );
 
       detectChanges();
 
       expect(
-        screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeNull();
 
       await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.EIDGENOESSISCHES_BERUFSATTEST,
+        'lebenslauf-editor-abschluss-select',
+        TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.bezeichnungDe,
       );
 
       detectChanges();
 
       expect(
-        screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeInTheDocument();
 
       expect(
-        screen.getByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.getByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toHaveValue('');
-    });
-
-    it('should reset fachrichtung if field is hidden', async () => {
-      const { detectChanges } = await setup('AUSBILDUNG');
-
-      const value = 'Meine Fachrichtung';
-
-      expect(screen.queryByTestId('lebenslauf-editor-fachrichtung')).toBeNull();
-
-      await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
-      );
-
-      detectChanges();
-
-      expect(
-        screen.queryByTestId('lebenslauf-editor-fachrichtung'),
-      ).toBeInTheDocument();
-
-      await userEvent.type(
-        screen.getByTestId('lebenslauf-editor-fachrichtung'),
-        value,
-      );
-
-      detectChanges();
-
-      expect(screen.getByTestId('lebenslauf-editor-fachrichtung')).toHaveValue(
-        value,
-      );
-
-      await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.FACHMATURITAET,
-      );
-
-      detectChanges();
-
-      expect(screen.queryByTestId('lebenslauf-editor-fachrichtung')).toBeNull();
-
-      await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
-      );
-
-      detectChanges();
-
-      expect(
-        screen.queryByTestId('lebenslauf-editor-fachrichtung'),
-      ).toBeInTheDocument();
-
-      expect(screen.getByTestId('lebenslauf-editor-fachrichtung')).toHaveValue(
-        '',
-      );
-    });
-
-    it('should reset titelDesAbschlusses if field is hidden', async () => {
-      const { detectChanges } = await setup('AUSBILDUNG');
-      const value = 'Mein Beruf';
-
-      expect(
-        screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-      ).toBeNull();
-
-      await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
-      );
-
-      detectChanges();
-
-      expect(
-        screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-      ).toBeInTheDocument();
-
-      await userEvent.type(
-        screen.getByTestId('lebenslauf-editor-titel-des-abschlusses'),
-        value,
-      );
-
-      detectChanges();
-
-      expect(
-        screen.getByTestId('lebenslauf-editor-titel-des-abschlusses'),
-      ).toHaveValue(value);
-
-      await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.FACHMATURITAET,
-      );
-
-      detectChanges();
-
-      expect(
-        screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-      ).toBeNull();
-
-      await clickMatSelectOption(
-        'lebenslauf-editor-ausbildungsart-select',
-        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
-      );
-
-      detectChanges();
-
-      expect(
-        screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-      ).toBeInTheDocument();
-
-      expect(
-        screen.getByTestId('lebenslauf-editor-titel-des-abschlusses'),
-      ).toHaveValue('');
-    });
-
-    it('should display fachrichtung if one of {BACHELOR_HOCHSCHULE_UNI, BACHELOR_FACHHOCHSCHULE, MASTER} is selected', async () => {
-      const { detectChanges } = await setup('AUSBILDUNG');
-      const bildungsartenWhichNeedFachrichtung = [
-        LebenslaufAusbildungsArt.BACHELOR_HOCHSCHULE_UNI,
-        LebenslaufAusbildungsArt.BACHELOR_FACHHOCHSCHULE,
-        LebenslaufAusbildungsArt.MASTER,
-      ];
-      const bildungsartenWhichDontNeedFachrichtung = Object.values(
-        LebenslaufAusbildungsArt,
-      ).filter(
-        (ausbildungsart) =>
-          !bildungsartenWhichNeedFachrichtung.includes(ausbildungsart),
-      );
-
-      for (const bildungsart of bildungsartenWhichDontNeedFachrichtung) {
-        await clickMatSelectOption(
-          'lebenslauf-editor-ausbildungsart-select',
-          bildungsart,
-        );
-
-        detectChanges();
-
-        expect(
-          screen.queryByTestId('lebenslauf-editor-fachrichtung'),
-        ).toBeNull();
-      }
-
-      for (const bildungsart of bildungsartenWhichNeedFachrichtung) {
-        await clickMatSelectOption(
-          'lebenslauf-editor-ausbildungsart-select',
-          bildungsart,
-        );
-
-        detectChanges();
-
-        expect(
-          screen.queryByTestId('lebenslauf-editor-fachrichtung'),
-        ).toBeInTheDocument();
-      }
-    });
-
-    it('should display titelDesAbschlusses if ANDERER_BILDUNGSABSCHLUSS is selected', async () => {
-      const { detectChanges } = await setup('AUSBILDUNG');
-      const bildungsartenWhichNeedTitelDesAbschlusses = [
-        LebenslaufAusbildungsArt.ANDERER_BILDUNGSABSCHLUSS,
-      ];
-      const bildungsartenWhichDontNeedTitelDesAbschlusses = Object.values(
-        LebenslaufAusbildungsArt,
-      ).filter(
-        (ausbildungsart) =>
-          !bildungsartenWhichNeedTitelDesAbschlusses.includes(ausbildungsart),
-      );
-
-      for (const bildungsart of bildungsartenWhichDontNeedTitelDesAbschlusses) {
-        await clickMatSelectOption(
-          'lebenslauf-editor-ausbildungsart-select',
-          bildungsart,
-        );
-
-        detectChanges();
-
-        expect(
-          screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-        ).toBeNull();
-      }
-
-      for (const bildungsart of bildungsartenWhichNeedTitelDesAbschlusses) {
-        await clickMatSelectOption(
-          'lebenslauf-editor-ausbildungsart-select',
-          bildungsart,
-        );
-
-        detectChanges();
-
-        expect(
-          screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),
-        ).toBeInTheDocument();
-      }
     });
   });
 
@@ -373,11 +172,10 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       await setup('TAETIGKEIT');
 
       expect(
-        screen.queryByTestId('lebenslauf-editor-ausbildungsart-select'),
+        screen.queryByTestId('lebenslauf-editor-abschluss-select'),
       ).toBeNull();
-      expect(screen.queryByTestId('lebenslauf-editor-fachrichtung')).toBeNull();
       expect(
-        screen.queryByTestId('lebenslauf-editor-berufsbezeichnung'),
+        screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeNull();
       expect(
         screen.queryByTestId('lebenslauf-editor-titel-des-abschlusses'),

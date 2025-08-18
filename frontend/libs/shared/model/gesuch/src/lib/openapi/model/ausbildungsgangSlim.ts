@@ -9,16 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Bildungskategorie } from './bildungskategorie';
-import { AbschlussZusatzfrage } from './abschlussZusatzfrage';
 
 export interface AusbildungsgangSlim { 
     id: string;
-    bezeichnungDe: string;
-    bezeichnungFr: string;
-    bildungskategorie: Bildungskategorie;
-    zusatzfrage?: AbschlussZusatzfrage;
+    abschlussId: string;
+    ausbildungsstaetteId: string;
 }
-
-
 

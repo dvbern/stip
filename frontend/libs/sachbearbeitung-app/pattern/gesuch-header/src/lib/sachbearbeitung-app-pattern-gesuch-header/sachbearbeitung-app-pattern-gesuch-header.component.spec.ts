@@ -18,7 +18,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   let fixture: ComponentFixture<SachbearbeitungAppPatternGesuchHeaderComponent>;
   const setStatus$ = {
     SET_TO_BEARBEITUNG: vitest.fn(),
-    EINGEREICHT: vitest.fn(),
+    ANSPRUCH_PRUEFEN: vitest.fn(),
     BEARBEITUNG_ABSCHLIESSEN: vitest.fn(),
     BEREIT_FUER_BEARBEITUNG: vitest.fn(),
     NEGATIVE_VERFUEGUNG_ERSTELLEN: vitest.fn(),
@@ -47,7 +47,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
         {
           provide: MatDialog,
           useValue: {
-            open: () => ({ afterClosed: () => of({}) }),
+            open: () => ({ afterClosed: () => of({ type: 'grund' }) }),
           },
         },
       ],

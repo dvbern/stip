@@ -18,10 +18,11 @@
 package ch.dvbern.stip.api.lebenslauf.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.annotation.Nullable;
@@ -29,8 +30,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -41,9 +47,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 
 @Audited
 @LebenslaufItemArtRequiredFieldsConstraint
-@LebenslaufItemAusbildungBerufsbezeichnungConstraint
-@LebenslaufItemAusbildungFachrichtungConstraint
-@LebenslaufItemAusbildungTitelDesAbschlussesConstraint
+@LebenslaufItemAusbildungFachrichtungBerufsbezeichnungConstraint
 @Entity
 @Table(
     name = "lebenslauf_item",
@@ -52,9 +56,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Getter
 @Setter
 public class LebenslaufItem extends AbstractMandantEntity {
-    @Column(name = "bildungsart")
-    @Enumerated(EnumType.STRING)
-    private LebenslaufAusbildungsArt bildungsart;
+    @Nullable
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "abschluss_id", nullable = true, foreignKey = @ForeignKey(name = "FK_lebenslauf_item_abschluss_id")
+    )
+    private Abschluss abschluss;
 
     @NotNull
     @Column(name = "von", nullable = false)
@@ -75,18 +82,8 @@ public class LebenslaufItem extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "berufsbezeichnung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String berufsbezeichnung;
-
-    @Nullable
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "fachrichtung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String fachrichtung;
-
-    @Nullable
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "titel_des_abschlusses", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String titelDesAbschlusses;
+    @Column(name = "fachrichtung_berufsbezeichnung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String fachrichtungBerufsbezeichnung;
 
     @Column(name = "ausbildung_abgeschlossen", nullable = false)
     private boolean ausbildungAbgeschlossen = false;
@@ -99,4 +96,9 @@ public class LebenslaufItem extends AbstractMandantEntity {
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;
+
+    @Transient
+    public boolean isAusbildung() {
+        return Objects.nonNull(abschluss);
+    }
 }

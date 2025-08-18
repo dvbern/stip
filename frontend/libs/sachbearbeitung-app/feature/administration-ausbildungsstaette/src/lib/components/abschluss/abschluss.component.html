@@ -9,6 +9,7 @@
       data-testid="cockpit-table"
       mat-table
       matSort
+      class="tw-w-full !tw-table-fixed"
     >
       <caption class="cdk-visually-hidden">
         {{
@@ -30,6 +31,7 @@
                 [formControl]="filterForm.controls.abschluss"
                 data-testid="cockpit-filter-fall"
                 (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()"
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
@@ -88,6 +90,7 @@
           mat-cell
           *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
           class="tw-w-32 tw-whitespace-nowrap"
+          [dvTruncateTooltip]="'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | translate"
         >
           {{ 'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | translate }}
         </td>
@@ -130,6 +133,7 @@
           mat-cell
           *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
           class="tw-w-32 tw-whitespace-nowrap"
+          [dvTruncateTooltip]="'shared.bildungsrichtung.' + abschluss.bildungsrichtung | translate"
         >
           {{ 'shared.bildungsrichtung.' + abschluss.bildungsrichtung | translate }}
         </td>
@@ -166,11 +170,7 @@
             </mat-select>
           </mat-form-field>
         </th>
-        <td
-          mat-cell
-          *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
-          class="tw-w-48 tw-whitespace-nowrap"
-        >
+        <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-whitespace-nowrap">
           @let key = abschluss.aktiv ? 'ACTIVE' : 'INACTIVE';
           {{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.status.' + key | translate
@@ -180,7 +180,7 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-11 tw-whitespace-nowrap !tw-text-right">
+        <th mat-header-cell *matHeaderCellDef class="tw-w-28 tw-whitespace-nowrap !tw-text-right">
           <button
             type="button"
             class="btn btn-outline-primary btn-sm"
@@ -192,13 +192,20 @@
         </th>
         <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw-w-11">
           <div class="tw-flex tw-justify-end">
+            <button
+              type="button"
+              class="dv-icon-button dv-icon-button-md tw-text-gray-500"
+              (click)="editAbschluss(abschluss); $event.stopPropagation()"
+            >
+              <span class="material-symbols-rounded !tw-text-xl/none">edit</span>
+            </button>
             @if (abschluss.canArchive) {
               <button
                 type="button"
                 class="dv-icon-button dv-icon-button-md tw-text-gray-500"
                 (click)="archive(abschluss); $event.stopPropagation()"
               >
-                <span class="material-symbols-rounded !tw-text-2xl/none">archive</span>
+                <span class="material-symbols-rounded !tw-text-2xl/none">cancel</span>
               </button>
             }
             <button

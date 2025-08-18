@@ -96,7 +96,8 @@ public class GesuchsperiodeSeeding extends Seeder {
                         LocalDate.of(yearToSeed, 12, 31),
                         LocalDate.of(yearToSeed, 1, 15),
                         LocalDate.of(yearToSeed, 6, 30),
-                        LocalDate.of(yearToSeed, 9, 30)
+                        LocalDate.of(yearToSeed, 9, 30),
+                        LocalDate.of(yearToSeed, 12, 31)
                     );
                     case FALL -> getPeriodeForSeeding(
                         "Herbst",
@@ -107,7 +108,8 @@ public class GesuchsperiodeSeeding extends Seeder {
                         LocalDate.of(yearToSeed + 1, 6, 30),
                         LocalDate.of(yearToSeed, 7, 15),
                         LocalDate.of(yearToSeed, 12, 31),
-                        LocalDate.of(yearToSeed + 1, 3, 31)
+                        LocalDate.of(yearToSeed + 1, 3, 31),
+                        LocalDate.of(yearToSeed, 12, 31)
                     );
                 });
             }
@@ -141,7 +143,8 @@ public class GesuchsperiodeSeeding extends Seeder {
         final LocalDate to,
         final LocalDate aufschaltterminStart,
         final LocalDate einreichefristNormal,
-        final LocalDate einreichefristReduziert
+        final LocalDate einreichefristReduziert,
+        final LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung
     ) {
         String jahrAsString = String.valueOf(jahr.getTechnischesJahr());
 
@@ -174,9 +177,9 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setPersonen6(31668)
             .setPersonen7(34116)
             .setProWeiterePerson(2448)
-            .setKinder0018(1400)
-            .setJugendlicheErwachsene1925(4600)
-            .setErwachsene2699(5400)
+            .setKinder0017(1400)
+            .setJugendlicheErwachsene1824(4600)
+            .setErwachsene2599(5400)
             .setWohnkostenFam1pers(13536)
             .setWohnkostenFam2pers(16260)
             .setWohnkostenFam3pers(16260)
@@ -197,7 +200,8 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setReduzierungDesGrundbedarfs(2838)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1)
-            .setFristNachreichenDokumente(30);
+            .setFristNachreichenDokumente(30)
+            .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(stichtagVolljaehrigkeitMedizinischeGrundversorgung);
     }
 
     private enum Season {

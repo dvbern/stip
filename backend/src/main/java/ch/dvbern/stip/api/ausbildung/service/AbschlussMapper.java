@@ -23,9 +23,11 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDto;
 import jakarta.ws.rs.BadRequestException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
@@ -51,4 +53,9 @@ public abstract class AbschlussMapper {
     }
 
     abstract AbschlussSlimDto toSlimDto(Abschluss abschluss);
+
+    abstract void partialUpdate(
+        RenameAbschlussDto renameAbschlussDto,
+        @MappingTarget Abschluss abschluss
+    );
 }

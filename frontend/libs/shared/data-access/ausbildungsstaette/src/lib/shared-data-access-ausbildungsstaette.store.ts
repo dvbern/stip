@@ -4,6 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
+  AbschlussSlim,
   AusbildungsstaetteService,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
@@ -16,10 +17,12 @@ import {
 
 type AusbildungsstaetteState = {
   ausbildungsstaetten: CachedRemoteData<AusbildungsstaetteSlim[]>;
+  abschluesse: CachedRemoteData<AbschlussSlim[]>;
 };
 
 const initialState: AusbildungsstaetteState = {
   ausbildungsstaetten: initial(),
+  abschluesse: initial(),
 };
 
 @Injectable()
@@ -30,7 +33,28 @@ export class AusbildungsstaetteStore extends signalStore(
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
   ausbildungsstaetteViewSig = computed(
-    () => this.ausbildungsstaetten.data() ?? [],
+    () =>
+      this.ausbildungsstaetten.data()?.map((ausbildungsstaette) => ({
+        ...ausbildungsstaette,
+        testId: ausbildungsstaette.nameDe,
+        displayValueDe: ausbildungsstaette.nameDe,
+        displayValueFr: ausbildungsstaette.nameFr,
+      })) ?? [],
+  );
+  ausbildungsstaettenWithAusbildungsgaengeViewSig = computed(() =>
+    this.ausbildungsstaetteViewSig().filter(
+      (a) => a.ausbildungsgaenge.length > 0,
+    ),
+  );
+
+  abschluesseViewSig = computed(
+    () =>
+      this.abschluesse.data()?.map((abschluss) => ({
+        ...abschluss,
+        testId: abschluss.bezeichnungDe,
+        displayValueDe: abschluss.bezeichnungDe,
+        displayValueFr: abschluss.bezeichnungFr,
+      })) ?? [],
   );
 
   loadAusbildungsstaetten$ = rxMethod<void>(
@@ -46,6 +70,25 @@ export class AusbildungsstaetteStore extends signalStore(
           .pipe(
             handleApiResponse((ausbildungsstaetten) =>
               patchState(this, { ausbildungsstaetten }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  loadAbschluesse$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          abschluesse: cachedPending(state.abschluesse),
+        }));
+      }),
+      switchMap(() =>
+        this.ausbildungsstaetteService
+          .getAllAbschluessForAuswahl$()
+          .pipe(
+            handleApiResponse((abschluesse) =>
+              patchState(this, { abschluesse }),
             ),
           ),
       ),

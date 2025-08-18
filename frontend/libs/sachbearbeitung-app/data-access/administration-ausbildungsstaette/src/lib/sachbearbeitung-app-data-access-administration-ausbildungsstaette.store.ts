@@ -3,10 +3,11 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Observable, map, pipe, switchMap, tap } from 'rxjs';
 
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Abschluss,
-  AbschlussSlim,
   Ausbildungsgang,
+  AusbildungsgangSlim,
   Ausbildungsstaette,
   AusbildungsstaetteService,
   AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams,
@@ -15,6 +16,8 @@ import {
   AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams,
   AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams,
   AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams,
+  AusbildungsstaetteServiceRenameAbschlussRequestParams,
+  AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams,
   PaginatedAbschluss,
   PaginatedAusbildungsgang,
   PaginatedAusbildungsstaette,
@@ -31,7 +34,8 @@ type EntityTypes = 'ausbildungsgang' | 'abschluss' | 'ausbildungsstaette';
 
 type AusbildungsstaetteState = {
   lastCreate: RemoteData<unknown>;
-  availableAbschluesse: CachedRemoteData<AbschlussSlim[]>;
+  lastEdit: RemoteData<unknown>;
+  allAusbildungsgaenge: CachedRemoteData<AusbildungsgangSlim[]>;
   ausbildungsgaenge: CachedRemoteData<PaginatedAusbildungsgang>;
   ausbildungsstaetten: CachedRemoteData<PaginatedAusbildungsstaette>;
   abschluesse: CachedRemoteData<PaginatedAbschluss>;
@@ -39,7 +43,8 @@ type AusbildungsstaetteState = {
 
 const initialState: AusbildungsstaetteState = {
   lastCreate: initial(),
-  availableAbschluesse: initial(),
+  lastEdit: initial(),
+  allAusbildungsgaenge: initial(),
   ausbildungsgaenge: initial(),
   ausbildungsstaetten: initial(),
   abschluesse: initial(),
@@ -50,6 +55,7 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
+  private globalNotificationStore = inject(GlobalNotificationStore);
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
   ausbildungsgaengeViewSig = computed(() => {
@@ -68,19 +74,19 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
     }));
   });
 
-  loadAvailableAbschluesse$ = rxMethod<void>(
+  loadAllAusbildungsgaenge$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          availableAbschluesse: cachedPending(state.availableAbschluesse),
+          allAusbildungsgaenge: cachedPending(state.allAusbildungsgaenge),
         }));
       }),
       switchMap(() =>
         this.ausbildungsstaetteService
-          .getAllAbschluessForAuswahl$()
+          .getAllAusbildungsgaengeForAuswahl$()
           .pipe(
-            handleApiResponse((availableAbschluesse) =>
-              patchState(this, { availableAbschluesse }),
+            handleApiResponse((allAusbildungsgaenge) =>
+              patchState(this, { allAusbildungsgaenge }),
             ),
           ),
       ),
@@ -167,7 +173,44 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
               patchState(this, { lastCreate: ausbildungsgang });
             },
             {
-              onSuccess,
+              onSuccess: (value) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.success',
+                });
+                onSuccess?.(value);
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+
+  editAbschluss$ = rxMethod<{
+    values: AusbildungsstaetteServiceRenameAbschlussRequestParams;
+    onSuccess?: (abschluss: Abschluss) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          ausbildungsgaenge: cachedPending(state.ausbildungsgaenge),
+        }));
+      }),
+      switchMap(({ values, onSuccess }) =>
+        this.ausbildungsstaetteService.renameAbschluss$(values).pipe(
+          handleApiResponse(
+            (abschluss) => {
+              patchState(this, { lastEdit: abschluss });
+            },
+            {
+              onSuccess: (value) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.editDialog.success',
+                });
+                onSuccess?.(value);
+              },
             },
           ),
         ),
@@ -192,7 +235,44 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
               patchState(this, { lastCreate: ausbildungsstaette });
             },
             {
-              onSuccess,
+              onSuccess: (value) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.createDialog.success',
+                });
+                onSuccess?.(value);
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+
+  editAusbildungsstaette$ = rxMethod<{
+    values: AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams;
+    onSuccess?: (ausbildungsstaette: Ausbildungsstaette) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          ausbildungsgaenge: cachedPending(state.ausbildungsgaenge),
+        }));
+      }),
+      switchMap(({ values, onSuccess }) =>
+        this.ausbildungsstaetteService.renameAusbildungsstaette$(values).pipe(
+          handleApiResponse(
+            (ausbildungsstaette) => {
+              patchState(this, { lastEdit: ausbildungsstaette });
+            },
+            {
+              onSuccess: (value) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.editDialog.success',
+                });
+                onSuccess?.(value);
+              },
             },
           ),
         ),
@@ -219,7 +299,13 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
                 patchState(this, { lastCreate: abschluss });
               },
               {
-                onSuccess,
+                onSuccess: (value) => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.createDialog.success',
+                  });
+                  onSuccess?.(value);
+                },
               },
             ),
           ),
@@ -265,7 +351,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
 
         return servicesCalls$[type]().pipe(
           handleApiResponse(() => undefined, {
-            onSuccess,
+            onSuccess: () => {
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey: `sachbearbeitung-app.feature.administration.ausbildungsstaette.${type}.archiveDialog.success`,
+              });
+              onSuccess();
+            },
           }),
         );
       }),

@@ -17,21 +17,28 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -44,8 +51,18 @@ public class AusbildungsgangService {
     @Transactional
     public AusbildungsgangDto createAusbildungsgang(final AusbildungsgangCreateDto ausbildungsgangCreateDto) {
         final var ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
+        validateAusbildungsgangUniqueness(ausbildungsgang);
+
         ausbildungsgangRepository.persist(ausbildungsgang);
         return ausbildungsgangMapper.toDto(ausbildungsgang);
+    }
+
+    @Transactional
+    public List<AusbildungsgangSlimDto> getAllAusbildungsgangForAuswahl() {
+        return ausbildungsgangRepository.findAll()
+            .stream()
+            .map(ausbildungsgangMapper::toSlimDto)
+            .toList();
     }
 
     public PaginatedAusbildungsgangDto getAllAusbildungsgangForUebersicht(
@@ -116,4 +133,20 @@ public class AusbildungsgangService {
         return ausbildungsgangMapper.toDto(ausbildungsgang);
     }
 
+    private void validateAusbildungsgangUniqueness(final Ausbildungsgang ausbildungsgang) {
+        final var duplicate = ausbildungsgangRepository.findByAusbildungsstaetteAndAbschluss(
+            ausbildungsgang.getAusbildungsstaette().getId(),
+            ausbildungsgang.getAbschluss().getId()
+        );
+
+        if (duplicate.isPresent()) {
+            throw new CustomValidationsException(
+                "The combination of Ausbildungsstaette and Abschluss must be unique",
+                new CustomConstraintViolation(
+                    VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE,
+                    ""
+                )
+            );
+        }
+    }
 }

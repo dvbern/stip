@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.util.Objects;
 
-import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -36,7 +35,7 @@ public class AusbildungBesuchtBMSValidationConstraintValidator
         }
         final var abschluss = ausbildung.getAusbildungsgang().getAbschluss();
 
-        if (abschluss.getZusatzfrage() == AbschlussZusatzfrage.BERUFSBEZEICHNUNG_BERUFSMATURITAET) {
+        if (abschluss.isAskForBerufsmaturitaet()) {
             // both values (true/false) are valid for BMS flag
             return true;
         }

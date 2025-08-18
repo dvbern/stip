@@ -6,7 +6,7 @@ import { MatTooltip } from '@angular/material/tooltip';
   standalone: true,
 })
 export class SharedUiTruncateTooltipDirective extends MatTooltip {
-  @Input() set dvTruncateTooltip(value: string | undefined) {
+  @Input() set dvTruncateTooltip(value: string | undefined | null) {
     this.message = value;
   }
 

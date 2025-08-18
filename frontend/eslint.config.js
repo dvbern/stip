@@ -102,6 +102,7 @@ module.exports = [
                 'type:dialog',
                 'type:ui',
                 'type:util',
+                'type:util-data-access',
                 'type:util-fn',
                 'type:model',
                 'type:global',

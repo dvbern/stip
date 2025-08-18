@@ -36,16 +36,7 @@ import {
   AusbildungsstaetteSortColumn,
   SortOrder,
 } from '@dv/shared/model/gesuch';
-import {
-  SortAndPageInputs,
-  getSortAndPageInputs,
-  limitPageToNumberOfEntriesEffect,
-  makeEmptyStringPropertiesNull,
-  paginateList,
-  partiallyDebounceFormValueChangesSig,
-  restrictNumberParam,
-  sortList,
-} from '@dv/shared/model/table';
+import { SortAndPageInputs } from '@dv/shared/model/table';
 import {
   assertUnreachable,
   getCorrectPropertyName,
@@ -63,10 +54,21 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
+import {
+  getSortAndPageInputs,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  partiallyDebounceFormValueChangesSig,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/util/table';
 
 import { CreateAusbildungsstaetteDialogComponent } from './create-ausbildungsstaette-dialog.component';
+import { EditAusbildungsstaetteDialogComponent } from './edit-ausbildungsstaette-dialog.component';
 
 type AusbildungsstaetteFilterFormKeys =
   | 'ausbildungsstaette'
@@ -97,6 +99,7 @@ type DisplayColumns =
     MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
+    SharedUiTruncateTooltipDirective,
     SharedUiPadTextPipeComponent,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
@@ -139,7 +142,7 @@ export class AusbildungsstaetteComponent
 
   addAusbildungsstaetteIsLoadingSig = computed(() => {
     const abschluesseLoading = isPending(
-      this.administrationAusbildungsstaetteStore.availableAbschluesse(),
+      this.administrationAusbildungsstaetteStore.abschluesse(),
     );
     const ausbildungsstaettenLoading = isPending(
       this.ausbildungsstaetteStore.ausbildungsstaetten(),
@@ -271,16 +274,35 @@ export class AusbildungsstaetteComponent
   createAusbildungsstaette() {
     CreateAusbildungsstaetteDialogComponent.open(this.dialog, {
       ausbildungsstaetten:
-        this.ausbildungsstaetteStore.ausbildungsstaetten().data ?? [],
-      abschluesse:
-        this.administrationAusbildungsstaetteStore.availableAbschluesse()
-          .data ?? [],
+        this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
+      abschluesse: this.ausbildungsstaetteStore.abschluesseViewSig(),
     })
       .afterClosed()
       .subscribe((ausbildungsstaetteCreate) => {
         if (ausbildungsstaetteCreate) {
           this.administrationAusbildungsstaetteStore.createAusbildungsstaette$({
             values: { ausbildungsstaetteCreate },
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
+  editAusbildungsstaette(ausbildungsstaette: Ausbildungsstaette) {
+    EditAusbildungsstaetteDialogComponent.open(this.dialog, {
+      nameDe: ausbildungsstaette.nameDe,
+      nameFr: ausbildungsstaette.nameFr,
+    })
+      .afterClosed()
+      .subscribe((renameAusbildungsstaette) => {
+        if (renameAusbildungsstaette) {
+          this.administrationAusbildungsstaetteStore.editAusbildungsstaette$({
+            values: {
+              ausbildungsstaetteId: ausbildungsstaette.id,
+              renameAusbildungsstaette,
+            },
             onSuccess: () => {
               this.reloadAbschluesseSig.set({});
             },

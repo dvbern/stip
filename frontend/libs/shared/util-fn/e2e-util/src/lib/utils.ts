@@ -107,18 +107,6 @@ export const selectMatRadio = async (
   return locator.getByTestId(value).getByRole('radio').click();
 };
 
-export const fillLandAutoComplete = async (
-  autocomplete: Locator,
-  value: string,
-  page: Page,
-) => {
-  await autocomplete.fill(value);
-
-  const option = page.getByTestId(value);
-
-  await option.click();
-};
-
 export const expectFormToBeValid = async (form: Locator) => {
   return expect(form).toHaveClass(/ng-valid/);
 };
@@ -195,7 +183,7 @@ export const generateSVN = (seed: string) => {
 
 const getCheckDigit = (ssn: number[]) => {
   function isEven(x: number) {
-    return x % 2 == 0;
+    return x % 2 === 0;
   }
 
   let total = 0;
@@ -206,7 +194,7 @@ const getCheckDigit = (ssn: number[]) => {
   }
 
   let expectedCheckDigit = 0;
-  if (total % 10 != 0) {
+  if (total % 10 !== 0) {
     const roundTen = Math.floor(total / 10) * 10 + 10;
     expectedCheckDigit = roundTen - total;
   }

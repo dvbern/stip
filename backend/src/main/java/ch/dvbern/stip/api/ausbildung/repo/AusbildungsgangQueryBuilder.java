@@ -86,6 +86,7 @@ public class AusbildungsgangQueryBuilder {
         final var fieldSpecified = switch (column) {
             case ABSCHLUSS_BEZEICHNUNG_DE -> Q_AUSBILDUNGSGANG.abschluss.bezeichnungDe;
             case ABSCHLUSS_BEZEICHNUNG_FR -> Q_AUSBILDUNGSGANG.abschluss.bezeichnungFr;
+            case ABSCHLUSS_AUSBILDUNGSKATEGORIE -> Q_AUSBILDUNGSGANG.abschluss.ausbildungskategorie;
             case AUSBILDUNGSSTAETTE_NAME_DE -> Q_AUSBILDUNGSGANG.ausbildungsstaette.nameDe;
             case AUSBILDUNGSSTAETTE_NAME_FR -> Q_AUSBILDUNGSGANG.ausbildungsstaette.nameFr;
             case AKTIV -> Q_AUSBILDUNGSGANG.aktiv;

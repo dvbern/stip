@@ -22,8 +22,8 @@
           [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung' | translate"
         >
           @for (bildungsrichtung of bildungsrichtungen; track bildungsrichtung) {
-            <mat-option [value]="bildungsrichtung.value" [disabled]="bildungsrichtung.disabled">{{
-              'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.' + bildungsrichtung.value
+            <mat-option [value]="bildungsrichtung">{{
+              'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.' + bildungsrichtung
                 | translate
             }}</mat-option>
           }

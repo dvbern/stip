@@ -31,12 +31,14 @@ import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerUpdateDto;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +56,8 @@ public class SozialdienstBenutzerService {
     private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
     private final MailService mailService;
     private final KeycloakBenutzerService keycloakBenutzerService;
+    private final TenantService tenantService;
+    private final Event<SozialdienstBenutzerCreated> createdEvent;
 
     public Optional<SozialdienstBenutzer> getCurrentSozialdienstBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
@@ -133,6 +137,7 @@ public class SozialdienstBenutzerService {
             List.of(OidcConstants.ROLE_SOZIALDIENST_MITARBEITER)
         );
 
+        createdEvent.fire(new SozialdienstBenutzerCreated(keycloakId));
         mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
 
         sozialdienstBenutzer.setKeycloakId(keycloakId);

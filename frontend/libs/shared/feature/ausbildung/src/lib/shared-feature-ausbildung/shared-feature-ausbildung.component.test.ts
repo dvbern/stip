@@ -9,6 +9,7 @@ import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { Ausbildung, AusbildungService } from '@dv/shared/model/gesuch';
 import {
+  configureTestbedTranslateLanguage,
   provideSharedPatternVitestTestAusbildungstaetten,
   provideSharedPatternVitestTestSetup,
 } from '@dv/shared/pattern/vitest-test-setup';
@@ -21,6 +22,7 @@ import {
 
 import { SharedFeatureAusbildungComponent } from './shared-feature-ausbildung.component';
 
+const language = 'de';
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
     inputs: {
@@ -57,7 +59,7 @@ async function setup() {
               },
             },
           },
-          language: { language: 'de' },
+          language: { language },
           configs: {},
         },
       }),
@@ -70,6 +72,7 @@ async function setup() {
       AusbildungsstaetteStore,
       AusbildungStore,
     ],
+    configureTestBed: configureTestbedTranslateLanguage(language),
   });
 }
 
@@ -231,13 +234,13 @@ describe(SharedFeatureAusbildungComponent.name, () => {
 
       detectChanges();
 
-      expect(getByTestId('form-education-ausbildungsort')).not.toBeDisabled();
+      expect(getByTestId('form-education-ausbildungs-ort')).not.toBeDisabled();
 
       await checkMatCheckbox('form-education-isAusbildungAusland');
 
       detectChanges();
 
-      expect(getByTestId('form-education-ausbildungsort')).toBeDisabled();
+      expect(getByTestId('form-education-ausbildungs-ort')).toBeDisabled();
     });
   });
 });

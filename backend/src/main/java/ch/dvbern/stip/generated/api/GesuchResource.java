@@ -101,6 +101,12 @@ public interface GesuchResource {
     @Produces({ "application/json", "text/plain" })
     GesuchCreateResponseDto createGesuch(@Valid @NotNull GesuchCreateDto gesuchCreateDto);
 
+    @POST
+    @Path("/{gesuchTrancheId}/manuelle-verfuegung")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto createManuelleVerfuegung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@FormParam(value = "kommentar")  String kommentar);
+
     @DELETE
     @Path("/{gesuchId}")
     @Produces({ "text/plain" })
@@ -118,14 +124,19 @@ public interface GesuchResource {
     GesuchDto gesuchEinreichenGs(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/einreichen/jur")
-    @Produces({ "application/json", "text/plain" })
-    GesuchDto gesuchEinreichenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumente")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto gesuchFehlendeDokumenteUebermitteln(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/pruefen/jur")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto gesuchManuellPruefenJur(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/pruefen/sb")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto gesuchManuellPruefenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{gesuchTrancheId}/fehlendeDokumenteEinreichen")

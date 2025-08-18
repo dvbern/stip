@@ -216,6 +216,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienstMitarbeiterDashboard
       summary: Returns gesuche for dashboard filtered by gs
+  '/gesuch/{gesuchTrancheId}/pruefen/sb':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: Gesuch geprueft
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: gesuchManuellPruefenSB
+      summary: Das Gesuch manuell pruefen als Sachbearbeiter
   /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
     post:
       tags:
@@ -1768,6 +1795,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/SozialdienstBenutzer'
           description: Returns the created SozialdienstBenutzer
+        409:
+          description: A SozialdienstBenutzer with that identifier already exists in Keycloak
       operationId: createSozialdienstBenutzer
     patch:
       description: update an existing SozialdienstBenutzer
@@ -2458,7 +2487,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchEinreichenGs
       summary: Das Gesuch einreichen als Gesuchsteller
-  '/gesuch/{gesuchTrancheId}/einreichen/jur':
+  '/gesuch/{gesuchTrancheId}/pruefen/jur':
     patch:
       tags:
         - Gesuch
@@ -2474,7 +2503,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gesuch eingereicht
+          description: Gesuch geprueft
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2483,8 +2512,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchEinreichenJur
-      summary: Das Gesuch einreichen als Jurist
+      operationId: gesuchManuellPruefenJur
+      summary: Das Gesuch manuell pruefen als Jurist
   '/gesuch/{gesuchId}/verfuegungen':
     parameters:
       - name: gesuchId
@@ -2647,6 +2676,31 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchZurueckweisen
       summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchTrancheId}/manuelle-verfuegung':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManuelleVerfuegungCreate'
+      parameters:
+        - $ref: '#/components/parameters/gesuchTrancheId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch with changes in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createManuelleVerfuegung
   '/gesuch/{gesuchId}/statusprotokoll':
     parameters:
       - name: gesuchId
@@ -3716,11 +3770,7 @@ paths:
       summary: Returns all Abschluesse
   /abschluss/inaktiv/{abschlussId}:
     parameters:
-      - name: abschlussId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/abschlussId'
     patch:
       tags:
         - Ausbildungsstaette
@@ -3739,6 +3789,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: setAbschlussInaktiv
       summary: Set an Abschluss to Inaktiv
+  /abschluss/rename/{abschlussId}:
+    parameters:
+      - $ref: '#/components/parameters/abschlussId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameAbschluss'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Abschluss'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: renameAbschluss
+      summary: Renames a specified Abschluss
   /ausbildungsstaette:
     post:
       tags:
@@ -3799,11 +3876,7 @@ paths:
       summary: Returns all Ausbildungsstaette
   /ausbildungsstaette/inaktiv/{ausbildungsstaetteId}:
     parameters:
-      - name: ausbildungsstaetteId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/ausbildungsstaetteId'
     patch:
       tags:
         - Ausbildungsstaette
@@ -3822,6 +3895,33 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: setAusbildungsstaetteInaktiv
       summary: Set an Ausbildungsstaette to Inaktiv
+  /ausbildungsstaette/rename/{ausbildungsstaetteId}:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungsstaetteId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameAusbildungsstaette'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ausbildungsstaette'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: renameAusbildungsstaette
+      summary: Renames a specified Ausbildungsstaette
   /ausbildungsstaette/slim:
     get:
       tags:
@@ -3864,6 +3964,27 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllAbschluessForAuswahl
       summary: Returns all AbschlussSlim
+  /ausbildungsgang/slim:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AusbildungsgangSlim'
+          description: Returns all AusbildungsgaengeSlim
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllAusbildungsgaengeForAuswahl
+      summary: Returns all AusbildungsgaengeSlim
   /ausbildungsgang:
     post:
       tags:
@@ -4118,6 +4239,7 @@ components:
         - IN_FREIGABE
         - IN_BEARBEITUNG_GS
         - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
         - BEREIT_FUER_BEARBEITUNG
         - EINGEREICHT
         - JURISTISCHE_ABKLAERUNG
@@ -4371,8 +4493,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        bildungsart:
-          $ref: '#/components/schemas/LebenslaufAusbildungsArt'
+        abschlussId:
+          $ref: '#/components/schemas/UUID'
           description: Required wenn taetigkeitsart = null
         von:
           description: Datum im Format mm.YYYY
@@ -4384,22 +4506,13 @@ components:
           $ref: '#/components/schemas/WohnsitzKanton'
         ausbildungAbgeschlossen:
           type: boolean
-        berufsbezeichnung:
+        fachrichtungBerufsbezeichnung:
           description: >-
-            Requierd wenn bildungsart = 'EIDGENOESSISCHES_BERUFSATTEST' oder
-            'EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS'
-          type: string
-        fachrichtung:
-          description: >-
-            Required wenn bildungsart = "BACHELOR_HOCHSCHULE_UNI" oder "BACHELOR_FACHHOCHSCHULE"
-            oder "MASTER"
-          type: string
-        titelDesAbschlusses:
-          description: Required wenn bildungsart = "ANDERER_AUSBILDUNGSABSCHLUSS"
+            Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
           type: string
         taetigkeitsart:
           $ref: '#/components/schemas/Taetigkeitsart'
-          description: Required wenn bildungsart = null
+          description: Required wenn abschluss != null
         taetigkeitsBeschreibung:
           description: Required wenn taetigkeitsart != null
           type: string
@@ -4594,6 +4707,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+    ManuelleVerfuegungCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: "#/components/schemas/FileUpload"
     Gesuch:
       required:
         - fallId
@@ -4713,6 +4835,7 @@ components:
         - endDate
         - canGetBerechnung
         - beschwerdeHaengig
+        - canTriggerManuellPruefen
       type: object
       properties:
         id:
@@ -4728,6 +4851,8 @@ components:
         canGetBerechnung:
           type: boolean
         beschwerdeHaengig:
+          type: boolean
+        canTriggerManuellPruefen:
           type: boolean
     FallDashboardItem:
       required:
@@ -4929,28 +5054,6 @@ components:
         - ANDERE_TAETIGKEIT
         - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
       type: string
-    Bildungsstufe:
-      enum:
-        - SEKUNDAR_2
-        - TERTIAER
-    LebenslaufAusbildungsArt:
-      enum:
-        - BERUFSVORBEREITENDES_SCHULJAHR
-        - VORLEHRE
-        - GESTALTERISCHE_VORKURSE
-        - EIDGENOESSISCHES_BERUFSATTEST
-        - EIDGENOESSISCHES_FAEHIGKEITSZEUGNIS
-        - BERUFSMATURITAET_NACH_LEHRE
-        - FACHMATURITAET
-        - GYMNASIALE_MATURITAETSSCHULEN
-        - EIDGENOESSISCHES_DIPLOM
-        - EIDGENOESSISCHER_FACHAUSWEIS
-        - DIPLOM_HOEHERE_FACHSCHULE
-        - BACHELOR_HOCHSCHULE_UNI
-        - BACHELOR_FACHHOCHSCHULE
-        - MASTER
-        - ANDERER_BILDUNGSABSCHLUSS
-      type: string
     PersonInAusbildung:
       type: object
       allOf:
@@ -5117,6 +5220,9 @@ components:
         nationalitaetId:
           $ref: '#/components/schemas/UUID'
         heimatort:
+          description: Required nur wenn Land = CH
+          type: string
+        heimatortPLZ:
           description: Required nur wenn Land = CH
           type: string
         niederlassungsstatus:
@@ -5425,7 +5531,6 @@ components:
     AusbildungBase:
       required:
         - fallId
-        - fachrichtung
         - ausbildungBegin
         - ausbildungEnd
         - pensum
@@ -5435,7 +5540,7 @@ components:
           $ref: '#/components/schemas/UUID'
         fallId:
           $ref: '#/components/schemas/UUID'
-        fachrichtung:
+        fachrichtungBerufsbezeichnung:
           type: string
         ausbildungNichtGefunden:
           type: boolean
@@ -5446,7 +5551,7 @@ components:
           description: Datum im Format mm.YYYY
           type: string
         besuchtBMS:
-          description: Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+          description: Required wenn Abschluss.askForBerufsmaturitaet = true
           type: boolean
         pensum:
           $ref: '#/components/schemas/AusbildungsPensum'
@@ -5455,6 +5560,9 @@ components:
           type: string
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
+          type: string
+        ausbildungsortPLZ:
+          description: Not required if isAusbildungAusland = true
           type: string
         ausbildungsort:
           description: Not required if isAusbildungAusland = true
@@ -5534,10 +5642,10 @@ components:
         - SEKUNDARSTUFE_II
     Bildungsrichtung:
       enum:
+        - BERUFLICHE_GRUNDBILDUNG
+        - ALLGEMEINBILDENDE_SCHULE
         - HOEHERE_BERUFSBILDUNG
         - HOCHSCHULE
-        - ALLGEMEINBILDENDE_SCHULE
-        - BERUFLICHE_GRUNDBILDUNG
         - OBLIGATORISCHE_SCHULE
     FerienTyp:
       enum:
@@ -5545,7 +5653,7 @@ components:
         - LEHRE
     AbschlussZusatzfrage:
       enum:
-        - BERUFSBEZEICHNUNG_BERUFSMATURITAET
+        - BERUFSBEZEICHNUNG
         - FACHRICHTUNG
     AbschlussSortColumn:
       enum:
@@ -5564,6 +5672,7 @@ components:
         - bfsKategorie
         - berufsbefaehigenderAbschluss
         - ferien
+        - askForBerufsmaturitaet
         - bezeichnungDe
         - bezeichnungFr
         - aktiv
@@ -5586,6 +5695,8 @@ components:
           type: string
         bezeichnungFr:
           type: string
+        askForBerufsmaturitaet:
+          type: boolean
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:
@@ -5673,38 +5784,31 @@ components:
       type: object
       required:
         - id
-        - abschlussId
-        - abschlussBezeichnungDe
-        - abschlussBezeichnungFr
-        - abschlussAusbildungskategorie
-        - abschlussBildungsrichtung
-        - ausbildungsstaetteId
-        - ausbildungsstaetteNameDe
-        - ausbildungsstaetteNameFr
+        - abschluss
+        - ausbildungsstaette
         - aktiv
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        abschluss:
+          $ref: '#/components/schemas/Abschluss'
+        ausbildungsstaette:
+          $ref: '#/components/schemas/Ausbildungsstaette'
+        aktiv:
+          type: boolean
+    AusbildungsgangSlim:
+      type: object
+      required:
+        - id
+        - abschlussId
+        - ausbildungsstaetteId
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         abschlussId:
           $ref: '#/components/schemas/UUID'
-        abschlussBezeichnungDe:
-          type: string
-        abschlussBezeichnungFr:
-          type: string
-        ausbildungskategorie:
-          $ref: '#/components/schemas/Ausbildungskategorie'
-        bildungsrichtung:
-          $ref: '#/components/schemas/Bildungsrichtung'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-        ausbildungsstaetteNameDe:
-          type: string
-        ausbildungsstaetteNameFr:
-          type: string
-        aktiv:
-          type: boolean
-        zusatzfrage:
-          $ref: '#/components/schemas/AbschlussZusatzfrage'
     PaginatedAusbildungsgang:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -5723,13 +5827,14 @@ components:
           $ref: '#/components/schemas/UUID'
         ausbildungsstaetteId:
           $ref: '#/components/schemas/UUID'
-    AusbildungsgangSlim:
+    AusbildungsgangData:
       type: object
       required:
         - id
         - bezeichnungDe
         - bezeichnungFr
         - bildungskategorie
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5741,6 +5846,10 @@ components:
           $ref: '#/components/schemas/Bildungskategorie'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
+        askForBerufsmaturitaet:
+          type: boolean
+        aktiv:
+          type: boolean
     AusbildungsstaetteSlim:
       type: object
       required:
@@ -5748,6 +5857,7 @@ components:
         - nameDe
         - nameFr
         - ausbildungsgaenge
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5758,7 +5868,9 @@ components:
         ausbildungsgaenge:
           type: array
           items:
-            $ref: '#/components/schemas/AusbildungsgangSlim'
+            $ref: '#/components/schemas/AusbildungsgangData'
+        aktiv:
+          type: boolean
     AbschlussSlim:
       type: object
       required:
@@ -5766,6 +5878,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - ausbildungskategorie
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5775,8 +5888,10 @@ components:
           type: string
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
-    Ausbildungsort:
-      type: string
+        zusatzfrage:
+          $ref: '#/components/schemas/AbschlussZusatzfrage'
+        aktiv:
+          type: boolean
     GesuchsperiodeWithDaten:
       required:
         - id
@@ -5879,9 +5994,9 @@ components:
         - personen_6
         - personen_7
         - proWeiterePerson
-        - kinder_00_18
-        - jugendliche_erwachsene_19_25
-        - erwachsene_26_99
+        - kinder_00_17
+        - jugendliche_erwachsene_18_24
+        - erwachsene_25_99
         - wohnkosten_fam_1pers
         - wohnkosten_fam_2pers
         - wohnkosten_fam_3pers
@@ -5902,6 +6017,7 @@ components:
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
         - fristNachreichenDokumente
+        - stichtagVolljaehrigkeitMedizinischeGrundversorgung
       properties:
         bezeichnungDe:
           type: string
@@ -5969,11 +6085,11 @@ components:
           type: integer
         proWeiterePerson:
           type: integer
-        kinder_00_18:
+        kinder_00_17:
           type: integer
-        jugendliche_erwachsene_19_25:
+        jugendliche_erwachsene_18_24:
           type: integer
-        erwachsene_26_99:
+        erwachsene_25_99:
           type: integer
         wohnkosten_fam_1pers:
           type: integer
@@ -6015,6 +6131,10 @@ components:
           type: integer
         fristNachreichenDokumente:
           type: integer
+        stichtagVolljaehrigkeitMedizinischeGrundversorgung:
+          format: date
+          description: dd.MM.yyyy
+          type: string
     AusbildungsStatus:
       enum:
         - AKTIV
@@ -7074,6 +7194,26 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
+    RenameAusbildungsstaette:
+      type: object
+      required:
+        - nameDe
+        - nameFr
+      properties:
+        nameDe:
+          type: string
+        nameFr:
+          type: string
+    RenameAbschluss:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
   responses:
     Unauthorized:
       content:
@@ -7351,6 +7491,18 @@ components:
       schema:
         type: string
       in: query
+    ausbildungsstaetteId:
+      name: ausbildungsstaetteId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
+    abschlussId:
+      name: abschlussId
+      schema:
+        $ref: '#/components/schemas/UUID'
+      in: path
+      required: true
 security:
   - auth-uat-bern: []
   - auth-dev-bern: []

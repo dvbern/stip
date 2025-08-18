@@ -9,6 +9,7 @@ import {
 export interface AusbildungValues extends Ausbildung {
   ausbildungsstaetteText: string;
   ausbildungsgangText: string;
+  ausbildungsortPLZ: string;
   ausbildungsort: string;
 }
 
@@ -16,7 +17,8 @@ export class AusbildungPO {
   public elems: {
     page: Page;
     form: Locator;
-    ausbildungsort: Locator;
+    ausbildungsortPLZ: Locator;
+    ausbildungsOrt: Locator;
     isAusbildungAusland: Locator;
     ausbildungsstaetteSelect: Locator;
     alternativeAusbildungsstaette: Locator;
@@ -36,7 +38,8 @@ export class AusbildungPO {
       page,
       form: page.getByTestId('form-education-form'),
 
-      ausbildungsort: page.getByTestId('form-education-ausbildungsort'),
+      ausbildungsortPLZ: page.getByTestId('form-education-ausbildungs-plz'),
+      ausbildungsOrt: page.getByTestId('form-education-ausbildungs-ort'),
       isAusbildungAusland: page.getByTestId(
         'form-education-isAusbildungAusland',
       ),
@@ -76,9 +79,14 @@ export class AusbildungPO {
       ausbildung.ausbildungsgangText,
     );
 
-    await this.elems.fachrichtung.fill(ausbildung.fachrichtung);
+    if (ausbildung.fachrichtungBerufsbezeichnung) {
+      await this.elems.fachrichtung.fill(
+        ausbildung.fachrichtungBerufsbezeichnung,
+      );
+    }
 
-    await this.elems.ausbildungsort.fill(ausbildung.ausbildungsort);
+    await this.elems.ausbildungsortPLZ.fill(ausbildung.ausbildungsortPLZ);
+    await this.elems.ausbildungsOrt.fill(ausbildung.ausbildungsort);
 
     await this.elems.ausbildungBegin.fill(ausbildung.ausbildungBegin);
     await this.elems.ausbildungEnd.fill(ausbildung.ausbildungEnd);

@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstMitarbeiter;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
@@ -66,6 +67,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -108,6 +110,8 @@ import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
+import ch.dvbern.stip.stipdecision.service.StipDecisionService;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusMock;
@@ -121,6 +125,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
@@ -143,6 +148,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -150,8 +157,11 @@ import static org.mockito.Mockito.when;
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTestResource(TestClamAVEnvironment.class)
 class GesuchServiceTest {
+    @InjectMock
+    StipDecisionService decisionService;
 
     @Inject
+    @InjectMocks
     GesuchService gesuchService;
 
     @Inject
@@ -1836,6 +1846,23 @@ class GesuchServiceTest {
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
         assertNull(gesuch.getEinreichedatum());
+    }
+
+    @Test
+    @TestAsJurist
+    void gesuchShouldNotBeEingereichtAgainWhenAusbildungUpdatedByJurist() {
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG);
+
+        when(decisionService.decide(any())).thenReturn(StipDeciderResult.GESUCH_VALID);
+        when(decisionService.getGesuchStatusChangeEvent(any()))
+            .thenReturn(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuch.setEinreichedatum(LocalDate.now());
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        gesuchService.setGesuchStatusToAnspruchPruefen(gesuch.getId());
+        gesuchService.stipendienAnspruchPruefen(gesuch.getId());
+        verify(mailService, never()).sendStandardNotificationEmail(any(), any(), any(), any());
+        verify(notificationRepository, never()).persistAndFlush(any(Notification.class));
     }
 
     @Test

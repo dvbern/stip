@@ -123,10 +123,10 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    EINGEREICHT: rxMethod<{ gesuchTrancheId: string }>(
+    ANSPRUCH_PRUEFEN: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId }) =>
-          this.gesuchService.gesuchEinreichenJur$({
+          this.gesuchService.gesuchManuellPruefenJur$({
             gesuchTrancheId,
           }),
         ),
@@ -197,6 +197,14 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
+    STATUS_PRUEFUNG_AUSLOESEN: rxMethod<{ gesuchTrancheId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchTrancheId }) =>
+          this.gesuchService.gesuchManuellPruefenSB$({ gesuchTrancheId }),
+        ),
+      ),
+    ),
+
     ZURUECKWEISEN: rxMethod<{
       gesuchTrancheId: string;
       text: string;
@@ -225,4 +233,43 @@ export class GesuchStore extends signalStore(
       ),
     ),
   } satisfies Record<StatusUebergang, unknown>;
+
+  createManuelleVerfuegung$ = rxMethod<{
+    gesuchTrancheId: string;
+    fileUpload: File;
+    kommentar?: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          lastStatusChange: pending(),
+        }));
+      }),
+      switchMap(({ gesuchTrancheId, fileUpload, kommentar }) =>
+        this.gesuchService
+          .createManuelleVerfuegung$({
+            gesuchTrancheId,
+            fileUpload,
+            kommentar,
+          })
+          .pipe(
+            handleApiResponse(
+              () => {
+                patchState(this, { lastStatusChange: success(null) });
+              },
+              {
+                onSuccess: (data) => {
+                  this.store.dispatch(
+                    SharedDataAccessGesuchEvents.gesuchSetReturned({
+                      gesuch: data,
+                    }),
+                  );
+                  this.loadGesuchInfo$({ gesuchId: data.id });
+                },
+              },
+            ),
+          ),
+      ),
+    ),
+  );
 }

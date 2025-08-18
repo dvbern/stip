@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -70,15 +71,19 @@ public class AusbildungsstaetteQueryBuilder {
         final var fieldSpecified = switch (column) {
             case NAME_DE -> Q_AUSBILDUNGSSTAETTE.nameDe;
             case NAME_FR -> Q_AUSBILDUNGSSTAETTE.nameFr;
-            case CH_SHIS -> Q_AUSBILDUNGSSTAETTE.chShis;
+            // Adapted from https://stackoverflow.com/a/8502570/9363973, with Postgres 16 maybe replace
+            case CH_SHIS -> Expressions.stringTemplate(
+                "CAST(NULLIF(regexp_replace({0}, '\\D', '', 'g'), '') AS integer)",
+                Q_AUSBILDUNGSSTAETTE.chShis
+            );
             case BUR_NO -> Q_AUSBILDUNGSSTAETTE.burNo;
             case CT_NO -> Q_AUSBILDUNGSSTAETTE.ctNo;
             case AKTIV -> Q_AUSBILDUNGSSTAETTE.aktiv;
         };
 
         final var orderSpecifier = switch (sortOrder) {
-            case ASCENDING -> fieldSpecified.asc();
-            case DESCENDING -> fieldSpecified.desc();
+            case ASCENDING -> fieldSpecified.asc().nullsLast();
+            case DESCENDING -> fieldSpecified.desc().nullsFirst();
         };
 
         query.orderBy(orderSpecifier);

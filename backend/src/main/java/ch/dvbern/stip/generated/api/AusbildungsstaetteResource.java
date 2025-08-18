@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
@@ -11,6 +12,8 @@ import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.PaginatedAusbildungsstaetteDto;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDto;
+import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
 import java.util.UUID;
 
 import jakarta.ws.rs.*;
@@ -59,6 +62,11 @@ public interface AusbildungsstaetteResource {
     PaginatedAbschlussDto getAllAbschlussForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("ausbildungskategorie")   ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie,@QueryParam("bildungsrichtung")   ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung,@QueryParam("bezeichnungDe")   String bezeichnungDe,@QueryParam("bezeichnungFr")   String bezeichnungFr,@QueryParam("aktiv")   Boolean aktiv);
 
     @GET
+    @Path("/ausbildungsgang/slim")
+    @Produces({ "application/json", "text/plain" })
+    List<AusbildungsgangSlimDto> getAllAusbildungsgaengeForAuswahl();
+
+    @GET
     @Path("/ausbildungsgang")
     @Produces({ "application/json", "text/plain" })
     PaginatedAusbildungsgangDto getAllAusbildungsgangForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("abschlussBezeichnungDe")   String abschlussBezeichnungDe,@QueryParam("abschlussBezeichnungFr")   String abschlussBezeichnungFr,@QueryParam("ausbildungskategorie")   ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie,@QueryParam("ausbildungsstaetteNameDe")   String ausbildungsstaetteNameDe,@QueryParam("ausbildungsstaetteNameFr")   String ausbildungsstaetteNameFr,@QueryParam("aktiv")   Boolean aktiv);
@@ -72,6 +80,18 @@ public interface AusbildungsstaetteResource {
     @Path("/ausbildungsstaette")
     @Produces({ "application/json", "text/plain" })
     PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("nameDe")   String nameDe,@QueryParam("nameFr")   String nameFr,@QueryParam("chShis")   String chShis,@QueryParam("burNo")   String burNo,@QueryParam("ctNo")   String ctNo,@QueryParam("aktiv")   Boolean aktiv);
+
+    @PATCH
+    @Path("/abschluss/rename/{abschlussId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    AbschlussDto renameAbschluss(@PathParam("abschlussId") UUID abschlussId,@Valid @NotNull RenameAbschlussDto renameAbschlussDto);
+
+    @PATCH
+    @Path("/ausbildungsstaette/rename/{ausbildungsstaetteId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    AusbildungsstaetteDto renameAusbildungsstaette(@PathParam("ausbildungsstaetteId") UUID ausbildungsstaetteId,@Valid @NotNull RenameAusbildungsstaetteDto renameAusbildungsstaetteDto);
 
     @PATCH
     @Path("/abschluss/inaktiv/{abschlussId}")

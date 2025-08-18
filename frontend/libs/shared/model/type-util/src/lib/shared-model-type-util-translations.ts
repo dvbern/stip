@@ -17,9 +17,9 @@ export type IsTranslated<K> = K extends `${string}De` | `${string}Fr`
   ? K
   : never;
 export type NameOfTranslated<K> = K extends
-  | `${infer Name}De`
-  | `${infer Name}Fr`
-  ? Name
+  | `${infer NameDe}De`
+  | `${infer NameFr}Fr`
+  ? NameDe | NameFr
   : never;
 export type OnlyKeysWithDeOrFr<T> = {
   [K in keyof T]: IsTranslated<K>;

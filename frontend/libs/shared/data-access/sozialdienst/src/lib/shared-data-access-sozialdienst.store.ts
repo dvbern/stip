@@ -2,9 +2,18 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, exhaustMap, pipe, switchMap, tap, throwError } from 'rxjs';
+import {
+  EMPTY,
+  catchError,
+  exhaustMap,
+  pipe,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { SharedModelError } from '@dv/shared/model/error';
 import {
   DelegierenService,
   DelegierenServiceFallDelegierenRequestParams,
@@ -166,6 +175,16 @@ export class SozialdienstStore extends signalStore(
                   });
                   onAfterSave?.(newSozialdienst.id);
                 },
+                onFailure: (error) => {
+                  const parsedError = SharedModelError.parse(error);
+                  if (parsedError.status === 409) {
+                    this.globalNotificationStore.createNotification({
+                      type: 'ERROR',
+                      messageKey:
+                        'shared.admin.sozialdienstBenutzer.error.emailExists',
+                    });
+                  }
+                },
               },
             ),
           ),
@@ -224,12 +243,12 @@ export class SozialdienstStore extends signalStore(
                   ),
                 ),
             ),
-            catchError((error) => {
+            catchError(() => {
               this.loadSozialdienst$({
                 sozialdienstId: sozialdienst.id,
               });
 
-              return throwError(() => error);
+              return EMPTY;
             }),
           );
       }),
@@ -451,6 +470,16 @@ export class SozialdienstStore extends signalStore(
                     messageKey: 'shared.admin.sozialdienstBenutzer.erstellt',
                   });
                   onAfterSave?.(sozialdienstBenutzer.id);
+                },
+                onFailure: (error) => {
+                  const parsedError = SharedModelError.parse(error);
+                  if (parsedError.status === 409) {
+                    this.globalNotificationStore.createNotification({
+                      type: 'ERROR',
+                      messageKey:
+                        'shared.admin.sozialdienstBenutzer.error.emailExists',
+                    });
+                  }
                 },
               },
             ),

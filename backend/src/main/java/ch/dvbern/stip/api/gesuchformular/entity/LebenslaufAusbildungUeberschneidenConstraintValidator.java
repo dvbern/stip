@@ -41,7 +41,7 @@ public class LebenslaufAusbildungUeberschneidenConstraintValidator
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         List<LebenslaufItem> lebenslaufItemList = gesuchFormular.getLebenslaufItems()
             .stream()
-            .filter(lebenslaufItem -> lebenslaufItem.getBildungsart() != null)
+            .filter(LebenslaufItem::isAusbildung)
             .toList();
 
         int n = lebenslaufItemList.size();

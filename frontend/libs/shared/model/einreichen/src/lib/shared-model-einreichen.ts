@@ -23,6 +23,7 @@ const __F = 'FEHLENDE_DOKUMENTE';
 const AbschlussPhaseMap = {
   GESUCH_IN_BEARBEITUNG_GS /**                */: { [gs]: _R_, [sb]: ___ },
   GESUCH_EINGEREICHT /**                      */: { [gs]: S__, [sb]: ___ },
+  GESUCH_ANSPRUCH_PRUEFEN /**                 */: { [gs]: S__, [sb]: ___ },
   GESUCH_BEREIT_FUER_BEARBEITUNG /**          */: { [gs]: S__, [sb]: ___ },
   GESUCH_IN_BEARBEITUNG_SB /**                */: { [gs]: S__, [sb]: _R_ },
   GESUCH_IN_FREIGABE /**                      */: { [gs]: S__, [sb]: S__ },

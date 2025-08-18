@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsgangCreateDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDataDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
 import jakarta.inject.Inject;
@@ -59,19 +60,15 @@ public abstract class AusbildungsgangMapper {
         return ausbildungsstaetteService.requireById(ausbildungsstaetteId);
     }
 
-    @Mapping(target = "abschlussId", source = "abschluss.id")
-    @Mapping(target = "abschlussBezeichnungDe", source = "abschluss.bezeichnungDe")
-    @Mapping(target = "abschlussBezeichnungFr", source = "abschluss.bezeichnungFr")
-    @Mapping(target = "ausbildungsstaetteId", source = "ausbildungsstaette.id")
-    @Mapping(target = "ausbildungsstaetteNameDe", source = "ausbildungsstaette.nameDe")
-    @Mapping(target = "ausbildungsstaetteNameFr", source = "ausbildungsstaette.nameFr")
-    @Mapping(target = "ausbildungskategorie", source = "abschluss.ausbildungskategorie")
-    @Mapping(target = "bildungsrichtung", source = "abschluss.bildungsrichtung")
-    @Mapping(target = "zusatzfrage", source = "abschluss.zusatzfrage")
     public abstract AusbildungsgangDto toDto(Ausbildungsgang ausbildungsgang);
+
+    @Mapping(target = "abschlussId", source = "abschluss.id")
+    @Mapping(target = "ausbildungsstaetteId", source = "ausbildungsstaette.id")
+    public abstract AusbildungsgangSlimDto toSlimDto(Ausbildungsgang ausbildungsgang);
 
     @Mapping(target = "bezeichnungDe", source = "abschluss.bezeichnungDe")
     @Mapping(target = "bezeichnungFr", source = "abschluss.bezeichnungFr")
+    @Mapping(target = "bildungskategorie", source = "abschluss.bildungskategorie")
     @Mapping(target = "zusatzfrage", source = "abschluss.zusatzfrage")
-    public abstract AusbildungsgangSlimDto toSlimDto(Ausbildungsgang ausbildungsgang);
+    public abstract AusbildungsgangDataDto toDataDto(Ausbildungsgang ausbildungsgang);
 }

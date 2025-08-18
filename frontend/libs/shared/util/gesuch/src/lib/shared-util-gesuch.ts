@@ -100,13 +100,14 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
  */
 export type StatusUebergang =
   | 'SET_TO_BEARBEITUNG'
-  | 'EINGEREICHT'
+  | 'ANSPRUCH_PRUEFEN'
   | 'BEREIT_FUER_BEARBEITUNG'
   | 'ZURUECKWEISEN'
   | 'BEARBEITUNG_ABSCHLIESSEN'
   | 'VERFUEGT'
   | 'VERSENDET'
-  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN';
+  | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
+  | 'STATUS_PRUEFUNG_AUSLOESEN';
 
 /**
  * A map which contains the possible status transitions for specific gesuch statuses
@@ -129,7 +130,7 @@ export const StatusUebergaengeMap: Partial<
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
   ABKLAERUNG_DURCH_RECHSTABTEILUNG: [
-    'EINGEREICHT',
+    'ANSPRUCH_PRUEFEN',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
   IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
@@ -163,11 +164,11 @@ export const StatusUebergaengeOptions: Record<
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  EINGEREICHT: (context) =>
+  ANSPRUCH_PRUEFEN: (context) =>
     ({
       icon: 'check_circle_outline',
-      titleKey: 'EINGEREICHT',
-      typ: 'EINGEREICHT',
+      titleKey: 'ANSPRUCH_PRUEFEN',
+      typ: 'ANSPRUCH_PRUEFEN',
       allowedFor: ['V0_Jurist'],
       disabledReason: context?.isInvalid ? 'VALIDIERUNG_FEHLER' : undefined,
     }) as const,
@@ -231,5 +232,13 @@ export const StatusUebergaengeOptions: Record<
       disabledReason: context?.permissions.canNegativVerfuegen
         ? undefined
         : 'CANNOT_NEGATIV_VERFUEGEN',
+    }) as const,
+  STATUS_PRUEFUNG_AUSLOESEN: () =>
+    ({
+      icon: 'check_circle',
+      titleKey: 'STATUS_PRUEFUNG_AUSLOESEN',
+      typ: 'STATUS_PRUEFUNG_AUSLOESEN',
+      allowedFor: ['V0_Sachbearbeiter'],
+      disabledReason: undefined,
     }) as const,
 };

@@ -59,6 +59,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanCreateManuelleVerfuegung(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG);
+    }
+
+    @Transactional
     public void sbCanChangeGesuchStatusToVersandbereit(final UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERSANDBEREIT);
     }
@@ -77,6 +82,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void sbCanGesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
+    }
+
+    public void juristCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+        sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
     }
 
     @Transactional
@@ -155,7 +164,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void juristCanGesuchEinreichen(final UUID gesuchId) {
+    public void sbCanGesuchManuellPruefen(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK);
+    }
+
+    @Transactional
+    public void juristCanGesuchManuellPruefen(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
     }
 

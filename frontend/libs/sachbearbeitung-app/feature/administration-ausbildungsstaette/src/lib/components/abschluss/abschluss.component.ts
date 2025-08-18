@@ -32,16 +32,7 @@ import {
   Bildungsrichtung,
   SortOrder,
 } from '@dv/shared/model/gesuch';
-import {
-  SortAndPageInputs,
-  getSortAndPageInputs,
-  limitPageToNumberOfEntriesEffect,
-  makeEmptyStringPropertiesNull,
-  paginateList,
-  partiallyDebounceFormValueChangesSig,
-  restrictNumberParam,
-  sortList,
-} from '@dv/shared/model/table';
+import { SortAndPageInputs } from '@dv/shared/model/table';
 import {
   assertUnreachable,
   getCorrectPropertyName,
@@ -59,10 +50,21 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
+import {
+  getSortAndPageInputs,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  partiallyDebounceFormValueChangesSig,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/util/table';
 
 import { CreateAbschlussDialogComponent } from './create-abschluss-dialog.component';
+import { EditAbschlussDialogComponent } from './edit-abschluss-dialog.component';
 import { DataInfoDialogComponent } from '../data-info-dialog/data-info-dialog.component';
 
 type AbschlussFilterFormKeys =
@@ -92,6 +94,7 @@ type DisplayColumns =
     MatTooltipModule,
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
+    SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
     TranslatedPropertyPipe,
@@ -261,24 +264,44 @@ export class AbschlussComponent
       });
   }
 
+  editAbschluss(abschluss: Abschluss) {
+    EditAbschlussDialogComponent.open(this.dialog, {
+      bezeichnungDe: abschluss.bezeichnungDe,
+      bezeichnungFr: abschluss.bezeichnungFr,
+    })
+      .afterClosed()
+      .subscribe((renameAbschluss) => {
+        if (renameAbschluss) {
+          this.administrationAusbildungsstaetteStore.editAbschluss$({
+            values: {
+              abschlussId: abschluss.id,
+              renameAbschluss,
+            },
+            onSuccess: () => {
+              this.reloadAbschluesseSig.set({});
+            },
+          });
+        }
+      });
+  }
+
   showInfo(abschluss: Abschluss) {
     DataInfoDialogComponent.open(
       this.dialog,
       'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title',
-      abschluss,
       ({ info, translatedInfo, spacer }) => [
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe',
-          'bezeichnungDe',
+          abschluss.bezeichnungDe,
         ),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr',
-          'bezeichnungFr',
+          abschluss.bezeichnungFr,
         ),
         spacer(),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie',
-          `sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
+          `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
         ),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungskategorie',
@@ -290,7 +313,7 @@ export class AbschlussComponent
         ),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.bfsKategorie',
-          'bfsKategorie',
+          abschluss.bfsKategorie,
         ),
         translatedInfo(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.berufsbefaehigenderAbschluss',

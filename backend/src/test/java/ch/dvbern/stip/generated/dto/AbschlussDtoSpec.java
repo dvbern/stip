@@ -42,6 +42,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AbschlussDtoSpec.JSON_PROPERTY_FERIEN,
   AbschlussDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AbschlussDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
+  AbschlussDtoSpec.JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET,
   AbschlussDtoSpec.JSON_PROPERTY_ZUSATZFRAGE,
   AbschlussDtoSpec.JSON_PROPERTY_AKTIV
 })
@@ -74,6 +75,9 @@ public class AbschlussDtoSpec {
 
   public static final String JSON_PROPERTY_BEZEICHNUNG_FR = "bezeichnungFr";
   private String bezeichnungFr;
+
+  public static final String JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET = "askForBerufsmaturitaet";
+  private Boolean askForBerufsmaturitaet;
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
@@ -318,6 +322,32 @@ public class AbschlussDtoSpec {
   }
 
 
+  public AbschlussDtoSpec askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+    
+    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+    return this;
+  }
+
+   /**
+   * Get askForBerufsmaturitaet
+   * @return askForBerufsmaturitaet
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAskForBerufsmaturitaet() {
+    return askForBerufsmaturitaet;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAskForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+    this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+  }
+
+
   public AbschlussDtoSpec zusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
     
     this.zusatzfrage = zusatzfrage;
@@ -387,13 +417,14 @@ public class AbschlussDtoSpec {
         Objects.equals(this.ferien, abschluss.ferien) &&
         Objects.equals(this.bezeichnungDe, abschluss.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, abschluss.bezeichnungFr) &&
+        Objects.equals(this.askForBerufsmaturitaet, abschluss.askForBerufsmaturitaet) &&
         Objects.equals(this.zusatzfrage, abschluss.zusatzfrage) &&
         Objects.equals(this.aktiv, abschluss.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, zusatzfrage, aktiv);
+    return Objects.hash(id, ausbildungskategorie, bildungskategorie, bildungsrichtung, bfsKategorie, berufsbefaehigenderAbschluss, ferien, bezeichnungDe, bezeichnungFr, askForBerufsmaturitaet, zusatzfrage, aktiv);
   }
 
   @Override
@@ -409,6 +440,7 @@ public class AbschlussDtoSpec {
     sb.append("    ferien: ").append(toIndentedString(ferien)).append("\n");
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
+    sb.append("    askForBerufsmaturitaet: ").append(toIndentedString(askForBerufsmaturitaet)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");

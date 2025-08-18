@@ -41,14 +41,6 @@ import {
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
 import {
-  inverseSortMap,
-  limitPageToNumberOfEntriesEffect,
-  makeEmptyStringPropertiesNull,
-  paginateList,
-  restrictNumberParam,
-  sortList,
-} from '@dv/shared/model/table';
-import {
   DEFAULT_PAGE_SIZE,
   INPUT_DELAY,
   PAGE_SIZES,
@@ -72,6 +64,14 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import {
+  inverseSortMap,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
+  paginateList,
+  restrictNumberParam,
+  sortList,
+} from '@dv/shared/util/table';
 import { parseDate, toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';

@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
 import ch.dvbern.stip.generated.dto.BrueckenangebotCreateDto;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
+import ch.dvbern.stip.generated.dto.RenameAbschlussDto;
 import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -60,7 +61,8 @@ public class AbschlussService {
 
     @Transactional
     public List<AbschlussSlimDto> getAllAbschlussForAuswahl() {
-        return abschlussRepository.findAllAktiv()
+        return abschlussRepository.findAll()
+            .stream()
             .map(abschlussMapper::toSlimDto)
             .toList();
     }
@@ -132,4 +134,10 @@ public class AbschlussService {
         return abschlussMapper.toDto(abschluss);
     }
 
+    @Transactional
+    public AbschlussDto renameAbschluss(final UUID abschlussId, final RenameAbschlussDto renameAbschlussDto) {
+        final var abschluss = abschlussRepository.requireById(abschlussId);
+        abschlussMapper.partialUpdate(renameAbschlussDto, abschluss);
+        return abschlussMapper.toDto(abschluss);
+    }
 }

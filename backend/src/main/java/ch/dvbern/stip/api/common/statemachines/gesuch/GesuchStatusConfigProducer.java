@@ -80,6 +80,18 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.EINGEREICHT)
+            .permit(GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN, Gesuchstatus.ANSPRUCH_PRUEFEN)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.EINGEREICHT),
+                komplettEingereichtHandler::handle
+            );
+
+        config.configure(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
+            .permit(GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN, Gesuchstatus.ANSPRUCH_PRUEFEN)
+            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
+            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
+
+        config.configure(Gesuchstatus.ANSPRUCH_PRUEFEN)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(
                 GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
@@ -87,16 +99,7 @@ public class GesuchStatusConfigProducer {
             )
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
-            .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.EINGEREICHT),
-                komplettEingereichtHandler::handle
-            );
-
-        config.configure(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
-            .permit(GesuchStatusChangeEvent.EINGEREICHT, Gesuchstatus.EINGEREICHT)
-            .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
+            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
@@ -124,6 +127,7 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.IN_FREIGABE, Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.GESUCH_ZURUECKWEISEN, Gesuchstatus.IN_BEARBEITUNG_GS)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
+            .permit(GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN, Gesuchstatus.ANSPRUCH_PRUEFEN)
             .permit(
                 GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH,
                 Gesuchstatus.KEIN_STIPENDIENANSPRUCH

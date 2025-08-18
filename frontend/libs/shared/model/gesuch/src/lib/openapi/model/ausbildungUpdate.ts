@@ -14,7 +14,7 @@ import { AusbildungsPensum } from './ausbildungsPensum';
 export interface AusbildungUpdate { 
     id?: string;
     fallId: string;
-    fachrichtung: string;
+    fachrichtungBerufsbezeichnung?: string;
     ausbildungNichtGefunden?: boolean;
     /**
      * Datum im Format mm.YYYY
@@ -25,7 +25,7 @@ export interface AusbildungUpdate {
      */
     ausbildungEnd: string;
     /**
-     * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+     * Required wenn Abschluss.askForBerufsmaturitaet = true
      */
     besuchtBMS?: boolean;
     pensum: AusbildungsPensum;
@@ -37,6 +37,10 @@ export interface AusbildungUpdate {
      * Required wenn andere ausbildungNichtGefunden = true
      */
     alternativeAusbildungsgang?: string;
+    /**
+     * Not required if isAusbildungAusland = true
+     */
+    ausbildungsortPLZ?: string;
     /**
      * Not required if isAusbildungAusland = true
      */

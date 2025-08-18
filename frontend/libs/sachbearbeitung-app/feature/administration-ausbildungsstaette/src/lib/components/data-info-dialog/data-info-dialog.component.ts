@@ -9,6 +9,7 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 
 type InfoEntry =
   | {
@@ -19,7 +20,7 @@ type InfoEntry =
   | {
       type: 'translatedInfo';
       labelKey: SachbearbeitungAppTranslationKey;
-      valueKey: SachbearbeitungAppTranslationKey;
+      valueKey: SharedTranslationKey | SachbearbeitungAppTranslationKey;
     }
   | {
       type: 'spacer';
@@ -29,25 +30,25 @@ type InfoData = {
   entries: InfoEntry[];
 };
 
-const createInfoData = <T extends object>(entry: T) => ({
+const createInfoData = {
   info: (
     labelKey: SachbearbeitungAppTranslationKey,
-    value: keyof T,
+    value: string | number,
   ): InfoEntry => ({
     type: 'info',
     labelKey,
-    value: entry[value] as string | number,
+    value,
   }),
   translatedInfo: (
     labelKey: SachbearbeitungAppTranslationKey,
-    valueKey: SachbearbeitungAppTranslationKey,
+    valueKey: SharedTranslationKey | SachbearbeitungAppTranslationKey,
   ): InfoEntry => ({
     type: 'translatedInfo',
     labelKey,
     valueKey,
   }),
   spacer: (): InfoEntry => ({ type: 'spacer' }),
-});
+};
 
 @Component({
   selector: 'dv-data-info-dialog',
@@ -59,18 +60,17 @@ export class DataInfoDialogComponent {
   private dialogRef = inject(MatDialogRef);
   dialogData = inject<InfoData>(MAT_DIALOG_DATA);
 
-  static open<T extends object>(
+  static open(
     dialog: MatDialog,
     titleKey: SachbearbeitungAppTranslationKey,
-    entry: T,
-    entries: (helper: ReturnType<typeof createInfoData<T>>) => InfoEntry[],
+    createEntries: (helper: typeof createInfoData) => InfoEntry[],
   ) {
     return dialog.open<DataInfoDialogComponent, InfoData>(
       DataInfoDialogComponent,
       {
         data: {
           titleKey,
-          entries: [...entries(createInfoData(entry))],
+          entries: [...createEntries(createInfoData)],
         },
       },
     );

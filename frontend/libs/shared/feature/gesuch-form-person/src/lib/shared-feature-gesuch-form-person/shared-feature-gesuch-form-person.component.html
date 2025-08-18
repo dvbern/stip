@@ -20,7 +20,7 @@
             <input
               type="text"
               matInput
-              formControlName="sozialversicherungsnummer"
+              [formControl]="form.controls.sozialversicherungsnummer"
               data-testid="form-person-sozialversicherungsnummer"
               placeholder="756.xxxx.xxxx.xx"
               [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
@@ -66,7 +66,7 @@
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.person.salutation.label' | translate }}</mat-label>
           <mat-select
-            formControlName="anrede"
+            [formControl]="form.controls.anrede"
             data-testid="form-person-anrede"
             [placeholder]="'shared.form.select.empty' | translate"
           >
@@ -91,7 +91,13 @@
         <!-- Name -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
-          <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-person-nachname" />
+          <input
+            type="text"
+            matInput
+            dvMaxLength
+            [formControl]="form.controls.nachname"
+            data-testid="form-person-nachname"
+          />
           <mat-hint *dvZuvorHint="view.formChanges?.nachname; testId: 'form-person-nachname-zuvor-hint'"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -100,7 +106,13 @@
         <!-- Vorname -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
-          <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-person-vorname" />
+          <input
+            type="text"
+            matInput
+            dvMaxLength
+            [formControl]="form.controls.vorname"
+            data-testid="form-person-vorname"
+          />
           <mat-hint *dvZuvorHint="view.formChanges?.vorname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
@@ -123,7 +135,7 @@
         <div class="col-12 col-md-6 col-xl-4 d-flex align-items-center flex-grow-1 gap-1">
           <div>
             <mat-checkbox
-              formControlName="identischerZivilrechtlicherWohnsitz"
+              [formControl]="form.controls.identischerZivilrechtlicherWohnsitz"
               data-testid="form-person-identischerZivilrechtlicherWohnsitz"
               >{{ 'shared.form.shared.identical-civil-residence.label' | translate }}</mat-checkbox
             >
@@ -157,7 +169,14 @@
         <div class="row g-4 mt-1">
           <div class="col-12 col-xl-8">
             <mat-label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | translate }}</mat-label>
-            <div class="row g-4 mt-1">
+            @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
+            <div
+              class="row g-4 mt-1"
+              dvPlzOrtAutocomplete
+              [autocompleteSig]="plzAutocomplete"
+              [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
+              (plzLookupValuesSig)="plzValues = $event"
+            >
               <!-- PLZ -->
               <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3 mt-3">
                 <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
@@ -165,13 +184,21 @@
                   type="text"
                   matInput
                   [dvMaxLength]="'small'"
-                  formControlName="identischerZivilrechtlicherWohnsitzPLZ"
+                  [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz"
+                  [matAutocomplete]="plzAutocomplete"
                   data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
                 />
                 <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | translate }}
                 </mat-error>
+                <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+                  @for (lookup of plzValues; track $index) {
+                    <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+                      {{ lookup.plz }} {{ lookup.ort }}
+                    </mat-option>
+                  }
+                </mat-autocomplete>
               </mat-form-field>
 
               <!-- Ort -->
@@ -181,7 +208,7 @@
                   type="text"
                   matInput
                   dvMaxLength
-                  formControlName="identischerZivilrechtlicherWohnsitzOrt"
+                  [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
                   data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
                 />
                 <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
@@ -203,7 +230,13 @@
         <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>{{ 'shared.form.person.email.label' | translate }}</mat-label>
-            <input matInput dvMaxLength type="email" formControlName="email" data-testid="form-person-email" />
+            <input
+              matInput
+              dvMaxLength
+              type="email"
+              [formControl]="form.controls.email"
+              data-testid="form-person-email"
+            />
             <mat-hint *dvZuvorHint="view.formChanges?.email"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | translate }}
@@ -230,7 +263,7 @@
               type="text"
               matInput
               dvMaxLength
-              formControlName="telefonnummer"
+              [formControl]="form.controls.telefonnummer"
               data-testid="form-person-telefonnummer"
             />
             <mat-hint *dvZuvorHint="view.formChanges?.telefonnummer"></mat-hint>
@@ -261,7 +294,7 @@
               matInput
               [dvMaxLength]="'small'"
               placeholder="dd.mm.yyyy"
-              formControlName="geburtsdatum"
+              [formControl]="form.controls.geburtsdatum"
               data-testid="form-person-geburtsdatum"
               (blur)="onGeburtsdatumBlur()"
             />
@@ -290,7 +323,7 @@
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>{{ 'shared.form.person.zivilstand.label' | translate }}</mat-label>
             <mat-select
-              formControlName="zivilstand"
+              [formControl]="form.controls.zivilstand"
               data-testid="form-person-zivilstand"
               [placeholder]="'shared.form.select.empty' | translate"
             >
@@ -338,13 +371,17 @@
       <div class="row g-4 mt-1">
         <!-- NATIONALITAET -->
         <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-          <dv-shared-ui-land-autocomplete
+          <dv-shared-ui-select-search
+            [formControl]="form.controls.nationalitaetId"
             [testIdSig]="'form-person-nationalitaet'"
             [labelKeySig]="'shared.form.person.nationality.label'"
-            formControlName="nationalitaetId"
-            [zuvorHintValueSig]="view.formChanges?.nationalitaetId"
+            [valuesSig]="laenderSig()"
             [languageSig]="languageSig()"
-          ></dv-shared-ui-land-autocomplete>
+            [isEntryValidSig]="isValidLandEntry"
+            [panelWidthSig]="'auto'"
+            [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
+            [zuvorValueSig]="view.formChanges?.nationalitaetId"
+          ></dv-shared-ui-select-search>
         </div>
 
         <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->
@@ -354,7 +391,7 @@
               <mat-label>{{ 'shared.form.person.niederlassungsstatus.label' | translate }}</mat-label>
 
               <mat-select
-                formControlName="niederlassungsstatus"
+                [formControl]="form.controls.niederlassungsstatus"
                 data-testid="form-person-niederlassungsstatus"
                 [panelWidth]="null"
                 [placeholder]="'shared.form.select.empty' | translate"
@@ -410,11 +447,48 @@
           </div>
         }
 
-        @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
-          <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
-              <input type="text" matInput dvMaxLength formControlName="heimatort" data-testid="form-person-heimatort" />
+        @if (!hiddenFieldsSetSig().has(form.controls.heimatortPlzOrt)) {
+          <div
+            class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2"
+            dvPlzOrtAutocomplete
+            [autocompleteSig]="plzAutocomplete"
+            [plzFormSig]="form.controls.heimatortPlzOrt"
+            (plzLookupValuesSig)="plzValues = $event"
+          >
+            <!-- PLZ -->
+            <mat-form-field dvSharedUiFormField class="tw-basis-auto">
+              <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+              <input
+                type="text"
+                matInput
+                [dvMaxLength]="'small'"
+                [formControl]="form.controls.heimatortPlzOrt.controls.plz"
+                [matAutocomplete]="plzAutocomplete"
+                data-testid="form-person-heimatortPLZ"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.heimatortPLZ"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.requiredShort' | translate }}
+              </mat-error>
+              <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+                @for (lookup of plzValues; track $index) {
+                  <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+                    {{ lookup.plz }} {{ lookup.ort }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <!-- Ort -->
+            <mat-form-field dvSharedUiFormField class="tw-basis-11/12">
+              <mat-label>{{ 'shared.form.person.origin.label' | translate }} </mat-label>
+              <input
+                type="text"
+                matInput
+                dvMaxLength
+                [formControl]="form.controls.heimatortPlzOrt.controls.ort"
+                data-testid="form-person-heimatort"
+              />
               <mat-hint *dvZuvorHint="view.formChanges?.heimatort"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | translate }}
@@ -450,7 +524,7 @@
           <div class="col-12 col-md-6 col-xl-4 tw-flex-col tw-gap-2">
             <mat-radio-group
               class="col-12 col-md-6 col-xl-4 tw-w-full"
-              formControlName="fluechtlingsstatus"
+              [formControl]="form.controls.fluechtlingsstatus"
               data-testid="form-person-fluechtlingsstatus"
               dvSharedUiFormField
             >
@@ -488,7 +562,7 @@
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4 tw-flex tw-flex-col tw-gap-2">
             <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | translate }}</mat-label>
             <mat-select
-              formControlName="zustaendigerKanton"
+              [formControl]="form.controls.zustaendigerKanton"
               data-testid="form-person-zustaendigerKanton"
               [placeholder]="'shared.form.select.empty' | translate"
             >
@@ -523,7 +597,7 @@
               matInput
               [dvMaxLength]="'small'"
               placeholder="dd.mm.yyyy"
-              formControlName="einreisedatum"
+              [formControl]="form.controls.einreisedatum"
               data-testid="form-person-einreisedatum"
               (blur)="onEinreisedatumBlur()"
             />
@@ -552,7 +626,7 @@
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>{{ 'shared.form.shared.wohnsitz.label' | translate }}</mat-label>
             <mat-select
-              formControlName="wohnsitz"
+              [formControl]="form.controls.wohnsitz"
               data-testid="form-person-wohnsitz"
               [placeholder]="'shared.form.select.empty' | translate"
             >
@@ -578,7 +652,7 @@
 
         @if (nationalitaetBfsCodeSig() === bfsCodeSchweiz) {
           <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-            <mat-checkbox formControlName="vormundschaft" data-testid="form-person-vormundschaft">{{
+            <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
               'shared.form.person.guardianship.label' | translate
             }}</mat-checkbox>
             @if (vormundschaftDocumentOptionsSig(); as options) {
@@ -614,7 +688,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ 'shared.form.person.zustaendigeKESB.label' | translate }}</mat-label>
               <mat-select
-                formControlName="zustaendigeKESB"
+                [formControl]="form.controls.zustaendigeKESB"
                 data-testid="form-person-zustaendigeKESB"
                 [placeholder]="'shared.form.select.empty' | translate"
               >
@@ -658,7 +732,7 @@
 
         <mat-radio-group
           class="col-12 col-md-6 col-xl-4"
-          formControlName="sozialhilfebeitraege"
+          [formControl]="form.controls.sozialhilfebeitraege"
           data-testid="form-person-sozialhilfeBeitraege"
           dvSharedUiFormField
         >
@@ -715,7 +789,7 @@
           <label>{{ 'shared.form.person.korrespondenzSprache.label' | translate }}</label>
           <mat-radio-group
             class="d-flex flex-column"
-            formControlName="korrespondenzSprache"
+            [formControl]="form.controls.korrespondenzSprache"
             data-testid="form-person-korrespondenzSprache"
             dvSharedUiFormField
           >

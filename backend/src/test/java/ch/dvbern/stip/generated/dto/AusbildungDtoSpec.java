@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDtoSpec.JSON_PROPERTY_EDITABLE,
   AusbildungDtoSpec.JSON_PROPERTY_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FALL_ID,
-  AusbildungDtoSpec.JSON_PROPERTY_FACHRICHTUNG,
+  AusbildungDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_BEGIN,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNG_END,
@@ -44,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDtoSpec.JSON_PROPERTY_PENSUM,
   AusbildungDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE,
   AusbildungDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
+  AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
   AusbildungDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND
 })
@@ -65,8 +66,8 @@ public class AusbildungDtoSpec {
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
 
-  public static final String JSON_PROPERTY_FACHRICHTUNG = "fachrichtung";
-  private String fachrichtung;
+  public static final String JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG = "fachrichtungBerufsbezeichnung";
+  private String fachrichtungBerufsbezeichnung;
 
   public static final String JSON_PROPERTY_AUSBILDUNG_NICHT_GEFUNDEN = "ausbildungNichtGefunden";
   private Boolean ausbildungNichtGefunden;
@@ -88,6 +89,9 @@ public class AusbildungDtoSpec {
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG = "alternativeAusbildungsgang";
   private String alternativeAusbildungsgang;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z = "ausbildungsortPLZ";
+  private String ausbildungsortPLZ;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
   private String ausbildungsort;
@@ -228,29 +232,29 @@ public class AusbildungDtoSpec {
   }
 
 
-  public AusbildungDtoSpec fachrichtung(String fachrichtung) {
+  public AusbildungDtoSpec fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
     
-    this.fachrichtung = fachrichtung;
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
     return this;
   }
 
    /**
-   * Get fachrichtung
-   * @return fachrichtung
+   * Get fachrichtungBerufsbezeichnung
+   * @return fachrichtungBerufsbezeichnung
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getFachrichtung() {
-    return fachrichtung;
+  public String getFachrichtungBerufsbezeichnung() {
+    return fachrichtungBerufsbezeichnung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
+  @JsonProperty(JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
   }
 
 
@@ -339,7 +343,7 @@ public class AusbildungDtoSpec {
   }
 
    /**
-   * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+   * Required wenn Abschluss.askForBerufsmaturitaet &#x3D; true
    * @return besuchtBMS
   **/
   @jakarta.annotation.Nullable
@@ -436,6 +440,32 @@ public class AusbildungDtoSpec {
   }
 
 
+  public AusbildungDtoSpec ausbildungsortPLZ(String ausbildungsortPLZ) {
+    
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+    return this;
+  }
+
+   /**
+   * Not required if isAusbildungAusland &#x3D; true
+   * @return ausbildungsortPLZ
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAusbildungsortPLZ() {
+    return ausbildungsortPLZ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+  }
+
+
   public AusbildungDtoSpec ausbildungsort(String ausbildungsort) {
     
     this.ausbildungsort = ausbildungsort;
@@ -501,7 +531,7 @@ public class AusbildungDtoSpec {
         Objects.equals(this.editable, ausbildung.editable) &&
         Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.fallId, ausbildung.fallId) &&
-        Objects.equals(this.fachrichtung, ausbildung.fachrichtung) &&
+        Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildung.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
         Objects.equals(this.ausbildungBegin, ausbildung.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
@@ -509,13 +539,14 @@ public class AusbildungDtoSpec {
         Objects.equals(this.pensum, ausbildung.pensum) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsortPLZ, ausbildung.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ausbildungsgang, editable, id, fallId, fachrichtung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(status, ausbildungsgang, editable, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -527,7 +558,7 @@ public class AusbildungDtoSpec {
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
+    sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
@@ -535,6 +566,7 @@ public class AusbildungDtoSpec {
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
+    sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("}");

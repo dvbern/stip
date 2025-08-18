@@ -23,17 +23,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusbildungDto  implements Serializable {
   private @Valid UUID fallId;
-  private @Valid String fachrichtung;
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
   private @Valid AusbildungsPensumDto pensum;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
   private @Valid Boolean editable;
   private @Valid UUID id;
+  private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid Boolean ausbildungNichtGefunden;
   private @Valid Boolean besuchtBMS;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
+  private @Valid String ausbildungsortPLZ;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
   private @Valid AusbildungsgangDto ausbildungsgang;
@@ -55,25 +56,6 @@ public class AusbildungDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
-  }
-
-  /**
-   **/
-  public AusbildungDto fachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
-    return this;
-  }
-
-  
-  @JsonProperty("fachrichtung")
-  @NotNull
-  public String getFachrichtung() {
-    return fachrichtung;
-  }
-
-  @JsonProperty("fachrichtung")
-  public void setFachrichtung(String fachrichtung) {
-    this.fachrichtung = fachrichtung;
   }
 
   /**
@@ -193,6 +175,24 @@ public class AusbildungDto  implements Serializable {
 
   /**
    **/
+  public AusbildungDto fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+    return this;
+  }
+
+  
+  @JsonProperty("fachrichtungBerufsbezeichnung")
+  public String getFachrichtungBerufsbezeichnung() {
+    return fachrichtungBerufsbezeichnung;
+  }
+
+  @JsonProperty("fachrichtungBerufsbezeichnung")
+  public void setFachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+    this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+  }
+
+  /**
+   **/
   public AusbildungDto ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
     this.ausbildungNichtGefunden = ausbildungNichtGefunden;
     return this;
@@ -210,7 +210,7 @@ public class AusbildungDto  implements Serializable {
   }
 
   /**
-   * Required bei Ausbildungskategorien 4 oder 5. Kann nur dann auf true gesetzt werden.
+   * Required wenn Abschluss.askForBerufsmaturitaet &#x3D; true
    **/
   public AusbildungDto besuchtBMS(Boolean besuchtBMS) {
     this.besuchtBMS = besuchtBMS;
@@ -264,6 +264,25 @@ public class AusbildungDto  implements Serializable {
   @JsonProperty("alternativeAusbildungsgang")
   public void setAlternativeAusbildungsgang(String alternativeAusbildungsgang) {
     this.alternativeAusbildungsgang = alternativeAusbildungsgang;
+  }
+
+  /**
+   * Not required if isAusbildungAusland &#x3D; true
+   **/
+  public AusbildungDto ausbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungsortPLZ")
+  public String getAusbildungsortPLZ() {
+    return ausbildungsortPLZ;
+  }
+
+  @JsonProperty("ausbildungsortPLZ")
+  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
   }
 
   /**
@@ -332,17 +351,18 @@ public class AusbildungDto  implements Serializable {
     }
     AusbildungDto ausbildung = (AusbildungDto) o;
     return Objects.equals(this.fallId, ausbildung.fallId) &&
-        Objects.equals(this.fachrichtung, ausbildung.fachrichtung) &&
         Objects.equals(this.ausbildungBegin, ausbildung.ausbildungBegin) &&
         Objects.equals(this.ausbildungEnd, ausbildung.ausbildungEnd) &&
         Objects.equals(this.pensum, ausbildung.pensum) &&
         Objects.equals(this.status, ausbildung.status) &&
         Objects.equals(this.editable, ausbildung.editable) &&
         Objects.equals(this.id, ausbildung.id) &&
+        Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildung.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildung.ausbildungNichtGefunden) &&
         Objects.equals(this.besuchtBMS, ausbildung.besuchtBMS) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildung.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildung.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsortPLZ, ausbildung.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland) &&
         Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang);
@@ -350,7 +370,7 @@ public class AusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fachrichtung, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, ausbildungsgang);
   }
 
   @Override
@@ -359,17 +379,18 @@ public class AusbildungDto  implements Serializable {
     sb.append("class AusbildungDto {\n");
     
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    fachrichtung: ").append(toIndentedString(fachrichtung)).append("\n");
     sb.append("    ausbildungBegin: ").append(toIndentedString(ausbildungBegin)).append("\n");
     sb.append("    ausbildungEnd: ").append(toIndentedString(ausbildungEnd)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");
     sb.append("    besuchtBMS: ").append(toIndentedString(besuchtBMS)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
+    sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");

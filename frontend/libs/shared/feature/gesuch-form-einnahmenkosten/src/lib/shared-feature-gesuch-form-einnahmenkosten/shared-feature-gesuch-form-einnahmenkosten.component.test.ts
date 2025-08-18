@@ -81,11 +81,6 @@ async function setupWithPreparedGesuchWithWohnsitz(
 
 describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
   describe('should display warning if not all of personInAusbildung, familiensituation, ausbildung are defined', () => {
-    it('TODO Placeholder', () => {
-      console.log(
-        'TODO Placeholder: Fix and reenable once ausbildungsstaette is updated',
-      );
-    });
     it('should display warning if personInAusbildung is undefined', async () => {
       const { queryByTestId, detectChanges } = await setup({
         personInAusbildung: undefined,

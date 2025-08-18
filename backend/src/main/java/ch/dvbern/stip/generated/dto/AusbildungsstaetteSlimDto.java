@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsgangSlimDto;
+import ch.dvbern.stip.generated.dto.AusbildungsgangDataDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +27,8 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String nameDe;
   private @Valid String nameFr;
-  private @Valid List<AusbildungsgangSlimDto> ausbildungsgaenge = new ArrayList<>();
+  private @Valid List<AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
+  private @Valid Boolean aktiv;
 
   /**
    **/
@@ -88,7 +89,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsstaetteSlimDto ausbildungsgaenge(List<AusbildungsgangSlimDto> ausbildungsgaenge) {
+  public AusbildungsstaetteSlimDto ausbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
     return this;
   }
@@ -96,16 +97,16 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   
   @JsonProperty("ausbildungsgaenge")
   @NotNull
-  public List<AusbildungsgangSlimDto> getAusbildungsgaenge() {
+  public List<AusbildungsgangDataDto> getAusbildungsgaenge() {
     return ausbildungsgaenge;
   }
 
   @JsonProperty("ausbildungsgaenge")
-  public void setAusbildungsgaenge(List<AusbildungsgangSlimDto> ausbildungsgaenge) {
+  public void setAusbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
     this.ausbildungsgaenge = ausbildungsgaenge;
   }
 
-  public AusbildungsstaetteSlimDto addAusbildungsgaengeItem(AusbildungsgangSlimDto ausbildungsgaengeItem) {
+  public AusbildungsstaetteSlimDto addAusbildungsgaengeItem(AusbildungsgangDataDto ausbildungsgaengeItem) {
     if (this.ausbildungsgaenge == null) {
       this.ausbildungsgaenge = new ArrayList<>();
     }
@@ -114,13 +115,32 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     return this;
   }
 
-  public AusbildungsstaetteSlimDto removeAusbildungsgaengeItem(AusbildungsgangSlimDto ausbildungsgaengeItem) {
+  public AusbildungsstaetteSlimDto removeAusbildungsgaengeItem(AusbildungsgangDataDto ausbildungsgaengeItem) {
     if (ausbildungsgaengeItem != null && this.ausbildungsgaenge != null) {
       this.ausbildungsgaenge.remove(ausbildungsgaengeItem);
     }
 
     return this;
   }
+  /**
+   **/
+  public AusbildungsstaetteSlimDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+    return this;
+  }
+
+  
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -134,12 +154,13 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     return Objects.equals(this.id, ausbildungsstaetteSlim.id) &&
         Objects.equals(this.nameDe, ausbildungsstaetteSlim.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaetteSlim.nameFr) &&
-        Objects.equals(this.ausbildungsgaenge, ausbildungsstaetteSlim.ausbildungsgaenge);
+        Objects.equals(this.ausbildungsgaenge, ausbildungsstaetteSlim.ausbildungsgaenge) &&
+        Objects.equals(this.aktiv, ausbildungsstaetteSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nameDe, nameFr, ausbildungsgaenge);
+    return Objects.hash(id, nameDe, nameFr, ausbildungsgaenge, aktiv);
   }
 
   @Override
@@ -151,6 +172,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("    ausbildungsgaenge: ").append(toIndentedString(ausbildungsgaenge)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

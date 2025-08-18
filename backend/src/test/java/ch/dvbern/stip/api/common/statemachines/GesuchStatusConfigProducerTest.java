@@ -53,7 +53,8 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(AenderungZurueckweisenHandler.class),
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class),
             Mockito.mock(StipendienAnspruchHandler.class)
-        ).createStateMachineConfig();
+        )
+            .createStateMachineConfig();
 
         for (final var status : Gesuchstatus.values()) {
             final var representation = config.getRepresentation(status);
