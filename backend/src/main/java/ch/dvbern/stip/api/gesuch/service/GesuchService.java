@@ -746,16 +746,17 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
 
-        if (!latestVerfuegung.isNegativeVerfuegung()) {
-            if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
-                throw new CustomValidationsException(
-                    "Required Unterschriftenblaetter are not uploaded",
-                    new CustomConstraintViolation(
-                        VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
-                        "unterschriftenblaetter"
-                    )
-                );
-            }
+        if (
+            !latestVerfuegung.isNegativeVerfuegung()
+            && !unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)
+        ) {
+            throw new CustomValidationsException(
+                "Required Unterschriftenblaetter are not uploaded",
+                new CustomConstraintViolation(
+                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                    "unterschriftenblaetter"
+                )
+            );
         }
 
         gesuchStatusService.triggerStateMachineEvent(
