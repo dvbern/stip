@@ -261,6 +261,8 @@
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
   "shared.admin.sozialdienst.sozialdienstAktualisiert": "Sozialdienst wurde erfolgreich aktualisiert",
   "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "Sozialdienst Admin wurde erfolgreich ersetzt",
+  "shared.admin.sozialdienst.sozialdienstStatusChanged.true": "Sozialdienst wurde erfolgreich aktiviert",
+  "shared.admin.sozialdienst.sozialdienstStatusChanged.false": "Sozialdienst wurde erfolgreich deaktiviert",
   "shared.admin.sozialdienstBenutzer.erstellt": "Sozialdienst Arbeiter wurde erfolgreich erfasst",
   "shared.admin.sozialdienstBenutzer.error.emailExists": "E-Mail-Adresse bereits vorhanden.",
   "shared.admin.sozialdienstBenutzer.aktualisiert": "Sozialdienst Arbeiter wurde erfolgreich aktualisiert",

@@ -84,6 +84,10 @@ public class Sozialdienst extends AbstractMandantEntity {
     @JoinColumn(name = "zahlungsverbindung_id", foreignKey = @ForeignKey(name = "sozialdienst_zahlungsverbindung_id"))
     private Zahlungsverbindung zahlungsverbindung;
 
+    @NotNull
+    @Column(name = "aktiv", nullable = false)
+    private boolean aktiv = true;
+
     @Transient
     public boolean isBenutzerAdmin(final SozialdienstBenutzer sozialdienstBenutzer) {
         return Objects.equals(getSozialdienstAdmin().getId(), sozialdienstBenutzer.getId());
