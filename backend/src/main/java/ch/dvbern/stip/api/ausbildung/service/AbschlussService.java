@@ -61,7 +61,8 @@ public class AbschlussService {
 
     @Transactional
     public List<AbschlussSlimDto> getAllAbschlussForAuswahl() {
-        return abschlussRepository.findAllAktiv()
+        return abschlussRepository.findAll()
+            .stream()
             .map(abschlussMapper::toSlimDto)
             .toList();
     }
