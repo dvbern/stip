@@ -13,6 +13,14 @@
           <i class="material-symbols-rounded text-white me-2">list</i>
           <span>{{ 'sachbearbeitung-app.header.antraege' | translate }}</span>
         </a>
+        <!-- Fehlgeschlagene Zahlungen -->
+        <a
+          routerLink="/fehlgeschlagene-zahlungen"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
+        >
+          {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | translate }}
+        </a>
         <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
           <i class="material-symbols-rounded text-white me-2">settings</i>
           <span>{{ 'sachbearbeitung-app.header.administration' | translate }}</span>

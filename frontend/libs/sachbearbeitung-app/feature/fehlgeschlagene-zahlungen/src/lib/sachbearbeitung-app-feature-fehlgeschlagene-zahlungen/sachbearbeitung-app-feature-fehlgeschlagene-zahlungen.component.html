@@ -1,27 +1,27 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
     <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
-      {{ 'sachbearbeitung-app.cockpit.gesuche' | translate }}
+      {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title' | translate }}
     </h1>
     <div class="tw-my-6">
-      <div class="tw-dv-table">
+      <div class="tw-dv-table tw-relative">
         <div [class.opacity-50]="buchhaltungsStore.fehlgeschlageneZahlungenView().loading">
           <table
             mat-table
             [dvSharedUiFocusableList]="items"
             [dataSource]="fehlgeschlageneZahlungenDataSourceSig()"
-            data-testid="cockpit-table"
+            data-testid="sachbearbeitung-app.fehlgeschlagene-zahlungen.table"
             tabindex="0"
           >
             <caption class="cdk-visually-hidden">
               {{
-                'sachbearbeitung-app.fehlende-zahlungen.table.description' | translate
+                'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.description' | translate
               }}
             </caption>
 
             <ng-container matColumnDef="fallNummer">
               <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.fallNummer' | translate }}
+                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer' | translate }}
               </th>
               <td
                 mat-cell
@@ -38,7 +38,7 @@
             <!-- Gesuch -->
             <ng-container matColumnDef="gesuchNummer">
               <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.gesuchNummer' | translate }}
+                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.gesuchNummer' | translate }}
               </th>
               <td
                 mat-cell
@@ -54,7 +54,7 @@
 
             <ng-container matColumnDef="nachname">
               <th mat-header-cell *matHeaderCellDef class="filtered tw-w-40 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.nachname' | translate }}
+                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.nachname' | translate }}
               </th>
               <td
                 mat-cell
@@ -68,7 +68,7 @@
 
             <ng-container matColumnDef="vorname">
               <th mat-header-cell *matHeaderCellDef class="filtered tw-w-40 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.vorname' | translate }}
+                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname' | translate }}
               </th>
               <td
                 mat-cell
@@ -83,7 +83,7 @@
             <!-- letzter Zahlungsversuch / timestamp -->
             <ng-container matColumnDef="lastTryDate">
               <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.lastTryDate' | translate }}
+                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.lastTryDate' | translate }}
               </th>
               <td
                 mat-cell
@@ -97,7 +97,7 @@
             <!-- Pseudobuchhalung / link -->
             <ng-container matColumnDef="pseudobuchhaltung">
               <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlende-zahlungen.table.pseudobuchhaltung' | translate }}
+                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.pseudobuchhaltung' | translate }}
               </th>
               <td
                 mat-cell
