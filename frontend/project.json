@@ -1,0 +1,18 @@
+{
+  "name": "stip-frontend",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "forwardAllArgs": false,
+        "command": "npm run test:changed"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint:without-progress"
+      }
+    }
+  }
+}

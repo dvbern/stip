@@ -5,22 +5,5 @@
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:ui", "scope:gesuch-app"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/gesuch-app/ui/adv-transloco-directive/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../../../coverage/libs/gesuch-app/ui/adv-transloco-directive"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }

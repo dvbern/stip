@@ -4,16 +4,5 @@
   "sourceRoot": "libs/shared/util-fn/comp-test/src",
   "projectType": "library",
   "tags": ["type:util-fn", "scope:shared"],
-  "targets": {
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../../../coverage/libs/shared/util-fn/comp-test"
-      }
-    }
-  }
+  "targets": {}
 }

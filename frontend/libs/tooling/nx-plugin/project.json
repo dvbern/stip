@@ -5,17 +5,6 @@
   "projectType": "library",
   "tags": ["scope:tooling", "type:nx-plugin"],
   "targets": {
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": [
-          "{projectRoot}/**/*.ts",
-          "{projectRoot}/generators.json",
-          "{projectRoot}/executors.json",
-          "{projectRoot}/package.json"
-        ]
-      }
-    },
     "test-generators": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

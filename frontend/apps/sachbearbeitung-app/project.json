@@ -121,17 +121,6 @@
         "buildTarget": "sachbearbeitung-app:build"
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../../../coverage/apps/sachbearbeitung-app"
-      }
-    },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {

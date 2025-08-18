@@ -5,22 +5,5 @@
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:global", "scope:shared"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/global/ablehnung-grund/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../../../coverage/libs/shared/global/ablehnung-grund"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }

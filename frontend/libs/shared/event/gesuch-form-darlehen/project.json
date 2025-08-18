@@ -4,12 +4,5 @@
   "sourceRoot": "libs/shared/event/gesuch-form-darlehen/src",
   "projectType": "library",
   "tags": ["type:event", "scope:shared"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/event/gesuch-form-darlehen/tsconfig.lib.json"
-      }
-    }
-  }
+  "targets": {}
 }

@@ -5,19 +5,5 @@
   "prefix": "dv",
   "tags": ["type:feature", "scope:sachbearbeitung-app"],
   "projectType": "library",
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/sachbearbeitung-app/feature/administration-ausbildungsstaette/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../../../coverage/libs/sachbearbeitung-app/feature/administration-ausbildungsstaette"
-      }
-    }
-  }
+  "targets": {}
 }

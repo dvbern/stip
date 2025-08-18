@@ -5,22 +5,5 @@
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/ui/pad-text-pipe/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../../../coverage/libs/shared/ui/pad-text-pipe"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }
