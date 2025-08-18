@@ -1,6 +1,12 @@
 {
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
   "name": "stip-frontend",
   "targets": {
+    "build": {
+      "cache": false,
+      "dependsOn": [],
+      "executor": "nx:noop"
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {

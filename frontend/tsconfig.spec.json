@@ -20,5 +20,6 @@
     "libs/**/*.spec.ts",
     "apps/**/*.d.ts",
     "libs/**/*.d.ts"
-  ]
+  ],
+  "exclude": ["libs/tooling/**/*", "**/*-e2e/**/*"]
 }
