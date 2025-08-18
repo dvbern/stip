@@ -447,15 +447,46 @@
           </div>
         }
 
-        @if (!hiddenFieldsSetSig().has(form.controls.heimatort)) {
-          <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.person.origin.label' | translate }}</mat-label>
+        @if (!hiddenFieldsSetSig().has(form.controls.heimatortPlzOrt)) {
+          <div
+            class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2"
+            dvPlzOrtAutocomplete
+            [autocompleteSig]="plzAutocomplete"
+            [plzFormSig]="form.controls.heimatortPlzOrt"
+            (plzLookupValuesSig)="plzValues = $event"
+          >
+            <!-- PLZ -->
+            <mat-form-field dvSharedUiFormField class="tw-basis-auto">
+              <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+              <input
+                type="text"
+                matInput
+                [dvMaxLength]="'small'"
+                [formControl]="form.controls.heimatortPlzOrt.controls.plz"
+                [matAutocomplete]="plzAutocomplete"
+                data-testid="form-person-heimatortPLZ"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.heimatortPLZ"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ 'shared.form.error.requiredShort' | translate }}
+              </mat-error>
+              <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+                @for (lookup of plzValues; track $index) {
+                  <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+                    {{ lookup.plz }} {{ lookup.ort }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <!-- Ort -->
+            <mat-form-field dvSharedUiFormField class="tw-basis-11/12">
+              <mat-label>{{ 'shared.form.person.origin.label' | translate }} </mat-label>
               <input
                 type="text"
                 matInput
                 dvMaxLength
-                [formControl]="form.controls.heimatort"
+                [formControl]="form.controls.heimatortPlzOrt.controls.ort"
                 data-testid="form-person-heimatort"
               />
               <mat-hint *dvZuvorHint="view.formChanges?.heimatort"></mat-hint>

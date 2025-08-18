@@ -40,7 +40,7 @@ export interface AusbildungUpdate {
     /**
      * Not required if isAusbildungAusland = true
      */
-    ausbildungsPLZ?: string;
+    ausbildungsortPLZ?: string;
     /**
      * Not required if isAusbildungAusland = true
      */

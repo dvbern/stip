@@ -206,7 +206,6 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     const valueInput = this.autocompleteSearchValueChangesSig();
     const shouldSort = this.sortByValueSig();
     const displayValue = this.displayValueWithSig();
-    const isEntryValid = this.isEntryValidSig();
     let values = this.valuesSig();
 
     if (!values) {
@@ -225,10 +224,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       );
     }
 
-    return values.filter(
-      (entry) =>
-        isEntryValid(entry) || entry.id === untracked(this.latestValueSig),
-    );
+    return values;
   });
 
   zuvorHintValueSig = computed(() => {
@@ -285,10 +281,10 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       } else {
         this.valueId = undefined;
         this.form.controls.search.setValue(undefined, {
-          emitEvent: false,
+          emitEvent: true,
         });
         this.form.controls.select.setValue(undefined, {
-          emitEvent: false,
+          emitEvent: true,
         });
       }
     });
@@ -395,7 +391,7 @@ const createValidator =
   ) =>
   () => {
     const value = autocompleteControl.value;
-    if (!validateCheck(value)) {
+    if (value && !validateCheck(value)) {
       return {
         invalidValue: true,
       };

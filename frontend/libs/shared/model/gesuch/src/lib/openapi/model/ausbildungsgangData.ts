@@ -19,6 +19,7 @@ export interface AusbildungsgangData {
     bildungskategorie: Bildungskategorie;
     zusatzfrage?: AbschlussZusatzfrage;
     askForBerufsmaturitaet?: boolean;
+    aktiv: boolean;
 }
 
 

@@ -13,7 +13,6 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
-  FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -203,7 +202,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   updateValidity$ = new Subject<unknown>();
   appSettings = inject(AppSettings);
   vorlaeufigAufgenommenF = vorlaeufigAufgenommenF;
-  hiddenFieldsSetSig = signal(new Set<FormControl>());
+  hiddenFieldsSetSig = signal(new Set<AbstractControl>());
   plzValues?: Plz[];
 
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
@@ -363,7 +362,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     nationalitaetId: this.formBuilder.control(<string | undefined>undefined, {
       validators: Validators.required,
     }),
-    heimatort: [<string | undefined>undefined, [Validators.required]],
+    heimatortPlzOrt: this.formBuilder.group({
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+    }),
     niederlassungsstatus: this.formBuilder.control<
       AvailableNiederlassungsstatus | undefined
     >(undefined, { validators: Validators.required }),
@@ -521,6 +523,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           ...personForForm,
           ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
           ...niederlassungsStatusConverter.from(niederlassungsstatus),
+          heimatortPlzOrt: {
+            plz: personForForm.heimatortPLZ,
+            ort: personForForm.heimatort,
+          },
           identischerZivilrechtlicherWohnsitzPlzOrt: {
             plz: personForForm.identischerZivilrechtlicherWohnsitzPLZ,
             ort: personForForm.identischerZivilrechtlicherWohnsitzOrt,
@@ -586,7 +592,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       if (nationalitaetBfsCode === BFSCODE_SCHWEIZ) {
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.heimatort,
+          formControl: this.form.controls.heimatortPlzOrt,
           visible: true,
           disabled: this.viewSig().readonly,
         });
@@ -615,7 +621,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         });
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.heimatort,
+          formControl: this.form.controls.heimatortPlzOrt,
           visible: false,
           disabled: this.viewSig().readonly,
           resetOnInvisible: false,
@@ -638,7 +644,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         });
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.heimatort,
+          formControl: this.form.controls.heimatortPlzOrt,
           visible: false,
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
@@ -819,6 +825,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       fluechtlingsstatus,
       zustaendigerKanton,
       identischerZivilrechtlicherWohnsitzPlzOrt,
+      heimatortPlzOrt,
       ...values
     } = convertTempFormToRealValues(this.form, [
       'nationalitaetId',
@@ -829,6 +836,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       plz: identischerZivilrechtlicherWohnsitzPLZ,
       ort: identischerZivilrechtlicherWohnsitzOrt,
     } = identischerZivilrechtlicherWohnsitzPlzOrt;
+    const { plz: heimatortPLZ, ort: heimatort } = heimatortPlzOrt;
 
     return {
       gesuchId: gesuch?.id,
@@ -845,6 +853,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           },
           identischerZivilrechtlicherWohnsitzOrt,
           identischerZivilrechtlicherWohnsitzPLZ,
+          heimatort,
+          heimatortPLZ,
           niederlassungsstatus: niederlassungsStatusConverter.to({
             ...values,
             fluechtlingsstatus,

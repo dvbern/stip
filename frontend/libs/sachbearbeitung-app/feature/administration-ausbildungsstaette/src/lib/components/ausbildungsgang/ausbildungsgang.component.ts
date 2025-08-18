@@ -289,10 +289,13 @@ export class AusbildungsgangComponent
       existingAusbildungsgaenge:
         this.administrationAusbildungsstaetteStore.allAusbildungsgaenge()
           .data ?? [],
-      ausbildungsstaetten:
-        this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
+      ausbildungsstaetten: this.ausbildungsstaetteStore
+        .ausbildungsstaetteViewSig()
+        .filter((item) => item.aktiv),
       abschluesse: sortListByText(
-        this.ausbildungsstaetteStore.abschluesseViewSig(),
+        this.ausbildungsstaetteStore
+          .abschluesseViewSig()
+          .filter((item) => item.aktiv),
         (item) => item[`bezeichnung${capitalized(this.currentLangSig())}`],
       ),
       language: this.currentLangSig(),

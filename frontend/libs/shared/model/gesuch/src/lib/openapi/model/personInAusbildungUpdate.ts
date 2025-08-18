@@ -31,6 +31,10 @@ export interface PersonInAusbildungUpdate {
      * Required nur wenn Land = CH
      */
     heimatort?: string;
+    /**
+     * Required nur wenn Land = CH
+     */
+    heimatortPLZ?: string;
     niederlassungsstatus?: Niederlassungsstatus;
     einreisedatum?: string;
     zivilstand?: Zivilstand;

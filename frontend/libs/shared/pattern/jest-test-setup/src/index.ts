@@ -130,6 +130,7 @@ export const TEST_AUSBILDUNGSSTAETTEN = {
       nameDe: 'Ausbildungsstaette DE 1',
       nameFr: 'Ausbildungsstaette FR 1',
       id: '1',
+      aktiv: true,
     },
     ausbildungsgaenge: [
       {
@@ -138,6 +139,7 @@ export const TEST_AUSBILDUNGSSTAETTEN = {
         id: '1',
         bildungskategorie: 'SEKUNDARSTUFE_I',
         zusatzfrage: 'FACHRICHTUNG',
+        aktiv: true,
       },
     ],
   },
@@ -150,6 +152,7 @@ export const TEST_ABSCHLUESSE = {
     bezeichnungFr: 'Abschluss Fachrichtung 1 FR',
     ausbildungskategorie: 'HOEHERE_FACHSCHULE',
     zusatzfrage: 'FACHRICHTUNG',
+    aktiv: true,
   }),
   abschlussFachrichtung2: prepareAbschluss({
     id: '2',
@@ -157,6 +160,7 @@ export const TEST_ABSCHLUESSE = {
     bezeichnungFr: 'Abschluss Fachrichtung 2 FR',
     ausbildungskategorie: 'HOEHERE_FACHSCHULE',
     zusatzfrage: 'FACHRICHTUNG',
+    aktiv: true,
   }),
   abschlussBerufsbezeichnung1: prepareAbschluss({
     id: '3',
@@ -164,6 +168,7 @@ export const TEST_ABSCHLUESSE = {
     bezeichnungFr: 'Abschluss Berufsbezeichnung 1 FR',
     ausbildungskategorie: 'BERUFSFACHSCHULEN',
     zusatzfrage: 'BERUFSBEZEICHNUNG',
+    aktiv: true,
   }),
   abschlussBerufsbezeichnung2: prepareAbschluss({
     id: '4',
@@ -171,12 +176,14 @@ export const TEST_ABSCHLUESSE = {
     bezeichnungFr: 'Abschluss Berufsbezeichnung 2 FR',
     ausbildungskategorie: 'BERUFSFACHSCHULEN',
     zusatzfrage: 'BERUFSBEZEICHNUNG',
+    aktiv: true,
   }),
   abschlussWithoutZusatzfrage1: prepareAbschluss({
     id: '5',
     bezeichnungDe: 'Abschluss Without Zusatzfrage 1 DE',
     bezeichnungFr: 'Abschluss Without Zusatzfrage 1 FR',
     ausbildungskategorie: 'BERUFS_UND_HOEHERE_FACHSCHULE',
+    aktiv: true,
   }),
 } satisfies Record<string, AbschlussSlim & { matchName: string }>;
 

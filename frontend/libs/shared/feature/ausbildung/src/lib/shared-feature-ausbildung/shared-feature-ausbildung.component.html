@@ -25,9 +25,11 @@
             [formControl]="form.controls.ausbildungsstaetteId"
             [testIdSig]="'form-education-ausbildungsstaette'"
             [labelKeySig]="'shared.form.ausbildung.ausbildungsstaette.label'"
-            [valuesSig]="ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig()"
+            [valuesSig]="ausbildungsstaettenOptionsSig()"
             [sortByValueSig]="true"
             [languageSig]="languageSig()"
+            [isEntryValidSig]="isActive"
+            [invalidValueLabelKeySig]="'shared.form.ausbildung.ausbildungsstaette.error.invalid' | translate"
           ></dv-shared-ui-select-search>
         </div>
       } @else {
@@ -71,27 +73,24 @@
 
     <!-- GANG -->
     <div class="tw-col-start-1 tw-flex tw-w-full tw-gap-2">
-      <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>
-          {{ 'shared.form.ausbildung.ausbildungsgang.label' | translate }}
-        </mat-label>
-        @if (!form.value['ausbildungNichtGefunden']) {
-          <!-- Ausbildungsgang Select -->
-          <mat-select
-            [formControl]="form.controls.ausbildungsgang"
-            data-testid="form-education-ausbildungsgang"
-            (valueChange)="handleGangChangedByUser()"
-            [compareWith]="compareById"
-            [placeholder]="'shared.form.select.empty' | translate"
-            [panelWidth]="null"
-          >
-            @for (ausbildungsgang of ausbildungsgangOptionsSig(); track $index) {
-              <mat-option [value]="ausbildungsgang" [attr.data-testid]="ausbildungsgang.bezeichnungDe">
-                {{ ausbildungsgang.translatedName }}
-              </mat-option>
-            }
-          </mat-select>
-        } @else {
+      @if (!form.value['ausbildungNichtGefunden']) {
+        <div class="tw-w-full">
+          <dv-shared-ui-select-search
+            [formControl]="form.controls.ausbildungsgangId"
+            [testIdSig]="'form-education-ausbildungsgang'"
+            [labelKeySig]="'shared.form.ausbildung.ausbildungsgang.label'"
+            [valuesSig]="ausbildungsgangOptionsSig()"
+            [sortByValueSig]="true"
+            [languageSig]="languageSig()"
+            [isEntryValidSig]="isActive"
+            [invalidValueLabelKeySig]="'shared.form.ausbildung.ausbildungsgang.error.invalid' | translate"
+          ></dv-shared-ui-select-search>
+        </div>
+      } @else {
+        <mat-form-field dvSharedUiFormField class="tw-w-full">
+          <mat-label>
+            {{ 'shared.form.ausbildung.ausbildungsgang.label' | translate }}
+          </mat-label>
           <!-- alternativer Ausbildungsgang -->
           <input
             type="text"
@@ -103,8 +102,8 @@
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>
-        }
-      </mat-form-field>
+        </mat-form-field>
+      }
       <button
         type="button"
         (click)="ausbildungsgangInfoDialog.toggle()"
@@ -175,7 +174,7 @@
       class="tw-col-start-1 tw-flex tw-gap-2"
       dvPlzOrtAutocomplete
       [autocompleteSig]="plzAutocomplete"
-      [plzFormSig]="form.controls.ausbildungsPlzOrt"
+      [plzFormSig]="form.controls.ausbildungsortPlzOrt"
       (plzLookupValuesSig)="plzValues = $event"
     >
       <!-- PLZ -->
@@ -185,7 +184,7 @@
           type="text"
           matInput
           [dvMaxLength]="'small'"
-          [formControl]="form.controls.ausbildungsPlzOrt.controls.plz"
+          [formControl]="form.controls.ausbildungsortPlzOrt.controls.plz"
           [matAutocomplete]="plzAutocomplete"
           data-testid="form-education-ausbildungs-plz"
         />
@@ -208,7 +207,7 @@
           type="text"
           matInput
           dvMaxLength
-          [formControl]="form.controls.ausbildungsPlzOrt.controls.ort"
+          [formControl]="form.controls.ausbildungsortPlzOrt.controls.ort"
           data-testid="form-education-ausbildungs-ort"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">

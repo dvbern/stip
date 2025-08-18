@@ -14,11 +14,13 @@
         <dv-shared-ui-select-search
           [formControl]="form.controls.abschlussId"
           [labelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss'"
-          [valuesSig]="ausbildungsstatteStore.abschluesseViewSig()"
+          [valuesSig]="abschluesseOptionsSig()"
           [sortByValueSig]="true"
           [testIdSig]="'lebenslauf-editor-abschluss-select'"
           [clearTestIdSig]="'button-form-lebenslauf-abschluss-clear'"
           [languageSig]="languageSig()"
+          [isEntryValidSig]="isActive"
+          [invalidValueLabelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss.error' | translate"
         >
           <ng-container *dvSearchOptionLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
             @let abschlussFullname =
