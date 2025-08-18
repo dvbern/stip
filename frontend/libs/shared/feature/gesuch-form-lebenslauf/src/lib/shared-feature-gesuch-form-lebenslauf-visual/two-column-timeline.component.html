@@ -71,9 +71,13 @@
                       }
                     </ng-template>
                     @if (child.editable) {
-                      <a class="w-100 d-block" (click)="handleEditItem(child)">
+                      <button
+                        type="button"
+                        class="btn btn-link tw-block tw-w-full tw-border-0 tw-p-0 tw-text-left"
+                        (click)="handleEditItem(child)"
+                      >
                         <ng-container *ngTemplateOutlet="content"></ng-container>
-                      </a>
+                      </button>
                     }
                     @if (!child.editable) {
                       <ng-container *ngTemplateOutlet="content"></ng-container>

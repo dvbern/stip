@@ -51,7 +51,6 @@ import {
 import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feature-gesuch-form-eltern-steuererklaerung.selector';
 
 @Component({
-  selector: 'lib-shared-feature-gesuch-form-eltern-steuererklaerung',
   imports: [
     CommonModule,
     ReactiveFormsModule,

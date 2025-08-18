@@ -23,7 +23,6 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
 @Component({
-  selector: 'lib-shared-feature-verfuegung-zusammenfassung',
   imports: [
     CommonModule,
     MatCardModule,
