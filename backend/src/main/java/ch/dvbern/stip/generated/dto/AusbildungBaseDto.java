@@ -31,7 +31,7 @@ public class AusbildungBaseDto  implements Serializable {
   private @Valid Boolean besuchtBMS;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
-  private @Valid String ausbildungsPLZ;
+  private @Valid String ausbildungsortPLZ;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
 
@@ -227,20 +227,20 @@ public class AusbildungBaseDto  implements Serializable {
   /**
    * Not required if isAusbildungAusland &#x3D; true
    **/
-  public AusbildungBaseDto ausbildungsPLZ(String ausbildungsPLZ) {
-    this.ausbildungsPLZ = ausbildungsPLZ;
+  public AusbildungBaseDto ausbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
     return this;
   }
 
   
-  @JsonProperty("ausbildungsPLZ")
-  public String getAusbildungsPLZ() {
-    return ausbildungsPLZ;
+  @JsonProperty("ausbildungsortPLZ")
+  public String getAusbildungsortPLZ() {
+    return ausbildungsortPLZ;
   }
 
-  @JsonProperty("ausbildungsPLZ")
-  public void setAusbildungsPLZ(String ausbildungsPLZ) {
-    this.ausbildungsPLZ = ausbildungsPLZ;
+  @JsonProperty("ausbildungsortPLZ")
+  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
   }
 
   /**
@@ -300,14 +300,14 @@ public class AusbildungBaseDto  implements Serializable {
         Objects.equals(this.besuchtBMS, ausbildungBase.besuchtBMS) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungBase.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildungBase.alternativeAusbildungsgang) &&
-        Objects.equals(this.ausbildungsPLZ, ausbildungBase.ausbildungsPLZ) &&
+        Objects.equals(this.ausbildungsortPLZ, ausbildungBase.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungBase.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungBase.isAusbildungAusland);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsPLZ, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -325,7 +325,7 @@ public class AusbildungBaseDto  implements Serializable {
     sb.append("    besuchtBMS: ").append(toIndentedString(besuchtBMS)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
-    sb.append("    ausbildungsPLZ: ").append(toIndentedString(ausbildungsPLZ)).append("\n");
+    sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("}");
