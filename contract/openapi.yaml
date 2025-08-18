@@ -5222,7 +5222,7 @@ components:
         heimatort:
           description: Required nur wenn Land = CH
           type: string
-        heimatPLZ:
+        heimatortPLZ:
           description: Required nur wenn Land = CH
           type: string
         niederlassungsstatus:
@@ -5561,7 +5561,7 @@ components:
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
-        ausbildungsPLZ:
+        ausbildungsortPLZ:
           description: Not required if isAusbildungAusland = true
           type: string
         ausbildungsort:
