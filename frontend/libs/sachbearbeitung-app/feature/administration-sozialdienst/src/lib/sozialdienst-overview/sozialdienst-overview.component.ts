@@ -14,11 +14,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, map } from 'rxjs';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
@@ -37,12 +38,16 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 const INPUT_DELAY = 600;
 
+const availableStatus = ['AKTIV', 'INAKTIV', 'ALL'] as const;
+type SozialdienstStatus = (typeof availableStatus)[number];
+
 @Component({
   imports: [
     CommonModule,
     TranslatePipe,
     ReactiveFormsModule,
     MatTableModule,
+    MatSelectModule,
     MatSortModule,
     MatPaginatorModule,
     MatTooltipModule,
@@ -65,10 +70,12 @@ const INPUT_DELAY = 600;
 export class SozialdienstOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
+  private translate = inject(TranslateService);
   store = inject(SozialdienstStore);
   destroyRef = inject(DestroyRef);
 
-  displayedColumns = ['name', 'ort', 'actions'];
+  displayedColumns = ['name', 'ort', 'status', 'actions'];
+  availableStatus = availableStatus;
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
@@ -76,6 +83,7 @@ export class SozialdienstOverviewComponent {
   filterForm = this.formBuilder.group({
     name: [<string | null>null],
     ort: [<string | null>null],
+    status: [<SozialdienstStatus | 'ALL'>'ALL'],
   });
   private filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(
@@ -94,11 +102,23 @@ export class SozialdienstOverviewComponent {
     const paginator = this.paginatorSig();
 
     datasource.filterPredicate = (data, filter) => {
-      const { name, ort } = JSON.parse(filter);
+      const { name, ort, status } = JSON.parse(filter);
       if (name && !data.name.toLowerCase().includes(name.toLowerCase())) {
         return false;
       }
       if (ort && !data.ort.toLowerCase().includes(ort.toLowerCase())) {
+        return false;
+      }
+      if (status) {
+        switch (status) {
+          case 'AKTIV':
+            return data.aktiv;
+          case 'INAKTIV':
+            return !data.aktiv;
+          case 'ALL':
+            return true;
+        }
+
         return false;
       }
       return true;
@@ -138,5 +158,32 @@ export class SozialdienstOverviewComponent {
           this.store.deleteSozialdienst$(sozialdienst);
         }
       });
+  }
+
+  toggleStatus(sozialdienst: Sozialdienst) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title:
+        'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.' +
+        this.booleanToStatus(sozialdienst.aktiv),
+      message:
+        'sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.' +
+        this.booleanToStatus(sozialdienst.aktiv),
+      translationObject: sozialdienst,
+    })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          const targetAktiv = !sozialdienst.aktiv;
+          this.store.setSozialdienstStatusTo$({
+            sozialdienstId: sozialdienst.id,
+            aktiv: targetAktiv,
+          });
+        }
+      });
+  }
+
+  booleanToStatus(value: boolean): SozialdienstStatus {
+    return value ? 'AKTIV' : 'INAKTIV';
   }
 }

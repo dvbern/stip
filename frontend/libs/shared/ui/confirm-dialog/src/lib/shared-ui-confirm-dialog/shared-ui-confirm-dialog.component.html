@@ -7,7 +7,9 @@
   <span class="material-symbols-rounded">close</span>
 </button>
 <div class="p-4">
-  <h3 class="mb-3">{{ dialogData?.title ?? 'shared.ui.confirmDialog.title' | translate }}</h3>
+  <h3 class="mb-3">
+    {{ dialogData?.title ?? 'shared.ui.confirmDialog.title' | translate: dialogData?.translationObject ?? {} }}
+  </h3>
   <div
     [innerHTML]="
       dialogData?.message ?? 'shared.ui.confirmDialog.message' | translate: dialogData?.translationObject ?? {}

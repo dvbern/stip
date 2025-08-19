@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SozialdienstDtoSpec.JSON_PROPERTY_ID,
   SozialdienstDtoSpec.JSON_PROPERTY_NAME,
+  SozialdienstDtoSpec.JSON_PROPERTY_AKTIV,
   SozialdienstDtoSpec.JSON_PROPERTY_SOZIALDIENST_ADMIN,
   SozialdienstDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
@@ -43,6 +44,9 @@ public class SozialdienstDtoSpec {
 
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
+
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public static final String JSON_PROPERTY_SOZIALDIENST_ADMIN = "sozialdienstAdmin";
   private SozialdienstBenutzerDtoSpec sozialdienstAdmin;
@@ -102,6 +106,32 @@ public class SozialdienstDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setName(String name) {
     this.name = name;
+  }
+
+
+  public SozialdienstDtoSpec aktiv(Boolean aktiv) {
+    
+    this.aktiv = aktiv;
+    return this;
+  }
+
+   /**
+   * Get aktiv
+   * @return aktiv
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
 
@@ -167,13 +197,14 @@ public class SozialdienstDtoSpec {
     SozialdienstDtoSpec sozialdienst = (SozialdienstDtoSpec) o;
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
+        Objects.equals(this.aktiv, sozialdienst.aktiv) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
         Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung);
+    return Objects.hash(id, name, aktiv, sozialdienstAdmin, zahlungsverbindung);
   }
 
   @Override
@@ -182,6 +213,7 @@ public class SozialdienstDtoSpec {
     sb.append("class SozialdienstDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
