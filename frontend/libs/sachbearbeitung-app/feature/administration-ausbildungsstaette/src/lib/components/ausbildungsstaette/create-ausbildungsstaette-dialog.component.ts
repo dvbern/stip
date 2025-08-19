@@ -21,6 +21,8 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MaskitoDirective } from '@maskito/angular';
+import { MaskitoOptions } from '@maskito/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
@@ -50,6 +52,7 @@ type SchulType = 'CT' | 'BUR';
   selector: 'dv-create-ausbildungsstaette-dialog',
   imports: [
     CommonModule,
+    MaskitoDirective,
     ReactiveFormsModule,
     TranslatePipe,
     MatFormFieldModule,
@@ -71,6 +74,9 @@ export class CreateAusbildungsstaetteDialogComponent {
   translate = inject(TranslateService);
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
+  alphanumericMask: MaskitoOptions = {
+    mask: /^[a-zA-Z\d]+$/,
+  };
   form = this.formBuilder.group({
     schule: [<SchulType | undefined>undefined, Validators.required],
     nameDe: [
@@ -94,7 +100,19 @@ export class CreateAusbildungsstaetteDialogComponent {
       ],
     ],
     burNo: [<string | undefined>undefined],
+    ctNo: [<string | undefined>undefined],
   });
+  schuleChangedSig = toSignal(this.form.controls.schule.valueChanges);
+  numberFields = {
+    BUR: {
+      labelSubKey: 'burNummer',
+      control: this.form.controls.burNo,
+    },
+    CT: {
+      labelSubKey: 'ctNummer',
+      control: this.form.controls.ctNo,
+    },
+  } satisfies Record<SchulType, unknown>;
   schulen = [
     {
       value: 'CT',
@@ -107,8 +125,6 @@ export class CreateAusbildungsstaetteDialogComponent {
         'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.BUR',
     },
   ] satisfies { value: SchulType; label: SachbearbeitungAppTranslationKey }[];
-
-  private schuleChangedSig = toSignal(this.form.controls.schule.valueChanges);
 
   static open(dialog: MatDialog, data: CreateAbschlussData) {
     return dialog.open<
@@ -136,6 +152,7 @@ export class CreateAusbildungsstaetteDialogComponent {
       nameDe: values.nameDe,
       nameFr: values.nameFr,
       burNo: values.burNo,
+      ctNo: values.ctNo,
     });
   }
 
