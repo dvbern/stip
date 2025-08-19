@@ -327,7 +327,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
         let currentValidator: ValidatorFn;
         effect(() => {
           if (currentValidator) {
-            [control, this.form.controls.select].map((c) => {
+            [control, this.form.controls.select].forEach((c) => {
               c.removeValidators(currentValidator);
             });
           }
@@ -336,7 +336,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
             this.form.controls.select,
             validateCheck,
           );
-          [control, this.form.controls.select].map((c) => {
+          [control, this.form.controls.select].forEach((c) => {
             c.addValidators(currentValidator);
             c.updateValueAndValidity();
           });
