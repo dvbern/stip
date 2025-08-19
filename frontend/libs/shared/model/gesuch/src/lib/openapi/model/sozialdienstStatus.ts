@@ -10,9 +10,10 @@
  * Do not edit the class manually.
  */
 
-export interface SozialdienstSlim { 
-    id: string;
-    name: string;
-    aktiv: boolean;
-}
+export type SozialdienstStatus = 'AKTIV' | 'INAKTIV';
+
+export const SozialdienstStatus = {
+    AKTIV: 'AKTIV' as SozialdienstStatus,
+    INAKTIV: 'INAKTIV' as SozialdienstStatus
+};
 

@@ -15,6 +15,7 @@ import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 export interface Sozialdienst { 
     id: string;
     name: string;
+    aktiv: boolean;
     sozialdienstAdmin: SozialdienstBenutzer;
     zahlungsverbindung: Zahlungsverbindung;
 }

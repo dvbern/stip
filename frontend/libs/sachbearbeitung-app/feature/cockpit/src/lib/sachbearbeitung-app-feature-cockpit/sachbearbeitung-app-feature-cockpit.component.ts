@@ -249,17 +249,17 @@ export class SachbearbeitungAppFeatureCockpitComponent
     {
       typ: 'ALLE_BEARBEITBAR_MEINE',
       icon: 'person',
-      roles: ['V0_Sachbearbeiter'],
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
     },
     {
       typ: 'ALLE_BEARBEITBAR',
       icon: 'people',
-      roles: ['V0_Sachbearbeiter'],
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
     },
     {
       typ: 'ALLE',
       icon: 'all_inclusive',
-      roles: ['V0_Sachbearbeiter', 'V0_Jurist'],
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
     },
   ];
 

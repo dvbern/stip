@@ -32,6 +32,7 @@ import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -55,6 +56,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
     SharedUiTruncateTooltipDirective,
     SharedUiFocusableListDirective,
     SharedUiFocusableListItemDirective,
+    SharedUiHasRolesDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './sachbearbeitung-app-feature-infos-notizen.component.html',

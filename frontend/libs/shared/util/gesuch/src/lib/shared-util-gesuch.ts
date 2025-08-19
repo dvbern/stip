@@ -96,6 +96,7 @@ export type StatusUebergang =
   | 'SET_TO_BEARBEITUNG'
   | 'ANSPRUCH_PRUEFEN'
   | 'BEREIT_FUER_BEARBEITUNG'
+  | 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'
   | 'ZURUECKWEISEN'
   | 'BEARBEITUNG_ABSCHLIESSEN'
   | 'VERFUEGT'
@@ -127,7 +128,7 @@ export const StatusUebergaengeMap: Partial<
     'ANSPRUCH_PRUEFEN',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
-  IN_FREIGABE: ['VERFUEGT', 'BEREIT_FUER_BEARBEITUNG'],
+  IN_FREIGABE: ['VERFUEGT', 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'],
   VERSANDBEREIT: ['VERSENDET'],
 };
 
@@ -198,7 +199,7 @@ export const StatusUebergaengeOptions: Record<
       icon: 'done',
       titleKey: 'VERFUEGT',
       typ: 'VERFUEGT',
-      allowedFor: ['V0_Sachbearbeiter'],
+      allowedFor: ['V0_Freigabestelle'],
       disabledReason: undefined,
     }) as const,
   BEREIT_FUER_BEARBEITUNG: () =>
@@ -207,6 +208,14 @@ export const StatusUebergaengeOptions: Record<
       titleKey: 'BEREIT_FUER_BEARBEITUNG',
       typ: 'BEREIT_FUER_BEARBEITUNG',
       allowedFor: ['V0_Sachbearbeiter'],
+      disabledReason: undefined,
+    }) as const,
+  ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: () =>
+    ({
+      icon: 'play_arrow',
+      titleKey: 'BEREIT_FUER_BEARBEITUNG',
+      typ: 'BEREIT_FUER_BEARBEITUNG',
+      allowedFor: ['V0_Freigabestelle'],
       disabledReason: undefined,
     }) as const,
   VERSENDET: () =>

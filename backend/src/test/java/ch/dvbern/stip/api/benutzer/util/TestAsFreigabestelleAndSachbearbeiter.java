@@ -36,6 +36,7 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE;
     user = "freigabestelle",
     roles = {
         OidcConstants.ROLE_FREIGABESTELLE,
+        OidcConstants.ROLE_SACHBEARBEITER,
         OidcPermissions.FREIGABESTELLE_GESUCH_UPDATE,
         OidcPermissions.NOTIZ_READ,
         OidcPermissions.SB_GESUCH_READ,
@@ -44,6 +45,34 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE;
         OidcPermissions.CUSTOM_DOKUMENT_READ,
         OidcPermissions.DOKUMENT_READ,
         OidcPermissions.FALL_READ,
+        OidcPermissions.NOTIZ_READ,
+        OidcPermissions.NOTIZ_DELETE,
+        OidcPermissions.BUCHHALTUNG_ENTRY_CREATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_READ,
+        OidcPermissions.AUSBILDUNG_READ,
+        OidcPermissions.CUSTOM_DOKUMENT_READ,
+        OidcPermissions.NOTIFICATION_READ,
+        OidcPermissions.DOKUMENT_READ,
+        OidcPermissions.FALL_READ,
+        OidcPermissions.AUSBILDUNG_UPDATE,
+        OidcPermissions.BUCHHALTUNG_ENTRY_READ,
+        OidcPermissions.NOTIZ_CREATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_UPLOAD,
+        OidcPermissions.CUSTOM_DOKUMENT_CREATE,
+        OidcPermissions.SB_GESUCH_READ,
+        OidcPermissions.DOKUMENT_ABLEHNEN_AKZEPTIEREN,
+        OidcPermissions.NOTIZ_UPDATE,
+        OidcPermissions.UNTERSCHRIFTENBLATT_DELETE,
+        OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.AUSBILDUNGSSTAETTE_READ,
+        OidcPermissions.SB_GESUCH_UPDATE,
+        OidcPermissions.CUSTOM_DOKUMENT_DELETE,
+        OidcPermissions.BUCHSTABENZUWEISUNG_READ,
+        OidcPermissions.DOKUMENT_UPLOAD_SB,
+        OidcPermissions.DOKUMENT_DELETE_SB,
+        OidcPermissions.AUSBILDUNGSSTAETTE_CREATE,
+        OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE,
+        "default-roles-bern"
     }
 )
 @OidcSecurity(
@@ -53,6 +82,5 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE;
         @Claim(key = "given_name", value = "Claudio")
     }
 )
-public @interface TestAsFreigabestelle {
-
+public @interface TestAsFreigabestelleAndSachbearbeiter {
 }

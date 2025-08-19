@@ -25,7 +25,7 @@ public final class OidcConstants {
     public static final String ROLE_SACHBEARBEITER = "V0_Sachbearbeiter";
     public static final String ROLE_ADMIN = "V0_Sachbearbeiter-Admin";
     public static final String ROLE_JURIST = "V0_Jurist";
-    public static final String ROLE_FREIGABESTELLE = "Freigabestelle";
+    public static final String ROLE_FREIGABESTELLE = "V0_Freigabestelle";
     public static final String ROLE_SOZIALDIENST_MITARBEITER = "V0_Sozialdienst-Mitarbeiter";
     public static final String ROLE_SOZIALDIENST_ADMIN = "V0_Sozialdienst-Admin";
     public static final String ROLE_SUPER_USER = "V0_Super-User";
@@ -35,7 +35,8 @@ public final class OidcConstants {
         Set.of(
             ROLE_SACHBEARBEITER,
             ROLE_ADMIN,
-            ROLE_JURIST
+            ROLE_JURIST,
+            ROLE_FREIGABESTELLE
         )
     );
 
@@ -45,7 +46,8 @@ public final class OidcConstants {
             ROLE_ADMIN,
             ROLE_JURIST,
             ROLE_SOZIALDIENST_MITARBEITER,
-            ROLE_SOZIALDIENST_ADMIN
+            ROLE_SOZIALDIENST_ADMIN,
+            ROLE_FREIGABESTELLE
         )
     );
 

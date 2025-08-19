@@ -65,7 +65,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
 
     public void canReadCustomDokumentOfTyp(final UUID customDokumentTypId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSbOrJurist(currentBenutzer)) {
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
 

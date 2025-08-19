@@ -261,6 +261,8 @@
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Le service social a été supprimé avec succès",
   "shared.admin.sozialdienst.sozialdienstAktualisiert": "Le service social a été mis à jour avec succès",
   "shared.admin.sozialdienst.sozialdienstAdminErsetzt": "L'administrateur du service social a été remplacé avec succès",
+  "shared.admin.sozialdienst.sozialdienstStatusChanged.true": "Le service social a été activé avec succès",
+  "shared.admin.sozialdienst.sozialdienstStatusChanged.false": "Le service social a été désactivé avec succès",
   "shared.admin.sozialdienstBenutzer.erstellt": "L'employé du service social a été créé avec succès",
   "shared.admin.sozialdienstBenutzer.error.emailExists": "L'adresse e-mail existe déjà.",
   "shared.admin.sozialdienstBenutzer.aktualisiert": "L'employé du service social a été mis à jour avec succès",
@@ -850,6 +852,7 @@
   "shared.role.V0_Sachbearbeiter-Admin": "Admin",
   "shared.role.V0_Jurist": "Juriste",
   "shared.role.V0_Sachbearbeiter": "Gestionnaire de dossier",
+  "shared.role.V0_Freigabestelle": "Service de validation",
   "shared.role.V0_Gesuchsteller": "Requérant",
 
   "shared.bildungsrichtung.HOEHERE_BERUFSBILDUNG": "Formation professionnelle supérieure",
