@@ -11,7 +11,7 @@
       "executor": "nx:run-commands",
       "options": {
         "forwardAllArgs": false,
-        "command": "npm run test:changed"
+        "command": "npm run test"
       }
     },
     "lint": {
