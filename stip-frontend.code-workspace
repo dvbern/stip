@@ -8,7 +8,6 @@
     "recommendations": [
       "nrwl.angular-console",
       "esbenp.prettier-vscode",
-      "Orta.vscode-jest",
       "dbaeumer.vscode-eslint",
       "SonarSource.sonarlint-vscode",
       "bradlc.vscode-tailwindcss",

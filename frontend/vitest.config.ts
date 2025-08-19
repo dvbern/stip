@@ -9,6 +9,7 @@ export default defineConfig(() => ({
   test: {
     globals: true,
     isolate: false,
+    pool: 'vmThreads',
     coverage: {
       enabled: true,
       reporter: ['lcov'],

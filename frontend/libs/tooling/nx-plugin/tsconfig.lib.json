@@ -7,7 +7,6 @@
   },
   "include": ["src/**/generator.ts", "src/**/executor.ts"],
   "exclude": [
-    "vite.config.mts",
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     "src/generators/lib/files/**/*.ts"
