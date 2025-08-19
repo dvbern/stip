@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -122,7 +124,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @TestAsSachbearbeiter
+    @TestAsFreigabestelleAndSachbearbeiter
     @Order(4)
     @Test
     void makeGesuchVerfuegt() {
@@ -475,7 +477,7 @@ class GesuchTrancheAenderungEinbindenTest {
         assertThat(gesuchtranchen.getTranchen()).hasSize(3);
     }
 
-    @TestAsSachbearbeiter
+    @TestAsFreigabestelle
     @Order(19)
     @Test
     void makeGesuchVerfuegtAgain() {

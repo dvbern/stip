@@ -31,12 +31,24 @@ public class BaseAuthorizer {
         );
     }
 
+    protected boolean isSbOrFreigabestelleOrJurist(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasOneOfRoles(
+            Set.of(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_FREIGABESTELLE, OidcConstants.ROLE_JURIST)
+        );
+    }
+
     protected boolean isAdmin(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_ADMIN);
     }
 
     protected boolean isSachbearbeiter(final Benutzer currentBenutzer) {
         return currentBenutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER);
+    }
+
+    protected boolean isSachbearbeiterOrFreigabestelle(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasOneOfRoles(
+            Set.of(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_FREIGABESTELLE)
+        );
     }
 
     protected boolean isJurist(final Benutzer currentBenutzer) {

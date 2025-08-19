@@ -89,6 +89,16 @@ export class GesuchAppFeatureCockpitComponent {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
+  availableSozialdiensteSig = computed(() => {
+    const sozialdienste = this.sozialdienstStore.availableSozialdienste()?.data;
+    const delegierterSozialdienst =
+      this.dashboardStore.dashboardViewSig()?.delegierung?.sozialdienst;
+
+    return sozialdienste?.filter(
+      (sozialdienst) =>
+        sozialdienst.aktiv || sozialdienst.id === delegierterSozialdienst?.id,
+    );
+  });
 
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;

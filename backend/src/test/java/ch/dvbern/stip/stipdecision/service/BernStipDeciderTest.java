@@ -136,7 +136,7 @@ class BernStipDeciderTest {
         assertThat(decision).isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_ALTER_PIA);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
-        assertThat(event).isEqualTo(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG_DURCH_PRUEFUNG);
     }
 
     @Test

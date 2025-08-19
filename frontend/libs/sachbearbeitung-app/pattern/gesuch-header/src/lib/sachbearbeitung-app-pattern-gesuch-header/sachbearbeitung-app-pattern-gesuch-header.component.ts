@@ -254,6 +254,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         });
         break;
       case 'BEREIT_FUER_BEARBEITUNG':
+      case 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {
           entityId: gesuchTrancheId,
           titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,

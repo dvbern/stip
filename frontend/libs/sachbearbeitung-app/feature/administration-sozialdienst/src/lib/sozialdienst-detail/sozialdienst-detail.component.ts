@@ -196,6 +196,7 @@ export class SozialdienstDetailComponent implements OnDestroy {
         vorname: zahlungsverbindung.vorname,
         nachname: zahlungsverbindung.nachname,
       },
+      aktiv: sozialdienst.aktiv,
     };
 
     this.store.updateSozialdienst$({

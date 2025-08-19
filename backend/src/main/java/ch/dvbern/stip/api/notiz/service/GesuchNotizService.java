@@ -104,6 +104,17 @@ public class GesuchNotizService {
     }
 
     @Transactional
+    public void createJuristischeNotiz(final Gesuch gesuch, final String betreff, final String text) {
+        final var notiz = new GesuchNotiz()
+            .setGesuch(gesuch)
+            .setNotizTyp(GesuchNotizTyp.JURISTISCHE_NOTIZ)
+            .setBetreff(betreff)
+            .setText(text);
+
+        gesuchNotizRepository.persistAndFlush(notiz);
+    }
+
+    @Transactional
     public GesuchNotizDto update(final GesuchNotizUpdateDto gesuchNotizUpdateDto) {
         var gesuchNotiz = gesuchNotizRepository.requireById(gesuchNotizUpdateDto.getId());
         gesuchNotizMapper.partialUpdate(gesuchNotizUpdateDto, gesuchNotiz);

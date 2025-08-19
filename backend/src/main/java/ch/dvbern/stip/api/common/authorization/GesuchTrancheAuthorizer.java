@@ -85,7 +85,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             gesuchTrancheId,
             GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN
         );
-        if (isSbOrJurist(benutzerService.getCurrentBenutzer())) {
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }
 
