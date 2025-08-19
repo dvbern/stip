@@ -74,6 +74,7 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
     'saldoAenderung',
     'saldo',
     'comment',
+    'sapStatus',
     'info',
   ];
   buchhaltungDataSourceSig = computed(() => {

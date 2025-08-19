@@ -17,27 +17,19 @@
         </caption>
 
         <ng-container matColumnDef="datum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | translate }}
           </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-w-32 tw-whitespace-nowrap"
-          >
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="benutzer">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.user' | translate }}
           </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-w-32 tw-whitespace-nowrap"
-          >
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             {{ buchhaltung.entry.userErstellt }}
           </td>
         </ng-container>
@@ -69,7 +61,7 @@
         </ng-container>
 
         <ng-container matColumnDef="rueckforderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | translate }}
           </th>
           <td
@@ -83,7 +75,7 @@
 
         <!-- saldoAenderung -->
         <ng-container matColumnDef="saldoAenderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | translate }}
           </th>
           <td
@@ -109,31 +101,33 @@
         </ng-container>
 
         <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-[30ch]">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | translate }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-max-w-[30ch] tw-whitespace-nowrap"
+            class="tw-whitespace-nowrap"
             [dvTruncateTooltip]="buchhaltung.entry.comment"
           >
             {{ buchhaltung.entry.comment }}
           </td>
         </ng-container>
 
-        <!-- Status -->
-        <ng-container matColumnDef="">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.status' | translate }}
+        <!-- sapStatus -->
+        <ng-container matColumnDef="sapStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.sapStatus' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | translate }}
+            @if (buchhaltung.entry.sapStatus) {
+              {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | translate }}
+            }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="info">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-40 tw-whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">

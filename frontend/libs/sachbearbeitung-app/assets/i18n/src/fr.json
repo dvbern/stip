@@ -427,6 +427,9 @@
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlungAn": "Paiement à:",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung": "Remarque:",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf": "Historique:",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus": "SAP Status",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp": "Date",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId": "SAP ID",
   "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "La correction du solde a été créée avec succès",
 
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.SUCCESS": "Réussir",

@@ -426,7 +426,10 @@
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapBusinessPartnerId": "SAP Businesspartner ID",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlungAn": "Auszahlung an:",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung": "Bemerkung:",
-  "sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf": "Verlauf:",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf": "SAP Verlauf:",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus": "SAP Status",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp": "Datum",
+  "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId": "SAP ID",
   "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "Saldokorrektur wurde erfolgreich erstellt",
 
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.SUCCESS": "Erfolgreich",
