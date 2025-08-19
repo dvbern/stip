@@ -90,6 +90,8 @@ quarkus:
       traces-sample-rate: 1.0
       environment: '${KSTIP_ENVIRONMENT}'
       in-app-packages: 'ch.dvbern.stip.*'
+    console:
+      format: '%d{yyyy-MM-dd HH:mm:ss,SSS z} %z{Europe/Zurich} %p [%C] (%t) %m %n'
   antivirus:
     clamav:
       enabled: true
