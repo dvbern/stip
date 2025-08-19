@@ -80,6 +80,7 @@ include:
       install-e2e-test-package: false
       e2e-artifacts-dir: 'dist/.playwright/'
       e2e-on: 'default'
+      node-version: '20'
 
 .install-argocd:
   tags: ['zone:tz', 'os:linux', 'type:docker']
