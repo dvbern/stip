@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.util.Objects;
 
-import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangService;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -28,7 +28,7 @@ public class AusbildungsgangMustBeAktivConstraintValidator
     implements ConstraintValidator<AusbildungsgangMustBeAktivConstraint, Ausbildung> {
 
     @Inject
-    AusbildungsgangRepository ausbildungsgangRepository;
+    AusbildungsgangService ausbildungsgangService;
 
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
@@ -39,6 +39,6 @@ public class AusbildungsgangMustBeAktivConstraintValidator
             return true;
         }
 
-        return ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()).isAktiv();
+        return ausbildungsgangService.requireById(ausbildung.getAusbildungsgang().getId()).isAktiv();
     }
 }
