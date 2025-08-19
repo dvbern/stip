@@ -41,7 +41,7 @@ public class DokumentAuthorizer extends BaseAuthorizer {
 
     public void canGetDokumentDownloadToken(final UUID dokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSbOrJurist(currentBenutzer)) {
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
 

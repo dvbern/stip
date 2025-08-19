@@ -41,7 +41,7 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canRead() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSbOrJurist(currentBenutzer)) {
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
         forbidden();

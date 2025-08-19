@@ -12,7 +12,8 @@ export type Role =
   | 'Sachbearbeiter'
   | 'Jurist'
   | 'Super-User'
-  | 'Sachbearbeiter-Admin';
+  | 'Sachbearbeiter-Admin'
+  | 'Freigabestelle';
 
 type PermissionRoleList = typeof PERMISSION_ROLE_LIST;
 

@@ -20,6 +20,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     SET_TO_BEARBEITUNG: vitest.fn(),
     ANSPRUCH_PRUEFEN: vitest.fn(),
     BEARBEITUNG_ABSCHLIESSEN: vitest.fn(),
+    ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: vitest.fn(),
     BEREIT_FUER_BEARBEITUNG: vitest.fn(),
     NEGATIVE_VERFUEGUNG_ERSTELLEN: vitest.fn(),
     VERFUEGT: vitest.fn(),
@@ -77,10 +78,14 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   });
 
   it.each([
+    ['SET_TO_BEARBEITUNG'],
+    ['ANSPRUCH_PRUEFEN'],
     ['BEARBEITUNG_ABSCHLIESSEN'],
+    // ['ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'], is the same as 'BEREIT_FUER_BEARBEITUNG'
     ['BEREIT_FUER_BEARBEITUNG'],
     ['NEGATIVE_VERFUEGUNG_ERSTELLEN'],
     ['VERFUEGT'],
+    ['STATUS_PRUEFUNG_AUSLOESEN'],
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {

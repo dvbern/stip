@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SozialdienstDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
+  private @Valid Boolean aktiv;
   private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
 
@@ -63,6 +64,25 @@ public class SozialdienstDto  implements Serializable {
   @JsonProperty("name")
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   **/
+  public SozialdienstDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+    return this;
+  }
+
+  
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
   }
 
   /**
@@ -115,13 +135,14 @@ public class SozialdienstDto  implements Serializable {
     SozialdienstDto sozialdienst = (SozialdienstDto) o;
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
+        Objects.equals(this.aktiv, sozialdienst.aktiv) &&
         Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
         Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, sozialdienstAdmin, zahlungsverbindung);
+    return Objects.hash(id, name, aktiv, sozialdienstAdmin, zahlungsverbindung);
   }
 
   @Override
@@ -131,6 +152,7 @@ public class SozialdienstDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");

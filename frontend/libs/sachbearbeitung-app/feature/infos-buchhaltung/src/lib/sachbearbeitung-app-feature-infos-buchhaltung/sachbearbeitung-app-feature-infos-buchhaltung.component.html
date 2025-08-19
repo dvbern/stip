@@ -3,7 +3,12 @@
 } @else {
   @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
     <div class="tw-flex tw-w-full tw-justify-end">
-      <button type="button" (click)="createBuchhaltungsKorrektur()" class="btn btn-outline-primary">
+      <button
+        *dvHasRoles="['V0_Sachbearbeiter']"
+        type="button"
+        (click)="createBuchhaltungsKorrektur()"
+        class="btn btn-outline-primary"
+      >
         {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | translate }}
       </button>
     </div>
