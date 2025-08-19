@@ -9,6 +9,10 @@ export default defineConfig(() => ({
   test: {
     globals: true,
     isolate: false,
+    coverage: {
+      enabled: true,
+      reporter: ['lcov'],
+    },
     environment: 'jsdom',
     include: ['{apps,libs}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['libs/tooling/**/*', '**/*-e2e/**/*'],
