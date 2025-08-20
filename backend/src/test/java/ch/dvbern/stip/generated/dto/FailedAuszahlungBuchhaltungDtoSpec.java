@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -59,7 +58,7 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   private String vorname;
 
   public static final String JSON_PROPERTY_LAST_TRY_DATE = "lastTryDate";
-  private LocalDate lastTryDate;
+  private java.time.LocalDateTime lastTryDate;
 
   public FailedAuszahlungBuchhaltungDtoSpec() {
   }
@@ -220,7 +219,7 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   }
 
 
-  public FailedAuszahlungBuchhaltungDtoSpec lastTryDate(LocalDate lastTryDate) {
+  public FailedAuszahlungBuchhaltungDtoSpec lastTryDate(java.time.LocalDateTime lastTryDate) {
     
     this.lastTryDate = lastTryDate;
     return this;
@@ -234,14 +233,14 @@ public class FailedAuszahlungBuchhaltungDtoSpec {
   @JsonProperty(JSON_PROPERTY_LAST_TRY_DATE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getLastTryDate() {
+  public java.time.LocalDateTime getLastTryDate() {
     return lastTryDate;
   }
 
 
   @JsonProperty(JSON_PROPERTY_LAST_TRY_DATE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setLastTryDate(LocalDate lastTryDate) {
+  public void setLastTryDate(java.time.LocalDateTime lastTryDate) {
     this.lastTryDate = lastTryDate;
   }
 

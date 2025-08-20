@@ -66,6 +66,7 @@ public class FallRepository implements BaseRepository<Fall> {
             .where(Q_FALL.failedBuchhaltungAuszahlungType.isNotNull())
             .offset((long) page * pageSize)
             .limit(pageSize)
+            .orderBy(Q_FALL.timestampErstellt.desc())
             .stream();
     }
 }

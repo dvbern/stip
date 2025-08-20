@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -27,7 +26,7 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   private @Valid String gesuchNummer;
   private @Valid String name;
   private @Valid String vorname;
-  private @Valid LocalDate lastTryDate;
+  private @Valid java.time.LocalDateTime lastTryDate;
 
   /**
    **/
@@ -145,7 +144,7 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
 
   /**
    **/
-  public FailedAuszahlungBuchhaltungDto lastTryDate(LocalDate lastTryDate) {
+  public FailedAuszahlungBuchhaltungDto lastTryDate(java.time.LocalDateTime lastTryDate) {
     this.lastTryDate = lastTryDate;
     return this;
   }
@@ -153,12 +152,12 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   
   @JsonProperty("lastTryDate")
   @NotNull
-  public LocalDate getLastTryDate() {
+  public java.time.LocalDateTime getLastTryDate() {
     return lastTryDate;
   }
 
   @JsonProperty("lastTryDate")
-  public void setLastTryDate(LocalDate lastTryDate) {
+  public void setLastTryDate(java.time.LocalDateTime lastTryDate) {
     this.lastTryDate = lastTryDate;
   }
 

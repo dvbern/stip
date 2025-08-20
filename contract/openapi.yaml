@@ -4778,7 +4778,9 @@ components:
         vorname:
           type: string
         lastTryDate:
-          $ref: '#/components/schemas/LocalDate'
+          type: string
+          format: date-time
+          # $ref: '#/components/schemas/LocalDate'
     PaginatedFailedAuszahlungBuchhaltung:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'

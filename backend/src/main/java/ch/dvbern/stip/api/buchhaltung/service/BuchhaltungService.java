@@ -312,16 +312,7 @@ public class BuchhaltungService {
     }
 
     public boolean canRetryAuszahlungBuchhaltung(final Fall fall) {
-        final var lastAuszahlungBuchhaltung =
-            fall
-                .getBuchhaltungs()
-                .stream()
-                .filter(
-                    buchhaltung -> BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType())
-                )
-                .min(Comparator.comparing(Buchhaltung::getTimestampErstellt));
-        return lastAuszahlungBuchhaltung.filter(buchhaltung -> buchhaltung.getSapStatus() == SapStatus.FAILURE)
-            .isPresent();
+        return Objects.nonNull(fall.getFailedBuchhaltungAuszahlungType());
     }
 
     public boolean canRetryAuszahlungBuchhaltung(final UUID gesuchId) {

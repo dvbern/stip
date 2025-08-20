@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.fall.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.UUID;
 
@@ -71,14 +71,13 @@ public interface FallMapper {
     }
 
     @Named("getLastTryDate")
-    default LocalDate getLastTryDate(Fall fall) {
+    default LocalDateTime getLastTryDate(Fall fall) {
         return getLastFailedBuchhaltungAuszahlung(fall).getSapDeliverys()
             .stream()
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst()
             .orElseThrow()
-            .getTimestampErstellt()
-            .toLocalDate();
+            .getTimestampErstellt();
     }
 
 }
