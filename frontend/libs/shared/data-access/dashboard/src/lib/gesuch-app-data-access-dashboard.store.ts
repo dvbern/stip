@@ -19,9 +19,9 @@ import {
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
-  canCurrentlyEdit,
   getGesuchPermissions,
   getTranchePermissions,
+  isNotReadonly,
 } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
@@ -76,7 +76,7 @@ export class DashboardStore extends signalStore(
         const canEditAusbildung =
           !hasMoreThanOneGesuche &&
           filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS';
-        const canCurrentlyEditAusbildung = canCurrentlyEdit(
+        const canCurrentlyEditAusbildung = isNotReadonly(
           this.appType,
           rolesMap,
           fallDashboardItem.delegierung,
@@ -85,8 +85,12 @@ export class DashboardStore extends signalStore(
         const getBezeichnung = (
           lang: 'De' | 'Fr',
           ausbildungsgang?: Ausbildungsgang,
-        ) =>
-          `${ausbildungsgang?.ausbildungsstaette?.[`name${lang}`]} - ${ausbildungsgang?.abschluss?.[`bezeichnung${lang}`]}`;
+        ) => {
+          const name = ausbildungsgang?.ausbildungsstaette?.[`name${lang}`];
+          const bezeichnung =
+            ausbildungsgang?.abschluss?.[`bezeichnung${lang}`];
+          return `${name} - ${bezeichnung}`;
+        };
 
         (ausbildung.status !== 'AKTIV'
           ? inactiveAusbildungen
@@ -110,7 +114,7 @@ export class DashboardStore extends signalStore(
     return {
       fall: fallDashboardItem.fall,
       delegierung: fallDashboardItem.delegierung,
-      canCreateAusbildung: canCurrentlyEdit(
+      canCreateAusbildung: isNotReadonly(
         this.appType,
         rolesMap,
         fallDashboardItem.delegierung,
@@ -199,7 +203,7 @@ const toGesuchDashboardItemView =
       format(Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStart), 'yy'),
       format(Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStopp), 'yy'),
     ].join('/');
-    const canCurrentlyEditGesuch = canCurrentlyEdit(
+    const canCurrentlyEditGesuch = isNotReadonly(
       appType,
       rolesMap,
       fallItem.delegierung,

@@ -18,7 +18,7 @@ import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
-import { canCurrentlyEdit } from '@dv/shared/model/permission-state';
+import { isNotReadonly } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { isPending } from '@dv/shared/util/remote-data';
 
@@ -54,7 +54,7 @@ export abstract class SharedFeatureAuszahlungComponent {
     return {
       auszahlung: auszahlung.data,
       isLoading: isPending(auszahlung),
-      readonly: !canCurrentlyEdit(
+      readonly: !isNotReadonly(
         this.config.appType,
         rolesMap,
         auszahlung.data?.isDelegated,

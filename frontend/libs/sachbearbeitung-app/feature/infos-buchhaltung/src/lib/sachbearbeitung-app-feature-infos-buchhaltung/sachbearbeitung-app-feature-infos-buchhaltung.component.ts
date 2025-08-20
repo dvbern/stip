@@ -25,6 +25,7 @@ import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { BuchhaltungEntry } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   SharedUiRdIsPendingPipe,
@@ -47,6 +48,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
     SharedUiFormatChfPipe,
+    SharedUiHasRolesDirective,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiTruncateTooltipDirective,
     SharedUiDownloadButtonDirective,

@@ -2,7 +2,7 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
-    <div class="tw-flex tw-w-full tw-justify-between">
+    <div *dvHasRoles="['V0_Sachbearbeiter']" class="tw-flex tw-w-full tw-justify-between">
       <!-- retry button -->
       @if (buchhaltungStore.buchhaltung().data?.canRetryAuszahlung) {
         <button

@@ -508,4 +508,47 @@ export class SozialdienstStore extends signalStore(
       ),
     ),
   );
+
+  setSozialdienstStatusTo$ = rxMethod<{
+    sozialdienstId: string;
+    aktiv: boolean;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          sozialdienste: cachedPending(state.sozialdienste),
+        }));
+      }),
+      exhaustMap(({ sozialdienstId, aktiv }) =>
+        this.sozialdienstService
+          .setSozialdienstAktivTo$({ sozialdienstId, aktiv })
+          .pipe(
+            handleApiResponse(
+              () => {
+                patchState(this, {
+                  sozialdienst: initial(),
+                });
+              },
+              {
+                onSuccess: () => {
+                  this.loadAllSozialdienste$();
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey:
+                      'shared.admin.sozialdienst.sozialdienstStatusChanged.' +
+                      aktiv,
+                  });
+                },
+                onFailure: () => {
+                  this.loadAllSozialdienste$();
+                },
+              },
+            ),
+          ),
+      ),
+      catchError((error) => {
+        this.loadAllSozialdienste$();
+        return throwError(() => error);
+      }),
+    ),
+  );
 }

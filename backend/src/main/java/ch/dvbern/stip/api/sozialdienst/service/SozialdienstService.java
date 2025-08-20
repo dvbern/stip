@@ -124,4 +124,12 @@ public class SozialdienstService {
         final var sozialdienstOfBenutzer = sozialdienstRepository.getSozialdienstByBenutzer(benutzer);
         return sozialdienstOfBenutzer.getId().equals(sozialdienstId);
     }
+
+    @Transactional
+    public SozialdienstDto setSozialdienstStatusTo(final UUID sozialdienstId, final boolean aktiv) {
+        final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        sozialdienst.setAktiv(aktiv);
+
+        return sozialdienstMapper.toDto(sozialdienst);
+    }
 }

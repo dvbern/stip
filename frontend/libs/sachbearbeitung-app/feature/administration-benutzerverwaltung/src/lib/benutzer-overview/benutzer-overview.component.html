@@ -12,7 +12,7 @@
           </caption>
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-56 tw-whitespace-nowrap">
               <label class="pe-none" for="benutzers">
                 {{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}
               </label>
@@ -47,7 +47,7 @@
           </ng-container>
 
           <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-56 tw-whitespace-nowrap">
               <div class="tw-pb-[28px] tw-pt-[2px]">
                 <label>
                   {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
@@ -66,7 +66,7 @@
           </ng-container>
 
           <ng-container matColumnDef="roles">
-            <th mat-header-cell *matHeaderCellDef class="filtered tw-w-60 tw-whitespace-nowrap">
+            <th mat-header-cell *matHeaderCellDef class="filtered tw-w-64 tw-whitespace-nowrap">
               <label class="pe-none" for="benutzers">
                 {{ 'sachbearbeitung-app.admin.benutzerverwaltung.overview.roles' | translate }}
               </label>
@@ -117,7 +117,7 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>
+            <th mat-header-cell *matHeaderCellDef class="tw-w-20">
               <a
                 [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
                 [routerLink]="['.', 'create']"

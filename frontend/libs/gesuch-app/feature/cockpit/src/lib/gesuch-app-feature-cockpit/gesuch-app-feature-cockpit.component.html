@@ -59,7 +59,7 @@
 
         <!-- side column -->
         <div class="tw-flex tw-flex-col tw-gap-8 lg:tw-mb-8">
-          @let sozialdienste = sozialdienstStore.availableSozialdienste().data;
+          @let sozialdienste = availableSozialdiensteSig();
           @if (sozialdienste && sozialdienste.length > 0) {
             <!-- SOZIALDIENST DELEGIEREN -->
             <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
@@ -79,8 +79,10 @@
                       [value]="delegierterSozialdienst"
                       [compareWith]="compareById"
                     >
-                      @for (sozialdienst of sozialdienstStore.availableSozialdienste().data; track sozialdienst.id) {
-                        <mat-option [value]="sozialdienst">{{ sozialdienst.name }}</mat-option>
+                      @for (sozialdienst of sozialdienste; track sozialdienst.id) {
+                        <mat-option [value]="sozialdienst" [disabled]="!sozialdienst.aktiv">
+                          {{ sozialdienst.name }}
+                        </mat-option>
                       }
                     </mat-select>
                   </mat-form-field>

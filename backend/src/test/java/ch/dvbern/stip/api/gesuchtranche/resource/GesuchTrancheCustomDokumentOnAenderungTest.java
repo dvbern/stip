@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.resource;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -131,7 +132,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
-    @TestAsSachbearbeiter
+    @TestAsFreigabestelleAndSachbearbeiter
     @Order(6)
     @Test
     void makeGesuchVerfuegt() {

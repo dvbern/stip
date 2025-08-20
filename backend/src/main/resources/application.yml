@@ -163,6 +163,9 @@ quarkus:
       grant-type: password
       username: ${STIP_KEYCLOAK_ADMIN_USER}
       password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+  quartz:
+    clustered: true
+    store-type: jdbc-cmt
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH

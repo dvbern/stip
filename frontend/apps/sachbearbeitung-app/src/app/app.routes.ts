@@ -22,6 +22,7 @@ export const appRoutes: Route[] = [
           'V0_Sachbearbeiter-Admin',
           'V0_Jurist',
           'V0_Sachbearbeiter',
+          'V0_Freigabestelle',
           'V0_Sozialdienst-Admin',
         ],
         '/unauthorized',
@@ -59,7 +60,10 @@ export const appRoutes: Route[] = [
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,
-          hasRoles(['V0_Sachbearbeiter', 'V0_Jurist'], '/administration'),
+          hasRoles(
+            ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+            '/administration',
+          ),
         ],
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>

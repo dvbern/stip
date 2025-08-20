@@ -122,4 +122,13 @@ public class SozialdienstAuthorizer extends BaseAuthorizer {
     public void canGetSozialdienstBenutzer() {
         permitAll();
     }
+
+    public void canUpdateSozialdienstStatus() {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isAdmin(currentBenutzer)) {
+            return;
+        }
+
+        forbidden();
+    }
 }
