@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -156,5 +157,23 @@ public class GesuchTrancheHistoryRepository {
             .stream()
             .findFirst();
         return gesuchTrancheOpt;
+    }
+
+    @Transactional
+    public List<GesuchTranche> getAllAbgelehnteAenderungs(final UUID gesuchId) {
+        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
+        // List<GesuchTranche>
+        @SuppressWarnings("unchecked")
+        final List<GesuchTranche> abgehlenteAenderungList = AuditReaderFactory.get(em)
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
+            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .add(AuditEntity.property("status").hasChanged())
+            .getResultList();
+        return abgehlenteAenderungList;
     }
 }

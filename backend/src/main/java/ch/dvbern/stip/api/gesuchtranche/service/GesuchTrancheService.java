@@ -142,23 +142,28 @@ public class GesuchTrancheService {
         final var allTranchenFromGesuchInStatusVerfuegt =
             gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusFirstChangedToVerfuegt(gesuchId);
 
-        final var allTranchenOut = new ArrayList<GesuchTranche>(allTranchenList.size());
-        allTranchenOut.addAll(
+        final var allTrancheTranchen = new ArrayList<GesuchTranche>();
+        allTrancheTranchen.addAll(
             allTranchenList.stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
                 .sorted(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigAb()))
                 .toList()
         );
-        allTranchenOut.addAll(
+        final var aenderungen = new ArrayList<GesuchTranche>();
+        aenderungen.addAll(
             allTranchenList.stream()
                 .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
                 .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
                 .toList()
         );
 
+        final var abgelehnteAenderungen = gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungs(gesuchId);
+
         return gesuchTrancheMapper.toListDto(
-            allTranchenOut,
-            allTranchenFromGesuchInStatusVerfuegt
+            allTrancheTranchen,
+            allTranchenFromGesuchInStatusVerfuegt,
+            aenderungen,
+            abgelehnteAenderungen
         );
     }
 

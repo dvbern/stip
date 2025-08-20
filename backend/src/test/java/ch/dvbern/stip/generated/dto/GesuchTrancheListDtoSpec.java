@@ -32,7 +32,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchTrancheListDtoSpec.JSON_PROPERTY_TRANCHEN,
-  GesuchTrancheListDtoSpec.JSON_PROPERTY_INITIAL_TRANCHEN
+  GesuchTrancheListDtoSpec.JSON_PROPERTY_INITIAL_TRANCHEN,
+  GesuchTrancheListDtoSpec.JSON_PROPERTY_AENDERUNGEN,
+  GesuchTrancheListDtoSpec.JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN
 })
 @JsonTypeName("GesuchTrancheList")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -42,6 +44,12 @@ public class GesuchTrancheListDtoSpec {
 
   public static final String JSON_PROPERTY_INITIAL_TRANCHEN = "initialTranchen";
   private List<GesuchTrancheSlimDtoSpec> initialTranchen;
+
+  public static final String JSON_PROPERTY_AENDERUNGEN = "aenderungen";
+  private List<GesuchTrancheSlimDtoSpec> aenderungen;
+
+  public static final String JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN = "abgelehnteAenderungen";
+  private List<GesuchTrancheSlimDtoSpec> abgelehnteAenderungen;
 
   public GesuchTrancheListDtoSpec() {
   }
@@ -113,6 +121,74 @@ public class GesuchTrancheListDtoSpec {
     this.initialTranchen = initialTranchen;
   }
 
+
+  public GesuchTrancheListDtoSpec aenderungen(List<GesuchTrancheSlimDtoSpec> aenderungen) {
+    
+    this.aenderungen = aenderungen;
+    return this;
+  }
+
+  public GesuchTrancheListDtoSpec addAenderungenItem(GesuchTrancheSlimDtoSpec aenderungenItem) {
+    if (this.aenderungen == null) {
+      this.aenderungen = new ArrayList<>();
+    }
+    this.aenderungen.add(aenderungenItem);
+    return this;
+  }
+
+   /**
+   * Get aenderungen
+   * @return aenderungen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AENDERUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<GesuchTrancheSlimDtoSpec> getAenderungen() {
+    return aenderungen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AENDERUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAenderungen(List<GesuchTrancheSlimDtoSpec> aenderungen) {
+    this.aenderungen = aenderungen;
+  }
+
+
+  public GesuchTrancheListDtoSpec abgelehnteAenderungen(List<GesuchTrancheSlimDtoSpec> abgelehnteAenderungen) {
+    
+    this.abgelehnteAenderungen = abgelehnteAenderungen;
+    return this;
+  }
+
+  public GesuchTrancheListDtoSpec addAbgelehnteAenderungenItem(GesuchTrancheSlimDtoSpec abgelehnteAenderungenItem) {
+    if (this.abgelehnteAenderungen == null) {
+      this.abgelehnteAenderungen = new ArrayList<>();
+    }
+    this.abgelehnteAenderungen.add(abgelehnteAenderungenItem);
+    return this;
+  }
+
+   /**
+   * Get abgelehnteAenderungen
+   * @return abgelehnteAenderungen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<GesuchTrancheSlimDtoSpec> getAbgelehnteAenderungen() {
+    return abgelehnteAenderungen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAbgelehnteAenderungen(List<GesuchTrancheSlimDtoSpec> abgelehnteAenderungen) {
+    this.abgelehnteAenderungen = abgelehnteAenderungen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -123,12 +199,14 @@ public class GesuchTrancheListDtoSpec {
     }
     GesuchTrancheListDtoSpec gesuchTrancheList = (GesuchTrancheListDtoSpec) o;
     return Objects.equals(this.tranchen, gesuchTrancheList.tranchen) &&
-        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen);
+        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen) &&
+        Objects.equals(this.aenderungen, gesuchTrancheList.aenderungen) &&
+        Objects.equals(this.abgelehnteAenderungen, gesuchTrancheList.abgelehnteAenderungen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tranchen, initialTranchen);
+    return Objects.hash(tranchen, initialTranchen, aenderungen, abgelehnteAenderungen);
   }
 
   @Override
@@ -137,6 +215,8 @@ public class GesuchTrancheListDtoSpec {
     sb.append("class GesuchTrancheListDtoSpec {\n");
     sb.append("    tranchen: ").append(toIndentedString(tranchen)).append("\n");
     sb.append("    initialTranchen: ").append(toIndentedString(initialTranchen)).append("\n");
+    sb.append("    aenderungen: ").append(toIndentedString(aenderungen)).append("\n");
+    sb.append("    abgelehnteAenderungen: ").append(toIndentedString(abgelehnteAenderungen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

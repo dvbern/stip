@@ -54,7 +54,14 @@ public interface GesuchTrancheMapper {
 
     @Mapping(target = "tranchen", qualifiedByName = "toSlimDto")
     @Mapping(target = "initialTranchen", qualifiedByName = "toSlimDto")
-    GesuchTrancheListDto toListDto(List<GesuchTranche> tranchen, List<GesuchTranche> initialTranchen);
+    @Mapping(target = "aenderungen", qualifiedByName = "toSlimDto")
+    @Mapping(target = "abgelehnteAenderungen", qualifiedByName = "toSlimDto")
+    GesuchTrancheListDto toListDto(
+        List<GesuchTranche> tranchen,
+        List<GesuchTranche> initialTranchen,
+        List<GesuchTranche> aenderungen,
+        List<GesuchTranche> abgelehnteAenderungen
+    );
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     GesuchTranche partialUpdate(GesuchTrancheUpdateDto gesuchUpdateDto, @MappingTarget GesuchTranche gesuch);
