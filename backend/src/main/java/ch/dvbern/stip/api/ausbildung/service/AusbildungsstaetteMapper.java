@@ -25,25 +25,27 @@ import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
+import jakarta.ws.rs.BadRequestException;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 
 @Mapper(
     config = MappingConfig.class,
     uses = AusbildungsgangMapper.class
 )
 public abstract class AusbildungsstaetteMapper {
-    @Mapping(target = "ctNo", source = ".", qualifiedByName = "getCtNo")
     abstract Ausbildungsstaette toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
 
-    @Named("getCtNo")
-    String getCtNo(AusbildungsstaetteCreateDto ausbildungsstaetteDto) {
-        if (Objects.isNull(ausbildungsstaetteDto.getBurNo())) {
-            return "CT.BE";
+    @BeforeMapping
+    protected void ensureOnlyOneNoIsSet(AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto) {
+        final boolean ctIsNull = Objects.isNull(ausbildungsstaetteCreateDto.getCtNo());
+        final boolean burIsNull = Objects.isNull(ausbildungsstaetteCreateDto.getBurNo());
+
+        // !XOR
+        if (ctIsNull == burIsNull) {
+            throw new BadRequestException("(Only) One of CtNo and BurNo must be set");
         }
-        return null;
     }
 
     abstract AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);

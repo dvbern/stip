@@ -30,6 +30,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,11 +58,13 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
     private String chShis;
 
     @Nullable
+    @Pattern(regexp = "^[A-Za-z0-9]+$")
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "bur_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String burNo;
 
     @Nullable
+    @Pattern(regexp = "^[A-Za-z0-9]+$")
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "ct_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String ctNo;

@@ -58,6 +58,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @AusbildungsortRequiredIfSwissConstraint
 @OnlyOneGesuchPerYearConstraint
 @AusbildungBesuchtBMSValidationConstraint
+@AusbildungsgangMustBeAktivConstraint
 @Entity
 @Table(
     name = "ausbildung",

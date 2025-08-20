@@ -85,8 +85,12 @@ export class DashboardStore extends signalStore(
         const getBezeichnung = (
           lang: 'De' | 'Fr',
           ausbildungsgang?: Ausbildungsgang,
-        ) =>
-          `${ausbildungsgang?.ausbildungsstaette?.[`name${lang}`]} - ${ausbildungsgang?.abschluss?.[`bezeichnung${lang}`]}`;
+        ) => {
+          const name = ausbildungsgang?.ausbildungsstaette?.[`name${lang}`];
+          const bezeichnung =
+            ausbildungsgang?.abschluss?.[`bezeichnung${lang}`];
+          return `${name} - ${bezeichnung}`;
+        };
 
         (ausbildung.status !== 'AKTIV'
           ? inactiveAusbildungen

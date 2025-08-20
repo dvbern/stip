@@ -49,6 +49,11 @@ public class AusbildungsgangService {
     private final ConfigService configService;
 
     @Transactional
+    public Ausbildungsgang requireById(final UUID id) {
+        return ausbildungsgangRepository.requireById(id);
+    }
+
+    @Transactional
     public AusbildungsgangDto createAusbildungsgang(final AusbildungsgangCreateDto ausbildungsgangCreateDto) {
         final var ausbildungsgang = ausbildungsgangMapper.toEntity(ausbildungsgangCreateDto);
         validateAusbildungsgangUniqueness(ausbildungsgang);
@@ -59,8 +64,7 @@ public class AusbildungsgangService {
 
     @Transactional
     public List<AusbildungsgangSlimDto> getAllAusbildungsgangForAuswahl() {
-        return ausbildungsgangRepository.findAll()
-            .stream()
+        return ausbildungsgangRepository.findAllAktiv()
             .map(ausbildungsgangMapper::toSlimDto)
             .toList();
     }

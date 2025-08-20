@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.ausbildung.repo;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsgang;
@@ -33,19 +34,27 @@ import lombok.RequiredArgsConstructor;
 public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang> {
     private final EntityManager em;
 
+    private static final QAusbildungsgang Q_AUSBILDUNGSGANG = QAusbildungsgang.ausbildungsgang;
+
     public Optional<Ausbildungsgang> findByAusbildungsstaetteAndAbschluss(
         final UUID ausbildungsstaetteId,
         final UUID abschlussId
     ) {
-        final var ausbildungsgang = QAusbildungsgang.ausbildungsgang;
         return new JPAQueryFactory(em)
-            .selectFrom(ausbildungsgang)
+            .selectFrom(Q_AUSBILDUNGSGANG)
             .where(
-                ausbildungsgang.ausbildungsstaette.id.eq(ausbildungsstaetteId)
-                    .and(ausbildungsgang.abschluss.id.eq(abschlussId))
-                    .and(ausbildungsgang.aktiv)
+                Q_AUSBILDUNGSGANG.ausbildungsstaette.id.eq(ausbildungsstaetteId)
+                    .and(Q_AUSBILDUNGSGANG.abschluss.id.eq(abschlussId))
+                    .and(Q_AUSBILDUNGSGANG.aktiv)
             )
             .stream()
             .findFirst();
+    }
+
+    public Stream<Ausbildungsgang> findAllAktiv() {
+        return new JPAQueryFactory(em)
+            .selectFrom(Q_AUSBILDUNGSGANG)
+            .where(Q_AUSBILDUNGSGANG.aktiv)
+            .stream();
     }
 }

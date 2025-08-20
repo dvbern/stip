@@ -5800,6 +5800,8 @@ components:
           type: string
         burNo:
           type: string
+        ctNo:
+          type: string
     AusbildungsgangSortColumn:
       enum:
         - ABSCHLUSS_BEZEICHNUNG_DE

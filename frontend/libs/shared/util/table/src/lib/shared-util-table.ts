@@ -132,7 +132,7 @@ export const sortListByText = <T>(
   return [...list].sort((a, b) => {
     const values = [a, b].map(getter);
     const [aValue, bValue] =
-      sortOrder === 'ASCENDING' ? values : values.reverse();
+      sortOrder === 'ASCENDING' ? values : [...values].reverse();
     if (aValue === bValue) {
       return 0;
     }
