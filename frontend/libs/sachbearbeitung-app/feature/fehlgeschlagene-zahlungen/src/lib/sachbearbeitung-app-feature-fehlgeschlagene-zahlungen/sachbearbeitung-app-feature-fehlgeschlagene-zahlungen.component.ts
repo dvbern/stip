@@ -90,7 +90,6 @@ export class SachbearbeitungAppFeatureFehlgeschlageneZahlungenComponent {
     'nachname',
     'vorname',
     'lastTryDate',
-    'pseudobuchhaltung',
   ];
 
   items?: QueryList<SharedUiFocusableListItemDirective>;

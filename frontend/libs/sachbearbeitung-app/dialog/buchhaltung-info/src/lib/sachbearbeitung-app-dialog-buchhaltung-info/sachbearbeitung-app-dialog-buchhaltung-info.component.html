@@ -65,7 +65,7 @@
       </dt>
       <dd class="tw-font-normal">
         <div>
-          <span class="tw-text-sm tw-font-semibold">
+          <span>
             {{ zv.vorname }}
           </span>
           <span>
@@ -80,7 +80,7 @@
       </dd>
     }
 
-    <dt class="tw-mt-4 tw-whitespace-nowrap tw-font-semibold">
+    <dt class="tw-mt-4 tw-whitespace-nowrap tw-text-xl tw-font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung' | translate }}
     </dt>
     <dd
@@ -92,29 +92,28 @@
   <!-- SAP delivery Verlauf -->
   @if (sapDeliverysSig()?.length) {
     <h3 class="tw-mt-4 tw-text-xl">{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf' | translate }}</h3>
-    <table>
-      <caption class="tw-sr-only">
-        {{
-          'sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf' | translate
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th>{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp' | translate }}</th>
-          <th>{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | translate }}</th>
-          <th>{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (sapDelivery of sapDeliverysSig(); track sapDelivery.sapId) {
-          <tr>
-            <td>{{ sapDelivery.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</td>
-            <td>{{ sapDelivery.sapId }}</td>
-            <td>{{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + sapDelivery.sapStatus | translate }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+    <div class="tw-grid tw-grid-cols-[max-content_1fr_1fr] tw-gap-x-4">
+      <div class="tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp' | translate }}
+      </div>
+      <div class="tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | translate }}
+      </div>
+      <div class="tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | translate }}
+      </div>
+
+      <!-- <ng-container *ngFor="let sapDelivery of sapDeliverysSig(); trackBy: trackBySapId">
+        <div>{{ sapDelivery.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</div>
+        <div>{{ sapDelivery.sapId }}</div>
+        <div>{{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + sapDelivery.sapStatus | translate }}</div>
+      </ng-container> -->
+      @for (item of sapDeliverysSig(); track item.sapId) {
+        <div>{{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</div>
+        <div>{{ item.sapId }}</div>
+        <div>{{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + item.sapStatus | translate }}</div>
+      }
+    </div>
   }
 
   <div class="tw-mt-10 tw-flex tw-justify-end">

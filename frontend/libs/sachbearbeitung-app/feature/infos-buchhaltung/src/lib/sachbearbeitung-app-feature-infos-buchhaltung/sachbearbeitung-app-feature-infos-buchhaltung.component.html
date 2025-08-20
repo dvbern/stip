@@ -2,12 +2,25 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
-    <div class="tw-flex tw-w-full tw-justify-end">
+    <div class="tw-flex tw-w-full tw-justify-between">
+      <!-- retry button -->
+      @if (buchhaltungStore.buchhaltung().data?.canRetryAuszahlung) {
+        <button
+          type="button"
+          class="btn btn-outline-primary tw-flex tw-items-center tw-gap-2"
+          [disabled]="buchhaltungStore.retriedAuszahlung() | rdIsPending: { ignoreInitial: true }"
+          (click)="retryAuszahlung()"
+          data-testid="sachbearbeitung-app.buchhaltung-info.retry"
+        >
+          <i class="material-symbols-rounded">refresh</i>
+          <span>{{ 'sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung' | translate }}</span>
+        </button>
+      }
+
       <button type="button" (click)="createBuchhaltungsKorrektur()" class="btn btn-outline-primary">
         {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | translate }}
       </button>
     </div>
-    <!-- todo: add retry button -->
     <div class="tw-dv-table" [class.opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
       <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw-w-full tw-table-fixed">
         <caption class="cdk-visually-hidden">
@@ -22,15 +35,6 @@
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="benutzer">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.user' | translate }}
-          </th>
-          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
-            {{ buchhaltung.entry.userErstellt }}
           </td>
         </ng-container>
 

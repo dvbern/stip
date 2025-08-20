@@ -20,7 +20,7 @@
             </caption>
 
             <ng-container matColumnDef="fallNummer">
-              <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer' | translate }}
               </th>
               <td
@@ -28,8 +28,7 @@
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
                 class="tw-w-32 tw-whitespace-nowrap"
               >
-                <!-- todo: implement routerLink -->
-                <a [routerLink]="" (click)="$event.stopPropagation()">
+                <a [routerLink]="['/infos/buchhaltung', fz.gesuchId]">
                   {{ fz.fallNummer }}
                 </a>
               </td>
@@ -45,15 +44,12 @@
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
                 class="tw-w-32 tw-whitespace-nowrap"
               >
-                <!-- todo: implement routerLink -->
-                <a routerLink="" (click)="$event.stopPropagation()">
-                  {{ fz.gesuchNummer }}
-                </a>
+                {{ fz.gesuchNummer }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="nachname">
-              <th mat-header-cell *matHeaderCellDef class="filtered tw-w-40 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.nachname' | translate }}
               </th>
               <td
@@ -67,7 +63,7 @@
             </ng-container>
 
             <ng-container matColumnDef="vorname">
-              <th mat-header-cell *matHeaderCellDef class="filtered tw-w-40 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname' | translate }}
               </th>
               <td
@@ -94,22 +90,6 @@
               </td>
             </ng-container>
 
-            <!-- Pseudobuchhalung / link -->
-            <ng-container matColumnDef="pseudobuchhaltung">
-              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.pseudobuchhaltung' | translate }}
-              </th>
-              <td
-                mat-cell
-                *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-                class="tw-w-32 tw-whitespace-nowrap"
-              >
-                <a [routerLink]="['/buchhaltung', 'pseudobuchhaltung', fz.fallNummer]">
-                  <i class="material-symbols-rounded text-white me-2">description</i>
-                </a>
-              </td>
-            </ng-container>
-
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr
               dvSharedUiFocusableListItem
@@ -117,6 +97,7 @@
               tabindex="-1"
               *dvMatRowDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig(); columns: displayedColumns"
               class="highlightable"
+              [routerLink]="['/infos/buchhaltung', fz.gesuchId]"
             ></tr>
             <tr class="mat-mdc-row" *matNoDataRow>
               <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">

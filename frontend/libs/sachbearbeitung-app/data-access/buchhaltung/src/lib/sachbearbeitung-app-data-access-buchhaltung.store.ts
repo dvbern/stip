@@ -13,10 +13,14 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
+  RemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isSuccess,
+  mapCachedData,
+  pending,
 } from '@dv/shared/util/remote-data';
 
 export type BuchhaltungEntryView =
@@ -26,11 +30,13 @@ export type BuchhaltungEntryView =
 type BuchhaltungState = {
   buchhaltung: CachedRemoteData<BuchhaltungOverview>;
   paginatedFailedAuszahlungBuchhaltung: CachedRemoteData<PaginatedFailedAuszahlungBuchhaltung>;
+  retriedAuszahlung: RemoteData<BuchhaltungEntry>;
 };
 
 const initialState: BuchhaltungState = {
   buchhaltung: initial(),
   paginatedFailedAuszahlungBuchhaltung: initial(),
+  retriedAuszahlung: initial(),
 };
 
 @Injectable()
@@ -135,6 +141,39 @@ export class BuchhaltungStore extends signalStore(
                   });
                 },
               },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  retryFailedAuszahlung$ = rxMethod<{ gesuchId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          retriedAuszahlung: pending(),
+        }));
+      }),
+      switchMap(({ gesuchId }) =>
+        this.buchhaltungService
+          .retryFailedAuszahlungBuchhaltungForGesuch$({ gesuchId })
+          .pipe(
+            handleApiResponse((retriedAuszahlung) =>
+              patchState(this, (state) => ({
+                retriedAuszahlung,
+                buchhaltung: mapCachedData(state.buchhaltung, (buchhaltung) => {
+                  if (isSuccess(retriedAuszahlung)) {
+                    return {
+                      ...buchhaltung,
+                      buchhaltungEntrys: [
+                        ...buchhaltung.buchhaltungEntrys,
+                        retriedAuszahlung.data,
+                      ],
+                    };
+                  }
+                  return buchhaltung;
+                }),
+              })),
             ),
           ),
       ),

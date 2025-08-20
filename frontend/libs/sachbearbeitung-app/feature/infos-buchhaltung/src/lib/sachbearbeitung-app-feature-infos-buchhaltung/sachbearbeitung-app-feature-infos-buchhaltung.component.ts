@@ -67,7 +67,6 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   paginatorSig = viewChild(MatPaginator);
   displayedColumns = [
     'datum',
-    'benutzer',
     'stipendienbetrag',
     'auszahlung',
     'rueckforderung',
@@ -109,6 +108,16 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
 
   isStartOfNewGesuch(_: number, buchhaltungEntry: BuchhaltungEntryView) {
     return buchhaltungEntry.type === 'gesuchStart';
+  }
+
+  retryAuszahlung() {
+    const gesuchId = this.gesuchIdSig();
+
+    if (!gesuchId) {
+      return;
+    }
+
+    this.buchhaltungStore.retryFailedAuszahlung$({ gesuchId });
   }
 
   createBuchhaltungsKorrektur() {

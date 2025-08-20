@@ -37,12 +37,14 @@ export class SachbearbeitungAppDialogBuchhaltungInfoComponent {
   }
 
   sapDeliverysSig = computed(() => {
-    return this.dialogData.sapDeliverys?.sort((a, b) => {
-      return (
-        new Date(b.timestampErstellt).getTime() -
-        new Date(a.timestampErstellt).getTime()
-      );
-    });
+    return this.dialogData.sapDeliverys
+      ? [...this.dialogData.sapDeliverys].sort((a, b) => {
+          return (
+            new Date(a.timestampErstellt).getTime() -
+            new Date(b.timestampErstellt).getTime()
+          );
+        })
+      : undefined;
   });
 
   close() {
