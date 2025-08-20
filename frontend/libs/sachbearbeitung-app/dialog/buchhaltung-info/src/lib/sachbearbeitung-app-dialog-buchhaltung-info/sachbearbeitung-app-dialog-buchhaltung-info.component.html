@@ -72,10 +72,8 @@
             {{ zv.nachname }}
           </span>
         </div>
-        <div>{{ zv.adresse.strasse }}</div>
-        <div>{{ zv.adresse.hausnummer }}</div>
-        <div>{{ zv.adresse.plz }}</div>
-        <div>{{ zv.adresse.ort }}</div>
+        <div>{{ zv.adresse.strasse }} {{ zv.adresse.hausnummer }}</div>
+        <div>{{ zv.adresse.plz }} {{ zv.adresse.ort }}</div>
         <div>{{ zv.iban }}</div>
       </dd>
     }
@@ -103,11 +101,6 @@
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | translate }}
       </div>
 
-      <!-- <ng-container *ngFor="let sapDelivery of sapDeliverysSig(); trackBy: trackBySapId">
-        <div>{{ sapDelivery.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</div>
-        <div>{{ sapDelivery.sapId }}</div>
-        <div>{{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + sapDelivery.sapStatus | translate }}</div>
-      </ng-container> -->
       @for (item of sapDeliverysSig(); track item.sapId) {
         <div>{{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</div>
         <div>{{ item.sapId }}</div>
