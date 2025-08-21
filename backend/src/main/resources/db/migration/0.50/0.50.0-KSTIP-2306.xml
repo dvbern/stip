@@ -51,4 +51,7 @@
         <column name="failed_buchhaltung_auszahlung_type" type="VARCHAR(255)"/>
       </addColumn>
     </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-17">
+      <dropUniqueConstraint constraintName="uc_zahlungsverbindungsapdelivery_id_col" tableName="zahlungsverbindung"/>
+    </changeSet>
 </databaseChangeLog>

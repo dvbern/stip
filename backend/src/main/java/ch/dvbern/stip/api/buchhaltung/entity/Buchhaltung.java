@@ -109,8 +109,8 @@ public class Buchhaltung extends AbstractMandantEntity {
     public SapStatus getSapStatus() {
         return switch (this.getBuchhaltungType()) {
             case SALDOAENDERUNG, STIPENDIUM -> null;
-            case BUSINESSPARTNER_CREATE -> sapDeliverys.isEmpty() ? null : sapDeliverys.getFirst().getSapStatus();
-            case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER -> {
+            // case BUSINESSPARTNER_CREATE -> sapDeliverys.isEmpty() ? null : sapDeliverys.getFirst().getSapStatus();
+            case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER, BUSINESSPARTNER_CREATE -> {
                 if (sapDeliverys.isEmpty()) {
                     yield SapStatus.IN_PROGRESS;
                 }

@@ -29,6 +29,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -78,7 +79,7 @@ public class Zahlungsverbindung extends AbstractMandantEntity {
     private Integer sapBusinessPartnerId;
 
     @Nullable
-    @OneToOne(optional = true)
+    @ManyToOne(optional = true)
     @JoinColumn(
         name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_zahlungsverbindung_sapdelivery_id"),
         nullable = true

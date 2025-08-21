@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
-import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
@@ -54,8 +53,8 @@ public interface FallMapper {
         return fall.getBuchhaltungs()
             .stream()
             .sorted(Comparator.comparing(Buchhaltung::getTimestampErstellt).reversed())
-            .filter(buchhaltung -> BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()))
             .filter(buchhaltung -> buchhaltung.getSapStatus() == SapStatus.FAILURE)
+            // .filter(buchhaltung -> BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()))
             .findFirst()
             .orElseThrow();
     }

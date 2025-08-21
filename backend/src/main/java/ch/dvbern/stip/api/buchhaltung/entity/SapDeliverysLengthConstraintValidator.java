@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class SapDeliverysLengthConstraintValidator
     implements ConstraintValidator<SapDeliverysLengthConstraint, Buchhaltung> {
-    public static final Integer MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER = 1;
+    public static final Integer MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER = 3;
     public static final Integer MAX_SAP_DELIVERYS_AUSZAHLUNG = 3;
 
     @Override
