@@ -1592,7 +1592,9 @@ paths:
                 $ref: '#/components/schemas/GesuchsperiodeWithDaten'
       operationId: publishGesuchsperiode
       summary: Publishes a Gesuchsperiode with the given id
-  /gesuchsperiode/get-all-assignable:
+  /gesuchsperiode/get-all-assignable/{gesuchId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
     get:
       tags:
         - Gesuchsperiode
