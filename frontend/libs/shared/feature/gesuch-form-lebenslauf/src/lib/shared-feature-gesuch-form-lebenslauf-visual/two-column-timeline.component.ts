@@ -68,8 +68,7 @@ export class TwoColumnTimelineComponent {
       const lebenslaufItems = this.lebenslaufItems();
       const ausbildung = this.ausbildung();
       const ausbildungsstaettes = this.ausbildungsstaettes();
-      const language = this.language();
-      console.log('language', { language });
+      this.language();
 
       this.setLebenslaufItems(
         startDate,
