@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -58,15 +59,28 @@ public class GesuchTrancheHistoryRepository {
 
     @Transactional
     public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
+        return getLatestWhereStatusChangedToUeberpruefen(gesuchTrancheId, null);
+    }
+
+    @Transactional
+    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(
+        final UUID gesuchTrancheId,
+        final @Nullable Integer revision
+    ) {
         final var reader = AuditReaderFactory.get(em);
-        return (GesuchTranche) reader.createQuery()
+        final var query = reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, false)
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
             .add(AuditEntity.property("status").hasChanged())
             .addOrder(AuditEntity.revisionNumber().desc())
-            .setMaxResults(1)
-            .getSingleResult();
+            .setMaxResults(1);
+
+        if (revision != null) {
+            query.add(AuditEntity.revisionNumber().eq(revision));
+        }
+
+        return (GesuchTranche) query.getSingleResult();
     }
 
     @Transactional

@@ -499,9 +499,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
+    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId, Integer revision) {
         gesuchTrancheAuthorizer.sbOrJuristCanRead();
-        return gesuchService.getSbTrancheChanges(aenderungId);
+        return gesuchService.getSbTrancheChanges(aenderungId, revision);
     }
 
     @RolesAllowed(GS_GESUCH_READ)

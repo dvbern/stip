@@ -126,6 +126,7 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
+import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -875,11 +876,11 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
+    public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId, final @Nullable Integer revision) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
         final var latestWhereStatusChanged =
-            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
+            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId, revision);
         return gesuchMapperUtil.toWithChangesDto(
             aenderung.getGesuch(),
             aenderung,

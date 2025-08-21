@@ -2926,6 +2926,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #aenderungIdPath Die ID der Aenderung (required)
+     * @see #revisionQuery  (optional)
      * return GesuchWithChangesDtoSpec
      */
     public static class GetSbAenderungChangesOper implements Oper {
@@ -2971,6 +2972,17 @@ public class GesuchApiSpec {
          */
         public GetSbAenderungChangesOper aenderungIdPath(Object aenderungId) {
             reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        public static final String REVISION_QUERY = "revision";
+
+        /**
+         * @param revision (Integer)  (optional)
+         * @return operation
+         */
+        public GetSbAenderungChangesOper revisionQuery(Object... revision) {
+            reqSpec.addQueryParam(REVISION_QUERY, revision);
             return this;
         }
 

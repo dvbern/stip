@@ -27,6 +27,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status;
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String comment;
+  private @Valid Integer revision;
 
   /**
    **/
@@ -141,6 +142,24 @@ public class GesuchTrancheSlimDto  implements Serializable {
     this.comment = comment;
   }
 
+  /**
+   **/
+  public GesuchTrancheSlimDto revision(Integer revision) {
+    this.revision = revision;
+    return this;
+  }
+
+  
+  @JsonProperty("revision")
+  public Integer getRevision() {
+    return revision;
+  }
+
+  @JsonProperty("revision")
+  public void setRevision(Integer revision) {
+    this.revision = revision;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -156,12 +175,13 @@ public class GesuchTrancheSlimDto  implements Serializable {
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
         Objects.equals(this.status, gesuchTrancheSlim.status) &&
         Objects.equals(this.typ, gesuchTrancheSlim.typ) &&
-        Objects.equals(this.comment, gesuchTrancheSlim.comment);
+        Objects.equals(this.comment, gesuchTrancheSlim.comment) &&
+        Objects.equals(this.revision, gesuchTrancheSlim.revision);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, comment);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, comment, revision);
   }
 
   @Override
@@ -175,6 +195,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    revision: ").append(toIndentedString(revision)).append("\n");
     sb.append("}");
     return sb.toString();
   }
