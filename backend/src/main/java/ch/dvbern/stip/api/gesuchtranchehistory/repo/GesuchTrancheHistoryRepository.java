@@ -35,7 +35,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 
@@ -174,7 +176,7 @@ public class GesuchTrancheHistoryRepository {
     }
 
     @Transactional
-    public List<GesuchTranche> getAllAbgelehnteAenderungs(final UUID gesuchId) {
+    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
         // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
         // List<GesuchTranche>
         @SuppressWarnings("unchecked")
@@ -188,6 +190,26 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
             .add(AuditEntity.property("status").hasChanged())
             .getResultList();
-        return abgehlenteAenderungList;
+
+        @SuppressWarnings("unchecked")
+        final List<Pair<GesuchTranche, DefaultRevisionEntity>> abgehlenteAenderungen = AuditReaderFactory.get(em)
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, true)
+            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
+            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .add(AuditEntity.property("status").hasChanged())
+            .getResultList()
+            .stream()
+            .filter(result -> result instanceof Object[] array && array.length >= 2)
+            .map(result -> {
+                final var list = (Object[]) result;
+                return Pair.of((GesuchTranche) list[0], (DefaultRevisionEntity) list[1]);
+            })
+            .toList();
+
+        return abgehlenteAenderungen;
     }
 }
