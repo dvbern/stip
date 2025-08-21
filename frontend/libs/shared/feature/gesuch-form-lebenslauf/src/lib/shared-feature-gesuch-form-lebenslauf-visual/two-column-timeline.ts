@@ -1,9 +1,18 @@
 import { addMonths, isAfter, isBefore, isEqual, subMonths } from 'date-fns';
 
-type TimelineLabel = {
-  title: string;
-  subTitle?: { key: string; value?: string };
-};
+import { AbschlussSlim } from '@dv/shared/model/gesuch';
+
+type TimelineLabel =
+  | {
+      type: 'TEXT';
+      title: string;
+      subTitle?: { key: string; value?: string };
+    }
+  | {
+      type: 'ABSCHLUSS';
+      abschluss: AbschlussSlim;
+      subTitle?: { key: string; value?: string };
+    };
 
 export interface TimelineRawItem {
   id: string;

@@ -23,9 +23,7 @@
           [invalidValueLabelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss.error' | translate"
         >
           <ng-container *dvSearchOptionLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
-            @let abschlussFullname =
-              `${abschluss | translatedProp: 'bezeichnung' : languageSig()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}`;
-            {{ abschlussFullname }}
+            {{ `${abschluss | translatedProp: 'bezeichnung' : languageSig()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}` }}
           </ng-container>
         </dv-shared-ui-select-search>
       </div>
