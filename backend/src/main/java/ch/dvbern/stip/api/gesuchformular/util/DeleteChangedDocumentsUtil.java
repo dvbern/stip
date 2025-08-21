@@ -25,12 +25,16 @@ import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.ElternUpdateDto;
+import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
@@ -57,6 +61,41 @@ public class DeleteChangedDocumentsUtil {
                 oldFormular.getPersonInAusbildung()
             )
         );
+
+        for (final Eltern oldEltern : oldFormular.getElterns()) {
+            final var newEltern = newFormular.getElterns()
+                .stream()
+                .filter(
+                    elternUpdateDto -> elternUpdateDto.getElternTyp() == oldEltern.getElternTyp()
+                )
+                .findFirst();
+            if (newEltern.isPresent()) {
+                documentTypesToDelete.addAll(
+                    getDocumentsToDeleteForEltern(newEltern.get(), oldEltern)
+                );
+            } else {
+                documentTypesToDelete.add(
+                    switch (oldEltern.getElternTyp()) {
+                        case MUTTER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER;
+                        case VATER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER;
+                    }
+                );
+            }
+
+            newEltern.ifPresent(
+                elternUpdateDto -> documentTypesToDelete.addAll(
+                    getDocumentsToDeleteForEltern(elternUpdateDto, oldEltern)
+                )
+            );
+        }
+
+        documentTypesToDelete.addAll(
+            getDocumentsToDeleteForFamiliensituation(
+                newFormular.getFamiliensituation(),
+                oldFormular.getFamiliensituation()
+            )
+        );
+
         documentTypesToDelete.addAll(
             getDocumentsToDeleteForPartner(newFormular.getPartner(), oldFormular.getPartner())
         );
@@ -168,6 +207,50 @@ public class DeleteChangedDocumentsUtil {
             toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
         }
 
+        return toDelete;
+    }
+
+    List<DokumentTyp> getDocumentsToDeleteForEltern(
+        final ElternUpdateDto newEltern,
+        final Eltern oldEltern
+    ) {
+        if (newEltern == null || oldEltern == null) {
+            return List.of();
+        }
+
+        final var toDelete = new ArrayList<DokumentTyp>();
+        if (
+            hasChangedAndNewIsGreaterThanZero(oldEltern.getWohnkosten(), newEltern.getWohnkosten())
+        ) {
+            final var toDeleteDoc = switch (newEltern.getElternTyp()) {
+                case MUTTER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER;
+                case VATER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER;
+            };
+            toDelete.add(toDeleteDoc);
+            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+        }
+        return toDelete;
+    }
+
+    List<DokumentTyp> getDocumentsToDeleteForFamiliensituation(
+        final FamiliensituationUpdateDto newFamiliensituation,
+        final Familiensituation oldFamiliensituation
+    ) {
+        if (newFamiliensituation == null || oldFamiliensituation == null) {
+            return List.of();
+        }
+        final var toDelete = new ArrayList<DokumentTyp>();
+
+        if (
+            !Objects.equals(
+                newFamiliensituation.getElternVerheiratetZusammen(),
+                oldFamiliensituation.getElternVerheiratetZusammen()
+            )
+        ) {
+            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER);
+            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER);
+            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+        }
         return toDelete;
     }
 
