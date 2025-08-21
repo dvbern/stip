@@ -51,7 +51,6 @@
     "files.exclude": {
       "backend/**": true
     },
-    "eslint.validate": ["json"],
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
     "tailwindCSS.experimental.classRegex": [
       "HostBinding.*class[\\s\\S*]*['\"`](.+?)['\"`]",
@@ -148,6 +147,12 @@
     "testing.automaticallyOpenTestResults": "neverOpen",
     "angular.forceStrictTemplates": true,
     "git.blame.statusBarItem.enabled": false,
-    "editor.suggest.preview": true
+    "editor.suggest.preview": true,
+    "eslint.useFlatConfig": true,
+    "eslint.validate": [
+      "typescript",
+      "json",
+      "javascript"
+    ]
   }
 }
