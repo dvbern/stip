@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,7 +10,7 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MaskitoDirective } from '@maskito/angular';
@@ -25,6 +26,7 @@ import { maskitoPercent } from '@dv/shared/util/maskito-util';
 @Component({
   selector: 'dv-shared-ui-percentage-splitter',
   imports: [
+    CommonModule,
     MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,
@@ -55,9 +57,6 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
       const controlBChangedSig = toSignal(this.controlB.valueChanges, {
         initialValue: undefined,
       });
-
-      this.controlA.addValidators(Validators.minLength(2));
-      this.controlB.addValidators(Validators.minLength(2));
 
       effect(() => {
         const anteilA = percentStringToNumber(controlAChangedSig());
