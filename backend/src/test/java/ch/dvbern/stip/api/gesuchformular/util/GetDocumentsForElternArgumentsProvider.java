@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.api.gesuchformular.util;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.util.StreamUtil;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 public class GetDocumentsForElternArgumentsProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-        return concat(
+        return StreamUtil.concat(
             CreatePermutationUtil.createIntegerPermutations(
                 (val) -> new ElternUpdateDto().wohnkosten(val).elternTyp(ElternTyp.MUTTER),
                 (val) -> new Eltern().setWohnkosten(val).setElternTyp(ElternTyp.MUTTER),
@@ -48,11 +48,5 @@ public class GetDocumentsForElternArgumentsProvider implements ArgumentsProvider
                 DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
             )
         );
-    }
-
-    @SafeVarargs
-    // Because Java Stream does not provide a concat with varargs parameter
-    private static Stream<? extends Arguments> concat(final Stream<Arguments>... streams) {
-        return Arrays.stream(streams).flatMap(stream -> stream);
     }
 }
