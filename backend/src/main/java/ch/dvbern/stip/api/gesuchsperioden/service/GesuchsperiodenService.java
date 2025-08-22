@@ -26,7 +26,9 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -47,6 +49,7 @@ public class GesuchsperiodenService {
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
+    private final GesuchRepository gesuchRepository;
 
     @Transactional
     public GesuchsperiodeWithDatenDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
@@ -190,8 +193,13 @@ public class GesuchsperiodenService {
     }
 
     @Transactional
-    public List<GesuchsperiodeDto> getAllAssignableGesuchsperioden() {
-        return gesuchsperiodeRepository.getAllAssignableGesuchsperioden()
+    public List<GesuchsperiodeDto> getAllAssignableGesuchsperioden(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var ausbildung = gesuch.getAusbildung();
+        final var range =
+            DateUtil.isFruehling(ausbildung.getAusbildungBegin()) ? DateRange.getFruehling() : DateRange.getHerbst();
+
+        return gesuchsperiodeRepository.getAllAssignableGesuchsperiodenWithStartBetween(range)
             .stream()
             .map(gesuchsperiodeMapper::toDto)
             .toList();

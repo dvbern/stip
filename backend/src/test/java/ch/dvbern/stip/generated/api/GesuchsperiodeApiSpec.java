@@ -252,12 +252,13 @@ public class GesuchsperiodeApiSpec {
      * Returns all assignable gesuchsperiode.
      * 
      *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
      * return List&lt;GesuchsperiodeDtoSpec&gt;
      */
     public static class GetAllAssignableGesuchsperiodeOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchsperiode/get-all-assignable";
+        public static final String REQ_URI = "/gesuchsperiode/get-all-assignable/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -269,7 +270,7 @@ public class GesuchsperiodeApiSpec {
         }
 
         /**
-         * GET /gesuchsperiode/get-all-assignable
+         * GET /gesuchsperiode/get-all-assignable/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -280,13 +281,24 @@ public class GesuchsperiodeApiSpec {
         }
 
         /**
-         * GET /gesuchsperiode/get-all-assignable
+         * GET /gesuchsperiode/get-all-assignable/{gesuchId}
          * @param handler handler
          * @return List&lt;GesuchsperiodeDtoSpec&gt;
          */
         public List<GesuchsperiodeDtoSpec> executeAs(Function<Response, Response> handler) {
             TypeRef<List<GesuchsperiodeDtoSpec>> type = new TypeRef<List<GesuchsperiodeDtoSpec>>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GetAllAssignableGesuchsperiodeOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
         }
 
         /**
