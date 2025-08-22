@@ -98,6 +98,7 @@ import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
@@ -109,6 +110,7 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_A
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 
+@Slf4j
 public class TestUtil {
     public static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern("MM.yyyy", Locale.GERMAN);
@@ -130,6 +132,21 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    public static void deleteGesuch(final GesuchApiSpec gesuchApiSpec, final UUID gesuchId, final int attempts) {
+        AssertionError lastError = null;
+        for (int i = 0; i < attempts; i++) {
+            try {
+                deleteGesuch(gesuchApiSpec, gesuchId);
+                return;
+            } catch (AssertionError e) {
+                lastError = e;
+                LOG.warn("Failed to delete gesuch {}, retrying", gesuchId);
+            }
+        }
+
+        throw lastError;
     }
 
     public static void deleteAusbildung(final GesuchApiSpec gesuchApiSpec, final UUID ausbildungId) {
