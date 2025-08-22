@@ -90,8 +90,11 @@
               >
                 <span>
                   {{
-                    'shared.header.aenderung.item'
-                      | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
+                    aenderung.typ === 'TRANCHE'
+                      ? ('shared.header.tranche.item'
+                        | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 })
+                      : ('shared.header.aenderung.item'
+                        | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 })
                   }}
                   -
                   {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}

@@ -84,7 +84,7 @@
 
   <ng-template #updateAenderungButton>
     @let gesuch = view.gesuch;
-    @if (gesuch && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
+    @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
       <button
         type="button"
         class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
