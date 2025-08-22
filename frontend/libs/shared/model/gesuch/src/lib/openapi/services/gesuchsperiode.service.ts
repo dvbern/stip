@@ -36,6 +36,11 @@ export interface GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams {
     gesuchsperiodeId: string;
 }
 
+export interface GesuchsperiodeServiceGetAllAssignableGesuchsperiodeRequestParams {
+    /** Die ID vom Gesuch */
+    gesuchId: string;
+}
+
 export interface GesuchsperiodeServiceGetGesuchsperiodeRequestParams {
     gesuchsperiodeId: string;
 }
@@ -269,13 +274,18 @@ export class GesuchsperiodeService {
 
     /**
      * Returns all assignable gesuchsperiode.
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAllAssignableGesuchsperiode$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuchsperiode>>;
-     public getAllAssignableGesuchsperiode$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuchsperiode>>>;
-     public getAllAssignableGesuchsperiode$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuchsperiode>>>;
-     public getAllAssignableGesuchsperiode$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getAllAssignableGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetAllAssignableGesuchsperiodeRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Gesuchsperiode>>;
+     public getAllAssignableGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetAllAssignableGesuchsperiodeRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Gesuchsperiode>>>;
+     public getAllAssignableGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetAllAssignableGesuchsperiodeRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Gesuchsperiode>>>;
+     public getAllAssignableGesuchsperiode$(requestParameters: GesuchsperiodeServiceGetAllAssignableGesuchsperiodeRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllAssignableGesuchsperiode$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -322,7 +332,7 @@ export class GesuchsperiodeService {
             }
         }
 
-        const localVarPath = `/gesuchsperiode/get-all-assignable`;
+        const localVarPath = `/gesuchsperiode/get-all-assignable/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<Gesuchsperiode>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

@@ -45,16 +45,16 @@ export class ChangeGesuchsperiodeStore extends signalStore(
     }));
   }
 
-  getAllAssignableGesuchsperiode$ = rxMethod<void>(
+  getAllAssignableGesuchsperiode$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, {
           assignableGesuchsperioden: pending(),
         });
       }),
-      switchMap(() =>
+      switchMap(({ gesuchId }) =>
         this.gesuchsperiodeService
-          .getAllAssignableGesuchsperiode$()
+          .getAllAssignableGesuchsperiode$({ gesuchId })
           .pipe(
             handleApiResponse((assignableGesuchsperioden) =>
               patchState(this, { assignableGesuchsperioden }),

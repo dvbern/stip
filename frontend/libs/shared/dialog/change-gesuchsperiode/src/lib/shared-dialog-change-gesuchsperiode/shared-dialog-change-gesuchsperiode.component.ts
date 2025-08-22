@@ -137,7 +137,9 @@ export class SharedDialogChangeGesuchsperiodeComponent {
 
   constructor() {
     this.changeGesuchsperiodeStore.resetErrors();
-    this.changeGesuchsperiodeStore.getAllAssignableGesuchsperiode$();
+    this.changeGesuchsperiodeStore.getAllAssignableGesuchsperiode$({
+      gesuchId: this.dialogData.gesuchId,
+    });
   }
 
   confirm() {
