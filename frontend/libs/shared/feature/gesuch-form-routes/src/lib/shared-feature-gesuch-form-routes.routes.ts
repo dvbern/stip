@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { trancheRoutes } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
   AUSZAHLUNG,
@@ -174,16 +175,8 @@ export const baseGesuchFormRoutes: Routes = [
         (m) => m.sharedFeatureGesuchDokumenteRoutes,
       ),
   },
-  {
-    path: ':id/tranche/:trancheId',
-    redirectTo: TRANCHE.route + '/:id/tranche/:trancheId',
-  },
-  {
-    path: ':id/aenderung/:trancheId',
-    redirectTo: TRANCHE.route + '/:id/aenderung/:trancheId',
-  },
-  {
-    path: ':id/initial/:trancheId',
-    redirectTo: TRANCHE.route + '/:id/initial/:trancheId',
-  },
+  ...trancheRoutes.map((route) => ({
+    path: `:id/${route}/:trancheId`,
+    redirectTo: `${TRANCHE.route}/:id/${route}/:trancheId`,
+  })),
 ];
