@@ -1250,10 +1250,9 @@ public class GesuchService {
 
         gesuch.getGesuchTranchen().forEach(tranche -> {
             final var oldGueltigkeit = tranche.getGueltigkeit();
-            final var actualYear = gesuchsperiode.getGesuchsperiodeStart().getYear();
             final var newGueltigkeit = new DateRange(
-                oldGueltigkeit.getGueltigAb().withYear(actualYear),
-                oldGueltigkeit.getGueltigBis().withYear(actualYear)
+                oldGueltigkeit.getGueltigAb().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear()),
+                oldGueltigkeit.getGueltigBis().withYear(gesuchsperiode.getGesuchsperiodeStopp().getYear())
             );
 
             tranche.setGueltigkeit(newGueltigkeit);
