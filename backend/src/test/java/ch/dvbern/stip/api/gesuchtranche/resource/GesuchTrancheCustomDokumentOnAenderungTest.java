@@ -319,6 +319,6 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @Order(99)
     @StepwiseExtension.AlwaysRun
     void deleteGesuch() {
-        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId(), 5);
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }
