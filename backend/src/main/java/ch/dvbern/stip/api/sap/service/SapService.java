@@ -440,7 +440,10 @@ public class SapService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var zahlungsverbindung = gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung();
 
-        if (!zahlungsverbindung.getSapDelivery().getSapStatus().equals(SapStatus.SUCCESS)) {
+        if (
+            zahlungsverbindung.getSapDelivery() == null ||
+            !zahlungsverbindung.getSapDelivery().getSapStatus().equals(SapStatus.SUCCESS)
+        ) {
             return;
         }
 
@@ -471,6 +474,17 @@ public class SapService {
                     )
                 );
                 final var fall = zahlungsverbindungRepository.getFallOfZahlungsverbindung(zahlungsverbindung.getId());
+
+                if (fall == null) {
+                    LOG.warn(
+                        String.format(
+                            "No Fall found for Zahlungsverbindung: %s, skipping processing",
+                            zahlungsverbindung.getId()
+                        )
+                    );
+                    continue;
+                }
+
                 final var gesuch = fall.getAusbildungs()
                     .stream()
                     .max(Comparator.comparing(Ausbildung::getTimestampErstellt))
