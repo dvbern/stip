@@ -1248,6 +1248,17 @@ public class GesuchService {
                 GesuchNachInBearbeitungSBValidationGroup.class
             );
 
+        gesuch.getGesuchTranchen().forEach(tranche -> {
+            final var oldGueltigkeit = tranche.getGueltigkeit();
+            final var actualYear = gesuchsperiode.getGesuchsperiodeStart().getYear();
+            final var newGueltigkeit = new DateRange(
+                oldGueltigkeit.getGueltigAb().withYear(actualYear),
+                oldGueltigkeit.getGueltigBis().withYear(actualYear)
+            );
+
+            tranche.setGueltigkeit(newGueltigkeit);
+        });
+
         gesuchRepository.persistAndFlush(gesuch);
 
         return gesuchMapperUtil.mapWithTranche(gesuch, gesuchTranche);
