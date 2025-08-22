@@ -37,6 +37,8 @@ export class AusbildungsstaetteStore extends signalStore(
       this.ausbildungsstaetten.data()?.map((ausbildungsstaette) => ({
         ...ausbildungsstaette,
         testId: ausbildungsstaette.nameDe,
+        // Invalid is set by the component based on depending values
+        disabled: !ausbildungsstaette.aktiv,
         displayValueDe: ausbildungsstaette.nameDe,
         displayValueFr: ausbildungsstaette.nameFr,
       })) ?? [],
@@ -52,6 +54,8 @@ export class AusbildungsstaetteStore extends signalStore(
       this.abschluesse.data()?.map((abschluss) => ({
         ...abschluss,
         testId: abschluss.bezeichnungDe,
+        invalid: !abschluss.aktiv,
+        disabled: !abschluss.aktiv,
         displayValueDe: abschluss.bezeichnungDe,
         displayValueFr: abschluss.bezeichnungFr,
       })) ?? [],

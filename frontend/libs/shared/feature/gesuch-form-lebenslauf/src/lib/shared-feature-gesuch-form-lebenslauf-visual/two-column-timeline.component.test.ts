@@ -5,7 +5,10 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { Ausbildung, LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
-import { provideSharedPatternJestTestAusbildungstaetten } from '@dv/shared/pattern/jest-test-setup';
+import {
+  TEST_ABSCHLUESSE,
+  provideSharedPatternJestTestAusbildungstaetten,
+} from '@dv/shared/pattern/jest-test-setup';
 
 import { TwoColumnTimelineComponent } from './two-column-timeline.component';
 
@@ -48,7 +51,7 @@ describe(TwoColumnTimelineComponent.name, () => {
     const berufsbezeichnung = 'Mein Beruf';
     const items = [
       {
-        abschlussId: '1',
+        abschlussId: TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.id,
         fachrichtungBerufsbezeichnung: berufsbezeichnung,
         wohnsitz: 'BE',
         von: '02.2022',
@@ -68,7 +71,7 @@ describe(TwoColumnTimelineComponent.name, () => {
     const fachrichtungBerufsbezeichnung = 'Meine Fachbezeichnung';
     const items = [
       {
-        abschlussId: '1',
+        abschlussId: TEST_ABSCHLUESSE.abschlussFachrichtung1.id,
         fachrichtungBerufsbezeichnung,
         von: '02.2022',
         bis: '03.2022',

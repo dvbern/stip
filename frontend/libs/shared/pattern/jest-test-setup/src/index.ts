@@ -126,17 +126,15 @@ const prepareAbschluss = (abschluss: AbschlussSlim) => {
 
 export const TEST_AUSBILDUNGSSTAETTEN = {
   staette1: {
-    ...{
-      nameDe: 'Ausbildungsstaette DE 1',
-      nameFr: 'Ausbildungsstaette FR 1',
-      id: '1',
-      aktiv: true,
-    },
+    nameDe: 'Ausbildungsstaette DE 1',
+    nameFr: 'Ausbildungsstaette FR 1',
+    id: 'staette1',
+    aktiv: true,
     ausbildungsgaenge: [
       {
+        id: 'gang1',
         bezeichnungDe: 'Ausbildungsgang 1 DE',
         bezeichnungFr: 'Ausbildungsgang 1 FR',
-        id: '1',
         bildungskategorie: 'SEKUNDARSTUFE_I',
         zusatzfrage: 'FACHRICHTUNG',
         aktiv: true,
@@ -147,7 +145,7 @@ export const TEST_AUSBILDUNGSSTAETTEN = {
 
 export const TEST_ABSCHLUESSE = {
   abschlussFachrichtung1: prepareAbschluss({
-    id: '1',
+    id: 'abschluss1',
     bezeichnungDe: 'Abschluss Fachrichtung 1 DE',
     bezeichnungFr: 'Abschluss Fachrichtung 1 FR',
     ausbildungskategorie: 'HOEHERE_FACHSCHULE',
@@ -155,7 +153,7 @@ export const TEST_ABSCHLUESSE = {
     aktiv: true,
   }),
   abschlussFachrichtung2: prepareAbschluss({
-    id: '2',
+    id: 'abschluss2',
     bezeichnungDe: 'Abschluss Fachrichtung 2 DE',
     bezeichnungFr: 'Abschluss Fachrichtung 2 FR',
     ausbildungskategorie: 'HOEHERE_FACHSCHULE',
@@ -163,7 +161,7 @@ export const TEST_ABSCHLUESSE = {
     aktiv: true,
   }),
   abschlussBerufsbezeichnung1: prepareAbschluss({
-    id: '3',
+    id: 'abschluss3',
     bezeichnungDe: 'Abschluss Berufsbezeichnung 1 DE',
     bezeichnungFr: 'Abschluss Berufsbezeichnung 1 FR',
     ausbildungskategorie: 'BERUFSFACHSCHULEN',
@@ -171,7 +169,7 @@ export const TEST_ABSCHLUESSE = {
     aktiv: true,
   }),
   abschlussBerufsbezeichnung2: prepareAbschluss({
-    id: '4',
+    id: 'abschluss4',
     bezeichnungDe: 'Abschluss Berufsbezeichnung 2 DE',
     bezeichnungFr: 'Abschluss Berufsbezeichnung 2 FR',
     ausbildungskategorie: 'BERUFSFACHSCHULEN',
@@ -179,7 +177,7 @@ export const TEST_ABSCHLUESSE = {
     aktiv: true,
   }),
   abschlussWithoutZusatzfrage1: prepareAbschluss({
-    id: '5',
+    id: 'abschluss5',
     bezeichnungDe: 'Abschluss Without Zusatzfrage 1 DE',
     bezeichnungFr: 'Abschluss Without Zusatzfrage 1 FR',
     ausbildungskategorie: 'BERUFS_UND_HOEHERE_FACHSCHULE',
