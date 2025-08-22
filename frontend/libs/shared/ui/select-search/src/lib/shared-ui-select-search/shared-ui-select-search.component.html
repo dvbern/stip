@@ -28,8 +28,8 @@
         <span ngxMatSelectSearchClear class="material-symbols-rounded tw-flex">clear</span>
       </ngx-mat-select-search>
     </mat-option>
-    @for (value of filteredValuesSig(); track $index) {
-      <mat-option [value]="value" [attr.data-testid]="value.testId" [disabled]="!isEntryValidSig()(value)">
+    @for (value of filteredValuesSig(); track value.id ?? $index) {
+      <mat-option [value]="value" [attr.data-testid]="value.testId" [disabled]="value.disabled">
         @if (optionTemplateSig(); as optionTemplate) {
           <ng-container *ngTemplateOutlet="optionTemplate.templateRef; context: { $implicit: value }"></ng-container>
         } @else {

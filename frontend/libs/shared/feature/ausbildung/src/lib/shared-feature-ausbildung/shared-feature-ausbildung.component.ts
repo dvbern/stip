@@ -29,6 +29,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
+import { diff } from 'json-diff-ts';
 import { startWith } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
@@ -233,48 +234,74 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   });
 
-  ausbildungsstaettenOptionsSig = computed(() => {
-    const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
-    const ausbildungsstaetten =
-      this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
+  ausbildungsstaettenOptionsSig = computed(
+    () => {
+      const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
+      const isNew = this.fallIdSig();
+      const ausbildungsstaetten =
+        this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
 
-    return ausbildungsstaetten.filter(
-      (ausbildungsstaette) =>
-        ausbildungsstaette.aktiv ||
-        ausbildungsstaette.id === currentAusbildungsstaette?.id,
-    );
-  });
+      if (!ausbildungsstaetten || (!currentAusbildungsstaette && !isNew)) {
+        return [];
+      }
 
-  ausbildungsgangOptionsSig = computed(() => {
-    const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
-    const ausbildung = {
-      ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
-        .gesuchFormular?.ausbildung,
-    };
-    const language = this.languageSig();
+      return ausbildungsstaetten
+        .map((ausbildungsstaette) => ({
+          ...ausbildungsstaette,
+          invalid:
+            !ausbildungsstaette.aktiv &&
+            ausbildungsstaette.id !== currentAusbildungsstaette?.id,
+          disabled: !ausbildungsstaette.aktiv,
+        }))
+        .filter((ausbildungsstaette) =>
+          ausbildungsstaette.ausbildungsgaenge.some((gang) => gang.aktiv),
+        );
+    },
+    {
+      equal: areObjectsEqual,
+    },
+  );
 
-    const ausbildungsgaenge =
-      currentAusbildungsstaette?.ausbildungsgaenge
-        ?.filter(
-          (ausbildungsgang) =>
-            ausbildungsgang.aktiv ||
-            ausbildungsgang.id === ausbildung.ausbildungsgang?.id,
-        )
-        .map((ausbildungsgang) => {
-          return {
-            ...ausbildungsgang,
-            translatedName: getTranslatableProp(
-              ausbildungsgang,
-              'bezeichnung',
-              language,
-            ),
-            testId: ausbildungsgang.bezeichnungDe,
-            displayValueDe: ausbildungsgang.bezeichnungDe,
-            displayValueFr: ausbildungsgang.bezeichnungFr,
-          };
-        }) ?? [];
-    return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
-  });
+  ausbildungsgangOptionsSig = computed(
+    () => {
+      const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
+      const currentAusbildungsgang = this.currentAusbildungsgangSig();
+      const ausbildung = {
+        ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+          .gesuchFormular?.ausbildung,
+      };
+      const language = this.languageSig();
+
+      const ausbildungsgaenge =
+        currentAusbildungsstaette?.ausbildungsgaenge
+          ?.filter(
+            (ausbildungsgang) =>
+              ausbildungsgang.aktiv ||
+              ausbildungsgang.id === ausbildung.ausbildungsgang?.id,
+          )
+          .map((ausbildungsgang) => {
+            return {
+              ...ausbildungsgang,
+              translatedName: getTranslatableProp(
+                ausbildungsgang,
+                'bezeichnung',
+                language,
+              ),
+              testId: ausbildungsgang.bezeichnungDe,
+              invalid:
+                !ausbildungsgang.aktiv &&
+                ausbildungsgang.id !== currentAusbildungsgang?.id,
+              disabled: !ausbildungsgang.aktiv,
+              displayValueDe: ausbildungsgang.bezeichnungDe,
+              displayValueFr: ausbildungsgang.bezeichnungFr,
+            };
+          }) ?? [];
+      return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
+    },
+    {
+      equal: areObjectsEqual,
+    },
+  );
 
   zusatzfrageSig = computed(() => {
     const newAusbildungsgang = this.currentAusbildungsgangSig();
@@ -652,3 +679,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   };
 }
+
+const areObjectsEqual = <T>(a: T, b: T): boolean => {
+  return diff(a, b).length === 0;
+};

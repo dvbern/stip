@@ -196,7 +196,7 @@ export class AusbildungsstaetteComponent
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
 
-  private reloadAbschluesseSig = signal<unknown>(null);
+  private reloadAusbildungsstaettenSig = signal<unknown>(null);
 
   constructor() {
     this.ausbildungsstaetteStore.loadAusbildungsstaetten$();
@@ -226,7 +226,7 @@ export class AusbildungsstaetteComponent
       const { sortColumn, sortOrder, page, pageSize } =
         getSortAndPageInputs(this);
 
-      this.reloadAbschluesseSig();
+      this.reloadAusbildungsstaettenSig();
       const active = this.status();
       this.administrationAusbildungsstaetteStore.loadAusbildungsstaetten$({
         filter: {
@@ -264,7 +264,7 @@ export class AusbildungsstaetteComponent
             type: 'ausbildungsstaette',
             id: ausbildungsstaette.id,
             onSuccess: () => {
-              this.reloadAbschluesseSig.set({});
+              this.reloadAusbildungsstaettenSig.set({});
             },
           });
         }
@@ -283,7 +283,7 @@ export class AusbildungsstaetteComponent
           this.administrationAusbildungsstaetteStore.createAusbildungsstaette$({
             values: { ausbildungsstaetteCreate },
             onSuccess: () => {
-              this.reloadAbschluesseSig.set({});
+              this.reloadAusbildungsstaettenSig.set({});
             },
           });
         }
@@ -304,7 +304,7 @@ export class AusbildungsstaetteComponent
               renameAusbildungsstaette,
             },
             onSuccess: () => {
-              this.reloadAbschluesseSig.set({});
+              this.reloadAusbildungsstaettenSig.set({});
             },
           });
         }

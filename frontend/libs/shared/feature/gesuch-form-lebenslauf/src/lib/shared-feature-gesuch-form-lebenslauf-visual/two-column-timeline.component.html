@@ -40,7 +40,12 @@
                   <div>
                     <ng-template #content>
                       <h5 data-testid="two-column-timeline-label">
-                        {{ child.label.title | translate }}
+                        @if (child.label.type === 'TEXT') {
+                          {{ child.label.title | translate }}
+                        } @else {
+                          @let abschluss = child.label.abschluss;
+                          {{ `${abschluss | translatedProp: 'bezeichnung' : language()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}` }}
+                        }
                       </h5>
                       @if (child.label.subTitle; as subTitle) {
                         <small class="d-block" data-testid="two-column-timeline-sub-label">

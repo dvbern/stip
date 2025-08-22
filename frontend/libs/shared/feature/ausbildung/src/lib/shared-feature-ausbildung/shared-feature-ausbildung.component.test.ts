@@ -26,7 +26,7 @@ const language = 'de';
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
     inputs: {
-      fallIdSig: null,
+      fallIdSig: 'fall123',
     },
     imports: [
       TranslateTestingModule.withTranslations({}),

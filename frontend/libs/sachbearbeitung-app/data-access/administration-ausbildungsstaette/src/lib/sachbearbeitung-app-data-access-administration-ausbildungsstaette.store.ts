@@ -187,37 +187,6 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
     ),
   );
 
-  editAbschluss$ = rxMethod<{
-    values: AusbildungsstaetteServiceRenameAbschlussRequestParams;
-    onSuccess?: (abschluss: Abschluss) => void;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          ausbildungsgaenge: cachedPending(state.ausbildungsgaenge),
-        }));
-      }),
-      switchMap(({ values, onSuccess }) =>
-        this.ausbildungsstaetteService.renameAbschluss$(values).pipe(
-          handleApiResponse(
-            (abschluss) => {
-              patchState(this, { lastEdit: abschluss });
-            },
-            {
-              onSuccess: (value) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.editDialog.success',
-                });
-                onSuccess?.(value);
-              },
-            },
-          ),
-        ),
-      ),
-    ),
-  );
-
   createAusbildungsstaette$ = rxMethod<{
     values: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams;
     onSuccess?: (ausbildungsstaette: Ausbildungsstaette) => void;
@@ -313,17 +282,43 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
     ),
   );
 
+  editAbschluss$ = rxMethod<{
+    values: AusbildungsstaetteServiceRenameAbschlussRequestParams;
+    onSuccess?: (abschluss: Abschluss) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          ausbildungsgaenge: cachedPending(state.ausbildungsgaenge),
+        }));
+      }),
+      switchMap(({ values, onSuccess }) =>
+        this.ausbildungsstaetteService.renameAbschluss$(values).pipe(
+          handleApiResponse(
+            (abschluss) => {
+              patchState(this, { lastEdit: abschluss });
+            },
+            {
+              onSuccess: (value) => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey:
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.editDialog.success',
+                });
+                onSuccess?.(value);
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+
   archiveEntity$ = rxMethod<{
     type: EntityTypes;
     id: string;
     onSuccess: () => void;
   }>(
     pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          abschluesse: cachedPending(state.abschluesse),
-        }));
-      }),
       switchMap(({ type, id, onSuccess }) => {
         const ignoreResult = (observable: Observable<unknown>) =>
           observable.pipe(map(() => undefined));
