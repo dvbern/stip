@@ -261,4 +261,9 @@ public class Gesuch extends AbstractMandantEntity {
             )
             .findFirst();
     }
+
+    public boolean isErstgesuch() {
+        // TODO KSTIP-1777: Implement isErstgesuch logic
+        return true;
+    }
 }
