@@ -1224,12 +1224,20 @@ public class GesuchService {
     public GesuchDto setGesuchsperiodeForGesuch(final UUID gesuchTrancheId, final UUID gesuchsperiodeId) {
         final var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(gesuchsperiodeId).orElseThrow();
 
-        if (!GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS.contains(gesuchsperiode.getGueltigkeitStatus())) {
-            throw new BadRequestException("Gesuchsperiode is not assignable");
-        }
-
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var gesuch = gesuchTranche.getGesuch();
+        final var potentialGesuchsperioden = gesuchsperiodeService.getAllAssignableGesuchsperioden(gesuch.getId());
+
+        final var foundGesuchsperiode = potentialGesuchsperioden.stream()
+            .filter(potentialGesuchsperiode -> potentialGesuchsperiode.getId().equals(gesuchsperiodeId))
+            .findFirst();
+
+        if (
+            !GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS.contains(gesuchsperiode.getGueltigkeitStatus())
+            || foundGesuchsperiode.isEmpty()
+        ) {
+            throw new BadRequestException("Gesuchsperiode is not assignable");
+        }
 
         gesuch.setGesuchsperiode(gesuchsperiode);
 
