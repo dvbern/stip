@@ -40,6 +40,7 @@ import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -59,30 +60,31 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    @Transactional
-    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
-        return getLatestWhereStatusChangedToUeberpruefen(gesuchTrancheId, null);
-    }
-
-    @Transactional
-    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(
-        final UUID gesuchTrancheId,
-        final @Nullable Integer revision
-    ) {
+    private AuditQuery getRevisionQuery(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
-        final var query = reader.createQuery()
+        return reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, false)
             .add(AuditEntity.id().eq(gesuchTrancheId))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
             .add(AuditEntity.property("status").hasChanged())
             .addOrder(AuditEntity.revisionNumber().desc())
             .setMaxResults(1);
+    }
 
-        if (revision != null) {
-            query.add(AuditEntity.revisionNumber().eq(revision));
-        }
+    @Transactional
+    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
+        return (GesuchTranche) getRevisionQuery(gesuchTrancheId)
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
+            .getSingleResult();
+    }
 
-        return (GesuchTranche) query.getSingleResult();
+    @Transactional
+    public GesuchTranche getByRevisionId(
+        final UUID gesuchTrancheId,
+        final @Nullable Integer revision
+    ) {
+        return (GesuchTranche) getRevisionQuery(gesuchTrancheId)
+            .add(AuditEntity.revisionNumber().eq(revision))
+            .getSingleResult();
     }
 
     @Transactional

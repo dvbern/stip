@@ -126,7 +126,6 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
-import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -876,15 +875,27 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId, final @Nullable Integer revision) {
+    public GesuchWithChangesDto getSbTrancheChanges(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
         final var latestWhereStatusChanged =
-            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId, revision);
+            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
         return gesuchMapperUtil.toWithChangesDto(
             aenderung.getGesuch(),
             aenderung,
             List.of(initialRevision, latestWhereStatusChanged)
+        );
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+        final var gesuch = gesuchTrancheRepository.requireAenderungById(aenderungId).getGesuch();
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
+        return gesuchMapperUtil.toWithChangesDto(
+            gesuch,
+            aenderung,
+            List.of(initialRevision)
         );
     }
 
