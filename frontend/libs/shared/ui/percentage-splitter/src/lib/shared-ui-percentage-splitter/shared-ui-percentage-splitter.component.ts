@@ -13,8 +13,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedUiFormFieldDirective,
@@ -33,7 +33,7 @@ import { maskitoPercent } from '@dv/shared/util/maskito-util';
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    TranslatePipe,
+    TranslocoPipe,
   ],
   templateUrl: './shared-ui-percentage-splitter.component.html',
   styleUrls: ['./shared-ui-percentage-splitter.component.scss'],

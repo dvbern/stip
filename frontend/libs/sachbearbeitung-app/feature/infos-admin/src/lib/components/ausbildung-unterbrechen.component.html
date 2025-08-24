@@ -1,6 +1,6 @@
 <!-- Ausbildung Unterbrechen / Pausieren -->
 <h3 class="tw-mb-6 tw-mt-10">
-  {{ 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen' | translate }}
+  {{ 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen' | transloco }}
 </h3>
 
 <button
@@ -9,7 +9,7 @@
   data-testid="button-ausbildung-unterbrechen"
   (click)="gesuchUnterbrechen()"
 >
-  {{ 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen' | translate }}
+  {{ 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen' | transloco }}
 </button>
 
 <!-- table for unterbrechen entries, with columns timestamp, user and kommentar  -->
@@ -17,14 +17,14 @@
   <table mat-table [dataSource]="gesuchUnterbrechenSig()">
     <caption class="cdk-visually-hidden">
       {{
-        'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen' | translate
+        'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen' | transloco
       }}
     </caption>
 
     <!-- Datum -->
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | translate }}
+        {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let unterbrechen; dataSource: gesuchUnterbrechenSig()" class="tw-whitespace-nowrap">
         {{ unterbrechen.timestamp | date: 'dd.MM.yyyy' }}
@@ -34,7 +34,7 @@
     <!-- User -->
     <ng-container matColumnDef="user">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.admin.table.user' | translate }}
+        {{ 'sachbearbeitung-app.infos.admin.table.user' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let unterbrechen; dataSource: gesuchUnterbrechenSig()" class="tw-whitespace-nowrap">
         {{ unterbrechen.user }}
@@ -44,7 +44,7 @@
     <!-- Kommentar -->
     <ng-container matColumnDef="kommentar">
       <th class="tw-min-w-80" mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.admin.table.kommentar' | translate }}
+        {{ 'sachbearbeitung-app.infos.admin.table.kommentar' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let unterbrechen; dataSource: gesuchUnterbrechenSig()" class="tw-min-w-80">
         {{ unterbrechen.kommentar }}
@@ -55,7 +55,7 @@
     <tr mat-row *matRowDef="let row; columns: gesuchTableColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
       <td class="mat-mdc-cell tw-p-3" [colSpan]="gesuchTableColumns.length">
-        {{ 'shared.table.noEntries' | translate }}
+        {{ 'shared.table.noEntries' | transloco }}
       </td>
     </tr>
   </table>

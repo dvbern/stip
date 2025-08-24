@@ -4,7 +4,7 @@
   <div class="tw-absolute tw-right-0 tw-top-0 tw-font-bold">
     {{
       (gesuch.isErstgesuch ? 'shared.dashboard.gesuch.order.erstgesuch' : 'shared.dashboard.gesuch.order.folgegesuch')
-        | translate
+        | transloco
     }}
   </div>
   <div
@@ -14,7 +14,7 @@
     <div class="tw-flex tw-flex-col">
       <dl class="tw-mb-10 tw-flex tw-flex-col" [class.tw-mb-0]="!gesuch.isActive">
         <dt class="tw-font-bold">
-          {{ 'shared.dashboard.gesuch.title' | translate: { yearRange: gesuch.yearRange } }}
+          {{ 'shared.dashboard.gesuch.title' | transloco: { yearRange: gesuch.yearRange } }}
         </dt>
         <dd class="tw-mb-6">
           {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
@@ -22,49 +22,49 @@
 
         @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
         @if (gesuch.isActive) {
-          <dt class="tw-font-bold">{{ 'shared.dashboard.gesuch.status.title' | translate }}</dt>
+          <dt class="tw-font-bold">{{ 'shared.dashboard.gesuch.status.title' | transloco }}</dt>
           <dd class="tw-mb-6">
             @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
               @if (count > 1) {
-                {{ 'shared.dashboard.gesuch.status.missingDocuments' | translate: { count } }}
+                {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
               } @else {
-                {{ 'shared.dashboard.gesuch.status.missingDocument' | translate }}
+                {{ 'shared.dashboard.gesuch.status.missingDocument' | transloco }}
               }
             } @else {
-              {{ 'gesuch-app.gesuch.status.contract.' + gesuch.gesuchStatus | translate }}
+              {{ 'gesuch-app.gesuch.status.contract.' + gesuch.gesuchStatus | transloco }}
             }
           </dd>
 
           @if (!gesuch.einreichefristAbgelaufen) {
             @if (gesuch.reduzierterBeitrag) {
               <span class="tw-font-bold">
-                {{ 'shared.dashboard.periode.einreichefrist.reduziert' | translate }}
+                {{ 'shared.dashboard.periode.einreichefrist.reduziert' | transloco }}
               </span>
             }
             @if ((gesuch.einreichefristDays ?? 0) > 1) {
               <span
                 [innerHTML]="
                   'shared.dashboard.periode.einreichefrist.remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-                    | translate: { days: gesuch.einreichefristDays }
+                    | transloco: { days: gesuch.einreichefristDays }
                 "
               ></span>
             } @else if (gesuch.einreichefristDays === 1) {
               <span
                 [innerHTML]="
                   'shared.dashboard.periode.einreichefrist.1remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-                    | translate
+                    | transloco
                 "
               ></span>
             } @else {
               <span
                 [innerHTML]="
                   'shared.dashboard.periode.einreichefrist.0remaining' + (gesuch.reduzierterBeitrag ? '.reduziert' : '')
-                    | translate
+                    | transloco
                 "
               ></span>
             }
             <dt class="tw-mt-6 tw-font-bold">
-              {{ 'shared.dashboard.periode.einreichefrist.text' | translate }}
+              {{ 'shared.dashboard.periode.einreichefrist.text' | transloco }}
             </dt>
             <dd>
               {{
@@ -74,13 +74,13 @@
             </dd>
           } @else {
             <span class="tw-font-bold">
-              {{ 'shared.dashboard.periode.einreichefrist.abgelaufen.warning' | translate }}
+              {{ 'shared.dashboard.periode.einreichefrist.abgelaufen.warning' | transloco }}
             </span>
-            <span class="tw-mt-6">{{ 'shared.dashboard.periode.einreichefrist.abgelaufen.text' | translate }}</span>
+            <span class="tw-mt-6">{{ 'shared.dashboard.periode.einreichefrist.abgelaufen.text' | transloco }}</span>
           }
           @if (missingDocTrancheId && gesuch.nachfristDokumente) {
             <dt class="tw-mt-6 tw-font-bold">
-              {{ 'shared.dashboard.periode.nachfrist.text' | translate }}
+              {{ 'shared.dashboard.periode.nachfrist.text' | transloco }}
             </dt>
             <dd>
               {{ gesuch.nachfristDokumente | date: 'dd.MM.yyyy' }}
@@ -104,7 +104,7 @@
                 data-testid="cockpit-gesuch-edit"
                 [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
               >
-                {{ 'shared.dashboard.gesuch.edit' | translate }}
+                {{ 'shared.dashboard.gesuch.edit' | transloco }}
               </a>
 
               @if (gesuch.canDelete) {
@@ -114,7 +114,7 @@
                   data-testid="shared.dashboard.gesuch.delete"
                   (click)="deleteGesuch.emit(gesuch.id)"
                 >
-                  <span>{{ 'shared.dashboard.gesuch.delete' | translate }}</span>
+                  <span>{{ 'shared.dashboard.gesuch.delete' | transloco }}</span>
                 </button>
               }
             } @else if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
@@ -123,7 +123,7 @@
                 data-testid="cockpit-gesuch-edit"
                 [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
               >
-                {{ 'shared.dashboard.gesuch.open' | translate }}
+                {{ 'shared.dashboard.gesuch.open' | transloco }}
               </a>
             } @else if (missingDocTrancheId) {
               <a
@@ -131,7 +131,7 @@
                 data-testid="cockpit-gesuch-upload-missing-documents"
                 [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
               >
-                {{ 'shared.dashboard.gesuch.uploadMissingDocuments' | translate }}
+                {{ 'shared.dashboard.gesuch.uploadMissingDocuments' | transloco }}
               </a>
             }
           }
@@ -141,7 +141,7 @@
               data-testid="cockpit-gesuch-edit"
               [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
             >
-              {{ 'shared.dashboard.gesuch.open' | translate }}
+              {{ 'shared.dashboard.gesuch.open' | transloco }}
             </a>
 
             @if (gesuch.canCreateAenderung) {
@@ -151,7 +151,7 @@
                 data-testid="cockpit-gesuch-aenderung-create"
                 (click)="aenderungMelden.emit()"
               >
-                {{ 'shared.dashboard.aenderung.create' | translate }}
+                {{ 'shared.dashboard.aenderung.create' | transloco }}
               </button>
             }
           }

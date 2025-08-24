@@ -41,15 +41,15 @@
                     <ng-template #content>
                       <h5 data-testid="two-column-timeline-label">
                         @if (child.label.type === 'TEXT') {
-                          {{ child.label.title | translate }}
+                          {{ child.label.title }}
                         } @else {
                           @let abschluss = child.label.abschluss;
-                          {{ `${abschluss | translatedProp: 'bezeichnung' : language()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}` }}
+                          {{ `${abschluss | translatedProp: 'bezeichnung' : language()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}` }}
                         }
                       </h5>
                       @if (child.label.subTitle; as subTitle) {
                         <small class="d-block" data-testid="two-column-timeline-sub-label">
-                          {{ subTitle.key | translate }}: {{ subTitle.value }}
+                          {{ subTitle.key | transloco }}: {{ subTitle.value }}
                         </small>
                       }
                       <small class="d-block">{{
@@ -58,20 +58,20 @@
                       @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
                         <small class="d-flex gap-1 mt-2 align-items-center">
                           <i
-                            [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | translate"
+                            [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | transloco"
                             class="material-symbols-rounded fs-6"
                             >check_box</i
                           >
-                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
+                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | transloco }}</span>
                         </small>
                       } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
                         <small class="d-flex gap-1 mt-2 align-items-center">
                           <i
-                            [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | translate"
+                            [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | transloco"
                             class="material-symbols-rounded fs-6"
                             >check_box_outline_blank</i
                           >
-                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | translate }}</span>
+                          <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | transloco }}</span>
                         </small>
                       }
                     </ng-template>
@@ -96,7 +96,7 @@
           <!-- gap -->
           <div class="position-relative" data-testid="timeline-gap-block">
             <div class="hide-on-hover">
-              <h5>{{ 'shared.form.lebenslauf.missingEntries' | translate }}</h5>
+              <h5>{{ 'shared.form.lebenslauf.missingEntries' | transloco }}</h5>
               <small>{{ printDateAsMonthYear(item.von) + ' - ' + printDateAsMonthYear(item.bis) }}</small>
             </div>
             <div class="plus-and-buttons d-flex gap-3 justify-content-end align-items-center">
@@ -109,7 +109,7 @@
                   >
                     <i class="material-symbols-rounded">school</i>
                     <span class="d-none d-sm-block ms-2">{{
-                      'shared.form.lebenslauf.add.ausbildung.short' | translate
+                      'shared.form.lebenslauf.add.ausbildung.short' | transloco
                     }}</span>
                   </button>
                   <button
@@ -119,7 +119,7 @@
                   >
                     <i class="material-symbols-rounded">work</i>
                     <span class="d-none d-sm-block ms-2">{{
-                      'shared.form.lebenslauf.add.taetigkeit.short' | translate
+                      'shared.form.lebenslauf.add.taetigkeit.short' | transloco
                     }}</span>
                   </button>
                 </div>

@@ -118,6 +118,7 @@
   "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Année de la demande Détail Vue",
 
+  "sachbearbeitung-app.admin.benutzerverwaltung.description": "Aperçu de la gestion des utilisateurs",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Utilisateurs",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Créer un utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Modifier l'utilisateur",
@@ -127,6 +128,7 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label": "Fonction (Allemand)",
   "sachbearbeitung-app.admin.benutzerverwaltung.funktionFr.label": "Fonction (Français)",
   "sachbearbeitung-app.admin.benutzerverwaltung.rollen.title": "Rôles",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten": "Modifier l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen": "Supprimer l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.sachbearbeiter.label": "Agent",
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",

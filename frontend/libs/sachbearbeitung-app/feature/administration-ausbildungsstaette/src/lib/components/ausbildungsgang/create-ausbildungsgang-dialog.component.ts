@@ -22,7 +22,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import {
   AbschlussSlim,
@@ -51,7 +51,7 @@ type CreateAbschlussData = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -69,7 +69,7 @@ export class CreateAusbildungsgangDialogComponent {
       MatDialogRef,
     );
   private formBuilder = inject(NonNullableFormBuilder);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
   form = this.formBuilder.group(

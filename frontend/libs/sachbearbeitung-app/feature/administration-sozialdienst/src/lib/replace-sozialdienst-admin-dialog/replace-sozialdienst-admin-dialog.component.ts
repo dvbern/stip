@@ -8,7 +8,7 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
 import {
@@ -26,7 +26,7 @@ export interface ReplaceSozialdienstAdminDialogResult {
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,

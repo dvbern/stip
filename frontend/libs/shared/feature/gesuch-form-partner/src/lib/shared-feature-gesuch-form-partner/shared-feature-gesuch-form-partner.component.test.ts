@@ -4,11 +4,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { fireEvent, render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { RolesMap } from '@dv/shared/model/benutzer';
 import {
   configureTestbedTranslateLanguage,
+  getTranslocoModule,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
@@ -26,10 +26,7 @@ import { SharedFeatureGesuchFormPartnerComponent } from './shared-feature-gesuch
 const language = 'de';
 async function setup() {
   return await render(SharedFeatureGesuchFormPartnerComponent, {
-    imports: [
-      TranslateTestingModule.withTranslations({ de: {} }),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideMockStore({
         initialState: {

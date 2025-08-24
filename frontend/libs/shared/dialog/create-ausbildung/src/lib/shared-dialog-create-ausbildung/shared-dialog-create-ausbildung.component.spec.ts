@@ -5,13 +5,12 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { provideMockStore } from '@ngrx/store/testing';
-import { provideTranslateService } from '@ngx-translate/core';
 
 import { RolesMap } from '@dv/shared/model/benutzer';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
+  getTranslocoModule,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideSharedPatternVitestTestSetup,
@@ -37,7 +36,11 @@ describe('SharedDialogCreateAusbildungComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedDialogCreateAusbildungComponent, MatDialogModule],
+      imports: [
+        SharedDialogCreateAusbildungComponent,
+        MatDialogModule,
+        getTranslocoModule(),
+      ],
       providers: [
         provideMockStore({
           initialState: {
@@ -52,7 +55,6 @@ describe('SharedDialogCreateAusbildungComponent', () => {
         }),
         provideHttpClient(),
         provideSharedPatternVitestTestSetup(),
-        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

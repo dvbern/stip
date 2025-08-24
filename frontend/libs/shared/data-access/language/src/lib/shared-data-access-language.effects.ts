@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { TranslateService } from '@ngx-translate/core';
 import { map, tap } from 'rxjs';
 
 import { DEFAULT_LANGUAGE } from '@dv/shared/model/language';
@@ -40,11 +39,7 @@ export const resolveLanguageOnInit = createEffect(
 );
 
 export const syncLanguageToNgxTranslate = createEffect(
-  (
-    actions$ = inject(Actions),
-    ngxTranslateService = inject(TranslateService),
-    translocoService = inject(TranslocoService),
-  ) => {
+  (actions$ = inject(Actions), translocoService = inject(TranslocoService)) => {
     return actions$.pipe(
       ofType(
         SharedDataAccessLanguageEvents.resolvedDefault,
@@ -54,7 +49,6 @@ export const syncLanguageToNgxTranslate = createEffect(
         SharedDataAccessLanguageEvents.footerSelectorChange,
       ),
       tap(({ language }) => {
-        ngxTranslateService.use(language);
         translocoService.setActiveLang(language);
       }),
     );

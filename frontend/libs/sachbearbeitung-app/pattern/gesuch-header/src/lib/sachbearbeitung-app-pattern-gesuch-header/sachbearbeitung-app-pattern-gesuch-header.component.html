@@ -1,7 +1,7 @@
 <dv-shared-pattern-app-header
   [backLink]="{
     path: '/',
-    text: 'sachbearbeitung-app.header.back' | translate,
+    text: 'sachbearbeitung-app.header.back' | transloco,
   }"
   (openSidenav)="openSidenav.emit()"
 >
@@ -17,7 +17,7 @@
       [matMenuTriggerFor]="gesuchMenu"
     >
       <i class="material-symbols-rounded text-white me-2">checklist</i>
-      <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+      <span>{{ 'shared.header.tranchenAuswahl' | transloco }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
@@ -32,7 +32,7 @@
             <span>
               {{
                 'shared.header.tranche.item'
-                  | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
+                  | transloco: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
               }}
               -
               {{ tranche.gueltigBis | date: 'MM.yyyy' }}
@@ -51,7 +51,7 @@
       [class.disabled]="!canViewBerechnungSig()"
     >
       <i class="material-symbols-rounded text-white me-2">equal</i>
-      <span>{{ 'sachbearbeitung-app.header.verfuegung' | translate }}</span>
+      <span>{{ 'sachbearbeitung-app.header.verfuegung' | transloco }}</span>
     </a>
 
     <!-- Änderungen -->
@@ -66,7 +66,7 @@
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
-      <span>{{ 'shared.header.aenderungen' | translate }}</span>
+      <span>{{ 'shared.header.aenderungen' | transloco }}</span>
       <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
     <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
@@ -82,7 +82,7 @@
             <span>
               {{
                 'shared.header.aenderung.item'
-                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
+                  | transloco: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
               }}
               -
               {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
@@ -91,7 +91,7 @@
         }
         <div class="d-flex gap-2 align-items-center text-muted small">
           <hr class="flex-grow-1" />
-          {{ 'shared.header.aenderungen.akzeptierte' | translate }}
+          {{ 'shared.header.aenderungen.akzeptierte' | transloco }}
           <hr class="flex-grow-1" />
         </div>
         @for (aenderung of aenderungen.byStatus.completed; track $index) {
@@ -105,7 +105,7 @@
             <span>
               {{
                 'shared.header.aenderung.item'
-                  | translate: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
+                  | transloco: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
               }}
               -
               {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
@@ -116,7 +116,7 @@
         @if (initialTranchen.hasTranchen) {
           <div class="d-flex gap-2 align-items-center text-muted small">
             <hr class="flex-grow-1" />
-            {{ 'shared.header.aenderungen.initial' | translate }}
+            {{ 'shared.header.aenderungen.initial' | transloco }}
             <hr class="flex-grow-1" />
           </div>
           @for (initialTranche of initialTranchen.list; track $index) {
@@ -131,12 +131,12 @@
                 @if (initialTranchen.hasMultiple) {
                   {{
                     'shared.header.initialTranche.multiple'
-                      | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy', index: $index + 1 }
+                      | transloco: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy', index: $index + 1 }
                   }}
                 } @else {
                   {{
                     'shared.header.initialTranche.item'
-                      | translate: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy' }
+                      | transloco: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy' }
                   }}
                 }
                 -
@@ -156,7 +156,7 @@
       [class.active]="isInfosRouteSig()"
     >
       <i class="material-symbols-rounded text-white me-2">info</i>
-      <span>{{ 'sachbearbeitung-app.header.infos' | translate }}</span>
+      <span>{{ 'sachbearbeitung-app.header.infos' | transloco }}</span>
     </a>
 
     @let statusUebergaenge = statusUebergaengeOptionsSig();
@@ -181,7 +181,7 @@
           [matMenuTriggerFor]="aktionMenu"
         >
           <i class="material-symbols-rounded me-3">sync_alt</i>
-          <span>{{ 'sachbearbeitung-app.header.aktion' | translate }}</span>
+          <span>{{ 'sachbearbeitung-app.header.aktion' | transloco }}</span>
           <i class="material-symbols-rounded ms-2">expand_more</i>
         </button>
         <!-- Aktion Menu -->
@@ -199,7 +199,7 @@
                 >
                   <div class="d-flex gap-2 align-items-center">
                     <i class="material-symbols-rounded">add_circle</i>
-                    <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | translate }}</span>
+                    <span>{{ 'sachbearbeitung-app.header.tranche.erstellen' | transloco }}</span>
                   </div>
                 </button>
               }
@@ -218,7 +218,7 @@
                 [matTooltip]="
                   uebergang.disabledReason
                     ? ('sachbearbeitung-app.header.status-uebergang.disabled-reason.' + uebergang.disabledReason
-                      | translate)
+                      | transloco)
                     : null
                 "
                 mat-menu-item
@@ -226,7 +226,7 @@
               >
                 <div class="d-flex gap-2 align-items-center">
                   <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
-                  <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | translate }}</span>
+                  <span>{{ 'sachbearbeitung-app.header.status-uebergang.' + uebergang.titleKey | transloco }}</span>
                 </div>
               </button>
             }
@@ -239,7 +239,7 @@
 
       <div class="tw-text-sm">
         <mat-chip [color]="'info'" highlighted>
-          {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate }}
+          {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | transloco }}
         </mat-chip>
       </div>
     }

@@ -6,13 +6,13 @@
     </dv-shared-ui-icon-chip>
     @if (tranche.status === 'IN_BEARBEITUNG_GS') {
       <h3 data-testid="cockpit-periode-title">
-        <span>{{ 'shared.dashboard.aenderung.title' | translate }}</span>
+        <span>{{ 'shared.dashboard.aenderung.title' | transloco }}</span>
         <span>&nbsp;</span>
       </h3>
     } @else {
       <div>
         <h3 data-testid="cockpit-periode-title">
-          <span>{{ 'shared.dashboard.aenderung.title' | translate }}</span>
+          <span>{{ 'shared.dashboard.aenderung.title' | transloco }}</span>
           <span>&nbsp;</span>
         </h3>
         <h6 class="card-subtitle fw-medium mt-2 mb-2 small">
@@ -29,9 +29,9 @@
     @if (tranche.comment) {
       <span class="mt-4 fw-normal small">{{ tranche.comment }}</span>
     }
-    <span class="mt-4 fw-normal small">{{ 'shared.dashboard.aenderung.status.title' | translate }}</span>
+    <span class="mt-4 fw-normal small">{{ 'shared.dashboard.aenderung.status.title' | transloco }}</span>
     <span class="fw-medium">
-      {{ 'shared.gesuch.status.tranche.' + tranche.status | translate }}
+      {{ 'shared.gesuch.status.tranche.' + tranche.status | transloco }}
     </span>
     <div class="mb-3 tw-flex-grow"></div>
     @if (gesuch.canDeleteAenderung) {
@@ -41,7 +41,7 @@
         data-testid="shared.dashboard.aenderung.delete"
         (click)="deleteAenderung.emit(tranche.id)"
       >
-        <span>{{ 'shared.dashboard.aenderung.delete' | translate }}</span>
+        <span>{{ 'shared.dashboard.aenderung.delete' | transloco }}</span>
       </button>
     }
     <a
@@ -52,7 +52,7 @@
     >
       {{
         (tranche.status === 'IN_BEARBEITUNG_GS' ? 'shared.dashboard.aenderung.edit' : 'shared.dashboard.aenderung.open')
-          | translate
+          | transloco
       }}
     </a>
   </div>

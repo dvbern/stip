@@ -18,8 +18,8 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -54,7 +54,7 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,

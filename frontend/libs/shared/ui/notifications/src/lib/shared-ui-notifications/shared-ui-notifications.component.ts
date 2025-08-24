@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { Notification } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -21,7 +21,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   selector: 'dv-shared-ui-notifications',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatPaginatorModule,
     SharedUiIconChipComponent,
     SharedUiTooltipDateComponent,

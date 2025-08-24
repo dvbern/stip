@@ -15,8 +15,8 @@
                 <span class="text-warning material-symbols-rounded me-3">warning</span>
                 <div class="ms-3">
                   @if (dokumenteRouteSig(); as dokumenteRoute) {
-                    <span [innerHTML]="'shared.form.abschluss.fehlendeDokumente' | translate"></span>
-                    &nbsp;<a [routerLink]="dokumenteRoute">{{ 'shared.dokumente.title' | translate }}</a>
+                    <span [innerHTML]="'shared.form.abschluss.fehlendeDokumente' | transloco"></span>
+                    &nbsp;<a [routerLink]="dokumenteRoute">{{ 'shared.dokumente.title' | transloco }}</a>
                   }
                 </div>
               </dv-shared-ui-info-container>
@@ -26,14 +26,14 @@
                 <dv-shared-ui-info-container class="d-block" [type]="'warning'" data-testid="alert-warning">
                   <div class="d-flex gap-2">
                     <span class="text-warning material-symbols-rounded me-3">warning</span>
-                    <span [innerHTML]="'shared.form.abschluss.notReady' | translate"></span>
+                    <span [innerHTML]="'shared.form.abschluss.notReady' | transloco"></span>
                   </div>
 
                   <ul class="mt-4">
                     @for (step of einreichenView.invalidFormularSteps; track step.route) {
                       <li>
                         @if (step.routeParts; as link) {
-                          <a [routerLink]="link">{{ step.titleTranslationKey | translate }}</a>
+                          <a [routerLink]="link">{{ step.titleTranslationKey | transloco }}</a>
                         }
                       </li>
                     }
@@ -44,8 +44,8 @@
                   <dv-shared-ui-info-container [type]="'danger'" data-testid="alert-danger">
                     <span class="text-danger material-symbols-rounded">error</span>
                     <div class="ms-3">
-                      <span [innerHTML]="error.validationErrorKey | translate"></span>
-                      &nbsp;<a [routerLink]="error.stepRoute">{{ error.linkKey | translate }}</a>
+                      <span [innerHTML]="error.validationErrorKey | transloco"></span>
+                      &nbsp;<a [routerLink]="error.stepRoute">{{ error.linkKey | transloco }}</a>
                     </div>
                   </dv-shared-ui-info-container>
                 }
@@ -54,7 +54,7 @@
             @case ('READY_TO_SEND') {
               <dv-shared-ui-info-container data-testid="alert-info">
                 <span class="text-info material-symbols-rounded me-3">info</span>
-                <span [innerHTML]="'shared.form.abschluss.ready' | translate"></span>
+                <span [innerHTML]="'shared.form.abschluss.ready' | transloco"></span>
               </dv-shared-ui-info-container>
 
               @if (einreichenView.isFehlendeDokumente) {
@@ -69,7 +69,7 @@
                     !canGSSendMissingDocumentsSig()
                   "
                 >
-                  {{ 'shared.form.abschluss.fehlendeDokumenteEinreichen' | translate }}
+                  {{ 'shared.form.abschluss.fehlendeDokumenteEinreichen' | transloco }}
                 </button>
               } @else {
                 <button
@@ -79,14 +79,14 @@
                   data-testid="button-abschluss"
                   [disabled]="!permissions.canFreigeben || einreichenStore.einreicheOperationIsInProgressSig()"
                 >
-                  {{ 'shared.form.abschluss.abschliessen' | translate }}
+                  {{ 'shared.form.abschluss.abschliessen' | transloco }}
                 </button>
               }
             }
             @case ('SUBMITTED') {
               <dv-shared-ui-info-container [type]="'success'" data-testid="alert-success">
                 <span class="text-success material-symbols-rounded me-3">check_circle</span>
-                <span [innerHTML]="'shared.form.abschluss.submitted' | translate"></span>
+                <span [innerHTML]="'shared.form.abschluss.submitted' | transloco"></span>
               </dv-shared-ui-info-container>
             }
           }

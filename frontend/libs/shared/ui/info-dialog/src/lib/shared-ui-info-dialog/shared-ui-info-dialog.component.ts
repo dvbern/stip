@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface InfoDialogData {
   titleKey: string;
@@ -10,7 +10,7 @@ export interface InfoDialogData {
 
 @Component({
   selector: 'dv-shared-ui-info-dialog',
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule, TranslocoPipe],
   templateUrl: './shared-ui-info-dialog.component.html',
   styleUrl: './shared-ui-info-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

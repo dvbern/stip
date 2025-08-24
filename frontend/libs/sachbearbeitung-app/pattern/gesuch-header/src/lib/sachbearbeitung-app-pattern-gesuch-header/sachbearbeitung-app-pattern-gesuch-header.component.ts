@@ -20,8 +20,8 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
@@ -59,7 +59,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatChipsModule,

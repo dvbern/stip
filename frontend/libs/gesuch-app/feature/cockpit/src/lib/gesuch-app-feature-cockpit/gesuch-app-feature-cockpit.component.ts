@@ -10,9 +10,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
+import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -53,8 +53,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   selector: 'dv-gesuch-app-feature-cockpit',
   imports: [
     CommonModule,
-    TranslatePipe,
-    TranslateDirective,
     MatSelectModule,
     RouterLink,
     SharedPatternMainLayoutComponent,
@@ -65,6 +63,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
+    GesuchAppUiAdvTranslocoDirective,
   ],
   providers: [
     FallStore,

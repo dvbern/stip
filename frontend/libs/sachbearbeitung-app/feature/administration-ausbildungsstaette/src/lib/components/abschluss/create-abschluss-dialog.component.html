@@ -3,61 +3,61 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw-mb-8 tw-text-xl">
-    {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.createDialog.title' | translate }}
+    {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.createDialog.title' | transloco }}
   </h1>
 
   <form [formGroup]="form" class="tw-mt-5" novalidate>
     <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung' | transloco }}
         </mat-label>
         <mat-select
           [formControl]="form.controls.bildungsrichtung"
-          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung' | translate"
+          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung' | transloco"
         >
           @for (bildungsrichtung of bildungsrichtungen; track bildungsrichtung) {
             <mat-option [value]="bildungsrichtung">{{
               'sachbearbeitung-app.feature.administration.ausbildungsstaette.bildungsrichtung.' + bildungsrichtung
-                | translate
+                | transloco
             }}</mat-option>
           }
         </mat-select>
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungDe' | transloco }}
         </mat-label>
         <input matInput [formControl]="form.controls.bezeichnungDe" />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.bezeichnungFr' | transloco }}
         </mat-label>
         <input matInput [formControl]="form.controls.bezeichnungFr" />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
     </div>
 
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
-        {{ 'shared.form.save' | translate }}
+        {{ 'shared.form.save' | transloco }}
       </button>
     </div>
   </form>

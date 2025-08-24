@@ -26,8 +26,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
 import { diff } from 'json-diff-ts';
 import { startWith } from 'rxjs';
@@ -103,7 +103,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,

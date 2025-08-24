@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiKommentarDialogComponent } from './shared-ui-kommentar-dialog.component';
 
@@ -11,9 +13,12 @@ describe('SharedUiKommentarDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiKommentarDialogComponent, NoopAnimationsModule],
+      imports: [
+        SharedUiKommentarDialogComponent,
+        NoopAnimationsModule,
+        getTranslocoModule(),
+      ],
       providers: [
-        provideTranslateService(),
         {
           provide: MAT_DIALOG_DATA,
           useValue: {

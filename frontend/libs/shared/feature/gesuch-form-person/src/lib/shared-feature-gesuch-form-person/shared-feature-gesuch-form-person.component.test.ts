@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { RenderResult, render, within } from '@testing-library/angular';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import {
+  getTranslocoModule,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
 } from '@dv/shared/pattern/vitest-test-setup';
@@ -24,10 +24,7 @@ const formularMock = {
 
 async function setup() {
   return await render(SharedFeatureGesuchFormPersonComponent, {
-    imports: [
-      TranslateTestingModule.withTranslations({ de: {} }),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       provideCompileTimeConfig(),

@@ -2,7 +2,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { fireEvent, render } from '@testing-library/angular';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 import { of } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
@@ -10,6 +9,7 @@ import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaet
 import { Ausbildung, AusbildungService } from '@dv/shared/model/gesuch';
 import {
   configureTestbedTranslateLanguage,
+  getTranslocoModule,
   provideSharedPatternVitestTestAusbildungstaetten,
   provideSharedPatternVitestTestSetup,
 } from '@dv/shared/pattern/vitest-test-setup';
@@ -28,10 +28,7 @@ async function setup() {
     inputs: {
       fallIdSig: 'fall123',
     },
-    imports: [
-      TranslateTestingModule.withTranslations({}),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       {

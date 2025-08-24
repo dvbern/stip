@@ -4,7 +4,9 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import {
   ConfirmDialogData,
@@ -29,9 +31,12 @@ describe('SharedUiConfirmDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiConfirmDialogComponent, MatDialogModule],
+      imports: [
+        SharedUiConfirmDialogComponent,
+        MatDialogModule,
+        getTranslocoModule(),
+      ],
       providers: [
-        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

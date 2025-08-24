@@ -3,13 +3,13 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render, screen } from '@testing-library/angular';
 import { default as userEvent } from '@testing-library/user-event';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   TEST_ABSCHLUESSE,
+  getTranslocoModule,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
@@ -25,10 +25,7 @@ async function setup(type: SharedModelLebenslauf['type']) {
       itemSig: { type },
       ausbildungenSig: [],
     },
-    imports: [
-      TranslateTestingModule.withTranslations({}),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       provideCompileTimeConfig(),

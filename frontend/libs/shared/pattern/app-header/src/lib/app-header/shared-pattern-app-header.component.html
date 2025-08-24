@@ -24,7 +24,7 @@
     } @else {
       @if (logoSig(); as logo) {
         <a class="first-entry" routerLink="/">
-          <img [src]="logo.src" [alt]="'shared.logo.tenant' | translate: logo" class="tw-h-[60px] tw-max-w-[135px]" />
+          <img [src]="logo.src" [alt]="'shared.logo.tenant' | transloco: logo" class="tw-h-[60px] tw-max-w-[135px]" />
         </a>
       }
     }
@@ -41,7 +41,7 @@
         <button
           class="dv-icon-button"
           type="button"
-          [attr.aria-label]="'shared.menu' | translate"
+          [attr.aria-label]="'shared.menu' | transloco"
           (click)="openSidenav.emit()"
         >
           <span class="material-symbols-rounded">menu</span>

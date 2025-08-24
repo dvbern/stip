@@ -2,7 +2,11 @@ import { importProvidersFrom, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import {
+  TranslocoService,
+  TranslocoTestingModule,
+  TranslocoTestingOptions,
+} from '@jsverse/transloco';
 import { OAuthService, provideOAuthClient } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 
@@ -74,7 +78,7 @@ export const mockConfigsState = (
 export function configureTestbedTranslateLanguage(language: string) {
   return (testBed: TestBed) => {
     testBed.runInInjectionContext(() => {
-      inject(TranslateService).use(language);
+      inject(TranslocoService).setActiveLang(language);
     });
   };
 }
@@ -85,7 +89,6 @@ export function provideSharedPatternVitestTestSetup(
   return [
     provideOAuthClient(),
     provideCompileTimeConfig(compileTimeConfig),
-    provideTranslateService(),
     importProvidersFrom([RouterTestingModule, NoopAnimationsModule]),
     {
       provide: StoreUtilService,
@@ -197,4 +200,22 @@ export function provideSharedPatternVitestTestAusbildungstaetten() {
       },
     },
   };
+}
+
+export function getTranslocoModule(
+  options: TranslocoTestingOptions & {
+    de?: Record<string, string>;
+    fr?: Record<string, string>;
+  } = {},
+) {
+  const { de = {}, fr = {}, ...restOptions } = options;
+  return TranslocoTestingModule.forRoot({
+    langs: { de, fr },
+    translocoConfig: {
+      availableLangs: ['de', 'fr'],
+      defaultLang: 'de',
+    },
+    preloadLangs: true,
+    ...restOptions,
+  });
 }

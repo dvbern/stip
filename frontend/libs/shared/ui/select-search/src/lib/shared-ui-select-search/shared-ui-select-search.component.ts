@@ -28,7 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   MatSelectSearchClearDirective,
   MatSelectSearchComponent,
@@ -83,7 +83,7 @@ import { SharedUiSearchOptionLabelDirective } from './select-search-option-label
   standalone: true,
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
@@ -108,7 +108,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
   private formBuilder = inject(NonNullableFormBuilder);
   private ngControl = inject(NgControl, { optional: true });
   private injector = inject(Injector);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   /**
    * The list of values to display in the autocomplete.

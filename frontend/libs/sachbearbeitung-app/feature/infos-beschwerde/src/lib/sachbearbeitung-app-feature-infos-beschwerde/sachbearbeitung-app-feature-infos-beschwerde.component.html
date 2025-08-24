@@ -11,7 +11,7 @@
   >
     @for (tab of tabsSig(); track tab.name) {
       <a mat-tab-link [routerLink]="[tab.name]" [active]="tab.active" class="btn btn-nav" [class.active]="tab.active">
-        {{ `sachbearbeitung-app.infos.beschwerde.${tab.name}` | translate }}
+        {{ `sachbearbeitung-app.infos.beschwerde.${tab.name}` | transloco }}
       </a>
     }
   </nav>

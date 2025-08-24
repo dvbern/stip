@@ -5,9 +5,9 @@
         <dv-shared-ui-icon-chip class="step-icon me-1 fs-3">
           <i class="material-symbols-rounded title-icon text-info fs-7">info</i>
         </dv-shared-ui-icon-chip>
-        {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.title' | translate }}
+        {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.title' | transloco }}
       </h3>
-      <p class="mb-4">{{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.description' | translate }}</p>
+      <p class="mb-4">{{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.description' | transloco }}</p>
     </div>
   </div>
   <div class="row">
@@ -18,7 +18,7 @@
         [disabled]="blockedReasonSig()?.data"
         (click)="askForPublish$.emit()"
       >
-        {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.button' | translate }}
+        {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.button' | transloco }}
       </button>
     </div>
   </div>
@@ -29,7 +29,7 @@
           <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
         }
         @if (blockedReasonRd?.data; as blockedReason) {
-          <span class="text-danger">{{ blockedReason | translate }}</span>
+          <span class="text-danger">{{ blockedReason | transloco }}</span>
         }
       </div>
     </div>

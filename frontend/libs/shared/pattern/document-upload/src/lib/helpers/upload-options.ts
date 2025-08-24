@@ -1,6 +1,11 @@
 import { Signal, computed } from '@angular/core';
 
-import { DokumentOptions } from '@dv/shared/model/dokument';
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
+import {
+  CustomDokumentOptions,
+  DokumentOptions,
+  StandardDokumentOptions,
+} from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
   Dokument,
@@ -12,10 +17,8 @@ import {
 import { PermissionMap } from '@dv/shared/model/permission-state';
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
-  readonly [K in DokumentTyp]: DokumentOptions['titleKey'];
-} & Partial<
-  Record<`${DokumentTyp}_DESCRIPTION`, DokumentOptions['descriptionKey']>
-> = {
+  readonly [K in DokumentTyp]: SharedTranslationKey;
+} & Partial<Record<`${DokumentTyp}_DESCRIPTION`, SharedTranslationKey>> = {
   AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE:
     'shared.form.ausbildung.file.AUSBILDUNGSSTAETTE',
   PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A:
@@ -241,9 +244,12 @@ export function createUploadOptionsFactory<
         ? {
             permissions,
             allowTypes,
-            titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-            descriptionKey:
-              DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
+            info: {
+              type: 'TRANSLATABLE',
+              title: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+              description:
+                DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
+            },
             dokument: {
               trancheId,
               dokumentTyp,
@@ -263,7 +269,7 @@ export function createGesuchDokumentOptions(options: {
   gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
   permissions: PermissionMap;
-}): DokumentOptions {
+}): StandardDokumentOptions {
   const {
     trancheId,
     allowTypes,
@@ -275,9 +281,12 @@ export function createGesuchDokumentOptions(options: {
   return {
     allowTypes,
     permissions,
-    titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-    descriptionKey:
-      DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
+    info: {
+      type: 'TRANSLATABLE',
+      title: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+      description:
+        DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
+    },
     dokument: {
       dokumentTyp,
       trancheId,
@@ -296,7 +305,7 @@ export function createAdditionalDokumentOptions(options: {
   gesuchDokument?: UnterschriftenblattDokument;
   initialDocuments?: Dokument[];
   permissions: PermissionMap;
-}): DokumentOptions {
+}): StandardDokumentOptions {
   const {
     gesuchId,
     trancheId,
@@ -309,7 +318,10 @@ export function createAdditionalDokumentOptions(options: {
   return {
     allowTypes,
     permissions,
-    titleKey: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
+    info: {
+      type: 'TRANSLATABLE',
+      title: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
+    },
     dokument: {
       dokumentTyp,
       gesuchId,
@@ -329,7 +341,7 @@ export function createCustomDokumentOptions(options: {
   gesuchDokument?: GesuchDokument;
   initialDocuments?: Dokument[];
   permissions: PermissionMap;
-}): DokumentOptions {
+}): CustomDokumentOptions {
   const {
     gesuchId,
     trancheId,
@@ -342,8 +354,11 @@ export function createCustomDokumentOptions(options: {
   return {
     allowTypes,
     permissions,
-    titleKey: dokumentTyp.type,
-    descriptionKey: dokumentTyp.description,
+    info: {
+      type: 'TEXT',
+      title: dokumentTyp.type,
+      description: dokumentTyp.description,
+    },
     dokument: {
       dokumentTyp,
       gesuchId,

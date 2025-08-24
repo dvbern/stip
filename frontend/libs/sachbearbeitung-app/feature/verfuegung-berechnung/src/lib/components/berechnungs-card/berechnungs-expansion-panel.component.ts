@@ -6,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
@@ -17,7 +17,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
   selector: 'dv-berechnungs-expansion-panel',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatExpansionModule,
     SharedUiFormatChfPipe,
   ],
@@ -34,11 +34,11 @@ import { Berechnung, BerechnungsValue } from '../../../models';
             [ngClass]="panel.expanded && view.shouldChangeSize ? 'h3' : 'h4'"
           >
             <div class="d-flex flex-column flex-grow-1 fs-5">
-              {{ view.titleKey | translate }}
+              {{ view.titleKey | transloco }}
               @if (!panel.expanded) {
                 <span class="row fw-normal mt-1 fs-6 text-muted">
                   <div class="col-12">
-                    {{ view.infoKey | translate }}
+                    {{ view.infoKey | transloco }}
                   </div>
                 </span>
               }

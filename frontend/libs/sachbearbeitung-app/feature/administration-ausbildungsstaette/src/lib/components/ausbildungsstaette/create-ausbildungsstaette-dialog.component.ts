@@ -21,9 +21,9 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import {
@@ -54,7 +54,7 @@ type SchulType = 'CT' | 'BUR';
     CommonModule,
     MaskitoDirective,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -71,7 +71,7 @@ export class CreateAusbildungsstaetteDialogComponent {
     );
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
   alphanumericMask: MaskitoOptions = {

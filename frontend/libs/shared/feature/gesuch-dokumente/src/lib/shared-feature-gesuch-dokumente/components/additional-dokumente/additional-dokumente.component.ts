@@ -6,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelTableAdditionalDokument } from '@dv/shared/model/dokument';
 import {
@@ -25,7 +25,7 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
   selector: 'dv-additional-dokumente',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,

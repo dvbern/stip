@@ -2,11 +2,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { Language } from '@dv/shared/model/language';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { configureTestbedTranslateLanguage } from '@dv/shared/pattern/vitest-test-setup';
+import {
+  configureTestbedTranslateLanguage,
+  getTranslocoModule,
+} from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiSelectSearchComponent } from './shared-ui-select-search.component';
 
@@ -40,10 +42,7 @@ const values: TestType[] = [
 
 async function setup(language: Language = 'de') {
   const result = await render(SharedUiSelectSearchComponent, {
-    imports: [
-      NoopAnimationsModule,
-      TranslateTestingModule.withTranslations({ de: {}, fr: {} }),
-    ],
+    imports: [NoopAnimationsModule, getTranslocoModule()],
     providers: [provideHttpClient()],
     inputs: {
       labelKeySig: 'label.test.key',

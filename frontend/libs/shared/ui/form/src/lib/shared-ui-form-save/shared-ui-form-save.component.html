@@ -5,7 +5,7 @@
   data-testid="button-save"
   [disabled]="loading || disabled"
 >
-  <span>{{ labelKey | translate }}</span>
+  <span>{{ labelKey | transloco }}</span>
   @if (loading) {
     <dv-shared-ui-loading loadingTextKey="shared.ui.saving.text" type="icon"></dv-shared-ui-loading>
   }

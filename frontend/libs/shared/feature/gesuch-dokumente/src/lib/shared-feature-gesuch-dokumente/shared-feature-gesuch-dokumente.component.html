@@ -18,7 +18,7 @@
           data-testid="dokumente-button-setToAdditionalDokumenteErhalten"
           [disabled]="!canSetToAdditionalDokumenteErhaltenSig()"
         >
-          {{ 'shared.dokumente.setToAdditionalDokumenteErhalten' | translate }}
+          {{ 'shared.dokumente.setToAdditionalDokumenteErhalten' | transloco }}
         </button>
       </div>
     }
@@ -61,7 +61,7 @@
       data-testid="dokumente-button-sendMissingDocuments"
       [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig()"
     >
-      {{ 'shared.dokumente.uebermitteln' | translate }}
+      {{ 'shared.dokumente.uebermitteln' | transloco }}
     </button>
   }
 </div>
@@ -76,7 +76,7 @@
       data-testid="button-continue"
       [disabled]="dokumente | rdIsPending"
     >
-      {{ 'shared.form.gonext' | translate }}
+      {{ 'shared.form.gonext' | transloco }}
     </button>
   } @else {
     <button
@@ -91,7 +91,7 @@
         !canGSSendMissingDocumentsSig()
       "
     >
-      {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | translate }}
+      {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | transloco }}
     </button>
   }
 </dv-shared-ui-step-form-buttons>

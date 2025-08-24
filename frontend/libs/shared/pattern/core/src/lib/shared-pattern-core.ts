@@ -1,8 +1,4 @@
-import {
-  HttpBackend,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
   ENVIRONMENT_INITIALIZER,
@@ -25,14 +21,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { Store, provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import {
-  MissingTranslationHandler,
-  MissingTranslationHandlerParams,
-  TranslateLoader,
-  provideTranslateService,
-} from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
-import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 
 import {
   sharedDataAccessBenutzerEffects,
@@ -61,14 +50,6 @@ import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/p
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { TranslocoHttpLoader } from './transloco-loader';
-
-export class ExplicitMissingTranslationHandler
-  implements MissingTranslationHandler
-{
-  handle(params: MissingTranslationHandlerParams) {
-    return `${params.key}`;
-  }
-}
 
 export const metaReducers = [];
 
@@ -137,24 +118,12 @@ export function provideSharedPatternCore(
         availableLangs: ['de', 'fr'],
         defaultLang: 'de',
         reRenderOnLangChange: true,
+        missingHandler: {
+          allowEmpty: true,
+        },
         prodMode: !isDevMode(),
       },
       loader: TranslocoHttpLoader,
-    }),
-    provideTranslateService({
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: ExplicitMissingTranslationHandler,
-      },
-      useDefaultLang: false, // easier to notice missing translations
-      loader: {
-        provide: TranslateLoader,
-        useFactory: () =>
-          new MultiTranslateHttpLoader(inject(HttpBackend), [
-            { prefix: './assets/i18n/', suffix: '.json' },
-            { prefix: './assets/i18n/shared.', suffix: '.json' },
-          ]),
-      },
     }),
     provideRouterStore(),
     ...(isDevMode() ? [provideStoreDevtools({ connectInZone: true })] : []),

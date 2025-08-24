@@ -3,7 +3,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { RolesMap } from '@dv/shared/model/benutzer';
@@ -15,6 +14,7 @@ import {
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
 import {
+  getTranslocoModule,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideSharedPatternVitestTestAusbildungstaetten,
@@ -28,10 +28,7 @@ import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-featur
 async function setup(formular: GesuchFormular) {
   mockElementScrollIntoView();
   return await render(SharedFeatureGesuchFormEinnahmenkostenComponent, {
-    imports: [
-      TranslateTestingModule.withTranslations({ de: {} }),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       provideMockStore({

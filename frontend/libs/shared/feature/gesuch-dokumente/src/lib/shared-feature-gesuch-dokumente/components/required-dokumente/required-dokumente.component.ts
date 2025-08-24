@@ -15,7 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { SharedDialogEditDokumentenNachfristComponent } from '@dv/shared/dialog/edit-dokumenten-nachfrist';
@@ -41,6 +40,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createGesuchDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -56,7 +56,6 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
   imports: [
     CommonModule,
     RouterLink,
-    TranslatePipe,
     MatTableModule,
     MatTooltipModule,
     TypeSafeMatCellDefDirective,
@@ -64,6 +63,7 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
     DokumentStatusActionsComponent,
     SharedUiLoadingComponent,
     SharedUiIfSachbearbeiterDirective,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './required-dokumente.component.html',
   styleUrl: './required-dokumente.component.scss',

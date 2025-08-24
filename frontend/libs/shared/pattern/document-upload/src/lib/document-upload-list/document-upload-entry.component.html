@@ -10,7 +10,7 @@
       {{ document.theme.icon }}
     </i>
   </dv-shared-ui-icon-chip>
-  <div class="d-flex flex-column flex-grow-1 w-min-content tw-ml-1">
+  <div class="d-flex flex-column flex-grow-1 w-min-content tw-ml-1" *dvTranslocoShared="let t">
     <div class="d-flex flex-row">
       <span class="text-truncate filename fs-7" [title]="document.file.filename">{{ document.file.filename }}</span>
       <div class="flex-grow-1"></div>
@@ -18,7 +18,7 @@
         <button
           type="button"
           class="dv-icon-button flex-shrink-0 cancel-icon ms-2"
-          [attr.aria-label]="'shared.cancel' | translate"
+          [attr.aria-label]="t('shared.cancel')"
           (click)="cancelUpload.emit({ dokumentId: document.file.id })"
         >
           <span class="material-symbols-rounded align-middle">clear</span>
@@ -35,7 +35,7 @@
         <button
           type="button"
           class="dv-icon-button flex-shrink-0 delete-icon ms-2"
-          [attr.aria-label]="'shared.form.delete' | translate"
+          [attr.aria-label]="t('shared.form.delete')"
           [disabled]="!isDeletableSig() || loadingSig()"
           (click)="checkForRemove$.emit()"
         >
@@ -46,23 +46,20 @@
     <mat-progress-bar [color]="document.theme.color" [value]="document.progress"></mat-progress-bar>
 
     @if (document.state === 'done') {
-      <span
-        class="fs-8 fst-italic text-success"
-        translate
-        [translateParams]="{
+      <span class="fs-8 fst-italic text-success">{{
+        t('shared.file.uploadDone', {
           date: document.file.timestampErstellt | date: 'dd.MM.yyyy',
           size: document.file.filesize | filesize,
-        }"
-        >shared.file.uploadDone</span
-      >
+        })
+      }}</span>
     }
     @if (document.state === 'uploading') {
-      <span class="fs-8 fst-italic text-info" translate>shared.file.uploading</span>
+      <span class="fs-8 fst-italic text-info">{{ t('shared.file.uploading') }}</span>
     }
     @if (document.error; as error) {
       <span
         class="fs-8 fst-italic text-danger text-wrap"
-        [innerHTML]="error.translationKey | translate: error.values"
+        [innerHTML]="t($any(error.translationKey), $any(error.values))"
       ></span>
     }
   </div>

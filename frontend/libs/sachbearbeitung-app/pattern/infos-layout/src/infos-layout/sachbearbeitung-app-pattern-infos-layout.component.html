@@ -20,7 +20,7 @@
           >
             <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
             <span class="text-start">
-              {{ option.translationKey | translate: option.translationOptions }}
+              {{ option.translationKey | transloco: option.translationOptions }}
             </span>
           </a>
         }
@@ -50,7 +50,7 @@
               </dv-shared-ui-icon-chip>
 
               <h2 class="fw-bold m-0" data-testid="step-title">
-                {{ option.titleTranslationKey | translate }}
+                {{ option.titleTranslationKey | transloco }}
               </h2>
             </div>
           }

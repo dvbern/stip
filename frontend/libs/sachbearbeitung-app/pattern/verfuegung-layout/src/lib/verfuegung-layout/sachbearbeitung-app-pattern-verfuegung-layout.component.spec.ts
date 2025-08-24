@@ -4,11 +4,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { provideTranslateService } from '@ngx-translate/core';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
+import {
+  getTranslocoModule,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 
 import { SachbearbeitungAppPatternVerfuegungLayoutComponent } from './sachbearbeitung-app-pattern-verfuegung-layout.component';
 
@@ -21,6 +23,7 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
       imports: [
         NoopAnimationsModule,
         SachbearbeitungAppPatternVerfuegungLayoutComponent,
+        getTranslocoModule(),
       ],
       providers: [
         GesuchStore,
@@ -28,7 +31,6 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideOAuthClient(),
-        provideTranslateService(),
         provideMockStore({
           initialState: {
             gesuchs: {

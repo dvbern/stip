@@ -4,14 +4,14 @@
       @for (notification of globalNotification?.list; track notification.id) {
         <div class="d-flex align-items-center">
           @if (notification.messageKey) {
-            <div class="flex-grow-1" [innerHTML]="notification.messageKey | translate"></div>
+            <div class="flex-grow-1" [innerHTML]="notification.messageKey | transloco"></div>
           } @else if (notification.message) {
             <div class="flex-grow-1">
               {{ notification.message }}
             </div>
           } @else {
             <div class="flex-grow-1">
-              {{ 'shared.genericError.general' | translate }}
+              {{ 'shared.genericError.general' | transloco }}
             </div>
           }
           @if (!globalNotification.autohide) {

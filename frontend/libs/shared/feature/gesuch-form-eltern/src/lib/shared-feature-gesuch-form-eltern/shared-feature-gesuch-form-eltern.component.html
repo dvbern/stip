@@ -55,7 +55,7 @@
     }
     @if (!view.expectVater && !view.expectMutter) {
       <div>
-        {{ 'shared.form.eltern.none' | translate }}
+        {{ 'shared.form.eltern.none' | transloco }}
       </div>
     }
   </div>
@@ -68,7 +68,7 @@
       [disabled]="!view.gesuchId"
       data-testid="button-continue"
     >
-      {{ 'shared.form.gonext' | translate }}
+      {{ 'shared.form.gonext' | transloco }}
     </button>
   </dv-shared-ui-step-form-buttons>
 }

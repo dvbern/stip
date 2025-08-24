@@ -9,7 +9,7 @@
       <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
         <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
           <i class="material-symbols-rounded text-white me-2">list</i>
-          <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
         </div>
         <a
           *dvHasRoles="['V0_Sozialdienst-Admin']"
@@ -18,7 +18,7 @@
           data-testid="gesuch-step-nav-administration"
         >
           <i class="material-symbols-rounded text-white me-2">settings</i>
-          <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.administration' | transloco }}</span>
         </a>
       </div>
       <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
@@ -47,7 +47,7 @@
               </dv-shared-ui-icon-chip>
               <div class="flex-grow-1 tw-text-start tw-leading-4">
                 <span class="fw-bold fs-7 mb-0">
-                  {{ 'sozialdienst-app.cockpit.quick-filter.' + quickFilter.typ | translate }}
+                  {{ 'sozialdienst-app.cockpit.quick-filter.' + quickFilter.typ | transloco }}
                 </span>
                 <input
                   #radio
@@ -57,7 +57,7 @@
                   labelPosition="before"
                   formControlName="query"
                   [value]="quickFilter.typ"
-                  [attr.aria-label]="'sozialdienst-app.cockpit.quick-filter.label.' + quickFilter.typ | translate"
+                  [attr.aria-label]="'sozialdienst-app.cockpit.quick-filter.label.' + quickFilter.typ | transloco"
                 />
               </div>
             </button>
@@ -66,7 +66,7 @@
 
         <!-- table -->
         <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
-          {{ 'sozialdienst-app.cockpit.delegierungen' | translate }}
+          {{ 'sozialdienst-app.cockpit.delegierungen' | transloco }}
         </h1>
 
         <div class="tw-dv-table tw-my-6">
@@ -83,14 +83,14 @@
               >
                 <caption class="cdk-visually-hidden">
                   {{
-                    'sozialdienst-app.cockpit.table.description' | translate
+                    'sozialdienst-app.cockpit.table.description' | transloco
                   }}
                 </caption>
 
                 <ng-container matColumnDef="FALLNUMMER">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
                     <label class="pe-none" for="fallNummer">{{
-                      'sozialdienst-app.cockpit.table.fall' | translate
+                      'sozialdienst-app.cockpit.table.fall' | transloco
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
@@ -126,7 +126,7 @@
                 <ng-container matColumnDef="NACHNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                     <label class="pe-none" for="nachname">{{
-                      'sozialdienst-app.cockpit.table.nachname' | translate
+                      'sozialdienst-app.cockpit.table.nachname' | transloco
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
@@ -160,7 +160,7 @@
                 <ng-container matColumnDef="VORNAME">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                     <label class="pe-none" for="vorname">{{
-                      'sozialdienst-app.cockpit.table.vorname' | translate
+                      'sozialdienst-app.cockpit.table.vorname' | transloco
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
@@ -201,7 +201,7 @@
                     example="01.01.2000"
                   >
                     <label class="pe-none" for="geburtsdatum">{{
-                      'sozialdienst-app.cockpit.table.geburtsdatum' | translate
+                      'sozialdienst-app.cockpit.table.geburtsdatum' | transloco
                     }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
@@ -243,7 +243,7 @@
                 <!-- wohnort -->
                 <ng-container matColumnDef="WOHNORT">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
-                    <label class="pe-none" for="ort">{{ 'sozialdienst-app.cockpit.table.wohnort' | translate }}</label>
+                    <label class="pe-none" for="ort">{{ 'sozialdienst-app.cockpit.table.wohnort' | transloco }}</label>
                     <div class="tw-relative tw-flex">
                       <mat-form-field>
                         <input
@@ -275,23 +275,23 @@
 
                 <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
-                    {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | translate }}
+                    {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco }}
                     <mat-form-field class="tw-w-full">
                       <mat-select
-                        [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | translate"
+                        [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco"
                         formControlName="delegierungAngenommen"
                         (click)="$event.stopPropagation()"
                         class="!tw-font-normal"
-                        [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | translate"
+                        [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | transloco"
                         panelClass="table-select"
                       >
                         <mat-option [value]="undefined">
-                          {{ 'sozialdienst-app.cockpit.no-status-filter' | translate }}
+                          {{ 'sozialdienst-app.cockpit.no-status-filter' | transloco }}
                         </mat-option>
 
                         @for (status of statusValues; track status.key) {
                           <mat-option [value]="status.value">
-                            {{ 'sozialdienst-app.cockpit.table.delegierung.' + status.key | translate }}
+                            {{ 'sozialdienst-app.cockpit.table.delegierung.' + status.key | transloco }}
                           </mat-option>
                         }
                       </mat-select>
@@ -304,8 +304,8 @@
                   >
                     {{
                       fall.delegierung.delegierungAngenommen
-                        ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG' | translate)
-                        : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE' | translate)
+                        ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG' | transloco)
+                        : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE' | transloco)
                     }}
                   </td>
                 </ng-container>
@@ -335,7 +335,7 @@
                 ></tr>
                 <tr class="mat-mdc-row" *matNoDataRow>
                   <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
-                    {{ 'shared.table.noData' | translate }}
+                    {{ 'shared.table.noData' | transloco }}
                   </td>
                 </tr>
               </table>

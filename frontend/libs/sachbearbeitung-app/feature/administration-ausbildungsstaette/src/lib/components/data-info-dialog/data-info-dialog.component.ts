@@ -6,7 +6,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
@@ -52,7 +52,7 @@ const createInfoData = {
 
 @Component({
   selector: 'dv-data-info-dialog',
-  imports: [CommonModule, TranslatePipe, MatCheckboxModule],
+  imports: [CommonModule, TranslocoPipe, MatCheckboxModule],
   templateUrl: './data-info-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

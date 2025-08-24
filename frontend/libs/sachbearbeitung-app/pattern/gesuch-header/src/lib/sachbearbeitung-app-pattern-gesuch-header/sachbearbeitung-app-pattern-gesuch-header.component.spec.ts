@@ -7,7 +7,10 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
+import {
+  getTranslocoModule,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import { success } from '@dv/shared/util/remote-data';
 
@@ -31,7 +34,10 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SachbearbeitungAppPatternGesuchHeaderComponent],
+      imports: [
+        SachbearbeitungAppPatternGesuchHeaderComponent,
+        getTranslocoModule(),
+      ],
       providers: [
         provideRouter([]),
         provideHttpClient(),
