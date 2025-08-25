@@ -238,11 +238,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     () => {
       const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
       const currentAusbildungsgang = this.currentAusbildungsgangSig();
-      const isNew = this.fallIdSig();
       const ausbildungsstaetten =
         this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
 
-      if (!ausbildungsstaetten || (!currentAusbildungsstaette && !isNew)) {
+      if (!ausbildungsstaetten) {
         return [];
       }
 

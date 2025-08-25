@@ -173,7 +173,7 @@ const uniqueAusbildungsstaetteValidator = (
     }
 
     const duplicateExists = ausbildungsstaetten.some(
-      (entry) => entry[property] === currentValue,
+      (entry) => entry.aktiv && entry[property] === currentValue,
     );
 
     return duplicateExists ? { notUniqueAusbildungsstaette: true } : null;
