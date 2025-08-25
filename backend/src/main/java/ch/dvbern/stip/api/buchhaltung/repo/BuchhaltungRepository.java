@@ -119,18 +119,4 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
             )
             .stream();
     }
-
-    public Stream<Buchhaltung> findBusinesspartnerCreateBuchhaltungWithFailedSapDelivery() {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(Q_BUCHHALTUNG)
-            .where(
-                Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.BUSINESSPARTNER_CREATE)
-            )
-            .where(
-                Q_BUCHHALTUNG.sapDeliverys.size().lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
-            )
-            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS).not())
-            .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.IN_PROGRESS).not())
-            .stream();
-    }
 }

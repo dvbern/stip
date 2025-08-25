@@ -491,28 +491,6 @@ public class SapService {
             }
         }
 
-        final var businesspartnerCreateBuchhaltungWithFailedSapDelivery =
-            buchhaltungRepository.findBusinesspartnerCreateBuchhaltungWithFailedSapDelivery().toList();
-        for (var buchhaltung : businesspartnerCreateBuchhaltungWithFailedSapDelivery) {
-            try {
-                LOG.info(
-                    String.format(
-                        "Processing pendingBusinessPartnerCreateBuchhaltung: %s",
-                        buchhaltung.getId()
-                    )
-                );
-                createBusinessPartnerOrGetStatus(buchhaltung.getGesuch(), buchhaltung.getZahlungsverbindung());
-            } catch (Exception e) {
-                LOG.error(
-                    String.format(
-                        "processPendingCreateBusinessPartnerActions: Error during processing of pendingBusinessPartnerCreateBuchhaltung %s",
-                        buchhaltung.getId()
-                    ),
-                    e
-                );
-            }
-        }
-
         final var gesuchsWithPendingSapActions = gesuchRepository.findGesuchWithPendingSapAction().toList();
         for (var gesuch : gesuchsWithPendingSapActions) {
             try {
