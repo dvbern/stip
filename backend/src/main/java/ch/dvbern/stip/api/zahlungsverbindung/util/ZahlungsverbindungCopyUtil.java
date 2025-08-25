@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.util;
+package ch.dvbern.stip.api.zahlungsverbindung.util;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

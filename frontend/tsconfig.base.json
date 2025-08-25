@@ -52,6 +52,7 @@
       "@dv/sachbearbeitung-app/feature/administration-gesuchsperiode": ["libs/sachbearbeitung-app/feature/administration-gesuchsperiode/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/administration-sozialdienst": ["libs/sachbearbeitung-app/feature/administration-sozialdienst/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/cockpit": ["libs/sachbearbeitung-app/feature/cockpit/src/index.ts"],
+      "@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen": ["libs/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form": ["libs/sachbearbeitung-app/feature/gesuch-form/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten": ["libs/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/infos": ["libs/sachbearbeitung-app/feature/infos/src/index.ts"],

@@ -211,6 +211,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildungsstaette.name.notunique}";
     public static final String VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE =
         "{jakarta.validation.constraints.ausbildungsgang.ausbildungsstaetteAbschluss.notunique}";
+    public static final String VALIDATION_SAP_DELIVERYS_LENGTH_VIOLATION =
+        "{jakarta.validation.constraints.buchhaltung.sapDeliverys.length.violation}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.service;
+package ch.dvbern.stip.api.zahlungsverbindung.service;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.auszahlung.repo.ZahlungsverbindungRepository;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;

@@ -18,8 +18,6 @@
 package ch.dvbern.stip.api.sozialdienst.service;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
 import ch.dvbern.stip.api.land.service.LandService;
@@ -29,6 +27,8 @@ import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;

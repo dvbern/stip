@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.common.authorization;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Authorizer
 public class BuchhaltungAuthorizer extends BaseAuthorizer {
     private final GesuchRepository gesuchRepository;
-    private final GesuchStatusService gesuchStatusService;
+    private final BuchhaltungService buchhaltungService;
 
     @Transactional
     public void canCreateBuchhaltungSaldokorrektur(final UUID gesuchId) {
@@ -45,5 +45,15 @@ public class BuchhaltungAuthorizer extends BaseAuthorizer {
 
     public void canGetBuchhaltungEntrys() {
         permitAll();
+    }
+
+    public void canGetFailedAuszahlungBuchhaltungEntrys() {
+        permitAll();
+    }
+
+    public void canRetryFailedAuszahlungBuchhaltung(final UUID gesuchId) {
+        if (!buchhaltungService.canRetryAuszahlungBuchhaltung(gesuchId)) {
+            forbidden();
+        }
     }
 }

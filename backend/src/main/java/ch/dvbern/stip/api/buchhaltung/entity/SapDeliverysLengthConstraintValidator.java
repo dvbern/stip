@@ -15,31 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.entity;
+package ch.dvbern.stip.api.buchhaltung.entity;
 
-import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class Iso2OnZahlungsverbindungMustBeSetValidator
-    implements ConstraintValidator<Iso2OnZahlungsverbindungMustBeSet, Zahlungsverbindung> {
-    private String property;
+public class SapDeliverysLengthConstraintValidator
+    implements ConstraintValidator<SapDeliverysLengthConstraint, Buchhaltung> {
+    public static final Integer MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER = 3;
+    public static final Integer MAX_SAP_DELIVERYS_AUSZAHLUNG = 3;
 
     @Override
-    public void initialize(Iso2OnZahlungsverbindungMustBeSet constraintAnnotation) {
-        property = constraintAnnotation.property();
-    }
-
-    @Override
-    public boolean isValid(Zahlungsverbindung value, ConstraintValidatorContext context) {
-        final var iso2code = value.getAdresse().getLand().getIso2code();
-        if (iso2code == null || iso2code.isEmpty()) {
-            return GesuchValidatorUtil.addProperty(
-                context,
-                property
-            );
-        }
-
-        return true;
+    public boolean isValid(Buchhaltung value, ConstraintValidatorContext context) {
+        return switch (value.getBuchhaltungType()) {
+            case SALDOAENDERUNG, STIPENDIUM -> value.getSapDeliverys().isEmpty();
+            case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER -> value.getSapDeliverys()
+                .size() <= MAX_SAP_DELIVERYS_AUSZAHLUNG;
+            case BUSINESSPARTNER_CREATE -> value.getSapDeliverys().size() <= MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER;
+        };
     }
 }

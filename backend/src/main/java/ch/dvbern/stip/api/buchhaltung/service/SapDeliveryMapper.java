@@ -15,12 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.type;
+package ch.dvbern.stip.api.buchhaltung.service;
 
-public enum Kontoinhaber {
-    GESUCHSTELLER,
-    VATER,
-    MUTTER,
-    SOZIALDIENST_INSTITUTION,
-    ANDERE
+import java.math.BigDecimal;
+
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.generated.dto.SapDeliveryDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+@Mapper(config = MappingConfig.class)
+public abstract class SapDeliveryMapper {
+    @Mapping(source = "sapDeliveryId", target = "sapId", qualifiedByName = "getSapDeliveryId")
+    public abstract SapDeliveryDto toDto(SapDelivery sapDelivery);
+
+    @Named("getSapDeliveryId")
+    String getSapDeliveryId(BigDecimal sapDeliveryId) {
+        return String.valueOf(sapDeliveryId.longValue());
+    }
 }

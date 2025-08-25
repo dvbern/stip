@@ -2,13 +2,22 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (buchhaltungDataSourceSig(); as buchhaltungDataSource) {
-    <div class="tw-flex tw-w-full tw-justify-end">
-      <button
-        *dvHasRoles="['V0_Sachbearbeiter']"
-        type="button"
-        (click)="createBuchhaltungsKorrektur()"
-        class="btn btn-outline-primary"
-      >
+    <div *dvHasRoles="['V0_Sachbearbeiter']" class="tw-flex tw-w-full tw-justify-between">
+      <!-- retry button -->
+      @if (buchhaltungStore.buchhaltung().data?.canRetryAuszahlung) {
+        <button
+          type="button"
+          class="btn btn-outline-primary tw-flex tw-items-center tw-gap-2"
+          [disabled]="buchhaltungStore.retriedAuszahlung() | rdIsPending: { ignoreInitial: true }"
+          (click)="retryAuszahlung()"
+          data-testid="sachbearbeitung-app.buchhaltung-info.retry"
+        >
+          <i class="material-symbols-rounded">refresh</i>
+          <span>{{ 'sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung' | translate }}</span>
+        </button>
+      }
+
+      <button type="button" (click)="createBuchhaltungsKorrektur()" class="btn btn-outline-primary">
         {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | translate }}
       </button>
     </div>
@@ -21,33 +30,16 @@
         </caption>
 
         <ng-container matColumnDef="datum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | translate }}
           </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-w-32 tw-whitespace-nowrap"
-          >
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="benutzer">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.user' | translate }}
-          </th>
-          <td
-            mat-cell
-            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-w-32 tw-whitespace-nowrap"
-          >
-            {{ buchhaltung.entry.userErstellt }}
-          </td>
-        </ng-container>
-
         <ng-container matColumnDef="stipendienbetrag">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 !tw-text-right">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | translate }}
           </th>
           <td
@@ -60,7 +52,7 @@
         </ng-container>
 
         <ng-container matColumnDef="auszahlung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28 !tw-text-right">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.auszahlung' | translate }}
           </th>
           <td
@@ -73,7 +65,7 @@
         </ng-container>
 
         <ng-container matColumnDef="rueckforderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 !tw-text-right">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | translate }}
           </th>
           <td
@@ -85,8 +77,22 @@
           </td>
         </ng-container>
 
+        <!-- saldoAenderung -->
+        <ng-container matColumnDef="saldoAenderung">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 !tw-text-right">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | translate }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
+            class="tw-whitespace-nowrap !tw-text-right tw-font-bold"
+          >
+            {{ buchhaltung.entry.saldoAenderung | formatChf }}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="saldo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 !tw-text-right">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | translate }}
           </th>
           <td
@@ -99,21 +105,33 @@
         </ng-container>
 
         <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-[30ch]">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | translate }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw-max-w-[30ch] tw-whitespace-nowrap"
+            class="tw-whitespace-nowrap"
             [dvTruncateTooltip]="buchhaltung.entry.comment"
           >
             {{ buchhaltung.entry.comment }}
           </td>
         </ng-container>
 
+        <!-- sapStatus -->
+        <ng-container matColumnDef="sapStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.sapStatus' | translate }}
+          </th>
+          <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
+            @if (buchhaltung.entry.sapStatus) {
+              {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | translate }}
+            }
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="info">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-40 tw-whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 tw-whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | translate }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">

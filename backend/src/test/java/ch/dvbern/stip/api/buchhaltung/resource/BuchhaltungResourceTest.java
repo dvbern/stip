@@ -17,13 +17,13 @@
 
 package ch.dvbern.stip.api.buchhaltung.resource;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -41,8 +41,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
-import ch.dvbern.stip.generated.dto.BuchhaltungEntryDtoSpec;
-import ch.dvbern.stip.generated.dto.BuchhaltungTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -203,22 +202,22 @@ class BuchhaltungResourceTest {
     @TestAsSachbearbeiter
     @Order(8)
     void getBuchhaltung() {
-        final var buchhaltungEntrys = Arrays.stream(
-            buchhaltungApiSpec.getBuchhaltungEntrys()
-                .gesuchIdPath(gesuch.getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(
-                    BuchhaltungEntryDtoSpec[].class
-                )
-        ).toList();
+        final var buchhaltungOverview = buchhaltungApiSpec.getBuchhaltungEntrys()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(
+                BuchhaltungOverviewDto.class
+            );
 
-        assertThat(buchhaltungEntrys.size(), is(1));
-        assertThat(buchhaltungEntrys.get(0).getBuchhaltungType(), equalTo(BuchhaltungTypeDtoSpec.STIPENDIUM));
+        final var buchhaltungEntrys = buchhaltungOverview.getBuchhaltungEntrys();
+
+        assertThat(buchhaltungEntrys.size(), greaterThan(1));
+        assertThat(buchhaltungEntrys.get(0).getBuchhaltungType(), equalTo(BuchhaltungType.STIPENDIUM));
         assertThat(buchhaltungEntrys.get(0).getSaldo(), greaterThan(0));
         assertThat(buchhaltungEntrys.get(0).getSaldoAenderung(), greaterThan(0));
         assertThat(buchhaltungEntrys.get(0).getSaldo(), equalTo(buchhaltungEntrys.get(0).getSaldoAenderung()));

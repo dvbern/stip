@@ -7,7 +7,7 @@
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw-mb-8 tw-text-xl">
+  <h1 class="tw-mb-8 tw-text-2xl">
     {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.title' | translate }}
   </h1>
   <dl class="tw-grid tw-grid-cols-[min-content_2fr] tw-gap-x-4 tw-pl-0">
@@ -41,7 +41,7 @@
     }
 
     <dt class="tw-whitespace-nowrap tw-font-semibold">
-      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.salodannderung' | translate }}
+      {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldoAenderung' | translate }}
     </dt>
     <dd class="tw-font-normal">{{ dialogData.saldoAenderung | formatChf }}</dd>
 
@@ -50,22 +50,6 @@
     </dt>
     <dd class="tw-font-normal">{{ dialogData.saldo | formatChf }}</dd>
 
-    @if (dialogData.sapId) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
-        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | translate }}
-      </dt>
-      <dd class="tw-font-normal">{{ dialogData.sapId }}</dd>
-    }
-
-    @if (dialogData.sapStatus) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
-        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | translate }}
-      </dt>
-      <dd class="tw-font-normal">
-        {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + dialogData.sapStatus | translate }}
-      </dd>
-    }
-
     @if (dialogData.businessPartnerId) {
       <dt class="tw-whitespace-nowrap tw-font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapBusinessPartnerId' | translate }}
@@ -73,7 +57,28 @@
       <dd class="tw-font-normal">{{ dialogData.businessPartnerId }}</dd>
     }
 
-    <dt class="tw-mt-4 tw-whitespace-nowrap tw-font-semibold">
+    <!-- auszahlung an -->
+    @let zv = dialogData.zahlungsverbindung;
+    @if (zv) {
+      <dt class="tw-whitespace-nowrap tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlungAn' | translate }}
+      </dt>
+      <dd class="tw-font-normal">
+        <div>
+          <span>
+            {{ zv.vorname }}
+          </span>
+          <span>
+            {{ zv.nachname }}
+          </span>
+        </div>
+        <div>{{ zv.adresse.strasse }} {{ zv.adresse.hausnummer }}</div>
+        <div>{{ zv.adresse.plz }} {{ zv.adresse.ort }}</div>
+        <div>{{ zv.iban }}</div>
+      </dd>
+    }
+
+    <dt class="tw-mt-4 tw-whitespace-nowrap tw-text-xl tw-font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung' | translate }}
     </dt>
     <dd
@@ -81,6 +86,28 @@
       [innerText]="dialogData.comment"
     ></dd>
   </dl>
+
+  <!-- SAP delivery Verlauf -->
+  @if (sapDeliverysSig()?.length) {
+    <h3 class="tw-mt-4 tw-text-xl">{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf' | translate }}</h3>
+    <div class="tw-grid tw-grid-cols-[max-content_1fr_1fr] tw-gap-x-4">
+      <div class="tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp' | translate }}
+      </div>
+      <div class="tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | translate }}
+      </div>
+      <div class="tw-font-semibold">
+        {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | translate }}
+      </div>
+
+      @for (item of sapDeliverysSig(); track item.sapId) {
+        <div>{{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</div>
+        <div>{{ item.sapId }}</div>
+        <div>{{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + item.sapStatus | translate }}</div>
+      }
+    </div>
+  }
 
   <div class="tw-mt-10 tw-flex tw-justify-end">
     <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
