@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
@@ -37,6 +38,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -51,6 +53,7 @@ public class DelegierenService {
     private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
     private final ConfigService configService;
     private final DelegierungMapper delegierungMapper;
+    private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
@@ -73,7 +76,20 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
 
+        if (delegierung.getDelegierterMitarbeiter() == null) {
+            final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
+            if (!delegierung.getSozialdienst().isBenutzerAdmin(currentBenutzer)) {
+                throw new ForbiddenException();
+            }
+        }
+
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
+    }
+
+    @Transactional
+    public void delegierungAblehnen(final UUID delegierungId) {
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+        delegierungRepository.delete(delegierung);
     }
 
     @Transactional

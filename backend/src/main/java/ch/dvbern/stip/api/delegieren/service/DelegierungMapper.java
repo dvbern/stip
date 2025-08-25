@@ -24,13 +24,21 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
 
-public interface DelegierungMapper {
-    Delegierung toEntity(final DelegierungDto delegierungDto);
+public abstract class DelegierungMapper {
+    public abstract Delegierung toEntity(final DelegierungDto delegierungDto);
 
-    DelegierungDto toDto(final Delegierung delegierung);
+    @Mapping(source = ".", target = "delegierungAngenommen", qualifiedByName = "delegierungAngenommen")
+    public abstract DelegierungDto toDto(final Delegierung delegierung);
 
-    FallWithDelegierungDto toFallWithDto(Fall fall);
+    public abstract FallWithDelegierungDto toFallWithDto(Fall fall);
+
+    @Named("delegierungAngenommen")
+    boolean delegierungAngenommen(Delegierung delegierung) {
+        return delegierung.getDelegierterMitarbeiter() != null;
+    }
 }

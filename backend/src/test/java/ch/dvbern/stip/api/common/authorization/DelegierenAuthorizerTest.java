@@ -69,7 +69,7 @@ class DelegierenAuthorizerTest {
 
         delegierenAuthorizer = new DelegierenAuthorizer(
             benutzerService, fallRepository, delegierungRepository, sozialdienstService,
-            sozialdienstBenutzerRepository
+            sozialdienstBenutzerRepository, sozialdienstBenutzerService
         );
 
     }
@@ -95,7 +95,6 @@ class DelegierenAuthorizerTest {
         var delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(sozialdienstbenutzer);
-        delegierung.setDelegierungAngenommen(true);
         when(delegierungRepository.requireById(any())).thenReturn(delegierung);
         fall.setDelegierung(delegierung);
 
@@ -105,13 +104,13 @@ class DelegierenAuthorizerTest {
     }
 
     @Test
-    void canReadDelegierung_shouldWork_asSozialdienstMitarbeiterOfSozialdienst(){
+    void canReadDelegierung_shouldWork_asSozialdienstMitarbeiterOfSozialdienst() {
         // arrange
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(new Sozialdienst());
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadDelegierung());
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadDelegierungMa());
     }
 
     @Test

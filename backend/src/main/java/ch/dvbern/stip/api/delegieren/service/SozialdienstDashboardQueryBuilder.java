@@ -71,7 +71,7 @@ public class SozialdienstDashboardQueryBuilder {
     }
 
     public void delegierungAngenommen(final JPAQuery<Delegierung> query, final Boolean delegierungAngenommen) {
-        query.where(qDelegierung.delegierungAngenommen.eq(delegierungAngenommen));
+        query.where(qDelegierung.delegierterMitarbeiter.isNotNull().eq(delegierungAngenommen));
     }
 
     public void orderBy(
