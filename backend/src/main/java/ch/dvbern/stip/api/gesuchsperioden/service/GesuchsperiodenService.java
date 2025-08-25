@@ -195,9 +195,7 @@ public class GesuchsperiodenService {
     @Transactional
     public List<GesuchsperiodeDto> getAllAssignableGesuchsperioden(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var ausbildung = gesuch.getAusbildung();
-        final var range =
-            DateUtil.isFruehling(ausbildung.getAusbildungBegin()) ? DateRange.getFruehling() : DateRange.getHerbst();
+        final var range = DateRange.getFruehlingOrHerbst(gesuch.getAusbildung().getAusbildungBegin());
 
         return gesuchsperiodeRepository.getAllAssignableGesuchsperiodenWithStartBetween(range)
             .stream()
