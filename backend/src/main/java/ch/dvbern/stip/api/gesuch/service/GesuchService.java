@@ -71,6 +71,8 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
@@ -96,6 +98,7 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -1241,7 +1244,7 @@ public class GesuchService {
             .validate(
                 validator,
                 gesuchTranche.getGesuchFormular(),
-                GesuchNachInBearbeitungSBValidationGroup.class
+                List.of(EinnahmenKostenPageValidation.class, SteuerdatenPageValidation.class)
             );
 
         if (gesuch.getGesuchTranchen().size() != 1) {
