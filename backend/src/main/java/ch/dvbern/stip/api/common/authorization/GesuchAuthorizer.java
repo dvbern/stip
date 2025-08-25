@@ -160,14 +160,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void sbCanChangeGesuchsperiodeForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (!gesuch.isErstgesuch()) {
-            forbidden();
-        }
-
-        if (gesuch.getGesuchTranchen().size() != 1) {
-            forbidden();
-        }
-
         if (!gesuchStatusService.canChangeGesuchsperiode(gesuch)) {
             forbidden();
         }

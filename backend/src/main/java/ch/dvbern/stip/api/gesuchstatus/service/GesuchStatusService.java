@@ -119,6 +119,14 @@ public class GesuchStatusService {
     }
 
     public boolean canChangeGesuchsperiode(final Gesuch gesuch) {
+        if (!gesuch.isErstgesuch()) {
+            return false;
+        }
+
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            return false;
+        }
+
         final var isInStatus = gesuchIsInOneOfGesuchStatus(gesuch, Set.of(Gesuchstatus.IN_BEARBEITUNG_SB));
 
         if (isInStatus && !gesuch.isVerfuegt()) {
