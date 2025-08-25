@@ -309,6 +309,14 @@ quarkus:
         username: ${STIP_KEYCLOAK_ADMIN_USER}
         password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
 
+'%dbclear':
+  quarkus:
+    config:
+      profile:
+        parent: prod
+    quartz:
+      clustered: false
+
 mp:
   openapi:
     scan:
