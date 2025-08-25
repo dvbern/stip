@@ -38,6 +38,7 @@ public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungss
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_AUSBILDUNGSSTAETTE)
             .where(Q_AUSBILDUNGSSTAETTE.nameDe.eq(nameDe))
+            .where(Q_AUSBILDUNGSSTAETTE.aktiv)
             .stream()
             .findAny();
     }
@@ -46,6 +47,7 @@ public class AusbildungsstaetteRepository implements BaseRepository<Ausbildungss
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_AUSBILDUNGSSTAETTE)
             .where(Q_AUSBILDUNGSSTAETTE.nameFr.eq(nameFr))
+            .where(Q_AUSBILDUNGSSTAETTE.aktiv)
             .stream()
             .findAny();
     }
