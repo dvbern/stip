@@ -45,6 +45,7 @@ public class AbschlussService {
     private final AbschlussRepository abschlussRepository;
     private final AbschlussQueryBuilder abschlussQueryBuilder;
     private final AbschlussMapper abschlussMapper;
+    private final AusbildungsgangService ausbildungsgangService;
     private final ConfigService configService;
 
     @Transactional
@@ -130,6 +131,7 @@ public class AbschlussService {
         if (abschluss.getAusbildungskategorie() != Ausbildungskategorie.BRUECKENANGEBOT) {
             throw new ForbiddenException("Can't set abschluss inaktiv that was not user created");
         }
+        ausbildungsgangService.setAllAusbildungsgaengeOfAbschlussToInaktiv(abschlussId);
         abschluss.setAktiv(false);
         return abschlussMapper.toDto(abschluss);
     }
