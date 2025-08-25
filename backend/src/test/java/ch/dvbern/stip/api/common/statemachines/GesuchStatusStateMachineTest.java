@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumente
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
@@ -59,6 +60,7 @@ class GesuchStatusStateMachineTest {
     private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerSpy;
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
+    private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
     @BeforeEach
@@ -76,6 +78,7 @@ class GesuchStatusStateMachineTest {
         aenderungFehlendeDokumenteNichtEingereichtHandlerSpy =
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class);
         stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
+        juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -88,7 +91,8 @@ class GesuchStatusStateMachineTest {
             negativeVerfuegungHandlerSpy,
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
-            stipendienAnspruchHandlerSpy
+            stipendienAnspruchHandlerSpy,
+            juristischeAbklaerungDurchPruefungHandlerSpy
         ).createStateMachineConfig();
     }
 

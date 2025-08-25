@@ -48,7 +48,6 @@ async function setup(language: Language = 'de') {
     inputs: {
       labelKeySig: 'label.test.key',
       valuesSig: values,
-      isEntryValidSig: () => true,
       invalidValueLabelKeySig: 'error.test.key',
       languageSig: language,
       testIdSig: 'autocomplete-test-id',

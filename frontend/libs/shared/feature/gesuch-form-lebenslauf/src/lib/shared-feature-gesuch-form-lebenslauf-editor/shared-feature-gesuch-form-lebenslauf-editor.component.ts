@@ -154,6 +154,12 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
 
     return abschluesse.find((a) => a.id === abschlussId);
   });
+  abschluesseOptionsSig = computed(() => {
+    const selectedAbschlussId = this.abschlussIdSig();
+    return this.ausbildungsstatteStore
+      .abschluesseViewSig()
+      .filter((a) => a.aktiv || a.id === selectedAbschlussId);
+  });
   startChangedSig = toSignal(this.form.controls.von.valueChanges);
   endChangedSig = toSignal(this.form.controls.bis.valueChanges);
   kantonValues = this.prepareKantonValues();
@@ -357,6 +363,10 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     if (item.id) {
       this.deleteTriggered.emit(item.id);
     }
+  }
+
+  isActive(obj: { aktiv: boolean }) {
+    return obj.aktiv;
   }
 
   onDateBlur(ctrl: FormControl) {

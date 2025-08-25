@@ -13,11 +13,11 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
-  FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,9 +37,11 @@ import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person
 import {
   Anrede,
   DokumentTyp,
+  GesuchFormularUpdate,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   Niederlassungsstatus,
   PATTERN_EMAIL,
+  Plz,
   Sprache,
   Wohnsitz,
   WohnsitzKanton,
@@ -67,6 +69,7 @@ import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -143,6 +146,7 @@ const berechtigteNiederlassungsstatus = {
     MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,
+    MatAutocompleteModule,
     MatCheckboxModule,
     MatSelectModule,
     MatRadioModule,
@@ -161,6 +165,7 @@ const berechtigteNiederlassungsstatus = {
     SharedUiTranslateChangePipe,
     SharedUiMaxLengthDirective,
     SharedUiSelectSearchComponent,
+    SharedUiPlzOrtAutocompleteDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -197,7 +202,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   updateValidity$ = new Subject<unknown>();
   appSettings = inject(AppSettings);
   vorlaeufigAufgenommenF = vorlaeufigAufgenommenF;
-  hiddenFieldsSetSig = signal(new Set<FormControl>());
+  hiddenFieldsSetSig = signal(new Set<AbstractControl>());
+  plzValues?: Plz[];
 
   auslaenderausweisDocumentOptionsSig = this.createUploadOptionsSig(() => {
     const niederlassungsstatus = this.niederlassungsstatusChangedSig();
@@ -326,14 +332,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       this.formBuilder,
     ),
     identischerZivilrechtlicherWohnsitz: [true, []],
-    identischerZivilrechtlicherWohnsitzPLZ: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
-    identischerZivilrechtlicherWohnsitzOrt: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
+    identischerZivilrechtlicherWohnsitzPlzOrt: this.formBuilder.group({
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+    }),
     email: ['', [Validators.required, Validators.pattern(PATTERN_EMAIL)]],
     telefonnummer: [
       '',
@@ -360,7 +362,10 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     nationalitaetId: this.formBuilder.control(<string | undefined>undefined, {
       validators: Validators.required,
     }),
-    heimatort: [<string | undefined>undefined, [Validators.required]],
+    heimatortPlzOrt: this.formBuilder.group({
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+    }),
     niederlassungsstatus: this.formBuilder.control<
       AvailableNiederlassungsstatus | undefined
     >(undefined, { validators: Validators.required }),
@@ -489,8 +494,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       }
     };
 
-    (window as any).__form = this.form;
-
     // patch form value
     effect(() => {
       const { gesuchFormular } = this.viewSig();
@@ -520,6 +523,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           ...personForForm,
           ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
           ...niederlassungsStatusConverter.from(niederlassungsstatus),
+          heimatortPlzOrt: {
+            plz: personForForm.heimatortPLZ,
+            ort: personForForm.heimatort,
+          },
+          identischerZivilrechtlicherWohnsitzPlzOrt: {
+            plz: personForForm.identischerZivilrechtlicherWohnsitzPLZ,
+            ort: personForForm.identischerZivilrechtlicherWohnsitzOrt,
+          },
         });
         SharedUiFormAddressComponent.patchForm(
           this.form.controls.adresse,
@@ -554,18 +565,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
       updateVisbilityAndDisbledState({
         hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-        formControl: this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
+        formControl:
+          this.form.controls.identischerZivilrechtlicherWohnsitzPlzOrt.controls
+            .plz,
         visible: !zivilrechtlichIdentisch,
         disabled: this.viewSig().readonly,
       });
       updateVisbilityAndDisbledState({
         hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-        formControl: this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
+        formControl:
+          this.form.controls.identischerZivilrechtlicherWohnsitzPlzOrt.controls
+            .ort,
         visible: !zivilrechtlichIdentisch,
         disabled: this.viewSig().readonly,
       });
-      this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
-      this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
+      this.form.controls.identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz.updateValueAndValidity();
+      this.form.controls.identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort.updateValueAndValidity();
     });
 
     // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
@@ -577,7 +592,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       if (nationalitaetBfsCode === BFSCODE_SCHWEIZ) {
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.heimatort,
+          formControl: this.form.controls.heimatortPlzOrt,
           visible: true,
           disabled: this.viewSig().readonly,
         });
@@ -606,7 +621,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         });
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.heimatort,
+          formControl: this.form.controls.heimatortPlzOrt,
           visible: false,
           disabled: this.viewSig().readonly,
           resetOnInvisible: false,
@@ -629,7 +644,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         });
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.heimatort,
+          formControl: this.form.controls.heimatortPlzOrt,
           visible: false,
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
@@ -806,10 +821,22 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
-    const values = convertTempFormToRealValues(this.form, [
+    const {
+      fluechtlingsstatus,
+      zustaendigerKanton,
+      identischerZivilrechtlicherWohnsitzPlzOrt,
+      heimatortPlzOrt,
+      ...values
+    } = convertTempFormToRealValues(this.form, [
       'nationalitaetId',
       'sozialhilfebeitraege',
     ]);
+
+    const {
+      plz: identischerZivilrechtlicherWohnsitzPLZ,
+      ort: identischerZivilrechtlicherWohnsitzOrt,
+    } = identischerZivilrechtlicherWohnsitzPlzOrt;
+    const { plz: heimatortPLZ, ort: heimatort } = heimatortPlzOrt;
 
     return {
       gesuchId: gesuch?.id,
@@ -824,9 +851,15 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
               this.form.controls.adresse,
             ),
           },
-          niederlassungsstatus: niederlassungsStatusConverter.to(values),
-          fluechtlingsstatus: undefined,
-          zustaendigerKanton: undefined,
+          identischerZivilrechtlicherWohnsitzOrt,
+          identischerZivilrechtlicherWohnsitzPLZ,
+          heimatort,
+          heimatortPLZ,
+          niederlassungsstatus: niederlassungsStatusConverter.to({
+            ...values,
+            fluechtlingsstatus,
+            zustaendigerKanton,
+          }),
           geburtsdatum: parseStringAndPrintForBackendLocalDate(
             values.geburtsdatum,
             this.languageSig(),
@@ -839,7 +872,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           ),
           ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
         },
-      },
+      } satisfies Partial<GesuchFormularUpdate>,
     };
   }
 }

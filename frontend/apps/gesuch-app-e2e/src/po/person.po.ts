@@ -23,6 +23,7 @@ export class PersonPO {
     telefonnummer: Locator;
     geburtsdatum: Locator;
     nationalitaetSelect: Locator;
+    heimatortPLZ: Locator;
     heimatort: Locator;
     vorumundschaftCheckbox: Locator;
     zivilstandSelect: Locator;
@@ -62,6 +63,7 @@ export class PersonPO {
       telefonnummer: page.getByTestId('form-person-telefonnummer'),
       geburtsdatum: page.getByTestId('form-person-geburtsdatum'),
       nationalitaetSelect: page.getByTestId('form-person-nationalitaet'),
+      heimatortPLZ: page.getByTestId('form-person-heimatortPLZ'),
       heimatort: page.getByTestId('form-person-heimatort'),
       vorumundschaftCheckbox: page.getByTestId('form-person-vorumundschaft'),
       zivilstandSelect: page.getByTestId('form-person-zivilstand'),
@@ -117,6 +119,7 @@ export class PersonPO {
       person.nationalitaetId,
     );
 
+    await this.elems.heimatortPLZ.fill(person.heimatortPLZ ?? '3011');
     await this.elems.heimatort.fill(person.heimatort ?? 'Bern');
 
     await this.elems.zivilstandSelect.click();

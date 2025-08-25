@@ -68,6 +68,7 @@ public abstract class AusbildungsgangMapper {
 
     @Mapping(target = "bezeichnungDe", source = "abschluss.bezeichnungDe")
     @Mapping(target = "bezeichnungFr", source = "abschluss.bezeichnungFr")
+    @Mapping(target = "bildungskategorie", source = "abschluss.bildungskategorie")
     @Mapping(target = "zusatzfrage", source = "abschluss.zusatzfrage")
     public abstract AusbildungsgangDataDto toDataDto(Ausbildungsgang ausbildungsgang);
 }

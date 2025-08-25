@@ -61,7 +61,9 @@ public class SozialdienstRepository implements BaseRepository<Sozialdienst> {
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(sozialdienst)
-            .where(sozialdienst.sozialdienstBenutzers.isNotEmpty())
+            .where(
+                sozialdienst.sozialdienstBenutzers.isNotEmpty()
+            )
             .stream();
     }
 }

@@ -24,16 +24,19 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
@@ -96,6 +99,11 @@ public class Fall extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "auszahlung_id", foreignKey = @ForeignKey(name = "FK_fall_auszahlung_id"))
     private @Valid Auszahlung auszahlung;
+
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    @Column(name = "failed_buchhaltung_auszahlung_type", nullable = true)
+    private BuchhaltungType failedBuchhaltungAuszahlungType;
 
     public Zahlungsverbindung getRelevantZahlungsverbindung() {
         if (auszahlung.isAuszahlungAnSozialdienst()) {

@@ -58,7 +58,6 @@ public class GesuchNotizService {
     public List<GesuchNotizDto> getAllByGesuchId(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return getAllByFall(gesuch.getAusbildung().getFall());
-
     }
 
     @Transactional
@@ -97,6 +96,17 @@ public class GesuchNotizService {
         final var notiz = new GesuchNotiz()
             .setGesuch(gesuch)
             .setNotizTyp(GesuchNotizTyp.GESUCH_NOTIZ)
+            .setBetreff(betreff)
+            .setText(text);
+
+        gesuchNotizRepository.persistAndFlush(notiz);
+    }
+
+    @Transactional
+    public void createJuristischeNotiz(final Gesuch gesuch, final String betreff, final String text) {
+        final var notiz = new GesuchNotiz()
+            .setGesuch(gesuch)
+            .setNotizTyp(GesuchNotizTyp.JURISTISCHE_NOTIZ)
             .setBetreff(betreff)
             .setText(text);
 

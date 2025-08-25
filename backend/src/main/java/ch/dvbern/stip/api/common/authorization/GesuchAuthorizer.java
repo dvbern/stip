@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -69,7 +70,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToVerfuegt(final UUID gesuchId) {
+    public void freigabestelleCanChangeGesuchStatusToVerfuegt(final UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGT);
     }
 
@@ -90,9 +91,18 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE) {
+            assertBenutzerIsFreigabestelle();
+        }
+
         assertGesuchIsInOneOfGesuchStatus(
             gesuchId,
-            Set.of(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
+            Set.of(
+                Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
+                Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
+                Gesuchstatus.IN_FREIGABE
+            )
         );
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
@@ -137,8 +147,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void gsSbOrJuristCanRead(final UUID gesuchId) {
-        if (isSbOrJurist(benutzerService.getCurrentBenutzer())) {
+    public void gsSbOrFreigabestelleOrJuristCanRead(final UUID gesuchId) {
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }
         gsCanRead(gesuchId);
@@ -281,6 +291,17 @@ public class GesuchAuthorizer extends BaseAuthorizer {
                 sozialdienstService
             )
         ) {
+            forbidden();
+        }
+    }
+
+    public void assertBenutzerIsFreigabestelle() {
+        assertBenutzerHasRole(OidcConstants.ROLE_FREIGABESTELLE);
+    }
+
+    public void assertBenutzerHasRole(final String roleIdentifier) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (!currentBenutzer.hasRole(roleIdentifier)) {
             forbidden();
         }
     }

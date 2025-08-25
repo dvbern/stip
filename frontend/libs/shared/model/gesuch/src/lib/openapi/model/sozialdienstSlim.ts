@@ -13,5 +13,6 @@
 export interface SozialdienstSlim { 
     id: string;
     name: string;
+    aktiv: boolean;
 }
 

@@ -15,10 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.util;
+package ch.dvbern.stip.api.zahlungsverbindung.util;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.util.NullDiffUtil;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import lombok.experimental.UtilityClass;
 

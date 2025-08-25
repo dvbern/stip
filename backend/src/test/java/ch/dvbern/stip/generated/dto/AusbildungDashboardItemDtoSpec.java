@@ -44,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_PENSUM,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSSTAETTE,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND
 })
@@ -82,6 +83,9 @@ public class AusbildungDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG = "alternativeAusbildungsgang";
   private String alternativeAusbildungsgang;
+
+  public static final String JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z = "ausbildungsortPLZ";
+  private String ausbildungsortPLZ;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSORT = "ausbildungsort";
   private String ausbildungsort;
@@ -386,6 +390,32 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
 
+  public AusbildungDashboardItemDtoSpec ausbildungsortPLZ(String ausbildungsortPLZ) {
+    
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+    return this;
+  }
+
+   /**
+   * Not required if isAusbildungAusland &#x3D; true
+   * @return ausbildungsortPLZ
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getAusbildungsortPLZ() {
+    return ausbildungsortPLZ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+  }
+
+
   public AusbildungDashboardItemDtoSpec ausbildungsort(String ausbildungsort) {
     
     this.ausbildungsort = ausbildungsort;
@@ -457,13 +487,14 @@ public class AusbildungDashboardItemDtoSpec {
         Objects.equals(this.pensum, ausbildungDashboardItem.pensum) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildungDashboardItem.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsortPLZ, ausbildungDashboardItem.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(gesuchs, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland);
   }
 
   @Override
@@ -481,6 +512,7 @@ public class AusbildungDashboardItemDtoSpec {
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
+    sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("}");

@@ -17,12 +17,9 @@
 
 package ch.dvbern.stip.api.ausbildung.repo;
 
-import java.util.stream.Stream;
-
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.QAbschluss;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +30,4 @@ public class AbschlussRepository implements BaseRepository<Abschluss> {
     private final EntityManager entityManager;
 
     private static final QAbschluss Q_ABSCHLUSS = QAbschluss.abschluss;
-
-    public Stream<Abschluss> findAllAktiv() {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(Q_ABSCHLUSS)
-            .where(Q_ABSCHLUSS.aktiv.isTrue())
-            .stream();
-    }
 }

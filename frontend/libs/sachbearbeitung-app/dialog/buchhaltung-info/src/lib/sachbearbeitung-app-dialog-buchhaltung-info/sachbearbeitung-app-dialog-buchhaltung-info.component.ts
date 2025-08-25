@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -30,6 +35,17 @@ export class SachbearbeitungAppDialogBuchhaltungInfoComponent {
       data: entry,
     });
   }
+
+  sapDeliverysSig = computed(() => {
+    return this.dialogData.sapDeliverys
+      ? [...this.dialogData.sapDeliverys].sort((a, b) => {
+          return (
+            new Date(a.timestampErstellt).getTime() -
+            new Date(b.timestampErstellt).getTime()
+          );
+        })
+      : undefined;
+  });
 
   close() {
     this.dialogRef.close();

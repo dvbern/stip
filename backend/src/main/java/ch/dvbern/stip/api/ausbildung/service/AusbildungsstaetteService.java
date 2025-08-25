@@ -47,6 +47,7 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsstaetteQueryBuilder ausbildungsstaetteQueryBuilder;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
+    private final AusbildungsgangService ausbildungsgangService;
     private final ConfigService configService;
 
     private void validateAusbildungsstaetteNameUniqueness(
@@ -86,7 +87,8 @@ public class AusbildungsstaetteService {
 
     @Transactional
     public List<AusbildungsstaetteSlimDto> getAllAusbildungsstaetteForAuswahl() {
-        return ausbildungsstaetteRepository.findAllAktiv()
+        return ausbildungsstaetteRepository.findAll()
+            .stream()
             .map(ausbildungsstaetteMapper::toSlimDto)
             .toList();
     }
@@ -158,6 +160,7 @@ public class AusbildungsstaetteService {
         if (Objects.nonNull(ausbildungsstaette.getChShis())) {
             throw new ForbiddenException("Can't set ausbildungsstaette inaktiv that was not user created");
         }
+        ausbildungsgangService.setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(ausbildungsstaetteId);
         ausbildungsstaette.setAktiv(false);
         return ausbildungsstaetteMapper.toDto(ausbildungsstaette);
     }

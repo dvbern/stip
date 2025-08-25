@@ -17,6 +17,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -35,6 +36,7 @@ import {
   ElternUpdate,
   GesuchFormularType,
   MASK_SOZIALVERSICHERUNGSNUMMER,
+  Plz,
 } from '@dv/shared/model/gesuch';
 import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
 import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
@@ -52,6 +54,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
@@ -89,6 +92,7 @@ const MEDIUM_AGE_ADULT = 40;
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatAutocompleteModule,
     MatCheckboxModule,
     MatRadioModule,
     SharedUiFormFieldDirective,
@@ -102,6 +106,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedPatternDocumentUploadComponent,
     SharedUiMaxLengthDirective,
     SharedUiInfoDialogDirective,
+    SharedUiPlzOrtAutocompleteDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],
@@ -139,6 +144,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   readonly ElternTyp = ElternTyp;
 
   languageSig = this.store.selectSignal(selectLanguage);
+  plzValues?: Plz[];
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -147,14 +153,10 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       this.formBuilder,
     ),
     identischerZivilrechtlicherWohnsitz: [true, []],
-    identischerZivilrechtlicherWohnsitzPLZ: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
-    identischerZivilrechtlicherWohnsitzOrt: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
+    identischerZivilrechtlicherWohnsitzPlzOrt: this.formBuilder.group({
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+    }),
     telefonnummer: [
       '',
       [Validators.required, sharedUtilValidatorTelefonNummer()],
@@ -253,18 +255,20 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     effect(() => {
       this.gotReenabledSig();
       const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
+      const zivilrechtlicherWohnsitzPlzOrt =
+        this.form.controls.identischerZivilrechtlicherWohnsitzPlzOrt.controls;
       this.formUtils.setDisabledState(
-        this.form.controls.identischerZivilrechtlicherWohnsitzPLZ,
+        zivilrechtlicherWohnsitzPlzOrt.plz,
         zivilrechtlichIdentisch,
         true,
       );
       this.formUtils.setDisabledState(
-        this.form.controls.identischerZivilrechtlicherWohnsitzOrt,
+        zivilrechtlicherWohnsitzPlzOrt.ort,
         zivilrechtlichIdentisch,
         true,
       );
-      this.form.controls.identischerZivilrechtlicherWohnsitzPLZ.updateValueAndValidity();
-      this.form.controls.identischerZivilrechtlicherWohnsitzOrt.updateValueAndValidity();
+      zivilrechtlicherWohnsitzPlzOrt.plz.updateValueAndValidity();
+      zivilrechtlicherWohnsitzPlzOrt.ort.updateValueAndValidity();
     });
     const landChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.adresse.controls.landId,
@@ -297,6 +301,10 @@ export class SharedFeatureGesuchFormElternEditorComponent {
           elternteil.geburtsdatum,
           this.languageSig(),
         ),
+        identischerZivilrechtlicherWohnsitzPlzOrt: {
+          plz: elternteil.identischerZivilrechtlicherWohnsitzPLZ,
+          ort: elternteil.identischerZivilrechtlicherWohnsitzOrt,
+        },
       });
 
       if (elternteil.adresse) {
@@ -335,17 +343,22 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   handleSave() {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
-    const formValues = convertTempFormToRealValues(this.form, [
-      'ausweisbFluechtling',
-      'ergaenzungsleistungen',
-      'sozialhilfebeitraege',
-      'wohnkosten',
-    ]);
+    const { identischerZivilrechtlicherWohnsitzPlzOrt, ...formValues } =
+      convertTempFormToRealValues(this.form, [
+        'ausweisbFluechtling',
+        'ergaenzungsleistungen',
+        'sozialhilfebeitraege',
+        'wohnkosten',
+      ]);
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
       this.languageSig(),
       subYears(new Date(), MEDIUM_AGE_ADULT),
     );
+    const {
+      plz: identischerZivilrechtlicherWohnsitzPLZ,
+      ort: identischerZivilrechtlicherWohnsitzOrt,
+    } = identischerZivilrechtlicherWohnsitzPlzOrt;
     const elternteil = this.elternteilSig();
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
@@ -359,6 +372,8 @@ export class SharedFeatureGesuchFormElternEditorComponent {
         id: elternteil.id,
         elternTyp: elternteil.elternTyp,
         geburtsdatum,
+        identischerZivilrechtlicherWohnsitzPLZ,
+        identischerZivilrechtlicherWohnsitzOrt,
         ...this.numberConverter.toNumber(formValues),
       });
       this.form.markAsPristine();

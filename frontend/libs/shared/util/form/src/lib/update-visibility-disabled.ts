@@ -1,9 +1,9 @@
 import { WritableSignal } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 export function updateVisbilityAndDisbledState(options: {
-  hiddenFieldsSetSig: WritableSignal<Set<FormControl>>;
-  formControl: FormControl;
+  hiddenFieldsSetSig: WritableSignal<Set<AbstractControl>>;
+  formControl: AbstractControl;
   visible: boolean;
   disabled: boolean;
   resetOnInvisible?: boolean;

@@ -22,9 +22,9 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;
@@ -108,7 +108,7 @@ class SapServiceIntegrationTest {
         auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
 
         final var businessPartnerReadResponse =
-            sapEndpointService.readBusinessPartner(auszahlung.getZahlungsverbindung());
+            sapEndpointService.readBusinessPartner(auszahlung.getZahlungsverbindung(), BigDecimal.ZERO);
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerReadResponse.getRETURNCODE().get(0).getTYPE()),
             is(false)

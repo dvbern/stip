@@ -36,7 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_STATUS,
   GesuchTrancheSlimDtoSpec.JSON_PROPERTY_COMMENT,
-  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_TYP
+  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_TYP,
+  GesuchTrancheSlimDtoSpec.JSON_PROPERTY_REVISION
 })
 @JsonTypeName("GesuchTrancheSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -58,6 +59,9 @@ public class GesuchTrancheSlimDtoSpec {
 
   public static final String JSON_PROPERTY_TYP = "typ";
   private GesuchTrancheTypDtoSpec typ;
+
+  public static final String JSON_PROPERTY_REVISION = "revision";
+  private Integer revision;
 
   public GesuchTrancheSlimDtoSpec() {
   }
@@ -217,6 +221,32 @@ public class GesuchTrancheSlimDtoSpec {
     this.typ = typ;
   }
 
+
+  public GesuchTrancheSlimDtoSpec revision(Integer revision) {
+    
+    this.revision = revision;
+    return this;
+  }
+
+   /**
+   * Get revision
+   * @return revision
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REVISION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getRevision() {
+    return revision;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_REVISION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRevision(Integer revision) {
+    this.revision = revision;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -231,12 +261,13 @@ public class GesuchTrancheSlimDtoSpec {
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
         Objects.equals(this.status, gesuchTrancheSlim.status) &&
         Objects.equals(this.comment, gesuchTrancheSlim.comment) &&
-        Objects.equals(this.typ, gesuchTrancheSlim.typ);
+        Objects.equals(this.typ, gesuchTrancheSlim.typ) &&
+        Objects.equals(this.revision, gesuchTrancheSlim.revision);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, comment, typ);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, comment, typ, revision);
   }
 
   @Override
@@ -249,6 +280,7 @@ public class GesuchTrancheSlimDtoSpec {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
+    sb.append("    revision: ").append(toIndentedString(revision)).append("\n");
     sb.append("}");
     return sb.toString();
   }

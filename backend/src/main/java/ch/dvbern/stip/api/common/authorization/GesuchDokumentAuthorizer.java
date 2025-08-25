@@ -161,8 +161,8 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     public void canGetGesuchDokumentKommentar(final UUID gesuchDokumentId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        // Sachbearbeiter and Jurists can always read every Gesuch
-        if (isSbOrJurist(currentBenutzer)) {
+        // Sachbearbeiter, Freigabstelle and Jurists can always read every Gesuch
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
 
@@ -187,7 +187,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
 
     public void canGetGesuchDokumentForTranche(final UUID gesuchTrancheId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSbOrJurist(currentBenutzer)) {
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
 

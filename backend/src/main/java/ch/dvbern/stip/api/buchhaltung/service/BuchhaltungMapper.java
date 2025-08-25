@@ -17,27 +17,32 @@
 
 package ch.dvbern.stip.api.buchhaltung.service;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungMapper;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = { SapDeliveryMapper.class, ZahlungsverbindungMapper.class })
 public abstract class BuchhaltungMapper {
     @Mapping(source = "stipendium", target = "stipendienBetrag")
     @Mapping(source = "betrag", target = "saldoAenderung")
     @Mapping(source = ".", target = "auszahlung", qualifiedByName = "getAuszahlung")
     @Mapping(source = ".", target = "rueckforderung", qualifiedByName = "getRueckforderung")
-    @Mapping(source = ".", target = "sapId", qualifiedByName = "getSapDeliveryId")
-    @Mapping(source = "sapDelivery.sapStatus", target = "sapStatus")
-    @Mapping(source = "sapDelivery.sapBusinessPartnerId", target = "businessPartnerId")
+    @Mapping(source = ".", target = "businessPartnerId", qualifiedByName = "getBusinessPartnerId")
     @Mapping(source = "gesuch.id", target = "gesuchId")
     public abstract BuchhaltungEntryDto toDto(Buchhaltung buchhaltung);
+
+    @Named("getBusinessPartnerId")
+    Integer getBusinessPartnerId(Buchhaltung buchhaltung) {
+        if (buchhaltung.getSapDeliverys().isEmpty()) {
+            return null;
+        }
+        return buchhaltung.getSapDeliverys().get(0).getSapBusinessPartnerId();
+    }
 
     @Named("getAuszahlung")
     Integer getAuszahlung(Buchhaltung buchhaltung) {
@@ -51,14 +56,6 @@ public abstract class BuchhaltungMapper {
     Integer getRueckforderung(Buchhaltung buchhaltung) {
         if (BuchhaltungType.AUSZAHLUNGS.contains(buchhaltung.getBuchhaltungType()) && buchhaltung.getBetrag() < 0) {
             return buchhaltung.getBetrag();
-        }
-        return null;
-    }
-
-    @Named("getSapDeliveryId")
-    String getSapDeliveryId(Buchhaltung buchhaltung) {
-        if (Objects.nonNull(buchhaltung.getSapDelivery())) {
-            return String.valueOf(buchhaltung.getSapDelivery().getSapDeliveryId().longValue());
         }
         return null;
     }

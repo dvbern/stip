@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import {
@@ -14,6 +14,7 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
   selector: 'dv-sachbearbeitung-app-pattern-overview-layout',
   imports: [
     RouterLink,
+    RouterLinkActive,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,

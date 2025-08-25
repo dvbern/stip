@@ -217,7 +217,7 @@ public interface GesuchResource {
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
 
     @GET
     @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")

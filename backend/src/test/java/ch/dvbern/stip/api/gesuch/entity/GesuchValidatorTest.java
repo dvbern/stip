@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
@@ -57,6 +58,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -65,6 +67,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AHV_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
@@ -260,11 +264,22 @@ class GesuchValidatorTest {
         assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
 
         // Die Ausbildungsgang und Staette muessen bei alternative Ausbildung null sein
+        final var ausbildungsgangRepositoryMock = Mockito.mock(AusbildungsgangRepository.class);
+        QuarkusMock.installMockForType(ausbildungsgangRepositoryMock, AusbildungsgangRepository.class);
+
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().getAusbildung().setAusbildungNichtGefunden(true);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
             .getAusbildung()
-            .setAusbildungsgang(new Ausbildungsgang())
+            .setAusbildungsgang((Ausbildungsgang) new Ausbildungsgang().setId(UUID.randomUUID()))
             .setFachrichtungBerufsbezeichnung("test");
+
+        Mockito.when(ausbildungsgangRepositoryMock.requireById(ArgumentMatchers.any()))
+            .thenReturn(
+                getGesuchTrancheFromGesuch(gesuch).getGesuchFormular()
+                    .getAusbildung()
+                    .getAusbildungsgang()
+            );
+
         assertOneMessage(VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), true);
         assertOneMessage(VALIDATION_ALTERNATIVE_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE, gesuch.getAusbildung(), false);
 

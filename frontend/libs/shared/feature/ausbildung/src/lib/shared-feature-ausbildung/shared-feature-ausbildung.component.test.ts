@@ -26,7 +26,7 @@ const language = 'de';
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
     inputs: {
-      fallIdSig: null,
+      fallIdSig: 'fall123',
     },
     imports: [
       TranslateTestingModule.withTranslations({}),
@@ -234,13 +234,13 @@ describe(SharedFeatureAusbildungComponent.name, () => {
 
       detectChanges();
 
-      expect(getByTestId('form-education-ausbildungsort')).not.toBeDisabled();
+      expect(getByTestId('form-education-ausbildungs-ort')).not.toBeDisabled();
 
       await checkMatCheckbox('form-education-isAusbildungAusland');
 
       detectChanges();
 
-      expect(getByTestId('form-education-ausbildungsort')).toBeDisabled();
+      expect(getByTestId('form-education-ausbildungs-ort')).toBeDisabled();
     });
   });
 });

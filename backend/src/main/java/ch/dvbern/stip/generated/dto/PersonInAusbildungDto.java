@@ -37,6 +37,7 @@ public class PersonInAusbildungDto  implements Serializable {
   private @Valid String nachname;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache korrespondenzSprache;
   private @Valid String heimatort;
+  private @Valid String heimatortPLZ;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
   private @Valid LocalDate einreisedatum;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
@@ -314,6 +315,25 @@ public class PersonInAusbildungDto  implements Serializable {
   }
 
   /**
+   * Required nur wenn Land &#x3D; CH
+   **/
+  public PersonInAusbildungDto heimatortPLZ(String heimatortPLZ) {
+    this.heimatortPLZ = heimatortPLZ;
+    return this;
+  }
+
+  
+  @JsonProperty("heimatortPLZ")
+  public String getHeimatortPLZ() {
+    return heimatortPLZ;
+  }
+
+  @JsonProperty("heimatortPLZ")
+  public void setHeimatortPLZ(String heimatortPLZ) {
+    this.heimatortPLZ = heimatortPLZ;
+  }
+
+  /**
    **/
   public PersonInAusbildungDto niederlassungsstatus(ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus) {
     this.niederlassungsstatus = niederlassungsstatus;
@@ -504,6 +524,7 @@ public class PersonInAusbildungDto  implements Serializable {
         Objects.equals(this.nachname, personInAusbildung.nachname) &&
         Objects.equals(this.korrespondenzSprache, personInAusbildung.korrespondenzSprache) &&
         Objects.equals(this.heimatort, personInAusbildung.heimatort) &&
+        Objects.equals(this.heimatortPLZ, personInAusbildung.heimatortPLZ) &&
         Objects.equals(this.niederlassungsstatus, personInAusbildung.niederlassungsstatus) &&
         Objects.equals(this.einreisedatum, personInAusbildung.einreisedatum) &&
         Objects.equals(this.zivilstand, personInAusbildung.zivilstand) &&
@@ -517,7 +538,7 @@ public class PersonInAusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigeKESB);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, wohnsitz, sozialhilfebeitraege, nachname, korrespondenzSprache, heimatort, heimatortPLZ, niederlassungsstatus, einreisedatum, zivilstand, wohnsitzAnteilMutter, wohnsitzAnteilVater, vormundschaft, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, zustaendigeKESB);
   }
 
   @Override
@@ -539,6 +560,7 @@ public class PersonInAusbildungDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    korrespondenzSprache: ").append(toIndentedString(korrespondenzSprache)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");
+    sb.append("    heimatortPLZ: ").append(toIndentedString(heimatortPLZ)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");
     sb.append("    einreisedatum: ").append(toIndentedString(einreisedatum)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");

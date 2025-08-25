@@ -34,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AbschlussSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AbschlussSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AbschlussSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSKATEGORIE,
-  AbschlussSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE
+  AbschlussSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE,
+  AbschlussSlimDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("AbschlussSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -53,6 +54,9 @@ public class AbschlussSlimDtoSpec {
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
+
+  public static final String JSON_PROPERTY_AKTIV = "aktiv";
+  private Boolean aktiv;
 
   public AbschlussSlimDtoSpec() {
   }
@@ -186,6 +190,32 @@ public class AbschlussSlimDtoSpec {
     this.zusatzfrage = zusatzfrage;
   }
 
+
+  public AbschlussSlimDtoSpec aktiv(Boolean aktiv) {
+    
+    this.aktiv = aktiv;
+    return this;
+  }
+
+   /**
+   * Get aktiv
+   * @return aktiv
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AKTIV)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -199,12 +229,13 @@ public class AbschlussSlimDtoSpec {
         Objects.equals(this.bezeichnungDe, abschlussSlim.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, abschlussSlim.bezeichnungFr) &&
         Objects.equals(this.ausbildungskategorie, abschlussSlim.ausbildungskategorie) &&
-        Objects.equals(this.zusatzfrage, abschlussSlim.zusatzfrage);
+        Objects.equals(this.zusatzfrage, abschlussSlim.zusatzfrage) &&
+        Objects.equals(this.aktiv, abschlussSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, zusatzfrage);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, zusatzfrage, aktiv);
   }
 
   @Override
@@ -216,6 +247,7 @@ public class AbschlussSlimDtoSpec {
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

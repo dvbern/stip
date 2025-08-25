@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -16,5 +16,6 @@ export interface AusbildungsstaetteSlim {
     nameDe: string;
     nameFr: string;
     ausbildungsgaenge: Array<AusbildungsgangData>;
+    aktiv: boolean;
 }
 
