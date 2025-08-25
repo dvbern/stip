@@ -1244,15 +1244,22 @@ public class GesuchService {
                 GesuchNachInBearbeitungSBValidationGroup.class
             );
 
-        gesuch.getGesuchTranchen().forEach(tranche -> {
-            final var oldGueltigkeit = tranche.getGueltigkeit();
-            final var newGueltigkeit = new DateRange(
-                oldGueltigkeit.getGueltigAb().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear()),
-                oldGueltigkeit.getGueltigBis().withYear(gesuchsperiode.getGesuchsperiodeStopp().getYear())
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            LOG.error(
+                "Tried to reassign Gesuchsperiode for Gesuch with id {} that has more than 1 tranche",
+                gesuch.getId()
             );
+            throw new BadRequestException("Tried to reassign Gesuchsperiode for Gesuch with more than 1 tranche");
+        }
 
-            tranche.setGueltigkeit(newGueltigkeit);
-        });
+        final var tranche = gesuch.getGesuchTranchen().getFirst();
+        final var oldGueltigkeit = tranche.getGueltigkeit();
+        final var newGueltigkeit = new DateRange(
+            oldGueltigkeit.getGueltigAb().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear()),
+            oldGueltigkeit.getGueltigBis().withYear(gesuchsperiode.getGesuchsperiodeStopp().getYear())
+        );
+
+        tranche.setGueltigkeit(newGueltigkeit);
 
         gesuchRepository.persistAndFlush(gesuch);
 
