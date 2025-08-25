@@ -40,6 +40,10 @@ export interface AusbildungBase {
     /**
      * Not required if isAusbildungAusland = true
      */
+    ausbildungsortPLZ?: string;
+    /**
+     * Not required if isAusbildungAusland = true
+     */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
 }

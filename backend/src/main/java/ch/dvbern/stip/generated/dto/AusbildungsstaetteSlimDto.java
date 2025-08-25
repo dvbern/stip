@@ -28,6 +28,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
   private @Valid List<AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
+  private @Valid Boolean aktiv;
 
   /**
    **/
@@ -121,6 +122,25 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public AusbildungsstaetteSlimDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+    return this;
+  }
+
+  
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -134,12 +154,13 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     return Objects.equals(this.id, ausbildungsstaetteSlim.id) &&
         Objects.equals(this.nameDe, ausbildungsstaetteSlim.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaetteSlim.nameFr) &&
-        Objects.equals(this.ausbildungsgaenge, ausbildungsstaetteSlim.ausbildungsgaenge);
+        Objects.equals(this.ausbildungsgaenge, ausbildungsstaetteSlim.ausbildungsgaenge) &&
+        Objects.equals(this.aktiv, ausbildungsstaetteSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nameDe, nameFr, ausbildungsgaenge);
+    return Objects.hash(id, nameDe, nameFr, ausbildungsgaenge, aktiv);
   }
 
   @Override
@@ -151,6 +172,7 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("    ausbildungsgaenge: ").append(toIndentedString(ausbildungsgaenge)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

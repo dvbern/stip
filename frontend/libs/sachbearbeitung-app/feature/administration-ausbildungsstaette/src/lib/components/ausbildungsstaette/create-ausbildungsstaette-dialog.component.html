@@ -55,12 +55,13 @@
           {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | translate }}
         </mat-error>
       </mat-form-field>
-      @if (form.controls.schule.value === 'BUR') {
+      @if (schuleChangedSig(); as schulType) {
+        @let schule = numberFields[schulType];
         <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>
-            {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.burNummer' | translate }}
+            {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.' + schule.labelSubKey | translate }}
           </mat-label>
-          <input matInput [formControl]="form.controls.burNo" />
+          <input matInput [maskito]="alphanumericMask" [formControl]="schule.control" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | translate }}
           </mat-error>

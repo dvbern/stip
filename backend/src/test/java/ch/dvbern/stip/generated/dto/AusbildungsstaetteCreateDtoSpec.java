@@ -29,7 +29,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_NAME_DE,
   AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_NAME_FR,
-  AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_BUR_NO
+  AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_BUR_NO,
+  AusbildungsstaetteCreateDtoSpec.JSON_PROPERTY_CT_NO
 })
 @JsonTypeName("AusbildungsstaetteCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -42,6 +43,9 @@ public class AusbildungsstaetteCreateDtoSpec {
 
   public static final String JSON_PROPERTY_BUR_NO = "burNo";
   private String burNo;
+
+  public static final String JSON_PROPERTY_CT_NO = "ctNo";
+  private String ctNo;
 
   public AusbildungsstaetteCreateDtoSpec() {
   }
@@ -123,6 +127,32 @@ public class AusbildungsstaetteCreateDtoSpec {
     this.burNo = burNo;
   }
 
+
+  public AusbildungsstaetteCreateDtoSpec ctNo(String ctNo) {
+    
+    this.ctNo = ctNo;
+    return this;
+  }
+
+   /**
+   * Get ctNo
+   * @return ctNo
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CT_NO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getCtNo() {
+    return ctNo;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CT_NO)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCtNo(String ctNo) {
+    this.ctNo = ctNo;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -134,12 +164,13 @@ public class AusbildungsstaetteCreateDtoSpec {
     AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreate = (AusbildungsstaetteCreateDtoSpec) o;
     return Objects.equals(this.nameDe, ausbildungsstaetteCreate.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr) &&
-        Objects.equals(this.burNo, ausbildungsstaetteCreate.burNo);
+        Objects.equals(this.burNo, ausbildungsstaetteCreate.burNo) &&
+        Objects.equals(this.ctNo, ausbildungsstaetteCreate.ctNo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameDe, nameFr, burNo);
+    return Objects.hash(nameDe, nameFr, burNo, ctNo);
   }
 
   @Override
@@ -149,6 +180,7 @@ public class AusbildungsstaetteCreateDtoSpec {
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
+    sb.append("    ctNo: ").append(toIndentedString(ctNo)).append("\n");
     sb.append("}");
     return sb.toString();
   }

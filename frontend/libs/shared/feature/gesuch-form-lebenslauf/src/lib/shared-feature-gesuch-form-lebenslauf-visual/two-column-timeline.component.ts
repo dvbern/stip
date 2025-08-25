@@ -18,6 +18,7 @@ import {
   AusbildungsstaetteSlim,
   LebenslaufItemUpdate,
 } from '@dv/shared/model/gesuch';
+import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import {
   dateFromMonthYearString,
   printDateAsMonthYear,
@@ -38,7 +39,7 @@ import {
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule, TranslatePipe, TranslatedPropertyPipe],
   templateUrl: './two-column-timeline.component.html',
   styleUrls: ['./two-column-timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -114,6 +115,7 @@ export class TwoColumnTimelineComponent {
       von: dateFromMonthYearString(plannedAusbildung?.ausbildungBegin),
       bis: dateFromMonthYearString(plannedAusbildung?.ausbildungEnd),
       label: {
+        type: 'TEXT',
         title:
           (this.getTranslatedAusbildungstaetteName(ausbildungsstaette) ??
             plannedAusbildung?.alternativeAusbildungsstaette) +
@@ -144,7 +146,10 @@ export class TwoColumnTimelineComponent {
       lebenslaufItem.taetigkeitsart !== undefined &&
       lebenslaufItem.taetigkeitsart !== null
     ) {
-      return { title: lebenslaufItem.taetigkeitsBeschreibung ?? '' };
+      return {
+        type: 'TEXT',
+        title: lebenslaufItem.taetigkeitsBeschreibung ?? '',
+      };
     }
 
     const abschluss = this.ausbildungsstaetteStore
@@ -153,11 +158,12 @@ export class TwoColumnTimelineComponent {
 
     if (!abschluss) {
       console.warn(`Abschluss with id ${lebenslaufItem.abschlussId} not found`);
-      return { title: '' };
+      return { type: 'TEXT', title: '' };
     }
 
     return {
-      title: `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}`,
+      type: 'ABSCHLUSS',
+      abschluss,
       ...(abschluss.zusatzfrage
         ? {
             subTitle: {

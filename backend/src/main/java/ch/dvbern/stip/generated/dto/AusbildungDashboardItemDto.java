@@ -38,6 +38,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid Boolean besuchtBMS;
   private @Valid String alternativeAusbildungsstaette;
   private @Valid String alternativeAusbildungsgang;
+  private @Valid String ausbildungsortPLZ;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
   private @Valid AusbildungsgangDto ausbildungsgang;
@@ -273,6 +274,25 @@ public class AusbildungDashboardItemDto  implements Serializable {
   /**
    * Not required if isAusbildungAusland &#x3D; true
    **/
+  public AusbildungDashboardItemDto ausbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungsortPLZ")
+  public String getAusbildungsortPLZ() {
+    return ausbildungsortPLZ;
+  }
+
+  @JsonProperty("ausbildungsortPLZ")
+  public void setAusbildungsortPLZ(String ausbildungsortPLZ) {
+    this.ausbildungsortPLZ = ausbildungsortPLZ;
+  }
+
+  /**
+   * Not required if isAusbildungAusland &#x3D; true
+   **/
   public AusbildungDashboardItemDto ausbildungsort(String ausbildungsort) {
     this.ausbildungsort = ausbildungsort;
     return this;
@@ -381,6 +401,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.besuchtBMS, ausbildungDashboardItem.besuchtBMS) &&
         Objects.equals(this.alternativeAusbildungsstaette, ausbildungDashboardItem.alternativeAusbildungsstaette) &&
         Objects.equals(this.alternativeAusbildungsgang, ausbildungDashboardItem.alternativeAusbildungsgang) &&
+        Objects.equals(this.ausbildungsortPLZ, ausbildungDashboardItem.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
         Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
@@ -389,7 +410,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
   }
 
   @Override
@@ -409,6 +430,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    besuchtBMS: ").append(toIndentedString(besuchtBMS)).append("\n");
     sb.append("    alternativeAusbildungsstaette: ").append(toIndentedString(alternativeAusbildungsstaette)).append("\n");
     sb.append("    alternativeAusbildungsgang: ").append(toIndentedString(alternativeAusbildungsgang)).append("\n");
+    sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");

@@ -29,8 +29,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,11 +58,13 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
     private String chShis;
 
     @Nullable
+    @Pattern(regexp = "^[A-Za-z0-9]+$")
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "bur_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String burNo;
 
     @Nullable
+    @Pattern(regexp = "^[A-Za-z0-9]+$")
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "ct_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     private String ctNo;
@@ -73,9 +75,4 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "ausbildungsstaette")
     private List<Ausbildungsgang> ausbildungsgaenge = new ArrayList<>();
-
-    @Transient
-    public List<Ausbildungsgang> getAktiveAusbildungsgaenge() {
-        return ausbildungsgaenge.stream().filter(Ausbildungsgang::isAktiv).toList();
-    }
 }
