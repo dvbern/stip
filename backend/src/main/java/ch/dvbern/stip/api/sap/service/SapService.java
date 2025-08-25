@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -109,10 +110,13 @@ public class SapService {
             businessPartnerCreateBuchhaltung = zahlungsverbindung.getSapDelivery().getBuchhaltung();
         }
 
-        if (businessPartnerCreateBuchhaltung.getSapStatus() != SapStatus.IN_PROGRESS) {
+        if (
+            !EnumSet.of(SapStatus.SUCCESS, SapStatus.IN_PROGRESS)
+                .contains(businessPartnerCreateBuchhaltung.getSapStatus())
+        ) {
             throw new IllegalStateException(
                 String.format(
-                    "buchhaltung status is not IN_PROGRESS but %s",
+                    "buchhaltung status is not IN_PROGRESS or SUCCESS but %s",
                     businessPartnerCreateBuchhaltung.getSapStatus()
                 )
             );
