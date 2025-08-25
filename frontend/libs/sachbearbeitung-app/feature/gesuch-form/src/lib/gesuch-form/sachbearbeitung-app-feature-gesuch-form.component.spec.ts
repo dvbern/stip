@@ -4,6 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
 import { initial } from '@dv/shared/util/remote-data';
 
@@ -17,6 +18,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         GesuchStore,
+        GesuchInfoStore,
         SteuerdatenStore,
         provideHttpClient(),
         provideMockStore({

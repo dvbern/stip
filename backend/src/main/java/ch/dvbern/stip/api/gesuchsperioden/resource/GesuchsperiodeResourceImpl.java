@@ -99,4 +99,11 @@ public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
         gesuchsperiodeAuthorizer.canUpdate(gesuchsperiodeId);
         return gesuchsperiodenService.updateGesuchsperiode(gesuchsperiodeId, gesuchsperiodeUpdateDto);
     }
+
+    @Override
+    @RolesAllowed(STAMMDATEN_READ)
+    public List<GesuchsperiodeDto> getAllAssignableGesuchsperiode(UUID gesuchId) {
+        gesuchsperiodeAuthorizer.canRead();
+        return gesuchsperiodenService.getAllAssignableGesuchsperioden(gesuchId);
+    }
 }

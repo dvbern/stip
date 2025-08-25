@@ -158,24 +158,6 @@ class EinreichedatumAendernTest {
     @Test
     @TestAsSachbearbeiter
     @Order(4)
-    void einreichedatumAusserhalbGesuchsperiode() {
-        gesuchApiSpec.einreichedatumManuellAendern()
-            .gesuchIdPath(gesuch.getId())
-            .body(
-                new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(LocalDate.of(2000, 1, 31))
-                    .text("Test notizen Text")
-                    .betreff("Test betreff Text")
-            )
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
-    }
-
-    @Test
-    @TestAsSachbearbeiter
-    @Order(5)
     void einreichedatumAendern() {
         gesuch = gesuchApiSpec.einreichedatumManuellAendern()
             .gesuchIdPath(gesuch.getId())
@@ -198,7 +180,7 @@ class EinreichedatumAendernTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(5)
     void einreichedatumAendernCreatedNotiz() {
         final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())

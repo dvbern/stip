@@ -1,36 +1,26 @@
 import { getRouterSelectors } from '@ngrx/router-store';
 import { createSelector } from '@ngrx/store';
-import { IChange, diff } from 'json-diff-ts';
 
 import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
-import { RolesMap } from '@dv/shared/model/benutzer';
-import { CompileTimeConfig } from '@dv/shared/model/config';
 import {
-  AppTrancheChange,
-  GSFormStepProps,
-  GesuchFormular,
-  GesuchTranche,
   GesuchTrancheTyp,
   GesuchUrlType,
-  SBFormStepProps,
-  SharedModelGesuch,
-  SteuerdatenTyp,
   TRANCHE_TYPE_INITIAL,
-  TrancheSetting,
 } from '@dv/shared/model/gesuch';
 import {
-  ABSCHLUSS,
   BaseFormSteps,
   ELTERN,
-  ELTERN_STEUERDATEN_STEPS,
   ELTERN_STEUERERKLAERUNG_STEPS,
-  GesuchFormStep,
   RETURN_TO_HOME,
-  isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
-import { capitalized, lowercased } from '@dv/shared/model/type-util';
+import {
+  addStepsByAppType,
+  appendSteps,
+  createTrancheSetting,
+  prepareTranchenChanges,
+} from '@dv/shared/util-fn/gesuch-util';
 
 import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feature';
 
@@ -140,19 +130,6 @@ export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
   },
 );
 
-const createTrancheSetting = (
-  gesuchUrlTyp: GesuchUrlType | null,
-  gesuchTranche: GesuchTranche | undefined,
-): TrancheSetting | null => {
-  return gesuchTranche && gesuchUrlTyp
-    ? ({
-        type: gesuchTranche.typ,
-        gesuchUrlTyp,
-        routesSuffix: [lowercased(gesuchUrlTyp), gesuchTranche.id],
-      } as const)
-    : null;
-};
-
 export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectGesuchsState,
   selectSharedDataAccessBenutzersView,
@@ -214,216 +191,3 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
     };
   },
 );
-
-/**
- * Returns true if the gesuchFormular has the given property
- */
-export const isGesuchFormularProp =
-  (formKeys: string[]) =>
-  (prop?: string): prop is GSFormStepProps => {
-    if (!prop) return false;
-    return formKeys.includes(prop);
-  };
-
-type AdditionalSteps = {
-  after: GesuchFormStep;
-  steps: GesuchFormStep[];
-};
-
-/**
- * Append additional steps after the given step
- */
-const appendSteps = (
-  steps: GesuchFormStep[],
-  additionalSteps: AdditionalSteps[],
-) => {
-  const afterMap = additionalSteps.reduce(
-    (acc, { after, steps }) => {
-      if (steps.length > 0) {
-        acc[after.route] = steps;
-      }
-      return acc;
-    },
-    {} as Record<string, GesuchFormStep[]>,
-  );
-  return steps.reduce((acc, step) => {
-    if (afterMap[step.route]) {
-      return [...acc, step, ...afterMap[step.route]];
-    }
-    return [...acc, step];
-  }, [] as GesuchFormStep[]);
-};
-
-function addStepsByAppType(
-  sharedSteps: GesuchFormStep[],
-  rolesMap: RolesMap,
-  steuerdatenTabs: SteuerdatenTyp[] | undefined,
-  compileTimeConfig?: CompileTimeConfig,
-) {
-  switch (compileTimeConfig?.appType) {
-    case 'gesuch-app':
-      return [...sharedSteps, ABSCHLUSS];
-    case 'sachbearbeitung-app': {
-      const steuerdatenSteps =
-        rolesMap.V0_Sachbearbeiter || rolesMap.V0_Freigabestelle
-          ? steuerdatenTabs?.map((typ) => ({
-              step: ELTERN_STEUERDATEN_STEPS[typ],
-              type: typ,
-            }))
-          : null;
-      return steuerdatenSteps
-        ? appendSteps(
-            sharedSteps,
-            steuerdatenSteps.map((s) => {
-              return {
-                after: ELTERN_STEUERERKLAERUNG_STEPS[s.type],
-                steps: [s.step],
-              };
-            }),
-          )
-        : sharedSteps;
-    }
-
-    default:
-      return [];
-  }
-}
-
-/**
- * Calculates the changes between the gesuchTrancheToWorkWith and previous tranches
- *
- * Returns an object of changes for GS and SB:
- * - tranche: the tranche containing the previous gesuchFormular
- * - affectedSteps: the steps that have changed
- */
-export function prepareTranchenChanges(
-  gesuch: SharedModelGesuch | null,
-): AppTrancheChange | null {
-  if (!gesuch) {
-    return null;
-  }
-  const adresseIdFields = formularPropsContaining<{ adresse: { id?: string } }>(
-    {
-      personInAusbildung: null,
-      elterns: null,
-      partner: null,
-    },
-  ).map((step) => `${step}.adresse.id`);
-
-  const idFields = formularPropsContaining<{ id?: string }>({
-    steuererklaerung: null,
-    lebenslaufItems: null,
-    elterns: null,
-    geschwisters: null,
-    kinds: null,
-  }).map((step) => `${step}.id`);
-
-  /**
-   * Changes have Zero, one or max two tranches
-   * - Zero: No changes
-   * - One: GS erstellt einen Antrag. Changes should be calculated between gesuchTrancheToWorkWith and changes[0]
-   * - Two: SB bearbeitet einen Antrag (As soon as he changes status). Changes should be calculated between changes[1] and gesuchTrancheToWorkWith
-   */
-  const allChanges = gesuch.changes?.map((tranche) => {
-    const changes = diff(
-      tranche.gesuchFormular,
-      gesuch.gesuchTrancheToWorkWith.gesuchFormular,
-      {
-        // The json-diff-ts library updated their handling of nested keys
-        // https://github.com/ltwlf/json-diff-ts/pull/243/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5
-        keysToSkip: [...adresseIdFields, ...idFields],
-        embeddedObjKeys: {
-          /** Used to have a more accurate diff for steuerdaten in {@link hasSteuererklaerungChanges} */
-          ['steuererklaerung']: 'steuerdatenTyp',
-        },
-      },
-    );
-    return {
-      tranche,
-      affectedSteps: [
-        ...changes
-          .filter(
-            (c) =>
-              // Ignore steuerdaten changes, they are handled separately
-              !isSteuererklaerungStep(
-                c.key as GSFormStepProps | SBFormStepProps,
-              ) &&
-              ((c.changes?.length ?? 0) > 0 ||
-                // Also mark the step as affected if a new entry has been added or removed
-                c.type !== 'UPDATE'),
-          )
-          .map((c) => c.key),
-        ...hasSteuererklaerungChanges(changes),
-      ],
-    };
-  });
-
-  if (!allChanges || allChanges.length <= 0) {
-    return null;
-  }
-
-  return {
-    gs: allChanges[0],
-    sb: allChanges[1],
-  };
-}
-
-/**
- * Used to mark steuerdatenVater/Mutter Tabs as affected if steuerdatenTyp has changed to FAMILIE
- * or back to individual
- */
-export const hasSteuererklaerungChanges = (
-  changes: IChange[],
-): GSFormStepProps[] => {
-  const steuererklaerungChange = changes.find(
-    (c) =>
-      isSteuererklaerungStep(c.key as GSFormStepProps | SBFormStepProps) &&
-      c.type === 'UPDATE',
-  );
-  const affectedSteps = new Set<GSFormStepProps>();
-
-  // Check if steuerdaten have changed
-  (['MUTTER', 'VATER', 'FAMILIE'] satisfies SteuerdatenTyp[]).forEach(
-    (steuerdatenTyp) => {
-      const steuerdatenTypChange = steuererklaerungChange?.changes?.find(
-        (c) => c.key === steuerdatenTyp,
-      );
-      if (
-        steuerdatenTypChange &&
-        ((steuerdatenTypChange.changes ?? []).length > 0 ||
-          steuerdatenTypChange.type !== 'UPDATE')
-      ) {
-        affectedSteps.add(
-          `steuererklaerung${capitalized(lowercased(steuerdatenTyp))}`,
-        );
-      }
-    },
-  );
-
-  return Array.from(affectedSteps);
-};
-
-type RelevantFields = Exclude<keyof GesuchFormular, 'ausbildung'>;
-
-type FieldsThatContain<
-  T extends Record<string, unknown>,
-  U = RelevantFields,
-> = U extends RelevantFields
-  ? Exclude<GesuchFormular[U], undefined> extends T | T[]
-    ? U
-    : never
-  : never;
-
-/**
- * Returns Formular properties which types are containing the given sub-type
- *
- * @example
- * ```ts
- * formularPropsContaining<{ heimatort?: string }>({
- *     personInAusbildung: null,
- * });
- * ```
- */
-const formularPropsContaining = <T extends Record<string, unknown>>(
-  obj: Record<FieldsThatContain<T>, null>,
-) => Object.keys(obj) as FieldsThatContain<T>[];

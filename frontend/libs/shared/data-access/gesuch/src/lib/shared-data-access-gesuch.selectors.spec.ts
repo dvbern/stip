@@ -13,6 +13,10 @@ import {
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { DeepPartial } from '@dv/shared/pattern/jest-test-setup';
 import { initial, success } from '@dv/shared/util/remote-data';
+import {
+  isGesuchFormularProp,
+  prepareTranchenChanges,
+} from '@dv/shared/util-fn/gesuch-util';
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
@@ -21,8 +25,6 @@ import {
   sharedDataAccessGesuchsFeature,
 } from './shared-data-access-gesuch.feature';
 import {
-  isGesuchFormularProp,
-  prepareTranchenChanges,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';

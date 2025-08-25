@@ -18,10 +18,10 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde';
-import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppDialogBeschwaerdeEntscheidComponent } from '@dv/sachbearbeitung-app/dialog/beschwaerde-entscheid';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { BeschwerdeVerlaufEntry, Gesuchstatus } from '@dv/shared/model/gesuch';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
@@ -50,7 +50,7 @@ export class VerwaltungComponent {
   );
 
   canCreateEntscheidSig = computed(() => {
-    const gesuchStatus = this.gesuchStore.gesuchInfo.data()?.gesuchStatus;
+    const gesuchStatus = this.gesuchInfoStore.gesuchInfo.data()?.gesuchStatus;
     if (!gesuchStatus) {
       return false;
     }
@@ -60,7 +60,7 @@ export class VerwaltungComponent {
       Gesuchstatus.STIPENDIENANSPRUCH,
     ].includes(gesuchStatus);
   });
-  gesuchStore = inject(GesuchStore);
+  gesuchInfoStore = inject(GesuchInfoStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
   displayColumns = [
@@ -92,7 +92,7 @@ export class VerwaltungComponent {
   });
 
   entscheidHochladen() {
-    const gesuchId = this.gesuchStore.gesuchInfo().data?.id;
+    const gesuchId = this.gesuchInfoStore.gesuchInfo().data?.id;
 
     if (!gesuchId) {
       return;
@@ -111,7 +111,7 @@ export class VerwaltungComponent {
             beschwerdeErfolgreich: result.beschwerdeErfolgreich,
             kommentar: result.kommentar,
             onSucces: () => {
-              this.gesuchStore.loadGesuchInfo$({ gesuchId });
+              this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
               this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });
@@ -120,7 +120,7 @@ export class VerwaltungComponent {
   }
 
   setBeschwerdeTo(beschwerdeHaengig: boolean) {
-    const gesuchId = this.gesuchStore.gesuchInfo().data?.id;
+    const gesuchId = this.gesuchInfoStore.gesuchInfo().data?.id;
 
     if (!gesuchId) {
       return;
@@ -147,7 +147,7 @@ export class VerwaltungComponent {
               kommentar: result?.kommentar,
             },
             onSucces: () => {
-              this.gesuchStore.loadGesuchInfo$({ gesuchId });
+              this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
               this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });

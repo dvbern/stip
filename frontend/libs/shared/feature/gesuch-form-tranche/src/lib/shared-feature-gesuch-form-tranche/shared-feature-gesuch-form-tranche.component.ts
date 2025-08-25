@@ -29,7 +29,9 @@ import {
   AenderungChangeState,
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -85,6 +87,9 @@ export class SharedFeatureGesuchFormTrancheComponent {
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchInfoStore = inject(GesuchInfoStore, {
+    optional: true,
+  });
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
@@ -105,12 +110,13 @@ export class SharedFeatureGesuchFormTrancheComponent {
   });
 
   currentTrancheNumberSig = computed(() => {
-    const { tranche: currentTranche, gesuchUrlTyp } = this.viewSig();
+    const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
     if (!currentTranche) {
       return '…';
     }
 
+    const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
     const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
     const list = {
@@ -148,6 +154,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
+        this.gesuchInfoStore?.loadGesuchInfo$({ gesuchId });
         this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
       }
     });
@@ -251,6 +258,25 @@ export class SharedFeatureGesuchFormTrancheComponent {
       maxDate: new Date(gesuchsperiodeStopp),
       currentGueligAb: new Date(gueltigAb),
       currentGueligBis: new Date(gueltigBis),
+    })
+      .afterClosed()
+      .subscribe();
+  }
+
+  changeGesuchsperiode(gesuchTrancheId: string | undefined) {
+    const { gesuchId, trancheSetting } = this.viewSig();
+    const gesuchFormular =
+      this.viewSig().gesuch?.gesuchTrancheToWorkWith.gesuchFormular;
+
+    if (!gesuchTrancheId || !gesuchFormular || !gesuchId || !trancheSetting) {
+      return;
+    }
+
+    SharedDialogChangeGesuchsperiodeComponent.open(this.dialog, {
+      gesuchTrancheId,
+      gesuchId,
+      trancheSetting,
+      gesuchFormular,
     })
       .afterClosed()
       .subscribe();

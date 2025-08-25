@@ -119,6 +119,7 @@ public class GesuchApiSpec {
                 getSbAenderungChanges(),
                 getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
+                setGesuchsperiodeForGesuch(),
                 updateGesuch(),
                 updateNachfristDokumente()
         );
@@ -266,6 +267,10 @@ public class GesuchApiSpec {
 
     public GetStatusProtokollOper getStatusProtokoll() {
         return new GetStatusProtokollOper(createReqSpec());
+    }
+
+    public SetGesuchsperiodeForGesuchOper setGesuchsperiodeForGesuch() {
+        return new SetGesuchsperiodeForGesuchOper(createReqSpec());
     }
 
     public UpdateGesuchOper updateGesuch() {
@@ -3148,6 +3153,91 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetStatusProtokollOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Set gesuchsperiode for gesuch
+     * 
+     *
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
+     * @see #gesuchsperiodeIdQuery  (required)
+     * return GesuchDtoSpec
+     */
+    public static class SetGesuchsperiodeForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/set-gesuchsperiode";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public SetGesuchsperiodeForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/set-gesuchsperiode
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchTrancheId}/set-gesuchsperiode
+         * @param handler handler
+         * @return GesuchDtoSpec
+         */
+        public GesuchDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDtoSpec> type = new TypeRef<GesuchDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
+         * @return operation
+         */
+        public SetGesuchsperiodeForGesuchOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        public static final String GESUCHSPERIODE_ID_QUERY = "gesuchsperiodeId";
+
+        /**
+         * @param gesuchsperiodeId (UUID)  (required)
+         * @return operation
+         */
+        public SetGesuchsperiodeForGesuchOper gesuchsperiodeIdQuery(Object... gesuchsperiodeId) {
+            reqSpec.addQueryParam(GESUCHSPERIODE_ID_QUERY, gesuchsperiodeId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public SetGesuchsperiodeForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public SetGesuchsperiodeForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

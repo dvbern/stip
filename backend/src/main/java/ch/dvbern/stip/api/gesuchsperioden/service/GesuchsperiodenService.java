@@ -26,7 +26,9 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -44,10 +46,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @RequiredArgsConstructor
 @Slf4j
 public class GesuchsperiodenService {
-    private static final String PROPERTY_PATH = "gesuchsperiode";
     private final GesuchsperiodeMapper gesuchsperiodeMapper;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
+    private final GesuchRepository gesuchRepository;
 
     @Transactional
     public GesuchsperiodeWithDatenDto createGesuchsperiode(final GesuchsperiodeCreateDto createDto) {
@@ -188,5 +190,16 @@ public class GesuchsperiodenService {
             gesuchsperiode.setGueltigkeitStatus(GueltigkeitStatus.ARCHIVIERT);
             LOG.info("Updated Gesuchsperiode with id %s to Gueltigkeisstatus ARCHIVIERT");
         });
+    }
+
+    @Transactional
+    public List<GesuchsperiodeDto> getAllAssignableGesuchsperioden(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var range = DateRange.getFruehlingOrHerbst(gesuch.getAusbildung().getAusbildungBegin());
+
+        return gesuchsperiodeRepository.getAllAssignableGesuchsperiodenWithStartBetween(range)
+            .stream()
+            .map(gesuchsperiodeMapper::toDto)
+            .toList();
     }
 }
