@@ -55,6 +55,8 @@ import { SharedUiSearchOptionLabelDirective } from './select-search-option-label
  *           this.someStore.someViewSig()?.map((something) => ({
  *             ...something,
  *             testId: something.nameDe,
+ *             invalid: something.deleted,
+ *             disabled: something.archived,
  *             displayValueDe: something.nameDe,
  *             displayValueFr: something.nameFr,
  *           })) ?? [],
@@ -70,7 +72,6 @@ import { SharedUiSearchOptionLabelDirective } from './select-search-option-label
  *           [valuesSig]="valuesSig()"
  *           [labelKeySig]="'shared.form.shared.something.label'"
  *           [languageSig]="languageSig()"
- *           [isEntryValidSig]="isValidValueEntrySig"
  *           [testIdSig]="'form-something-select-search'"
  *           [invalidValueLabelKeySig]="'shared.form.error.something.invalidValue'"
  *           [zuvorValueSig]="changes?.somethingId"
@@ -118,12 +119,6 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
    * The label key for the autocomplete input.
    */
   labelKeySig = input.required<string>();
-  /**
-   * A function that checks if the value is valid.
-   */
-  isEntryValidSig = input<(value: T) => boolean>(
-    (value: T) => !!value && !!value.id,
-  );
   /**
    * The language to use for displaying values.
    */
@@ -206,7 +201,6 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     const valueInput = this.autocompleteSearchValueChangesSig();
     const shouldSort = this.sortByValueSig();
     const displayValue = this.displayValueWithSig();
-    const isEntryValid = this.isEntryValidSig();
     let values = this.valuesSig();
 
     if (!values) {
@@ -217,7 +211,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       values = sortListByText(values, displayValue);
     }
 
-    if (typeof valueInput === 'string') {
+    if (typeof valueInput === 'string' && valueInput.length > 0) {
       values = values.filter((value) =>
         this.displayValueWithSig()(value)
           ?.toLowerCase()
@@ -225,10 +219,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       );
     }
 
-    return values.filter(
-      (entry) =>
-        isEntryValid(entry) || entry.id === untracked(this.latestValueSig),
-    );
+    return values;
   });
 
   zuvorHintValueSig = computed(() => {
@@ -273,21 +264,31 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       if (valueId) {
         this.valueId = valueId;
         const value = values?.find((l) => l.id === valueId);
-        if (value && valueId !== this.form.controls.select.value?.id) {
+        if (value) {
           this.form.controls.select.patchValue(value, { emitEvent: false });
 
-          // Mark the control as touched if the entry is invalid
-          if (!this.isEntryValidSig()(value)) {
+          // Mark the control as touched if the entry is
+          if (value.invalid) {
             this.markAsTouched();
           }
+        } else {
+          this.form.controls.search.setValue(undefined, {
+            emitEvent: true,
+          });
+          this.form.controls.select.setValue(undefined, {
+            emitEvent: true,
+          });
+          this.markAsTouched();
+          this.onChange(undefined);
         }
+        this.ngControl?.control?.updateValueAndValidity();
       } else {
         this.valueId = undefined;
         this.form.controls.search.setValue(undefined, {
-          emitEvent: false,
+          emitEvent: true,
         });
         this.form.controls.select.setValue(undefined, {
-          emitEvent: false,
+          emitEvent: true,
         });
       }
     });
@@ -334,11 +335,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
               c.removeValidators(currentValidator);
             });
           }
-          const validateCheck = this.isEntryValidSig();
-          currentValidator = createValidator(
-            this.form.controls.select,
-            validateCheck,
-          );
+          currentValidator = createValidator(this.form.controls.select);
           [control, this.form.controls.select].forEach((c) => {
             c.addValidators(currentValidator);
             c.updateValueAndValidity();
@@ -388,13 +385,9 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
 }
 
 const createValidator =
-  <T>(
-    autocompleteControl: AbstractControl,
-    validateCheck: (value: T) => boolean,
-  ) =>
-  () => {
+  (autocompleteControl: AbstractControl<LookupType | undefined>) => () => {
     const value = autocompleteControl.value;
-    if (!validateCheck(value)) {
+    if (value && value.invalid) {
       return {
         invalidValue: true,
       };

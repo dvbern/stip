@@ -139,8 +139,7 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   matDiaogBackdropClickedSig = toSignal(this.dialogRef.backdropClick());
 
   showUnsavedChangesErrorSig = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const _clicked = this.matDiaogBackdropClickedSig();
+    this.matDiaogBackdropClickedSig();
 
     if (
       isDefined(

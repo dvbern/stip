@@ -9,7 +9,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { FormControlName } from '@angular/forms';
+import { FormControlDirective, FormControlName } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
 import { Subject, combineLatest, of } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
@@ -29,14 +29,19 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
 
   // Can be used on a MatFormField or FormControlName component/directive, useful for radio-groups for example
   matFormField = inject(MatFormField, { optional: true });
-  selfControl = inject(FormControlName, { optional: true });
+  selfControlName = inject(FormControlName, { optional: true });
+  selfControlDirective = inject(FormControlDirective, { optional: true });
   readonlyChecker = inject(SharedUiFormReadonlyDirective, { optional: true });
   changeDetector = inject(ChangeDetectorRef);
 
   private destroyRef = inject(DestroyRef);
   private errorMessages$ = toObservable(this.errorMessagesSig);
   private get nullableControl() {
-    return this.matFormField?._control?.ngControl ?? this.selfControl;
+    return (
+      this.matFormField?._control?.ngControl ??
+      this.selfControlName ??
+      this.selfControlDirective
+    );
   }
   private get control() {
     if (!this.nullableControl) {

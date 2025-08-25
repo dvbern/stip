@@ -76,6 +76,7 @@ export const person = (seed: string): PersonInAusbildung => ({
   telefonnummer: '0316338555',
   geburtsdatum: `01.01.${specificYearsAgo(20)}`,
   nationalitaetId: 'Schweiz',
+  heimatortPLZ: '3011',
   heimatort: 'Bern',
   zivilstand: 'LEDIG',
   wohnsitz: 'MUTTER_VATER',

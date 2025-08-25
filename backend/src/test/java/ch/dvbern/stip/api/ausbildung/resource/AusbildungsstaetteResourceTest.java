@@ -82,8 +82,11 @@ class AusbildungsstaetteResourceTest {
     @TestAsJurist
     @Order(2)
     void createAusbildungsstaetteAsJurist() {
+        final var ausbildungsstaetteCreateDtoSpec =
+            AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
+        ausbildungsstaetteCreateDtoSpec.setCtNo("asdasd");
         var response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
-            .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
+            .body(ausbildungsstaetteCreateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then();
 
@@ -185,6 +188,9 @@ class AusbildungsstaetteResourceTest {
         ausbildungsstaetteCreateDtoSpec.setNameDe("createAusbildungsstaetteTestCtNo");
         ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestCtNo");
 
+        final var ctNo = "CTNO";
+        ausbildungsstaetteCreateDtoSpec.setCtNo(ctNo);
+
         final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(ausbildungsstaetteCreateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -195,7 +201,7 @@ class AusbildungsstaetteResourceTest {
             .body()
             .as(AusbildungsstaetteDto.class);
 
-        assertThat(ausbildungsstaetteDto.getCtNo(), Matchers.containsString("CT.BE"));
+        assertThat(ausbildungsstaetteDto.getCtNo(), Matchers.containsString(ctNo));
     }
 
     @Test
@@ -456,5 +462,23 @@ class AusbildungsstaetteResourceTest {
             .as(AusbildungsstaetteDto.class);
 
         assertThat(ausbildungsstaetteDto.getAktiv(), Matchers.is(false));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(17)
+    void createAusbildungsstaetteTestNonAlphaNumFails() {
+        final var ausbildungsstaetteCreateDtoSpec =
+            AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
+        ausbildungsstaetteCreateDtoSpec.setNameDe("createAusbildungsstaetteTestNonAlphaNumFails");
+        ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestNonAlphaNumFails");
+        ausbildungsstaetteCreateDtoSpec.setCtNo("./123123");
+
+        final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.createAusbildungsstaette()
+            .body(ausbildungsstaetteCreateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
     }
 }
