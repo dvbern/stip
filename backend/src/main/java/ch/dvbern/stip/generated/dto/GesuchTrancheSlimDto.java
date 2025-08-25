@@ -1,17 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -20,13 +17,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class GesuchTrancheSlimDto  implements Serializable {
+public class  GesuchTrancheSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status;
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String comment;
+  private @Valid Integer revision;
 
   /**
    **/
@@ -35,7 +33,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -54,7 +52,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigAb")
   @NotNull
   public LocalDate getGueltigAb() {
@@ -73,7 +71,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigBis")
   @NotNull
   public LocalDate getGueltigBis() {
@@ -92,7 +90,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("status")
   @NotNull
   public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus getStatus() {
@@ -111,7 +109,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("typ")
   @NotNull
   public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
@@ -130,7 +128,7 @@ public class GesuchTrancheSlimDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("comment")
   public String getComment() {
     return comment;
@@ -139,6 +137,24 @@ public class GesuchTrancheSlimDto  implements Serializable {
   @JsonProperty("comment")
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  /**
+   **/
+  public GesuchTrancheSlimDto revision(Integer revision) {
+    this.revision = revision;
+    return this;
+  }
+
+
+  @JsonProperty("revision")
+  public Integer getRevision() {
+    return revision;
+  }
+
+  @JsonProperty("revision")
+  public void setRevision(Integer revision) {
+    this.revision = revision;
   }
 
 
@@ -156,25 +172,27 @@ public class GesuchTrancheSlimDto  implements Serializable {
         Objects.equals(this.gueltigBis, gesuchTrancheSlim.gueltigBis) &&
         Objects.equals(this.status, gesuchTrancheSlim.status) &&
         Objects.equals(this.typ, gesuchTrancheSlim.typ) &&
-        Objects.equals(this.comment, gesuchTrancheSlim.comment);
+        Objects.equals(this.comment, gesuchTrancheSlim.comment) &&
+        Objects.equals(this.revision, gesuchTrancheSlim.revision);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, comment);
+    return Objects.hash(id, gueltigAb, gueltigBis, status, typ, comment, revision);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheSlimDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
+    sb.append("    revision: ").append(toIndentedString(revision)).append("\n");
     sb.append("}");
     return sb.toString();
   }

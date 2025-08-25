@@ -54,8 +54,9 @@
   "shared.header.aenderungen": "Änderungen",
   "shared.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
   "shared.header.aenderung.item": "Änderung {{ index }} vom {{ date }}",
+  "shared.header.aenderungen.completed": "Akzeptierte Änderungen",
+  "shared.header.aenderungen.rejected": "Abgelehnte Änderungen",
   "shared.header.aenderungen.initial": "Erstgesuch",
-  "shared.header.aenderungen.akzeptierte": "Akzeptierte Änderungen",
   "shared.header.initialTranche.item": "Erstgesuch vom {{ date }}",
   "shared.header.initialTranche.multiple": "Erstgesuch Tranche {{ index }} vom {{ date }}",
   "shared.file.upload": "Dateien Durchsuchen",
@@ -255,6 +256,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Fehlende Dokumente nicht eingereicht",
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Frist für Dokumente geändert",
   "shared.nachrichten.type.NEUE_VERFUEGUNG": "Neue Verfügung",
+  "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Auszahlung fehlgeschlagen",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",

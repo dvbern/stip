@@ -59,7 +59,6 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
-import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
@@ -154,7 +153,6 @@ public class GesuchService {
     private final GesuchsperiodenService gesuchsperiodeService;
     private final BenutzerService benutzerService;
     private final GesuchDokumentRepository gesuchDokumentRepository;
-    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
@@ -884,6 +882,18 @@ public class GesuchService {
             aenderung.getGesuch(),
             aenderung,
             List.of(initialRevision, latestWhereStatusChanged)
+        );
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+        final var gesuch = gesuchTrancheRepository.requireAenderungById(aenderungId).getGesuch();
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
+        return gesuchMapperUtil.toWithChangesDto(
+            gesuch,
+            aenderung,
+            List.of(initialRevision)
         );
     }
 

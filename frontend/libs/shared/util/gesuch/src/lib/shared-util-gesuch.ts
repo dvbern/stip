@@ -67,24 +67,22 @@ export function getLatestTrancheIdFromGesuchOnUpdate$(
  * Create 2 route configs, one with the id and one with the id and tranche id
  */
 export function idAndTrancheIdRoutes<T extends Route>(route: T) {
+  const baseConfig = {
+    ...route,
+    data: {
+      ...(route.data ?? {}),
+      // reinitialize when navigated to the same route
+      shouldReuseRoute: false,
+    },
+  };
   return [
     {
-      ...route,
+      ...baseConfig,
       path: ':id',
-      data: {
-        ...(route.data ?? {}),
-        // reinitialize when navigated to the same route
-        shouldReuseRoute: false,
-      },
     },
     {
-      ...route,
+      ...baseConfig,
       path: ':id/:trancheTyp/:trancheId',
-      data: {
-        ...(route.data ?? {}),
-        // reinitialize when navigated to the same route
-        shouldReuseRoute: false,
-      },
     },
   ];
 }

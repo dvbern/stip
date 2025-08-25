@@ -208,6 +208,7 @@ export interface GesuchServiceGetInitialTrancheChangesRequestParams {
 export interface GesuchServiceGetSbAenderungChangesRequestParams {
     /** Die ID der Aenderung */
     aenderungId: string;
+    revision?: number;
 }
 
 export interface GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams {
@@ -2914,6 +2915,13 @@ export class GesuchService {
         if (aenderungId === null || aenderungId === undefined) {
             throw new Error('Required parameter aenderungId was null or undefined when calling getSbAenderungChanges$.');
         }
+        const revision = requestParameters.revision;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (revision !== undefined && revision !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>revision, 'revision');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -2964,6 +2972,7 @@ export class GesuchService {
         return this.httpClient.request<GesuchWithChanges>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

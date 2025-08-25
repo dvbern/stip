@@ -17,14 +17,15 @@
 
 package ch.dvbern.stip.api.buchhaltung.service;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
@@ -33,13 +34,20 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.util.JwtUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
+import ch.dvbern.stip.api.zahlungsverbindung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
+import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
+import ch.dvbern.stip.generated.dto.PaginatedFailedAuszahlungBuchhaltungDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -52,10 +60,20 @@ public class BuchhaltungService {
     private final BuchhaltungRepository buchhaltungRepository;
     private final GesuchRepository gesuchRepository;
     private final FallRepository fallRepository;
+    private final FallMapper fallMapper;
+    private final ZahlungsverbindungRepository zahlungsverbindungRepository;
 
     private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
         return buchhaltungList
             .stream()
+            .filter(
+                buchhaltung -> buchhaltung.getSapDeliverys()
+                    .stream()
+                    .map(SapDelivery::getSapStatus)
+                    .noneMatch(
+                        SapStatus.NO_SUCCESS::contains
+                    )
+            )
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
             .map(Buchhaltung::getSaldo)
             .orElse(0);
@@ -64,6 +82,16 @@ public class BuchhaltungService {
     @Transactional
     public Buchhaltung getLatestBuchhaltungEntry(final UUID fallId) {
         return buchhaltungRepository.findAllForFallId(fallId)
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+            .orElseThrow(
+                NotFoundException::new
+            );
+    }
+
+    @Transactional
+    public Buchhaltung getLatestNotFailedBuchhaltungEntry(final UUID fallId) {
+        return buchhaltungRepository.findAllForFallId(fallId)
+            .filter(buchhaltung -> buchhaltung.getSapStatus() != SapStatus.FAILURE)
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
             .orElseThrow(
                 NotFoundException::new
@@ -111,19 +139,6 @@ public class BuchhaltungService {
         final Integer betrag,
         final String comment
     ) {
-        return createBuchaltungForFallAndGesuch(fall, gesuch, buchhaltungType, betrag, comment, null, null);
-    }
-
-    @Transactional
-    public BuchhaltungEntryDto createBuchaltungForFallAndGesuch(
-        final Fall fall,
-        final Gesuch gesuch,
-        final BuchhaltungType buchhaltungType,
-        final Integer betrag,
-        final String comment,
-        final BigDecimal sapDeliveryId,
-        final SapStatus sapStatus
-    ) {
         final var lastEntrySaldo = getLastEntrySaldo(fall.getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
@@ -161,7 +176,20 @@ public class BuchhaltungService {
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
+        if (Objects.nonNull(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung())) {
+            final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+                gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
+            );
+            newZahlungsverbindung.setAdresse(
+                AdresseCopyUtil
+                    .createCopy(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().getAdresse())
+            );
+            zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
+            buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
+        }
+
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
+        buchhaltungEntry.setUserErstellt(JwtUtil.SYSTEM_USR);
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungEntry;
     }
@@ -185,10 +213,18 @@ public class BuchhaltungService {
             .setBuchhaltungType(buchhaltungType)
             .setBetrag(betrag)
             .setSaldo(lastEntrySaldo - betrag)
-            .setStipendium(0)
             .setComment(translator.translate(tlKey))
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
+
+        final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+            gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
+        );
+        newZahlungsverbindung.setAdresse(
+            AdresseCopyUtil.createCopy(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().getAdresse())
+        );
+        zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
+        buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
@@ -204,7 +240,7 @@ public class BuchhaltungService {
         final UUID fallId,
         final BuchhaltungType buchhaltungType
     ) {
-        return buchhaltungRepository.findPendingBuchhaltungEntryOfGesuch(fallId, buchhaltungType);
+        return buchhaltungRepository.findPendingBuchhaltungEntryOfFall(fallId, buchhaltungType);
     }
 
     @Transactional
@@ -219,6 +255,7 @@ public class BuchhaltungService {
         final var lastEntryStipendiumOpt = getLastEntryStipendiumOpt(gesuch.getId());
 
         String comment = translator.translate("stip.verfuegung.buchhaltung.erstgesuch");
+        // TODO: MERGE KSTIP-1777 | Replace condition with isErstGesuch on gesuch
         if (gesuch.getAusbildung().getGesuchs().size() > 1) {
             comment = translator.translate("stip.verfuegung.buchhaltung.folgegesuch");
         }
@@ -257,12 +294,47 @@ public class BuchhaltungService {
         return getAllForFallId(gesuch.getAusbildung().getFall().getId()).map(buchhaltungMapper::toDto);
     }
 
+    public BuchhaltungOverviewDto getBuchhaltungOverviewDto(final UUID gesuchId) {
+        final BuchhaltungOverviewDto buchhaltungOverviewDto = new BuchhaltungOverviewDto();
+        buchhaltungOverviewDto.setBuchhaltungEntrys(getAllDtoForGesuchId(gesuchId).toList());
+        buchhaltungOverviewDto.setCanRetryAuszahlung(canRetryAuszahlungBuchhaltung(gesuchId));
+        return buchhaltungOverviewDto;
+    }
+
     @Transactional
     public void deleteBuchhaltungsForGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var buchhaltungs = getAllForFallId(gesuch.getAusbildung().getFall().getId());
         for (var buchhaltung : buchhaltungs.toList()) {
-            buchhaltungRepository.delete(buchhaltung);
+            if (Objects.nonNull(buchhaltung.getGesuch()) && buchhaltung.getGesuch().equals(gesuch)) {
+                buchhaltung.setGesuch(null);
+            }
         }
+    }
+
+    public boolean canRetryAuszahlungBuchhaltung(final Fall fall) {
+        return Objects.nonNull(fall.getFailedBuchhaltungAuszahlungType());
+    }
+
+    public boolean canRetryAuszahlungBuchhaltung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return canRetryAuszahlungBuchhaltung(
+            gesuch.getAusbildung()
+                .getFall()
+        );
+    }
+
+    @Transactional
+    public PaginatedFailedAuszahlungBuchhaltungDto getPaginatedFailedAuszahlungBuchhaltung(
+        final Integer page,
+        final Integer pageSize
+    ) {
+        final var dto = new PaginatedFailedAuszahlungBuchhaltungDto();
+        dto.setEntries(
+            fallRepository.findAllFallsWithFailedAuszahlungBuchhaltung(page, pageSize)
+                .map(fallMapper::toFailedAuszahlungBuchhaltungDto)
+                .toList()
+        );
+        return dto;
     }
 }

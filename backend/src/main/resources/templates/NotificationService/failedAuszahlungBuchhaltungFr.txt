@@ -1,0 +1,4 @@
+Le paiement d'une bourse a échoué.
+Ceci est probablement dû à des informations de paiement incorrectes.
+Vous pouvez mettre à jour ces informations et une nouvelle tentative de paiement sera effectuée.
+Vous pouvez également contacter votre conseiller social.

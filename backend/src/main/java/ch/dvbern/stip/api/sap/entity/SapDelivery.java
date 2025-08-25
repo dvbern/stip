@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.entity;
 
 import java.math.BigDecimal;
 
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import jakarta.annotation.Nullable;
@@ -26,7 +27,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,4 +60,9 @@ public class SapDelivery extends AbstractMandantEntity {
     @Nullable
     @Column(name = "sap_business_partner_id")
     private Integer sapBusinessPartnerId;
+
+    @Nullable
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "buchhaltung_id", foreignKey = @ForeignKey(name = "FK_sap_delivery_buchhaltung_id"))
+    private Buchhaltung buchhaltung;
 }

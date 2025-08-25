@@ -15,14 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.service;
+package ch.dvbern.stip.api.zahlungsverbindung.service;
 
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.auszahlung.util.ZahlungsverbindungDiffUtil;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.zahlungsverbindung.util.ZahlungsverbindungDiffUtil;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungUpdateDto;
 import jakarta.inject.Inject;

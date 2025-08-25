@@ -71,4 +71,8 @@ public class VendorPostingCreateResponse {
         return this.returncode;
     }
 
+    public void setRETURNCODE(List<ReturnCode> returncode) {
+        this.returncode = returncode;
+    }
+
 }
