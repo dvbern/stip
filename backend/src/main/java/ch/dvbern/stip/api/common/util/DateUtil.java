@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -110,6 +111,10 @@ public class DateUtil {
     }
 
     public boolean beforeOrEqual(final LocalDate left, final LocalDate right) {
+        return left.isBefore(right) || left.isEqual(right);
+    }
+
+    public boolean beforeOrEqual(final LocalDateTime left, final LocalDateTime right) {
         return left.isBefore(right) || left.isEqual(right);
     }
 

@@ -34,17 +34,17 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class FallRepository implements BaseRepository<Fall> {
-
     private final EntityManager entityManager;
+
+    private static final QFall Q_FALL = QFall.fall;
 
     public Stream<Fall> findFaelleForSb(UUID sachbearbeiterId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
-        final var fall = QFall.fall;
+
         final var zuordnung = QZuordnung.zuordnung;
 
         final var query = queryFactory
-            .select(fall)
-            .from(fall)
+            .selectFrom(Q_FALL)
             .where(
                 JPAExpressions
                     .select(zuordnung.sachbearbeiter.id)
@@ -58,5 +58,15 @@ public class FallRepository implements BaseRepository<Fall> {
 
     public Optional<Fall> findFallForGsOptional(final UUID gesuchstellerId) {
         return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
+    }
+
+    public Stream<Fall> findAllFallsWithFailedAuszahlungBuchhaltung(final Integer page, final Integer pageSize) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_FALL)
+            .where(Q_FALL.failedBuchhaltungAuszahlungType.isNotNull())
+            .offset((long) page * pageSize)
+            .limit(pageSize)
+            .orderBy(Q_FALL.timestampErstellt.desc())
+            .stream();
     }
 }

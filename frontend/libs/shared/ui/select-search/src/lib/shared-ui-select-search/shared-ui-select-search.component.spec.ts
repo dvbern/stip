@@ -69,7 +69,6 @@ describe('SharedUiSelectSearchComponent Unit Test', () => {
     // Set up the component inputs
     fixture.componentRef.setInput('labelKeySig', 'label.test.key');
     fixture.componentRef.setInput('valuesSig', values);
-    fixture.componentRef.setInput('isEntryValidSig', () => true);
     fixture.componentRef.setInput('invalidValueLabelKeySig', 'error.test.key');
     fixture.componentRef.setInput('languageSig', 'de');
     fixture.componentRef.setInput('zuvorValueSig', hintValue);

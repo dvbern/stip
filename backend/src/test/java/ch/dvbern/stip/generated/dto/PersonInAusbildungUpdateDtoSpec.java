@@ -47,6 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_NATIONALITAET_ID,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_HEIMATORT,
+  PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_HEIMATORT_P_L_Z,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_NIEDERLASSUNGSSTATUS,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_EINREISEDATUM,
   PersonInAusbildungUpdateDtoSpec.JSON_PROPERTY_ZIVILSTAND,
@@ -93,6 +94,9 @@ public class PersonInAusbildungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_HEIMATORT = "heimatort";
   private String heimatort;
+
+  public static final String JSON_PROPERTY_HEIMATORT_P_L_Z = "heimatortPLZ";
+  private String heimatortPLZ;
 
   public static final String JSON_PROPERTY_NIEDERLASSUNGSSTATUS = "niederlassungsstatus";
   private NiederlassungsstatusDtoSpec niederlassungsstatus;
@@ -393,6 +397,32 @@ public class PersonInAusbildungUpdateDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setHeimatort(String heimatort) {
     this.heimatort = heimatort;
+  }
+
+
+  public PersonInAusbildungUpdateDtoSpec heimatortPLZ(String heimatortPLZ) {
+    
+    this.heimatortPLZ = heimatortPLZ;
+    return this;
+  }
+
+   /**
+   * Required nur wenn Land &#x3D; CH
+   * @return heimatortPLZ
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HEIMATORT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getHeimatortPLZ() {
+    return heimatortPLZ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HEIMATORT_P_L_Z)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHeimatortPLZ(String heimatortPLZ) {
+    this.heimatortPLZ = heimatortPLZ;
   }
 
 
@@ -752,6 +782,7 @@ public class PersonInAusbildungUpdateDtoSpec {
         Objects.equals(this.geburtsdatum, personInAusbildungUpdate.geburtsdatum) &&
         Objects.equals(this.nationalitaetId, personInAusbildungUpdate.nationalitaetId) &&
         Objects.equals(this.heimatort, personInAusbildungUpdate.heimatort) &&
+        Objects.equals(this.heimatortPLZ, personInAusbildungUpdate.heimatortPLZ) &&
         Objects.equals(this.niederlassungsstatus, personInAusbildungUpdate.niederlassungsstatus) &&
         Objects.equals(this.einreisedatum, personInAusbildungUpdate.einreisedatum) &&
         Objects.equals(this.zivilstand, personInAusbildungUpdate.zivilstand) &&
@@ -769,7 +800,7 @@ public class PersonInAusbildungUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, heimatort, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigeKESB);
+    return Objects.hash(adresse, sozialversicherungsnummer, vorname, anrede, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, nationalitaetId, heimatort, heimatortPLZ, niederlassungsstatus, einreisedatum, zivilstand, wohnsitz, wohnsitzAnteilMutter, wohnsitzAnteilVater, sozialhilfebeitraege, vormundschaft, nachname, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, korrespondenzSprache, zustaendigeKESB);
   }
 
   @Override
@@ -786,6 +817,7 @@ public class PersonInAusbildungUpdateDtoSpec {
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    nationalitaetId: ").append(toIndentedString(nationalitaetId)).append("\n");
     sb.append("    heimatort: ").append(toIndentedString(heimatort)).append("\n");
+    sb.append("    heimatortPLZ: ").append(toIndentedString(heimatortPLZ)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");
     sb.append("    einreisedatum: ").append(toIndentedString(einreisedatum)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");

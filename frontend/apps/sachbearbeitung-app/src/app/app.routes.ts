@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { BuchhaltungStore } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
@@ -21,6 +22,7 @@ export const appRoutes: Route[] = [
           'V0_Sachbearbeiter-Admin',
           'V0_Jurist',
           'V0_Sachbearbeiter',
+          'V0_Freigabestelle',
           'V0_Sozialdienst-Admin',
         ],
         '/unauthorized',
@@ -44,10 +46,24 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'fehlgeschlagene-zahlungen',
+        title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
+        providers: [BuchhaltungStore],
+        loadChildren: () =>
+          import(
+            '@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen'
+          ).then(
+            (m) => m.sachbearbeitungAppFeatureFehlgeschlageneZahlungenRoutes,
+          ),
+      },
+      {
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,
-          hasRoles(['V0_Sachbearbeiter', 'V0_Jurist'], '/administration'),
+          hasRoles(
+            ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+            '/administration',
+          ),
         ],
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>

@@ -7,7 +7,7 @@ import {
   Gesuchstatus,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
-import { capitalized } from '@dv/shared/model/type-util';
+import { assertUnreachable, capitalized } from '@dv/shared/model/type-util';
 
 const Permissions = {
   W: { index: 0, name: 'write' },
@@ -213,21 +213,25 @@ export const getTranchePermissions = (
  * Currently it applies a check if the current user is allowed to update the gesuch
  * depending on if it is delegated and the user roles of the current user.
  */
-export const canCurrentlyEdit = (
+export const isNotReadonly = (
   appType: AppType,
   rolesMap: RolesMap,
   delegierung: DelegierungSlim | boolean | undefined,
 ) => {
-  // Only apply special rules for the gesuch-app
-  if (appType !== 'gesuch-app') {
-    return true;
+  switch (appType) {
+    case 'sachbearbeitung-app':
+      return (
+        ['V0_Sachbearbeiter', 'V0_Jurist'] satisfies AvailableBenutzerRole[]
+      ).some((role) => rolesMap[role] === true);
+    case 'gesuch-app':
+      return (
+        !delegierung ||
+        // OK if it is delegated and current user is a sozialdienst-mitarbeiter
+        (!!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
+      );
+    default:
+      assertUnreachable(appType);
   }
-
-  return (
-    !delegierung ||
-    // OK if it is delegated and current user is a sozialdienst-mitarbeiter
-    (!!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
-  );
 };
 
 /**
@@ -239,7 +243,7 @@ const applyDelegatedPermission = (
   appType: AppType,
   rolesMap: RolesMap,
 ): PermissionMap => {
-  if (canCurrentlyEdit(appType, rolesMap, gesuch.delegierung)) {
+  if (isNotReadonly(appType, rolesMap, gesuch.delegierung)) {
     return permissions;
   }
 

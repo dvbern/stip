@@ -211,7 +211,7 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
     }
 
-    public void createGesuchFehlendeDokumenteNichtEingereichtText(final Gesuch gesuch) {
+    public void createGesuchFehlendeDokumenteNichtEingereichtNotification(final Gesuch gesuch) {
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -241,6 +241,21 @@ public class NotificationService {
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT)
             .setGesuch(gesuch)
             .setNotificationText(msg);
+        setAbsender(gesuch, notification);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    public void createFailedAuszahlungBuchhaltungNotification(final Gesuch gesuch) {
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        String message = Templates.getFailedAuszahlungBuchhaltungText(sprache).render();
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.FAILED_AUSZAHLUNG)
+            .setGesuch(gesuch)
+            .setNotificationText(message);
         setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
     }
@@ -435,6 +450,17 @@ public class NotificationService {
                 return neueVerfuegungFR();
             }
             return neueVerfuegungDE();
+        }
+
+        public static native TemplateInstance failedAuszahlungBuchhaltungDe();
+
+        public static native TemplateInstance failedAuszahlungBuchhaltungFr();
+
+        public static TemplateInstance getFailedAuszahlungBuchhaltungText(final Sprache korrespondenzSprache) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return failedAuszahlungBuchhaltungDe();
+            }
+            return failedAuszahlungBuchhaltungDe();
         }
     }
 }

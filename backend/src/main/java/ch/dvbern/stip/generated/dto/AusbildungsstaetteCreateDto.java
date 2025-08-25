@@ -22,6 +22,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
   private @Valid String burNo;
+  private @Valid String ctNo;
 
   /**
    **/
@@ -79,6 +80,24 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     this.burNo = burNo;
   }
 
+  /**
+   **/
+  public AusbildungsstaetteCreateDto ctNo(String ctNo) {
+    this.ctNo = ctNo;
+    return this;
+  }
+
+  
+  @JsonProperty("ctNo")
+  public String getCtNo() {
+    return ctNo;
+  }
+
+  @JsonProperty("ctNo")
+  public void setCtNo(String ctNo) {
+    this.ctNo = ctNo;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -91,12 +110,13 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     AusbildungsstaetteCreateDto ausbildungsstaetteCreate = (AusbildungsstaetteCreateDto) o;
     return Objects.equals(this.nameDe, ausbildungsstaetteCreate.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr) &&
-        Objects.equals(this.burNo, ausbildungsstaetteCreate.burNo);
+        Objects.equals(this.burNo, ausbildungsstaetteCreate.burNo) &&
+        Objects.equals(this.ctNo, ausbildungsstaetteCreate.ctNo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameDe, nameFr, burNo);
+    return Objects.hash(nameDe, nameFr, burNo, ctNo);
   }
 
   @Override
@@ -107,6 +127,7 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
     sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
+    sb.append("    ctNo: ").append(toIndentedString(ctNo)).append("\n");
     sb.append("}");
     return sb.toString();
   }

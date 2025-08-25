@@ -18,6 +18,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,6 +29,7 @@ import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addYears } from 'date-fns';
+import { diff } from 'json-diff-ts';
 import { startWith } from 'rxjs';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
@@ -42,8 +44,8 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   AusbildungsPensum,
-  AusbildungsgangData,
   GesuchsperiodeSelectErrorType,
+  Plz,
 } from '@dv/shared/model/gesuch';
 import {
   capitalized,
@@ -62,6 +64,7 @@ import {
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import {
   SharedUiRdIsPendingPipe,
   SharedUiRdIsPendingWithoutCachePipe,
@@ -104,6 +107,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
+    MatAutocompleteModule,
     MatCheckboxModule,
     MatSelectModule,
     SharedUiInfoDialogDirective,
@@ -116,6 +120,7 @@ const gesuchsPeriodenSelectErrorMap: Record<
     SharedUiMaxLengthDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiSelectSearchComponent,
+    SharedUiPlzOrtAutocompleteDirective,
   ],
   templateUrl: './shared-feature-ausbildung.component.html',
   providers: [
@@ -150,16 +155,16 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
 
   form = this.formBuilder.group({
-    ausbildungsort: [<string | undefined>undefined, [Validators.required]],
+    ausbildungsortPlzOrt: this.formBuilder.group({
+      plz: [<string | undefined>undefined, [Validators.required]],
+      ort: [<string | undefined>undefined, [Validators.required]],
+    }),
     isAusbildungAusland: [false, []],
     ausbildungsstaetteId: [
       <string | undefined>undefined,
       [Validators.required],
     ],
-    ausbildungsgang: [
-      <AusbildungsgangData | undefined>undefined,
-      [Validators.required],
-    ],
+    ausbildungsgangId: [<string | undefined>undefined, [Validators.required]],
     besuchtBMS: [false, []],
     fachrichtungBerufsbezeichnung: [
       <string | undefined>undefined,
@@ -189,6 +194,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private ausbildungsstaetteIdSig = toSignal(
     this.form.controls.ausbildungsstaetteId.valueChanges,
   );
+  private ausbildungsgangIdSig = toSignal(
+    this.form.controls.ausbildungsgangId.valueChanges,
+  );
   private ausbildungNichtGefundenChangedSig = toSignal(
     this.form.controls.ausbildungNichtGefunden.valueChanges,
   );
@@ -198,10 +206,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private endChangedSig = toSignal(
     this.form.controls.ausbildungEnd.valueChanges,
   );
-  private ausbildungsgangChangedSig = toSignal(
-    this.form.controls.ausbildungsgang.valueChanges,
-  );
 
+  plzValues?: Plz[];
   isEditableSig = computed(() => {
     const { type } = this.usageTypeSig();
     const {
@@ -211,39 +217,103 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     return type === 'dialog' || gesuchFormular?.ausbildung?.editable;
   });
 
-  ausbildungsgangOptionsSig = computed(() => {
+  private currentAusbildungsstaetteSig = computed(() => {
+    const ausbildungsstaetteId = this.ausbildungsstaetteIdSig();
     const ausbildungsstaettes =
       this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
-    const language = this.languageSig();
 
-    const ausbildungsgaenge =
-      [...ausbildungsstaettes]
-        .find(
-          (ausbildungsstaette) =>
-            ausbildungsstaette.id === this.ausbildungsstaetteIdSig(),
-        )
-        ?.ausbildungsgaenge?.map((ausbildungsgang) => {
-          return {
-            ...ausbildungsgang,
-            translatedName: getTranslatableProp(
-              ausbildungsgang,
-              'bezeichnung',
-              language,
-            ),
-          };
-        }) ?? [];
-    return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
+    return ausbildungsstaettes.find(
+      (ausbildungsstaette) => ausbildungsstaette.id === ausbildungsstaetteId,
+    );
   });
 
+  private currentAusbildungsgangSig = computed(() => {
+    const ausbildungsgangId = this.ausbildungsgangIdSig();
+    return this.currentAusbildungsstaetteSig()?.ausbildungsgaenge.find(
+      (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
+    );
+  });
+
+  ausbildungsstaettenOptionsSig = computed(
+    () => {
+      const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
+      const currentAusbildungsgang = this.currentAusbildungsgangSig();
+      const ausbildungsstaetten =
+        this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
+
+      if (!ausbildungsstaetten) {
+        return [];
+      }
+
+      return ausbildungsstaetten
+        .map((ausbildungsstaette) => ({
+          ...ausbildungsstaette,
+          invalid:
+            !ausbildungsstaette.aktiv &&
+            ausbildungsstaette.id !== currentAusbildungsstaette?.id,
+          disabled: !ausbildungsstaette.aktiv,
+        }))
+        .filter((ausbildungsstaette) =>
+          ausbildungsstaette.ausbildungsgaenge.some(
+            (gang) => gang.aktiv || gang.id === currentAusbildungsgang?.id,
+          ),
+        );
+    },
+    {
+      equal: areObjectsEqual,
+    },
+  );
+
+  ausbildungsgangOptionsSig = computed(
+    () => {
+      const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
+      const currentAusbildungsgang = this.currentAusbildungsgangSig();
+      const ausbildung = {
+        ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
+          .gesuchFormular?.ausbildung,
+      };
+      const language = this.languageSig();
+
+      const ausbildungsgaenge =
+        currentAusbildungsstaette?.ausbildungsgaenge
+          ?.filter(
+            (ausbildungsgang) =>
+              ausbildungsgang.aktiv ||
+              ausbildungsgang.id === ausbildung.ausbildungsgang?.id,
+          )
+          .map((ausbildungsgang) => {
+            return {
+              ...ausbildungsgang,
+              translatedName: getTranslatableProp(
+                ausbildungsgang,
+                'bezeichnung',
+                language,
+              ),
+              testId: ausbildungsgang.bezeichnungDe,
+              invalid:
+                !ausbildungsgang.aktiv &&
+                ausbildungsgang.id !== currentAusbildungsgang?.id,
+              disabled: !ausbildungsgang.aktiv,
+              displayValueDe: ausbildungsgang.bezeichnungDe,
+              displayValueFr: ausbildungsgang.bezeichnungFr,
+            };
+          }) ?? [];
+      return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
+    },
+    {
+      equal: areObjectsEqual,
+    },
+  );
+
   zusatzfrageSig = computed(() => {
-    const newAusbildungsgang = this.ausbildungsgangChangedSig();
+    const newAusbildungsgang = this.currentAusbildungsgangSig();
     if (!newAusbildungsgang) return undefined;
 
     return newAusbildungsgang.zusatzfrage;
   });
 
   showBesuchtBMS = computed(() => {
-    const newAusbildungsgang = this.ausbildungsgangChangedSig();
+    const newAusbildungsgang = this.currentAusbildungsgangSig();
     if (!newAusbildungsgang) return false;
 
     const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
@@ -277,10 +347,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       const {
         alternativeAusbildungsgang,
         alternativeAusbildungsstaette,
-        ausbildungsgang,
+        ausbildungsgangId,
         ausbildungsstaetteId,
       } = this.form.controls;
-      this.formUtils.setRequired(ausbildungsgang, !value);
+      this.formUtils.setRequired(ausbildungsgangId, !value);
       this.formUtils.setRequired(ausbildungsstaetteId, !value);
       this.formUtils.setRequired(alternativeAusbildungsgang, !!value);
       this.formUtils.setRequired(alternativeAusbildungsstaette, !!value);
@@ -361,24 +431,26 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       if (ausbildung && ausbildungstaetten) {
         this.form.patchValue({
           ...ausbildung,
-          ausbildungsgang: undefined,
+          ausbildungsortPlzOrt: {
+            plz: ausbildung.ausbildungsortPLZ,
+            ort: ausbildung.ausbildungsort,
+          },
         });
         const currentAusbildungsgang = ausbildung.ausbildungsgang;
         if (currentAusbildungsgang) {
           const ausbildungsstaette = ausbildungstaetten.find(
             (ausbildungsstaette) =>
-              ausbildungsstaette.ausbildungsgaenge?.find(
-                (ausbildungsgang) =>
-                  ausbildungsgang.id === currentAusbildungsgang.id,
-              ),
+              ausbildungsstaette.id ===
+              ausbildung.ausbildungsgang?.ausbildungsstaette?.id,
           );
           const ausbildungsgang = ausbildungsstaette?.ausbildungsgaenge?.find(
             (ausbildungsgang) =>
               ausbildungsgang.id === currentAusbildungsgang.id,
           );
           this.form.patchValue({
-            ausbildungsstaetteId: ausbildungsstaette?.id,
-            ausbildungsgang: ausbildungsgang,
+            ausbildungsstaetteId:
+              ausbildung.ausbildungsgang?.ausbildungsstaette?.id,
+            ausbildungsgangId: ausbildungsgang?.id,
           });
         }
       }
@@ -422,11 +494,18 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       const isAusbildungAusland = !!isAusbildungAuslandSig();
 
       if (isAusbildungAusland) {
-        this.form.controls.ausbildungsort.reset();
+        this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
+        this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
       }
 
       this.formUtils.setDisabledState(
-        this.form.controls.ausbildungsort,
+        this.form.controls.ausbildungsortPlzOrt.controls.plz,
+        !this.isEditableSig() || isAusbildungAusland,
+        false,
+      );
+
+      this.formUtils.setDisabledState(
+        this.form.controls.ausbildungsortPlzOrt.controls.ort,
         !this.isEditableSig() || isAusbildungAusland,
         false,
       );
@@ -442,27 +521,23 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       const isWritable = this.isEditableSig();
       const staette = staetteSig();
       this.formUtils.setDisabledState(
-        this.form.controls.ausbildungsgang,
+        this.form.controls.ausbildungsgangId,
         !isWritable || !staette,
         isWritable,
       );
 
       if (!staette) {
-        this.form.controls.ausbildungsgang.reset();
+        this.form.controls.ausbildungsgangId.reset();
         this.form.controls.besuchtBMS.reset();
         if (!this.form.controls.ausbildungNichtGefunden) {
           this.form.controls.fachrichtungBerufsbezeichnung.reset();
-          this.form.controls.ausbildungsort.reset();
+          this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
+          this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
         }
       }
     });
 
     // When Ausbildungsgang is null, disable fachrichtung. But only if ausbildungNichtGefunden is false
-    const ausbildungsgangSig = toSignal(
-      this.form.controls.ausbildungsgang.valueChanges.pipe(
-        startWith(this.form.value.ausbildungsgang),
-      ),
-    );
     const ausbildungNichtGefundenSig = toSignal(
       this.form.controls.ausbildungNichtGefunden.valueChanges.pipe(
         startWith(this.form.value.ausbildungNichtGefunden),
@@ -472,14 +547,15 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       const isWritable = this.isEditableSig();
       this.formUtils.setDisabledState(
         this.form.controls.fachrichtungBerufsbezeichnung,
-        !isWritable || (!ausbildungNichtGefundenSig() && !ausbildungsgangSig()),
+        !isWritable ||
+          (!ausbildungNichtGefundenSig() && !this.currentAusbildungsgangSig()),
         isWritable,
       );
     });
 
     effect(() => {
       const { readonly } = this.cachedGesuchViewSig();
-      const ausbildungsgang = ausbildungsgangSig();
+      const ausbildungsgang = this.currentAusbildungsgangSig();
       updateVisbilityAndDisbledState({
         hiddenFieldsSetSig: this.hiddenFieldsSetSig,
         formControl: this.form.controls.fachrichtungBerufsbezeichnung,
@@ -498,17 +574,19 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   handleGangChangedByUser() {
     this.form.controls.fachrichtungBerufsbezeichnung.reset();
-    this.form.controls.ausbildungsort.reset();
+    this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
+    this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
     this.form.controls.besuchtBMS.reset();
   }
 
   handleManuellChangedByUser() {
     this.form.controls.ausbildungsstaetteId.reset();
+    this.form.controls.ausbildungsgangId.reset();
     this.form.controls.alternativeAusbildungsstaette.reset();
-    this.form.controls.ausbildungsgang.reset();
     this.form.controls.alternativeAusbildungsgang.reset();
     this.form.controls.fachrichtungBerufsbezeichnung.reset();
-    this.form.controls.ausbildungsort.reset();
+    this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
+    this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
     this.form.controls.besuchtBMS.reset();
   }
 
@@ -532,16 +610,17 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     this.withAusbildungRange((ctrl) => this.onDateBlur(ctrl));
 
-    const { ausbildungsgang: formAusbildungsgang, ...formValues } =
-      convertTempFormToRealValues(this.form, ['pensum']);
-    delete formValues.ausbildungsstaetteId;
+    const {
+      ausbildungsgangId,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ausbildungsstaetteId: _,
+      ausbildungsortPlzOrt,
+      ...formValues
+    } = convertTempFormToRealValues(this.form, ['pensum']);
 
     const ausbildungId =
       this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
         .gesuchFormular?.ausbildung.id;
-    const ausbildungsgang = formAusbildungsgang
-      ? { ausbildungsgangId: formAusbildungsgang.id }
-      : {};
     const { type, fallId } = this.usageTypeSig();
 
     switch (type) {
@@ -550,7 +629,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           ausbildung: {
             fallId: fallId,
             ...formValues,
-            ...ausbildungsgang,
+            ausbildungsgangId,
+            ausbildungsort: ausbildungsortPlzOrt.ort,
+            ausbildungsortPLZ: ausbildungsortPlzOrt.plz,
           },
           onSuccess: (response) => {
             if (response.ausbildung) {
@@ -570,7 +651,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             ...formValues,
             id: ausbildungId,
             fallId: fallId,
-            ...ausbildungsgang,
+            ausbildungsgangId,
+            ausbildungsort: ausbildungsortPlzOrt.ort,
+            ausbildungsortPLZ: ausbildungsortPlzOrt.plz,
           },
           onSuccess: () => {
             this.globalNotificationStore.createSuccessNotification({
@@ -586,6 +669,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.markAsPristine();
   }
 
+  isActive(obj: { aktiv: boolean }) {
+    return obj.aktiv;
+  }
+
   private withAusbildungRange = (
     fn: (control: FormControl, type: AusbildungRangeControls) => void,
   ) => {
@@ -594,3 +681,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
   };
 }
+
+const areObjectsEqual = <T>(a: T, b: T): boolean => {
+  return diff(a, b).length === 0;
+};

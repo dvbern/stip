@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -102,11 +103,22 @@ public class AusbildungService {
     @Transactional
     public AusbildungDto patchAusbildung(final UUID ausbildungId, final AusbildungUpdateDto ausbildungUpdateDto) {
         var ausbildung = ausbildungRepository.requireById(ausbildungId);
+        final var oldAusbildungsGang = ausbildung.getAusbildungsgang();
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
 
         if (ausbildung.getAusbildungsgang() != null) {
+            final var newAusbildungsGang =
+                ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId());
+            if (!newAusbildungsGang.isAktiv()) {
+                if (
+                    Objects.isNull(oldAusbildungsGang) || !newAusbildungsGang.getId().equals(oldAusbildungsGang.getId())
+                ) {
+                    throw new BadRequestException("Ausbildungsgang ist nicht aktiv");
+                }
+            }
+
             ausbildung
-                .setAusbildungsgang(ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId()));
+                .setAusbildungsgang(newAusbildungsGang);
         }
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {

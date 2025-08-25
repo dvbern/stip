@@ -18,6 +18,7 @@ export interface AbschlussSlim {
     bezeichnungFr: string;
     ausbildungskategorie: Ausbildungskategorie;
     zusatzfrage?: AbschlussZusatzfrage;
+    aktiv: boolean;
 }
 
 

@@ -1757,6 +1757,34 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getSozialdienst
       summary: Get a Sozialdienst by Id
+  /sozialdienst/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}:
+    parameters:
+      - $ref: '#/components/parameters/sozialdienstId'
+      - name: aktiv
+        schema:
+          type: boolean
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: setSozialdienstAktivTo
+      summary: Changes a Sozialdienst's status to a given value
   /sozialdienst/benutzer:
     get:
       tags:
@@ -2993,6 +3021,11 @@ paths:
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -3726,9 +3759,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BuchhaltungEntry'
+                $ref: '#/components/schemas/BuchhaltungOverview'
           description: Returns all buchhaltungsentrys of a Fall with the given gesuchId
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4123,6 +4154,55 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: setAusbildungsgangInaktiv
       summary: Set an Ausbildungsgang to Inaktiv
+  /buchhaltung/retry/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Buchhaltung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuchhaltungEntry'
+          description: return BuchhaltungEntry for retry
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: retryFailedAuszahlungBuchhaltungForGesuch
+      summary: return BuchhaltungEntry for retry
+  /buchhaltung/failed:
+    get:
+      tags:
+        - Buchhaltung
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFailedAuszahlungBuchhaltung'
+          description: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFailedAuszahlungBuchhaltungEntrys
+      summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
 components:
   schemas:
     Verfuegung:
@@ -4734,6 +4814,41 @@ components:
           type: string
         nachname:
           type: string
+    FailedAuszahlungBuchhaltung:
+      required:
+        - fallId
+        - fallNummer
+        - gesuchId
+        - gesuchNummer
+        - name
+        - vorname
+        - lastTryDate
+      type: object
+      properties:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchNummer:
+          type: string
+        name:
+          type: string
+        vorname:
+          type: string
+        lastTryDate:
+          type: string
+          format: date-time
+          # $ref: '#/components/schemas/LocalDate'
+    PaginatedFailedAuszahlungBuchhaltung:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedAuszahlungBuchhaltung'
     BeschwerdeEntscheidCreate:
       required:
         - kommentar
@@ -5277,6 +5392,9 @@ components:
         heimatort:
           description: Required nur wenn Land = CH
           type: string
+        heimatortPLZ:
+          description: Required nur wenn Land = CH
+          type: string
         niederlassungsstatus:
           $ref: '#/components/schemas/Niederlassungsstatus'
           description: Required wenn Nationalitaet != CH
@@ -5613,6 +5731,9 @@ components:
         alternativeAusbildungsgang:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
+        ausbildungsortPLZ:
+          description: Not required if isAusbildungAusland = true
+          type: string
         ausbildungsort:
           description: Not required if isAusbildungAusland = true
           type: string
@@ -5821,6 +5942,8 @@ components:
           type: string
         burNo:
           type: string
+        ctNo:
+          type: string
     AusbildungsgangSortColumn:
       enum:
         - ABSCHLUSS_BEZEICHNUNG_DE
@@ -5883,6 +6006,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - bildungskategorie
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5896,6 +6020,8 @@ components:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
           type: boolean
+        aktiv:
+          type: boolean
     AusbildungsstaetteSlim:
       type: object
       required:
@@ -5903,6 +6029,7 @@ components:
         - nameDe
         - nameFr
         - ausbildungsgaenge
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5914,6 +6041,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungsgangData'
+        aktiv:
+          type: boolean
     AbschlussSlim:
       type: object
       required:
@@ -5921,6 +6050,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - ausbildungskategorie
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5932,6 +6062,8 @@ components:
           $ref: '#/components/schemas/Ausbildungskategorie'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
+        aktiv:
+          type: boolean
     GesuchsperiodeWithDaten:
       required:
         - id
@@ -6252,6 +6384,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        aenderungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        abgelehnteAenderungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:
@@ -6273,6 +6413,8 @@ components:
           type: string
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
+        revision:
+          type: integer
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:
@@ -6464,11 +6606,14 @@ components:
       required:
         - id
         - name
+        - aktiv
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
+        aktiv:
+          type: boolean
     Sozialdienst:
       allOf:
         - $ref: '#/components/schemas/SozialdienstSlim'
@@ -6478,11 +6623,14 @@ components:
             - name
             - sozialdienstAdmin
             - zahlungsverbindung
+            - aktiv
           properties:
             sozialdienstAdmin:
               $ref: '#/components/schemas/SozialdienstBenutzer'
             zahlungsverbindung:
               $ref: '#/components/schemas/Zahlungsverbindung'
+            aktiv:
+              type: boolean
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -6571,6 +6719,7 @@ components:
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
         - NEUE_VERFUEGUNG
+        - FAILED_AUSZAHLUNG
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
@@ -7121,6 +7270,32 @@ components:
         - SALDOAENDERUNG
         - AUSZAHLUNG
         - STIPENDIUM
+    SapDelivery:
+      type: object
+      required:
+        - sapId
+        - timestampErstellt
+        - sapStatus
+      properties:
+        sapId:
+          type: string
+        timestampErstellt:
+          type: string
+          format: date-time
+        sapStatus:
+          $ref: '#/components/schemas/SapStatus'
+    BuchhaltungOverview:
+      type: object
+      required:
+        - canRetryAuszahlung
+        - buchhaltungEntrys
+      properties:
+        canRetryAuszahlung:
+          type: boolean
+        buchhaltungEntrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/BuchhaltungEntry'
     BuchhaltungEntry:
       type: object
       required:
@@ -7148,10 +7323,6 @@ components:
           type: integer
         saldo:
           type: integer
-        sapId:
-          type: string
-        sapStatus:
-          $ref: '#/components/schemas/SapStatus'
         businessPartnerId:
           type: integer
         comment:
@@ -7160,6 +7331,14 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
+        sapStatus:
+          $ref: '#/components/schemas/SapStatus'
+        sapDeliverys:
+          type: array
+          items:
+            $ref: '#/components/schemas/SapDelivery'
     BuchhaltungSaldokorrektur:
       type: object
       required:

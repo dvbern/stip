@@ -18,6 +18,9 @@
 package ch.dvbern.stip.api.buchhaltung.type;
 
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
 public enum SapStatus {
     /**
@@ -52,4 +55,11 @@ public enum SapStatus {
             default -> throw new IllegalStateException("Unexpected value: " + code);
         };
     }
+
+    public static final Set<SapStatus> NO_SUCCESS = Collections.unmodifiableSet(
+        EnumSet.of(
+            FAILURE,
+            SUSPENDED
+        )
+    );
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SozialdienstSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
+  private @Valid Boolean aktiv;
 
   /**
    **/
@@ -61,6 +62,25 @@ public class SozialdienstSlimDto  implements Serializable {
     this.name = name;
   }
 
+  /**
+   **/
+  public SozialdienstSlimDto aktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+    return this;
+  }
+
+  
+  @JsonProperty("aktiv")
+  @NotNull
+  public Boolean getAktiv() {
+    return aktiv;
+  }
+
+  @JsonProperty("aktiv")
+  public void setAktiv(Boolean aktiv) {
+    this.aktiv = aktiv;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -72,12 +92,13 @@ public class SozialdienstSlimDto  implements Serializable {
     }
     SozialdienstSlimDto sozialdienstSlim = (SozialdienstSlimDto) o;
     return Objects.equals(this.id, sozialdienstSlim.id) &&
-        Objects.equals(this.name, sozialdienstSlim.name);
+        Objects.equals(this.name, sozialdienstSlim.name) &&
+        Objects.equals(this.aktiv, sozialdienstSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, name, aktiv);
   }
 
   @Override
@@ -87,6 +108,7 @@ public class SozialdienstSlimDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
   }

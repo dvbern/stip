@@ -63,6 +63,10 @@ public class DelegierenService {
         }
 
         final var sozialdienst = sozialdienstRepository.requireById(sozialdienstId);
+        if (!sozialdienst.isAktiv()) {
+            throw new BadRequestException();
+        }
+
         final var newDelegierung = new Delegierung()
             .setDelegierterFall(fall)
             .setSozialdienst(sozialdienst)

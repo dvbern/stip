@@ -42,6 +42,10 @@ export interface Ausbildung {
     /**
      * Not required if isAusbildungAusland = true
      */
+    ausbildungsortPLZ?: string;
+    /**
+     * Not required if isAusbildungAusland = true
+     */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
     status: AusbildungsStatus;

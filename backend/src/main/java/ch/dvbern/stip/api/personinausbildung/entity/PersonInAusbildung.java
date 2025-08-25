@@ -125,6 +125,11 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(name = "heimatort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String heimatort;
 
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "heimatort_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String heimatortPLZ;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "niederlassungsstatus")
     private Niederlassungsstatus niederlassungsstatus;

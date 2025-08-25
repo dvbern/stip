@@ -50,6 +50,7 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
+  selectRevision,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
@@ -121,111 +122,121 @@ export const loadGesuch = createEffect(
             combineLatestWith(
               store.select(selectTrancheTyp),
               store.select(selectRouteTrancheId),
+              store.select(selectRevision),
             ),
           ),
       ),
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
-      switchMap(([[, [id, trancheTyp, trancheId]], { compileTimeConfig }]) => {
-        if (!id) {
-          throw new Error(ROUTE_ID_MISSING);
-        }
-        if (!trancheTyp || !trancheId || !compileTimeConfig) {
-          throw new Error('Missing trancheTyp, trancheId or compileTimeConfig');
-        }
+      switchMap(
+        ([
+          [, [id, trancheTyp, trancheId, revision]],
+          { compileTimeConfig },
+        ]) => {
+          if (!id) {
+            throw new Error(ROUTE_ID_MISSING);
+          }
+          if (!trancheTyp || !trancheId || !compileTimeConfig) {
+            throw new Error(
+              'Missing trancheTyp, trancheId or compileTimeConfig',
+            );
+          }
 
-        const handle404And401 = {
-          context: noGlobalErrorsIf(
-            true,
-            handleNotFoundAndUnauthorized(
-              (error) => {
-                globalNotifications.createNotification({
-                  type: 'ERROR_PERMANENT',
-                  messageKey:
-                    'shared.genericError.gesuch-not-found-redirection',
-                  content: error,
-                });
-                router.navigate(['/'], { replaceUrl: true });
-              },
-              (error) => {
-                globalNotifications.createNotification({
-                  type: 'ERROR_PERMANENT',
-                  messageKey: 'shared.genericError.unauthorized',
-                  content: error,
-                });
-                router.navigate(['/'], { replaceUrl: true });
-              },
+          const handle404And401 = {
+            context: noGlobalErrorsIf(
+              true,
+              handleNotFoundAndUnauthorized(
+                (error) => {
+                  globalNotifications.createNotification({
+                    type: 'ERROR_PERMANENT',
+                    messageKey:
+                      'shared.genericError.gesuch-not-found-redirection',
+                    content: error,
+                  });
+                  router.navigate(['/'], { replaceUrl: true });
+                },
+                (error) => {
+                  globalNotifications.createNotification({
+                    type: 'ERROR_PERMANENT',
+                    messageKey: 'shared.genericError.unauthorized',
+                    content: error,
+                  });
+                  router.navigate(['/'], { replaceUrl: true });
+                },
+              ),
             ),
-          ),
-        };
+          };
 
-        // Call the correct service based on the app type
-        const aenderungServices$ = {
-          'gesuch-app': (aenderungId: string) =>
-            gesuchService.getGsAenderungChangesInBearbeitung$(
-              { aenderungId },
-              undefined,
-              undefined,
-              handle404And401,
-            ),
-          'sachbearbeitung-app': (aenderungId: string) =>
-            gesuchService.getSbAenderungChanges$(
-              { aenderungId },
-              undefined,
-              undefined,
-              handle404And401,
-            ),
-        } satisfies Record<AppType, unknown>;
+          // Call the correct service based on the app type
+          const aenderungServices$ = {
+            'gesuch-app': (aenderungId: string) =>
+              gesuchService.getGsAenderungChangesInBearbeitung$(
+                { aenderungId },
+                undefined,
+                undefined,
+                handle404And401,
+              ),
+            'sachbearbeitung-app': (aenderungId: string) =>
+              gesuchService.getSbAenderungChanges$(
+                { aenderungId, revision },
+                undefined,
+                undefined,
+                handle404And401,
+              ),
+          } satisfies Record<AppType, unknown>;
 
-        const trancheServices$ = {
-          'gesuch-app': (gesuchTrancheId: string) =>
-            gesuchService.getGesuchGS$(
-              {
-                gesuchTrancheId,
-              },
-              undefined,
-              undefined,
-              handle404And401,
-            ),
-          'sachbearbeitung-app': (gesuchTrancheId: string) =>
-            gesuchService.getGesuchSB$(
-              {
-                gesuchTrancheId,
-              },
-              undefined,
-              undefined,
-              handle404And401,
-            ),
-        } satisfies Record<AppType, unknown>;
+          const trancheServices$ = {
+            'gesuch-app': (gesuchTrancheId: string) =>
+              gesuchService.getGesuchGS$(
+                {
+                  gesuchTrancheId,
+                },
+                undefined,
+                undefined,
+                handle404And401,
+              ),
+            'sachbearbeitung-app': (gesuchTrancheId: string) =>
+              gesuchService.getGesuchSB$(
+                {
+                  gesuchTrancheId,
+                },
+                undefined,
+                undefined,
+                handle404And401,
+              ),
+          } satisfies Record<AppType, unknown>;
 
-        // Different services for different types of tranches
-        const services$ = {
-          AENDERUNG: (appType: AppType) => aenderungServices$[appType],
-          TRANCHE: (appType: AppType) => trancheServices$[appType],
-          INITIAL: () => (gesuchTrancheId: string) =>
-            gesuchService.getInitialTrancheChanges$(
-              {
-                gesuchTrancheId,
-              },
-              undefined,
-              undefined,
-              handle404And401,
-            ),
-        } satisfies Record<GesuchUrlType, unknown>;
+          // Different services for different types of tranches
+          const services$ = {
+            AENDERUNG: (appType: AppType) => aenderungServices$[appType],
+            TRANCHE: (appType: AppType) => trancheServices$[appType],
+            INITIAL: () => (gesuchTrancheId: string) =>
+              gesuchService.getInitialTrancheChanges$(
+                {
+                  gesuchTrancheId,
+                },
+                undefined,
+                undefined,
+                handle404And401,
+              ),
+          } satisfies Record<GesuchUrlType, unknown>;
 
-        return services$[trancheTyp](compileTimeConfig.appType)(trancheId).pipe(
-          map((gesuch) =>
-            SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
-              gesuch,
-              typ: trancheTyp,
-            }),
-          ),
-          catchError((error) => [
-            SharedDataAccessGesuchEvents.gesuchLoadedFailure({
-              error: sharedUtilFnErrorTransformer(error),
-            }),
-          ]),
-        );
-      }),
+          return services$[trancheTyp](compileTimeConfig.appType)(
+            trancheId,
+          ).pipe(
+            map((gesuch) =>
+              SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
+                gesuch,
+                typ: trancheTyp,
+              }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchLoadedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
+        },
+      ),
     );
   },
   { functional: true },

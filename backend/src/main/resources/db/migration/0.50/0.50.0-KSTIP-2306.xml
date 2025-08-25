@@ -1,0 +1,57 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="jafa (generated)" id="1753176217440-11">
+        <dropForeignKeyConstraint baseTableName="buchhaltung" constraintName="FK_buchhaltung_sapdelivery_id"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-2">
+        <addColumn tableName="sapdelivery">
+            <column name="buchhaltung_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-3">
+        <addColumn tableName="sapdelivery_aud">
+            <column name="buchhaltung_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-4">
+        <addColumn tableName="buchhaltung">
+            <column name="zahlungsverbindung_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-5">
+        <addColumn tableName="buchhaltung_aud">
+            <column name="zahlungsverbindung_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-6">
+        <addUniqueConstraint columnNames="zahlungsverbindung_id" constraintName="UC_BUCHHALTUNGZAHLUNGSVERBINDUNG_ID_COL" tableName="buchhaltung"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-9">
+        <addForeignKeyConstraint baseColumnNames="buchhaltung_id" baseTableName="sapdelivery" constraintName="FK_sap_delivery_buchhaltung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="buchhaltung" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-10">
+        <addForeignKeyConstraint baseColumnNames="zahlungsverbindung_id" baseTableName="buchhaltung" constraintName="FKa3fik4qjv53n41mtlyebwd6gi" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="zahlungsverbindung" validate="true"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-12">
+        <dropUniqueConstraint constraintName="uc_buchhaltungsapdelivery_id_col" tableName="buchhaltung"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-13">
+        <dropColumn columnName="sapdelivery_id" tableName="buchhaltung"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-14">
+        <dropColumn columnName="sapdelivery_id" tableName="buchhaltung_aud"/>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-15">
+      <addColumn tableName="fall">
+        <column name="failed_buchhaltung_auszahlung_type" type="VARCHAR(255)"/>
+      </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-16">
+      <addColumn tableName="fall_aud">
+        <column name="failed_buchhaltung_auszahlung_type" type="VARCHAR(255)"/>
+      </addColumn>
+    </changeSet>
+    <changeSet author="jafa (generated)" id="1753176217440-17">
+      <dropUniqueConstraint constraintName="uc_zahlungsverbindungsapdelivery_id_col" tableName="zahlungsverbindung"/>
+    </changeSet>
+</databaseChangeLog>

@@ -16,12 +16,17 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.BuchhaltungTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.SapDeliveryDtoSpec;
 import ch.dvbern.stip.generated.dto.SapStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -38,12 +43,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_RUECKFORDERUNG,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SALDO_AENDERUNG,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_SALDO,
-  BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_ID,
-  BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_STATUS,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_BUSINESS_PARTNER_ID,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_COMMENT,
   BuchhaltungEntryDtoSpec.JSON_PROPERTY_VERFUEGUNG_ID,
-  BuchhaltungEntryDtoSpec.JSON_PROPERTY_GESUCH_ID
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG,
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_STATUS,
+  BuchhaltungEntryDtoSpec.JSON_PROPERTY_SAP_DELIVERYS
 })
 @JsonTypeName("BuchhaltungEntry")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -72,12 +78,6 @@ public class BuchhaltungEntryDtoSpec {
   public static final String JSON_PROPERTY_SALDO = "saldo";
   private Integer saldo;
 
-  public static final String JSON_PROPERTY_SAP_ID = "sapId";
-  private String sapId;
-
-  public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
-  private SapStatusDtoSpec sapStatus;
-
   public static final String JSON_PROPERTY_BUSINESS_PARTNER_ID = "businessPartnerId";
   private Integer businessPartnerId;
 
@@ -89,6 +89,15 @@ public class BuchhaltungEntryDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
   private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  private ZahlungsverbindungDtoSpec zahlungsverbindung;
+
+  public static final String JSON_PROPERTY_SAP_STATUS = "sapStatus";
+  private SapStatusDtoSpec sapStatus;
+
+  public static final String JSON_PROPERTY_SAP_DELIVERYS = "sapDeliverys";
+  private List<SapDeliveryDtoSpec> sapDeliverys;
 
   public BuchhaltungEntryDtoSpec() {
   }
@@ -301,58 +310,6 @@ public class BuchhaltungEntryDtoSpec {
   }
 
 
-  public BuchhaltungEntryDtoSpec sapId(String sapId) {
-    
-    this.sapId = sapId;
-    return this;
-  }
-
-   /**
-   * Get sapId
-   * @return sapId
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SAP_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getSapId() {
-    return sapId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SAP_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSapId(String sapId) {
-    this.sapId = sapId;
-  }
-
-
-  public BuchhaltungEntryDtoSpec sapStatus(SapStatusDtoSpec sapStatus) {
-    
-    this.sapStatus = sapStatus;
-    return this;
-  }
-
-   /**
-   * Get sapStatus
-   * @return sapStatus
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public SapStatusDtoSpec getSapStatus() {
-    return sapStatus;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSapStatus(SapStatusDtoSpec sapStatus) {
-    this.sapStatus = sapStatus;
-  }
-
-
   public BuchhaltungEntryDtoSpec businessPartnerId(Integer businessPartnerId) {
     
     this.businessPartnerId = businessPartnerId;
@@ -456,6 +413,92 @@ public class BuchhaltungEntryDtoSpec {
     this.gesuchId = gesuchId;
   }
 
+
+  public BuchhaltungEntryDtoSpec zahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+    
+    this.zahlungsverbindung = zahlungsverbindung;
+    return this;
+  }
+
+   /**
+   * Get zahlungsverbindung
+   * @return zahlungsverbindung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public ZahlungsverbindungDtoSpec getZahlungsverbindung() {
+    return zahlungsverbindung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setZahlungsverbindung(ZahlungsverbindungDtoSpec zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+  }
+
+
+  public BuchhaltungEntryDtoSpec sapStatus(SapStatusDtoSpec sapStatus) {
+    
+    this.sapStatus = sapStatus;
+    return this;
+  }
+
+   /**
+   * Get sapStatus
+   * @return sapStatus
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SapStatusDtoSpec getSapStatus() {
+    return sapStatus;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SAP_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSapStatus(SapStatusDtoSpec sapStatus) {
+    this.sapStatus = sapStatus;
+  }
+
+
+  public BuchhaltungEntryDtoSpec sapDeliverys(List<SapDeliveryDtoSpec> sapDeliverys) {
+    
+    this.sapDeliverys = sapDeliverys;
+    return this;
+  }
+
+  public BuchhaltungEntryDtoSpec addSapDeliverysItem(SapDeliveryDtoSpec sapDeliverysItem) {
+    if (this.sapDeliverys == null) {
+      this.sapDeliverys = new ArrayList<>();
+    }
+    this.sapDeliverys.add(sapDeliverysItem);
+    return this;
+  }
+
+   /**
+   * Get sapDeliverys
+   * @return sapDeliverys
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SAP_DELIVERYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<SapDeliveryDtoSpec> getSapDeliverys() {
+    return sapDeliverys;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SAP_DELIVERYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSapDeliverys(List<SapDeliveryDtoSpec> sapDeliverys) {
+    this.sapDeliverys = sapDeliverys;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -473,17 +516,18 @@ public class BuchhaltungEntryDtoSpec {
         Objects.equals(this.rueckforderung, buchhaltungEntry.rueckforderung) &&
         Objects.equals(this.saldoAenderung, buchhaltungEntry.saldoAenderung) &&
         Objects.equals(this.saldo, buchhaltungEntry.saldo) &&
-        Objects.equals(this.sapId, buchhaltungEntry.sapId) &&
-        Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
         Objects.equals(this.businessPartnerId, buchhaltungEntry.businessPartnerId) &&
         Objects.equals(this.comment, buchhaltungEntry.comment) &&
         Objects.equals(this.verfuegungId, buchhaltungEntry.verfuegungId) &&
-        Objects.equals(this.gesuchId, buchhaltungEntry.gesuchId);
+        Objects.equals(this.gesuchId, buchhaltungEntry.gesuchId) &&
+        Objects.equals(this.zahlungsverbindung, buchhaltungEntry.zahlungsverbindung) &&
+        Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
+        Objects.equals(this.sapDeliverys, buchhaltungEntry.sapDeliverys);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, sapId, sapStatus, businessPartnerId, comment, verfuegungId, gesuchId);
+    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, stipendienBetrag, auszahlung, rueckforderung, saldoAenderung, saldo, businessPartnerId, comment, verfuegungId, gesuchId, zahlungsverbindung, sapStatus, sapDeliverys);
   }
 
   @Override
@@ -498,12 +542,13 @@ public class BuchhaltungEntryDtoSpec {
     sb.append("    rueckforderung: ").append(toIndentedString(rueckforderung)).append("\n");
     sb.append("    saldoAenderung: ").append(toIndentedString(saldoAenderung)).append("\n");
     sb.append("    saldo: ").append(toIndentedString(saldo)).append("\n");
-    sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
-    sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
     sb.append("    businessPartnerId: ").append(toIndentedString(businessPartnerId)).append("\n");
     sb.append("    comment: ").append(toIndentedString(comment)).append("\n");
     sb.append("    verfuegungId: ").append(toIndentedString(verfuegungId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
+    sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
+    sb.append("    sapDeliverys: ").append(toIndentedString(sapDeliverys)).append("\n");
     sb.append("}");
     return sb.toString();
   }

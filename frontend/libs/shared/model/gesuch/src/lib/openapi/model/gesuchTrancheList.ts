@@ -14,5 +14,7 @@ import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 export interface GesuchTrancheList { 
     tranchen?: Array<GesuchTrancheSlim>;
     initialTranchen?: Array<GesuchTrancheSlim>;
+    aenderungen?: Array<GesuchTrancheSlim>;
+    abgelehnteAenderungen?: Array<GesuchTrancheSlim>;
 }
 

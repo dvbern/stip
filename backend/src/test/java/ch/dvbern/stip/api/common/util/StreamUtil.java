@@ -15,12 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.auszahlung.type;
+package ch.dvbern.stip.api.common.util;
 
-public enum Kontoinhaber {
-    GESUCHSTELLER,
-    VATER,
-    MUTTER,
-    SOZIALDIENST_INSTITUTION,
-    ANDERE
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import lombok.experimental.UtilityClass;
+import org.junit.jupiter.params.provider.Arguments;
+
+@UtilityClass
+public class StreamUtil {
+    @SafeVarargs
+    // Because Java Stream does not provide a concat with varargs parameter
+    public Stream<? extends Arguments> concat(final Stream<Arguments>... streams) {
+        return Arrays.stream(streams).flatMap(stream -> stream);
+    }
 }

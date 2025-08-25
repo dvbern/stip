@@ -24,18 +24,20 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @UtilityClass
 public class JwtUtil {
+    public static String SYSTEM_USR = "System";
+
     public String extractUsernameFromJwt(final Instance<JsonWebToken> token) {
         if (token != null && token.isResolvable()) {
             final var jwt = token.get();
             final var givenName = jwt.getClaim(Claims.given_name);
             final var familyName = jwt.getClaim(Claims.family_name);
             if (givenName == null && familyName == null) {
-                return "System";
+                return SYSTEM_USR;
             }
 
             return givenName + " " + familyName;
         } else {
-            return "System";
+            return SYSTEM_USR;
         }
     }
 }

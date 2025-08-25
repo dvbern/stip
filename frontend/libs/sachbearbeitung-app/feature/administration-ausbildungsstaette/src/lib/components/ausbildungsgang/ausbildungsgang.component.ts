@@ -195,7 +195,7 @@ export class AusbildungsgangComponent
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
 
-  private reloadAbschluesseSig = signal<unknown>(null);
+  private reloadAusbildungsgaengeSig = signal<unknown>(null);
 
   constructor() {
     this.ausbildungsstaetteStore.loadAusbildungsstaetten$();
@@ -227,7 +227,7 @@ export class AusbildungsgangComponent
       const { sortColumn, sortOrder, page, pageSize } =
         getSortAndPageInputs(this);
 
-      this.reloadAbschluesseSig();
+      this.reloadAusbildungsgaengeSig();
       const active = this.status();
       this.administrationAusbildungsstaetteStore.loadAllAusbildungsgaenge$();
       this.administrationAusbildungsstaetteStore.loadAusbildungsgaenge$({
@@ -255,8 +255,11 @@ export class AusbildungsgangComponent
     const getBezeichnung = (
       lang: 'De' | 'Fr',
       ausbildungsgang: Ausbildungsgang,
-    ) =>
-      `${ausbildungsgang?.ausbildungsstaette?.[`name${lang}`]} - ${ausbildungsgang?.abschluss?.[`bezeichnung${lang}`]}`;
+    ) => {
+      const name = ausbildungsgang?.ausbildungsstaette?.[`name${lang}`];
+      const bezeichnung = ausbildungsgang?.abschluss?.[`bezeichnung${lang}`];
+      return `${name} - ${bezeichnung}`;
+    };
     SharedUiConfirmDialogComponent.open<SachbearbeitungAppTranslationKey>(
       this.dialog,
       {
@@ -277,7 +280,7 @@ export class AusbildungsgangComponent
             type: 'ausbildungsgang',
             id: ausbildungsgang.id,
             onSuccess: () => {
-              this.reloadAbschluesseSig.set({});
+              this.reloadAusbildungsgaengeSig.set({});
             },
           });
         }
@@ -289,10 +292,13 @@ export class AusbildungsgangComponent
       existingAusbildungsgaenge:
         this.administrationAusbildungsstaetteStore.allAusbildungsgaenge()
           .data ?? [],
-      ausbildungsstaetten:
-        this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
+      ausbildungsstaetten: this.ausbildungsstaetteStore
+        .ausbildungsstaetteViewSig()
+        .filter((item) => item.aktiv),
       abschluesse: sortListByText(
-        this.ausbildungsstaetteStore.abschluesseViewSig(),
+        this.ausbildungsstaetteStore
+          .abschluesseViewSig()
+          .filter((item) => item.aktiv),
         (item) => item[`bezeichnung${capitalized(this.currentLangSig())}`],
       ),
       language: this.currentLangSig(),
@@ -303,7 +309,7 @@ export class AusbildungsgangComponent
           this.administrationAusbildungsstaetteStore.createAusbildungsgang$({
             values: { ausbildungsgangCreate },
             onSuccess: () => {
-              this.reloadAbschluesseSig.set({});
+              this.reloadAusbildungsgaengeSig.set({});
             },
           });
         }

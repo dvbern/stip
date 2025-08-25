@@ -38,6 +38,7 @@ export class LandStore extends signalStore(
       fromCachedDataSig(this.laender)?.map((land) => ({
         ...land,
         testId: land.deKurzform,
+        invalid: !land.eintragGueltig,
         displayValueDe: land.deKurzform,
         displayValueFr: land.frKurzform,
       })) ?? []
