@@ -90,6 +90,8 @@ quarkus:
       traces-sample-rate: 1.0
       environment: '${KSTIP_ENVIRONMENT}'
       in-app-packages: 'ch.dvbern.stip.*'
+    console:
+      format: '%z{Europe/Zurich} %d{yyyy-MM-dd HH:mm:ss,SSS z}  %p [%C] (%t) %m %n'
   antivirus:
     clamav:
       enabled: true
@@ -141,6 +143,8 @@ quarkus:
       queries-slower-than-ms: 20
       jdbc-warnings: true
     multitenant: 'DISCRIMINATOR'
+    jdbc:
+      timezone: 'Europe/Zurich'
   default-locale: 'de'
   security:
     jaxrs:
