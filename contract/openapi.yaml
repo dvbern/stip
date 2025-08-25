@@ -1939,7 +1939,25 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: delegierterMitarbeiterAendern
-  /delegierung/{getDelegierungSozQueryType}:
+  /delegierung/{delegierungId}/ablehnen:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    delete:
+      tags:
+        - Delegieren
+      responses:
+        204:
+          description: Die deleguerung wurde erfolgreich geloescht
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: delegierungAblehnen
+  /delegierung/{getDelegierungSozQueryType}/admin:
     get:
       tags:
         - Delegieren
@@ -1954,7 +1972,6 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: '#/components/parameters/delegierungAngenommen'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -1976,8 +1993,46 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDelegierungsOfSozialdienst
-      summary: Returns a list of Faelle with Delegierung
+      operationId: getDelegierungsOfSozialdienstAdmin
+      summary: Returns a list of all Faelle with Delegierung
+  /delegierung/{getDelegierungSozQueryType}/ma:
+    get:
+      tags:
+        - Delegieren
+      parameters:
+        - name: getDelegierungSozQueryType
+          schema:
+            $ref: '#/components/schemas/GetDelegierungSozQueryType'
+          in: path
+          required: true
+        - $ref: '#/components/parameters/fallNummer'
+        - $ref: '#/components/parameters/nachname'
+        - $ref: '#/components/parameters/vorname'
+        - $ref: '#/components/parameters/geburtsdatum'
+        - $ref: '#/components/parameters/wohnort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/SozDashboardColumn'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSozDashboard'
+          description: Returns FallWithDelegierung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDelegierungsOfSozialdienstMa
+      summary: Returns a list of Faelle with Delegierung that are accepted
   /land:
     get:
       tags:
