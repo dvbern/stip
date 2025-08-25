@@ -161,6 +161,13 @@ public class SapService {
             gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(BUSINESSPARTNER_CREATE);
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
             MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        } else if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.SUCCESS) {
+            gesuch.getAusbildung()
+                .getFall()
+                .getRelevantZahlungsverbindung()
+                .setSapBusinessPartnerId(
+                    businessPartnerCreateBuchhaltung.getZahlungsverbindung().getSapBusinessPartnerId()
+                );
         }
         return businessPartnerCreateStatus;
     }
@@ -459,41 +466,34 @@ public class SapService {
     }
 
     public void processPendingCreateBusinessPartnerActions() {
-        final var pendingZahlungsverbindungs =
-            zahlungsverbindungRepository.findZahlungsverbindungsWithPendingSapDelivery().toList();
-        for (var zahlungsverbindung : pendingZahlungsverbindungs) {
+        final var pendingBusinessPartnerCreateBuchhaltungs =
+            buchhaltungRepository.findPendingBusinesspartnerCreateBuchhaltung().toList();
+
+        for (final var pendingBusinessPartnerCreateBuchhaltung : pendingBusinessPartnerCreateBuchhaltungs) {
             try {
                 LOG.info(
                     String.format(
-                        "Processing Zahlungsverbindung: %s, %s",
-                        zahlungsverbindung.getId(),
-                        zahlungsverbindung.getIban()
+                        "Processing pendingBusinessPartnerCreateBuchhaltung: %s",
+                        pendingBusinessPartnerCreateBuchhaltung.getId()
                     )
                 );
-                final var fall = zahlungsverbindungRepository.getFallOfZahlungsverbindung(zahlungsverbindung.getId());
-                final var gesuch = fall.getAusbildungs()
-                    .stream()
-                    .max(Comparator.comparing(Ausbildung::getTimestampErstellt))
-                    .orElseThrow(NotFoundException::new)
-                    .getGesuchs()
-                    .stream()
-                    .max(Comparator.comparing(Gesuch::getTimestampErstellt))
-                    .orElseThrow(NotFoundException::new);
+                final var zahlungsverbindung = pendingBusinessPartnerCreateBuchhaltung.getZahlungsverbindung();
+                final var gesuch = pendingBusinessPartnerCreateBuchhaltung.getGesuch();
                 createBusinessPartnerOrGetStatus(gesuch, zahlungsverbindung);
             } catch (Exception e) {
                 LOG.error(
                     String.format(
-                        "processPendingCreateBusinessPartnerActions: Error during processing of Zahlungsverbindung %s",
-                        zahlungsverbindung.getId()
+                        "processPendingCreateBusinessPartnerActions: Error during processing of pendingBusinessPartnerCreateBuchhaltung %s",
+                        pendingBusinessPartnerCreateBuchhaltung.getId()
                     ),
                     e
                 );
             }
         }
 
-        final var pendingBusinessPartnerCreateBuchhaltungs =
+        final var businesspartnerCreateBuchhaltungWithFailedSapDelivery =
             buchhaltungRepository.findBusinesspartnerCreateBuchhaltungWithFailedSapDelivery().toList();
-        for (var buchhaltung : pendingBusinessPartnerCreateBuchhaltungs) {
+        for (var buchhaltung : businesspartnerCreateBuchhaltungWithFailedSapDelivery) {
             try {
                 LOG.info(
                     String.format(

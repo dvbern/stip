@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.zahlungsverbindung.repo;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -44,10 +45,11 @@ public class ZahlungsverbindungRepository implements BaseRepository<Zahlungsverb
             .stream();
     }
 
-    public Fall getFallOfZahlungsverbindung(final UUID zahlungsverbindungId) {
+    public Optional<Fall> getFallOfZahlungsverbindung(final UUID zahlungsverbindungId) {
         return new JPAQueryFactory(entityManager)
             .selectFrom(QFall.fall)
             .where(QFall.fall.auszahlung.zahlungsverbindung.id.eq(zahlungsverbindungId))
-            .fetchFirst();
+            .stream()
+            .findFirst();
     }
 }

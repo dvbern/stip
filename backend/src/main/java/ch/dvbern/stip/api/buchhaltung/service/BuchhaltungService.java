@@ -255,6 +255,7 @@ public class BuchhaltungService {
         final var lastEntryStipendiumOpt = getLastEntryStipendiumOpt(gesuch.getId());
 
         String comment = translator.translate("stip.verfuegung.buchhaltung.erstgesuch");
+        // TODO: MERGE KSTIP-1777 | Replace condition with isErstGesuch on gesuch
         if (gesuch.getAusbildung().getGesuchs().size() > 1) {
             comment = translator.translate("stip.verfuegung.buchhaltung.folgegesuch");
         }
