@@ -97,10 +97,7 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         final var queryFactory = new JPAQueryFactory(entityManager);
         return queryFactory
             .selectFrom(gesuchsperiode)
-            .where(
-                gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT)
-                    .or(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.ARCHIVIERT))
-            )
+            .where(gesuchsperiode.gueltigkeitStatus.in(GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS))
             .where(
                 Expressions.numberTemplate(Integer.class, "date_part('doy', {0})", gesuchsperiode.gesuchsperiodeStart)
                     .between(range.getGueltigAb().getDayOfYear(), range.getGueltigBis().getDayOfYear())

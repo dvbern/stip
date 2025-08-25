@@ -44,7 +44,6 @@ import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
-import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
@@ -1232,10 +1231,7 @@ public class GesuchService {
             .filter(potentialGesuchsperiode -> potentialGesuchsperiode.getId().equals(gesuchsperiodeId))
             .findFirst();
 
-        if (
-            !GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS.contains(gesuchsperiode.getGueltigkeitStatus())
-            || foundGesuchsperiode.isEmpty()
-        ) {
+        if (foundGesuchsperiode.isEmpty()) {
             throw new BadRequestException("Gesuchsperiode is not assignable");
         }
 
