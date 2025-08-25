@@ -375,7 +375,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(3);
+        assertThat(gesuchtranchen.getTranchen()).hasSize(2);
     }
 
     @Test
@@ -418,7 +418,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(2);
+        assertThat(gesuchtranchen.getTranchen()).hasSize(1);
     }
 
     @Test
@@ -474,7 +474,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(3);
+        assertThat(gesuchtranchen.getTranchen()).hasSize(2);
     }
 
     @TestAsFreigabestelle

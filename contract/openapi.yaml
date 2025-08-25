@@ -2966,6 +2966,11 @@ paths:
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -6225,6 +6230,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        aenderungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        abgelehnteAenderungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
     GesuchTrancheSlim:
       type: object
       required:
@@ -6246,6 +6259,8 @@ components:
           type: string
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
+        revision:
+          type: integer
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:

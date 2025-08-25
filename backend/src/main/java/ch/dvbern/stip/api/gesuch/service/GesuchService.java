@@ -888,6 +888,18 @@ public class GesuchService {
     }
 
     @Transactional
+    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+        final var gesuch = gesuchTrancheRepository.requireAenderungById(aenderungId).getGesuch();
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
+        return gesuchMapperUtil.toWithChangesDto(
+            gesuch,
+            aenderung,
+            List.of(initialRevision)
+        );
+    }
+
+    @Transactional
     public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);

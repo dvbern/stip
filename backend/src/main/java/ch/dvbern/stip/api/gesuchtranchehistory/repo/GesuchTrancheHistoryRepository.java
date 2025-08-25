@@ -29,13 +29,18 @@ import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -55,16 +60,30 @@ public class GesuchTrancheHistoryRepository {
             .getSingleResult();
     }
 
-    @Transactional
-    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
+    private AuditQuery getRevisionQuery(final UUID gesuchTrancheId) {
         final var reader = AuditReaderFactory.get(em);
-        return (GesuchTranche) reader.createQuery()
+        return reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, false)
             .add(AuditEntity.id().eq(gesuchTrancheId))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
             .add(AuditEntity.property("status").hasChanged())
             .addOrder(AuditEntity.revisionNumber().desc())
-            .setMaxResults(1)
+            .setMaxResults(1);
+    }
+
+    @Transactional
+    public GesuchTranche getLatestWhereStatusChangedToUeberpruefen(final UUID gesuchTrancheId) {
+        return (GesuchTranche) getRevisionQuery(gesuchTrancheId)
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
+            .getSingleResult();
+    }
+
+    @Transactional
+    public GesuchTranche getByRevisionId(
+        final UUID gesuchTrancheId,
+        final @Nullable Integer revision
+    ) {
+        return (GesuchTranche) getRevisionQuery(gesuchTrancheId)
+            .add(AuditEntity.revisionNumber().eq(revision))
             .getSingleResult();
     }
 
@@ -156,5 +175,43 @@ public class GesuchTrancheHistoryRepository {
             .stream()
             .findFirst();
         return gesuchTrancheOpt;
+    }
+
+    @Transactional
+    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
+        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
+        // List<GesuchTranche>
+        @SuppressWarnings("unchecked")
+        final List<GesuchTranche> abgehlenteAenderungList = AuditReaderFactory.get(em)
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
+            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .add(AuditEntity.property("status").hasChanged())
+            .getResultList();
+
+        @SuppressWarnings("unchecked")
+        final List<Pair<GesuchTranche, DefaultRevisionEntity>> abgehlenteAenderungen = AuditReaderFactory.get(em)
+            .createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, true)
+            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
+            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .add(AuditEntity.property("status").hasChanged())
+            .getResultList()
+            .stream()
+            .filter(result -> result instanceof Object[] array && array.length >= 2)
+            .map(result -> {
+                final var list = (Object[]) result;
+                return Pair.of((GesuchTranche) list[0], (DefaultRevisionEntity) list[1]);
+            })
+            .toList();
+
+        return abgehlenteAenderungen;
     }
 }

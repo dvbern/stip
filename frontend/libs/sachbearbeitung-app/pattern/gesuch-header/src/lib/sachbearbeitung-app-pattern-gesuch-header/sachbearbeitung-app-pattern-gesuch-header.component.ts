@@ -31,14 +31,19 @@ import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   SharedDataAccessGesuchEvents,
+  selectRevision,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import {
+  AenderungCompletionState,
+  GesuchAenderungStore,
+} from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { aenderungRoutes, getTrancheRoute } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
@@ -94,6 +99,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  revisionSig = this.store.selectSignal(selectRevision);
+
   private otherGesuchInfoSourceSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
@@ -106,12 +113,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   );
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes('/tranche/')),
+      map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
     ),
   );
   isAenderungRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes('/aenderung/') || url.includes('/initial/')),
+      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
   canViewBerechnungSig = computed(() => {
@@ -131,6 +138,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       isPending(this.gesuchStore.lastStatusChange())
     );
   });
+  listedAenderungen: AenderungCompletionState[] = [
+    'open',
+    'completed',
+    'rejected',
+    'initial',
+  ];
 
   isInfosRouteSig = computed(() => {
     const isActive = this.router.isActive('infos', {

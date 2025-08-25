@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -499,8 +500,11 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
+    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId, Integer revision) {
         gesuchTrancheAuthorizer.sbOrJuristCanRead();
+        if (Objects.nonNull(revision)) {
+            return gesuchService.getSbTrancheChangesWithRevision(aenderungId, revision);
+        }
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 

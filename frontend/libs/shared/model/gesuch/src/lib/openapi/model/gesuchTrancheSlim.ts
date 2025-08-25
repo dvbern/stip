@@ -19,6 +19,7 @@ export interface GesuchTrancheSlim {
     status: GesuchTrancheStatus;
     comment?: string;
     typ: GesuchTrancheTyp;
+    revision?: number;
 }
 
 
