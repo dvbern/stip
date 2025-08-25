@@ -74,7 +74,8 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
 
-        if (ausbildung.getGesuchs().size() > 1) {
+        // If a Folgegesuch was created, we can't update the Ausbildung anymore
+        if (ausbildung.getGesuchs().stream().anyMatch(gesuch -> !gesuch.isErstgesuch())) {
             return false;
         }
 
