@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -32,7 +33,6 @@ import ch.dvbern.stip.api.common.authorization.BeschwerdeVerlaufAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
-import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
@@ -86,6 +86,7 @@ import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.ADMIN_GESUCH_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIGABESTELLE_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
@@ -117,7 +118,6 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
     private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
-    private final VerfuegungAuthorizer verfuegungAuthorizer;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -181,11 +181,11 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed(FREIGABESTELLE_GESUCH_UPDATE)
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToVerfuegt(gesuchId);
+        gesuchAuthorizer.freigabestelleCanChangeGesuchStatusToVerfuegt(gesuchId);
 
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
@@ -333,7 +333,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
-        gesuchAuthorizer.gsSbOrJuristCanRead(gesuchId);
+        gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
         return gesuchService.getGesuchInfo(gesuchId);
     }
 
@@ -405,7 +405,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<StatusprotokollEntryDto> getStatusProtokoll(UUID gesuchId) {
-        gesuchAuthorizer.gsSbOrJuristCanRead(gesuchId);
+        gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
         return gesuchHistoryService.getStatusprotokoll(gesuchId);
     }
 
@@ -501,8 +501,11 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId) {
+    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId, Integer revision) {
         gesuchTrancheAuthorizer.sbOrJuristCanRead();
+        if (Objects.nonNull(revision)) {
+            return gesuchService.getSbTrancheChangesWithRevision(aenderungId, revision);
+        }
         return gesuchService.getSbTrancheChanges(aenderungId);
     }
 
@@ -526,7 +529,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
     public GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(
         UUID gesuchTrancheId,
         KommentarDto kommentarDto

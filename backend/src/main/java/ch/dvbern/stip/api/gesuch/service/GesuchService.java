@@ -745,16 +745,17 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
 
-        if (!latestVerfuegung.isNegativeVerfuegung()) {
-            if (!unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)) {
-                throw new CustomValidationsException(
-                    "Required Unterschriftenblaetter are not uploaded",
-                    new CustomConstraintViolation(
-                        VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
-                        "unterschriftenblaetter"
-                    )
-                );
-            }
+        if (
+            !latestVerfuegung.isNegativeVerfuegung()
+            && !unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)
+        ) {
+            throw new CustomValidationsException(
+                "Required Unterschriftenblaetter are not uploaded",
+                new CustomConstraintViolation(
+                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
+                    "unterschriftenblaetter"
+                )
+            );
         }
 
         gesuchStatusService.triggerStateMachineEvent(
@@ -882,6 +883,18 @@ public class GesuchService {
             aenderung.getGesuch(),
             aenderung,
             List.of(initialRevision, latestWhereStatusChanged)
+        );
+    }
+
+    @Transactional
+    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+        final var gesuch = gesuchTrancheRepository.requireAenderungById(aenderungId).getGesuch();
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+        final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
+        return gesuchMapperUtil.toWithChangesDto(
+            gesuch,
+            aenderung,
+            List.of(initialRevision)
         );
     }
 

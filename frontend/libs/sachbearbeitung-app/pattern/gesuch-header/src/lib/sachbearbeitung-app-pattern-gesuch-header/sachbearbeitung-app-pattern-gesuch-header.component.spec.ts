@@ -21,6 +21,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     SET_TO_BEARBEITUNG: jest.fn(),
     ANSPRUCH_PRUEFEN: jest.fn(),
     BEARBEITUNG_ABSCHLIESSEN: jest.fn(),
+    ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: jest.fn(),
     BEREIT_FUER_BEARBEITUNG: jest.fn(),
     NEGATIVE_VERFUEGUNG_ERSTELLEN: jest.fn(),
     VERFUEGT: jest.fn(),
@@ -81,8 +82,10 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   it.each([
     ['BEARBEITUNG_ABSCHLIESSEN'],
     ['BEREIT_FUER_BEARBEITUNG'],
+    // ['ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'], is the same as 'BEREIT_FUER_BEARBEITUNG'
     ['NEGATIVE_VERFUEGUNG_ERSTELLEN'],
     ['VERFUEGT'],
+    ['STATUS_PRUEFUNG_AUSLOESEN'],
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {

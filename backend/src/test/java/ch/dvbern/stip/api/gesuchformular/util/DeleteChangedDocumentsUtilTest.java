@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -30,13 +31,16 @@ import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.mockito.Mockito;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -146,6 +150,25 @@ class DeleteChangedDocumentsUtilTest {
 
         // Assert
         assertExpectedResult(actual, expected);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(GetDocumentsForElternArgumentsProvider.class)
+    void getDocumentsForElternTest(
+        final ElternUpdateDto newEltern,
+        final Eltern oldEltern,
+        final DokumentTyp expected
+    ) {
+        // Act
+        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForEltern(newEltern, oldEltern);
+
+        // Assert
+        if (expected == null) {
+            assertEquals(0, actual.size());
+        } else {
+            assertThat(actual.size(), Matchers.greaterThanOrEqualTo(1));
+            assertThat(actual.contains(expected), Matchers.is(true));
+        }
     }
 
     void assertExpectedResult(final List<DokumentTyp> actual, final DokumentTyp expected) {

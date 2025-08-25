@@ -15,5 +15,6 @@ import { SozialdienstBenutzer } from './sozialdienstBenutzer';
 export interface SozialdienstAllOf { 
     sozialdienstAdmin: SozialdienstBenutzer;
     zahlungsverbindung: Zahlungsverbindung;
+    aktiv: boolean;
 }
 

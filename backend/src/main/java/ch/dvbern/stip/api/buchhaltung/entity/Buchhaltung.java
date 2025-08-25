@@ -17,11 +17,16 @@
 
 package ch.dvbern.stip.api.buchhaltung.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
+import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,8 +37,10 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -43,6 +50,7 @@ import org.hibernate.envers.Audited;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
 @Audited
+@SapDeliverysLengthConstraint
 @Entity
 @Table(
     name = "buchhaltung",
@@ -72,12 +80,8 @@ public class Buchhaltung extends AbstractMandantEntity {
     private Integer stipendium;
 
     @Nullable
-    @OneToOne(optional = true)
-    @JoinColumn(
-        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_sapdelivery_id"),
-        nullable = true
-    )
-    private SapDelivery sapDelivery;
+    @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER)
+    private List<SapDelivery> sapDeliverys = new ArrayList<>();
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
@@ -95,4 +99,36 @@ public class Buchhaltung extends AbstractMandantEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fall_id", foreignKey = @ForeignKey(name = "FK_buchhaltung_fall_id"))
     private Fall fall;
+
+    @Nullable
+    @OneToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "zahlungsverbindung_id")
+    private Zahlungsverbindung zahlungsverbindung;
+
+    @Transient
+    public SapStatus getSapStatus() {
+        return switch (this.getBuchhaltungType()) {
+            case SALDOAENDERUNG, STIPENDIUM -> null;
+            // case BUSINESSPARTNER_CREATE -> sapDeliverys.isEmpty() ? null : sapDeliverys.getFirst().getSapStatus();
+            case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER, BUSINESSPARTNER_CREATE -> {
+                if (sapDeliverys.isEmpty()) {
+                    yield SapStatus.IN_PROGRESS;
+                }
+                if (sapDeliverys.stream().anyMatch(sapDelivery -> sapDelivery.getSapStatus() == SapStatus.SUCCESS)) {
+                    yield SapStatus.SUCCESS;
+                }
+
+                if (
+                    sapDeliverys.stream().anyMatch(sapDelivery -> sapDelivery.getSapStatus() == SapStatus.IN_PROGRESS)
+                ) {
+                    yield SapStatus.IN_PROGRESS;
+                }
+
+                if (sapDeliverys.size() < SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG) {
+                    yield SapStatus.IN_PROGRESS;
+                }
+                yield SapStatus.FAILURE;
+            }
+        };
+    }
 }

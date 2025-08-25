@@ -37,6 +37,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -58,6 +59,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     MatInputModule,
     MatRadioModule,
     SharedUiLoadingComponent,
+    SharedUiHasRolesDirective,
     SharedUiFormReadonlyDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

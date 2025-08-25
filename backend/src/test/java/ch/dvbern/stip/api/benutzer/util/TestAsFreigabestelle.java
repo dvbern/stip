@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
+import ch.dvbern.stip.api.common.util.OidcPermissions;
 import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
@@ -34,7 +35,15 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE;
 @TestSecurity(
     user = "freigabestelle",
     roles = {
-        OidcConstants.ROLE_SOZIALDIENST_MITARBEITER
+        OidcConstants.ROLE_FREIGABESTELLE,
+        OidcPermissions.FREIGABESTELLE_GESUCH_UPDATE,
+        OidcPermissions.NOTIZ_READ,
+        OidcPermissions.SB_GESUCH_READ,
+        OidcPermissions.STAMMDATEN_READ,
+        OidcPermissions.AUSBILDUNGSSTAETTE_READ,
+        OidcPermissions.CUSTOM_DOKUMENT_READ,
+        OidcPermissions.DOKUMENT_READ,
+        OidcPermissions.FALL_READ,
     }
 )
 @OidcSecurity(

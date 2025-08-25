@@ -37,6 +37,8 @@
   "sozialdienst-app.cockpit.table.letzteAktivitaet": "Dernière activité",
   "sozialdienst-app.cockpit.delegierungen": "Délégations",
 
+  "sozialdienst-app.cockpit.table.delegierung.title.delegierung": "Délégation",
+  "sozialdienst-app.cockpit.table.delegierung.title.anfrage": "Demande de délégation",
   "sozialdienst-app.delegierung-dialog.zuweisung.title": "Affectation",
   "sozialdienst-app.delegierung-dialog.fallNummer.label": "Numéro de cas",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Travailleur social",

@@ -52,8 +52,8 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     public void canRead(final UUID ausbildungId) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        // Admins, Sachbearbeiter or Jurist can always read every Gesuch
-        if (isSbOrJurist(currentBenutzer)) {
+        // Admins, Sachbearbeiter, Freigabestelle or Jurist can always read every Gesuch
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
             return;
         }
 

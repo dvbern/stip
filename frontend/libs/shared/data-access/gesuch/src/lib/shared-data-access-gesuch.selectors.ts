@@ -26,7 +26,7 @@ import { sharedDataAccessGesuchsFeature } from './shared-data-access-gesuch.feat
 
 const baseFormStepsArray = Object.values(BaseFormSteps);
 
-const { selectRouteParam } = getRouterSelectors();
+const { selectRouteParam, selectQueryParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
 
@@ -47,6 +47,10 @@ export const selectTrancheTyp = createSelector(
 );
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
+export const selectRevision = createSelector(
+  selectQueryParam('revision'),
+  (revision) => (revision ? +revision : undefined),
+);
 
 export const selectSharedDataAccessCachedGesuchChanges = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,

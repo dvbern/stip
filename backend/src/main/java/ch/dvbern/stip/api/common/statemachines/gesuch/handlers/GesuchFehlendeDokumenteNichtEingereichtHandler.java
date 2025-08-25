@@ -39,7 +39,7 @@ public class GesuchFehlendeDokumenteNichtEingereichtHandler implements GesuchSta
         if (gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
-        notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuch);
+        notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotification(gesuch);
         gesuch.setNachfristDokumente(null);
         gesuch.setEinreichedatum(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);

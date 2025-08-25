@@ -1,0 +1,60 @@
+services:
+  backend:
+    networks:
+      - stip
+    build:
+      context: ./
+      dockerfile: src/main/docker/Dockerfile.jvm
+    depends_on:
+      - database
+    env_file:
+      - '.env'
+    environment:
+      - QUARKUS_LOG_SENTRY_ENABLED=false
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`localhost`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+
+  traefik:
+    networks:
+      - stip
+    container_name: "traefik"
+    image: docker-registry.dvbern.ch/dockerhub/library/traefik:latest
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    depends_on:
+      - backend
+
+  database:
+    networks:
+      - stip
+    image: docker-registry.dvbern.ch/dockerhub/library/postgres:15.3
+    env_file:
+      - '.env'
+    volumes:
+      - 'stip-database-data:/var/lib/postgresql/data'
+    ports:
+      - "${STIP_DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${STIP_DB_USERNAME}
+      POSTGRES_DB: ${STIP_DB}
+      POSTGRES_PASSWORD: ${STIP_DB_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+volumes:
+  stip-database-data:
+
+networks:
+  stip:
+    driver: bridge

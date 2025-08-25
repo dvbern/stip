@@ -91,6 +91,13 @@ public class SozialdienstResourceImpl implements SozialdienstResource {
 
     @Override
     @RolesAllowed(SOZIALDIENST_UPDATE)
+    public SozialdienstDto setSozialdienstAktivTo(UUID sozialdienstId, Boolean aktiv) {
+        sozialdienstAuthorizer.canUpdateSozialdienstStatus();
+        return sozialdienstService.setSozialdienstStatusTo(sozialdienstId, aktiv);
+    }
+
+    @Override
+    @RolesAllowed(SOZIALDIENST_UPDATE)
     public SozialdienstBenutzerDto replaceSozialdienstAdmin(
         UUID sozialdienstId,
         SozialdienstAdminDto sozialdienstAdminDto

@@ -7,6 +7,7 @@
     [class.disabled]="step.disabled"
     [class.tw-pointer-events-none]="!step.route"
     [routerLink]="step.route ?? '#'"
+    [queryParamsHandling]="'preserve'"
     [attr.data-testid]="'step-nav-' + step.name"
     (click)="navClicked.emit({})"
   >

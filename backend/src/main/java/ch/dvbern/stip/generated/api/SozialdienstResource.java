@@ -79,6 +79,11 @@ public interface SozialdienstResource {
     SozialdienstBenutzerDto replaceSozialdienstAdmin(@PathParam("sozialdienstId") UUID sozialdienstId,@Valid SozialdienstAdminDto sozialdienstAdminDto);
 
     @PATCH
+    @Path("/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}")
+    @Produces({ "application/json", "text/plain" })
+    SozialdienstDto setSozialdienstAktivTo(@PathParam("sozialdienstId") UUID sozialdienstId,@PathParam("aktiv") Boolean aktiv);
+
+    @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
     SozialdienstDto updateSozialdienst(@Valid SozialdienstUpdateDto sozialdienstUpdateDto);
