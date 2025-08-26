@@ -43,6 +43,7 @@ public class PersonInAusbildungCopyUtil {
         target.setTelefonnummer(source.getTelefonnummer());
         target.setNationalitaet(source.getNationalitaet());
         target.setHeimatort(source.getHeimatort());
+        target.setHeimatortPLZ(source.getHeimatortPLZ());
         target.setNiederlassungsstatus(source.getNiederlassungsstatus());
         target.setEinreisedatum(source.getEinreisedatum());
         target.setZivilstand(source.getZivilstand());
