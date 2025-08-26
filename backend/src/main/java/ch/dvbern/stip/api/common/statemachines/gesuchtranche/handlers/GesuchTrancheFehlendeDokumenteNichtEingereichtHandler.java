@@ -34,7 +34,7 @@ public class GesuchTrancheFehlendeDokumenteNichtEingereichtHandler implements Ge
     public void handle(
         GesuchTranche gesuchTranche
     ) {
-        notificationService.createGesuchFehlendeDokumenteNichtEingereichtText(gesuchTranche.getGesuch());
+        notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotification(gesuchTranche.getGesuch());
         gesuchTranche.getGesuch().setNachfristDokumente(null);
         gesuchTranche.getGesuch().setEinreichedatum(null);
         MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuchTranche.getGesuch());

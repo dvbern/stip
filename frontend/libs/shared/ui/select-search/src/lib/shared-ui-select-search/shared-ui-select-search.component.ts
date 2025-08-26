@@ -211,7 +211,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       values = sortListByText(values, displayValue);
     }
 
-    if (typeof valueInput === 'string') {
+    if (typeof valueInput === 'string' && valueInput.length > 0) {
       values = values.filter((value) =>
         this.displayValueWithSig()(value)
           ?.toLowerCase()
@@ -264,15 +264,24 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       if (valueId) {
         this.valueId = valueId;
         const value = values?.find((l) => l.id === valueId);
-        if (value && valueId !== this.form.controls.select.value?.id) {
+        if (value) {
           this.form.controls.select.patchValue(value, { emitEvent: false });
-          this.ngControl?.control?.updateValueAndValidity();
 
           // Mark the control as touched if the entry is
           if (value.invalid) {
             this.markAsTouched();
           }
+        } else {
+          this.form.controls.search.setValue(undefined, {
+            emitEvent: true,
+          });
+          this.form.controls.select.setValue(undefined, {
+            emitEvent: true,
+          });
+          this.markAsTouched();
+          this.onChange(undefined);
         }
+        this.ngControl?.control?.updateValueAndValidity();
       } else {
         this.valueId = undefined;
         this.form.controls.search.setValue(undefined, {

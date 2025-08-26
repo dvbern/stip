@@ -153,4 +153,12 @@ public class AusbildungsgangService {
             );
         }
     }
+
+    public void setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(final UUID ausbildungsstaetteId) {
+        ausbildungsgangRepository.setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(ausbildungsstaetteId);
+    }
+
+    public void setAllAusbildungsgaengeOfAbschlussToInaktiv(final UUID abschlussId) {
+        ausbildungsgangRepository.setAllAusbildungsgaengeOfAbschlussToInaktiv(abschlussId);
+    }
 }

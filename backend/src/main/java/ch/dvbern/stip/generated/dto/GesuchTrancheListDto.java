@@ -25,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchTrancheListDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> tranchen;
   private @Valid List<GesuchTrancheSlimDto> initialTranchen;
+  private @Valid List<GesuchTrancheSlimDto> aenderungen;
+  private @Valid List<GesuchTrancheSlimDto> abgelehnteAenderungen;
 
   /**
    **/
@@ -94,6 +96,74 @@ public class GesuchTrancheListDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public GesuchTrancheListDto aenderungen(List<GesuchTrancheSlimDto> aenderungen) {
+    this.aenderungen = aenderungen;
+    return this;
+  }
+
+  
+  @JsonProperty("aenderungen")
+  public List<GesuchTrancheSlimDto> getAenderungen() {
+    return aenderungen;
+  }
+
+  @JsonProperty("aenderungen")
+  public void setAenderungen(List<GesuchTrancheSlimDto> aenderungen) {
+    this.aenderungen = aenderungen;
+  }
+
+  public GesuchTrancheListDto addAenderungenItem(GesuchTrancheSlimDto aenderungenItem) {
+    if (this.aenderungen == null) {
+      this.aenderungen = new ArrayList<>();
+    }
+
+    this.aenderungen.add(aenderungenItem);
+    return this;
+  }
+
+  public GesuchTrancheListDto removeAenderungenItem(GesuchTrancheSlimDto aenderungenItem) {
+    if (aenderungenItem != null && this.aenderungen != null) {
+      this.aenderungen.remove(aenderungenItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
+  public GesuchTrancheListDto abgelehnteAenderungen(List<GesuchTrancheSlimDto> abgelehnteAenderungen) {
+    this.abgelehnteAenderungen = abgelehnteAenderungen;
+    return this;
+  }
+
+  
+  @JsonProperty("abgelehnteAenderungen")
+  public List<GesuchTrancheSlimDto> getAbgelehnteAenderungen() {
+    return abgelehnteAenderungen;
+  }
+
+  @JsonProperty("abgelehnteAenderungen")
+  public void setAbgelehnteAenderungen(List<GesuchTrancheSlimDto> abgelehnteAenderungen) {
+    this.abgelehnteAenderungen = abgelehnteAenderungen;
+  }
+
+  public GesuchTrancheListDto addAbgelehnteAenderungenItem(GesuchTrancheSlimDto abgelehnteAenderungenItem) {
+    if (this.abgelehnteAenderungen == null) {
+      this.abgelehnteAenderungen = new ArrayList<>();
+    }
+
+    this.abgelehnteAenderungen.add(abgelehnteAenderungenItem);
+    return this;
+  }
+
+  public GesuchTrancheListDto removeAbgelehnteAenderungenItem(GesuchTrancheSlimDto abgelehnteAenderungenItem) {
+    if (abgelehnteAenderungenItem != null && this.abgelehnteAenderungen != null) {
+      this.abgelehnteAenderungen.remove(abgelehnteAenderungenItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -105,12 +175,14 @@ public class GesuchTrancheListDto  implements Serializable {
     }
     GesuchTrancheListDto gesuchTrancheList = (GesuchTrancheListDto) o;
     return Objects.equals(this.tranchen, gesuchTrancheList.tranchen) &&
-        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen);
+        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen) &&
+        Objects.equals(this.aenderungen, gesuchTrancheList.aenderungen) &&
+        Objects.equals(this.abgelehnteAenderungen, gesuchTrancheList.abgelehnteAenderungen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tranchen, initialTranchen);
+    return Objects.hash(tranchen, initialTranchen, aenderungen, abgelehnteAenderungen);
   }
 
   @Override
@@ -120,6 +192,8 @@ public class GesuchTrancheListDto  implements Serializable {
     
     sb.append("    tranchen: ").append(toIndentedString(tranchen)).append("\n");
     sb.append("    initialTranchen: ").append(toIndentedString(initialTranchen)).append("\n");
+    sb.append("    aenderungen: ").append(toIndentedString(aenderungen)).append("\n");
+    sb.append("    abgelehnteAenderungen: ").append(toIndentedString(abgelehnteAenderungen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

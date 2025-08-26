@@ -698,7 +698,6 @@
                     ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
                     DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
                     Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
-                    Kontoinhaber=ch.dvbern.stip.api.auszahlung.type.Kontoinhaber,
                     Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
                     Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
                     WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,

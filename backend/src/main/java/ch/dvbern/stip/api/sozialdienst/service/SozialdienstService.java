@@ -20,11 +20,11 @@ package ch.dvbern.stip.api.sozialdienst.service;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.auszahlung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
+import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
 import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;

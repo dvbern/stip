@@ -20,6 +20,7 @@ export interface GesuchInfo {
     canGetBerechnung: boolean;
     beschwerdeHaengig: boolean;
     canTriggerManuellPruefen: boolean;
+    canChangeGesuchsperiode: boolean;
 }
 
 

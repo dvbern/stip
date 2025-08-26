@@ -15,6 +15,7 @@ import {
   GesuchTrancheService,
   GesuchTrancheStatus,
   PatchAenderungsInfoRequest,
+  getTrancheRoute,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { byAppType } from '@dv/shared/model/permission-state';
@@ -51,7 +52,11 @@ export type AenderungChangeState = Extract<
   'MANUELLE_AENDERUNG' | 'AKZEPTIERT' | 'ABGELEHNT'
 >;
 
-type AenderungCompletionState = 'open' | 'completed';
+export type AenderungCompletionState =
+  | 'open'
+  | 'completed'
+  | 'rejected'
+  | 'initial';
 const aenderungStatusMap = {
   IN_BEARBEITUNG_GS: null,
   UEBERPRUEFEN: 'open',
@@ -72,28 +77,51 @@ export class GesuchAenderungStore extends signalStore(
   private router = inject(Router);
 
   aenderungenViewSig = computed(() => {
-    const list = this.cachedTranchenList();
-    const aenderungen =
-      list.data?.tranchen
-        ?.filter((t) => t.typ === 'AENDERUNG')
-        .map((t, index) => ({ ...t, index })) ?? [];
+    const tranchenList = this.cachedTranchenList();
+    const initialGesucheList = this.cachedTranchenList();
+    const [aenderungen, abgelehnteAenderungen, initialGesuche] = (
+      [
+        ['aenderung', tranchenList.data?.aenderungen],
+        ['aenderung', tranchenList.data?.abgelehnteAenderungen],
+        ['initial', initialGesucheList.data?.initialTranchen],
+      ] as const
+    ).map(
+      ([route, lists]) =>
+        lists?.map((tranche, index) => ({
+          ...tranche,
+          index,
+          route: getTrancheRoute(route),
+          revision: tranche.revision ?? undefined, // API sends null
+        })) ?? [],
+    );
     return {
-      loading: isPending(list),
-      hasAenderungen: aenderungen.length > 0,
-      list: aenderungen,
-      byStatus: aenderungen.reduce(
-        (acc, tranche) => {
-          const key = aenderungStatusMap[tranche.status];
-          if (key) {
-            if (!acc[key]) {
-              acc[key] = [];
+      loading: isPending(tranchenList),
+      hasAenderungen:
+        aenderungen.length > 0 ||
+        abgelehnteAenderungen.length > 0 ||
+        initialGesuche.length > 0,
+      aenderungen,
+      abgelehnteAenderungen,
+      initialGesuche,
+      byStatus: {
+        open: [],
+        completed: [],
+        ...aenderungen.reduce(
+          (acc, tranche) => {
+            const key = aenderungStatusMap[tranche.status];
+            if (key) {
+              if (!acc[key]) {
+                acc[key] = [];
+              }
+              acc[key].push(tranche);
             }
-            acc[key].push(tranche);
-          }
-          return acc;
-        },
-        {} as Record<AenderungCompletionState, typeof aenderungen>,
-      ),
+            return acc;
+          },
+          {} as Partial<Record<AenderungCompletionState, typeof aenderungen>>,
+        ),
+        rejected: abgelehnteAenderungen,
+        initial: initialGesuche,
+      },
     };
   });
 
@@ -124,16 +152,6 @@ export class GesuchAenderungStore extends signalStore(
       };
     });
   };
-
-  initialTranchenViewSig = computed(() => {
-    const list = this.cachedTranchenList();
-    const length = list.data?.tranchen?.length ?? 0;
-    return {
-      list: list.data?.initialTranchen ?? null,
-      hasTranchen: !!length,
-      hasMultiple: length > 1,
-    };
-  });
 
   getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(
@@ -204,7 +222,7 @@ export class GesuchAenderungStore extends signalStore(
                       'gesuch',
                       PERSON.route,
                       gesuchId,
-                      'aenderung',
+                      getTrancheRoute('aenderung'),
                       data.id,
                     ]);
                     onSuccess();

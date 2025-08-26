@@ -7,6 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import {
   getTranslocoModule,
   provideSharedPatternVitestTestSetup,
@@ -39,6 +40,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
         getTranslocoModule(),
       ],
       providers: [
+        GesuchInfoStore,
         provideRouter([]),
         provideHttpClient(),
         provideMockStore({

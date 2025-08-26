@@ -1,6 +1,11 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.SapDeliveryDto;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -29,11 +34,12 @@ public class BuchhaltungEntryDto  implements Serializable {
   private @Valid Integer stipendienBetrag;
   private @Valid Integer auszahlung;
   private @Valid Integer rueckforderung;
-  private @Valid String sapId;
-  private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
   private @Valid Integer businessPartnerId;
   private @Valid UUID verfuegungId;
   private @Valid UUID gesuchId;
+  private @Valid ZahlungsverbindungDto zahlungsverbindung;
+  private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+  private @Valid List<SapDeliveryDto> sapDeliverys;
 
   /**
    **/
@@ -205,42 +211,6 @@ public class BuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
-  public BuchhaltungEntryDto sapId(String sapId) {
-    this.sapId = sapId;
-    return this;
-  }
-
-  
-  @JsonProperty("sapId")
-  public String getSapId() {
-    return sapId;
-  }
-
-  @JsonProperty("sapId")
-  public void setSapId(String sapId) {
-    this.sapId = sapId;
-  }
-
-  /**
-   **/
-  public BuchhaltungEntryDto sapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
-    this.sapStatus = sapStatus;
-    return this;
-  }
-
-  
-  @JsonProperty("sapStatus")
-  public ch.dvbern.stip.api.buchhaltung.type.SapStatus getSapStatus() {
-    return sapStatus;
-  }
-
-  @JsonProperty("sapStatus")
-  public void setSapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
-    this.sapStatus = sapStatus;
-  }
-
-  /**
-   **/
   public BuchhaltungEntryDto businessPartnerId(Integer businessPartnerId) {
     this.businessPartnerId = businessPartnerId;
     return this;
@@ -293,6 +263,76 @@ public class BuchhaltungEntryDto  implements Serializable {
     this.gesuchId = gesuchId;
   }
 
+  /**
+   **/
+  public BuchhaltungEntryDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+    return this;
+  }
+
+  
+  @JsonProperty("zahlungsverbindung")
+  public ZahlungsverbindungDto getZahlungsverbindung() {
+    return zahlungsverbindung;
+  }
+
+  @JsonProperty("zahlungsverbindung")
+  public void setZahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+  }
+
+  /**
+   **/
+  public BuchhaltungEntryDto sapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
+    this.sapStatus = sapStatus;
+    return this;
+  }
+
+  
+  @JsonProperty("sapStatus")
+  public ch.dvbern.stip.api.buchhaltung.type.SapStatus getSapStatus() {
+    return sapStatus;
+  }
+
+  @JsonProperty("sapStatus")
+  public void setSapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
+    this.sapStatus = sapStatus;
+  }
+
+  /**
+   **/
+  public BuchhaltungEntryDto sapDeliverys(List<SapDeliveryDto> sapDeliverys) {
+    this.sapDeliverys = sapDeliverys;
+    return this;
+  }
+
+  
+  @JsonProperty("sapDeliverys")
+  public List<SapDeliveryDto> getSapDeliverys() {
+    return sapDeliverys;
+  }
+
+  @JsonProperty("sapDeliverys")
+  public void setSapDeliverys(List<SapDeliveryDto> sapDeliverys) {
+    this.sapDeliverys = sapDeliverys;
+  }
+
+  public BuchhaltungEntryDto addSapDeliverysItem(SapDeliveryDto sapDeliverysItem) {
+    if (this.sapDeliverys == null) {
+      this.sapDeliverys = new ArrayList<>();
+    }
+
+    this.sapDeliverys.add(sapDeliverysItem);
+    return this;
+  }
+
+  public BuchhaltungEntryDto removeSapDeliverysItem(SapDeliveryDto sapDeliverysItem) {
+    if (sapDeliverysItem != null && this.sapDeliverys != null) {
+      this.sapDeliverys.remove(sapDeliverysItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -312,16 +352,17 @@ public class BuchhaltungEntryDto  implements Serializable {
         Objects.equals(this.stipendienBetrag, buchhaltungEntry.stipendienBetrag) &&
         Objects.equals(this.auszahlung, buchhaltungEntry.auszahlung) &&
         Objects.equals(this.rueckforderung, buchhaltungEntry.rueckforderung) &&
-        Objects.equals(this.sapId, buchhaltungEntry.sapId) &&
-        Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
         Objects.equals(this.businessPartnerId, buchhaltungEntry.businessPartnerId) &&
         Objects.equals(this.verfuegungId, buchhaltungEntry.verfuegungId) &&
-        Objects.equals(this.gesuchId, buchhaltungEntry.gesuchId);
+        Objects.equals(this.gesuchId, buchhaltungEntry.gesuchId) &&
+        Objects.equals(this.zahlungsverbindung, buchhaltungEntry.zahlungsverbindung) &&
+        Objects.equals(this.sapStatus, buchhaltungEntry.sapStatus) &&
+        Objects.equals(this.sapDeliverys, buchhaltungEntry.sapDeliverys);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, sapId, sapStatus, businessPartnerId, verfuegungId, gesuchId);
+    return Objects.hash(userErstellt, timestampErstellt, buchhaltungType, saldoAenderung, saldo, comment, stipendienBetrag, auszahlung, rueckforderung, businessPartnerId, verfuegungId, gesuchId, zahlungsverbindung, sapStatus, sapDeliverys);
   }
 
   @Override
@@ -338,11 +379,12 @@ public class BuchhaltungEntryDto  implements Serializable {
     sb.append("    stipendienBetrag: ").append(toIndentedString(stipendienBetrag)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    rueckforderung: ").append(toIndentedString(rueckforderung)).append("\n");
-    sb.append("    sapId: ").append(toIndentedString(sapId)).append("\n");
-    sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
     sb.append("    businessPartnerId: ").append(toIndentedString(businessPartnerId)).append("\n");
     sb.append("    verfuegungId: ").append(toIndentedString(verfuegungId)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
+    sb.append("    sapStatus: ").append(toIndentedString(sapStatus)).append("\n");
+    sb.append("    sapDeliverys: ").append(toIndentedString(sapDeliverys)).append("\n");
     sb.append("}");
     return sb.toString();
   }

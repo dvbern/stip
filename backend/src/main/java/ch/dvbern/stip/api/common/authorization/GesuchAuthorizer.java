@@ -167,6 +167,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanChangeGesuchsperiodeForGesuch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        if (!gesuchStatusService.canChangeGesuchsperiode(gesuch)) {
+            forbidden();
+        }
+    }
+
+    @Transactional
     public void gsCanGesuchEinreichen(final UUID gesuchId) {
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
         assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_BEARBEITUNG_GS);

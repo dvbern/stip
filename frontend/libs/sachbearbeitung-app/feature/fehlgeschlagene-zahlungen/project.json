@@ -1,0 +1,9 @@
+{
+  "name": "sachbearbeitung-app-feature-fehlgeschlagene-zahlungen",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:sachbearbeitung-app"],
+  "targets": {}
+}

@@ -44,7 +44,7 @@ class GesuchsperiodenServiceTest {
     void setUp() {
         gesuchsperiodeRepository = Mockito.mock(GesuchsperiodeRepository.class);
         gesuchsperiodenService =
-            new GesuchsperiodenService(null, gesuchsperiodeRepository, null);
+            new GesuchsperiodenService(null, gesuchsperiodeRepository, null, null);
     }
 
     @Test

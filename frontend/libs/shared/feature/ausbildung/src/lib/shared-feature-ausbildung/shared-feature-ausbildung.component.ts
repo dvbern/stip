@@ -237,11 +237,11 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   ausbildungsstaettenOptionsSig = computed(
     () => {
       const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
-      const isNew = this.fallIdSig();
+      const currentAusbildungsgang = this.currentAusbildungsgangSig();
       const ausbildungsstaetten =
         this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
 
-      if (!ausbildungsstaetten || (!currentAusbildungsstaette && !isNew)) {
+      if (!ausbildungsstaetten) {
         return [];
       }
 
@@ -254,7 +254,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
           disabled: !ausbildungsstaette.aktiv,
         }))
         .filter((ausbildungsstaette) =>
-          ausbildungsstaette.ausbildungsgaenge.some((gang) => gang.aktiv),
+          ausbildungsstaette.ausbildungsgaenge.some(
+            (gang) => gang.aktiv || gang.id === currentAusbildungsgang?.id,
+          ),
         );
     },
     {

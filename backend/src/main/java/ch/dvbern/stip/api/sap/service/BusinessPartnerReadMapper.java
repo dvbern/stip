@@ -17,12 +17,13 @@
 
 package ch.dvbern.stip.api.sap.service;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParms;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,13 +31,17 @@ import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
 public abstract class BusinessPartnerReadMapper {
-    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
+    // @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     // @Mapping(source = "sapBusinessPartnerId", target = "BPARTNER")
-    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(Zahlungsverbindung zahlungsverbindung);
+    @Mapping(source = ".", target = "DELIVERYID", qualifiedByName = "getDeliveryId")
+    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(
+        @Context BigDecimal deliveryid,
+        Zahlungsverbindung zahlungsverbindung
+    );
 
-    @Named("getExtId")
-    public String getExtId(Zahlungsverbindung zahlungsverbindung) {
-        return String.valueOf(Math.abs(zahlungsverbindung.getId().getMostSignificantBits()));
+    @Named("getDeliveryId")
+    public String getDeliveryId(@Context BigDecimal deliveryid, Zahlungsverbindung zahlungsverbindung) {
+        return String.valueOf(Math.abs(deliveryid.longValue()));
     }
 
     @Named("getSenderParms")
@@ -53,6 +58,7 @@ public abstract class BusinessPartnerReadMapper {
     @Mapping(source = ".", target = "SENDER", qualifiedByName = "getSenderParms")
     public abstract BusinessPartnerReadRequest toBusinessPartnerReadRequest(
         @Context BigInteger sysid,
+        @Context BigDecimal deliveryid,
         Zahlungsverbindung zahlungsverbindung
     );
 

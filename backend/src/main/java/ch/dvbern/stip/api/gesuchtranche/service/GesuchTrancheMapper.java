@@ -26,6 +26,8 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.envers.DefaultRevisionEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -52,9 +54,23 @@ public interface GesuchTrancheMapper {
     @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
     GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
 
+    @Named("toSlimDtoWithRevision")
+    default List<GesuchTrancheSlimDto> toSlimDtoWithRevision(List<Pair<GesuchTranche, DefaultRevisionEntity>> value) {
+        return value.stream()
+            .map(pair -> toSlimDto(pair.getLeft()).revision(pair.getRight().getId()))
+            .toList();
+    }
+
     @Mapping(target = "tranchen", qualifiedByName = "toSlimDto")
     @Mapping(target = "initialTranchen", qualifiedByName = "toSlimDto")
-    GesuchTrancheListDto toListDto(List<GesuchTranche> tranchen, List<GesuchTranche> initialTranchen);
+    @Mapping(target = "aenderungen", qualifiedByName = "toSlimDto")
+    @Mapping(target = "abgelehnteAenderungen", qualifiedByName = "toSlimDtoWithRevision")
+    GesuchTrancheListDto toListDto(
+        List<GesuchTranche> tranchen,
+        List<GesuchTranche> initialTranchen,
+        List<GesuchTranche> aenderungen,
+        List<Pair<GesuchTranche, DefaultRevisionEntity>> abgelehnteAenderungen
+    );
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     GesuchTranche partialUpdate(GesuchTrancheUpdateDto gesuchUpdateDto, @MappingTarget GesuchTranche gesuch);

@@ -56,13 +56,12 @@
 
     <!-- Änderungen -->
     @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
-    @let initialTranchen = gesuchAenderungStore.initialTranchenViewSig();
     <button
       type="button"
       class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
       data-testid="sb-gesuch-header-aenderungen-nav-menu"
       [class.active]="isAenderungRouteSig()"
-      [disabled]="!aenderungen.hasAenderungen && !initialTranchen.hasTranchen"
+      [disabled]="!aenderungen.hasAenderungen"
       [matMenuTriggerFor]="aenderungenMenu"
     >
       <i class="material-symbols-rounded text-white me-2">update</i>
@@ -71,78 +70,37 @@
     </button>
     <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel mt-2 rounded col-12">
       <div class="d-flex flex-column gap-2">
-        @for (aenderung of aenderungen.byStatus.open; track $index) {
-          <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
-            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="aenderungen-nav-menu-item"
-            mat-menu-item
-            [class.active]="trancheId === aenderung.id"
-          >
-            <span>
-              {{
-                'shared.header.aenderung.item'
-                  | transloco: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
-              }}
-              -
-              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-            </span>
-          </a>
-        }
-        <div class="d-flex gap-2 align-items-center text-muted small">
-          <hr class="flex-grow-1" />
-          {{ 'shared.header.aenderungen.akzeptierte' | transloco }}
-          <hr class="flex-grow-1" />
-        </div>
-        @for (aenderung of aenderungen.byStatus.completed; track $index) {
-          <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
-            class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-            data-testid="aenderungen-nav-menu-item"
-            mat-menu-item
-            [class.active]="trancheId === aenderung.id"
-          >
-            <span>
-              {{
-                'shared.header.aenderung.item'
-                  | transloco: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 }
-              }}
-              -
-              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-            </span>
-          </a>
-        }
-
-        @if (initialTranchen.hasTranchen) {
-          <div class="d-flex gap-2 align-items-center text-muted small">
-            <hr class="flex-grow-1" />
-            {{ 'shared.header.aenderungen.initial' | transloco }}
-            <hr class="flex-grow-1" />
-          </div>
-          @for (initialTranche of initialTranchen.list; track $index) {
-            <a
-              [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialTranche.id]"
-              class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
-              data-testid="aenderungen-nav-menu-item"
-              mat-menu-item
-              [class.active]="isAenderungRouteSig() && trancheId === initialTranche.id"
-            >
-              <span>
-                @if (initialTranchen.hasMultiple) {
+        @for (status of listedAenderungen; track $index) {
+          @if (aenderungen.byStatus[status].length) {
+            @if (!$first) {
+              <div class="d-flex gap-2 align-items-center text-muted small">
+                <hr class="flex-grow-1" />
+                {{ 'shared.header.aenderungen.' + status | transloco }}
+                <hr class="flex-grow-1" />
+              </div>
+            }
+            @for (aenderung of aenderungen.byStatus[status]; track $index) {
+              <a
+                [routerLink]="['/', 'gesuch', gesuchId, aenderung.route, aenderung.id]"
+                [queryParams]="{ revision: aenderung.revision }"
+                class="btn btn-nav fw-normal px-3 d-flex align-items-center shadow-none"
+                data-testid="aenderungen-nav-menu-item"
+                mat-menu-item
+                [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
+              >
+                <span>
                   {{
-                    'shared.header.initialTranche.multiple'
-                      | transloco: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy', index: $index + 1 }
+                    aenderung.typ === 'TRANCHE'
+                      ? ('shared.header.tranche.item'
+                        | transloco: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 })
+                      : ('shared.header.aenderung.item'
+                        | transloco: { date: aenderung.gueltigAb | date: 'dd.MM.yyyy', index: aenderung.index + 1 })
                   }}
-                } @else {
-                  {{
-                    'shared.header.initialTranche.item'
-                      | transloco: { date: initialTranche.gueltigAb | date: 'dd.MM.yyyy' }
-                  }}
-                }
-                -
-                {{ initialTranche.gueltigBis | date: 'dd.MM.yyyy' }}
-              </span>
-            </a>
+                  -
+                  {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+                </span>
+              </a>
+            }
           }
         }
       </div>

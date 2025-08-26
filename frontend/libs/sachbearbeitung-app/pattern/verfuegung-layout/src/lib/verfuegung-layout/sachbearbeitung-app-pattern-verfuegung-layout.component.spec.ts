@@ -7,6 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import {
   getTranslocoModule,
   provideSharedPatternVitestTestSetup,
@@ -27,6 +28,7 @@ describe('SachbearbeitungAppPatternVerfuegungLayoutComponent', () => {
       ],
       providers: [
         GesuchStore,
+        GesuchInfoStore,
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),

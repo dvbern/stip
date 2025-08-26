@@ -66,6 +66,7 @@ public abstract class GesuchMapper {
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = ".", target = "canGetBerechnung", qualifiedByName = "getCanGetBerechnung")
     @Mapping(source = ".", target = "canTriggerManuellPruefen", qualifiedByName = "getCanTriggerManuellPruefen")
+    @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
     public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildungId", target = "ausbildung.id")
@@ -108,6 +109,11 @@ public abstract class GesuchMapper {
     @Named("getCanGetBerechnung")
     boolean getCanGetBerechnung(Gesuch gesuch) {
         return gesuchStatusService.canGetBerechnung(gesuch);
+    }
+
+    @Named("canChangeGesuchsperiode")
+    boolean canChangeGesuchsperiode(Gesuch gesuch) {
+        return gesuchStatusService.canChangeGesuchsperiode(gesuch);
     }
 
     static DateRange getGesuchDateRange(Gesuch gesuch) {

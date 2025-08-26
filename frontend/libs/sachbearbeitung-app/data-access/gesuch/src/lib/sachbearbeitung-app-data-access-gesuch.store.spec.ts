@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+
 import { GesuchStore } from './sachbearbeitung-app-data-access-gesuch.store';
 
 describe('GesuchStore', () => {
@@ -12,6 +14,7 @@ describe('GesuchStore', () => {
     TestBed.configureTestingModule({
       providers: [
         GesuchStore,
+        GesuchInfoStore,
         provideRouter([]),
         provideHttpClient(),
         provideMockStore({

@@ -22,10 +22,10 @@ import java.math.BigInteger;
 import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.generated.general.SenderParmsDelivery;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

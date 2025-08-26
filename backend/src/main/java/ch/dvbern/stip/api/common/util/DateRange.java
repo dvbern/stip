@@ -26,6 +26,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+
 @Embeddable
 @Getter
 @Setter
@@ -98,5 +100,27 @@ public class DateRange implements Serializable, Comparable<DateRange> {
         }
 
         return DateUtil.beforeOrEqual(getGueltigAb(), date) && DateUtil.afterOrEqual(getGueltigBis(), date);
+    }
+
+    public static DateRange getFruehlingOrHerbst(final LocalDate date) {
+        if (DateUtil.isFruehling(date)) {
+            return DateRange.getFruehlingOf(date);
+        } else {
+            return DateRange.getHerbstOf(date);
+        }
+    }
+
+    public static DateRange getFruehlingOf(final LocalDate date) {
+        return new DateRange(
+            LocalDate.of(date.getYear(), 1, 1),
+            LocalDate.of(date.getYear(), 6, 1).with(lastDayOfMonth())
+        );
+    }
+
+    public static DateRange getHerbstOf(final LocalDate date) {
+        return new DateRange(
+            LocalDate.of(date.getYear(), 7, 1),
+            LocalDate.of(date.getYear(), 12, 1).with(lastDayOfMonth())
+        );
     }
 }

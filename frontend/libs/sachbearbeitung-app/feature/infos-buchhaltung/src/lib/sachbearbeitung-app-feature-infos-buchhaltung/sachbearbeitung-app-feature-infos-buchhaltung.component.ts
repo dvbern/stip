@@ -69,17 +69,18 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   paginatorSig = viewChild(MatPaginator);
   displayedColumns = [
     'datum',
-    'benutzer',
     'stipendienbetrag',
     'auszahlung',
     'rueckforderung',
+    'saldoAenderung',
     'saldo',
     'comment',
+    'sapStatus',
     'info',
   ];
   buchhaltungDataSourceSig = computed(() => {
     const buchhaltungEntries =
-      this.buchhaltungStore.buchhaltungEntriesViewSig();
+      this.buchhaltungStore.buchhaltungEntriesViewSig().buchhaltungEntrys;
 
     const dataSource = new MatTableDataSource(buchhaltungEntries);
     const sort = this.sortSig();
@@ -109,6 +110,16 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
 
   isStartOfNewGesuch(_: number, buchhaltungEntry: BuchhaltungEntryView) {
     return buchhaltungEntry.type === 'gesuchStart';
+  }
+
+  retryAuszahlung() {
+    const gesuchId = this.gesuchIdSig();
+
+    if (!gesuchId) {
+      return;
+    }
+
+    this.buchhaltungStore.retryFailedAuszahlung$({ gesuchId });
   }
 
   createBuchhaltungsKorrektur() {

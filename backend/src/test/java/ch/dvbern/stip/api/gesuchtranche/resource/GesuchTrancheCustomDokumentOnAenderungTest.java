@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -38,7 +39,6 @@ import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -76,6 +76,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private GesuchTrancheListDtoSpec gesuchtranchen;
     private GesuchDtoSpec gesuch;
@@ -93,7 +94,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @TestAsGesuchsteller
     @Order(2)
     void fillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test
@@ -245,11 +246,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        final var aenderung = gesuchtranchen.getTranchen()
-            .stream()
-            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
-            .findFirst()
-            .get();
+        final var aenderung = gesuchtranchen.getAenderungen().getFirst();
 
         gesuchTrancheApiSpec.aenderungEinreichen()
             .aenderungIdPath(aenderung.getId())
@@ -263,11 +260,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @TestAsSachbearbeiter
     @Order(12)
     void createCustomDokumentTypOnAenderungShouldSucceed() {
-        final var aenderung = gesuchtranchen.getTranchen()
-            .stream()
-            .filter(tranche -> tranche.getTyp() == GesuchTrancheTypDtoSpec.AENDERUNG)
-            .findFirst()
-            .get();
+        final var aenderung = gesuchtranchen.getAenderungen().getFirst();
 
         CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
         customDokumentTypCreateDtoSpec.setType("test");

@@ -42,14 +42,19 @@ kstip:
       cron: '0 1/2 * * * ? *' # Fires every 2 minutes, starting at XX:01
   sappendingauszahlung:
     bern:
-      cron: '0 5/2 * * * ? *' # Fires every 2 minutes, starting at XX:05
+      cron: '0 1/2 * * * ? *' # Fires every 2 minutes, starting at XX:01
     dv:
-      cron: '0 6/2 * * * ? *' # Fires every 2 minutes, starting at XX:06
+      cron: '0 2/2 * * * ? *' # Fires every 2 minutes, starting at XX:02
   sapremainderauszahlung:
     bern:
-      cron: '0 10/2 * * * ? *' # Fires every 2 minutes, starting at XX:10
+      cron: '0 2/2 * * * ? *' # Fires every 2 minutes, starting at XX:02
     dv:
-      cron: '0 11/2 * * * ? *' # Fires every 2 minutes, starting at XX:11
+      cron: '0 3/2 * * * ? *' # Fires every 2 minutes, starting at XX:03
+  sapretryfailedauszahlungsbuchhaltung:
+    bern:
+      cron: '0 3/2 * * * ? *' # Fires every 2 minutes, starting at XX:03
+    dv:
+      cron: '0 4/2 * * * ? *' # Fires every 2 minutes, starting at XX:04
   bern:
     seeding:
       sozialdienste: # Can be set via environment variable using: KSTIP_BERN_SEEDING_SOZIALDIENSTE, KSTIP_DV_SEEDING_SOZIALDIENSTE, etc.
@@ -90,6 +95,8 @@ quarkus:
       traces-sample-rate: 1.0
       environment: '${KSTIP_ENVIRONMENT}'
       in-app-packages: 'ch.dvbern.stip.*'
+    console:
+      format: '%z{Europe/Zurich} %d{yyyy-MM-dd HH:mm:ss,SSS z}  %p [%C] (%t) %m %n'
   antivirus:
     clamav:
       enabled: true
@@ -140,7 +147,10 @@ quarkus:
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
+#      sql: true
     multitenant: 'DISCRIMINATOR'
+    jdbc:
+      timezone: 'Europe/Zurich'
   default-locale: 'de'
   security:
     jaxrs:

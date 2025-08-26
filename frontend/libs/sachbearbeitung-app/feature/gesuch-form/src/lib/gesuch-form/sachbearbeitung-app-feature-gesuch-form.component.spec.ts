@@ -4,6 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import {
   getTranslocoModule,
   provideSharedPatternVitestTestSetup,
@@ -24,6 +25,7 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
       ],
       providers: [
         GesuchStore,
+        GesuchInfoStore,
         SteuerdatenStore,
         provideHttpClient(),
         provideMockStore({

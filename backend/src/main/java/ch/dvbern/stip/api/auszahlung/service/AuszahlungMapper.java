@@ -22,6 +22,7 @@ import java.util.Objects;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.zahlungsverbindung.service.ZahlungsverbindungMapper;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDto;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
 import org.mapstruct.AfterMapping;

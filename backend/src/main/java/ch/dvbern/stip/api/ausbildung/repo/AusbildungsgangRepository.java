@@ -57,4 +57,20 @@ public class AusbildungsgangRepository implements BaseRepository<Ausbildungsgang
             .where(Q_AUSBILDUNGSGANG.aktiv)
             .stream();
     }
+
+    public void setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(final UUID ausbildungsstaetteId) {
+        new JPAQueryFactory(em)
+            .update(Q_AUSBILDUNGSGANG)
+            .where(Q_AUSBILDUNGSGANG.ausbildungsstaette.id.eq(ausbildungsstaetteId))
+            .set(Q_AUSBILDUNGSGANG.aktiv, false)
+            .execute();
+    }
+
+    public void setAllAusbildungsgaengeOfAbschlussToInaktiv(final UUID abschlussId) {
+        new JPAQueryFactory(em)
+            .update(Q_AUSBILDUNGSGANG)
+            .where(Q_AUSBILDUNGSGANG.abschluss.id.eq(abschlussId))
+            .set(Q_AUSBILDUNGSGANG.aktiv, false)
+            .execute();
+    }
 }

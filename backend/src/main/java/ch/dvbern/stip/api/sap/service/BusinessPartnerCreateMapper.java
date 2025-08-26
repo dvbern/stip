@@ -21,11 +21,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
-import ch.dvbern.stip.api.auszahlung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -40,11 +40,14 @@ public abstract class BusinessPartnerCreateMapper {
     }
 
     @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
-    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(Zahlungsverbindung zahlungsverbindung);
+    public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
+        @Context BigDecimal deliveryid,
+        Zahlungsverbindung zahlungsverbindung
+    );
 
     @Named("getExtId")
-    public String getExtId(Zahlungsverbindung zahlungsverbindung) {
-        return String.valueOf(Math.abs(zahlungsverbindung.getId().getMostSignificantBits()));
+    public String getExtId(@Context BigDecimal deliveryid, Zahlungsverbindung zahlungsverbindung) {
+        return String.valueOf(Math.abs(deliveryid.longValue()));
     }
 
     @Mapping(source = "zahlungsverbindung.vorname", target = "FIRSTNAME")
@@ -80,6 +83,7 @@ public abstract class BusinessPartnerCreateMapper {
     @Mapping(source = "zahlungsverbindung", target = "ADDRESS", qualifiedByName = "setAdress")
     @Mapping(source = "zahlungsverbindung", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER toBusinessPartner(
+        @Context BigDecimal deliveryid,
         Zahlungsverbindung zahlungsverbindung
     );
 

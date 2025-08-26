@@ -18,7 +18,10 @@
 package ch.dvbern.stip.api.common.entity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.JwtUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -32,9 +35,11 @@ public class AbstractEntityListener {
     @Inject
     Instance<JsonWebToken> token;
 
+    private final ZoneId zoneId = DateUtil.ZUERICH_ZONE;
+
     @PrePersist
     protected void prePersist(AbstractEntity entity) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = ZonedDateTime.now(zoneId).toLocalDateTime();
         entity.setTimestampErstellt(now);
         entity.setTimestampMutiert(now);
 
@@ -45,7 +50,7 @@ public class AbstractEntityListener {
 
     @PreUpdate
     public void preUpdate(AbstractEntity entity) {
-        entity.setTimestampMutiert(LocalDateTime.now());
+        entity.setTimestampMutiert(ZonedDateTime.now(zoneId).toLocalDateTime());
         entity.setUserMutiert(JwtUtil.extractUsernameFromJwt(token));
     }
 }

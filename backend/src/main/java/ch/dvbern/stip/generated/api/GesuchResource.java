@@ -217,7 +217,7 @@ public interface GesuchResource {
     @GET
     @Path("/{aenderungId}/aenderung/sb/changes")
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId);
+    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
 
     @GET
     @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")
@@ -228,6 +228,11 @@ public interface GesuchResource {
     @Path("/{gesuchId}/statusprotokoll")
     @Produces({ "application/json", "text/plain" })
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
+
+    @PATCH
+    @Path("/{gesuchTrancheId}/set-gesuchsperiode")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto setGesuchsperiodeForGesuch(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("gesuchsperiodeId") @NotNull   UUID gesuchsperiodeId);
 
     @PATCH
     @Path("/{gesuchId}")
