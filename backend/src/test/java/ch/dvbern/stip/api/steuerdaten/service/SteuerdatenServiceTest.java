@@ -34,7 +34,6 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
-import ch.dvbern.stip.api.nesko.service.NeskoAccessLoggerService;
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -46,8 +45,6 @@ import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SteuerdatenServiceTest {
@@ -56,15 +53,10 @@ class SteuerdatenServiceTest {
     private SteuerdatenRepository steuerdatenRepository;
 
     private NeskoGetSteuerdatenService neskoGetSteuerdatenService;
-    private NeskoAccessLoggerService neskoAccessLoggerService;
     private NeskoAccessRepository neskoAccessRepository;
 
     private GesuchTranche gesuchTranche;
     private GesuchFormular gesuchFormular;
-
-    private Steuerdaten steuerdatenFamilie;
-    private Steuerdaten steuerdatenVater;
-    private Steuerdaten steuerdatenMutter;
 
     GetSteuerdatenResponse getSteuerdatenResponse;
 
@@ -91,15 +83,14 @@ class SteuerdatenServiceTest {
         eltern2.setSozialversicherungsnummer("");
 
         var gesuch = new Gesuch();
-        var tranche = new GesuchTranche();
-        tranche.setGesuch(gesuch);
+        gesuchTranche.setGesuch(gesuch);
         gesuch.setGesuchNummer(UUID.randomUUID().toString());
-        gesuchFormular.setTranche(tranche);
+        gesuchFormular.setTranche(gesuchTranche);
         gesuchFormular.getTranche().setGesuch(gesuch);
 
         gesuchFormular.setElterns(Set.of(eltern1, eltern2));
 
-        gesuchFormular.setTranche(tranche);
+        gesuchFormular.setTranche(gesuchTranche);
         gesuchTranche.setGesuchFormular(gesuchFormular);
         gesuch.setGesuchNummer(TestUtil.getFullGesuch().getGesuchNummer());
 
@@ -112,14 +103,11 @@ class SteuerdatenServiceTest {
         neskoAccessRepository = Mockito.mock(NeskoAccessRepository.class);
         Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
 
-        neskoAccessLoggerService = Mockito.mock(NeskoAccessLoggerService.class);
-
-        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any()))
+        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any(), any()))
             .thenReturn(getSteuerdatenResponse);
 
         steuerdatenService = new SteuerdatenService(
-            null, trancheRepository, null, steuerdatenRepository, neskoGetSteuerdatenService, null,
-            neskoAccessLoggerService
+            null, trancheRepository, null, steuerdatenRepository, neskoGetSteuerdatenService, null
         );
     }
 
@@ -148,8 +136,6 @@ class SteuerdatenServiceTest {
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
             is(true)
         );
-
-        verify(neskoAccessLoggerService, times(1)).logAccess(any(), any());
 
         actualSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
 
@@ -183,8 +169,6 @@ class SteuerdatenServiceTest {
         steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, "", 2021);
 
         // assert
-        verify(neskoAccessLoggerService, times(1)).logAccess(any(), any());
-
         assertThat(
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
             is(false)
@@ -223,7 +207,6 @@ class SteuerdatenServiceTest {
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
             is(true)
         );
-        verify(neskoAccessLoggerService, times(1)).logAccess(any(), any());
     }
 
     @Test
@@ -259,6 +242,5 @@ class SteuerdatenServiceTest {
             currentSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
             is(false)
         );
-        verify(neskoAccessLoggerService, times(1)).logAccess(any(), any());
     }
 }
