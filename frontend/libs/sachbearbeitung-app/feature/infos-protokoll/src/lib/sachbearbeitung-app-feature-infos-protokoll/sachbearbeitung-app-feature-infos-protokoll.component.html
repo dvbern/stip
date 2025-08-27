@@ -30,9 +30,9 @@
         mat-cell
         *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
         class="tw-max-w-32 tw-whitespace-nowrap"
-        [dvTruncateTooltip]="protokoll.typKey | translate"
+        [dvTruncateTooltip]="'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | translate"
       >
-        {{ protokoll.typKey | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | translate }}
       </td>
     </ng-container>
 
@@ -45,9 +45,9 @@
         mat-cell
         *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
         class="tw-max-w-32 tw-whitespace-nowrap"
-        [dvTruncateTooltip]="'sachbearbeitung-app.gesuch.status.contract.' + protokoll.statusTo | translate"
+        [dvTruncateTooltip]="protokoll.statusKey | translate"
       >
-        {{ 'sachbearbeitung-app.gesuch.status.contract.' + protokoll.statusTo | translate }}
+        {{ protokoll.statusKey | translate }}
       </td>
     </ng-container>
 

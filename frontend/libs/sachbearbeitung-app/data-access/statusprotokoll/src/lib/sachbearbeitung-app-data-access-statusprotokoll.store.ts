@@ -39,7 +39,7 @@ export class StatusprotokollStore extends signalStore(
   cachedStatusprotokollListViewSig = computed(() => {
     return fromCachedDataSig(this.cachedStatusprotokoll)?.map((entry) => ({
       ...entry,
-      typKey: `sachbearbeitung-app.gesuch.status.${typMap[entry.typ]}.${entry.statusTo}`,
+      statusKey: `sachbearbeitung-app.gesuch.status.${typMap[entry.typ]}.${entry.statusTo}`,
     }));
   });
 
