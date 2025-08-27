@@ -106,8 +106,8 @@ public class Steuerdaten extends AbstractMandantEntity {
     private Integer steuerjahr;
 
     @NotNull
-    @Column(name = "veranlagungscode", nullable = false)
+    @Column(name = "status_veranlagung", nullable = false)
     @Min(0)
     @Max(99)
-    private Integer veranlagungsCode = 0;
+    private Integer statusVeranlagung = 0;
 }

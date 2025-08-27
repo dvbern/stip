@@ -747,7 +747,7 @@ public class TestUtil {
                     .setVermoegen(0)
                     .setKinderalimente(0)
                     .setSteuerjahr(2000)
-                    .setVeranlagungsCode(0)
+                    .setStatusVeranlagung(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
@@ -764,7 +764,7 @@ public class TestUtil {
                     .setVermoegen(0)
                     .setKinderalimente(0)
                     .setSteuerjahr(2000)
-                    .setVeranlagungsCode(0)
+                    .setStatusVeranlagung(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
             )
         );
