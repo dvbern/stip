@@ -136,11 +136,11 @@ class GesuchStatusprotokollTest {
         final var sorted = Arrays.stream(statusProtokoll)
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
-        assertThat(sorted.get(0).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-        assertThat(sorted.get(1).getStatus(), is(GesuchstatusDtoSpec.EINGEREICHT));
-        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN));
-        assertThat(sorted.get(3).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-        assertThat(sorted.get(4).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(sorted.get(0).getStatusTo(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
+        assertThat(sorted.get(1).getStatusTo(), is(GesuchstatusDtoSpec.EINGEREICHT));
+        assertThat(sorted.get(2).getStatusTo(), is(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN));
+        assertThat(sorted.get(3).getStatusTo(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(sorted.get(4).getStatusTo(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
     @Test
