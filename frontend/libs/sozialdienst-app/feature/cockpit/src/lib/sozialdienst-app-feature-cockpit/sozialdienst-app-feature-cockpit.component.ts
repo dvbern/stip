@@ -34,9 +34,7 @@ import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  DelegierenServiceGetDelegierungsOfSozialdienstRequestParams,
   FallWithDelegierung,
-  GetDelegierungSozQueryType,
   SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
@@ -76,6 +74,8 @@ import { parseDate, toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';
 import {
+  GetDelegierungSozQueryType,
+  LoadPaginatedDashboardByRoles,
   SozCockitComponentInputs,
   SozCockpitFilterFormKeys,
 } from '@dv/sozialdienst-app/model/delegation';
@@ -202,6 +202,11 @@ export class SozialdienstAppFeatureCockpitComponent
       typ: 'ALLE',
       icon: 'all_inclusive',
       roles: ['V0_Sozialdienst-Mitarbeiter'],
+    },
+    {
+      typ: 'OFFEN',
+      icon: 'fiber_new',
+      roles: ['V0_Sozialdienst-Admin'],
     },
   ];
 
@@ -383,10 +388,7 @@ const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
   return value === 'true';
 };
 
-const createQuery = <
-  T extends
-    Partial<DelegierenServiceGetDelegierungsOfSozialdienstRequestParams>,
->(
+const createQuery = <T extends Partial<LoadPaginatedDashboardByRoles>>(
   value: T,
 ) => {
   return value;

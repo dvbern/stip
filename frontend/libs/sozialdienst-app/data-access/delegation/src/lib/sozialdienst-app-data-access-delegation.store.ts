@@ -3,10 +3,12 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { PermissionStore } from '@dv/shared/global/permission';
 import {
   DelegierenService,
   DelegierenServiceDelegierterMitarbeiterAendernRequestParams,
-  DelegierenServiceGetDelegierungsOfSozialdienstRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams,
   PaginatedSozDashboard,
   SozialdienstBenutzer,
   SozialdienstService,
@@ -19,6 +21,7 @@ import {
   initial,
   isPending,
 } from '@dv/shared/util/remote-data';
+import { LoadPaginatedDashboardByRoles } from '@dv/sozialdienst-app/model/delegation';
 
 type DelegationState = {
   paginatedSozDashboard: CachedRemoteData<PaginatedSozDashboard>;
@@ -41,6 +44,7 @@ export class DelegationStore extends signalStore(
 ) {
   private delegierenService = inject(DelegierenService);
   private sozialdienstService = inject(SozialdienstService);
+  private permissionStore = inject(PermissionStore);
 
   cockpitViewSig = computed(() => {
     return {
@@ -95,25 +99,38 @@ export class DelegationStore extends signalStore(
       ),
     );
 
-  loadPaginatedSozDashboard$ =
-    rxMethod<DelegierenServiceGetDelegierungsOfSozialdienstRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, (state) => ({
-            paginatedSozDashboard: cachedPending(state.paginatedSozDashboard),
-          }));
-        }),
-        switchMap((params) =>
-          this.delegierenService.getDelegierungsOfSozialdienst$(params).pipe(
-            handleApiResponse((paginatedSozDashboard) =>
-              patchState(this, {
-                paginatedSozDashboard: paginatedSozDashboard,
-              }),
-            ),
+  loadPaginatedSozDashboard$ = rxMethod<LoadPaginatedDashboardByRoles>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          paginatedSozDashboard: cachedPending(state.paginatedSozDashboard),
+        }));
+      }),
+      switchMap((params) => {
+        return this.loadPaginatedDashboardByRoles$(params).pipe(
+          handleApiResponse((paginatedSozDashboard) =>
+            patchState(this, {
+              paginatedSozDashboard: paginatedSozDashboard,
+            }),
           ),
-        ),
-      ),
-    );
+        );
+      }),
+    ),
+  );
+
+  private loadPaginatedDashboardByRoles$(req: LoadPaginatedDashboardByRoles) {
+    const roles = this.permissionStore.rolesMapSig();
+
+    if (roles['V0_Sozialdienst-Admin']) {
+      return this.delegierenService.getDelegierungsOfSozialdienstAdmin$(
+        req as DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
+      );
+    } else {
+      return this.delegierenService.getDelegierungsOfSozialdienstMa$(
+        req as DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams,
+      );
+    }
+  }
 
   resetDelegierenState() {
     patchState(this, {

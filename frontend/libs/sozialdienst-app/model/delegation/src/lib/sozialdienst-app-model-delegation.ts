@@ -1,13 +1,24 @@
 import { InputSignal, InputSignalWithTransform } from '@angular/core';
 import {
   Adresse,
+  DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams,
   Delegierung,
   FallWithDelegierung,
-  GetDelegierungSozQueryType,
+  GetDelegierungSozQueryTypeAdmin,
+  GetDelegierungSozQueryTypeMa,
   PersoenlicheAngaben,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
+
+export type LoadPaginatedDashboardByRoles =
+  | DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams
+  | DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams;
+
+export type GetDelegierungSozQueryType =
+  | GetDelegierungSozQueryTypeMa
+  | GetDelegierungSozQueryTypeAdmin;
 
 export type PersoehnelicheAngabenKeys = keyof Omit<
   PersoenlicheAngaben,

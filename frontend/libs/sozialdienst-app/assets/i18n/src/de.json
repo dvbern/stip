@@ -22,6 +22,7 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Wollen Sie den Sozialdienst Arbeiter \"{{ name }}\" wirklich löschen?",
 
   "sozialdienst-app.cockpit.quick-filter.ALLE": "Alle",
+  "sozialdienst-app.cockpit.quick-filter.OFFEN": "Delegations-anfragen",
   "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Meine bearbeitbaren Gesuche",
 
   "sozialdienst-app.cockpit.table.description": "Beschreibung der Tabelle",

@@ -22,6 +22,7 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Voulez-vous vraiment supprimer l'employé du service social \"{{ name }}\" ?",
 
   "sozialdienst-app.cockpit.quick-filter.ALLE": "Tous",
+  "sozialdienst-app.cockpit.quick-filter.OFFEN": "Demandes de délégation",
   "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Mes demandes modifiables",
 
   "sozialdienst-app.cockpit.table.description": "Description de la table",
