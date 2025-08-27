@@ -109,5 +109,5 @@ public class Steuerdaten extends AbstractMandantEntity {
     @Column(name = "status_veranlagung", nullable = false)
     @Min(0)
     @Max(99)
-    private Integer statusVeranlagung = 0;
+    private Integer veranlagungsStatus = 0;
 }

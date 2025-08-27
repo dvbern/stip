@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERDIENST_REALISIERT,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE
@@ -91,8 +91,8 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
   private Integer betreuungskostenKinder;
 
-  public static final String JSON_PROPERTY_VERANLAGUNGS_CODE = "veranlagungsCode";
-  private Integer veranlagungsCode = 0;
+  public static final String JSON_PROPERTY_VERANLAGUNGS_STATUS = "veranlagungsStatus";
+  private Integer veranlagungsStatus = 0;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
@@ -470,31 +470,31 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec veranlagungsCode(Integer veranlagungsCode) {
+  public EinnahmenKostenDtoSpec veranlagungsStatus(Integer veranlagungsStatus) {
     
-    this.veranlagungsCode = veranlagungsCode;
+    this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
    /**
-   * 2-Stelliger Veranlagungscode (0-99)
+   * Veranlagungsstatus (0-99)
    * minimum: 0
    * maximum: 99
-   * @return veranlagungsCode
+   * @return veranlagungsStatus
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getVeranlagungsCode() {
-    return veranlagungsCode;
+  public Integer getVeranlagungsStatus() {
+    return veranlagungsStatus;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVeranlagungsCode(Integer veranlagungsCode) {
-    this.veranlagungsCode = veranlagungsCode;
+  public void setVeranlagungsStatus(Integer veranlagungsStatus) {
+    this.veranlagungsStatus = veranlagungsStatus;
   }
 
 
@@ -604,7 +604,7 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.verdienstRealisiert, einnahmenKosten.verdienstRealisiert) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
-        Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
+        Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
         Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
         Objects.equals(this.steuernKantonGemeinde, einnahmenKosten.steuernKantonGemeinde);
@@ -612,7 +612,7 @@ public class EinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -633,7 +633,7 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
-    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");

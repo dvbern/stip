@@ -41,7 +41,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setFahrkostenPartner(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegung(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
-            model.setVeranlagungsCode(0);
+            model.setVeranlagungsStatus(0);
             model.setSteuerjahr(2022);
         });
     }

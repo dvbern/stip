@@ -142,23 +142,23 @@ class EinnahmenKostenValidatorTest {
     void veranlagungsCodeRequiredValidationTest() {
         final var factory = Validation.buildDefaultValidatorFactory();
         final var validator = factory.getValidator();
-        final String propertyName = "veranlagungscode";
+        final String propertyName = "veranlagungsstatus";
         GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
         boolean isValid = false;
 
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungsCode(null));
+        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungsStatus(null));
         isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isFalse();
 
-        gesuch.getEinnahmenKosten().setVeranlagungsCode(0);
+        gesuch.getEinnahmenKosten().setVeranlagungsStatus(0);
         isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
 
-        gesuch.getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuch.getEinnahmenKosten().setVeranlagungsStatus(99);
         isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
 
-        gesuch.getEinnahmenKosten().setVeranlagungsCode(100);
+        gesuch.getEinnahmenKosten().setVeranlagungsStatus(100);
         isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isFalse();
     }

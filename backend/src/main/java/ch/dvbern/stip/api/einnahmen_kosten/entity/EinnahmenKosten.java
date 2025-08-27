@@ -96,10 +96,10 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     private Integer betreuungskostenKinder;
 
     @NotNull
-    @Column(name = "veranlagungscode", nullable = false)
+    @Column(name = "status_veranlagung", nullable = false)
     @Min(0)
     @Max(99)
-    private Integer veranlagungsCode = 0;
+    private Integer veranlagungsStatus = 0;
 
     @NotNull
     @Column(name = "steuerjahr", nullable = false)

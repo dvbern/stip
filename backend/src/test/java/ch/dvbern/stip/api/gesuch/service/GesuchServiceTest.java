@@ -1080,7 +1080,7 @@ class GesuchServiceTest {
         SteuerdatenDto steuerdatenDto = new SteuerdatenDto();
         steuerdatenDto.setId(UUID.randomUUID());
         steuerdatenDto.setSteuerdatenTyp(typ);
-        steuerdatenDto.setVeranlagungsCode(5);
+        steuerdatenDto.setVeranlagungsStatus(5);
         steuerdatenDto.setSteuerjahr(2010);
         steuerdatenDto.setFahrkosten(0);
         steuerdatenDto.setEigenmietwert(0);
@@ -1110,9 +1110,9 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(null);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(5);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(5);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(1990);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
@@ -1125,7 +1125,10 @@ class GesuchServiceTest {
             Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
         );
         assertThat(
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(),
+            gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getEinnahmenKosten()
+                .getVeranlagungsStatus(),
             Matchers.equalTo(0)
         );
     }

@@ -36,8 +36,8 @@ public abstract class EinnahmenKostenMapper {
         EinnahmenKostenUpdateDto einnahmenKostenDto,
         @MappingTarget EinnahmenKosten einnahmenKosten
     ) {
-        if (einnahmenKosten.getVeranlagungsCode() == null) {
-            einnahmenKosten.setVeranlagungsCode(0);
+        if (einnahmenKosten.getVeranlagungsStatus() == null) {
+            einnahmenKosten.setVeranlagungsStatus(0);
         }
     }
 

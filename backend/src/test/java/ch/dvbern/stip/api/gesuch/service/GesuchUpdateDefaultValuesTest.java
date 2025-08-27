@@ -68,7 +68,7 @@ class GesuchUpdateDefaultValuesTest {
     @TestAsSachbearbeiter
     void testUpdateEinnahmeKostenVeranlagungscodeAsSB() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(99);
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
@@ -78,19 +78,22 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang());
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(99));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(99));
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(0));
     }
 
     @Test
     @TestAsGesuchsteller
     void testUpdateEinnahmeKostenVeranlagungscodeAsGS() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(99);
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
@@ -100,12 +103,15 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang());
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(0));
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(0));
     }
 
     @Test

@@ -34,7 +34,7 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
   private @Valid Integer steuerjahr;
-  private @Valid Integer veranlagungsCode;
+  private @Valid Integer veranlagungsStatus;
   private @Valid Integer saeule3a;
   private @Valid Integer saeule2;
 
@@ -302,20 +302,20 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenDto veranlagungsCode(Integer veranlagungsCode) {
-    this.veranlagungsCode = veranlagungsCode;
+  public SteuerdatenDto veranlagungsStatus(Integer veranlagungsStatus) {
+    this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
   
-  @JsonProperty("veranlagungsCode")
-  public Integer getVeranlagungsCode() {
-    return veranlagungsCode;
+  @JsonProperty("veranlagungsStatus")
+  public Integer getVeranlagungsStatus() {
+    return veranlagungsStatus;
   }
 
-  @JsonProperty("veranlagungsCode")
-  public void setVeranlagungsCode(Integer veranlagungsCode) {
-    this.veranlagungsCode = veranlagungsCode;
+  @JsonProperty("veranlagungsStatus")
+  public void setVeranlagungsStatus(Integer veranlagungsStatus) {
+    this.veranlagungsStatus = veranlagungsStatus;
   }
 
   /**
@@ -378,14 +378,14 @@ public class SteuerdatenDto  implements Serializable {
         Objects.equals(this.fahrkostenPartner, steuerdaten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, steuerdaten.verpflegungPartner) &&
         Objects.equals(this.steuerjahr, steuerdaten.steuerjahr) &&
-        Objects.equals(this.veranlagungsCode, steuerdaten.veranlagungsCode) &&
+        Objects.equals(this.veranlagungsStatus, steuerdaten.veranlagungsStatus) &&
         Objects.equals(this.saeule3a, steuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, steuerdaten.saeule2);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsCode, saeule3a, saeule2);
+    return Objects.hash(steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, verpflegung, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, kinderalimente, vermoegen, id, fahrkostenPartner, verpflegungPartner, steuerjahr, veranlagungsStatus, saeule3a, saeule2);
   }
 
   @Override
@@ -407,7 +407,7 @@ public class SteuerdatenDto  implements Serializable {
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
-    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("}");

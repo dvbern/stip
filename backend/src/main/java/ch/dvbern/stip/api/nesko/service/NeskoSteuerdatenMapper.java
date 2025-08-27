@@ -161,7 +161,7 @@ public class NeskoSteuerdatenMapper {
         steuerdaten.setVerpflegung(verpflegung);
         steuerdaten.setVerpflegungPartner(verpflegungPartner);
         steuerdaten.setSteuerjahr(getSteuerdatenResponse.getSteuerjahr());
-        steuerdaten.setStatusVeranlagung(0);
+        steuerdaten.setVeranlagungsStatus(0);
         return steuerdaten;
     }
 }
