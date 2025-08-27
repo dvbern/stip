@@ -33,7 +33,11 @@ import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbear
 import { LandStore } from '@dv/shared/data-access/land';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { Land } from '@dv/shared/model/gesuch';
-import { INPUT_DELAY } from '@dv/shared/model/ui-constants';
+import {
+  DEFAULT_PAGE_SIZE,
+  INPUT_DELAY,
+  PAGE_SIZES,
+} from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -90,6 +94,8 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     'isEuEfta',
     'actions',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
 
   filterForm = this.formBuilder.group({
     iso3code: [<string | null>null],

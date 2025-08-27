@@ -28,6 +28,7 @@ import {
   removeDuplicates,
   sortZuweisung,
 } from '@dv/sachbearbeitung-app/util-fn/sachbearbeiter-helper';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFormFieldDirective,
@@ -85,6 +86,8 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   store = inject(SachbearbeiterStore);
   filterChangedSig = signal<string | null>(null);
   displayedColumns = ['fullName', 'buchstabenDe', 'buchstabenFr'] as const;
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   zuweisungInputMask: MaskitoOptions = {
     mask: new RegExp(`^(${RANGE}|${CHAR})(, ?(${RANGE}|${CHAR})?)*$`, 'i'),
     postprocessors: [

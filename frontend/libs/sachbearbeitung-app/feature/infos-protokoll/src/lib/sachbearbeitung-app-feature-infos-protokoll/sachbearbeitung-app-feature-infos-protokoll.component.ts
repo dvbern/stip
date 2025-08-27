@@ -16,7 +16,9 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
@@ -31,13 +33,16 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     TypeSafeMatCellDefDirective,
     ReactiveFormsModule,
     SharedUiTruncateTooltipDirective,
+    SharedUiTooltipDateComponent,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './sachbearbeitung-app-feature-infos-protokoll.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosProtokollComponent {
-  displayedColumns = ['datum', 'status', 'user', 'kommentar'];
+  displayedColumns = ['datum', 'typ', 'status', 'user', 'kommentar'];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   statusprotokollStore = inject(StatusprotokollStore);
   store = inject(Store);
   // eslint-disable-next-line @angular-eslint/no-input-rename

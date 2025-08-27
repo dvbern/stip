@@ -492,6 +492,7 @@
   "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.infos.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Datum",
+  "sachbearbeitung-app.infos.protokoll.table.typ": "Typ",
   "sachbearbeitung-app.infos.protokoll.table.status": "Status",
   "sachbearbeitung-app.infos.protokoll.table.user": "User",
   "sachbearbeitung-app.infos.protokoll.table.kommentar": "Kommentar",
