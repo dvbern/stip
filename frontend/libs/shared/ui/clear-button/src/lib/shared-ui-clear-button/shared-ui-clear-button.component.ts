@@ -7,7 +7,7 @@ import {
   input,
   output,
 } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { BehaviorSubject } from 'rxjs';
 
 import { isDefined } from '@dv/shared/model/type-util';
@@ -23,7 +23,7 @@ type AllowedValues =
 
 @Component({
   selector: 'dv-shared-ui-clear-button',
-  imports: [CommonModule, SharedUiIconChipComponent, TranslatePipe],
+  imports: [CommonModule, SharedUiIconChipComponent, TranslocoPipe],
   templateUrl: './shared-ui-clear-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

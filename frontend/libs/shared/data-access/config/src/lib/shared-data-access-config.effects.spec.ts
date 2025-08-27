@@ -5,7 +5,7 @@ import { ConfigurationService } from '@dv/shared/model/gesuch';
 import { loadDeploymentConfig } from './shared-data-access-config.effects';
 import { SharedDataAccessConfigEvents } from './shared-data-access-config.events';
 
-it('loads actors effect - success', (done) => {
+it('loads actors effect - success', () => {
   const configurationServiceMock = {
     getDeploymentConfig$: () => of({}),
   } as unknown as ConfigurationService;
@@ -27,7 +27,6 @@ it('loads actors effect - success', (done) => {
           deploymentConfig: {},
         }),
       );
-      done();
     },
   );
 });

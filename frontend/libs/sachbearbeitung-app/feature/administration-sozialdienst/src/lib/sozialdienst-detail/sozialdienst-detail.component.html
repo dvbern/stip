@@ -6,7 +6,7 @@
     <div class="row g-4">
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | translate }}</mat-label>
+          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}</mat-label>
           <input
             [formControl]="form.controls.name"
             data-testid="form-sozialdienst-name"
@@ -15,7 +15,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -25,7 +25,7 @@
     <!-- IBAN -->
     <div class="row g-4 my-2">
       <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.ort.iban.label' | translate }}</mat-label>
+        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.ort.iban.label' | transloco }}</mat-label>
         <span matTextPrefix>CH</span>
         <input
           data-testid="form-sozialdienst-iban"
@@ -35,13 +35,13 @@
           [maskito]="MASK_IBAN"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | translate }}
+          {{ 'shared.form.error.invalidIBAN' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | translate }}
+          {{ 'shared.form.error.invalidIBAN' | transloco }}
         </mat-error>
       </mat-form-field>
     </div>
@@ -59,12 +59,12 @@
       <legend class="row d-flex mt-4">
         <div class="d-flex gap-5 align-content-center col-12 col-md-6 col-xl-4">
           <div>
-            {{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | translate }}
+            {{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | transloco }}
           </div>
           <!-- button sozialdienstAdmin ersetzen -->
           @if (idSig()) {
             <button
-              [title]="'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | translate"
+              [title]="'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | transloco"
               type="button"
               class="btn btn-outline-primary btn-sm d-flex align-items-center"
               (click)="replaceSozialdienstAdmin()"
@@ -80,7 +80,7 @@
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>
-              {{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | translate }}
+              {{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}
             </mat-label>
             <input
               [formControl]="zahlungsverbindungControls.nachname"
@@ -90,7 +90,7 @@
               type="text"
             />
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -99,7 +99,7 @@
         <div class="d-flex gap 2 align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>
-              {{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | translate }}
+              {{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}
             </mat-label>
             <input
               [formControl]="zahlungsverbindungControls.vorname"
@@ -109,7 +109,7 @@
               type="text"
             />
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -124,7 +124,7 @@
         >
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
             <mat-label>
-              {{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | translate }}
+              {{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}
             </mat-label>
             <input
               data-testid="form-sozialdienst-email"
@@ -135,10 +135,10 @@
               (blur)="trimEmail()"
             />
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | transloco }}
             </mat-error>
             <mat-error *dvSharedUiFormMessageError="'pattern'">
-              {{ 'shared.form.error.email' | translate }}
+              {{ 'shared.form.error.email' | transloco }}
             </mat-error>
           </mat-form-field>
         </div>

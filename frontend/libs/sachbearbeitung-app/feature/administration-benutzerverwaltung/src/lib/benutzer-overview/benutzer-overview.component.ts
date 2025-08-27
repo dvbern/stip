@@ -18,10 +18,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime, map, startWith } from 'rxjs';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { Sachbearbeiter } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
@@ -47,7 +48,6 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
@@ -64,6 +64,7 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
     ReactiveFormsModule,
     SharedUiClearButtonComponent,
     SharedUiMaxLengthDirective,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './benutzer-overview.component.html',
   styleUrls: ['./benutzer-overview.component.scss'],
@@ -73,7 +74,7 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
 export class BenutzerOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   store = inject(BenutzerverwaltungStore);
   destroyRef = inject(DestroyRef);
 
@@ -97,15 +98,11 @@ export class BenutzerOverviewComponent {
     ),
   );
   private rolesTranslationsSig = toSignal(
-    this.translate.onLangChange.pipe(
-      startWith({
-        translations:
-          this.translate.translations[
-            this.translate.currentLang ?? this.translate.defaultLang
-          ],
-      }),
-      map(({ translations }) =>
-        Object.entries<string>(translations).filter(([key]) =>
+    this.translate.langChanges$.pipe(
+      map(() => this.translate.getTranslation()),
+      startWith(this.translate.getTranslation()),
+      map((translations) =>
+        Array.from(translations.entries()).filter(([key]) =>
           key.startsWith(ROLE_TRANSATION_PREFIX),
         ),
       ),
@@ -132,7 +129,7 @@ export class BenutzerOverviewComponent {
           )
           .filter(isDefined);
         return roleNames.some(([, role]) =>
-          role.toLowerCase().includes(roles.toLowerCase()),
+          role.toString().toLowerCase().includes(roles.toLowerCase()),
         );
       }
       return true;

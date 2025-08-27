@@ -80,6 +80,8 @@ include:
       install-e2e-test-package: false
       e2e-artifacts-dir: 'dist/.playwright/'
       e2e-on: 'default'
+      node-image: '$DVB_DOCKER_REGISTRY/dockerhub/library/node'
+      node-version: ':22'
 
 .install-argocd:
   tags: ['zone:tz', 'os:linux', 'type:docker']

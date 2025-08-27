@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiDropFileComponent } from './shared-ui-drop-file.component';
 
@@ -9,8 +11,7 @@ describe('SharedUiDropFileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiDropFileComponent],
-      providers: [provideTranslateService()],
+      imports: [SharedUiDropFileComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiDropFileComponent);

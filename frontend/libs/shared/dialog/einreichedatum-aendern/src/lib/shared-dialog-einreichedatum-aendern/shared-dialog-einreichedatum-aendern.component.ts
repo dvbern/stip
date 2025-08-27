@@ -9,7 +9,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { EinreichedatumAendernRequest } from '@dv/shared/model/gesuch';
 import { SharedUiFormMessageErrorDirective } from '@dv/shared/ui/form';
@@ -31,7 +31,7 @@ export type EinreichedatumAendernDialogResult = EinreichedatumAendernRequest;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,

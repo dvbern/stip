@@ -5,12 +5,12 @@ import {
   HostBinding,
   Input,
 } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   standalone: true,
   selector: 'dv-shared-ui-loading',
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule, TranslocoDirective],
   templateUrl: './shared-ui-loading.component.html',
   styleUrl: './shared-ui-loading.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

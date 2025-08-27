@@ -4,14 +4,14 @@
   <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
 <h3>
-  {{ 'shared.dokumente.table.title.customDocuments' | translate }}
+  {{ 'shared.dokumente.table.title.customDocuments' | transloco }}
 </h3>
 
 <div class="tw-dv-table">
   <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
     <caption class="cdk-visually-hidden">
       {{
-        'shared.dokumente.table.title.customDocuments' | translate
+        'shared.dokumente.table.title.customDocuments' | transloco
       }}
     </caption>
 
@@ -36,7 +36,7 @@
     <!-- required document -->
     <ng-container matColumnDef="documentName">
       <th mat-header-cell *matHeaderCellDef class="tw-min-w-52">
-        {{ 'shared.dokumente.table.documentName' | translate }}
+        {{ 'shared.dokumente.table.documentName' | transloco }}
       </th>
       <td mat-cell class="tw-min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
@@ -48,7 +48,7 @@
     <!-- description -->
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef class="tw-w-full tw-min-w-96">
-        {{ 'shared.dokumente.table.description' | translate }}
+        {{ 'shared.dokumente.table.description' | transloco }}
       </th>
       <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
@@ -59,8 +59,8 @@
 
     <!-- status -->
     <ng-container matColumnDef="status">
-      <th [title]="'shared.dokumente.table.status' | translate" mat-header-cell *matHeaderCellDef>
-        {{ 'shared.dokumente.table.status' | translate }}
+      <th [title]="'shared.dokumente.table.status' | transloco" mat-header-cell *matHeaderCellDef>
+        {{ 'shared.dokumente.table.status' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <dv-dokument-status-actions
@@ -77,7 +77,7 @@
       <th mat-header-cell *matHeaderCellDef>
         <button
           *dvIfSachbearbeiter
-          [matTooltip]="'shared.dokumente.createCustomDokumentTyp' | translate"
+          [matTooltip]="'shared.dokumente.createCustomDokumentTyp' | transloco"
           type="button"
           class="btn btn-outline-primary btn-sm"
           data-testid="dokumente-button-createCustomDokumentTyp"
@@ -94,8 +94,8 @@
             <button
               type="button"
               class="dv-icon-button delete-icon tw-flex-shrink-0"
-              [attr.aria-label]="'shared.form.delete' | translate"
-              [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | translate"
+              [attr.aria-label]="'shared.form.delete' | transloco"
+              [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | transloco"
               (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
             >
               <span class="material-symbols-rounded tw-text-xl tw-text-gray-500">delete</span>
@@ -130,7 +130,7 @@
             <dv-shared-ui-loading class="tw-pb-2" type="icon"></dv-shared-ui-loading>
           } @else if (dokument.kommentare.length === 0) {
             <div class="text-muted tw-py-2 tw-text-center">
-              {{ 'shared.dokumente.table.noComment' | translate }}
+              {{ 'shared.dokumente.table.noComment' | transloco }}
             </div>
           } @else {
             <div class="tw-grid tw-grid-cols-[33px,1fr,1fr,3fr] tw-gap-4 tw-py-2">
@@ -169,7 +169,7 @@
 
     <tr class="mat-mdc-row" *matNoDataRow>
       <td class="mat-mdc-cell tw-px-3 tw-text-center" [colSpan]="displayedColumns.length">
-        {{ 'shared.dokumente.table.noData' | translate }}
+        {{ 'shared.dokumente.table.noData' | transloco }}
       </td>
     </tr>
   </table>

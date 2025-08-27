@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
@@ -30,7 +30,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
   imports: [
     CommonModule,
     MatCardModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatExpansionModule,
     BerechnungsCardComponent,
     PersoenlicheEinnahmenComponent,

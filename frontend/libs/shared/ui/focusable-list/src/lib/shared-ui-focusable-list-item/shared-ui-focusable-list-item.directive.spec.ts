@@ -14,7 +14,7 @@ import { SharedUiFocusableListItemDirective } from './shared-ui-focusable-list-i
       useValue: null as any,
     },
   ],
-  template: `<a dvSharedUiFocusableListItem></a>`,
+  template: `<a dvSharedUiFocusableListItem>test</a>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class TestItemComponent {}

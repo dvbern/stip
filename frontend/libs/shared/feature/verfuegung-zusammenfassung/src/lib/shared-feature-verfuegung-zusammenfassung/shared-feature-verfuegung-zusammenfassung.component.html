@@ -2,141 +2,143 @@
 @if (berechnungStore.berechnung() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  <mat-card class="rounded-4 mb-4">
-    <mat-card-header>
-      <mat-card-title>
-        <h2 class="d-flex align-items-center gap-2 mb-0">
-          <dv-shared-ui-icon-chip>
-            <i class="material-symbols-rounded text-info">equal</i>
-          </dv-shared-ui-icon-chip>
-          {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title' | translate }}
-        </h2>
-      </mat-card-title>
-    </mat-card-header>
+  <ng-container *transloco="let t">
+    <mat-card class="rounded-4 mb-4">
+      <mat-card-header>
+        <mat-card-title>
+          <h2 class="d-flex align-items-center gap-2 mb-0">
+            <dv-shared-ui-icon-chip>
+              <i class="material-symbols-rounded text-info">equal</i>
+            </dv-shared-ui-icon-chip>
+            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title') }}
+          </h2>
+        </mat-card-title>
+      </mat-card-header>
 
-    <div class="border-bottom border-1 mt-4"></div>
+      <div class="border-bottom border-1 mt-4"></div>
 
-    <mat-card-content class="p-5 !tw-flex tw-items-center tw-gap-5">
-      @if (zusammenfassung.totalBetragStipendium > 0) {
-        @if (zusammenfassung.verminderteBerechnung) {
-          <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
-            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert' | translate }}
-          </div>
-        } @else {
-          <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
-            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen' | translate }}
-          </div>
-        }
-      } @else {
-        <div class="reject p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
-          {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt' | translate }}
-        </div>
-      }
-      @if (gesuchIdSig(); as id) {
-        <button
-          type="button"
-          class="btn btn-outline-primary fs-7 tw-p-4 tw-text-sm"
-          [dvDownloadButton]="{ type: 'berechnungsblatt', id }"
-        >
-          <span class="material-symbols-rounded tw-align-middle">download</span>
-        </button>
-      }
-    </mat-card-content>
-  </mat-card>
-
-  <!-- zusammenfassung -->
-  <mat-card class="rounded-4 mb-4">
-    <mat-card-header>
-      <mat-card-title>
-        @if (zusammenfassung.verminderteBerechnung) {
-          <div class="text-muted mb-1">
-            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle' | translate }}
-          </div>
-        } @else {
-          <div class="text-muted mb-1">{{ 'sachbearbeitung-app.verfuegung.zusammenfassung.subtitle' | translate }}</div>
-        }
-        <h3 class="mb-0 fs-4">
-          {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.title' | translate }}
-        </h3>
-      </mat-card-title>
-    </mat-card-header>
-
-    <div class="border-bottom border-1 mt-4 mb-4"></div>
-
-    <mat-card-content class="d-flex flex-column gap-2">
-      @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
-        @for (teilBerechnung of berechnungen; track $index) {
-          <div class="d-flex justify-content-between fs-5">
-            <span class="">
-              {{
-                'sachbearbeitung-app.verfuegung.zusammenfassung.item.total'
-                  | translate: { index: berechnungsIndex + 1, type: teilBerechnung.type }
-              }}
-              {{ 'shared.label.von' | translate }} {{ teilBerechnung.gueltigAb | date: 'MM.yyyy' }}
-              {{ 'shared.label.bis' | translate }}
-              {{ teilBerechnung.gueltigBis | date: 'MM.yyyy' }}
-            </span>
-            <div class="">{{ teilBerechnung.berechnung | formatChf }}</div>
-          </div>
-          <a class="text-decoration-none text-info mb-3" [routerLink]="['../berechnung', berechnungsIndex + 1]">
-            <div class="d-flex align-items-center">
-              <span
-                class="text-decoration-underline"
-                translate
-                [translateParams]="{ index: berechnungsIndex + 1, type: teilBerechnung.type }"
-                >sachbearbeitung-app.verfuegung.zusammenfassung.item.link</span
-              >
-              <i class="material-symbols-rounded fs-5 text-decoration-none">open_in_new</i>
+      <mat-card-content class="p-5 !tw-flex tw-items-center tw-gap-5">
+        @if (zusammenfassung.totalBetragStipendium > 0) {
+          @if (zusammenfassung.verminderteBerechnung) {
+            <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert') }}
             </div>
-          </a>
+          } @else {
+            <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen') }}
+            </div>
+          }
+        } @else {
+          <div class="reject p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt') }}
+          </div>
         }
-      }
-    </mat-card-content>
+        @if (gesuchIdSig(); as id) {
+          <button
+            type="button"
+            class="btn btn-outline-primary fs-7 tw-p-4 tw-text-sm"
+            [dvDownloadButton]="{ type: 'berechnungsblatt', id }"
+          >
+            <span class="material-symbols-rounded tw-align-middle">download</span>
+          </button>
+        }
+      </mat-card-content>
+    </mat-card>
 
-    <div class="border-bottom border-1 mt-4"></div>
+    <!-- zusammenfassung -->
+    <mat-card class="rounded-4 mb-4">
+      <mat-card-header>
+        <mat-card-title>
+          @if (zusammenfassung.verminderteBerechnung) {
+            <div class="text-muted mb-1">
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle') }}
+            </div>
+          } @else {
+            <div class="text-muted mb-1">{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.subtitle') }}</div>
+          }
+          <h3 class="mb-0 fs-4">
+            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.title') }}
+          </h3>
+        </mat-card-title>
+      </mat-card-header>
 
-    <mat-card-footer class="px-3 py-4">
-      @if (zusammenfassung.verminderteBerechnung) {
-        <div class="d-flex justify-content-between fs-5 h4">
-          <div>
-            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
+      <div class="border-bottom border-1 mt-4 mb-4"></div>
+
+      <mat-card-content class="d-flex flex-column gap-2">
+        @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
+          @for (teilBerechnung of berechnungen; track $index) {
+            <div class="d-flex justify-content-between fs-5">
+              <span class="">
+                {{
+                  t('sachbearbeitung-app.verfuegung.zusammenfassung.item.total', {
+                    index: berechnungsIndex + 1,
+                    type: teilBerechnung.type,
+                  })
+                }}
+                {{ t('shared.label.von') }} {{ teilBerechnung.gueltigAb | date: 'MM.yyyy' }}
+                {{ t('shared.label.bis') }}
+                {{ teilBerechnung.gueltigBis | date: 'MM.yyyy' }}
+              </span>
+              <div class="">{{ teilBerechnung.berechnung | formatChf }}</div>
+            </div>
+            <a class="text-decoration-none text-info mb-3" [routerLink]="['../berechnung', berechnungsIndex + 1]">
+              <div class="d-flex align-items-center">
+                <span class="text-decoration-underline">{{
+                  t('sachbearbeitung-app.verfuegung.zusammenfassung.item.link', {
+                    index: berechnungsIndex + 1,
+                    type: teilBerechnung.type,
+                  })
+                }}</span>
+                <i class="material-symbols-rounded fs-5 text-decoration-none">open_in_new</i>
+              </div>
+            </a>
+          }
+        }
+      </mat-card-content>
+
+      <div class="border-bottom border-1 mt-4"></div>
+
+      <mat-card-footer class="px-3 py-4">
+        @if (zusammenfassung.verminderteBerechnung) {
+          <div class="d-flex justify-content-between fs-5 h4">
+            <div>
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium') }}
+            </div>
+            <div>
+              {{ zusammenfassung.totalBetragStipendium | formatChf }}
+            </div>
           </div>
-          <div>
-            {{ zusammenfassung.totalBetragStipendium | formatChf }}
+          <div class="d-flex text-muted justify-content-between fs-5 tw-mb-2">
+            <div>
+              {{
+                t('sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag', {
+                  months: zusammenfassung.verminderteBerechnung.monate,
+                })
+              }}
+            </div>
+            <div>
+              {{ zusammenfassung.verminderteBerechnung.reduktionsBetrag | formatChfNegative }}
+            </div>
           </div>
-        </div>
-        <div class="d-flex text-muted justify-content-between fs-5 tw-mb-2">
-          <div>
-            {{
-              'sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag'
-                | translate
-                  : {
-                      months: zusammenfassung.verminderteBerechnung.monate,
-                    }
-            }}
+          <div class="d-flex justify-content-between fs-4 h4">
+            <div>
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium') }}
+            </div>
+            <div>
+              {{ zusammenfassung.verminderteBerechnung.berechnungReduziert | formatChf }}
+            </div>
           </div>
-          <div>
-            {{ zusammenfassung.verminderteBerechnung.reduktionsBetrag | formatChfNegative }}
+        } @else {
+          <div class="d-flex justify-content-between fs-4 h4">
+            <div>
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium') }}
+            </div>
+            <div>
+              {{ zusammenfassung.totalBetragStipendium | formatChf }}
+            </div>
           </div>
-        </div>
-        <div class="d-flex justify-content-between fs-4 h4">
-          <div>
-            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium' | translate }}
-          </div>
-          <div>
-            {{ zusammenfassung.verminderteBerechnung.berechnungReduziert | formatChf }}
-          </div>
-        </div>
-      } @else {
-        <div class="d-flex justify-content-between fs-4 h4">
-          <div>
-            {{ 'sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium' | translate }}
-          </div>
-          <div>
-            {{ zusammenfassung.totalBetragStipendium | formatChf }}
-          </div>
-        </div>
-      }
-    </mat-card-footer>
-  </mat-card>
+        }
+      </mat-card-footer>
+    </mat-card>
+  </ng-container>
 }

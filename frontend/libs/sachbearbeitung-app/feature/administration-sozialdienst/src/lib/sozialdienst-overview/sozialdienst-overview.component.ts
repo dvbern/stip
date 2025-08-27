@@ -19,7 +19,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { debounceTime, map } from 'rxjs';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
@@ -47,7 +47,7 @@ type SozialdienstStatus = (typeof availableStatus)[number];
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     MatTableModule,
     MatSelectModule,
@@ -73,7 +73,7 @@ type SozialdienstStatus = (typeof availableStatus)[number];
 export class SozialdienstOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   store = inject(SozialdienstStore);
   destroyRef = inject(DestroyRef);
 

@@ -17,8 +17,19 @@
 
 package ch.dvbern.stip.api.common.type;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum GueltigkeitStatus {
     ENTWURF,
     PUBLIZIERT,
-    ARCHIVIERT
+    ARCHIVIERT;
+
+    public static final Set<GueltigkeitStatus> ASSIGNABLE_GUELTIGKEIT_STATUS = Collections.unmodifiableSet(
+        EnumSet.of(
+            PUBLIZIERT,
+            ARCHIVIERT
+        )
+    );
 }

@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUtilPaginatorTranslation } from './shared-util-paginator-translation';
 
@@ -8,7 +10,8 @@ describe('SharedUtilPaginatorTranslationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SharedUtilPaginatorTranslation, provideTranslateService()],
+      imports: [getTranslocoModule()],
+      providers: [SharedUtilPaginatorTranslation],
     });
     service = TestBed.inject(SharedUtilPaginatorTranslation);
   });

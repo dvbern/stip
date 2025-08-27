@@ -1,6 +1,6 @@
 <!-- Beschwerde Verlauf -->
 <h3 class="tw-mb-6">
-  {{ 'sachbearbeitung-app.infos.beschwerde.verlauf' | translate }}
+  {{ 'sachbearbeitung-app.infos.beschwerde.verlauf' | transloco }}
 </h3>
 
 <div class="tw-dv-table tw-mb-6">
@@ -8,14 +8,14 @@
   <table mat-table matSort [dataSource]="datasource" [matSortActive]="'timestampErstellt'" [matSortDirection]="'desc'">
     <caption class="cdk-visually-hidden">
       {{
-        'sachbearbeitung-app.infos.beschwerde.table.title' | translate
+        'sachbearbeitung-app.infos.beschwerde.table.title' | transloco
       }}
     </caption>
 
     <!-- Datum -->
     <ng-container matColumnDef="timestampErstellt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.infos.beschwerde.table.datum' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.datum' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
         {{ beschwerde.timestampErstellt | date: 'dd.MM.yyyy' }}
@@ -25,7 +25,7 @@
     <!-- User -->
     <ng-container matColumnDef="userErstellt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.infos.beschwerde.table.user' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.user' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
         {{ beschwerde.userErstellt }}
@@ -35,13 +35,13 @@
     <!-- Titel -->
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef class="tw-w-64">
-        {{ 'sachbearbeitung-app.infos.beschwerde.table.title' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.title' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
         @if (beschwerde.beschwerdeEntscheid) {
-          {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | translate }}
+          {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | transloco }}
         } @else {
-          {{ 'sachbearbeitung-app.infos.beschwerde.title.' + beschwerde.beschwerdeSetTo | translate }}
+          {{ 'sachbearbeitung-app.infos.beschwerde.title.' + beschwerde.beschwerdeSetTo | transloco }}
         }
       </td>
     </ng-container>
@@ -49,7 +49,7 @@
     <!-- Kommentar -->
     <ng-container matColumnDef="kommentar">
       <th mat-header-cell *matHeaderCellDef class="tw-w-[30ch]">
-        {{ 'sachbearbeitung-app.infos.beschwerde.table.comment' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.comment' | transloco }}
       </th>
       <td
         mat-cell
@@ -64,14 +64,14 @@
     <!-- Beschwerde erfolgreich -->
     <ng-container matColumnDef="successfull">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.beschwerde.table.successfull' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.successfull' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
         @if (beschwerde.beschwerdeEntscheid) {
           {{
             beschwerde.beschwerdeEntscheid.beschwerdeErfolgreich
-              ? ('sachbearbeitung-app.infos.beschwerde.infoDialog.true' | translate)
-              : ('sachbearbeitung-app.infos.beschwerde.infoDialog.false' | translate)
+              ? ('sachbearbeitung-app.infos.beschwerde.infoDialog.true' | transloco)
+              : ('sachbearbeitung-app.infos.beschwerde.infoDialog.false' | transloco)
           }}
         }
       </td>
@@ -81,7 +81,7 @@
 
     <ng-container matColumnDef="document">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.beschwerde.table.document' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.table.document' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let beschwerde; dataSource: datasource" class="tw-whitespace-nowrap">
         @let dokumentId = beschwerde.document?.id;
@@ -90,7 +90,7 @@
           <button
             type="button"
             class="btn btn-link fs-7 tw-p-4 tw-text-sm"
-            [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | translate"
+            [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | transloco"
             [dvDownloadButton]="{
               type: 'dokument',
               id: dokumentId,
@@ -111,7 +111,7 @@
           type="button"
           (click)="showDetails(beschwerde)"
           class="dv-icon-button dv-icon-button-md text-info"
-          [matTooltip]="'sachbearbeitung-app.infos.beschwerde.table.moreInfo' | translate"
+          [matTooltip]="'sachbearbeitung-app.infos.beschwerde.table.moreInfo' | transloco"
         >
           <span class="material-symbols-rounded">info</span>
         </button>
@@ -122,7 +122,7 @@
     <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
       <td class="mat-mdc-cell tw-p-3" [colSpan]="displayColumns.length">
-        {{ 'shared.table.noEntries' | translate }}
+        {{ 'shared.table.noEntries' | transloco }}
       </td>
     </tr>
   </table>

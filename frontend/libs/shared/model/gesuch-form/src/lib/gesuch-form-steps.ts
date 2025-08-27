@@ -14,6 +14,7 @@ import {
   Zivilstand,
 } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
+import { isDefined } from '@dv/shared/model/type-util';
 
 import {
   GesuchFormStep,
@@ -114,8 +115,8 @@ export const ABSCHLUSS: GesuchFormStep = {
 
 export const RETURN_TO_HOME: GesuchFormStep = {
   route: '/',
-  translationKey: '',
-  titleTranslationKey: '',
+  translationKey: 'shared.nothing',
+  titleTranslationKey: 'shared.nothing',
   iconSymbolName: '',
 } satisfies GesuchFormStep;
 
@@ -339,8 +340,6 @@ export const isStepValid = (
   if (!field || field === 'abschluss') {
     return undefined;
   }
-
-  const isDefined = (value: unknown) => value !== null && value !== undefined;
 
   if (isSteuererklaerungStep(field)) {
     const [stepSteuerdatenTyp] =

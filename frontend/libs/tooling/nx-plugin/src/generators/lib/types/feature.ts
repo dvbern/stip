@@ -4,7 +4,7 @@ import { libraryGenerator } from '@nx/angular/generators';
 import { Tree } from '@nx/devkit';
 
 import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
-import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
+import { updateSpecTsConfig } from './helpers/tsconfig';
 
 export function featureTypeFactory(
   options: NormalizedSchema,
@@ -18,6 +18,7 @@ export function featureTypeFactory(
       standalone: true,
       style: 'scss',
       skipTests: true,
+      spec: false,
       changeDetection: 'OnPush',
       ...(scope !== 'shared'
         ? {
@@ -31,19 +32,8 @@ export function featureTypeFactory(
 }
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
-  extendTestSetupSwc(tree, options);
-  extendJestConfigSwc(tree, options);
-
   tree.delete(path.join(options.projectRoot, 'README.md'));
-  tree.delete(
-    path.join(
-      options.projectRoot,
-      options.nameDasherized,
-      'src',
-      'lib',
-      'lib.routes.ts',
-    ),
-  );
+  tree.delete(path.join(options.projectRoot, 'src', 'lib', 'lib.routes.ts'));
 
   const pathToIndex = path.join(
     options.projectRoot,

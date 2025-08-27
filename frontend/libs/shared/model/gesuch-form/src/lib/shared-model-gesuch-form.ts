@@ -1,3 +1,4 @@
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { GSFormStepProps, SBFormStepProps } from '@dv/shared/model/gesuch';
 
 export type StepValidation = {
@@ -11,8 +12,8 @@ export type StepState = 'VALID' | 'INVALID' | 'WARNING';
 export interface GesuchFormStep {
   route: string;
   routes?: string[];
-  translationKey: string;
-  titleTranslationKey: string;
+  translationKey: SharedTranslationKey;
+  titleTranslationKey: SharedTranslationKey;
   iconSymbolName: string;
 }
 

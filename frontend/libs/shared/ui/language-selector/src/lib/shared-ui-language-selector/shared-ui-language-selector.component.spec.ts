@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiLanguageSelectorComponent } from './shared-ui-language-selector.component';
 
@@ -9,8 +11,7 @@ describe('SharedUiLanguageSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiLanguageSelectorComponent],
-      providers: [provideTranslateService()],
+      imports: [SharedUiLanguageSelectorComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiLanguageSelectorComponent);

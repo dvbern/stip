@@ -3,20 +3,19 @@ import { signal } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { AbschlussPhase } from '@dv/shared/model/einreichen';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import {
+  getTranslocoModule,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedFeatureGesuchFormAbschlussComponent } from './shared-feature-gesuch-form-abschluss.component';
 
 async function setup(abschlussPhase: AbschlussPhase) {
   return await render(SharedFeatureGesuchFormAbschlussComponent, {
-    imports: [
-      TranslateTestingModule.withTranslations({}),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       {
         provide: EinreichenStore,
@@ -41,7 +40,7 @@ async function setup(abschlussPhase: AbschlussPhase) {
         },
       },
       provideHttpClient(),
-      provideSharedPatternJestTestSetup(),
+      provideSharedPatternVitestTestSetup(),
       provideMockStore({
         initialState: {
           gesuchs: {

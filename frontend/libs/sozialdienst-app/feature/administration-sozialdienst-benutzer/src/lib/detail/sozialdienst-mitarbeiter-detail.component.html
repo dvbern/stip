@@ -1,6 +1,6 @@
 <ng-template dvHeaderSuffix>
   @if (store.sozialdienstBenutzer(); as view) {
-    - {{ 'sozialdienst-app.admin.sozialdienstBenutzer.' + modeSig() | translate }}
+    - {{ 'sozialdienst-app.admin.sozialdienstBenutzer.' + modeSig() | transloco }}
   }
 </ng-template>
 
@@ -18,7 +18,7 @@
       <!-- Name -->
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sozialdienst-app.admin.sozialdienstBenutzer.nachname.label' | translate }}</mat-label>
+          <mat-label>{{ 'sozialdienst-app.admin.sozialdienstBenutzer.nachname.label' | transloco }}</mat-label>
           <input
             formControlName="nachname"
             data-testid="form-sozialdienst-mitarbeiter-nachname"
@@ -27,14 +27,14 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       </div>
       <!-- Vorname -->
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'sozialdienst-app.admin.sozialdienstBenutzer.vorname.label' | translate }}</mat-label>
+          <mat-label>{{ 'sozialdienst-app.admin.sozialdienstBenutzer.vorname.label' | transloco }}</mat-label>
           <input
             formControlName="vorname"
             data-testid="form-sozialdienst-mitarbeiter-vorname"
@@ -43,7 +43,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -56,7 +56,7 @@
       >
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>
-            {{ 'sozialdienst-app.admin.sozialdienstBenutzer.email.label' | translate }}
+            {{ 'sozialdienst-app.admin.sozialdienstBenutzer.email.label' | transloco }}
           </mat-label>
           <input
             data-testid="form-sozialdienst-mitarbeiter-email"
@@ -67,10 +67,10 @@
             (blur)="trimEmail()"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
           <mat-error *dvSharedUiFormMessageError="'pattern'">
-            {{ 'shared.form.error.email' | translate }}
+            {{ 'shared.form.error.email' | transloco }}
           </mat-error>
         </mat-form-field>
       </div>

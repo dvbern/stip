@@ -3,7 +3,10 @@ import { inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiSelectSearchComponent } from './shared-ui-select-search.component';
 
@@ -55,11 +58,12 @@ describe('SharedUiSelectSearchComponent Unit Test', () => {
         SharedUiSelectSearchComponent,
         NoopAnimationsModule,
         ReactiveFormsModule,
+        getTranslocoModule(),
       ],
-      providers: [provideHttpClient(), provideTranslateService()],
+      providers: [provideHttpClient()],
     }).compileComponents();
     TestBed.runInInjectionContext(() => {
-      inject(TranslateService).use('de');
+      inject(TranslocoService).setActiveLang('de');
     });
 
     fixture = TestBed.createComponent(SharedUiSelectSearchComponent<TestType>);

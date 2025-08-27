@@ -17,9 +17,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { SachbearbeiterStore } from '@dv/sachbearbeitung-app/data-access/sachbearbeiter';
 import { BuchstabenZuordnung } from '@dv/sachbearbeitung-app/model/administration';
@@ -58,7 +58,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     MatPaginatorModule,
     MatTooltipModule,
     MatCheckboxModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormSaveComponent,
     SharedUiFormFieldDirective,
     SharedUiRdIsPendingPipe,

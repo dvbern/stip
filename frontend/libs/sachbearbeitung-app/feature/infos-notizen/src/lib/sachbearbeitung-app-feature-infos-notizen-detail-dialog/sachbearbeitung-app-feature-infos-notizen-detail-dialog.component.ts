@@ -17,7 +17,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchNotiz, GesuchNotizTyp } from '@dv/shared/model/gesuch';
@@ -47,7 +47,7 @@ export type NotizDialogResult = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatInputModule,
     MatFormFieldModule,
     SharedUiFormFieldDirective,

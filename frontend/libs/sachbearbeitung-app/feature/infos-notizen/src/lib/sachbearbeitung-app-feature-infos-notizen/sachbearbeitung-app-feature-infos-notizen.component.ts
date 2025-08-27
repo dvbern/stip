@@ -18,7 +18,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -46,7 +46,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     MatMenuModule,

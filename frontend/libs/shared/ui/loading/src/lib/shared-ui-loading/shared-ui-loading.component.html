@@ -3,11 +3,12 @@
   [class.compact]="type !== 'spinner'"
   [class.mt-4]="type === 'spinner'"
   [class.overlay]="overlay"
+  *transloco="let t"
 >
   <div class="spinner" [class.mb-3]="type === 'spinner'" [class.mb-1]="type === 'compact'"></div>
   @if (type !== 'icon') {
     @if (loadingTextKey; as textKey) {
-      <div class="spinner-text" [class.fs-7]="type === 'compact'">{{ textKey | translate }}</div>
+      <div class="spinner-text" [class.fs-7]="type === 'compact'">{{ t(textKey) }}</div>
     }
   }
 </div>

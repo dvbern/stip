@@ -59,9 +59,11 @@ export const uploadFiles = async (page: Page) => {
   }
 };
 
-export type DeepNullable<T> = {
-  [K in keyof T]: DeepNullable<T[K]> | null;
-};
+export type ExplicitNull<T> = T extends object
+  ? {
+      [K in keyof T]-?: ExplicitNull<T[K]> | null;
+    }
+  : T | null;
 
 export const handleCheckbox = async (
   matCheckboxComp: Locator,

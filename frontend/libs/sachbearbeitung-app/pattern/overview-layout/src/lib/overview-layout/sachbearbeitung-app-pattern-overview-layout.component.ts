@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import {
   SharedPatternAppHeaderComponent,
@@ -20,7 +20,7 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiHasRolesDirective,
-    TranslatePipe,
+    TranslocoPipe,
   ],
   templateUrl: './sachbearbeitung-app-pattern-overview-layout.component.html',
   styleUrls: ['./sachbearbeitung-app-pattern-overview-layout.component.scss'],

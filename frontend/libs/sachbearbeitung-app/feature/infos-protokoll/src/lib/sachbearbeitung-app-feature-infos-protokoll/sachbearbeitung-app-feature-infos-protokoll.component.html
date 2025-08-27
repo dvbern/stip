@@ -1,20 +1,20 @@
 <!-- Table -->
 <div class="row g-4 mt-2">
   <p>
-    {{ 'sachbearbeitung-app.infos.protokoll.text' | translate }}
+    {{ 'sachbearbeitung-app.infos.protokoll.text' | transloco }}
   </p>
 </div>
 <div class="tw-dv-table">
   <table mat-table [dataSource]="statusprotokollSig()" matSort>
     <caption class="cdk-visually-hidden">
       {{
-        'sachbearbeitung-app.infos.protokoll.description' | translate
+        'sachbearbeitung-app.infos.protokoll.description' | transloco
       }}
     </caption>
     <!-- Datum -->
     <ng-container matColumnDef="datum">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.infos.protokoll.table.datum' | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.datum' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="tw-whitespace-nowrap">
         <dv-shared-ui-tooltip-date [dateSig]="protokoll.timestamp"></dv-shared-ui-tooltip-date>
@@ -24,37 +24,37 @@
     <!-- Typ -->
     <ng-container matColumnDef="typ">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.infos.protokoll.table.typ' | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.typ' | transloco }}
       </th>
       <td
         mat-cell
         *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
         class="tw-max-w-32 tw-whitespace-nowrap"
-        [dvTruncateTooltip]="'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | translate"
+        [dvTruncateTooltip]="'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | transloco"
       >
-        {{ 'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | transloco }}
       </td>
     </ng-container>
 
     <!-- Status -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.infos.protokoll.table.status' | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.status' | transloco }}
       </th>
       <td
         mat-cell
         *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
         class="tw-max-w-48 tw-whitespace-nowrap"
-        [dvTruncateTooltip]="protokoll.statusKey | translate"
+        [dvTruncateTooltip]="protokoll.statusKey | transloco"
       >
-        {{ protokoll.statusKey | translate }}
+        {{ protokoll.statusKey | transloco }}
       </td>
     </ng-container>
 
     <!-- User -->
     <ng-container matColumnDef="user">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ 'sachbearbeitung-app.infos.protokoll.table.user' | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.user' | transloco }}
       </th>
       <td
         mat-cell
@@ -69,7 +69,7 @@
     <!-- Kommentar -->
     <ng-container matColumnDef="kommentar">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.protokoll.table.kommentar' | translate }}
+        {{ 'sachbearbeitung-app.infos.protokoll.table.kommentar' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="tw-min-w-80">
         {{ protokoll.kommentar }}
@@ -80,7 +80,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
       <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-        {{ 'shared.table.noData' | translate }}
+        {{ 'shared.table.noData' | transloco }}
       </td>
     </tr>
   </table>

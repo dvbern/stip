@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
 import {
@@ -26,7 +26,7 @@ import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
   selector: 'dv-sozialdienst-app-pattern-administration-layout',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterModule,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,

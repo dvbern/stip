@@ -5,22 +5,5 @@
   "prefix": "lib",
   "projectType": "library",
   "tags": ["type:util-data-access", "scope:shared"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/util-data-access/plz-ort-lookup/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "libs/shared/util-data-access/plz-ort-lookup/jest.config.ts"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }

@@ -3,7 +3,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { RolesMap } from '@dv/shared/model/benutzer';
@@ -15,11 +14,12 @@ import {
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
 import {
+  getTranslocoModule,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
-  provideSharedPatternJestTestAusbildungstaetten,
-  provideSharedPatternJestTestSetup,
-} from '@dv/shared/pattern/jest-test-setup';
+  provideSharedPatternVitestTestAusbildungstaetten,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { mockElementScrollIntoView } from '@dv/shared/util-fn/comp-test';
 
@@ -28,10 +28,7 @@ import { SharedFeatureGesuchFormEinnahmenkostenComponent } from './shared-featur
 async function setup(formular: GesuchFormular) {
   mockElementScrollIntoView();
   return await render(SharedFeatureGesuchFormEinnahmenkostenComponent, {
-    imports: [
-      TranslateTestingModule.withTranslations({ de: {} }),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       provideMockStore({
@@ -57,8 +54,8 @@ async function setup(formular: GesuchFormular) {
         },
       }),
       provideMaterialDefaultOptions(),
-      provideSharedPatternJestTestSetup(),
-      provideSharedPatternJestTestAusbildungstaetten(),
+      provideSharedPatternVitestTestSetup(),
+      provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
     ],
   });
@@ -341,20 +338,30 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
 function createEmptyAusbildung(): Ausbildung {
   return {
     fallId: 'asdf',
-    fachrichtung: '',
     ausbildungBegin: '',
     ausbildungEnd: '',
     pensum: 'VOLLZEIT',
     ausbildungsgang: {
       id: '',
-      bezeichnungDe: '',
-      bezeichnungFr: '',
-      abschlussId: '',
-      abschlussBezeichnungDe: '',
-      abschlussBezeichnungFr: '',
-      ausbildungsstaetteId: '',
-      ausbildungsstaetteNameDe: '',
-      ausbildungsstaetteNameFr: '',
+      abschluss: {
+        id: '',
+        bezeichnungDe: '',
+        bezeichnungFr: '',
+        aktiv: false,
+        askForBerufsmaturitaet: false,
+        ausbildungskategorie: 'BRUECKENANGEBOT',
+        berufsbefaehigenderAbschluss: false,
+        bfsKategorie: 1,
+        bildungskategorie: 'TERTIAERSTUFE_A',
+        bildungsrichtung: 'ALLGEMEINBILDENDE_SCHULE',
+        ferien: 'LEHRE',
+      },
+      ausbildungsstaette: {
+        id: '',
+        nameDe: '',
+        nameFr: '',
+        aktiv: false,
+      },
       aktiv: false,
     },
     editable: true,

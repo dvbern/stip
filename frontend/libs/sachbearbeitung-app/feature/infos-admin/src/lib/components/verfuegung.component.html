@@ -1,20 +1,20 @@
 <!-- Verfuegungen -->
 <h3 class="tw-mb-6">
-  {{ 'sachbearbeitung-app.infos.admin.verfuegung' | translate }}
+  {{ 'sachbearbeitung-app.infos.admin.verfuegung' | transloco }}
 </h3>
 
 <div class="tw-dv-table tw-mb-6">
   <table mat-table [dataSource]="verfuegungenSig()">
     <caption class="cdk-visually-hidden">
       {{
-        'sachbearbeitung-app.infos.admin.verfuegung' | translate
+        'sachbearbeitung-app.infos.admin.verfuegung' | transloco
       }}
     </caption>
 
     <!-- Datum -->
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | translate }}
+        {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let verfuegung; dataSource: verfuegungenSig()" class="tw-whitespace-nowrap">
         {{ verfuegung.timestampErstellt | date: 'dd.MM.yyyy' }}
@@ -24,7 +24,7 @@
     <!-- verfuegung als PDF -->
     <ng-container matColumnDef="verfuegung">
       <th mat-header-cell *matHeaderCellDef>
-        {{ 'sachbearbeitung-app.infos.admin.verfuegung.table.verfuegung' | translate }}
+        {{ 'sachbearbeitung-app.infos.admin.verfuegung.table.verfuegung' | transloco }}
       </th>
       <td
         mat-cell
@@ -34,7 +34,7 @@
         <button
           type="button"
           class="btn btn-link tw-flex tw-max-w-full tw-p-0"
-          [attr.aria-label]="'sachbearbeitung-app.infos.admin.verfuegung.table.dokument' | translate"
+          [attr.aria-label]="'sachbearbeitung-app.infos.admin.verfuegung.table.dokument' | transloco"
           [dvDownloadButton]="{
             type: 'verfuegung',
             id: verfuegung.id,
@@ -50,7 +50,7 @@
     <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
       <td class="mat-mdc-cell tw-p-3" [colSpan]="displayColumns.length">
-        {{ 'shared.table.noEntries' | translate }}
+        {{ 'shared.table.noEntries' | transloco }}
       </td>
     </tr>
   </table>

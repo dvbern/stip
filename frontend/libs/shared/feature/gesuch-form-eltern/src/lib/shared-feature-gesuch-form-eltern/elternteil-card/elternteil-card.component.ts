@@ -6,7 +6,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -16,7 +16,7 @@ import { SharedUiTranslatedLandPipe } from '@dv/shared/ui/translated-land';
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiIconChipComponent,
     SharedUiTranslatedLandPipe,
   ],

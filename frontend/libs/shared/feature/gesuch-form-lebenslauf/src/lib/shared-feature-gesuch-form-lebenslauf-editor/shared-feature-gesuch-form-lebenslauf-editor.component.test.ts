@@ -3,19 +3,19 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render, screen } from '@testing-library/angular';
 import { default as userEvent } from '@testing-library/user-event';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { RolesMap } from '@dv/shared/model/benutzer';
 import { SharedModelLebenslauf } from '@dv/shared/model/lebenslauf';
 import {
   TEST_ABSCHLUESSE,
+  getTranslocoModule,
   mockConfigsState,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
-  provideSharedPatternJestTestAusbildungstaetten,
-} from '@dv/shared/pattern/jest-test-setup';
-import { clickAutocompleteOption } from '@dv/shared/util-fn/comp-test';
+  provideSharedPatternVitestTestAusbildungstaetten,
+} from '@dv/shared/pattern/vitest-test-setup';
+import { clickMatSelectOption } from '@dv/shared/util-fn/comp-test';
 
 import { SharedFeatureGesuchFormLebenslaufEditorComponent } from './shared-feature-gesuch-form-lebenslauf-editor.component';
 
@@ -25,10 +25,7 @@ async function setup(type: SharedModelLebenslauf['type']) {
       itemSig: { type },
       ausbildungenSig: [],
     },
-    imports: [
-      TranslateTestingModule.withTranslations({}),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       provideCompileTimeConfig(),
@@ -45,7 +42,7 @@ async function setup(type: SharedModelLebenslauf['type']) {
           configs: mockConfigsState(),
         },
       }),
-      provideSharedPatternJestTestAusbildungstaetten(),
+      provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
     ],
   });
@@ -79,10 +76,9 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
       const renderResult = await setup('AUSBILDUNG');
       const { queryByTestId, detectChanges } = renderResult;
 
-      await clickAutocompleteOption(
+      await clickMatSelectOption(
         'lebenslauf-editor-abschluss-select',
         TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.bezeichnungDe,
-        TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.matchName,
       );
 
       detectChanges();
@@ -91,10 +87,9 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeInTheDocument();
 
-      await clickAutocompleteOption(
+      await clickMatSelectOption(
         'lebenslauf-editor-abschluss-select',
         TEST_ABSCHLUESSE.abschlussFachrichtung1.bezeichnungDe,
-        TEST_ABSCHLUESSE.abschlussFachrichtung1.matchName,
       );
 
       detectChanges();
@@ -117,10 +112,9 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
 
       detectChanges();
 
-      await clickAutocompleteOption(
+      await clickMatSelectOption(
         'lebenslauf-editor-abschluss-select',
         TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.bezeichnungDe,
-        TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.matchName,
       );
 
       detectChanges();
@@ -142,10 +136,9 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         screen.getByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toHaveValue(value);
 
-      await clickAutocompleteOption(
+      await clickMatSelectOption(
         'lebenslauf-editor-abschluss-select',
         TEST_ABSCHLUESSE.abschlussWithoutZusatzfrage1.bezeichnungDe,
-        TEST_ABSCHLUESSE.abschlussWithoutZusatzfrage1.matchName,
       );
 
       detectChanges();
@@ -154,10 +147,9 @@ describe(SharedFeatureGesuchFormLebenslaufEditorComponent.name, () => {
         screen.queryByTestId('lebenslauf-editor-fachrichtungBerufsbezeichnung'),
       ).toBeNull();
 
-      await clickAutocompleteOption(
+      await clickMatSelectOption(
         'lebenslauf-editor-abschluss-select',
         TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.bezeichnungDe,
-        TEST_ABSCHLUESSE.abschlussBerufsbezeichnung1.matchName,
       );
 
       detectChanges();

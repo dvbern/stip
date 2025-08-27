@@ -14,7 +14,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
@@ -34,7 +34,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     MatTooltipModule,
     MatPaginatorModule,
     RouterLink,
-    TranslatePipe,
+    TranslocoPipe,
     TranslatedPropertyPipe,
     TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
@@ -47,7 +47,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 export class GesuchsperiodeComponent implements OnInit {
   private dialog = inject(MatDialog);
   store = inject(GesuchsperiodeStore);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   displayedColumns: string[] = [
     'bezeichnung',

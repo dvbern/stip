@@ -10,10 +10,9 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
-import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import {
   VERFUEGUNG_OPTIONS,
   VerfuegungOption,
@@ -22,6 +21,7 @@ import {
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
@@ -33,7 +33,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   selector: 'dv-sachbearbeitung-app-pattern-verfuegung-layout',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,
@@ -53,14 +53,14 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
   verfuegungOptions = VERFUEGUNG_OPTIONS;
 
   private store = inject(Store);
-  private gesuchStore = inject(GesuchStore);
+  private gesuchInfoStore = inject(GesuchInfoStore);
   private berechnungStore = inject(BerechnungStore);
   private permissionStore = inject(PermissionStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchPermissionsSig = computed(() => {
-    const gesuchStatus = this.gesuchStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
     const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return {};
@@ -72,7 +72,7 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
     );
   });
   isLoadingSig = computed(() => {
-    return isPending(this.gesuchStore.gesuchInfo());
+    return isPending(this.gesuchInfoStore.gesuchInfo());
   });
 
   berechnungenSig = computed(() => {
@@ -98,7 +98,7 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
-        this.gesuchStore.loadGesuchInfo$({ gesuchId });
+        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
       }
     });
   }

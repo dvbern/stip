@@ -7,7 +7,7 @@ import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events
 
 describe('sharedDataAccessGesuch Effects', () => {
   const storeUtilMock: any = {
-    waitForBenutzerData$: jest.fn(() => (s: unknown) => s),
+    waitForBenutzerData$: vitest.fn(() => (s: unknown) => s),
   };
   let scheduler: TestScheduler;
 

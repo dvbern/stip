@@ -3,50 +3,50 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
   <h1 class="title h5 mb-4 d-flex">
-    {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | translate }}
+    {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | transloco }}
   </h1>
-  <div>{{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.message' | translate }}</div>
+  <div>{{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.message' | transloco }}</div>
 
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
-      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
-      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
-      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="email" type="email" />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'email'">
-        {{ 'shared.form.error.email' | translate }}
+        {{ 'shared.form.error.email' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <div class="d-flex mt-4 justify-content-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="confirm()">
-        {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm' | translate }}
+        {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm' | transloco }}
       </button>
     </div>
   </form>

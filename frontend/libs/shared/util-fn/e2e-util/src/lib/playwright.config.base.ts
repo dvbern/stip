@@ -1,5 +1,4 @@
 import { defineConfig } from '@playwright/test';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { zstdCompress, zstdDecompress } from 'http-encoding';
 
 export const BEARER_COOKIE = 'access_cookie';
@@ -54,7 +53,7 @@ export const baseConfig = defineConfig({
       mode: 'only-on-failure',
     },
     video: {
-      mode: 'retain-on-failure',
+      mode: 'on',
       // size: { width: 1920, height: 1080 },
       // smaller video size to reduce file size
       size: { width: 1280, height: 720 },

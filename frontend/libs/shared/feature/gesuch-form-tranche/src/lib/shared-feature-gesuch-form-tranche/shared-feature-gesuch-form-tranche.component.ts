@@ -6,7 +6,7 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormsModule,
   NonNullableFormBuilder,
@@ -16,8 +16,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
+import {
+  TranslocoPipe,
+  TranslocoService,
+  translateSignal,
+} from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -29,7 +33,9 @@ import {
   AenderungChangeState,
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -67,7 +73,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiFormReadonlyDirective,
-    TranslatePipe,
+    TranslocoPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,15 +82,18 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);
   private router = inject(Router);
   private dialog = inject(MatDialog);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   private formBuilder = inject(NonNullableFormBuilder);
-  private defaultCommentSig = toSignal(
-    this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
+  private defaultCommentSig = translateSignal(
+    'shared.form.tranche.bemerkung.initialgesuch',
   );
 
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchInfoStore = inject(GesuchInfoStore, {
+    optional: true,
+  });
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
@@ -105,12 +114,13 @@ export class SharedFeatureGesuchFormTrancheComponent {
   });
 
   currentTrancheNumberSig = computed(() => {
-    const { tranche: currentTranche, gesuchUrlTyp } = this.viewSig();
+    const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
     if (!currentTranche) {
       return '…';
     }
 
+    const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
     const tranchen = this.gesuchAenderungStore.tranchenViewSig();
     const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
     const list = {
@@ -148,6 +158,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
+        this.gesuchInfoStore?.loadGesuchInfo$({ gesuchId });
         this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
       }
     });
@@ -179,14 +190,14 @@ export class SharedFeatureGesuchFormTrancheComponent {
       const appPrefix = type === 'contract' ? appType : 'shared';
 
       this.form.patchValue({
-        status: this.translate.instant(
+        status: this.translate.translate(
           `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
         ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,
         fallnummer: fallNummer,
         gesuchsperiode: periode
-          ? this.translate.instant(
+          ? this.translate.translate(
               'shared.form.tranche.gesuchsperiode',
               periode,
             )
@@ -251,6 +262,25 @@ export class SharedFeatureGesuchFormTrancheComponent {
       maxDate: new Date(gesuchsperiodeStopp),
       currentGueligAb: new Date(gueltigAb),
       currentGueligBis: new Date(gueltigBis),
+    })
+      .afterClosed()
+      .subscribe();
+  }
+
+  changeGesuchsperiode(gesuchTrancheId: string | undefined) {
+    const { gesuchId, trancheSetting } = this.viewSig();
+    const gesuchFormular =
+      this.viewSig().gesuch?.gesuchTrancheToWorkWith.gesuchFormular;
+
+    if (!gesuchTrancheId || !gesuchFormular || !gesuchId || !trancheSetting) {
+      return;
+    }
+
+    SharedDialogChangeGesuchsperiodeComponent.open(this.dialog, {
+      gesuchTrancheId,
+      gesuchId,
+      trancheSetting,
+      gesuchFormular,
     })
       .afterClosed()
       .subscribe();

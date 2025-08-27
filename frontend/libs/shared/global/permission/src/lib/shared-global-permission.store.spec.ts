@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
-import { provideSharedOAuthServiceWithGesuchstellerJWT } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedOAuthServiceWithGesuchstellerJWT } from '@dv/shared/pattern/vitest-test-setup';
 
 import { PermissionStore } from './shared-global-permission.store';
 

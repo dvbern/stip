@@ -45,7 +45,6 @@ import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
@@ -72,9 +71,11 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -97,6 +98,7 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
+import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -185,6 +187,7 @@ public class GesuchService {
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
     private final StatusprotokollService statusprotokollService;
+    private final GesuchsperiodeRepository gesuchsperiodeRepository;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -995,19 +998,6 @@ public class GesuchService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        final var gesuchsperiode = gesuch.getGesuchsperiode();
-        final var newEinreichedatum = dto.getNewEinreichedatum();
-        final var between = DateUtil.between(
-            gesuchsperiode.getGesuchsperiodeStart(),
-            gesuchsperiode.getGesuchsperiodeStopp(),
-            newEinreichedatum,
-            true
-        );
-
-        if (!between) {
-            throw new BadRequestException("New einreichedatum is outside of the Gesuchsperiode");
-        }
-
         gesuch.setEinreichedatum(dto.getNewEinreichedatum());
         gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
 
@@ -1251,5 +1241,52 @@ public class GesuchService {
         } else {
             resetGesuchZurueckweisenToEingereicht(gesuch);
         }
+    }
+
+    @Transactional
+    public GesuchDto setGesuchsperiodeForGesuch(final UUID gesuchTrancheId, final UUID gesuchsperiodeId) {
+        final var gesuchsperiode = gesuchsperiodeRepository.findByIdOptional(gesuchsperiodeId).orElseThrow();
+
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var potentialGesuchsperioden = gesuchsperiodeService.getAllAssignableGesuchsperioden(gesuch.getId());
+
+        final var foundGesuchsperiode = potentialGesuchsperioden.stream()
+            .filter(potentialGesuchsperiode -> potentialGesuchsperiode.getId().equals(gesuchsperiodeId))
+            .findFirst();
+
+        if (foundGesuchsperiode.isEmpty()) {
+            throw new BadRequestException("Gesuchsperiode is not assignable");
+        }
+
+        gesuch.setGesuchsperiode(gesuchsperiode);
+
+        ValidatorUtil
+            .validate(
+                validator,
+                gesuchTranche.getGesuchFormular(),
+                List.of(EinnahmenKostenPageValidation.class, SteuerdatenPageValidation.class)
+            );
+
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            LOG.error(
+                "Tried to reassign Gesuchsperiode for Gesuch with id {} that has more than 1 tranche",
+                gesuch.getId()
+            );
+            throw new BadRequestException("Tried to reassign Gesuchsperiode for Gesuch with more than 1 tranche");
+        }
+
+        final var tranche = gesuch.getGesuchTranchen().getFirst();
+        final var oldGueltigkeit = tranche.getGueltigkeit();
+        final var newGueltigkeit = new DateRange(
+            oldGueltigkeit.getGueltigAb().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear()),
+            oldGueltigkeit.getGueltigBis().withYear(gesuchsperiode.getGesuchsperiodeStopp().getYear())
+        );
+
+        tranche.setGueltigkeit(newGueltigkeit);
+
+        gesuchRepository.persistAndFlush(gesuch);
+
+        return gesuchMapperUtil.mapWithTranche(gesuch, gesuchTranche);
     }
 }
