@@ -45,6 +45,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
@@ -117,6 +118,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
     private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
+    private final StatusprotokollService statusprotokollService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -405,7 +407,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<StatusprotokollEntryDto> getStatusProtokoll(UUID gesuchId) {
         gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
-        return gesuchHistoryService.getStatusprotokoll(gesuchId);
+        return statusprotokollService.getStatusprotokoll(gesuchId);
     }
 
     @Override

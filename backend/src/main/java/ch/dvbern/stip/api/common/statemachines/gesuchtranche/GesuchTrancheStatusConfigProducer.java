@@ -27,6 +27,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTran
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
@@ -42,6 +44,7 @@ public class GesuchTrancheStatusConfigProducer {
     private final GesuchTrancheFehlendeDokumenteEinreichenHandler gesuchTrancheFehlendeDokumenteEinreichenHandler;
     private final AkzeptiertHandler akzeptiertHandler;
     private final GesuchTrancheFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
+    private final StatusprotokollService statusprotokollService;
 
     public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
@@ -109,6 +112,15 @@ public class GesuchTrancheStatusConfigProducer {
         Object[] args
     ) {
         GesuchTranche gesuchTranche = extractGesuchFromStateMachineArgs(args);
+
+        statusprotokollService.createStatusprotokoll(
+            transition.getDestination().toString(),
+            transition.getSource().toString(),
+            StatusprotokollEntryTyp.AENDERUNG,
+            gesuchTranche.getComment(),
+            gesuchTranche.getGesuch()
+
+        );
 
         LOG.info(
             "KSTIP: GesuchTranche mit id {} wurde von Status {} nach Status {} durch event {} geandert",

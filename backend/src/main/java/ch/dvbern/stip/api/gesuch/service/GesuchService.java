@@ -73,7 +73,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -127,7 +127,6 @@ import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.BadRequestException;
@@ -493,7 +492,7 @@ public class GesuchService {
         }
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void gesuchEinreichen(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchTranchen().size() != 1) {
@@ -506,13 +505,13 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.EINGEREICHT);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void setGesuchStatusToAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.ANSPRUCH_PRUEFEN);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchTranchen().size() != 1) {
@@ -643,7 +642,7 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -669,7 +668,7 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void gesuchStatusToKeinStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
@@ -683,7 +682,7 @@ public class GesuchService {
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void changeGesuchStatusToNegativeVerfuegungWithDecision(
         final UUID gesuchId,
         final AusgewaehlterGrundDto ausgewaehlterGrundDto
@@ -707,7 +706,7 @@ public class GesuchService {
         );
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void changeGesuchStatusToNegativeVerfuegungManuell(
         final UUID gesuchId,
         final FileUpload fileUpload,
@@ -739,7 +738,7 @@ public class GesuchService {
         );
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
+    @Transactional
     public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
