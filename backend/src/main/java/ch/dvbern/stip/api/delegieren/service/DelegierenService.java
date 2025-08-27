@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerReposito
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -98,7 +98,7 @@ public class DelegierenService {
 
     @Transactional
     public PaginatedSozDashboardDto getDelegierungSoz(
-        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+        GetDelegierungSozQueryTypeAdminDto getDelegierungSozQueryType,
         @NotNull Integer page,
         @NotNull Integer pageSize,
         String fallNummer,

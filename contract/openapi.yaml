@@ -1992,7 +1992,7 @@ paths:
       parameters:
         - name: getDelegierungSozQueryType
           schema:
-            $ref: '#/components/schemas/GetDelegierungSozQueryType'
+            $ref: '#/components/schemas/GetDelegierungSozQueryTypeAdmin'
           in: path
           required: true
         - $ref: '#/components/parameters/fallNummer'
@@ -2000,6 +2000,7 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
+        - $ref: '#/components/parameters/delegierungAngenommen'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -2030,7 +2031,7 @@ paths:
       parameters:
         - name: getDelegierungSozQueryType
           schema:
-            $ref: '#/components/schemas/GetDelegierungSozQueryType'
+            $ref: '#/components/schemas/GetDelegierungSozQueryTypeMa'
           in: path
           required: true
         - $ref: '#/components/parameters/fallNummer'
@@ -4394,9 +4395,15 @@ components:
         - ALLE_MEINE
         - ALLE
       type: string
-    GetDelegierungSozQueryType:
+    GetDelegierungSozQueryTypeMa:
       enum:
         - ALLE_BEARBEITBAR_MEINE
+        - ALLE
+      type: string
+    GetDelegierungSozQueryTypeAdmin:
+      enum:
+        - ALLE_BEARBEITBAR_MEINE
+        - OFFEN
         - ALLE
       type: string
     GueltigkeitStatus:

@@ -27,7 +27,8 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DelegierenResource;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMaDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -55,7 +56,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
     @Override
     @RolesAllowed(DELEGIERUNG_READ)
     public PaginatedSozDashboardDto getDelegierungsOfSozialdienstMa(
-        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+        GetDelegierungSozQueryTypeMaDto getDelegierungSozQueryType,
         Integer page,
         Integer pageSize,
         String fallNummer,
@@ -68,8 +69,13 @@ public class DelegierenResourceImpl implements DelegierenResource {
     ) {
         delegierenAuthorizer.canReadDelegierungMa();
 
+        var adminDto = switch (getDelegierungSozQueryType) {
+            case ALLE -> GetDelegierungSozQueryTypeAdminDto.ALLE;
+            case ALLE_BEARBEITBAR_MEINE -> GetDelegierungSozQueryTypeAdminDto.ALLE_BEARBEITBAR_MEINE;
+        };
+
         return delegierenService.getDelegierungSoz(
-            getDelegierungSozQueryType,
+            adminDto,
             page,
             pageSize,
             fallNummer,
@@ -103,7 +109,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
     @Override
     @RolesAllowed(DELEGIERUNG_READ)
     public PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(
-        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+        GetDelegierungSozQueryTypeAdminDto getDelegierungSozQueryType,
         Integer page,
         Integer pageSize,
         String fallNummer,
@@ -111,6 +117,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
+        Boolean delegierungAngenommen,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -125,7 +132,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
             vorname,
             geburtsdatum,
             wohnort,
-            false,
+            delegierungAngenommen,
             sortColumn,
             sortOrder
         );
