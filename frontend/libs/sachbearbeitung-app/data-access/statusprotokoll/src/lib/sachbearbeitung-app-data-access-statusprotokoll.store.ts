@@ -3,7 +3,11 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { GesuchService, StatusprotokollEntry } from '@dv/shared/model/gesuch';
+import {
+  GesuchService,
+  StatusprotokollEntry,
+  StatusprotokollEntryTyp,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -20,6 +24,11 @@ const initialState: StatusprotokollState = {
   cachedStatusprotokoll: initial(),
 };
 
+const typMap = {
+  AENDERUNG: 'tranche',
+  GESUCH: 'contract',
+} satisfies Record<StatusprotokollEntryTyp, string>;
+
 @Injectable()
 export class StatusprotokollStore extends signalStore(
   { protectedState: false },
@@ -28,7 +37,10 @@ export class StatusprotokollStore extends signalStore(
   private gesuchService = inject(GesuchService);
 
   cachedStatusprotokollListViewSig = computed(() => {
-    return fromCachedDataSig(this.cachedStatusprotokoll);
+    return fromCachedDataSig(this.cachedStatusprotokoll)?.map((entry) => ({
+      ...entry,
+      typKey: `sachbearbeitung-app.gesuch.status.${typMap[entry.typ]}.${entry.statusTo}`,
+    }));
   });
 
   loadCachedStatusprotokoll$ = rxMethod<{ gesuchId: string }>(

@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Gesuchstatus } from './gesuchstatus';
+import { StatusprotokollEntryTyp } from './statusprotokollEntryTyp';
 
 /**
  * Eintrag von dem Statusprotokoll
@@ -18,16 +18,18 @@ export interface StatusprotokollEntry {
     /**
      * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
      */
-    timestamp?: string;
-    status?: Gesuchstatus;
+    timestamp: string;
+    statusFrom?: string;
+    statusTo: string;
+    typ: StatusprotokollEntryTyp;
     /**
      * Der Benutzer welcher den Statuswechsel ausgelöst hat
      */
-    benutzer?: string;
+    benutzer: string;
     /**
      * Kommentar vom SB über die Statusänderung
      */
-    kommentar?: string;
+    kommentar: string;
 }
 
 

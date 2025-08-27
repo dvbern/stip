@@ -27,6 +27,7 @@ import {
   GesuchNotizCreate,
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiFocusableListDirective,
@@ -69,6 +70,8 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
   displayedColumns = ['notizTyp', 'datum', 'user', 'betreff', 'actions'];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   notizStore = inject(NotizStore);
   permissionStore = inject(PermissionStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename

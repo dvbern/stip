@@ -492,6 +492,7 @@
   "sachbearbeitung-app.infos.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
   "sachbearbeitung-app.infos.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Date",
+  "sachbearbeitung-app.infos.protokoll.table.typ": "Type",
   "sachbearbeitung-app.infos.protokoll.table.status": "Statut",
   "sachbearbeitung-app.infos.protokoll.table.user": "User",
   "sachbearbeitung-app.infos.protokoll.table.kommentar": "Commentaire",

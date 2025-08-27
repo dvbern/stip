@@ -23,6 +23,7 @@ import { SachbearbeitungAppDialogBuchhaltungInfoComponent } from '@dv/sachbearbe
 import { SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent } from '@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { BuchhaltungEntry } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
@@ -78,6 +79,8 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
     'sapStatus',
     'info',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   buchhaltungDataSourceSig = computed(() => {
     const buchhaltungEntries =
       this.buchhaltungStore.buchhaltungEntriesViewSig().buchhaltungEntrys;
