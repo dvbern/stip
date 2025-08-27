@@ -6583,6 +6583,12 @@ components:
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
+      required:
+        - timestamp
+        - statusTo
+        - typ
+        - benutzer
+        - kommentar
       properties:
         timestamp:
           description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
