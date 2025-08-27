@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.kind.repo.NeskoAccessRepository;
 import ch.dvbern.stip.api.nesko.entity.NeskoAccess;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class NeskoAccessLoggerService {
     private final NeskoAccessRepository neskoAccessRepository;
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void logAccess(final String gesuchNr, final String requestedSvNr) {
         final var accessLog = new NeskoAccess(gesuchNr, requestedSvNr);
         neskoAccessRepository.persistAndFlush(accessLog);

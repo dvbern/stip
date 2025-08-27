@@ -60,7 +60,8 @@ public class NeskoGetSteuerdatenService {
         return placeNeskoGetSteuerdatenRequest(token, steuerjahr, ssvn);
     }
 
-    public GetSteuerdatenResponse placeNeskoGetSteuerdatenRequest(
+    // WARNING: Do not call directly. Always call neskoAccessLoggerService.logAccess before this method
+    GetSteuerdatenResponse placeNeskoGetSteuerdatenRequest(
         final String token,
         final Integer steuerjahr,
         final String ssvn

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.steuerdaten.service;
+package ch.dvbern.stip.api.nesko.service;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -30,8 +30,6 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
-import ch.dvbern.stip.api.nesko.service.NeskoAccessLoggerService;
-import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,6 +86,7 @@ public class NeskoGetSteuerdatenAccessLogTest {
         Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
 
         neskoAccessLoggerService = Mockito.spy(new NeskoAccessLoggerService(neskoAccessRepository));
+
         neskoGetSteuerdatenService = Mockito.spy(new NeskoGetSteuerdatenService(neskoAccessLoggerService));
 
         Mockito.doReturn(getSteuerdatenResponse)
