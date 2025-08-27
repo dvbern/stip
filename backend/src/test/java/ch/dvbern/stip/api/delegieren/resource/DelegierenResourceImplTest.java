@@ -17,156 +17,218 @@
 
 package ch.dvbern.stip.api.delegieren.resource;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
-import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.adresse.service.AdresseMapper;
+import ch.dvbern.stip.api.adresse.service.AdresseMapperImpl;
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
+import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.service.DelegierenService;
+import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapper;
+import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapperImpl;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.generator.api.model.delegieren.DelegierungCreateDtoSpecModel;
-import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
-import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
-import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
-import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
-import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.AusbildungApiSpec;
-import ch.dvbern.stip.generated.api.DelegierenApiSpec;
-import ch.dvbern.stip.generated.api.FallApiSpec;
-import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.SozialdienstApiSpec;
-import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.SozialdienstDtoSpec;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
+import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
+import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
+import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
+import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ForbiddenException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
-@QuarkusTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ExtendWith(StepwiseExtension.class)
-@RequiredArgsConstructor
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Slf4j
 class DelegierenResourceImplTest {
-    private final SozialdienstApiSpec sozialdienstApi = SozialdienstApiSpec.sozialdienst(RequestSpecUtil.quarkusSpec());
-    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
-    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
-    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    private final DelegierenApiSpec delegierenApiSpec = DelegierenApiSpec.delegieren(RequestSpecUtil.quarkusSpec());
+    private DelegierenResourceImpl delegierenApi;
+    private AdresseMapper adresseMapper;
+    private FallRepository fallRepository;
+    private DelegierungRepository delegierungRepository;
+    private SozialdienstRepository sozialdienstRepository;
+    private BenutzerService benutzerService;
+    private SozialdienstService sozialdienstService;
+    private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    private SozialdienstBenutzerService sozialdienstBenutzerService;
 
-    private final FallRepository fallRepository;
-    private final DelegierungRepository delegierungRepository;
+    @BeforeEach
+    void setup() {
+        fallRepository = Mockito.mock(FallRepository.class);
+        delegierungRepository = Mockito.mock(DelegierungRepository.class);
+        sozialdienstRepository = Mockito.mock(SozialdienstRepository.class);
+        benutzerService = Mockito.mock(BenutzerService.class);
+        sozialdienstService = Mockito.mock(SozialdienstService.class);
+        sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
+        sozialdienstBenutzerService = Mockito.mock(SozialdienstBenutzerService.class);
+        adresseMapper = Mockito.mock(AdresseMapperImpl.class);
 
-    private SozialdienstDtoSpec sozialdienst;
-    private SozialdienstDtoSpec inaktiverSozialdienst;
-    private GesuchDtoSpec gesuch;
-    private FallDtoSpec fall;
-
-    @Test
-    @Order(1)
-    @TestAsAdmin
-    void createSozialdienste() {
-        final var sozialdienstAdmin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
-        final var sozialdienstCreate = SozialdienstCreateDtoSpecModel
-            .sozialdienstCreateDtoSpec(sozialdienstAdmin);
-
-        sozialdienst = TestUtil.executeAndExtract(
-            SozialdienstDtoSpec.class,
-            sozialdienstApi.createSozialdienst().body(sozialdienstCreate)
+        PersoenlicheAngabenMapper persoenlicheAngabenMapper = new PersoenlicheAngabenMapperImpl(adresseMapper);
+        DelegierenAuthorizer delegierenAuthorizer = new DelegierenAuthorizer(
+            benutzerService, fallRepository, delegierungRepository, sozialdienstService,
+            sozialdienstBenutzerRepository, null
         );
-
-        final var inaktivSozialdienstCreate = SozialdienstCreateDtoSpecModel
-            .sozialdienstCreateDtoSpec(sozialdienstAdmin);
-
-        inaktiverSozialdienst = TestUtil.executeAndExtract(
-            SozialdienstDtoSpec.class,
-            sozialdienstApi.createSozialdienst().body(inaktivSozialdienstCreate)
+        DelegierenService delegierenService = new DelegierenService(
+            delegierungRepository, fallRepository, sozialdienstRepository, sozialdienstService,
+            sozialdienstBenutzerRepository, persoenlicheAngabenMapper, null, null,
+            null, sozialdienstBenutzerService
         );
-
-        inaktiverSozialdienst = TestUtil.executeAndExtract(
-            SozialdienstDtoSpec.class,
-            sozialdienstApi.setSozialdienstAktivTo()
-                .sozialdienstIdPath(inaktiverSozialdienst.getId())
-                .aktivPath(false)
-        );
-
-        assertThat(inaktiverSozialdienst.getAktiv(), is(false));
+        delegierenApi = new DelegierenResourceImpl(delegierenAuthorizer, delegierenService);
     }
 
     @Test
-    @Order(2)
-    @TestAsGesuchsteller
-    void createGesuch() {
-        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        fall = TestUtil.getFall(fallApiSpec).orElseThrow(() -> new RuntimeException("Failed to create/ get fall"));
-    }
-
-    @Test
-    @Order(3)
-    @TestAsGesuchsteller2
     void delegateNotOwnGesuchFails() {
-        TestUtil.executeAndAssert(
-            delegierenApiSpec.fallDelegieren()
-                .fallIdPath(fall.getId())
-                .sozialdienstIdPath(sozialdienst.getId())
-                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
-            Status.FORBIDDEN.getStatusCode()
+        var benutzer = new Benutzer();
+        benutzer.setId(UUID.randomUUID());
+
+        var gesuchsteller = new Benutzer();
+        benutzer.setId(UUID.randomUUID());
+
+        var fall = new Fall();
+        fall.setId(UUID.randomUUID());
+        fall.setGesuchsteller(benutzer);
+
+        when(benutzerService.getCurrentBenutzer()).thenReturn(gesuchsteller);
+        when(fallRepository.requireById(any())).thenReturn(fall);
+
+        Assertions.assertThrows(
+            ForbiddenException.class,
+            () -> delegierenApi.fallDelegieren(fall.getId(), UUID.randomUUID(), null)
         );
     }
 
     @Test
-    @Order(4)
-    @TestAsGesuchsteller
     void delegateToInaktiverSozialdienstFails() {
-        TestUtil.executeAndAssert(
-            delegierenApiSpec.fallDelegieren()
-                .fallIdPath(fall.getId())
-                .sozialdienstIdPath(inaktiverSozialdienst.getId())
-                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
-            Status.BAD_REQUEST.getStatusCode()
+        var benutzer = new Benutzer();
+        benutzer.setId(UUID.randomUUID());
+
+        var sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+        sozialdienst.setAktiv(false);
+
+        var fall = new Fall();
+        fall.setId(UUID.randomUUID());
+        fall.setGesuchsteller(benutzer);
+
+        when(benutzerService.getCurrentBenutzer()).thenReturn(benutzer);
+        when(fallRepository.requireById(any())).thenReturn(fall);
+        when(sozialdienstRepository.requireById(any())).thenReturn(sozialdienst);
+
+        Assertions.assertThrows(
+            BadRequestException.class,
+            () -> delegierenApi.fallDelegieren(fall.getId(), sozialdienst.getId(), null)
         );
     }
 
     @Test
-    @Order(5)
-    @TestAsGesuchsteller
     void delegateGesuch() {
-        TestUtil.executeAndAssert(
-            delegierenApiSpec.fallDelegieren()
-                .fallIdPath(fall.getId())
-                .sozialdienstIdPath(sozialdienst.getId())
-                .body(DelegierungCreateDtoSpecModel.delegierungCreateDto()),
-            Response.Status.NO_CONTENT.getStatusCode()
+        var benutzer = new Benutzer();
+        benutzer.setId(UUID.randomUUID());
+
+        var sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+
+        var fall = new Fall();
+        fall.setId(UUID.randomUUID());
+        fall.setGesuchsteller(benutzer);
+
+        var delegierungCreate = new DelegierungCreateDto()
+            .anrede(Anrede.HERR)
+            .nachname("Mustermann")
+            .vorname("Max")
+            .geburtsdatum(LocalDate.of(1990, 1, 1))
+            .adresse(new AdresseDto());
+
+        when(benutzerService.getCurrentBenutzer()).thenReturn(benutzer);
+        when(fallRepository.requireById(any())).thenReturn(fall);
+        when(sozialdienstRepository.requireById(any())).thenReturn(sozialdienst);
+        when(adresseMapper.toEntity(any())).thenReturn(new Adresse());
+
+        Mockito.doAnswer(invocationOnMock -> {
+            var delegierung = invocationOnMock.getArgument(0, Delegierung.class);
+            assertEquals(delegierung.getSozialdienst().getId(), sozialdienst.getId());
+            assertEquals(delegierung.getDelegierterFall().getId(), fall.getId());
+            assertEquals(delegierung.getPersoenlicheAngaben().getAnrede(), delegierungCreate.getAnrede());
+            assertEquals(delegierung.getPersoenlicheAngaben().getNachname(), delegierungCreate.getNachname());
+            assertEquals(delegierung.getPersoenlicheAngaben().getVorname(), delegierungCreate.getVorname());
+            assertEquals(delegierung.getPersoenlicheAngaben().getGeburtsdatum(), delegierungCreate.getGeburtsdatum());
+            return null;
+        }).when(delegierungRepository).persist(any(Delegierung.class));
+
+        delegierenApi.fallDelegieren(fall.getId(), sozialdienst.getId(), delegierungCreate);
+    }
+
+    @Test
+    void delegierterMitarbeiterAendernAsMaFail() {
+        var currentBenutzer = new SozialdienstBenutzer();
+        currentBenutzer.setId(UUID.randomUUID());
+
+        var targetBenutzer = new SozialdienstBenutzer();
+        targetBenutzer.setId(UUID.randomUUID());
+
+        var sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+        sozialdienst.setSozialdienstBenutzers(List.of(currentBenutzer, targetBenutzer));
+
+        var delegierung = new Delegierung();
+        delegierung.setId(UUID.randomUUID());
+        delegierung.setSozialdienst(sozialdienst);
+
+        var delegierterMitarbeiterAendern = new DelegierterMitarbeiterAendernDto();
+        delegierterMitarbeiterAendern.mitarbeiterId(UUID.randomUUID());
+
+        when(delegierungRepository.requireById(any())).thenReturn(delegierung);
+        when(sozialdienstBenutzerRepository.requireById(any())).thenReturn(targetBenutzer);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
+        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.of(currentBenutzer));
+
+        Assertions.assertThrows(
+            ForbiddenException.class,
+            () -> delegierenApi.delegierterMitarbeiterAendern(delegierung.getId(), delegierterMitarbeiterAendern)
         );
     }
 
     @Test
-    @Order(99)
-    @TestAsSuperUser
-    @Transactional
-    void deleteGesuch() {
-        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
-        final var dbFall = fallRepository.requireById(fall.getId());
-        final var dbDelegierung = dbFall.getDelegierung();
-        dbFall.setDelegierung(null);
+    void delegierterMitarbeiterAendernAsAdmin() {
+        var currentBenutzer = new SozialdienstBenutzer();
+        currentBenutzer.setId(UUID.randomUUID());
 
-        delegierungRepository.delete(dbDelegierung);
+        var targetBenutzer = new SozialdienstBenutzer();
+        targetBenutzer.setId(UUID.randomUUID());
+
+        var sozialdienst = new Sozialdienst();
+        sozialdienst.setId(UUID.randomUUID());
+        sozialdienst.setSozialdienstBenutzers(List.of(currentBenutzer, targetBenutzer));
+        sozialdienst.setSozialdienstAdmin(currentBenutzer);
+
+        var delegierung = new Delegierung();
+        delegierung.setId(UUID.randomUUID());
+        delegierung.setSozialdienst(sozialdienst);
+
+        var delegierterMitarbeiterAendern = new DelegierterMitarbeiterAendernDto();
+        delegierterMitarbeiterAendern.mitarbeiterId(UUID.randomUUID());
+
+        when(delegierungRepository.requireById(any())).thenReturn(delegierung);
+        when(sozialdienstBenutzerRepository.requireById(any())).thenReturn(targetBenutzer);
+        when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
+        when(sozialdienstService.isBenutzerMitarbeiterOfSozialdienst(any(), any())).thenReturn(true);
+        when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.of(currentBenutzer));
+
+        delegierenApi.delegierterMitarbeiterAendern(delegierung.getId(), delegierterMitarbeiterAendern);
     }
 }

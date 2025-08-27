@@ -15,7 +15,8 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDtoSpec;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDtoSpec;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMaDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
@@ -333,6 +334,7 @@ public class DelegierenApiSpec {
      * @see #vornameQuery  (optional)
      * @see #geburtsdatumQuery  (optional)
      * @see #wohnortQuery  (optional)
+     * @see #delegierungAngenommenQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return PaginatedSozDashboardDtoSpec
@@ -375,7 +377,7 @@ public class DelegierenApiSpec {
         public static final String GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH = "getDelegierungSozQueryType";
 
         /**
-         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeDtoSpec)  (required)
+         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeAdminDtoSpec)  (required)
          * @return operation
          */
         public GetDelegierungsOfSozialdienstAdminOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
@@ -435,6 +437,17 @@ public class DelegierenApiSpec {
          */
         public GetDelegierungsOfSozialdienstAdminOper wohnortQuery(Object... wohnort) {
             reqSpec.addQueryParam(WOHNORT_QUERY, wohnort);
+            return this;
+        }
+
+        public static final String DELEGIERUNG_ANGENOMMEN_QUERY = "delegierungAngenommen";
+
+        /**
+         * @param delegierungAngenommen (Boolean)  (optional)
+         * @return operation
+         */
+        public GetDelegierungsOfSozialdienstAdminOper delegierungAngenommenQuery(Object... delegierungAngenommen) {
+            reqSpec.addQueryParam(DELEGIERUNG_ANGENOMMEN_QUERY, delegierungAngenommen);
             return this;
         }
 
@@ -556,7 +569,7 @@ public class DelegierenApiSpec {
         public static final String GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH = "getDelegierungSozQueryType";
 
         /**
-         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeDtoSpec)  (required)
+         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeMaDtoSpec)  (required)
          * @return operation
          */
         public GetDelegierungsOfSozialdienstMaOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {

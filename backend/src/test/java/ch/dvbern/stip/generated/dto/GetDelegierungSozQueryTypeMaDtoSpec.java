@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetDelegierungSozQueryType
+ * Gets or Sets GetDelegierungSozQueryTypeMa
  */
-public enum GetDelegierungSozQueryTypeDtoSpec {
+public enum GetDelegierungSozQueryTypeMaDtoSpec {
   
   ALLE_BEARBEITBAR_MEINE("ALLE_BEARBEITBAR_MEINE"),
   
@@ -32,7 +32,7 @@ public enum GetDelegierungSozQueryTypeDtoSpec {
 
   private String value;
 
-  GetDelegierungSozQueryTypeDtoSpec(String value) {
+  GetDelegierungSozQueryTypeMaDtoSpec(String value) {
     this.value = value;
   }
 
@@ -47,8 +47,8 @@ public enum GetDelegierungSozQueryTypeDtoSpec {
   }
 
   @JsonCreator
-  public static GetDelegierungSozQueryTypeDtoSpec fromValue(String value) {
-    for (GetDelegierungSozQueryTypeDtoSpec b : GetDelegierungSozQueryTypeDtoSpec.values()) {
+  public static GetDelegierungSozQueryTypeMaDtoSpec fromValue(String value) {
+    for (GetDelegierungSozQueryTypeMaDtoSpec b : GetDelegierungSozQueryTypeMaDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }
