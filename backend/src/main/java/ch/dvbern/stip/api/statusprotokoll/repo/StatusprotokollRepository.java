@@ -43,4 +43,11 @@ public class StatusprotokollRepository implements BaseRepository<Statusprotokoll
             .stream()
             .toList();
     }
+
+    public void deleteAllByGesuchId(final UUID gesuchId) {
+        new JPAQueryFactory(entityManager)
+            .delete(Q_STATUSPROTOKOLL)
+            .where(Q_STATUSPROTOKOLL.gesuch.id.eq(gesuchId))
+            .execute();
+    }
 }

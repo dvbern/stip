@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
-import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -96,6 +95,8 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -183,7 +184,7 @@ public class GesuchService {
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
-    private final AusbildungsgangRepository ausbildungsgangRepository;
+    private final StatusprotokollService statusprotokollService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -343,6 +344,13 @@ public class GesuchService {
         }
 
         gesuchRepository.persistAndFlush(gesuch);
+        statusprotokollService.createStatusprotokoll(
+            Gesuchstatus.IN_BEARBEITUNG_GS.toString(),
+            null,
+            StatusprotokollEntryTyp.GESUCH,
+            null,
+            gesuch
+        );
 
         return Pair.of(
             gesuchMapperUtil.mapWithTranche(
@@ -483,6 +491,7 @@ public class GesuchService {
         notificationService.deleteNotificationsForGesuch(gesuchId);
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
+        statusprotokollService.deleteAllByGesuchId(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);

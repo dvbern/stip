@@ -86,6 +86,7 @@ import ch.dvbern.stip.api.pdf.service.PdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
@@ -226,6 +227,10 @@ class GesuchServiceTest {
 
     @InjectMock
     StipDecisionTextRepository stipDecisionTextRepository;
+
+    @InjectMock
+    StatusprotokollService statusprotokollService;
+
     static final String TENANT_ID = "bern";
 
     @BeforeAll

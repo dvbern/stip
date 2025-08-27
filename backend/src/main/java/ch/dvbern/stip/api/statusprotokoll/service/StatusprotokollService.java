@@ -56,4 +56,8 @@ public class StatusprotokollService {
         statusprotokollRepository.persist(statusprotokoll);
         return statusprotokoll;
     }
+
+    public void deleteAllByGesuchId(final UUID gesuchId) {
+        statusprotokollRepository.deleteAllByGesuchId(gesuchId);
+    }
 }

@@ -38,6 +38,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -49,10 +50,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Setter
 public class Statusprotokoll extends AbstractMandantEntity {
     @NotNull
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_to", nullable = false)
     private String statusTo;
 
     @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_from", nullable = true)
     private String statusFrom;
 
