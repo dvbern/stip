@@ -16,7 +16,7 @@
           data-testid="gesuch-step-nav-overview"
         >
           <i class="material-symbols-rounded text-white me-2">list</i>
-          <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
         </a>
         @let fallId = fallIdSig();
         <a
@@ -26,7 +26,7 @@
           [class.disabled]="!fallId"
         >
           <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
-          <span>{{ 'sozialdienst-app.header.fall' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
         </a>
         @let gesuchId = gesuchIdSig();
         @let trancheId = trancheIdSig();
@@ -41,7 +41,7 @@
             [matMenuTriggerFor]="gesuchMenu"
           >
             <i class="material-symbols-rounded text-white me-2">checklist</i>
-            <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+            <span>{{ 'shared.header.tranchenAuswahl' | transloco }}</span>
             <i class="material-symbols-rounded ms-2">expand_more</i>
           </button>
           <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
@@ -57,7 +57,7 @@
                   <span>
                     {{
                       'shared.header.tranche.item'
-                        | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
+                        | transloco: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
                     }}
                     -
                     {{ tranche.gueltigBis | date: 'MM.yyyy' }}
@@ -75,7 +75,7 @@
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
           >
             <i class="material-symbols-rounded text-white me-2">checklist</i>
-            <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+            <span>{{ 'shared.header.tranchenAuswahl' | transloco }}</span>
           </a>
         }
         <a
@@ -85,7 +85,7 @@
           [class.disabled]="!fallId"
         >
           <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
-          {{ 'shared.menu.auszahlung' | translate }}
+          {{ 'shared.menu.auszahlung' | transloco }}
         </a>
         <a
           *dvHasRoles="['V0_Sozialdienst-Admin']"
@@ -94,7 +94,7 @@
           data-testid="gesuch-step-nav-administration"
         >
           <i class="material-symbols-rounded text-white me-2">settings</i>
-          <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.administration' | transloco }}</span>
         </a>
       </div>
       <ng-content select="[dvHeaderMobileAddons]" ngProjectAs="[dvHeaderMobileAddons]"></ng-content>
@@ -117,12 +117,12 @@
               <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
               <div class="text-end">
                 <h5 class="step-title">
-                  {{ step.translationKey | translate }}
+                  {{ step.translationKey | transloco }}
                 </h5>
                 @if (step.nextStep?.translationKey; as nextStepKey) {
                   <p class="fst-italic mb-0">
-                    {{ 'shared.form.next' | translate }}:
-                    {{ nextStepKey | translate }}
+                    {{ 'shared.form.next' | transloco }}:
+                    {{ nextStepKey | transloco }}
                   </p>
                 }
               </div>
@@ -135,7 +135,7 @@
               </dv-shared-ui-icon-chip>
 
               <h2 class="fw-bold" data-testid="step-title">
-                {{ step.titleTranslationKey | translate }}
+                {{ step.titleTranslationKey | transloco }}
               </h2>
               <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
             </div>

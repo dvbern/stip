@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { provideCompileTimeConfig } from '@dv/shared/pattern/jest-test-setup';
+import { provideCompileTimeConfig } from '@dv/shared/pattern/vitest-test-setup';
 
 import { DokumentsStore } from './shared-data-access-dokuments.store';
 

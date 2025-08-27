@@ -12,7 +12,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import {
   SharedUiFormFieldDirective,
@@ -42,7 +42,7 @@ export interface OptionalKommentarDialogResult {
   selector: 'dv-shared-ui-kommentar-dialog',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,

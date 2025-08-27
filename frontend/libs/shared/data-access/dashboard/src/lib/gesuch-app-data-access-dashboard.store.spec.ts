@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 
 import { DashboardStore } from './gesuch-app-data-access-dashboard.store';
 
@@ -16,7 +16,7 @@ describe('DashboardStore', () => {
         provideMockStore(),
         DashboardStore,
         provideHttpClient(),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
       ],
     });
     store = TestBed.inject(DashboardStore);

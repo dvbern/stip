@@ -3,68 +3,42 @@
 @if (view.loading || (ausbildungsstaetteStore.ausbildungsstaetten() | rdIsPending)) {
   <dv-shared-ui-loading data-testid="form-einnahmen-kosten-loading"></dv-shared-ui-loading>
 } @else {
-  <!-- form -->
-  @if (formStateSig().hasData) {
-    <form
-      [formGroup]="form"
-      [dvSharedUiFormReadonly]="view.readonly"
-      (gotReenabledSig)="gotReenabled$.next({})"
-      data-testid="form-einnahmen-kosten-form"
-      novalidate
-      class="mt-4"
-      (ngSubmit)="handleSave()"
-    >
-      <h3 class="pt-5 mb-4">
-        {{ 'shared.form.einnahmenkosten.einnahmen.title' | translate }}
-      </h3>
+  <ng-container *dvTranslocoShared="let t">
+    <!-- form -->
+    @if (formStateSig().hasData) {
+      <form
+        [formGroup]="form"
+        [dvSharedUiFormReadonly]="view.readonly"
+        (gotReenabledSig)="gotReenabled$.next({})"
+        data-testid="form-einnahmen-kosten-form"
+        novalidate
+        class="mt-4"
+        (ngSubmit)="handleSave()"
+      >
+        <h3 class="pt-5 mb-4">
+          {{ t('shared.form.einnahmenkosten.einnahmen.title') }}
+        </h3>
 
-      <div class="row g-4">
-        <!-- NETTOERWERBSEINKOMMEN -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.einnahmenkosten.nettoerwerbseinkommen.label' | translate }}</mat-label>
-            <input
-              formControlName="nettoerwerbseinkommen"
-              data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.nettoerwerbseinkommen"></mat-hint>
-            <mat-hint translate>shared.form.einnahmenkosten.nettoerwerbseinkommen.info</mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (nettoerwerbseinkommenDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-      @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
         <div class="row g-4">
-          <!-- ALIMENTE -->
+          <!-- NETTOERWERBSEINKOMMEN -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.einnahmenkosten.alimente.label' | translate }}</mat-label>
+              <mat-label>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.label') }}</mat-label>
               <input
-                formControlName="alimente"
-                data-testid="form-einnahmen-kosten-alimente"
+                formControlName="nettoerwerbseinkommen"
+                data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
                 matInput
                 type="text"
                 [maskito]="maskitoNumber"
               />
-              <mat-hint *dvZuvorHint="view.formChanges?.alimente"></mat-hint>
+              <mat-hint *dvZuvorHint="view.formChanges?.nettoerwerbseinkommen"></mat-hint>
+              <mat-hint>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.info') }}</mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
+                {{ t('shared.form.error.required') }}
               </mat-error>
             </mat-form-field>
 
-            @if (alimenteDocumentSig(); as options) {
+            @if (nettoerwerbseinkommenDocumentSig(); as options) {
               <dv-shared-pattern-document-upload
                 class="flex-shrink-1"
                 [optionsSig]="options"
@@ -72,502 +46,524 @@
             }
           </div>
         </div>
-      }
-      <div class="row g-4">
-        <!-- ZULAGEN -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>
-              {{ 'shared.form.einnahmenkosten.zulagen.label' | translate }}
-              @if (!formStateSig().hatKinder) {
-                {{ 'shared.form.einnahmenkosten.optional.label' | translate }}
-              }
-            </mat-label>
-            <input
-              data-testid="form-einnahmen-kosten-zulagen"
-              formControlName="zulagen"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.zulagen"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
+        @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
+          <div class="row g-4">
+            <!-- ALIMENTE -->
+            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ t('shared.form.einnahmenkosten.alimente.label') }}</mat-label>
+                <input
+                  formControlName="alimente"
+                  data-testid="form-einnahmen-kosten-alimente"
+                  matInput
+                  type="text"
+                  [maskito]="maskitoNumber"
+                />
+                <mat-hint *dvZuvorHint="view.formChanges?.alimente"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+              </mat-form-field>
 
-          @if (zulagenDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-      <div class="row g-4">
-        <!-- RENTEN -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.einnahmenkosten.renten.label' | translate }}</mat-label>
-            <input
-              formControlName="renten"
-              data-testid="form-einnahmen-kosten-renten"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.renten"></mat-hint>
-            <mat-hint translate>shared.form.einnahmenkosten.renten.info</mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (rentenDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-      <div class="row g-4">
-        <!-- EO_LEISTUNGEN -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.einnahmenkosten.eoLeistungen.label' | translate }}</mat-label>
-            <input
-              formControlName="eoLeistungen"
-              data-testid="form-einnahmen-kosten-eoLeistungen"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.eoLeistungen"></mat-hint>
-            <mat-hint translate>shared.form.einnahmenkosten.eoLeistungen.info</mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (eoLeistungenDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-      <div class="row g-4">
-        <!-- ERGAENZUNGSLEISTUNGEN -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.einnahmenkosten.ergaenzungsleistungen.label' | translate }}</mat-label>
-            <input
-              formControlName="ergaenzungsleistungen"
-              data-testid="form-einnahmen-kosten-ergaenzungsleistungen"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.ergaenzungsleistungen"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (ergaenzungsleistungenDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <!-- BEITRAEGE -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.einnahmenkosten.beitraege.label' | translate }}</mat-label>
-            <input
-              formControlName="beitraege"
-              data-testid="form-einnahmen-kosten-beitraege"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.beitraege"></mat-hint>
-            <mat-hint translate>shared.form.einnahmenkosten.beitraege.info</mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (beitraegeDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-      <!-- KOSTEN -->
-      <h3 class="pt-5 mb-4">
-        {{ 'shared.form.einnahmenkosten.kosten.title' | translate }}
-      </h3>
-
-      @let ausbildungsStufe = formStateSig().ausbiludungsStufe;
-
-      <div class="row g-4">
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-          <mat-label>{{
-            'shared.form.einnahmenkosten.ausbildungskosten.label.' + ausbildungsStufe | translate
-          }}</mat-label>
-          <input
-            formControlName="ausbildungskosten"
-            data-testid="form-einnahmen-kosten-ausbildungskosten"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskosten"></mat-hint>
-          @if (istAusbildungskostenMoreThanLimitSig()) {
-            <mat-hint class="mat-caution">
-              {{
-                'shared.form.einnahmenkosten.ausbildungskosten.warning.' + ausbildungsStufe
-                  | translate: { max: formStateSig().ausbildungsKostenLimit }
-              }}
-            </mat-hint>
-          } @else {
-            <mat-hint>
-              {{
-                'shared.form.einnahmenkosten.ausbildungskosten.info.' + ausbildungsStufe
-                  | translate: { max: formStateSig().ausbildungsKostenLimit }
-              }}</mat-hint
-            >
-          }
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
-        <div class="row g-4">
-          <!-- BETREUUNGKOSTEN_KINDER -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.einnahmenkosten.betreuungskostenKinder.label' | translate }}</mat-label>
-              <input
-                formControlName="betreuungskostenKinder"
-                data-testid="form-einnahmen-kosten-betreuungskostenKinder"
-                matInput
-                type="text"
-                [maskito]="maskitoNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.betreuungskostenKinder"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            @if (betreuungskostenKinderDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-      }
-
-      <div class="row g-4">
-        <!-- FAHRKOSTEN -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>{{ 'shared.form.einnahmenkosten.fahrkosten.label' | translate }}</mat-label>
-            <input
-              formControlName="fahrkosten"
-              data-testid="form-einnahmen-kosten-fahrkosten"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.fahrkosten"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          @if (fahrkostenDocumentSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-      </div>
-
-      @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
-        <div class="row g-4">
-          <!-- WOHNKOSTEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.einnahmenkosten.wohnkosten.label' | translate }}</mat-label>
-              <input
-                formControlName="wohnkosten"
-                data-testid="form-einnahmen-kosten-wohnkosten"
-                matInput
-                type="text"
-                [maskito]="maskitoNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.wohnkosten"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            @if (wohnkostenDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-      }
-      @if (!hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche)) {
-        <div class="row g-4">
-          <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label' | translate }}</mat-label>
-            <input
-              formControlName="auswaertigeMittagessenProWoche"
-              data-testid="form-einnahmen-kosten-auswaertigeMittagessenProWoche"
-              matInput
-              type="number"
-              min="0"
-              max="5"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.auswaertigeMittagessenProWoche"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-            <mat-error *dvSharedUiFormMessageError="'range'">
-              {{ 'shared.form.error.range' | translate: { min: 0, max: 5 } }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      }
-      @if (!hiddenFieldsSetSig().has(form.controls.wgWohnend)) {
-        <div class="row g-4">
-          <!-- WG WOHNEND -->
-          <mat-radio-group
-            class="d-flex flex-column"
-            formControlName="wgWohnend"
-            data-testid="form-einnahmen-kosten-wgWohnend"
-            dvSharedUiFormField
-          >
-            <mat-label>{{ 'shared.form.einnahmenkosten.wgWohnend.label' | translate }}</mat-label>
-            <mat-radio-button data-testid="yes" [value]="true">
-              {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
-            >
-            <mat-radio-button data-testid="no" [value]="false">{{
-              'shared.form.radio.no' | translate
-            }}</mat-radio-button>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="view.formChanges?.wgWohnend | translateChange: 'shared.form.zuvor.radio.$VALUE'"
-            ></dv-shared-ui-form-zuvor-hint>
-            <div class="group-errors">
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </div>
-          </mat-radio-group>
-        </div>
-      }
-
-      <!-- STEUERRELEVANTE DATEN -->
-      <h3 class="pt-5 mb-4">
-        {{ 'shared.form.einnahmenkosten.steuerrelevanteDaten.title' | translate }}
-      </h3>
-      @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
-        <div class="row g-4">
-          <!-- VERMOEGEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.einnahmenkosten.vermoegen.label' | translate }}</mat-label>
-              <input
-                formControlName="vermoegen"
-                data-testid="form-einnahmen-kosten-vermoegen"
-                matInput
-                type="text"
-                [maskito]="maskitoNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.vermoegen"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            @if (vermoegenDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-      }
-
-      <!-- STEUERJAHR -->
-      @if (!hiddenFieldsSetSig().has(form.controls.steuerjahr)) {
-        <div class="row g-4">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.steuerjahr.label' | translate }}</mat-label>
-            <input
-              formControlName="steuerjahr"
-              data-testid="form-einnahmen-kosten-steuerjahr"
-              matInput
-              min="1900"
-              [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
-              type="number"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.steuerjahr"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-            <mat-error *dvSharedUiFormMessageError="'range'">
-              {{
-                'shared.form.error.range' | translate: { min: 1900, max: steuerjahrValidation.steuerjahrPeriodeSig() }
-              }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      }
-
-      <!-- VERANLAGUNGSCODE 0 - 99 -->
-      @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsCode)) {
-        <div class="row g-4">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ 'shared.form.einnahmenkosten.veranlagungsCode.label' | translate }}</mat-label>
-            <input
-              formControlName="veranlagungsCode"
-              data-testid="form-einnahmen-kosten-veranlagungsCode"
-              matInput
-              type="number"
-              min="0"
-              max="99"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsCode"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
-            </mat-error>
-            <mat-error *dvSharedUiFormMessageError="'range'">
-              {{ 'shared.form.error.range' | translate: { min: 0, max: 99 } }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      }
-
-      <!-- STEUERN KANTON / GEMEINDE -->
-      <div class="row g-4 readonly">
-        <mat-form-field class="col-12 col-md-6 col-xl-6">
-          <mat-label>{{ 'shared.form.einnahmenkosten.steuernKantonGemeinde.label' | translate }}</mat-label>
-          <input
-            data-testid="form-einnahmen-kosten-steuernKantonGemeinde"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-            disabled
-            [value]="steuernKantonGemeindeSig()"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges?.steuernKantonGemeinde"></mat-hint>
-        </mat-form-field>
-      </div>
-
-      <h3 class="pt-5 mb-4">
-        {{ 'shared.form.einnahmenkosten.general.title' | translate }}
-      </h3>
-      @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
-        <div class="row g-4">
-          <!-- VERDIENST_REALISIERT -->
-          <mat-radio-group
-            class="col-12 col-md-6"
-            formControlName="verdienstRealisiert"
-            data-testid="form-einnahmen-kosten-verdienstRealisiert"
-            dvSharedUiFormField
-          >
-            <div class="d-flex align-items-center flex-grow-1 gap-1">
-              <mat-label>{{ 'shared.form.einnahmenkosten.verdienstRealisiert.label' | translate }}</mat-label>
-              <button
-                type="button"
-                (click)="verdienstRealisiertDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md text-info mt-2"
-                [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
-              >
-                <span class="material-symbols-rounded"> info </span>
-              </button>
-            </div>
-            <div class="d-flex flex-wrap gap-2 pe-md-3 justify-content-between">
-              <div class="d-flex flex-column">
-                <mat-radio-button data-testid="yes" [value]="true">
-                  {{ 'shared.form.radio.yes' | translate }}</mat-radio-button
-                >
-                <mat-radio-button data-testid="no" [value]="false">{{
-                  'shared.form.radio.no' | translate
-                }}</mat-radio-button>
-                <dv-shared-ui-form-zuvor-hint
-                  [changes]="view.formChanges?.verdienstRealisiert | translateChange: 'shared.form.zuvor.radio.$VALUE'"
-                ></dv-shared-ui-form-zuvor-hint>
-              </div>
-              @if (verdienstRealisiertDocumentSig(); as options) {
+              @if (alimenteDocumentSig(); as options) {
                 <dv-shared-pattern-document-upload
-                  class="flex-shrink-1 mt-2"
+                  class="flex-shrink-1"
                   [optionsSig]="options"
                 ></dv-shared-pattern-document-upload>
               }
             </div>
-            <div class="group-errors">
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
-              </mat-error>
-            </div>
-          </mat-radio-group>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.einnahmenkosten.verdienstRealisiert.label'"
-            [dialogMessageKey]="'shared.form.einnahmenkosten.verdienstRealisiert.info'"
-            #verdienstRealisiertDialog="dvSharedUiInfoDialog"
-            class="d-none d-xl-block col-xl-6"
-          ></div>
-        </div>
-      }
-
-      <!-- Buttons -->
-      <dv-shared-ui-step-form-buttons>
-        @if (!view.readonly) {
-          <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
-            {{ 'shared.form.save-and-continue' | translate }}
-          </button>
-        } @else {
-          <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
-            {{ 'shared.form.gonext' | translate }}
-          </button>
+          </div>
         }
-      </dv-shared-ui-step-form-buttons>
-    </form>
-  } @else {
-    <div class="row">
-      <div class="col-12 col-xl-8 my-3">
-        <dv-shared-ui-info-container class="d-block" data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
-          >{{ 'shared.form.einnahmenkosten.top.incomplete' | translate }}
-          @for (schritt of formStateSig().schritte; track trackByIndex($index); let last = $last; let first = $first) {
-            <span>{{ (last && !first ? ' und ' : !first ? ', ' : '') + '"' + (schritt | translate) }}"</span>
+        <div class="row g-4">
+          <!-- ZULAGEN -->
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>
+                {{ t('shared.form.einnahmenkosten.zulagen.label') }}
+                @if (!formStateSig().hatKinder) {
+                  {{ t('shared.form.einnahmenkosten.optional.label') }}
+                }
+              </mat-label>
+              <input
+                data-testid="form-einnahmen-kosten-zulagen"
+                formControlName="zulagen"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.zulagen"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (zulagenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+        </div>
+        <div class="row g-4">
+          <!-- RENTEN -->
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ t('shared.form.einnahmenkosten.renten.label') }}</mat-label>
+              <input
+                formControlName="renten"
+                data-testid="form-einnahmen-kosten-renten"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.renten"></mat-hint>
+              <mat-hint>{{ t('shared.form.einnahmenkosten.renten.info') }}</mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (rentenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+        </div>
+        <div class="row g-4">
+          <!-- EO_LEISTUNGEN -->
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ t('shared.form.einnahmenkosten.eoLeistungen.label') }}</mat-label>
+              <input
+                formControlName="eoLeistungen"
+                data-testid="form-einnahmen-kosten-eoLeistungen"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.eoLeistungen"></mat-hint>
+              <mat-hint>{{ t('shared.form.einnahmenkosten.eoLeistungen.info') }}</mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (eoLeistungenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+        </div>
+        <div class="row g-4">
+          <!-- ERGAENZUNGSLEISTUNGEN -->
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ t('shared.form.einnahmenkosten.ergaenzungsleistungen.label') }}</mat-label>
+              <input
+                formControlName="ergaenzungsleistungen"
+                data-testid="form-einnahmen-kosten-ergaenzungsleistungen"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.ergaenzungsleistungen"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (ergaenzungsleistungenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- BEITRAEGE -->
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ t('shared.form.einnahmenkosten.beitraege.label') }}</mat-label>
+              <input
+                formControlName="beitraege"
+                data-testid="form-einnahmen-kosten-beitraege"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.beitraege"></mat-hint>
+              <mat-hint>{{ t('shared.form.einnahmenkosten.beitraege.info') }}</mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (beitraegeDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+        </div>
+        <!-- KOSTEN -->
+        <h3 class="pt-5 mb-4">
+          {{ t('shared.form.einnahmenkosten.kosten.title') }}
+        </h3>
+
+        @let ausbildungsStufe = formStateSig().ausbiludungsStufe;
+
+        <div class="row g-4">
+          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+            <mat-label>{{
+            t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`)
+            }}</mat-label>
+            <input
+              formControlName="ausbildungskosten"
+              data-testid="form-einnahmen-kosten-ausbildungskosten"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.ausbildungskosten"></mat-hint>
+            @if (ausbildungsStufe && istAusbildungskostenMoreThanLimitSig()) {
+              <mat-hint class="mat-caution">
+                {{
+                t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, { max: formStateSig().ausbildungsKostenLimit })
+                }}
+              </mat-hint>
+            } @else {
+              <mat-hint>
+                {{
+                t(`shared.form.einnahmenkosten.ausbildungskosten.info.${ausbildungsStufe}`, { max: formStateSig().ausbildungsKostenLimit })
+                }}</mat-hint
+              >
+            }
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ t('shared.form.error.required') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
+          <div class="row g-4">
+            <!-- BETREUUNGKOSTEN_KINDER -->
+            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ t('shared.form.einnahmenkosten.betreuungskostenKinder.label') }}</mat-label>
+                <input
+                  formControlName="betreuungskostenKinder"
+                  data-testid="form-einnahmen-kosten-betreuungskostenKinder"
+                  matInput
+                  type="text"
+                  [maskito]="maskitoNumber"
+                />
+                <mat-hint *dvZuvorHint="view.formChanges?.betreuungskostenKinder"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+              </mat-form-field>
+
+              @if (betreuungskostenKinderDocumentSig(); as options) {
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="row g-4">
+          <!-- FAHRKOSTEN -->
+          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+              <mat-label>{{ t('shared.form.einnahmenkosten.fahrkosten.label') }}</mat-label>
+              <input
+                formControlName="fahrkosten"
+                data-testid="form-einnahmen-kosten-fahrkosten"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.fahrkosten"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+
+            @if (fahrkostenDocumentSig(); as options) {
+              <dv-shared-pattern-document-upload
+                class="flex-shrink-1"
+                [optionsSig]="options"
+              ></dv-shared-pattern-document-upload>
+            }
+          </div>
+        </div>
+
+        @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
+          <div class="row g-4">
+            <!-- WOHNKOSTEN -->
+            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ t('shared.form.einnahmenkosten.wohnkosten.label') }}</mat-label>
+                <input
+                  formControlName="wohnkosten"
+                  data-testid="form-einnahmen-kosten-wohnkosten"
+                  matInput
+                  type="text"
+                  [maskito]="maskitoNumber"
+                />
+                <mat-hint *dvZuvorHint="view.formChanges?.wohnkosten"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+              </mat-form-field>
+
+              @if (wohnkostenDocumentSig(); as options) {
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+              }
+            </div>
+          </div>
+        }
+        @if (!hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche)) {
+          <div class="row g-4">
+            <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+              <mat-label>{{ t('shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label') }}</mat-label>
+              <input
+                formControlName="auswaertigeMittagessenProWoche"
+                data-testid="form-einnahmen-kosten-auswaertigeMittagessenProWoche"
+                matInput
+                type="number"
+                min="0"
+                max="5"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.auswaertigeMittagessenProWoche"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+              <mat-error *dvSharedUiFormMessageError="'range'">
+                {{ t('shared.form.error.range', { min: 0, max: 5 }) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        }
+        @if (!hiddenFieldsSetSig().has(form.controls.wgWohnend)) {
+          <div class="row g-4">
+            <!-- WG WOHNEND -->
+            <mat-radio-group
+              class="d-flex flex-column"
+              formControlName="wgWohnend"
+              data-testid="form-einnahmen-kosten-wgWohnend"
+              dvSharedUiFormField
+            >
+              <mat-label>{{ t('shared.form.einnahmenkosten.wgWohnend.label') }}</mat-label>
+              <mat-radio-button data-testid="yes" [value]="true"> {{ t('shared.form.radio.yes') }}</mat-radio-button>
+              <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
+              <dv-shared-ui-form-zuvor-hint
+                [changes]="view.formChanges?.wgWohnend | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+              ></dv-shared-ui-form-zuvor-hint>
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+              </div>
+            </mat-radio-group>
+          </div>
+        }
+
+        <!-- STEUERRELEVANTE DATEN -->
+        <h3 class="pt-5 mb-4">
+          {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}
+        </h3>
+        @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
+          <div class="row g-4">
+            <!-- VERMOEGEN -->
+            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
+              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-label>{{ t('shared.form.einnahmenkosten.vermoegen.label') }}</mat-label>
+                <input
+                  formControlName="vermoegen"
+                  data-testid="form-einnahmen-kosten-vermoegen"
+                  matInput
+                  type="text"
+                  [maskito]="maskitoNumber"
+                />
+                <mat-hint *dvZuvorHint="view.formChanges?.vermoegen"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+              </mat-form-field>
+
+              @if (vermoegenDocumentSig(); as options) {
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- STEUERJAHR -->
+        @if (!hiddenFieldsSetSig().has(form.controls.steuerjahr)) {
+          <div class="row g-4">
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+              <mat-label>{{ t('shared.form.einnahmenkosten.steuerjahr.label') }}</mat-label>
+              <input
+                formControlName="steuerjahr"
+                data-testid="form-einnahmen-kosten-steuerjahr"
+                matInput
+                min="1900"
+                [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
+                type="number"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.steuerjahr"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+              <mat-error *dvSharedUiFormMessageError="'range'">
+                {{ t('shared.form.error.range', { min: 1900, max: steuerjahrValidation.steuerjahrPeriodeSig() }) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        }
+
+        <!-- VERANLAGUNGSCODE 0 - 99 -->
+        @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsCode)) {
+          <div class="row g-4">
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+              <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsCode.label') }}</mat-label>
+              <input
+                formControlName="veranlagungsCode"
+                data-testid="form-einnahmen-kosten-veranlagungsCode"
+                matInput
+                type="number"
+                min="0"
+                max="99"
+              />
+              <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsCode"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+              <mat-error *dvSharedUiFormMessageError="'range'">
+                {{ t('shared.form.error.range', { min: 0, max: 99 }) }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        }
+
+        <!-- STEUERN KANTON / GEMEINDE -->
+        <div class="row g-4 readonly">
+          <mat-form-field class="col-12 col-md-6 col-xl-6">
+            <mat-label>{{ t('shared.form.einnahmenkosten.steuernKantonGemeinde.label') }}</mat-label>
+            <input
+              data-testid="form-einnahmen-kosten-steuernKantonGemeinde"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+              disabled
+              [value]="steuernKantonGemeindeSig()"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges?.steuernKantonGemeinde"></mat-hint>
+          </mat-form-field>
+        </div>
+
+        <h3 class="pt-5 mb-4">
+          {{ t('shared.form.einnahmenkosten.general.title') }}
+        </h3>
+        @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
+          <div class="row g-4">
+            <!-- VERDIENST_REALISIERT -->
+            <mat-radio-group
+              class="col-12 col-md-6"
+              formControlName="verdienstRealisiert"
+              data-testid="form-einnahmen-kosten-verdienstRealisiert"
+              dvSharedUiFormField
+            >
+              <div class="d-flex align-items-center flex-grow-1 gap-1">
+                <mat-label>{{ t('shared.form.einnahmenkosten.verdienstRealisiert.label') }}</mat-label>
+                <button
+                  type="button"
+                  (click)="verdienstRealisiertDialog.toggle()"
+                  class="dv-icon-button dv-icon-button-md text-info mt-2"
+                  [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+                >
+                  <span class="material-symbols-rounded"> info </span>
+                </button>
+              </div>
+              <div class="d-flex flex-wrap gap-2 pe-md-3 justify-content-between">
+                <div class="d-flex flex-column">
+                  <mat-radio-button data-testid="yes" [value]="true">
+                    {{ t('shared.form.radio.yes') }}</mat-radio-button
+                  >
+                  <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
+                  <dv-shared-ui-form-zuvor-hint
+                    [changes]="
+                      view.formChanges?.verdienstRealisiert
+                        | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE'
+                        | async
+                    "
+                  ></dv-shared-ui-form-zuvor-hint>
+                </div>
+                @if (verdienstRealisiertDocumentSig(); as options) {
+                  <dv-shared-pattern-document-upload
+                    class="flex-shrink-1 mt-2"
+                    [optionsSig]="options"
+                  ></dv-shared-pattern-document-upload>
+                }
+              </div>
+              <div class="group-errors">
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+              </div>
+            </mat-radio-group>
+            <div
+              dvSharedUiInfoDialog
+              [dialogTitleKey]="'shared.form.einnahmenkosten.verdienstRealisiert.label'"
+              [dialogMessageKey]="'shared.form.einnahmenkosten.verdienstRealisiert.info'"
+              #verdienstRealisiertDialog="dvSharedUiInfoDialog"
+              class="d-none d-xl-block col-xl-6"
+            ></div>
+          </div>
+        }
+
+        <!-- Buttons -->
+        <dv-shared-ui-step-form-buttons>
+          @if (!view.readonly) {
+            <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+              {{ t('shared.form.save-and-continue') }}
+            </button>
+          } @else {
+            <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
+              {{ t('shared.form.gonext') }}
+            </button>
           }
-        </dv-shared-ui-info-container>
+        </dv-shared-ui-step-form-buttons>
+      </form>
+    } @else {
+      <div class="row">
+        <div class="col-12 col-xl-8 my-3">
+          <dv-shared-ui-info-container class="d-block" data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
+            >{{ t('shared.form.einnahmenkosten.top.incomplete') }}
+            @for (schritt of formStateSig().schritte; track trackByIndex($index)) {
+              <span>{{ ($last && !$first ? ' und ' : !$first ? ', ' : '') + '"' + t(schritt) }}"</span>
+            }
+          </dv-shared-ui-info-container>
+        </div>
       </div>
-    </div>
-  }
+    }
+  </ng-container>
 }

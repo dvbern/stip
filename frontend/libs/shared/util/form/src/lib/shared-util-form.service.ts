@@ -15,7 +15,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { Subject, concat, from, of } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 
@@ -36,7 +36,7 @@ type StringToNumber<T> = Exclude<T, string> | number;
 export class SharedUtilFormService {
   private focusInput$ = new Subject<ElementRef<HTMLElement>>();
   private appRef = inject(ApplicationRef);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
 
   constructor() {
@@ -79,7 +79,7 @@ export class SharedUtilFormService {
         const unsaved = hasUnsavedChanges(component);
         const message = unsaved
           ? // Browsers show their own message, but just in case we try to set our own message
-            this.translate.instant('shared.dialog.unsavedChanges.text')
+            this.translate.translate('shared.dialog.unsavedChanges.text')
           : null;
         if (message) {
           e.returnValue = message;

@@ -5,7 +5,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface ConfirmDialogData<T extends string> {
   title?: T;
@@ -17,7 +17,7 @@ export interface ConfirmDialogData<T extends string> {
 
 @Component({
   selector: 'dv-shared-ui-confirm-dialog',
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule, TranslocoPipe],
   templateUrl: './shared-ui-confirm-dialog.component.html',
   styleUrl: './shared-ui-confirm-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

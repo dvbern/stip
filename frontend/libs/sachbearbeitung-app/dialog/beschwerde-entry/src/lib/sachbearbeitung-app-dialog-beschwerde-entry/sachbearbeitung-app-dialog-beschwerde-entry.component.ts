@@ -5,14 +5,14 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { BeschwerdeVerlaufEntry } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-beschwerde-entry',
-  imports: [CommonModule, TranslatePipe, SharedUiDownloadButtonDirective],
+  imports: [CommonModule, TranslocoPipe, SharedUiDownloadButtonDirective],
   templateUrl: './sachbearbeitung-app-dialog-beschwerde-entry.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

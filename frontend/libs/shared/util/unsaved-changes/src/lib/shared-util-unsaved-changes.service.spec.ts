@@ -22,7 +22,7 @@ describe('SharedUtilUnsavedGuard', () => {
     const form = new FormGroup({ test: new FormControl('') });
     const resetEvent = new Subject();
     const unsavedChanges$ = observeUnsavedChanges(form, resetEvent);
-    const spy = jest.fn();
+    const spy = vitest.fn();
     unsavedChanges$.subscribe(spy);
     form.markAsDirty();
     form.setValue({ test: 'test' });

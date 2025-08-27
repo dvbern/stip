@@ -3,16 +3,16 @@
     type="button"
     (click)="close()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="title tw-mb-4 tw-flex tw-text-lg xl:tw-pr-5">
     <span class="text-info material-symbols-rounded me-2">info</span>
-    {{ dialogData.titleKey | translate }}
+    {{ dialogData.titleKey | transloco }}
   </h1>
-  <p class="content" [innerHTML]="dialogData.messageKey | translate"></p>
+  <p class="content" [innerHTML]="dialogData.messageKey | transloco"></p>
   <button (click)="close()" type="button" class="btn btn-outline-primary tw-mt-auto tw-self-center">
-    {{ 'shared.close' | translate }}
+    {{ 'shared.close' | transloco }}
   </button>
 </section>

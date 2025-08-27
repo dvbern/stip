@@ -3,18 +3,18 @@
     type="button"
     (click)="close()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw-mb-8 tw-text-xl">
-    {{ 'shared.dialog.einreichedatum-aendern.title' | translate }}
+    {{ 'shared.dialog.einreichedatum-aendern.title' | transloco }}
   </h1>
 
   <form [formGroup]="form" (ngSubmit)="einreichedatumAendern()">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-8">
       <mat-label>
-        {{ 'shared.dialog.einreichedatum-aendern.einreichedatum.label' | translate }}
+        {{ 'shared.dialog.einreichedatum-aendern.einreichedatum.label' | transloco }}
       </mat-label>
       <input
         formControlName="einreichedatum"
@@ -28,15 +28,15 @@
       <mat-datepicker-toggle matIconSuffix [for]="einreichedatumDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #einreichedatumDatepicker></mat-datepicker>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
     <div class="tw-mt-10 tw-flex tw-justify-end tw-gap-3">
       <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-cancel">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" class="btn btn-primary" data-testid="dialog-ok" [disabled]="form.invalid">
-        {{ 'shared.accept' | translate }}
+        {{ 'shared.accept' | transloco }}
       </button>
     </div>
   </form>

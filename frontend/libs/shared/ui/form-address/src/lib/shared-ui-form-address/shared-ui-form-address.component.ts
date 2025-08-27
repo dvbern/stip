@@ -21,7 +21,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { Adresse, Plz } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
@@ -51,7 +51,7 @@ type AddresseFormGroup = FormGroup<{
   selector: 'dv-shared-ui-form-address',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,

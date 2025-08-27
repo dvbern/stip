@@ -8,7 +8,7 @@ import {
   input,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfosAdminStore } from '@dv/sachbearbeitung-app/data-access/infos-admin';
 import { Verfuegung } from '@dv/shared/model/gesuch';
@@ -24,7 +24,7 @@ export interface GesuchTableColumns {
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
     SharedUiDownloadButtonDirective,

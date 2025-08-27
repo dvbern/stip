@@ -4,7 +4,6 @@ import { libraryGenerator } from '@nx/angular/generators';
 import { Tree } from '@nx/devkit';
 
 import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
-import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 
 export function utilDataAccessTypeFactory(
   options: NormalizedSchema,
@@ -26,9 +25,6 @@ export function utilDataAccessTypeFactory(
 }
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
-  extendTestSetupSwc(tree, options);
-  extendJestConfigSwc(tree, options);
-
   tree.delete(
     path.join(
       options.projectRoot,

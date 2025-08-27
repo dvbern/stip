@@ -19,7 +19,7 @@
     class="col-12 col-xl-7"
   >
     <h3 class="mb-4">
-      {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | translate }}
+      {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | transloco }}
     </h3>
 
     @if (store.currentGesuchsjahr() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
@@ -28,7 +28,7 @@
       <div class="row g-4">
         <!-- BezeichnungDe -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | transloco }}</mat-label>
           <input
             formControlName="bezeichnungDe"
             data-testid="form-gesuchsjahr-bezeichnungDe"
@@ -37,12 +37,12 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
         <!-- BezeichnungFr -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | transloco }}</mat-label>
           <input
             formControlName="bezeichnungFr"
             data-testid="form-gesuchsjahr-bezeichnungFr"
@@ -51,7 +51,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -59,7 +59,7 @@
       <div class="row g-4 mt-1">
         <!-- Jahr -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | transloco }}</mat-label>
           <input
             formControlName="technischesJahr"
             data-testid="form-gesuchsjahr-jahr"
@@ -68,7 +68,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       </div>

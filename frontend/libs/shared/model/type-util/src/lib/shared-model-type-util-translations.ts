@@ -1,5 +1,5 @@
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
 import { isDefined } from './shared-model-type-util-guard';
@@ -42,15 +42,10 @@ export function getCorrectPropertyName<Property extends string>(
   return `${property}${lang}`;
 }
 
-export function getCurrentLanguageSig(translate: TranslateService) {
-  return toSignal(
-    translate.onLangChange.pipe(
-      map(() => isKnownLanguage(translate.currentLang)),
-    ),
-    {
-      initialValue: isKnownLanguage(translate.currentLang),
-    },
-  );
+export function getCurrentLanguageSig(translate: TranslocoService) {
+  return toSignal(translate.langChanges$.pipe(map(isKnownLanguage)), {
+    initialValue: isKnownLanguage(translate.getActiveLang()),
+  });
 }
 
 export function isKnownLanguage(language: string): KnownLanguage {

@@ -12,8 +12,8 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -30,6 +30,7 @@ import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -48,7 +49,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   imports: [
     CommonModule,
     RouterLink,
-    TranslatePipe,
+    TranslocoPipe,
     MatSidenavModule,
     MatMenuModule,
     SharedPatternAppHeaderComponent,

@@ -26,8 +26,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import {
   differenceInCalendarMonths,
   differenceInCalendarYears,
@@ -128,7 +128,7 @@ type DashboardFormFields =
   imports: [
     A11yModule,
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,

@@ -3,22 +3,22 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
   <h1 class="title h5 mb-4 d-flex">
-    {{ dialogData.titleKey | translate }}
+    {{ dialogData.titleKey | transloco }}
   </h1>
   @if (dialogData.messageKey) {
-    <p class="content mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
+    <p class="content mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
   }
 
   <form [formGroup]="form" class="mt-4" data-testid="form-kommentar-dialog-form" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
       @if (dialogData.labelKey; as commentLabel) {
-        <mat-label>{{ commentLabel | translate }}</mat-label>
+        <mat-label>{{ commentLabel | transloco }}</mat-label>
       }
       <textarea
         rows="4"
@@ -26,16 +26,16 @@
         [dvMaxLength]="'large'"
         formControlName="kommentar"
         data-testid="form-kommentar-dialog-kommentar"
-        [placeholder]="dialogData.placeholderKey | translate"
+        [placeholder]="dialogData.placeholderKey | transloco"
       ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <div class="d-flex mt-4 justify-content-between">
       <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button
         type="submit"
@@ -44,7 +44,7 @@
         class="btn btn-primary ms-2"
         (click)="confirm()"
       >
-        {{ dialogData.confirmKey | translate }}
+        {{ dialogData.confirmKey | transloco }}
       </button>
     </div>
   </form>

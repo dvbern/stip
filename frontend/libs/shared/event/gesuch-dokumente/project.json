@@ -4,9 +4,5 @@
   "sourceRoot": "libs/shared/event/gesuch-dokumente/src",
   "projectType": "library",
   "tags": ["type:event", "scope:shared"],
-  "targets": {
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }

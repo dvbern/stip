@@ -1,3 +1,4 @@
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentTyp,
   Dokument,
@@ -44,20 +45,40 @@ export type SharedModelTableDokument =
   | SharedModelTableRequiredDokument
   | SharedModelTableCustomDokument;
 
-export interface DokumentOptions {
+type DokumentInfoTranslatable = {
+  type: 'TRANSLATABLE';
+  title: SharedTranslationKey;
+  description?: SharedTranslationKey;
+};
+type DokumentInfoText = {
+  type: 'TEXT';
+  title: string;
+  description?: string;
+};
+export type DokumentInfo = DokumentInfoTranslatable | DokumentInfoText;
+
+interface BaseDocumentOptions {
   permissions: PermissionMap;
-  titleKey: string;
-  descriptionKey?: string;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];
 }
 
+export interface StandardDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoTranslatable;
+}
+
+export interface CustomDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoText;
+}
+
+export type DokumentOptions = StandardDokumentOptions | CustomDokumentOptions;
+
 export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
-  dokumentOptions: DokumentOptions;
+  dokumentOptions: StandardDokumentOptions;
   kommentare: GesuchDokumentKommentar[];
   kommentarePending: boolean;
 }
@@ -66,7 +87,7 @@ export interface SharedModelTableCustomDokument {
   dokumentTyp: CustomDokumentTyp;
   canDelete: boolean;
   gesuchDokument?: GesuchDokument;
-  dokumentOptions: DokumentOptions;
+  dokumentOptions: CustomDokumentOptions;
   kommentare: GesuchDokumentKommentar[];
   kommentarePending: boolean;
 }
@@ -74,7 +95,7 @@ export interface SharedModelTableCustomDokument {
 export type SharedModelTableAdditionalDokument = {
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchDokument?: UnterschriftenblattDokument;
-  dokumentOptions: DokumentOptions;
+  dokumentOptions: StandardDokumentOptions;
 };
 
 export interface DokumentUpload {

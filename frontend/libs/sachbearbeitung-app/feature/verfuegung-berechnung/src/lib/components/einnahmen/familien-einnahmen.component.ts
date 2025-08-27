@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import {
   SharedUiFormatChfNegativePipe,
@@ -14,7 +14,7 @@ import { FamilienBerechnung } from '../../../models';
   selector: 'dv-familien-einnahmen',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
     SharedUiFormatChfPositivePipe,
@@ -24,7 +24,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().totalEinkuenfte | formatChfPositive }}
@@ -35,7 +35,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
@@ -46,7 +46,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().mietwert | formatChfNegative: true }}
@@ -57,7 +57,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().kinderalimente | formatChfNegative: true }}
@@ -69,12 +69,12 @@ import { FamilienBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
-              | translate: einnahmenSig()
+              | transloco: einnahmenSig()
           }}
         </div>
       </div>
@@ -88,12 +88,12 @@ import { FamilienBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
-              | translate
+              | transloco
           }}
         </div>
       </div>
@@ -107,12 +107,12 @@ import { FamilienBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info'
-              | translate
+              | transloco
           }}
         </div>
       </div>
@@ -126,12 +126,12 @@ import { FamilienBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
-              | translate: einnahmenSig()
+              | transloco: einnahmenSig()
           }}
         </div>
       </div>
@@ -145,7 +145,7 @@ import { FamilienBerechnung } from '../../../models';
       <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
-            | translate
+            | transloco
         }}
       </div>
       <div class="text-end h4 flex-grow-1 text-nowrap">

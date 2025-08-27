@@ -1,7 +1,8 @@
-<div class="p-3 p-md-4">
+<div class="p-3 p-md-4" *dvTranslocoShared="let t">
+  @let info = data.options.info;
   <h4 class="d-flex align-content-center align-self-start title tw-mr-2">
     <span class="p-1 me-2 text-info upload-icon material-symbols-rounded rounded-circle align-self-start">upload</span>
-    <div [innerHTML]="data.options.titleKey | translate"></div>
+    <div [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"></div>
     <span class="flex-grow-1"></span>
     <button
       type="button"
@@ -12,8 +13,11 @@
     </button>
   </h4>
 
-  @if (data.options.descriptionKey) {
-    <div class="tw-whitespace-pre-wrap tw-px-8" [innerHTML]="data.options.descriptionKey | translate"></div>
+  @if (info.description) {
+    <div
+      class="tw-whitespace-pre-wrap tw-px-8"
+      [innerHTML]="info.type === 'TEXT' ? info.description : t(info.description)"
+    ></div>
   }
 
   @if (showUplaodSig()) {
@@ -26,10 +30,10 @@
       <label class="upload" [class.disabled]="data.store.isLoading()">
         <div
           class="text-center text-muted text-italic my-4 d-md-block d-none"
-          [innerHTML]="'shared.file.dropZone' | translate"
+          [innerHTML]="t('shared.file.dropZone')"
         ></div>
         <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
-          {{ 'shared.file.upload' | translate }}
+          {{ t('shared.file.upload') }}
         </button>
         <input
           #fileInput
@@ -47,7 +51,7 @@
   }
 
   @if (data.store.state().errorKey; as errorKey) {
-    <mat-error>{{ errorKey | translate }}</mat-error>
+    <mat-error>{{ t($any(errorKey)) }}</mat-error>
   }
 
   <dv-shared-pattern-document-upload-list

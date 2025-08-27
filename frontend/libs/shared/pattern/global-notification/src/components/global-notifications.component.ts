@@ -8,7 +8,7 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -33,7 +33,7 @@ const NOTIFICATION_TIME = 5000;
 
 @Component({
   selector: 'dv-global-notifications',
-  imports: [MatSnackBarModule, TranslatePipe],
+  imports: [MatSnackBarModule, TranslocoPipe],
   templateUrl: './global-notifications.component.html',
   styleUrls: ['./global-notifications.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

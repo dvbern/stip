@@ -5,7 +5,7 @@ import {
   input,
   output,
 } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelTableDokument } from '@dv/shared/model/dokument';
 import { Gesuchstatus } from '@dv/shared/model/gesuch';
@@ -16,7 +16,7 @@ import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
   selector: 'dv-dokument-status-actions',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiIconBadgeComponent,
     SharedUiReplaceAppTypePipe,
   ],

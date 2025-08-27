@@ -3,7 +3,7 @@
 } @else {
   @if (gesuchsperiodenDatasourceSig(); as gesuchsperiodeSource) {
     <h2 class="tw-my-6 tw-text-2xl">
-      {{ 'sachbearbeitung-app.admin.gesuchsperiode.title' | translate }}
+      {{ 'sachbearbeitung-app.admin.gesuchsperiode.title' | transloco }}
     </h2>
     <div class="tw-dv-table">
       <table
@@ -17,22 +17,22 @@
       >
         <caption class="cdk-visually-hidden">
           {{
-            'sachbearbeitung-app.admin.gesuchsperiode.table.description' | translate
+            'sachbearbeitung-app.admin.gesuchsperiode.table.description' | transloco
           }}
         </caption>
 
         <ng-container matColumnDef="bezeichnung">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.bezeichnung' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.bezeichnung' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource" class="fw-bold">
-            {{ gesuchsperiode | translatedProp: 'bezeichnung' : translate.currentLang }}
+            {{ gesuchsperiode | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="gesuchsperiode">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsperiode' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsperiode' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
             {{ gesuchsperiode.gesuchsperiode }}
@@ -41,31 +41,31 @@
 
         <ng-container matColumnDef="gueltigkeitStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.status' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.status' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
             <mat-chip
               [class.opacity-50]="gesuchsperiode.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
               [color]="gesuchsperiode.statusColor"
               highlighted
-              >{{ 'shared.gesuch.periode.status.' + gesuchsperiode.gueltigkeitStatus | translate }}</mat-chip
+              >{{ 'shared.gesuch.periode.status.' + gesuchsperiode.gueltigkeitStatus | transloco }}</mat-chip
             >
           </td>
         </ng-container>
 
         <ng-container matColumnDef="gesuchsjahr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsjahr' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsperiode.table.gesuchsjahr' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
-            {{ gesuchsperiode.gesuchsjahr | translatedProp: 'bezeichnung' : translate.currentLang }}
+            {{ gesuchsperiode.gesuchsjahr | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>
             <a
-              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               [routerLink]="['.', 'create']"
               class="btn btn-outline-primary btn-sm"
             >
@@ -79,7 +79,7 @@
                   type="button"
                   class="btn btn-link me-2"
                   [attr.aria-label]="
-                    'sachbearbeitung-app.admin.gesuchsperiode.table.loeschen' | translate: gesuchsperiode
+                    'sachbearbeitung-app.admin.gesuchsperiode.table.loeschen' | transloco: gesuchsperiode
                   "
                   (click)="deleteGesuchsperiode(gesuchsperiode); $event.stopPropagation()"
                 >
@@ -101,7 +101,7 @@
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-            {{ 'shared.table.noData' | translate }}
+            {{ 'shared.table.noData' | transloco }}
           </td>
         </tr>
       </table>

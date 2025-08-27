@@ -22,7 +22,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import {
@@ -46,7 +46,7 @@ export interface BeschwerdeentscheidUploadDialogResult {
   selector: 'dv-sachbearbeitung-app-dialog-beschwaerde-entscheid',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,

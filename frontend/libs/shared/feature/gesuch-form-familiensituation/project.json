@@ -5,23 +5,5 @@
   "prefix": "dv-shared-feature-gesuch-form-familiensituation",
   "projectType": "library",
   "tags": ["scope:shared", "type:feature"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/feature/gesuch-form-familiensituation/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "libs/shared/feature/gesuch-form-familiensituation/jest.config.ts"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
-    }
-  }
+  "targets": {}
 }

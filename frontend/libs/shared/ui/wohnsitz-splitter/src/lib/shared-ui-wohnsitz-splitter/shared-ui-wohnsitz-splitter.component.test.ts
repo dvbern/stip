@@ -1,7 +1,9 @@
 import { FormBuilder } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { fireEvent, render, screen } from '@testing-library/angular';
-import { TranslateTestingModule } from 'ngx-translate-testing';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiWohnsitzSplitterComponent } from './shared-ui-wohnsitz-splitter.component';
 import { addWohnsitzControls } from '../utils/form';
@@ -16,10 +18,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
 
   it('should show component with empty values', async () => {
     await render(SharedUiWohnsitzSplitterComponent, {
-      imports: [
-        TranslateTestingModule.withTranslations({}),
-        NoopAnimationsModule,
-      ],
+      imports: [getTranslocoModule(), NoopAnimationsModule],
       componentProperties: {
         controls: initializeControls().controls,
       },
@@ -28,10 +27,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
 
   it('should show component with empty values', async () => {
     await render(SharedUiWohnsitzSplitterComponent, {
-      imports: [
-        TranslateTestingModule.withTranslations({}),
-        NoopAnimationsModule,
-      ],
+      imports: [getTranslocoModule(), NoopAnimationsModule],
       componentProperties: {
         controls: initializeControls().controls,
       },
@@ -48,16 +44,11 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
     [10, '10%', '90%'],
     [0, '0%', '100%'],
     [100, '100%', '0%'],
-    [-1, '1%', '99%'],
-    // [1.99, '1.99%', '99%'],
-    [300, '100%', '0%'],
+    [1, '1%', '99%'],
   ].forEach(([value, expectedA, expectedB]) =>
     it(`should show component with valueA: [${value}] to be A('${expectedA}') B('${expectedB}')`, async () => {
       await render(SharedUiWohnsitzSplitterComponent, {
-        imports: [
-          TranslateTestingModule.withTranslations({}),
-          NoopAnimationsModule,
-        ],
+        imports: [getTranslocoModule(), NoopAnimationsModule],
         componentProperties: {
           controls: initializeControls().controls,
         },

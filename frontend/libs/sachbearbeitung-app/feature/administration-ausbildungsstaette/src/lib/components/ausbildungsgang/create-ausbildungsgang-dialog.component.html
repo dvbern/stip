@@ -3,23 +3,23 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw-mb-8 tw-text-xl">
-    {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.title' | translate }}
+    {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.title' | transloco }}
   </h1>
 
   <form [formGroup]="form" class="tw-mt-5" novalidate>
     <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
       <mat-form-field class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang' | transloco }}
         </mat-label>
         <input
           matInput
-          [value]="ausbildungsgangNameSig() | translatedProp: 'name' : translate.currentLang"
+          [value]="ausbildungsgangNameSig() | translatedProp: 'name' : translate.getActiveLang()"
           [readonly]="true"
           disabled
         />
@@ -45,7 +45,7 @@
         >
           <ng-container *dvSearchOptionLabel="dialogData.abschluesse; let abschluss">
             @let abschlussFullname =
-              `${abschluss | translatedProp: 'bezeichnung' : dialogData.language} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | translate)}`;
+              `${abschluss | translatedProp: 'bezeichnung' : dialogData.language} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}`;
             {{ abschlussFullname }}
           </ng-container>
         </dv-shared-ui-select-search>
@@ -55,7 +55,7 @@
         <div class="group-errors">
           <mat-error>
             {{
-              'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.error.conflict' | translate
+              'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.error.conflict' | transloco
             }}
           </mat-error>
         </div>
@@ -64,10 +64,10 @@
 
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
-        {{ 'shared.form.save' | translate }}
+        {{ 'shared.form.save' | transloco }}
       </button>
     </div>
   </form>

@@ -1,14 +1,14 @@
 import { InputSignal } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { render } from '@testing-library/angular';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { Ausbildung, LebenslaufItemUpdate } from '@dv/shared/model/gesuch';
 import {
   TEST_ABSCHLUESSE,
-  provideSharedPatternJestTestAusbildungstaetten,
-} from '@dv/shared/pattern/jest-test-setup';
+  getTranslocoModule,
+  provideSharedPatternVitestTestAusbildungstaetten,
+} from '@dv/shared/pattern/vitest-test-setup';
 
 import { TwoColumnTimelineComponent } from './two-column-timeline.component';
 
@@ -25,10 +25,10 @@ async function setup(
   props: Partial<InputsFrom<TwoColumnTimelineComponent>> = {},
 ) {
   const ref = await render(TwoColumnTimelineComponent, {
-    imports: [TranslateTestingModule.withTranslations(translations)],
+    imports: [getTranslocoModule(translations)],
     providers: [
       provideMockStore({ initialState: { language: { language: 'de' } } }),
-      provideSharedPatternJestTestAusbildungstaetten(),
+      provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,
     ],
     inputs: {

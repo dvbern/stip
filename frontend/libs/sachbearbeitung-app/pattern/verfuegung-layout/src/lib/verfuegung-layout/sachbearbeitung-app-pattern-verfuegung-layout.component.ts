@@ -10,8 +10,8 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   VERFUEGUNG_OPTIONS,
@@ -33,7 +33,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   selector: 'dv-sachbearbeitung-app-pattern-verfuegung-layout',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,

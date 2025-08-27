@@ -8,7 +8,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { map, startWith } from 'rxjs';
 
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
@@ -25,7 +25,7 @@ const ALL_TABS = [
     CommonModule,
     RouterLink,
     RouterOutlet,
-    TranslatePipe,
+    TranslocoPipe,
     MatTabsModule,
   ],
   providers: [paginatorTranslationProvider()],

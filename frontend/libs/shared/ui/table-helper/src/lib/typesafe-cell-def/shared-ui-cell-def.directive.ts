@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
  * @example
  * ```html
  * <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: source">
- *   {{ gesuchsperiode | translatedProp: 'bezeichnung' : translate.currentLang }}
+ *   {{ gesuchsperiode | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
  * </td>
  * ```
  */

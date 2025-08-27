@@ -18,9 +18,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -47,7 +47,7 @@ import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    TranslatePipe,
+    TranslocoPipe,
     MaskitoDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

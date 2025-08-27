@@ -12,8 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { StatusprotokollStore } from '@dv/sachbearbeitung-app/data-access/statusprotokoll';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -24,7 +24,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,

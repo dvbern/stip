@@ -21,7 +21,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -41,6 +40,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -87,8 +87,6 @@ type MainBildungskategorie =
   selector: 'dv-shared-feature-gesuch-form-einnahmenkosten',
   imports: [
     CommonModule,
-    TranslateDirective,
-    TranslatePipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -106,6 +104,7 @@ type MainBildungskategorie =
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
     SharedUiInfoDialogDirective,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
   styleUrl: './shared-feature-gesuch-form-einnahmenkosten.component.scss',

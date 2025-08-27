@@ -2,11 +2,11 @@
 @if (beschwerdeHaengig !== null) {
   <!-- Beschwerde Hängig -->
   <h3 class="tw-mb-6">
-    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | transloco }}
   </h3>
 
   <p>
-    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.text.' + beschwerdeHaengig | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.text.' + beschwerdeHaengig | transloco }}
   </p>
 
   <button
@@ -15,15 +15,15 @@
     data-testid="button-beschwerde-create"
     (click)="setBeschwerdeTo(beschwerdeHaengig)"
   >
-    {{ 'sachbearbeitung-app.infos.beschwerde.create.' + beschwerdeHaengig | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.create.' + beschwerdeHaengig | transloco }}
   </button>
 
   <!-- Beschwerde Entscheid hochladen -->
   <h3 class="tw-mb-6 tw-mt-10">
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | transloco }}
   </h3>
   <p>
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text' | transloco }}
   </p>
   <button
     class="btn btn-primary"
@@ -32,6 +32,6 @@
     (click)="entscheidHochladen()"
     [disabled]="!canCreateEntscheidSig()"
   >
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.upload' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.upload' | transloco }}
   </button>
 }

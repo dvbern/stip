@@ -5,7 +5,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedFeatureAusbildungComponent } from '@dv/shared/feature/ausbildung';
 
@@ -15,7 +15,7 @@ export type CreateAusbildungData = {
 
 @Component({
   selector: 'dv-shared-dialog-create-ausbildung',
-  imports: [CommonModule, TranslatePipe, SharedFeatureAusbildungComponent],
+  imports: [CommonModule, TranslocoPipe, SharedFeatureAusbildungComponent],
   templateUrl: './shared-dialog-create-ausbildung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

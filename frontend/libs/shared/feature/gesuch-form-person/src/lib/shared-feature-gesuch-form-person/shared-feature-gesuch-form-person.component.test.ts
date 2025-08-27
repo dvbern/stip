@@ -3,14 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { RenderResult, render, within } from '@testing-library/angular';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { GesuchFormular, PersonInAusbildung } from '@dv/shared/model/gesuch';
 import { provideSharedAppSettings } from '@dv/shared/pattern/app-settings';
 import {
+  getTranslocoModule,
   mockedGesuchAppWritableGesuchState,
   provideCompileTimeConfig,
-} from '@dv/shared/pattern/jest-test-setup';
+} from '@dv/shared/pattern/vitest-test-setup';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 import { SharedFeatureGesuchFormPersonComponent } from './shared-feature-gesuch-form-person.component';
@@ -18,16 +18,13 @@ import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch
 
 const formularMock = {
   ausbildung: {
-    ausbildungBegin: '01.' + new Date().getFullYear(),
+    ausbildungBegin: `01.${new Date().getFullYear()}`,
   },
 };
 
 async function setup() {
   return await render(SharedFeatureGesuchFormPersonComponent, {
-    imports: [
-      TranslateTestingModule.withTranslations({ de: {} }),
-      NoopAnimationsModule,
-    ],
+    imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [
       provideHttpClient(),
       provideCompileTimeConfig(),

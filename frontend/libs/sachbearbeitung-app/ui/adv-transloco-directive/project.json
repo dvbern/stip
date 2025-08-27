@@ -1,0 +1,9 @@
+{
+  "name": "sachbearbeitung-app-ui-adv-transloco-directive",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/ui/adv-transloco-directive/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:ui", "scope:sachbearbeitung-app"],
+  "targets": {}
+}

@@ -15,9 +15,9 @@ import {
 } from '@angular/material/dialog';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { Land } from '@dv/shared/model/gesuch';
 import {
@@ -36,7 +36,7 @@ export type EuEftaLandEditData = {
   standalone: true,
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     FormsModule,
     MatError,
     MatFormField,

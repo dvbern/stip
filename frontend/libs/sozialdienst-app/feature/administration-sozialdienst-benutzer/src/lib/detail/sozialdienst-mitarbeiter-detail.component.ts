@@ -17,7 +17,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { PATTERN_EMAIL } from '@dv/shared/model/gesuch';
@@ -38,7 +38,7 @@ import { convertTempFormToRealValues } from '@dv/shared/util/form';
 @Component({
   imports: [
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatInputModule,
     MatFormFieldModule,
     SharedUiRdIsPendingPipe,
