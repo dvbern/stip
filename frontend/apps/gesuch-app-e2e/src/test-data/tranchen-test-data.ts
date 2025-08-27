@@ -4,7 +4,7 @@ import {
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import {
-  Explicitnull,
+  ExplicitNull,
   fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
@@ -49,7 +49,7 @@ export const gesuchFormularUpdateFn = (
   seed: string,
   abschluesse: AbschlussSlim[],
   landId: string,
-): Explicitnull<GesuchFormularUpdate> => ({
+): ExplicitNull<GesuchFormularUpdate> => ({
   personInAusbildung: {
     sozialversicherungsnummer: generateSVN(seed + '_person'),
     anrede: 'FRAU',

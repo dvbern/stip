@@ -59,9 +59,9 @@ export const uploadFiles = async (page: Page) => {
   }
 };
 
-export type Explicitnull<T> = T extends object
+export type ExplicitNull<T> = T extends object
   ? {
-      [K in keyof T]-?: Explicitnull<T[K]> | null;
+      [K in keyof T]-?: ExplicitNull<T[K]> | null;
     }
   : T | null;
 
