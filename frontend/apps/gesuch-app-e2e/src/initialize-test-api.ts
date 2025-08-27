@@ -6,14 +6,14 @@ import {
   GesuchFormularUpdate,
   Land,
 } from '@dv/shared/model/gesuch';
-import { DeepNullable, SetupFn } from '@dv/shared/util-fn/e2e-util';
+import { Explicitnull, SetupFn } from '@dv/shared/util-fn/e2e-util';
 
 export const setupGesuchWithApi: (
   createFomularUpdateFn: (
     seed: string,
     abschluesse: AbschlussSlim[],
     landId: string,
-  ) => DeepNullable<GesuchFormularUpdate>,
+  ) => Explicitnull<GesuchFormularUpdate>,
   createZahlungsverbindungUpdate: (landId: string) => AuszahlungUpdate,
 ) => SetupFn =
   (createFomularUpdateFn, createZahlungsverbindungUpdateFn) =>
@@ -52,7 +52,7 @@ const setGesuchApi = async (
   trancheId: string,
   fallId: string,
   zahlungsverbindungUpdate: AuszahlungUpdate,
-  gesuchFormularUpdate: DeepNullable<GesuchFormularUpdate>,
+  gesuchFormularUpdate: Explicitnull<GesuchFormularUpdate>,
 ) => {
   const setZahlungsverbindungResponse = await apiContext.post(
     `/api/v1/auszahlung/${fallId}`,
