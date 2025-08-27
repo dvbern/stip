@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
+import ch.dvbern.stip.api.nesko.service.NeskoAccessLoggerService;
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.nesko.service.NeskoSteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -51,6 +52,7 @@ public class SteuerdatenService {
     private final SteuerdatenRepository steuerdatenRepository;
     private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    private final NeskoAccessLoggerService neskoAccessLoggerService;
 
     public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
         // query history if tranche does not exist anymore
@@ -112,6 +114,7 @@ public class SteuerdatenService {
 
         var getSteuerdatenResponse =
             neskoGetSteuerdatenService.getSteuerdatenResponse(token, ssvn, steuerjahr);
+        neskoAccessLoggerService.logAccess(gesuchFormular.getTranche().getGesuch().getGesuchNummer(), ssvn);
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);

@@ -48,7 +48,11 @@ public class NeskoGetSteuerdatenService {
     @ConfigProperty(name = "kstip.nesko-wsdl-url")
     String wsdlLocation;
 
-    public GetSteuerdatenResponse getSteuerdatenResponse(String token, String ssvn, Integer steuerjahr) {
+    public GetSteuerdatenResponse getSteuerdatenResponse(
+        String token,
+        String ssvn,
+        Integer steuerjahr
+    ) {
         StipendienAuskunftService stipendienAuskunftService = null;
         try {
             stipendienAuskunftService = new StipendienAuskunftService(new URL(wsdlLocation));
@@ -67,7 +71,8 @@ public class NeskoGetSteuerdatenService {
         request.setSozialversicherungsnummer(Long.valueOf(ssvn.replace(".", "")));
 
         try {
-            return port.getSteuerdaten(request);
+            final var steuerdaten = port.getSteuerdaten(request);
+            return steuerdaten;
         } catch (
         SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
         ) {
