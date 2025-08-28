@@ -43,6 +43,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @AllArgsConstructor
 public class NeskoAccess extends AbstractMandantEntity {
     @NotNull
+    @Column(name = "fallNr", length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String fallNr;
+
+    @NotNull
     @Column(name = "gesuch_nr", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String gesuchNr;

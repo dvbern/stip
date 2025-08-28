@@ -30,8 +30,8 @@ public class NeskoAccessLoggerService {
     private final NeskoAccessRepository neskoAccessRepository;
 
     @Transactional(TxType.REQUIRES_NEW)
-    public void logAccess(final String gesuchNr, final String requestedSvNr) {
-        final var accessLog = new NeskoAccess(gesuchNr, requestedSvNr);
+    public void logAccess(final String gesuchNr, final String fallNr, final String requestedSvNr) {
+        final var accessLog = new NeskoAccess(gesuchNr, fallNr, requestedSvNr);
         neskoAccessRepository.persistAndFlush(accessLog);
     }
 }

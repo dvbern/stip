@@ -54,9 +54,10 @@ public class NeskoGetSteuerdatenService {
         String token,
         String ssvn,
         Integer steuerjahr,
-        final String gesuchNummer
+        final String gesuchNummer,
+        final String fallNr
     ) {
-        neskoAccessLoggerService.logAccess(gesuchNummer, ssvn);
+        neskoAccessLoggerService.logAccess(gesuchNummer, fallNr, ssvn);
         return placeNeskoGetSteuerdatenRequest(token, steuerjahr, ssvn);
     }
 

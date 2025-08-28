@@ -112,7 +112,13 @@ public class SteuerdatenService {
 
         var getSteuerdatenResponse =
             neskoGetSteuerdatenService
-                .getSteuerdatenResponse(token, ssvn, steuerjahr, gesuchtranche.getGesuch().getGesuchNummer());
+                .getSteuerdatenResponse(
+                    token,
+                    ssvn,
+                    steuerjahr,
+                    gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
+                    gesuchtranche.getGesuch().getGesuchNummer()
+                );
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);

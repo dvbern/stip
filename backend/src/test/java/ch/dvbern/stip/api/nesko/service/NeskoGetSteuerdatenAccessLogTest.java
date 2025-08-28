@@ -103,11 +103,12 @@ public class NeskoGetSteuerdatenAccessLogTest {
             UUID.randomUUID().toString(),
             TestConstants.AHV_NUMMER_VALID_MUTTER,
             Year.now().getValue() - 1,
+            UUID.randomUUID().toString(),
             UUID.randomUUID().toString()
         );
 
         // assert
-        verify(neskoAccessLoggerService, times(1)).logAccess(any(), any());
+        verify(neskoAccessLoggerService, times(1)).logAccess(any(), any(), any());
     }
 
 }

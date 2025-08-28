@@ -22,8 +22,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -82,7 +84,12 @@ class SteuerdatenServiceTest {
         eltern2.setElternTyp(ElternTyp.MUTTER);
         eltern2.setSozialversicherungsnummer("");
 
+        var ausbildung = new Ausbildung();
+        var fall = new Fall();
+        fall.setFallNummer(UUID.randomUUID().toString());
+        ausbildung.setFall(fall);
         var gesuch = new Gesuch();
+        gesuch.setAusbildung(ausbildung);
         gesuchTranche.setGesuch(gesuch);
         gesuch.setGesuchNummer(UUID.randomUUID().toString());
         gesuchFormular.setTranche(gesuchTranche);
@@ -103,7 +110,7 @@ class SteuerdatenServiceTest {
         neskoAccessRepository = Mockito.mock(NeskoAccessRepository.class);
         Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
 
-        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any(), any()))
+        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any(), any(), any()))
             .thenReturn(getSteuerdatenResponse);
 
         steuerdatenService = new SteuerdatenService(
