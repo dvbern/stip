@@ -440,20 +440,20 @@
           </div>
         }
 
-        <!-- VERANLAGUNGSCODE 0 - 99 -->
-        @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsCode)) {
+        <!-- veranlagungsStatus 0 - 99 -->
+        @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsStatus)) {
           <div class="row g-4">
             <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-              <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsCode.label') }}</mat-label>
+              <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsStatus.label') }}</mat-label>
               <input
-                formControlName="veranlagungsCode"
-                data-testid="form-einnahmen-kosten-veranlagungsCode"
+                formControlName="veranlagungsStatus"
+                data-testid="form-einnahmen-kosten-veranlagungsStatus"
                 matInput
                 type="number"
                 min="0"
                 max="99"
               />
-              <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsCode"></mat-hint>
+              <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsStatus"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ t('shared.form.error.required') }}
               </mat-error>

@@ -45,7 +45,6 @@ import {
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
-import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
@@ -105,10 +104,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
         /** @see // this.steuerjahrValidation */
       ],
     ],
-    veranlagungsCode: [
-      <number | null>null,
-      [Validators.required, sharedUtilValidatorRange(0, 99)],
-    ],
+    veranlagungsStatus: [<string | null>null, [Validators.required]],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
@@ -270,7 +266,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       'fahrkosten',
       'verpflegung',
       'steuerjahr',
-      'veranlagungsCode',
+      'veranlagungsStatus',
     ]);
     const originalSteuerdaten = this.originalSteuerdatenSig();
     const steuerdaten = {

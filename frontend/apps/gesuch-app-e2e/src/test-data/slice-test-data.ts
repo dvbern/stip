@@ -139,7 +139,7 @@ export const steuerdaten: Steuerdaten = {
   verpflegung: 0,
   verpflegungPartner: 0,
   steuerjahr: +specificYearsAgo(2),
-  veranlagungsCode: 23,
+  veranlagungsStatus: 'Provisorisch Veranlagt',
 };
 
 export const bruder: Geschwister = {
@@ -163,7 +163,7 @@ export const einnahmenKosten: EinnahmenKosten = {
   auswaertigeMittagessenProWoche: 5,
   vermoegen: 6,
   steuerjahr: +specificYearsAgo(1),
-  veranlagungsCode: 0,
+  veranlagungsStatus: 'Provisorisch Veranlagt',
   steuernKantonGemeinde: 0,
   verdienstRealisiert: false,
 };

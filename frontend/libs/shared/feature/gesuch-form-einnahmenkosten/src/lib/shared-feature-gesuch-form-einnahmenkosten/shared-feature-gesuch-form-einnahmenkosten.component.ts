@@ -143,10 +143,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         /* See `vermoegenValidator` bellow */
       ],
     ],
-    veranlagungsCode: [
-      <number | null>null,
-      [Validators.required, sharedUtilValidatorRange(0, 99)],
-    ],
+    veranlagungsStatus: [<string | null>null, [Validators.required]],
     steuerjahr: [
       <number | null>null,
       [
@@ -438,7 +435,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         !warErwachsenSteuerJahr,
       );
       this.setDisabledStateAndHide(
-        this.form.controls.veranlagungsCode,
+        this.form.controls.veranlagungsStatus,
         this.config.isGesuchApp,
       );
       this.setDisabledStateAndHide(
@@ -470,7 +467,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           betreuungskostenKinder:
             einnahmenKosten.betreuungskostenKinder?.toString(),
           vermoegen: einnahmenKosten.vermoegen?.toString(),
-          veranlagungsCode: einnahmenKosten.veranlagungsCode,
+          veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
           steuerjahr: einnahmenKosten.steuerjahr,
         });
       }
@@ -532,7 +529,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'verdienstRealisiert',
       'auswaertigeMittagessenProWoche',
       'steuerjahr',
-      'veranlagungsCode',
+      'veranlagungsStatus',
       ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
     ]);
     return {
@@ -561,7 +558,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ),
           vermoegen: fromFormatedNumber(formValues.vermoegen),
           steuerjahr: formValues.steuerjahr,
-          veranlagungsCode: formValues.veranlagungsCode,
+          veranlagungsStatus: formValues.veranlagungsStatus,
         },
       },
     };

@@ -275,13 +275,13 @@
           </mat-error>
         </mat-form-field>
       }
-      <!-- VeranlagungsCode-->
-      @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsCode)) {
+      <!-- veranlagungsStatus-->
+      @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsStatus)) {
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-          <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungscode.label' | transloco }}</mat-label>
+          <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungsStatus.label' | transloco }}</mat-label>
           <input
-            formControlName="veranlagungsCode"
-            data-testid="form-eltern-steuerdaten.veranlagungsCode"
+            formControlName="veranlagungsStatus"
+            data-testid="form-eltern-steuerdaten.veranlagungsStatus"
             matInput
             type="number"
             min="0"
