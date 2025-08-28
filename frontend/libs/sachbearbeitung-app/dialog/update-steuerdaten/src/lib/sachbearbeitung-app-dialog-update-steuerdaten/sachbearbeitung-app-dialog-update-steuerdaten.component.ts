@@ -20,7 +20,6 @@ import { fromFormatedNumber, maskitoYear } from '@dv/shared/util/maskito-util';
 
 type UpdateSteuerdatenDialogResult = {
   steuerjahr: number;
-  token: string;
 };
 
 @Component({
@@ -51,9 +50,6 @@ export class SachbearbeitungAppDialogUpdateSteuerdatenComponent {
 
   form = this.formBuilder.group({
     steuerjahr: [<string | null>null, [Validators.required]],
-    token: this.formBuilder.control(<string | undefined>undefined, [
-      Validators.required,
-    ]),
   });
 
   static open(dialog: MatDialog) {
@@ -73,11 +69,10 @@ export class SachbearbeitungAppDialogUpdateSteuerdatenComponent {
       return;
     }
 
-    const { steuerjahr, token } = convertTempFormToRealValues(this.form);
+    const { steuerjahr } = convertTempFormToRealValues(this.form);
 
     this.dialogRef.close({
       steuerjahr: fromFormatedNumber(steuerjahr),
-      token,
     });
   }
 }

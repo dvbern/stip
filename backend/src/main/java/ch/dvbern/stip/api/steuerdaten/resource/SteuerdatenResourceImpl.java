@@ -75,7 +75,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
         return steuerdatenService.updateSteuerdatenFromNesko(
             gesuchTrancheId,
             neskoGetSteuerdatenRequestDto.getSteuerdatenTyp(),
-            neskoGetSteuerdatenRequestDto.getToken(),
+            null,
             neskoGetSteuerdatenRequestDto.getSteuerjahr()
         ).stream().map(steuerdatenMapper::toDto).toList();
     }

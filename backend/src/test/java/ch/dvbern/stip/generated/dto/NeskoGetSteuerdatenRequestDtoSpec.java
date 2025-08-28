@@ -28,16 +28,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * NeskoGetSteuerdatenRequestDtoSpec
  */
 @JsonPropertyOrder({
-  NeskoGetSteuerdatenRequestDtoSpec.JSON_PROPERTY_TOKEN,
   NeskoGetSteuerdatenRequestDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
   NeskoGetSteuerdatenRequestDtoSpec.JSON_PROPERTY_STEUERJAHR
 })
 @JsonTypeName("NeskoGetSteuerdatenRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class NeskoGetSteuerdatenRequestDtoSpec {
-  public static final String JSON_PROPERTY_TOKEN = "token";
-  private String token;
-
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
@@ -46,32 +42,6 @@ public class NeskoGetSteuerdatenRequestDtoSpec {
 
   public NeskoGetSteuerdatenRequestDtoSpec() {
   }
-
-  public NeskoGetSteuerdatenRequestDtoSpec token(String token) {
-    
-    this.token = token;
-    return this;
-  }
-
-   /**
-   * Get token
-   * @return token
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_TOKEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getToken() {
-    return token;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_TOKEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setToken(String token) {
-    this.token = token;
-  }
-
 
   public NeskoGetSteuerdatenRequestDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
     
@@ -133,21 +103,19 @@ public class NeskoGetSteuerdatenRequestDtoSpec {
       return false;
     }
     NeskoGetSteuerdatenRequestDtoSpec neskoGetSteuerdatenRequest = (NeskoGetSteuerdatenRequestDtoSpec) o;
-    return Objects.equals(this.token, neskoGetSteuerdatenRequest.token) &&
-        Objects.equals(this.steuerdatenTyp, neskoGetSteuerdatenRequest.steuerdatenTyp) &&
+    return Objects.equals(this.steuerdatenTyp, neskoGetSteuerdatenRequest.steuerdatenTyp) &&
         Objects.equals(this.steuerjahr, neskoGetSteuerdatenRequest.steuerjahr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, steuerdatenTyp, steuerjahr);
+    return Objects.hash(steuerdatenTyp, steuerjahr);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NeskoGetSteuerdatenRequestDtoSpec {\n");
-    sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("}");

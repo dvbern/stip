@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.PermissionDe
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.StipendienAuskunftService;
 import ch.dvbern.stip.api.nesko.type.NeskoSteuerdatenError;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.handler.MessageContext;
@@ -40,13 +41,31 @@ import jakarta.xml.ws.soap.SOAPFaultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class NeskoGetSteuerdatenService {
-    @ConfigProperty(name = "kstip.nesko-wsdl-url")
+    @ConfigProperty(name = "kstip.nesko.username")
+    String username;
+
+    @ConfigProperty(name = "kstip.nesko.password")
+    String password;
+
+    @ConfigProperty(name = "kstip.nesko.wsdl-url")
     String wsdlLocation;
+
+    @Inject
+    @RestClient
+    NeskoGetBearerTokenService neskoGetBearerTokenService;
+
+    public String getToken() {
+        return neskoGetBearerTokenService.post(
+            neskoGetBearerTokenService.getAuthorization(username, password),
+            neskoGetBearerTokenService.getGrantType()
+        ).getAccess_token();
+    }
 
     public GetSteuerdatenResponse getSteuerdatenResponse(String token, String ssvn, Integer steuerjahr) {
         StipendienAuskunftService stipendienAuskunftService = null;
@@ -57,7 +76,7 @@ public class NeskoGetSteuerdatenService {
         }
 
         Map<String, List<String>> headers = new HashMap<>();
-        headers.put("authorization", Collections.singletonList("Bearer " + token));
+        headers.put("authorization", Collections.singletonList("Bearer " + getToken()));
         var port = stipendienAuskunftService.getStipendienAuskunft();
         ((BindingProvider) port).getRequestContext()
             .put(MessageContext.HTTP_REQUEST_HEADERS, headers);
