@@ -4,7 +4,6 @@ import { libraryGenerator } from '@nx/angular/generators';
 import { Tree } from '@nx/devkit';
 
 import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
-import { extendJestConfigSwc, extendTestSetupSwc } from './helpers/swc';
 import { updateTsConfig } from './helpers/tsconfig';
 
 export function patternTypeFactory(
@@ -28,9 +27,6 @@ export function patternTypeFactory(
 
 function postprocess(tree: Tree, options: NormalizedSchema) {
   updateTsConfig(tree, options);
-  extendTestSetupSwc(tree, options);
-  extendJestConfigSwc(tree, options);
-
   tree.delete(
     path.join(
       options.projectRoot,

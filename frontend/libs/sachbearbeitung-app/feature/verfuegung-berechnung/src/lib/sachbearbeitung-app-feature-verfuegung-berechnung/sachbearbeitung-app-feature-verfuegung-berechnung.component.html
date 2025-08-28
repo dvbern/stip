@@ -1,14 +1,14 @@
-<p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | translate }}</p>
+<p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | transloco }}</p>
 @if (berechnungenSig().loading) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (berechnungenSig().berechnung; as berechnung) {
     <dl class="d-flex g-2">
-      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | translate }}:</dt>
+      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | transloco }}:</dt>
       <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.yyyy' }}</dd>
-      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | translate }}:</dt>
+      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | transloco }}:</dt>
       <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.yyyy' }}</dd>
-      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | translate }}:</dt>
+      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | transloco }}:</dt>
       <dd class="me-4">{{ berechnung.monate }}</dd>
     </dl>
     <div class="row">
@@ -42,6 +42,6 @@
       }
     </div>
   } @else {
-    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | translate }}</p>
+    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | transloco }}</p>
   }
 }

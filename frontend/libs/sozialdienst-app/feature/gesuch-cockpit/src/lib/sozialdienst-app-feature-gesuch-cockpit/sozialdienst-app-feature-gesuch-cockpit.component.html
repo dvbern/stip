@@ -11,11 +11,11 @@
           data-testid="gesuch-step-nav-overview"
         >
           <i class="material-symbols-rounded text-white me-2">list</i>
-          <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
         </a>
         <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
           <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
-          <span>{{ 'sozialdienst-app.header.fall' | translate }}</span>
+          <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
         </div>
       </div>
     </dv-shared-pattern-app-header>
@@ -28,7 +28,7 @@
 
       <div class="container tw-relative tw-my-12 tw-justify-between">
         <h1 class="tw-mb-8 tw-text-white">
-          {{ 'sozialdienst-app.dashboard.welcome.title' | translate: { name: benutzerNameSig() } }}
+          {{ 'sozialdienst-app.dashboard.welcome.title' | transloco: { name: benutzerNameSig() } }}
         </h1>
 
         @let dashboard = dashboardStore.dashboardViewSig();
@@ -57,7 +57,7 @@
                   <dv-shared-ui-icon-chip>
                     <i class="material-symbols-rounded">add</i>
                   </dv-shared-ui-icon-chip>
-                  {{ 'sozialdienst-app.dashboard.ausbildung.create' | translate }}
+                  {{ 'sozialdienst-app.dashboard.ausbildung.create' | transloco }}
                 </button>
               }
               @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {

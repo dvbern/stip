@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional, inject } from '@angular/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { de, frCH } from 'date-fns/locale';
 import { startWith } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { parseDateForVariant } from '@dv/shared/util/validator-date';
 
 @Injectable()
 export class DvDateAdapter extends DateFnsAdapter {
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   constructor(@Optional() @Inject(MAT_DATE_LOCALE) matDateLocale: object) {
     /** Not relevant once the base adapter is implemented with `inject` instead of `@Inject`
@@ -17,9 +17,9 @@ export class DvDateAdapter extends DateFnsAdapter {
      */
     super(matDateLocale);
 
-    this.translate.onLangChange
-      .pipe(startWith({ lang: this.translate.currentLang }))
-      .subscribe(({ lang }) => {
+    this.translate.langChanges$
+      .pipe(startWith(this.translate.getActiveLang()))
+      .subscribe((lang) => {
         this.setLocale(getLocaleFromLanguage(lang));
       });
   }

@@ -22,12 +22,13 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, isDefined } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { Anrede, FallWithDelegierung } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -57,7 +58,7 @@ export interface DelegierungDialogData {
   selector: 'dv-sozialdienst-app-feature-delegierung-dialog',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatInputModule,

@@ -13,25 +13,25 @@
           data-testid="sachbearbeitung-app.buchhaltung-info.retry"
         >
           <i class="material-symbols-rounded">refresh</i>
-          <span>{{ 'sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung' | translate }}</span>
+          <span>{{ 'sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung' | transloco }}</span>
         </button>
       }
 
       <button type="button" (click)="createBuchhaltungsKorrektur()" class="btn btn-outline-primary">
-        {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | translate }}
+        {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
       </button>
     </div>
     <div class="tw-dv-table" [class.opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
       <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw-w-full tw-table-fixed">
         <caption class="cdk-visually-hidden">
           {{
-            'sachbearbeitung-app.infos.buchhaltung.title' | translate
+            'sachbearbeitung-app.infos.buchhaltung.title' | transloco
           }}
         </caption>
 
         <ng-container matColumnDef="datum">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             {{ buchhaltung.entry.timestampErstellt | date: 'dd.MM.yyyy' }}
@@ -40,7 +40,7 @@
 
         <ng-container matColumnDef="stipendienbetrag">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 !tw-text-right">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | transloco }}
           </th>
           <td
             mat-cell
@@ -53,7 +53,7 @@
 
         <ng-container matColumnDef="auszahlung">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28 !tw-text-right">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.auszahlung' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.auszahlung' | transloco }}
           </th>
           <td
             mat-cell
@@ -66,7 +66,7 @@
 
         <ng-container matColumnDef="rueckforderung">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 !tw-text-right">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | transloco }}
           </th>
           <td
             mat-cell
@@ -80,7 +80,7 @@
         <!-- saldoAenderung -->
         <ng-container matColumnDef="saldoAenderung">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 !tw-text-right">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | transloco }}
           </th>
           <td
             mat-cell
@@ -93,7 +93,7 @@
 
         <ng-container matColumnDef="saldo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 !tw-text-right">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | transloco }}
           </th>
           <td
             mat-cell
@@ -106,7 +106,7 @@
 
         <ng-container matColumnDef="comment">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | transloco }}
           </th>
           <td
             mat-cell
@@ -121,18 +121,18 @@
         <!-- sapStatus -->
         <ng-container matColumnDef="sapStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-32 tw-whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.sapStatus' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.sapStatus' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             @if (buchhaltung.entry.sapStatus) {
-              {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | translate }}
+              {{ 'sachbearbeitung-app.infos.buchhaltung.sapStatus.' + buchhaltung.entry.sapStatus | transloco }}
             }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="info">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-20 tw-whitespace-nowrap">
-            {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | translate }}
+            {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw-whitespace-nowrap">
             <div class="gap-1 tw-flex">
@@ -140,7 +140,7 @@
                 type="button"
                 (click)="showDetails(buchhaltung.entry)"
                 class="dv-icon-button dv-icon-button-md text-info"
-                [matTooltip]="'sachbearbeitung-app.infos.buchhaltung.table.moreInfo' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.buchhaltung.table.moreInfo' | transloco"
               >
                 <span class="material-symbols-rounded">info</span>
               </button>
@@ -149,7 +149,7 @@
                   type="button"
                   class="btn btn-outline-primary fs-7 tw-p-4 tw-text-sm"
                   [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
-                  [matTooltip]="'shared.dokumente.table.download' | translate"
+                  [matTooltip]="'shared.dokumente.table.download' | transloco"
                 >
                   <span class="material-symbols-rounded tw-align-middle">download</span>
                 </button>
@@ -179,7 +179,7 @@
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-            {{ 'shared.table.noData' | translate }}
+            {{ 'shared.table.noData' | transloco }}
           </td>
         </tr>
       </table>

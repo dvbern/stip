@@ -19,8 +19,8 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -57,7 +57,7 @@ export type ChangeGesuchsperiodeDialogResult = {
   selector: 'dv-shared-dialog-change-gesuchsperiode',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterLink,
     ReactiveFormsModule,
     MatSelectModule,

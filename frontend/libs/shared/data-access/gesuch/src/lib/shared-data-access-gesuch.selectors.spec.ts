@@ -11,7 +11,7 @@ import {
   ELTERN_STEUERERKLAERUNG_FAMILIE,
 } from '@dv/shared/model/gesuch-form';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { DeepPartial } from '@dv/shared/pattern/jest-test-setup';
+import { DeepPartial } from '@dv/shared/pattern/vitest-test-setup';
 import { initial, success } from '@dv/shared/util/remote-data';
 import {
   isGesuchFormularProp,

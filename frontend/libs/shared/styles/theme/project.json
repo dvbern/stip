@@ -3,16 +3,5 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/styles/theme/src",
   "tags": ["scope:shared", "type:styles"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/styles/theme/tsconfig.json"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
-    }
-  }
+  "targets": {}
 }

@@ -6,7 +6,7 @@
       data-testid="gesuch-step-nav-overview"
     >
       <i class="material-symbols-rounded text-white me-2">list</i>
-      <span>{{ 'sozialdienst-app.header.antraege' | translate }}</span>
+      <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
     </a>
     @let fallId = fallIdSig();
     <a
@@ -16,7 +16,7 @@
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
-      <span>{{ 'sozialdienst-app.header.fall' | translate }}</span>
+      <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
     </a>
     <a
       [routerLink]="['/auszahlung', fallId]"
@@ -25,7 +25,7 @@
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
-      {{ 'shared.menu.auszahlung' | translate }}
+      {{ 'shared.menu.auszahlung' | transloco }}
     </a>
     <a
       *dvHasRoles="['V0_Sozialdienst-Admin']"
@@ -34,12 +34,12 @@
       data-testid="gesuch-step-nav-administration"
     >
       <i class="material-symbols-rounded text-white me-2">settings</i>
-      <span>{{ 'sozialdienst-app.header.administration' | translate }}</span>
+      <span>{{ 'sozialdienst-app.header.administration' | transloco }}</span>
     </a>
   </div>
   <div class="container tw-relative tw-my-12 tw-justify-between">
     <h1 class="tw-mb-8">
-      {{ 'shared.auszahlung.title' | translate }}
+      {{ 'shared.auszahlung.title' | transloco }}
     </h1>
     <dv-shared-ui-auszahlung
       [auszahlungViewSig]="auszahlungViewSig()"

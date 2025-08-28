@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
@@ -10,7 +10,7 @@ import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
   imports: [
     MatFormFieldModule,
     MatInputModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-ui-search.component.html',

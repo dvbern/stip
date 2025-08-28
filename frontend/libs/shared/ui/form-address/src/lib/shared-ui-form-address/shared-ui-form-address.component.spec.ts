@@ -2,7 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiFormAddressComponent } from './shared-ui-form-address.component';
 
@@ -12,8 +14,12 @@ describe('SharedUiFormAddressComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, SharedUiFormAddressComponent],
-      providers: [provideHttpClient(), provideTranslateService()],
+      imports: [
+        NoopAnimationsModule,
+        SharedUiFormAddressComponent,
+        getTranslocoModule(),
+      ],
+      providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiFormAddressComponent);

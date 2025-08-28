@@ -19,9 +19,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -57,7 +57,7 @@ import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darl
   selector: 'dv-shared-feature-darlehen',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

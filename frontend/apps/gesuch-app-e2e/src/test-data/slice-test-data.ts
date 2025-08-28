@@ -24,6 +24,7 @@ export const ausbildung: AusbildungValues = {
   fallId: '',
   status: 'AKTIV',
   editable: true,
+  ausbildungsortPLZ: '3011',
   ausbildungsort: 'Bern',
   ausbildungsstaetteText: 'Universität Bern',
   ausbildungsgangText: 'Bachelor',

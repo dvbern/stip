@@ -3,29 +3,29 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
   <h1 class="title h5 tw-mb-5 tw-flex">
-    {{ dialogData.titleKey | translate }}
+    {{ dialogData.titleKey | transloco }}
   </h1>
-  <p class="content tw-mb-0" [innerHTML]="dialogData.messageKey | translate"></p>
+  <p class="content tw-mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
 
   <form [formGroup]="form" class="tw-mt-5" novalidate>
     <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
       <mat-form-field dvSharedUiFormField [ngClass]="{ 'tw-w-4/5': showKantonFieldSig() }" class="tw-w-full">
         <mat-select
           formControlName="grund"
-          [placeholder]="'shared.form.select.empty' | translate"
-          [aria-label]="dialogData.labelKey | translate"
+          [placeholder]="'shared.form.select.empty' | transloco"
+          [aria-label]="dialogData.labelKey | transloco"
         >
           @for (grund of allAblehnungsGruendeSig(); track grund) {
             @if (grund.stipDecision === grundManuell.stipDecision) {
               <mat-divider></mat-divider>
               <mat-option [value]="grundManuell">{{
-                'sachbearbeitung-app.verfuegung.negativ.dialog.manuell' | translate
+                'sachbearbeitung-app.verfuegung.negativ.dialog.manuell' | transloco
               }}</mat-option>
             } @else {
               <mat-option [value]="grund">{{ grund.titleDe }}</mat-option>
@@ -33,15 +33,15 @@
           }
         </mat-select>
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
 
       @if (showVerfuegungUploadSig()) {
         <mat-form-field class="tw-mt-3 tw-w-full" dvSharedUiFormField>
           <mat-label>
-            {{ 'sachbearbeitung-app.verfuegung.negativ.dialog.comment' | translate }}
-            ({{ 'shared.form.optional.label' | translate }})
+            {{ 'sachbearbeitung-app.verfuegung.negativ.dialog.comment' | transloco }}
+            ({{ 'shared.form.optional.label' | transloco }})
           </mat-label>
           <textarea
             formControlName="kommentar"
@@ -53,7 +53,7 @@
             rows="2"
           ></textarea>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
 
@@ -63,10 +63,10 @@
           <label class="tw-flex tw-flex-col tw-items-center">
             <div
               class="text-center text-muted text-italic my-4 d-md-block d-none"
-              [innerHTML]="'shared.file.dropZone' | translate"
+              [innerHTML]="'shared.file.dropZone' | transloco"
             ></div>
             <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
-              {{ 'shared.file.upload' | translate }}
+              {{ 'shared.file.upload' | transloco }}
             </button>
             <input
               #fileInput
@@ -89,7 +89,7 @@
             <button
               type="button"
               class="dv-icon-button flex-shrink-0 tw-ml-2 tw-h-auto tw-w-auto tw-self-end"
-              [attr.aria-label]="'shared.form.delete' | translate"
+              [attr.aria-label]="'shared.form.delete' | transloco"
               (click)="resetSelectedFile()"
             >
               <span class="material-symbols-rounded align-middle text-muted !tw-text-xl/none">delete</span>
@@ -99,7 +99,7 @@
           <div class="group-errors tw-mb-[3px] tw-text-sm">
             @if (form.touched && form.controls.fileUpload.touched && fileInput.files?.length === 0) {
               <mat-error>
-                {{ 'shared.form.error.required' | translate }}
+                {{ 'shared.form.error.required' | transloco }}
               </mat-error>
             }
           </div>
@@ -110,17 +110,17 @@
         <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-select
             formControlName="kanton"
-            [placeholder]="'shared.form.select.empty' | translate"
-            [aria-label]="dialogData.labelKey | translate"
+            [placeholder]="'shared.form.select.empty' | transloco"
+            [aria-label]="dialogData.labelKey | transloco"
           >
             @for (kanton of kantone; track $index) {
               <mat-option [value]="kanton" [attr.data-testid]="kanton">
-                {{ 'shared.kanton.' + kanton | translate }}
+                {{ 'shared.kanton.' + kanton | transloco }}
               </mat-option>
             }
           </mat-select>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       }
@@ -128,10 +128,10 @@
 
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
-        {{ dialogData.confirmKey | translate }}
+        {{ dialogData.confirmKey | transloco }}
       </button>
     </div>
   </form>

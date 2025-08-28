@@ -8,20 +8,20 @@
         </dv-shared-ui-icon-chip>
         {{
           'shared.dashboard.ausbildung.title'
-            | translate
+            | transloco
               : (ausbildung.ausbildungNichtGefunden
                   ? { bezeichnungDe: ausbildung.alternativeAusbildungsgang }
                   : ausbildung.ausbildungsgang)
         }}
         <div class="tw-grow tw-text-end tw-text-base">
-          {{ 'shared.dashboard.ausbildung.status.' + ausbildung.status | translate: { status: ausbildung.status } }}
+          {{ 'shared.dashboard.ausbildung.status.' + ausbildung.status | transloco: { status: ausbildung.status } }}
         </div>
       </h2>
 
       <p class="tw-my-0 tw-w-full">
         {{
           'shared.dashboard.ausbildung.description'
-            | translate
+            | transloco
               : {
                   start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
                   end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),

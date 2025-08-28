@@ -4,7 +4,7 @@ import { userEvent } from '@testing-library/user-event';
 const dvUserEvent = userEvent.setup();
 const dvUserEventForMockedTimers = userEvent.setup({
   advanceTimers: () => {
-    jest.runOnlyPendingTimers();
+    vitest.runOnlyPendingTimers();
   },
 });
 
@@ -20,7 +20,7 @@ export const prepareEvent = () => {
 };
 
 export function mockElementScrollIntoView() {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  window.HTMLElement.prototype.scrollIntoView = vitest.fn();
 }
 
 export async function clickMatSelectOption(

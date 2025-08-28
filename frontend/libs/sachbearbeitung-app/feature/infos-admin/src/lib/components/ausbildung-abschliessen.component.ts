@@ -9,7 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
@@ -23,7 +23,7 @@ export interface GesuchTableColumns {
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
   ],

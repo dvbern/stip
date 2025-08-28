@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
@@ -23,12 +23,10 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
 @Component({
-  selector: 'lib-shared-feature-verfuegung-zusammenfassung',
   imports: [
     CommonModule,
     MatCardModule,
-    TranslateDirective,
-    TranslatePipe,
+    TranslocoDirective,
     RouterLink,
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,

@@ -1,7 +1,7 @@
-<dv-shared-pattern-main-layout>
+<dv-shared-pattern-main-layout *transloco="let t">
   <div class="container tw-relative tw-my-12 tw-justify-between">
     <h1 class="tw-mb-8">
-      {{ 'shared.auszahlung.title' | translate }}
+      {{ t('shared.auszahlung.title') }}
     </h1>
     <dv-shared-ui-auszahlung
       [auszahlungViewSig]="auszahlungViewSig()"
@@ -22,7 +22,7 @@
       data-testid="gesuch-step-nav-dashboard"
     >
       <i class="material-symbols-rounded text-white me-2">dashboard</i>
-      <span translate>shared.menu.dashboard</span>
+      <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
 
     @let fallId = fallIdSig();
@@ -33,7 +33,7 @@
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
-      <span translate>shared.menu.auszahlung</span>
+      <span>{{ t('shared.menu.auszahlung') }}</span>
     </a>
   </div>
 

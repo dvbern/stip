@@ -5,7 +5,10 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import {
+  getTranslocoModule,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { initial } from '@dv/shared/util/remote-data';
 
 import { SachbearbeitungAppFeatureGesuchFormComponent } from './sachbearbeitung-app-feature-gesuch-form.component';
@@ -16,6 +19,10 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        SachbearbeitungAppFeatureGesuchFormComponent,
+        getTranslocoModule(),
+      ],
       providers: [
         GesuchStore,
         GesuchInfoStore,
@@ -34,9 +41,8 @@ describe('SachbearbeitungAppFeatureGesuchFormComponent', () => {
             configs: {},
           },
         }),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
       ],
-      imports: [SachbearbeitungAppFeatureGesuchFormComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(

@@ -1,11 +1,11 @@
-<dv-shared-pattern-main-layout>
+<dv-shared-pattern-main-layout *dvTranslocoGs="let t">
   <div class="bg-image">
     <div class="gray-bg"></div>
   </div>
 
   <div class="container tw-relative tw-my-12 tw-justify-between">
     <h1 class="tw-mb-8 tw-text-white">
-      {{ 'gesuch-app.dashboard.welcome.title' | translate: { name: benutzerNameSig() } }}
+      {{ t('gesuch-app.dashboard.welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
     @let dashboard = dashboardStore.dashboardViewSig();
@@ -35,7 +35,7 @@
               <dv-shared-ui-icon-chip>
                 <i class="material-symbols-rounded">add</i>
               </dv-shared-ui-icon-chip>
-              {{ 'gesuch-app.dashboard.ausbildung.create' | translate }}
+              {{ t('gesuch-app.dashboard.ausbildung.create') }}
             </button>
           } @else {
             <div class="tw tw-block tw-rounded-lg tw-bg-white tw-p-6">
@@ -43,10 +43,10 @@
                 <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
                   <i class="material-symbols-rounded tw-text-2xl">school</i>
                 </dv-shared-ui-icon-chip>
-                {{ 'gesuch-app.dashboard.fall.delegated.title' | translate }}
+                {{ t('gesuch-app.dashboard.fall.delegated.title') }}
               </h3>
               <p class="tw-mb-0">
-                {{ 'gesuch-app.dashboard.fall.delegated.message' | translate }}
+                {{ t('gesuch-app.dashboard.fall.delegated.message') }}
               </p>
             </div>
           }
@@ -67,14 +67,14 @@
                 <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
                   <i class="material-symbols-rounded fs-5">interpreter_mode</i>
                 </dv-shared-ui-icon-chip>
-                {{ 'shared.dashboard.gesuch.sozialdienst' | translate }}
+                {{ t('shared.dashboard.gesuch.sozialdienst') }}
               </h3>
               <div class="tw-flex tw-flex-col tw-gap-4">
                 <div class="tw-flex tw-items-center tw-gap-2">
                   <mat-form-field class="tw-w-full">
                     <mat-select
                       #sozialdienst
-                      [placeholder]="'shared.dashboard.gesuch.sozialdienst-waehlen' | translate"
+                      [placeholder]="t('shared.dashboard.gesuch.sozialdienst-waehlen')"
                       [disabled]="delegierterSozialdienst"
                       [value]="delegierterSozialdienst"
                       [compareWith]="compareById"
@@ -100,7 +100,7 @@
                     (click)="delegiereSozialdienst(fall.id, sozialdienst.value)"
                     class="btn btn-primary"
                   >
-                    {{ 'shared.dashboard.gesuch.delegieren' | translate }}
+                    {{ t('shared.dashboard.gesuch.delegieren') }}
                   </button>
                 }
               </div>
@@ -140,7 +140,7 @@
       data-testid="gesuch-step-nav-dashboard"
     >
       <i class="material-symbols-rounded text-white me-2">dashboard</i>
-      <span translate>shared.menu.dashboard</span>
+      <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
 
     @let fallId = fallStore.currentFallViewSig()?.id;
@@ -151,7 +151,7 @@
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
-      <span translate>shared.menu.auszahlung</span>
+      <span>{{ t('shared.menu.auszahlung') }}</span>
     </a>
   </div>
 

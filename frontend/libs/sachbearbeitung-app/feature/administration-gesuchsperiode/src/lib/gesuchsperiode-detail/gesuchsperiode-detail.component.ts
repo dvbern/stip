@@ -29,14 +29,11 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import {
-  TranslateDirective,
-  TranslatePipe,
-  TranslateService,
-} from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { GesuchsperiodeWithDaten } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
@@ -72,9 +69,13 @@ import { PublishComponent } from '../publish/publish.component';
     MatHint,
     MatInputModule,
     MatSelectModule,
-    TranslateDirective,
-    TranslatePipe,
     ReactiveFormsModule,
+    PublishComponent,
+    TranslatedPropertyPipe,
+    MatDatepicker,
+    MatDatepickerToggle,
+    MatDatepickerInput,
+    MatChipsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,
@@ -84,12 +85,7 @@ import { PublishComponent } from '../publish/publish.component';
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiHeaderSuffixDirective,
     SharedUiMaxLengthDirective,
-    PublishComponent,
-    TranslatedPropertyPipe,
-    MatDatepicker,
-    MatDatepickerToggle,
-    MatDatepickerInput,
-    MatChipsModule,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './gesuchsperiode-detail.component.html',
   providers: [provideDvDateAdapter()],
@@ -102,7 +98,7 @@ export class GesuchsperiodeDetailComponent {
   store = inject(GesuchsperiodeStore);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
   maskitoYear = maskitoYear;
   maskitoNumber = maskitoNumber;
   // eslint-disable-next-line @angular-eslint/no-input-rename

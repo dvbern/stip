@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
@@ -41,7 +41,7 @@ import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokum
   selector: 'dv-custom-dokumente',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,
     SharedPatternDocumentUploadComponent,

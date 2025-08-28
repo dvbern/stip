@@ -22,27 +22,28 @@
       >
         <label>{{
           'shared.form.eltern-steuerdaten.steuererklaerungInBern.label'
-            | translate: { prefix: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.' + typ | translate }
+            | transloco: { prefix: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.pre.' + typ | transloco }
         }}</label>
         <div class="d-flex gap-2 col-12 pe-md-3 justify-content-between">
           <div class="d-flex flex-column">
             <mat-radio-button data-testid="yes" [value]="true">{{
-              'shared.form.eltern-steuerdaten.steuererklaerungInBern.true' | translate
+              'shared.form.eltern-steuerdaten.steuererklaerungInBern.true' | transloco
             }}</mat-radio-button>
             <mat-radio-button data-testid="no" [value]="false">{{
-              'shared.form.eltern-steuerdaten.steuererklaerungInBern.false' | translate
+              'shared.form.eltern-steuerdaten.steuererklaerungInBern.false' | transloco
             }}</mat-radio-button>
           </div>
         </div>
         <dv-shared-ui-form-zuvor-hint
           [changes]="
             changes?.steuererklaerungInBern
-              | translateChange: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.$VALUE'
+              | dvTranslateChange: 'shared.form.eltern-steuerdaten.steuererklaerungInBern.$VALUE'
+              | async
           "
         ></dv-shared-ui-form-zuvor-hint>
         <div class="group-errors">
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </div>
       </mat-radio-group>
@@ -52,7 +53,7 @@
         <div class="d-flex align-items-center gap-4 col-12 col-md-6">
           <p
             class="m-0"
-            [innerHTML]="'shared.form.eltern-steuererklaerung.file.' + typ + '_DOCUMENTUPLOAD' | translate"
+            [innerHTML]="'shared.form.eltern-steuererklaerung.file.' + typ + '_DOCUMENTUPLOAD' | transloco"
           ></p>
 
           <dv-shared-pattern-document-upload
@@ -65,11 +66,11 @@
     <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
         <button type="submit" (click)="handleSave()" class="btn btn-primary" data-testid="button-save-continue">
-          {{ 'shared.form.save-and-continue' | translate }}
+          {{ 'shared.form.save-and-continue' | transloco }}
         </button>
       } @else {
         <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
-          {{ 'shared.form.gonext' | translate }}
+          {{ 'shared.form.gonext' | transloco }}
         </button>
       }
     </dv-shared-ui-step-form-buttons>

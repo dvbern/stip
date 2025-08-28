@@ -8,8 +8,8 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   SharedUiFormFieldDirective,
@@ -31,7 +31,7 @@ type UpdateSteuerdatenDialogResult = {
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
   ],

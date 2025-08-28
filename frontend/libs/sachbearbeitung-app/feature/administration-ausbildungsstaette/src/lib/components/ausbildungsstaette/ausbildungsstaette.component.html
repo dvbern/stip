@@ -14,7 +14,7 @@
       <caption class="cdk-visually-hidden">
         {{
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.description'
-            | translate
+            | transloco
         }}
       </caption>
 
@@ -22,7 +22,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
           <label class="pe-none" for="ausbildungsstaette">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.ausbildungsstaette'
-              | translate
+              | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
@@ -47,9 +47,9 @@
           mat-cell
           *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
           class="tw-whitespace-nowrap"
-          [dvTruncateTooltip]="ausbildungsstaette | translatedProp: 'name' : translate.currentLang"
+          [dvTruncateTooltip]="ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang()"
         >
-          {{ ausbildungsstaette | translatedProp: 'name' : translate.currentLang }}
+          {{ ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang() }}
         </td>
       </ng-container>
 
@@ -57,7 +57,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-28 tw-whitespace-nowrap">
           <label class="pe-none" for="chShisNummer">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.chShisNummer'
-              | translate
+              | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
@@ -91,7 +91,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-28 tw-whitespace-nowrap">
           <label class="pe-none" for="ctNummer">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.ctNummer'
-              | translate
+              | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
@@ -125,7 +125,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-28 tw-whitespace-nowrap">
           <label class="pe-none" for="burNummer">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.burNummer'
-              | translate
+              | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
@@ -158,31 +158,31 @@
       <ng-container matColumnDef="AKTIV">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
           {{
-            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status' | translate
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status' | transloco
           }}
           <mat-form-field class="tw-w-full">
             <mat-select
               [aria-label]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status'
-                  | translate
+                  | transloco
               "
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
               class="!tw-font-normal"
               [placeholder]="
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco
               "
               panelClass="table-select"
             >
               <mat-option [value]="undefined">
-                {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate }}
+                {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco }}
               </mat-option>
 
               @for (status of statusValues; track status) {
                 <mat-option [value]="status">
                   {{
                     'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status.' +
-                      status | translate
+                      status | transloco
                   }}
                 </mat-option>
               }
@@ -197,7 +197,7 @@
           @let key = abschluss.aktiv ? 'ACTIVE' : 'INACTIVE';
           {{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status.' + key
-              | translate
+              | transloco
           }}
         </td>
       </ng-container>
@@ -212,7 +212,7 @@
             <button
               type="button"
               class="btn btn-outline-primary btn-sm"
-              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               (click)="createAusbildungsstaette()"
               [disabled]="addAusbildungsstaetteIsLoadingSig()"
             >
@@ -249,7 +249,7 @@
       ></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
-          {{ 'shared.table.noData' | translate }}
+          {{ 'shared.table.noData' | transloco }}
         </td>
       </tr>
     </table>

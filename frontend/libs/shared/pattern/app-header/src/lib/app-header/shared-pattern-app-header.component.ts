@@ -17,8 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
@@ -36,7 +36,7 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
   selector: 'dv-shared-pattern-app-header',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterLink,
     MatMenuModule,
     MatButtonModule,

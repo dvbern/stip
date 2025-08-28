@@ -8,8 +8,8 @@ import {
   input,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
@@ -19,7 +19,7 @@ import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav
 
 @Component({
   selector: 'dv-shared-pattern-gesuch-step-nav',
-  imports: [RouterLink, TranslatePipe, SharedUiChangeIndicatorComponent],
+  imports: [RouterLink, TranslocoPipe, SharedUiChangeIndicatorComponent],
   templateUrl: './shared-pattern-gesuch-step-nav.component.html',
   styleUrls: ['./shared-pattern-gesuch-step-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

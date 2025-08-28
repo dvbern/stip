@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
@@ -36,7 +36,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternGesuchStepNavComponent,

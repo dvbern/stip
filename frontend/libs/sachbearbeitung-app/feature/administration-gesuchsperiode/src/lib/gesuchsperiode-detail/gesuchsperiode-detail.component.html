@@ -1,16 +1,16 @@
-<ng-template dvHeaderSuffix>
-  @if (store.currentGesuchsperiodeViewSig(); as view) {
-    <mat-chip
-      class="ms-2 fw-normal fs-4"
-      [class.opacity-50]="view.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
-      [color]="view?.statusColor"
-      highlighted
-      >{{ 'shared.gesuch.periode.status.' + view.gueltigkeitStatus | translate }}</mat-chip
-    >
-  }
-</ng-template>
+<div class="mt-4 row d-flex g-4" *dvTranslocoSb="let t">
+  <ng-template dvHeaderSuffix>
+    @if (store.currentGesuchsperiodeViewSig(); as view) {
+      <mat-chip
+        class="ms-2 fw-normal fs-4"
+        [class.opacity-50]="view.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
+        [color]="view?.statusColor"
+        highlighted
+        >{{ t(`shared.gesuch.periode.status.${view.gueltigkeitStatus}`) }}</mat-chip
+      >
+    }
+  </ng-template>
 
-<div class="mt-4 row d-flex g-4">
   @if (store.currentGesuchsperiodeViewSig()?.isEditable) {
     @if (idSig(); as id) {
       <div class="col-12 col-xl-5 order-xl-1">
@@ -35,13 +35,13 @@
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
       <h1 class="h2 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title') }}
       </h1>
 
       <div class="row g-4">
         <!-- BezeichnungDe -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.bezeichnungDe.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.bezeichnungDe.label') }}</mat-label>
           <input
             formControlName="bezeichnungDe"
             data-testid="form-gesuchsperiode-bezeichnungDe"
@@ -50,12 +50,12 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
         <!-- BezeichnungFr -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.bezeichnungFr.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.bezeichnungFr.label') }}</mat-label>
           <input
             formControlName="bezeichnungFr"
             data-testid="form-gesuchsperiode-bezeichnungFr"
@@ -64,7 +64,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -72,7 +72,7 @@
       <div class="row g-4 mt-1">
         <!-- Fiskaljahr -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.fiskaljahr.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.fiskaljahr.label') }}</mat-label>
           <input
             formControlName="fiskaljahr"
             data-testid="form-gesuchsperiode-fiskaljahr"
@@ -81,14 +81,14 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Gesuchsjahr/Ausbildungsjahr -->
 
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.label') }}</mat-label>
           @if (store.gesuchsjahre() | rdIsPending) {
             <dv-shared-ui-loading
               class="position-absolute top-50 start-50 translate-middle"
@@ -98,16 +98,16 @@
           <mat-select
             formControlName="gesuchsjahrId"
             data-testid="form-gesuchsperiode-gesuchsjahr"
-            [placeholder]="'shared.form.select.empty' | translate"
+            [placeholder]="t('shared.form.select.empty')"
           >
             @for (jahr of store.gesuchsjahre.data(); track $index) {
               <mat-option [attr.data-testid]="'gesuchsjahr-' + jahr" [value]="jahr.id">
-                {{ jahr | translatedProp: 'bezeichnung' : translate.currentLang }}
+                {{ jahr | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
               </mat-option>
             }
           </mat-select>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -116,7 +116,7 @@
         <!-- Gesuchsperiode Start -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>
-            {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsperiodeStart.label' | translate }}
+            {{ t('sachbearbeitung-app.admin.gesuchsperiode.gesuchsperiodeStart.label') }}
           </mat-label>
           <input
             formControlName="gesuchsperiodeStart"
@@ -128,13 +128,13 @@
           <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStartDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #gesuchsperiodeStartDatepicker></mat-datepicker>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Gesuchsperiode Stopp -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsperiodeStopp.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.gesuchsperiodeStopp.label') }}</mat-label>
           <input
             formControlName="gesuchsperiodeStopp"
             data-testid="form-gesuchsperiode-gesuchsperiodeStopp"
@@ -145,7 +145,7 @@
           <mat-datepicker-toggle matIconSuffix [for]="gesuchsperiodeStoppDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #gesuchsperiodeStoppDatepicker></mat-datepicker>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -153,7 +153,7 @@
       <div class="row g-4 mt-1">
         <!-- Aufschalttermin Start -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.aufschaltterminStart.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.aufschaltterminStart.label') }}</mat-label>
           <input
             formControlName="aufschaltterminStart"
             data-testid="form-gesuchsperiode-aufschaltterminStart"
@@ -164,7 +164,7 @@
           <mat-datepicker-toggle matIconSuffix [for]="aufschaltterminStartDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #aufschaltterminStartDatepicker></mat-datepicker>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -172,7 +172,7 @@
       <div class="row g-4 mt-1">
         <!-- Einreichefrist Normal -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.einreichefristNormal.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.einreichefristNormal.label') }}</mat-label>
           <input
             formControlName="einreichefristNormal"
             data-testid="form-gesuchsperiode-einreichefrist-normal"
@@ -182,17 +182,15 @@
           />
           <mat-datepicker-toggle matIconSuffix [for]="einreicherfristNormalDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #einreicherfristNormalDatepicker></mat-datepicker>
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.einreichefristNormal.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.einreichefristNormal.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Einreichefrist Reduziert -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.label') }}</mat-label>
           <input
             formControlName="einreichefristReduziert"
             data-testid="form-gesuchsperiode-einreichefrist-reduziert"
@@ -202,9 +200,9 @@
           />
           <mat-datepicker-toggle matIconSuffix [for]="einreicherfristReduziertDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #einreicherfristReduziertDatepicker></mat-datepicker>
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.einreichefristReduziert.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -212,9 +210,7 @@
       <div class="row g-4 mt-1">
         <!-- Frist Nachreichen von Dokumenten -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label') }}</mat-label>
           <input
             formControlName="fristNachreichenDokumente"
             data-testid="form-gesuchsperiode-frist-nachreichen-dokumente"
@@ -223,14 +219,13 @@
             min="0"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
         <!-- Stichtag Volljaehrigkeit Medizinische-Grundversorgung -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label'
-              | translate
+            t('sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label')
           }}</mat-label>
           <input
             formControlName="stichtagVolljaehrigkeitMedizinischeGrundversorgung"
@@ -244,11 +239,11 @@
             [for]="stichtagVolljaehrigkeitMedizinischeGrundversorgungDatepicker"
           ></mat-datepicker-toggle>
           <mat-datepicker #stichtagVolljaehrigkeitMedizinischeGrundversorgungDatepicker></mat-datepicker>
-          <mat-hint translate>
-            sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info
-          </mat-hint>
+          <mat-hint>{{
+            t('sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info')
+          }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -256,9 +251,7 @@
       <div class="row g-4 mt-1">
         <!-- Zweiter Auszahlungstermin Monat-->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.label') }}</mat-label>
           <input
             formControlName="zweiterAuszahlungsterminMonat"
             data-testid="form-gesuchsperiode-zweiterAuszahlungsterminMonat"
@@ -267,20 +260,18 @@
             min="0"
             [max]="maxZweiterAuszahlungsterminMonat"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
           <mat-error *dvSharedUiFormMessageError="'max'">
-            {{ 'shared.form.error.max' | translate: { max: maxZweiterAuszahlungsterminMonat } }}
+            {{ t('shared.form.error.max', { max: maxZweiterAuszahlungsterminMonat }) }}
           </mat-error>
         </mat-form-field>
 
         <!-- Tag der Auszahlung für zweiten Auszahlungstermin-->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.label') }}</mat-label>
           <input
             formControlName="zweiterAuszahlungsterminTag"
             data-testid="form-gesuchsperiode-zweiterAuszahlungsterminTag"
@@ -289,31 +280,31 @@
             [min]="minZweiterAuszahlungsterminTag"
             [max]="maxZweiterAuszahlungsterminTag"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
           <mat-error *dvSharedUiFormMessageError="'min'">
-            {{ 'shared.form.error.min' | translate: { min: minZweiterAuszahlungsterminTag } }}
+            {{ t('shared.form.error.min', { min: minZweiterAuszahlungsterminTag }) }}
           </mat-error>
           <mat-error *dvSharedUiFormMessageError="'max'">
-            {{ 'shared.form.error.max' | translate: { max: maxZweiterAuszahlungsterminTag } }}
+            {{ t('shared.form.error.max', { max: maxZweiterAuszahlungsterminTag }) }}
           </mat-error>
         </mat-form-field>
       </div>
 
       <!-- Stammdaten -->
       <h1 class="h2 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title') }}
       </h1>
 
       <div class="row g-4">
         <!-- Freibetrag Vermögen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>
-            {{ 'sachbearbeitung-app.admin.gesuchsperiode.freibetrag_vermoegen.label' | translate }}
+            {{ t('sachbearbeitung-app.admin.gesuchsperiode.freibetrag_vermoegen.label') }}
           </mat-label>
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.freibetrag_vermoegen.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.freibetrag_vermoegen.info') }}</mat-hint>
           <input
             formControlName="freibetrag_vermoegen"
             data-testid="form-gesuchsperiode-freibetrag_vermoegen"
@@ -322,15 +313,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Freibetrag Erwerbseinkommen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.freibetrag_erwerbseinkommen.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.freibetrag_erwerbseinkommen.label') }}</mat-label>
           <input
             formControlName="freibetrag_erwerbseinkommen"
             data-testid="form-gesuchsperiode-freibetrag_erwerbseinkommen"
@@ -338,9 +327,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.freibetrag_erwerbseinkommen.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.freibetrag_erwerbseinkommen.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -348,7 +337,7 @@
       <div class="row g-4 mt-1">
         <!-- Einkommensfreibetrag -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.einkommensfreibetrag.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.einkommensfreibetrag.label') }}</mat-label>
           <input
             formControlName="einkommensfreibetrag"
             data-testid="form-gesuchsperiode-einkommensfreibetrag"
@@ -356,17 +345,15 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.einkommensfreibetrag.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.einkommensfreibetrag.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Elternbeteiligungssatz -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.elternbeteiligungssatz.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.elternbeteiligungssatz.label') }}</mat-label>
           <input
             formControlName="elternbeteiligungssatz"
             data-testid="form-gesuchsperiode-elternbeteiligungssatz"
@@ -375,7 +362,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -383,9 +370,7 @@
       <div class="row g-4 mt-1">
         <!-- VermogenSatzAngerechnet -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.vermogenSatzAngerechnet.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.vermogenSatzAngerechnet.label') }}</mat-label>
           <input
             formControlName="vermogenSatzAngerechnet"
             data-testid="form-gesuchsperiode-vermogenSatzAngerechnet"
@@ -394,13 +379,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Integrationszulage -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.integrationszulage.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.integrationszulage.label') }}</mat-label>
           <input
             formControlName="integrationszulage"
             data-testid="form-gesuchsperiode-integrationszulage"
@@ -409,7 +394,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -418,7 +403,7 @@
         <!-- Limite_EkFreibetrag_Integrationszulag -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label
-            >{{ 'sachbearbeitung-app.admin.gesuchsperiode.limite_EkFreibetrag_Integrationszulage.label' | translate }}
+            >{{ t('sachbearbeitung-app.admin.gesuchsperiode.limite_EkFreibetrag_Integrationszulage.label') }}
           </mat-label>
           <input
             formControlName="limite_EkFreibetrag_Integrationszulage"
@@ -427,19 +412,17 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate>
-            sachbearbeitung-app.admin.gesuchsperiode.limite_EkFreibetrag_Integrationszulage.info
-          </mat-hint>
+          <mat-hint>{{
+            t('sachbearbeitung-app.admin.gesuchsperiode.limite_EkFreibetrag_Integrationszulage.info')
+          }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- StipLimite_Minimalstipendium -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.stipLimite_Minimalstipendium.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.stipLimite_Minimalstipendium.label') }}</mat-label>
           <input
             formControlName="stipLimite_Minimalstipendium"
             data-testid="form-gesuchsperiode-stipLimite_Minimalstipendium"
@@ -448,7 +431,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -456,7 +439,7 @@
       <div class="row g-4 mt-1">
         <!-- Preis pro Mahlzeit -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.preisProMahlzeit.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.preisProMahlzeit.label') }}</mat-label>
           <input
             formControlName="preisProMahlzeit"
             data-testid="form-gesuchsperiode-preisProMahlzeit"
@@ -465,13 +448,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Max Säule 3a -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.maxSaeule3a.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.maxSaeule3a.label') }}</mat-label>
           <input
             formControlName="maxSaeule3a"
             data-testid="form-gesuchsperiode-maxSaeule3a"
@@ -480,7 +463,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -488,7 +471,7 @@
       <div class="row g-4 mt-1">
         <!-- Anzahl Wochen Lehre -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenLehre.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenLehre.label') }}</mat-label>
           <input
             formControlName="anzahlWochenLehre"
             data-testid="form-gesuchsperiode-anzahlWochenLehre"
@@ -497,13 +480,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Anzahl Wochen Schule -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenSchule.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.anzahlWochenSchule.label') }}</mat-label>
           <input
             formControlName="anzahlWochenSchule"
             data-testid="form-gesuchsperiode-anzahlWochenSchule"
@@ -512,7 +495,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -520,9 +503,7 @@
       <div class="row g-4 mt-1">
         <!-- Vermoegensanteil In Prozent-->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.vermoegensanteilInProzent.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.vermoegensanteilInProzent.label') }}</mat-label>
           <input
             formControlName="vermoegensanteilInProzent"
             data-testid="form-gesuchsperiode-vermoegensanteilInProzent"
@@ -530,17 +511,16 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.vermoegensanteilInProzent.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.vermoegensanteilInProzent.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Limite des Alters des Antragsstellers für die Halbierung des Elternbeitrags-->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.label'
-              | translate
+            t('sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.label')
           }}</mat-label>
           <input
             formControlName="limiteAlterAntragsstellerHalbierungElternbeitrag"
@@ -549,27 +529,27 @@
             min="1"
             type="number"
           />
-          <mat-hint translate>
-            sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.info
-          </mat-hint>
+          <mat-hint>{{
+            t('sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.info')
+          }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
           <mat-error *dvSharedUiFormMessageError="'min'">
-            {{ 'shared.form.error.min' | translate: { min: 1 } }}
+            {{ t('shared.form.error.min', { min: 1 }) }}
           </mat-error>
         </mat-form-field>
       </div>
 
       <!-- Ausbildungskosten (pers. Budget) -->
       <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title') }}
       </h2>
 
       <div class="row g-4">
         <!-- Sekundarstufe II -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_SekII.label') }}</mat-label>
           <input
             formControlName="ausbKosten_SekII"
             data-testid="form-gesuchsperiode-AusbKosten_SekII"
@@ -578,13 +558,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Teritärstufe -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.ausbKosten_Tertiaer.label') }}</mat-label>
           <input
             formControlName="ausbKosten_Tertiaer"
             data-testid="form-gesuchsperiode-ausbKosten_Tertiaer"
@@ -593,22 +573,20 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
 
       <!-- Grundbedarf -->
       <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.grundbedarf.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.grundbedarf.title') }}
       </h2>
 
       <div class="row g-4">
         <!-- Reduzierung des Grundbedarfs -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-12">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.reduzierungDesGrundbedarfs.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.reduzierungDesGrundbedarfs.label') }}</mat-label>
           <input
             formControlName="reduzierungDesGrundbedarfs"
             data-testid="form-gesuchsperiode-reduzierungDesGrundbedarfs"
@@ -616,9 +594,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.reduzierungDesGrundbedarfs.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.reduzierungDesGrundbedarfs.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -626,7 +604,7 @@
       <div class="row g-4 mt-1">
         <!-- 1 Person -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.person_1.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.person_1.label') }}</mat-label>
           <input
             formControlName="person_1"
             data-testid="form-gesuchsperiode-person_1"
@@ -635,13 +613,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 2 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_2.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.personen_2.label') }}</mat-label>
           <input
             formControlName="personen_2"
             data-testid="form-gesuchsperiode-personen_2"
@@ -650,7 +628,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -658,7 +636,7 @@
       <div class="row g-4 mt-1">
         <!-- 3 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_3.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.personen_3.label') }}</mat-label>
           <input
             formControlName="personen_3"
             data-testid="form-gesuchsperiode-personen_3"
@@ -667,13 +645,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 4 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_4.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.personen_4.label') }}</mat-label>
           <input
             formControlName="personen_4"
             data-testid="form-gesuchsperiode-personen_4"
@@ -682,7 +660,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -690,7 +668,7 @@
       <div class="row g-4 mt-1">
         <!-- 5 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_5.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.personen_5.label') }}</mat-label>
           <input
             formControlName="personen_5"
             data-testid="form-gesuchsperiode-personen_5"
@@ -699,13 +677,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 6 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_6.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.personen_6.label') }}</mat-label>
           <input
             formControlName="personen_6"
             data-testid="form-gesuchsperiode-personen_6"
@@ -714,7 +692,7 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -722,7 +700,7 @@
       <div class="row g-4 mt-1">
         <!-- 7 Personen -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.personen_7.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.personen_7.label') }}</mat-label>
           <input
             formControlName="personen_7"
             data-testid="form-gesuchsperiode-personen_7"
@@ -731,13 +709,13 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Pro weitere Person -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.proWeiterePerson.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.proWeiterePerson.label') }}</mat-label>
           <input
             formControlName="proWeiterePerson"
             data-testid="form-gesuchsperiode-proWeiterePerson"
@@ -746,20 +724,20 @@
             type="text"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
 
       <!-- Medizinische Grundversorgung -->
       <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.medizinische_grundversorgung.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.medizinische_grundversorgung.title') }}
       </h2>
 
       <div class="row g-4">
         <!-- Kinder 00-17 -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.kinder_00_17.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.kinder_00_17.label') }}</mat-label>
           <input
             formControlName="kinder_00_17"
             data-testid="form-gesuchsperiode-kinder_00_17"
@@ -767,17 +745,15 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.kinder_00_17.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.kinder_00_17.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- Jugendliche Erwachsene 18-24 -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.jugendliche_erwachsene_18_24.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.jugendliche_erwachsene_18_24.label') }}</mat-label>
           <input
             formControlName="jugendliche_erwachsene_18_24"
             data-testid="form-gesuchsperiode-jugendliche_erwachsene_18_24"
@@ -785,9 +761,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.jugendliche_erwachsene_18_24.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.jugendliche_erwachsene_18_24.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -795,7 +771,7 @@
       <div class="row g-4 mt-1">
         <!-- Erwachsene 25-99 -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.erwachsene_25_99.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.erwachsene_25_99.label') }}</mat-label>
           <input
             formControlName="erwachsene_25_99"
             data-testid="form-gesuchsperiode-erwachsene_25_99"
@@ -803,22 +779,22 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.erwachsene_25_99.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.erwachsene_25_99.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
 
       <!-- Wohnkosten (Familienbudget) -->
       <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-familienbudget.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-familienbudget.title') }}
       </h2>
 
       <div class="row g-4">
         <!-- 1 Person (2 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_1pers.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_1pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_fam_1pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_1pers"
@@ -826,15 +802,15 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_1pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_1pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 2 Person (3 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_2pers.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_2pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_fam_2pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_2pers"
@@ -842,9 +818,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_2pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_2pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -852,7 +828,7 @@
       <div class="row g-4 mt-1">
         <!-- 3 Person (4 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_3pers.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_3pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_fam_3pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_3pers"
@@ -860,15 +836,15 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_3pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_3pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 4 Person (5 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_4pers.label' | translate }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_4pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_fam_4pers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_4pers"
@@ -876,9 +852,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_4pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_4pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -886,9 +862,7 @@
       <div class="row g-4 mt-1">
         <!-- 5+ Personen (5+ Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_5pluspers.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_5pluspers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_fam_5pluspers"
             data-testid="form-gesuchsperiode-wohnkosten_fam_5pluspers"
@@ -896,24 +870,22 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_5pluspers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_fam_5pluspers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
 
       <!-- Wohnkosten (Persönliches Budget) -->
       <h2 class="h3 pt-5 mb-4">
-        {{ 'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-persoenlich.title' | translate }}
+        {{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-persoenlich.title') }}
       </h2>
 
       <div class="row g-4">
         <!-- 1 Person (2 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_1pers.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_1pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_persoenlich_1pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_1pers"
@@ -921,17 +893,15 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_1pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_1pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 2 Person (3 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_2pers.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_2pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_persoenlich_2pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_2pers"
@@ -939,9 +909,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_2pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_2pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -949,9 +919,7 @@
       <div class="row g-4 mt-1">
         <!-- 3 Person (4 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_3pers.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_3pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_persoenlich_3pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_3pers"
@@ -959,17 +927,15 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_3pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_3pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
 
         <!-- 4 Person (5 Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
-          <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_4pers.label' | translate
-          }}</mat-label>
+          <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_4pers.label') }}</mat-label>
           <input
             formControlName="wohnkosten_persoenlich_4pers"
             data-testid="form-gesuchsperiode-wohnkosten_persoenlich_4pers"
@@ -977,9 +943,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate> sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_4pers.info </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_4pers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -988,7 +954,7 @@
         <!-- 5 Person (5+ Zimmer) -->
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
           <mat-label>{{
-            'sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_5pluspers.label' | translate
+            t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_5pluspers.label')
           }}</mat-label>
           <input
             formControlName="wohnkosten_persoenlich_5pluspers"
@@ -997,11 +963,9 @@
             [maskito]="maskitoNumber"
             type="text"
           />
-          <mat-hint translate>
-            sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_5pluspers.info
-          </mat-hint>
+          <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten_persoenlich_5pluspers.info') }}</mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       </div>

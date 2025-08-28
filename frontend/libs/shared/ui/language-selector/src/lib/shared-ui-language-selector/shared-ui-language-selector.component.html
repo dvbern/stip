@@ -1,14 +1,15 @@
 <ul class="nav flex-nowrap">
   @for (lang of languages; track trackByIndex($index)) {
     <li class="nav-item">
-      <a
+      <button
+        type="button"
         class="nav-link"
         [attr.data-testid]="'lang-' + lang"
         (click)="handleLanguageChange(lang)"
         [class.active]="language === lang"
       >
         {{ lang | uppercase }}
-      </a>
+      </button>
     </li>
   }
 </ul>
