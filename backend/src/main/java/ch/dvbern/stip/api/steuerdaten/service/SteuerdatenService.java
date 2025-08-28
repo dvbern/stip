@@ -79,7 +79,6 @@ public class SteuerdatenService {
     public Set<Steuerdaten> updateSteuerdatenFromNesko(
         UUID gesuchTrancheId,
         SteuerdatenTyp steuerdatenTyp,
-        String token,
         int steuerjahr
     ) {
         final var gesuchtranche = trancheRepository.requireById(gesuchTrancheId);
@@ -111,7 +110,7 @@ public class SteuerdatenService {
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
 
         var getSteuerdatenResponse =
-            neskoGetSteuerdatenService.getSteuerdatenResponse(token, ssvn, steuerjahr);
+            neskoGetSteuerdatenService.getSteuerdatenResponse(ssvn, steuerjahr);
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);

@@ -67,7 +67,7 @@ public class NeskoGetSteuerdatenService {
         ).getAccess_token();
     }
 
-    public GetSteuerdatenResponse getSteuerdatenResponse(String token, String ssvn, Integer steuerjahr) {
+    public GetSteuerdatenResponse getSteuerdatenResponse(String ssvn, Integer steuerjahr) {
         StipendienAuskunftService stipendienAuskunftService = null;
         try {
             stipendienAuskunftService = new StipendienAuskunftService(new URL(wsdlLocation));
