@@ -251,14 +251,14 @@ public class GesuchService {
                 steuerjahrDefaultValue
             );
 
-            final String veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
-            final String veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsStatus();
-            final String veranlagungscodeDefaltValue = null;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+            final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
+            final String veranlagungsStatusExistingValue = einnahmenKosten.getVeranlagungsStatus();
+            final String veranlagungsStatusDefaltValue = null;
+            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityNullableValue(
                 benutzerRollenIdentifiers,
-                veranlagungsCodeDtoValue,
-                veranlagungsCodeExistingValue,
-                veranlagungscodeDefaltValue
+                veranlagungsStatusDtoValue,
+                veranlagungsStatusExistingValue,
+                veranlagungsStatusDefaltValue
             );
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);

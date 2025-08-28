@@ -1098,7 +1098,7 @@ class GesuchServiceTest {
                 .getGesuchFormular()
                 .getEinnahmenKosten()
                 .getVeranlagungsStatus(),
-            Matchers.equalTo(0)
+            Matchers.equalTo(null)
         );
     }
 

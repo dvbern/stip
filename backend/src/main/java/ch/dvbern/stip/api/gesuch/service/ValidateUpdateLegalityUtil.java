@@ -53,4 +53,34 @@ public class ValidateUpdateLegalityUtil {
             defaultValue
         );
     }
+
+    public <T> T getAndValidateLegalityNullableValue(
+        final Set<String> benutzerRollenIdentifiers,
+        final T dtoValue,
+        final T existingValue,
+        final T defaultValue
+    ) {
+        if (
+            !CollectionUtils.containsAny(
+                benutzerRollenIdentifiers,
+                Arrays.asList(
+                    OidcConstants.ROLE_SACHBEARBEITER,
+                    OidcConstants.ROLE_ADMIN
+                )
+            )
+        ) {
+            return updateLegalityNullableValue(existingValue, defaultValue);
+        }
+
+        return updateLegalityNullableValue(dtoValue, defaultValue);
+
+    }
+
+    private <T> T updateLegalityNullableValue(final T newValue, final T defaultValue) {
+        if (Objects.isNull(newValue)) {
+            return defaultValue;
+        }
+
+        return newValue;
+    }
 }
