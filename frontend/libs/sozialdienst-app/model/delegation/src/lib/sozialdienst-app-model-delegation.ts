@@ -8,7 +8,8 @@ import {
   GetDelegierungSozQueryTypeAdmin,
   GetDelegierungSozQueryTypeMa,
   PersoenlicheAngaben,
-  SozDashboardColumn,
+  SozDashboardColumnAdmin,
+  SozDashboardColumnMa,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
 
@@ -59,7 +60,7 @@ export type SozCockpitFilterInputs = Record<
 >;
 
 export interface SozCockpitBaseFilterInputs
-  extends SortAndPageInputs<SozDashboardColumn> {
+  extends SortAndPageInputs<SozDashboardColumnAdmin | SozDashboardColumnMa> {
   show: InputSignal<GetDelegierungSozQueryType | undefined>;
 }
 

@@ -36,7 +36,8 @@ import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
   FallWithDelegierung,
   SortOrder,
-  SozDashboardColumn,
+  SozDashboardColumnAdmin,
+  SozDashboardColumnMa,
 } from '@dv/shared/model/gesuch';
 import {
   DEFAULT_PAGE_SIZE,
@@ -122,7 +123,6 @@ export class SozialdienstAppFeatureCockpitComponent
 {
   private sidenavSig = viewChild.required(MatSidenav);
   private formBuilder = inject(NonNullableFormBuilder);
-  private permissionStore = inject(PermissionStore);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private store = inject(Store);
@@ -130,6 +130,7 @@ export class SozialdienstAppFeatureCockpitComponent
   private dialog = inject(MatDialog);
   delegationStore = inject(DelegationStore);
   versionSig = this.store.selectSignal(selectVersion);
+  permissionStore = inject(PermissionStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
@@ -140,7 +141,9 @@ export class SozialdienstAppFeatureCockpitComponent
   vorname = input<string | undefined>(undefined);
   geburtsdatum = input<string | undefined>(undefined);
   wohnort = input<string | undefined>(undefined);
-  sortColumn = input<SozDashboardColumn | undefined>(undefined);
+  sortColumn = input<
+    SozDashboardColumnAdmin | SozDashboardColumnMa | undefined
+  >(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
@@ -160,7 +163,9 @@ export class SozialdienstAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = [...Object.keys(SozDashboardColumn), 'AKTIONEN'];
+  displayedColumns = this.permissionStore.rolesMapSig()['V0_Sozialdienst-Admin']
+    ? [...Object.keys(SozDashboardColumnAdmin), 'AKTIONEN']
+    : [...Object.keys(SozDashboardColumnMa), 'AKTIONEN'];
 
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],

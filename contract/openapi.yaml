@@ -2005,7 +2005,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SozDashboardColumn'
+            $ref: '#/components/schemas/SozDashboardColumnAdmin'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -2043,7 +2043,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SozDashboardColumn'
+            $ref: '#/components/schemas/SozDashboardColumnMa'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -7174,7 +7174,14 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    SozDashboardColumn:
+    SozDashboardColumnMa:
+      enum:
+        - FALLNUMMER
+        - NACHNAME
+        - VORNAME
+        - GEBURTSDATUM
+        - WOHNORT
+    SozDashboardColumnAdmin:
       enum:
         - FALLNUMMER
         - NACHNAME
