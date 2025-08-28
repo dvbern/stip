@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.StipendienAuskunftPort;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,12 +87,11 @@ public class NeskoGetSteuerdatenAccessLogTest {
         Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
 
         neskoAccessLoggerService = Mockito.spy(new NeskoAccessLoggerService(neskoAccessRepository));
-
         neskoGetSteuerdatenService = Mockito.spy(new NeskoGetSteuerdatenService(neskoAccessLoggerService));
 
-        Mockito.doReturn(getSteuerdatenResponse)
+        Mockito.doReturn(Mockito.mock(StipendienAuskunftPort.class))
             .when(neskoGetSteuerdatenService)
-            .placeNeskoGetSteuerdatenRequest(any(), any(), any());
+            .getStipendianAuskunftPort(any());
     }
 
     @Test
