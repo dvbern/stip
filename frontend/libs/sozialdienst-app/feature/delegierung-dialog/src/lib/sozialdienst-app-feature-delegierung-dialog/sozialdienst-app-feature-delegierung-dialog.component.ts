@@ -36,6 +36,7 @@ import {
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { isPending, isSuccess } from '@dv/shared/util/remote-data';
 import {
@@ -63,6 +64,7 @@ export interface DelegierungDialogData {
     MatInputModule,
     MatInputModule,
     MatSelectModule,
+    SharedUiHasRolesDirective,
     ReactiveFormsModule,
     MatFormFieldModule,
     SharedUiFormReadonlyDirective,
@@ -227,6 +229,16 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
         delegierterMitarbeiterAendern: {
           mitarbeiterId,
         },
+        delegierungId,
+      });
+    }
+  }
+
+  rejectDelegation() {
+    const delegierungId = this.dialogData.fall.delegierung.id;
+
+    if (delegierungId) {
+      this.delegationStore.delegierungAblehnen$({
         delegierungId,
       });
     }

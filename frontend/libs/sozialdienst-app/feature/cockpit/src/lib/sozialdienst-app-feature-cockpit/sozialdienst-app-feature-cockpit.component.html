@@ -273,42 +273,45 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
-                    {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco }}
-                    <mat-form-field class="tw-w-full">
-                      <mat-select
-                        [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco"
-                        formControlName="delegierungAngenommen"
-                        (click)="$event.stopPropagation()"
-                        class="!tw-font-normal"
-                        [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | transloco"
-                        panelClass="table-select"
-                      >
-                        <mat-option [value]="undefined">
-                          {{ 'sozialdienst-app.cockpit.no-status-filter' | transloco }}
-                        </mat-option>
-
-                        @for (status of statusValues; track status.key) {
-                          <mat-option [value]="status.value">
-                            {{ 'sozialdienst-app.cockpit.table.delegierung.' + status.key | transloco }}
+                <!-- todo: might not be necessary -->
+                @if (permissionStore.rolesMapSig()['V0_Sozialdienst-Admin']) {
+                  <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+                      {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco }}
+                      <mat-form-field class="tw-w-full">
+                        <mat-select
+                          [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco"
+                          formControlName="delegierungAngenommen"
+                          (click)="$event.stopPropagation()"
+                          class="!tw-font-normal"
+                          [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | transloco"
+                          panelClass="table-select"
+                        >
+                          <mat-option [value]="undefined">
+                            {{ 'sozialdienst-app.cockpit.no-status-filter' | transloco }}
                           </mat-option>
-                        }
-                      </mat-select>
-                    </mat-form-field>
-                  </th>
-                  <td
-                    mat-cell
-                    *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
-                    class="tw-w-48 tw-whitespace-nowrap"
-                  >
-                    {{
-                      fall.delegierung.delegierungAngenommen
-                        ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG' | transloco)
-                        : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE' | transloco)
-                    }}
-                  </td>
-                </ng-container>
+
+                          @for (status of statusValues; track status.key) {
+                            <mat-option [value]="status.value">
+                              {{ 'sozialdienst-app.cockpit.table.delegierung.' + status.key | transloco }}
+                            </mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </th>
+                    <td
+                      mat-cell
+                      *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
+                      class="tw-w-48 tw-whitespace-nowrap"
+                    >
+                      {{
+                        fall.delegierung.delegierungAngenommen
+                          ? ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG' | transloco)
+                          : ('sozialdienst-app.cockpit.table.delegierung.DELEGIERUNG_ANFRAGE' | transloco)
+                      }}
+                    </td>
+                  </ng-container>
+                }
 
                 <!-- aktionen -->
                 <ng-container matColumnDef="AKTIONEN">

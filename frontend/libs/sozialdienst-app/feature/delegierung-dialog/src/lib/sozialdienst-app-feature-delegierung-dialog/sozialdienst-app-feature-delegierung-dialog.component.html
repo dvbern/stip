@@ -149,8 +149,18 @@
         }
       </div>
       <div class="justify-content-between tw-flex tw-w-full">
-        <button type="button" data-testid="sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
+        <button type="button" data-testid="dialog-sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
           {{ 'shared.cancel' | transloco }}
+        </button>
+
+        <button
+          *dvHasRoles="['V0_Sozialdienst-Admin']"
+          type="button"
+          data-testid="dialog-sozAdmin-delegierung-reject"
+          class="btn btn-danger"
+          (click)="rejectDelegation()"
+        >
+          {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
         </button>
 
         <dv-shared-ui-form-save
