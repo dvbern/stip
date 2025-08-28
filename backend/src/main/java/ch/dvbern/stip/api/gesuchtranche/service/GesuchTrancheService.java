@@ -41,6 +41,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -494,6 +495,12 @@ public class GesuchTrancheService {
             final var existingDokument = gesuchDokumentRepository.findById(gesuchDokument.getId());
             if (existingDokument == null) {
                 gesuchDokumentRepository.persist((GesuchDokument) gesuchDokument.setId(null));
+            } else if (
+                gesuchDokument.getStatus() != existingDokument.getStatus() &&
+                gesuchDokument.getStatus() == GesuchDokumentStatus.AUSSTEHEND
+            ) {
+                existingDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
+                gesuchDokumentKommentarService.deleteForGesuchDokument(existingDokument.getId());
             }
         }
 
