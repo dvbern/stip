@@ -236,9 +236,10 @@ public class GesuchService {
 
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-        Integer veranlagungsCodeToSet = 0;
 
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+        String veranlagungsCodeToSet = null;
+
         if (einnahmenKosten != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
@@ -250,9 +251,9 @@ public class GesuchService {
                 steuerjahrDefaultValue
             );
 
-            final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
-            final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsStatus();
-            final Integer veranlagungscodeDefaltValue = 0;
+            final String veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
+            final String veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsStatus();
+            final String veranlagungscodeDefaltValue = null;
             veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
                 veranlagungsCodeDtoValue,

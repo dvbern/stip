@@ -78,7 +78,7 @@ public class SteuerdatenDtoSpec {
   private Integer steuerjahr;
 
   public static final String JSON_PROPERTY_VERANLAGUNGS_STATUS = "veranlagungsStatus";
-  private Integer veranlagungsStatus;
+  private String veranlagungsStatus;
 
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
   private Integer totalEinkuenfte;
@@ -338,7 +338,7 @@ public class SteuerdatenDtoSpec {
   }
 
 
-  public SteuerdatenDtoSpec veranlagungsStatus(Integer veranlagungsStatus) {
+  public SteuerdatenDtoSpec veranlagungsStatus(String veranlagungsStatus) {
     
     this.veranlagungsStatus = veranlagungsStatus;
     return this;
@@ -352,14 +352,14 @@ public class SteuerdatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getVeranlagungsStatus() {
+  public String getVeranlagungsStatus() {
     return veranlagungsStatus;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVeranlagungsStatus(Integer veranlagungsStatus) {
+  public void setVeranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
   }
 

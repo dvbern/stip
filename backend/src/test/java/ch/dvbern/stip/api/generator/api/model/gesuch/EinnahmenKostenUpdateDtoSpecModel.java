@@ -37,7 +37,6 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setVerdienstRealisiert(false);
             model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
-            model.setVeranlagungsStatus(0);
             model.setSteuerjahr(0);
         });
     }

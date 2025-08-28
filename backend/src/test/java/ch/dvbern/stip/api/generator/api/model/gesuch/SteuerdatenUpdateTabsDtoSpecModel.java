@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.generator.api.model.gesuch;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
@@ -41,7 +42,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setFahrkostenPartner(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegung(TestUtil.getRandomInt(1, 10000));
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
-            model.setVeranlagungsStatus(0);
+            model.setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
             model.setSteuerjahr(2022);
         });
     }

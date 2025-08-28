@@ -33,7 +33,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid Boolean wgWohnend;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer betreuungskostenKinder;
-  private @Valid Integer veranlagungsStatus = 0;
+  private @Valid String veranlagungsStatus;
   private @Valid Integer steuerjahr;
   private @Valid Integer vermoegen;
   private @Valid Integer steuernKantonGemeinde;
@@ -301,23 +301,21 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
   /**
-   * Veranlagungsstatus (0-99)
-   * minimum: 0
-   * maximum: 99
+   * Veranlagungsstatus
    **/
-  public EinnahmenKostenUpdateDto veranlagungsStatus(Integer veranlagungsStatus) {
+  public EinnahmenKostenUpdateDto veranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
   
   @JsonProperty("veranlagungsStatus")
- @Min(0) @Max(99)  public Integer getVeranlagungsStatus() {
+  public String getVeranlagungsStatus() {
     return veranlagungsStatus;
   }
 
   @JsonProperty("veranlagungsStatus")
-  public void setVeranlagungsStatus(Integer veranlagungsStatus) {
+  public void setVeranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
   }
 

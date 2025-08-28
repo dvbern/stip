@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -68,7 +69,10 @@ class GesuchUpdateDefaultValuesTest {
     @TestAsSachbearbeiter
     void testUpdateEinnahmeKostenVeranlagungscodeAsSB() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
@@ -93,7 +97,10 @@ class GesuchUpdateDefaultValuesTest {
     @TestAsGesuchsteller
     void testUpdateEinnahmeKostenVeranlagungscodeAsGS() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 

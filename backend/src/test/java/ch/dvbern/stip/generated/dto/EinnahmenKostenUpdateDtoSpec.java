@@ -92,7 +92,7 @@ public class EinnahmenKostenUpdateDtoSpec {
   private Integer betreuungskostenKinder;
 
   public static final String JSON_PROPERTY_VERANLAGUNGS_STATUS = "veranlagungsStatus";
-  private Integer veranlagungsStatus = 0;
+  private String veranlagungsStatus;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
@@ -470,30 +470,28 @@ public class EinnahmenKostenUpdateDtoSpec {
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec veranlagungsStatus(Integer veranlagungsStatus) {
+  public EinnahmenKostenUpdateDtoSpec veranlagungsStatus(String veranlagungsStatus) {
     
     this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
    /**
-   * Veranlagungsstatus (0-99)
-   * minimum: 0
-   * maximum: 99
+   * Veranlagungsstatus
    * @return veranlagungsStatus
   **/
   @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getVeranlagungsStatus() {
+  public String getVeranlagungsStatus() {
     return veranlagungsStatus;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVeranlagungsStatus(Integer veranlagungsStatus) {
+  public void setVeranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
   }
 

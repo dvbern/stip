@@ -5634,11 +5634,8 @@ components:
           description: Betreuungskosten eigener Kinder
           type: integer
         veranlagungsStatus:
-          description: Veranlagungsstatus (0-99)
-          type: integer
-          minimum: 0
-          maximum: 99
-          default: 0
+          description: Veranlagungsstatus
+          type: string
         steuerjahr:
           description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
           type: integer
@@ -6503,7 +6500,7 @@ components:
         steuerjahr:
           type: integer
         veranlagungsStatus:
-          type: integer
+          type: string
         totalEinkuenfte:
           type: integer
         eigenmietwert:

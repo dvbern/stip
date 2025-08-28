@@ -34,7 +34,7 @@ public class SteuerdatenDto  implements Serializable {
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
   private @Valid Integer steuerjahr;
-  private @Valid Integer veranlagungsStatus;
+  private @Valid String veranlagungsStatus;
   private @Valid Integer saeule3a;
   private @Valid Integer saeule2;
 
@@ -302,19 +302,19 @@ public class SteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public SteuerdatenDto veranlagungsStatus(Integer veranlagungsStatus) {
+  public SteuerdatenDto veranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
   
   @JsonProperty("veranlagungsStatus")
-  public Integer getVeranlagungsStatus() {
+  public String getVeranlagungsStatus() {
     return veranlagungsStatus;
   }
 
   @JsonProperty("veranlagungsStatus")
-  public void setVeranlagungsStatus(Integer veranlagungsStatus) {
+  public void setVeranlagungsStatus(String veranlagungsStatus) {
     this.veranlagungsStatus = veranlagungsStatus;
   }
 

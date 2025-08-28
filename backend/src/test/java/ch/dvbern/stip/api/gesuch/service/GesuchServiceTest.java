@@ -87,7 +87,6 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
@@ -106,8 +105,6 @@ import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenDto;
-import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
@@ -1076,33 +1073,6 @@ class GesuchServiceTest {
     // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
     // }
 
-    private SteuerdatenDto initSteuerdatenDto(SteuerdatenTyp typ) {
-        SteuerdatenDto steuerdatenDto = new SteuerdatenDto();
-        steuerdatenDto.setId(UUID.randomUUID());
-        steuerdatenDto.setSteuerdatenTyp(typ);
-        steuerdatenDto.setVeranlagungsStatus(5);
-        steuerdatenDto.setSteuerjahr(2010);
-        steuerdatenDto.setFahrkosten(0);
-        steuerdatenDto.setEigenmietwert(0);
-        steuerdatenDto.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenDto.setKinderalimente(0);
-        steuerdatenDto.setSteuernBund(0);
-        steuerdatenDto.setSteuernKantonGemeinde(0);
-        steuerdatenDto.setTotalEinkuenfte(0);
-        steuerdatenDto.setTotalEinkuenfte(0);
-        steuerdatenDto.setVerpflegung(0);
-        steuerdatenDto.setVermoegen(0);
-        return steuerdatenDto;
-    }
-
-    private SteuererklaerungUpdateDto initSteuererklaerungUpdateDto(SteuerdatenTyp typ) {
-        SteuererklaerungUpdateDto steuererklaerungUpdateDto = new SteuererklaerungUpdateDto();
-        steuererklaerungUpdateDto.setId(UUID.randomUUID());
-        steuererklaerungUpdateDto.setSteuerdatenTyp(typ);
-        steuererklaerungUpdateDto.setSteuererklaerungInBern(true);
-        return steuererklaerungUpdateDto;
-    }
-
     @Test
     @TestAsGesuchsteller
     void gesuchUpdateEinnahmenkostenDoNotSetSteuerdatenTest() {
@@ -1112,7 +1082,6 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
         tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(null);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(5);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(1990);
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());

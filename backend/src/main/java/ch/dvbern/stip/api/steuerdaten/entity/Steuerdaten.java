@@ -26,12 +26,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -105,9 +106,8 @@ public class Steuerdaten extends AbstractMandantEntity {
     @Column(name = "steuerjahr", nullable = false)
     private Integer steuerjahr;
 
-    @NotNull
-    @Column(name = "status_veranlagung", nullable = false)
-    @Min(0)
-    @Max(99)
-    private Integer veranlagungsStatus = 0;
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "status_veranlagung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String veranlagungsStatus;
 }
