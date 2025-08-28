@@ -230,6 +230,11 @@ public interface GesuchResource {
     List<StatusprotokollEntryDto> getStatusProtokoll(@PathParam("gesuchId") UUID gesuchId);
 
     @PATCH
+    @Path("/{gesuchTrancheId}/set-gesuchsperiode")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto setGesuchsperiodeForGesuch(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("gesuchsperiodeId") @NotNull   UUID gesuchsperiodeId);
+
+    @PATCH
     @Path("/{gesuchId}")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })

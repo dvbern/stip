@@ -9,8 +9,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -44,7 +44,7 @@ export interface DelegierenDialogResult {
   selector: 'dv-gesuch-app-feature-delegieren-dialog',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,

@@ -19,11 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  TranslatePipe,
-  TranslateService,
-  isDefined,
-} from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { AdministrationAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/administration-ausbildungsstaette';
@@ -42,6 +38,7 @@ import {
   capitalized,
   getCorrectPropertyName,
   getCurrentLanguageSig,
+  isDefined,
   type,
   uppercased,
 } from '@dv/shared/model/type-util';
@@ -89,7 +86,7 @@ type DisplayColumns =
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatFormFieldModule,
@@ -119,7 +116,7 @@ export class AusbildungsgangComponent
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   ausbildungsgang = input<string | undefined>(undefined);

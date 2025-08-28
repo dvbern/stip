@@ -12,7 +12,7 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
@@ -35,7 +35,7 @@ type DialogData = SharedPatternDocumentUploadDialogComponent['data'];
   selector: 'dv-shared-pattern-document-upload',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatDialogModule,
     MatFormFieldModule,
     SharedUiIconChipComponent,

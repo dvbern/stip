@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import {
   SharedUiFormatChfPipe,
@@ -13,7 +13,7 @@ import { PersoenlicheBerechnung } from '../../../models';
   selector: 'dv-persoenliche-einnahmen',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
   ],
@@ -23,12 +23,12 @@ import { PersoenlicheBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info'
-              | translate
+              | transloco
           }}
         </div>
       </div>
@@ -42,12 +42,12 @@ import { PersoenlicheBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen.info'
-              | translate
+              | transloco
           }}
         </div>
       </div>
@@ -60,7 +60,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().alimente | formatChfPositive }}
@@ -71,7 +71,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
@@ -82,7 +82,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().kinderUndAusbildungszulagen | formatChfPositive }}
@@ -93,7 +93,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
@@ -104,7 +104,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().beitraegeGemeindeInstitution | formatChfPositive }}
@@ -116,12 +116,12 @@ import { PersoenlicheBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen.info'
-              | translate: einnahmenSig()
+              | transloco: einnahmenSig()
           }}
         </div>
       </div>
@@ -134,7 +134,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().einkommenPartner | formatChfPositive }}
@@ -145,7 +145,7 @@ import { PersoenlicheBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
@@ -157,7 +157,7 @@ import { PersoenlicheBerechnung } from '../../../models';
       <div class="h4">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'
-            | translate
+            | transloco
         }}
       </div>
       <div class="h4 text-end flex-grow-1 text-nowrap">

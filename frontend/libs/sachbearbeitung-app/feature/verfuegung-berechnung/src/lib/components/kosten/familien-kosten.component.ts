@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import {
   SharedUiFormatChfPipe,
@@ -13,7 +13,7 @@ import { FamilienBerechnung } from '../../../models';
   selector: 'dv-familien-kosten',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
   ],
@@ -22,7 +22,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
-          | translate: kostenSig()
+          | transloco: kostenSig()
       }}
     </div>
 
@@ -30,7 +30,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().grundbedarf | formatChfPositive }}
@@ -41,7 +41,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().wohnkosten | formatChfPositive }}
@@ -52,7 +52,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().medizinischeGrundversorgung | formatChfPositive }}
@@ -64,12 +64,12 @@ import { FamilienBerechnung } from '../../../models';
       <div classs="d-flex flex-column">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
-            | translate
+            | transloco
         }}
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info'
-              | translate
+              | transloco
           }}
         </div>
       </div>
@@ -82,7 +82,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
@@ -93,7 +93,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().bundessteuern | formatChfPositive }}
@@ -104,7 +104,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().fahrkosten | formatChfPositive }}
@@ -115,7 +115,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().fahrkostenPartner | formatChfPositive }}
@@ -126,7 +126,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().verpflegung | formatChfPositive }}
@@ -137,7 +137,7 @@ import { FamilienBerechnung } from '../../../models';
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
-          | translate
+          | transloco
       }}
       <div class="text-muted text-end flex-grow-1 text-nowrap">
         {{ kostenSig().verpflegungPartner | formatChfPositive }}
@@ -149,7 +149,7 @@ import { FamilienBerechnung } from '../../../models';
       <div class="h4 m-0">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total'
-            | translate
+            | transloco
         }}
       </div>
       <div class="text-end h4 flex-grow-1 text-nowrap">

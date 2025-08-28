@@ -7,7 +7,7 @@ import {
   input,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Observable, filter, switchMap } from 'rxjs';
 
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -21,7 +21,7 @@ import { RemoteData } from '@dv/shared/util/remote-data';
   selector:
     'dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish',
   imports: [
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiInfoContainerComponent,
     SharedUiIconChipComponent,
     SharedUiRdIsPendingPipe,

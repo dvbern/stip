@@ -17,12 +17,21 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator
     implements ConstraintValidator<EinnahmenKostenSteuerjahrInPastOrCurrentConstraint, GesuchFormular> {
+
+    private String propertyPath;
+
+    @Override
+    public void initialize(EinnahmenKostenSteuerjahrInPastOrCurrentConstraint constraintAnnotation) {
+        propertyPath = constraintAnnotation.property();
+        ConstraintValidator.super.initialize(constraintAnnotation);
+    }
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
@@ -42,6 +51,12 @@ public class EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator
         }
 
         final var gesuchsjahr = gesuchFormular.getTranche().getGesuch().getGesuchsperiode().getGesuchsjahr();
-        return gesuchFormular.getEinnahmenKosten().getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+        final var isValid =
+            gesuchFormular.getEinnahmenKosten().getSteuerjahr() <= GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
+        if (!isValid) {
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, propertyPath);
+        }
+
+        return true;
     }
 }

@@ -11,14 +11,14 @@
       >
         <caption class="cdk-visually-hidden">
           {{
-            'sachbearbeitung-app.admin.buchstabenZuteilung.table.description' | translate
+            'sachbearbeitung-app.admin.buchstabenZuteilung.table.description' | transloco
           }}
         </caption>
 
         <ng-container matColumnDef="fullName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-whitespace-nowrap">
             <label class="pe-none" for="fallNummer">{{
-              'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | translate
+              'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | transloco
             }}</label>
             <div class="tw-relative tw-flex">
               <mat-form-field>
@@ -32,7 +32,7 @@
                   (click)="$event.stopPropagation()"
                   (keydown)="$event.stopPropagation()"
                   [attr.aria-label]="
-                    'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | translate
+                    'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter' | transloco
                   "
                 />
               </mat-form-field>
@@ -47,13 +47,13 @@
         </ng-container>
         <ng-container matColumnDef="buchstabenDe">
           <th mat-header-cell *matHeaderCellDef class="tw-align-top">
-            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE' | translate }}
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE' | transloco }}
           </th>
           <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
             <mat-checkbox
               (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'De')"
               formControlName="enabledDe"
-              [matTooltip]="'shared.language.DEUTSCH' | translate"
+              [matTooltip]="'shared.language.DEUTSCH' | transloco"
             ></mat-checkbox>
             <mat-form-field dvSharedUiFormField>
               <input
@@ -69,13 +69,13 @@
         </ng-container>
         <ng-container matColumnDef="buchstabenFr">
           <th mat-header-cell *matHeaderCellDef class="tw-align-top">
-            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR' | translate }}
+            {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR' | transloco }}
           </th>
           <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
             <mat-checkbox
               (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'Fr')"
               formControlName="enabledFr"
-              [matTooltip]="'shared.language.FRANZOESISCH' | translate"
+              [matTooltip]="'shared.language.FRANZOESISCH' | transloco"
             ></mat-checkbox>
             <mat-form-field dvSharedUiFormField>
               <input
@@ -94,7 +94,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
-            {{ 'shared.table.noData' | translate }}
+            {{ 'shared.table.noData' | transloco }}
           </td>
         </tr>
       </table>

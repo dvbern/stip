@@ -17,9 +17,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 
@@ -79,7 +79,7 @@ const MEDIUM_AGE_ADULT = 30;
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormFieldDirective,
     SharedUiFormAddressComponent,
     MatFormFieldModule,

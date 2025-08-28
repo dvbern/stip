@@ -39,20 +39,20 @@
             class="d-flex flex-column"
           >
             <label>{{
-              'shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label' | translate
+              'shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label' | transloco
             }}</label>
 
             <mat-radio-button data-testid="yes" [value]="true">{{
-              'shared.form.radio.yes' | translate
+              'shared.form.radio.yes' | transloco
             }}</mat-radio-button>
 
             <mat-radio-button data-testid="no" [value]="false">{{
-              'shared.form.radio.no' | translate
+              'shared.form.radio.no' | transloco
             }}</mat-radio-button>
 
             <div class="group-errors">
               <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | translate }}
+                {{ 'shared.form.error.required' | transloco }}
               </mat-error>
             </div>
           </mat-radio-group>
@@ -77,12 +77,12 @@
               dvSharedUiFormField
             >
               <div class="d-flex align-items-center">
-                <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | translate }}</label>
+                <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | transloco }}</label>
                 <button
                   type="button"
                   (click)="gerichtlicheAlimentenregelungDialog.toggle()"
                   class="dv-icon-button dv-icon-button-md text-info"
-                  [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+                  [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
                 >
                   <span class="material-symbols-rounded"> info </span>
                 </button>
@@ -90,11 +90,11 @@
               <div class="d-flex gap-2 flex-wrap justify-content-between">
                 <div class="d-flex flex-column">
                   <mat-radio-button data-testid="yes" [value]="true">{{
-                    'shared.form.radio.yes' | translate
+                    'shared.form.radio.yes' | transloco
                   }}</mat-radio-button>
 
                   <mat-radio-button data-testid="no" [value]="false">{{
-                    'shared.form.radio.no' | translate
+                    'shared.form.radio.no' | transloco
                   }}</mat-radio-button>
                 </div>
 
@@ -107,7 +107,7 @@
               </div>
               <div class="group-errors">
                 <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
+                  {{ 'shared.form.error.required' | transloco }}
                 </mat-error>
               </div>
             </mat-radio-group>
@@ -123,28 +123,28 @@
           @if (!hiddenFieldsSetSig().has(form.controls.werZahltAlimente)) {
             <div class="row g-4 mt-3">
               <mat-form-field dvSharedUiFormField class="col-12 col-xl-6">
-                <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | translate }}</mat-label>
+                <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | transloco }}</mat-label>
                 <mat-select
                   formControlName="werZahltAlimente"
                   data-testid="form-family-werZahltAlimente"
-                  [placeholder]="'shared.form.select.empty' | translate"
+                  [placeholder]="'shared.form.select.empty' | transloco"
                 >
                   <mat-option [value]="ELTERNSCHAFTSTEILUNG.VATER" [attr.data-testid]="ELTERNSCHAFTSTEILUNG.VATER">
-                    {{ 'shared.form.familiensituation.vater' | translate }}
+                    {{ 'shared.form.familiensituation.vater' | transloco }}
                   </mat-option>
                   <mat-option [value]="ELTERNSCHAFTSTEILUNG.MUTTER" [attr.data-testid]="ELTERNSCHAFTSTEILUNG.MUTTER">
-                    {{ 'shared.form.familiensituation.mutter' | translate }}
+                    {{ 'shared.form.familiensituation.mutter' | transloco }}
                   </mat-option>
                   <mat-option
                     [value]="ELTERNSCHAFTSTEILUNG.GEMEINSAM"
                     [attr.data-testid]="ELTERNSCHAFTSTEILUNG.GEMEINSAM"
                   >
-                    {{ 'shared.form.familiensituation.gemeinsam' | translate }}
+                    {{ 'shared.form.familiensituation.gemeinsam' | transloco }}
                   </mat-option>
                 </mat-select>
 
                 <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
+                  {{ 'shared.form.error.required' | transloco }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -179,18 +179,18 @@
               dvSharedUiFormField
               class="d-flex flex-column col-12 col-xl-6"
             >
-              <label>{{ 'shared.form.familiensituation.elternteil-verstorben-unbekannt.label' | translate }}</label>
+              <label>{{ 'shared.form.familiensituation.elternteil-verstorben-unbekannt.label' | transloco }}</label>
               <mat-radio-button data-testid="yes" [value]="true">{{
-                'shared.form.radio.yes' | translate
+                'shared.form.radio.yes' | transloco
               }}</mat-radio-button>
 
               <mat-radio-button data-testid="no" [value]="false">{{
-                'shared.form.radio.no' | translate
+                'shared.form.radio.no' | transloco
               }}</mat-radio-button>
 
               <div class="group-errors">
                 <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ 'shared.form.error.required' | translate }}
+                  {{ 'shared.form.error.required' | transloco }}
                 </mat-error>
               </div>
             </mat-radio-group>
@@ -205,31 +205,31 @@
               >
                 <div class="d-flex align-items-center flex-grow-1">
                   <span class="me-2">{{
-                    'shared.form.familiensituation.elternteil-verstorben.label' | translate
+                    'shared.form.familiensituation.elternteil-verstorben.label' | transloco
                   }}</span>
                   <button
                     type="button"
                     (click)="elternteilVerstorbenUnbekanntDialog.toggle()"
                     class="dv-icon-button dv-icon-button-md text-info"
-                    [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+                    [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
                   >
                     <span class="material-symbols-rounded"> info </span>
                   </button>
                 </div>
 
-                <label>{{ 'shared.form.familiensituation.mutter' | translate }}</label>
+                <label>{{ 'shared.form.familiensituation.mutter' | transloco }}</label>
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
                   [value]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
                   >{{
-                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.verstorben' | translate
+                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.verstorben' | transloco
                   }}</mat-radio-button
                 >
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.UNBEKANNT"
                   [value]="ELTERN_ABWESENHEITS_GRUND.UNBEKANNT"
                   >{{
-                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.unbekannt' | translate
+                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.unbekannt' | transloco
                   }}</mat-radio-button
                 >
 
@@ -238,13 +238,13 @@
                   [value]="ELTERN_ABWESENHEITS_GRUND.WEDER_NOCH"
                   [disabled]="form.controls.vaterUnbekanntVerstorben.value === 'WEDER_NOCH'"
                   >{{
-                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.keine' | translate
+                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.keine' | transloco
                   }}</mat-radio-button
                 >
 
                 <div class="group-errors">
                   <mat-error *dvSharedUiFormMessageError="'required'">
-                    {{ 'shared.form.error.required' | translate }}
+                    {{ 'shared.form.error.required' | transloco }}
                   </mat-error>
                 </div>
               </mat-radio-group>
@@ -266,7 +266,7 @@
                 dvSharedUiFormField
                 class="d-flex flex-column col-12 col-xl-6"
               >
-                <label>{{ 'shared.form.familiensituation.mutter-unbekannt-reason.label' | translate }}</label>
+                <label>{{ 'shared.form.familiensituation.mutter-unbekannt-reason.label' | transloco }}</label>
                 <div class="d-flex gap-2 flex-wrap justify-content-between">
                   <div class="d-flex flex-column">
                     <mat-radio-button
@@ -274,7 +274,7 @@
                       [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
                       >{{
                         'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort'
-                          | translate
+                          | transloco
                       }}</mat-radio-button
                     >
                     <mat-radio-button
@@ -282,7 +282,7 @@
                       [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
                       >{{
                         'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
-                          | translate
+                          | transloco
                       }}</mat-radio-button
                     >
                   </div>
@@ -295,7 +295,7 @@
                 </div>
                 <div class="group-errors">
                   <mat-error *dvSharedUiFormMessageError="'required'">
-                    {{ 'shared.form.error.required' | translate }}
+                    {{ 'shared.form.error.required' | transloco }}
                   </mat-error>
                 </div>
               </mat-radio-group>
@@ -314,13 +314,13 @@
                 dvSharedUiFormField
                 class="d-flex flex-column col-12 col-xl-6"
               >
-                <label>{{ 'shared.form.familiensituation.vater' | translate }}</label>
+                <label>{{ 'shared.form.familiensituation.vater' | transloco }}</label>
 
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
                   [value]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
                   >{{
-                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.verstorben' | translate
+                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.verstorben' | transloco
                   }}</mat-radio-button
                 >
 
@@ -328,7 +328,7 @@
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.UNBEKANNT"
                   [value]="ELTERN_ABWESENHEITS_GRUND.UNBEKANNT"
                   >{{
-                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.unbekannt' | translate
+                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.unbekannt' | transloco
                   }}</mat-radio-button
                 >
 
@@ -337,13 +337,13 @@
                   [value]="ELTERN_ABWESENHEITS_GRUND.WEDER_NOCH"
                   [disabled]="form.controls.mutterUnbekanntVerstorben.value === 'WEDER_NOCH'"
                   >{{
-                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.keine' | translate
+                    'shared.form.familiensituation.elternteil-verstorben-unbekannt.keine' | transloco
                   }}</mat-radio-button
                 >
 
                 <div class="group-errors">
                   <mat-error *dvSharedUiFormMessageError="'required'">
-                    {{ 'shared.form.error.required' | translate }}
+                    {{ 'shared.form.error.required' | transloco }}
                   </mat-error>
                 </div>
               </mat-radio-group>
@@ -358,7 +358,7 @@
                 class="col-12 col-xl-6 d-flex flex-column"
               >
                 <label class="me-2">{{
-                  'shared.form.familiensituation.vater-unbekannt-reason.label' | translate
+                  'shared.form.familiensituation.vater-unbekannt-reason.label' | transloco
                 }}</label>
                 <div class="d-flex gap-2 flex-wrap align-items-center justify-content-between">
                   <div class="d-flex flex-column">
@@ -367,7 +367,7 @@
                       [value]="ELTERN_UNBEKANNTHEITS_GRUND.UNBEKANNTER_AUFENTHALTSORT"
                       >{{
                         'shared.form.familiensituation.elternteil-unbekannt-reason.unbekannter-aufenthaltsort'
-                          | translate
+                          | transloco
                       }}</mat-radio-button
                     >
                     <div class="d-flex align-items-center gap-2">
@@ -376,14 +376,14 @@
                         [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
                         >{{
                           'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung'
-                            | translate
+                            | transloco
                         }}</mat-radio-button
                       >
                       <button
                         type="button"
                         (click)="fehlendeAnerkennungDialog.toggle()"
                         class="dv-icon-button dv-icon-button-md text-info"
-                        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+                        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
                       >
                         <span class="material-symbols-rounded"> info </span>
                       </button>
@@ -398,7 +398,7 @@
                 </div>
                 <div class="group-errors">
                   <mat-error *dvSharedUiFormMessageError="'required'">
-                    {{ 'shared.form.error.required' | translate }}
+                    {{ 'shared.form.error.required' | transloco }}
                   </mat-error>
                 </div>
               </mat-radio-group>
@@ -447,11 +447,11 @@
     <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
       @if (!readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
-          {{ 'shared.form.save-and-continue' | translate }}
+          {{ 'shared.form.save-and-continue' | transloco }}
         </button>
       } @else {
         <button type="button" class="btn btn-primary" data-testid="button-next" (click)="handleContinue()">
-          {{ 'shared.form.gonext' | translate }}
+          {{ 'shared.form.gonext' | transloco }}
         </button>
       }
     </dv-shared-ui-step-form-buttons>
@@ -463,17 +463,17 @@
           dvSharedUiFormField
           class="d-flex flex-column col-12 col-xl-6"
         >
-          <label>{{ 'shared.form.familiensituation.mutter-wiederverheiratet.label' | translate }}</label>
+          <label>{{ 'shared.form.familiensituation.mutter-wiederverheiratet.label' | transloco }}</label>
 
           <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | translate
+            'shared.form.radio.yes' | transloco
           }}</mat-radio-button>
 
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
 
           <div class="group-errors">
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </div>
         </mat-radio-group>
@@ -488,17 +488,17 @@
           dvSharedUiFormField
           class="d-flex flex-column col-12 col-xl-6"
         >
-          <label>{{ 'shared.form.familiensituation.vater-wiederverheiratet.label' | translate }}</label>
+          <label>{{ 'shared.form.familiensituation.vater-wiederverheiratet.label' | transloco }}</label>
 
           <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | translate
+            'shared.form.radio.yes' | transloco
           }}</mat-radio-button>
 
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
 
           <div class="group-errors">
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </div>
         </mat-radio-group>

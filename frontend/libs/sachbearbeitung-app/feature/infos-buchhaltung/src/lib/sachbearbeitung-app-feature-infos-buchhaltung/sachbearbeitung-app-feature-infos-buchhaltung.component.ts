@@ -12,8 +12,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   BuchhaltungEntryView,
@@ -41,7 +41,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
   selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatTooltipModule,
     MatPaginatorModule,

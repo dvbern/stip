@@ -7,7 +7,9 @@ import {
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUtilFormService } from './shared-util-form.service';
 
@@ -31,11 +33,10 @@ describe('SharedUtilFormService', () => {
   };
 
   beforeEach(async () => {
-    jest.spyOn(wndw, 'addEventListener');
-    jest.spyOn(wndw, 'removeEventListener');
+    vitest.spyOn(wndw, 'addEventListener');
+    vitest.spyOn(wndw, 'removeEventListener');
     await TestBed.configureTestingModule({
-      providers: [provideTranslateService()],
-      imports: [TestComponent],
+      imports: [TestComponent, getTranslocoModule()],
     }).compileComponents();
     service = TestBed.inject(SharedUtilFormService);
     componentFixture = TestBed.createComponent(TestComponent);

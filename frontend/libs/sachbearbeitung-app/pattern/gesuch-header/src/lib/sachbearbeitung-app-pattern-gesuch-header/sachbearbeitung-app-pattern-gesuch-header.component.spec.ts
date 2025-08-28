@@ -7,7 +7,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import {
+  getTranslocoModule,
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
 import { success } from '@dv/shared/util/remote-data';
 
@@ -17,22 +21,26 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   let component: SachbearbeitungAppPatternGesuchHeaderComponent;
   let fixture: ComponentFixture<SachbearbeitungAppPatternGesuchHeaderComponent>;
   const setStatus$ = {
-    SET_TO_BEARBEITUNG: jest.fn(),
-    ANSPRUCH_PRUEFEN: jest.fn(),
-    BEARBEITUNG_ABSCHLIESSEN: jest.fn(),
-    ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: jest.fn(),
-    BEREIT_FUER_BEARBEITUNG: jest.fn(),
-    NEGATIVE_VERFUEGUNG_ERSTELLEN: jest.fn(),
-    VERFUEGT: jest.fn(),
-    VERSENDET: jest.fn(),
-    ZURUECKWEISEN: jest.fn(),
-    STATUS_PRUEFUNG_AUSLOESEN: jest.fn(),
+    SET_TO_BEARBEITUNG: vitest.fn(),
+    ANSPRUCH_PRUEFEN: vitest.fn(),
+    BEARBEITUNG_ABSCHLIESSEN: vitest.fn(),
+    ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: vitest.fn(),
+    BEREIT_FUER_BEARBEITUNG: vitest.fn(),
+    NEGATIVE_VERFUEGUNG_ERSTELLEN: vitest.fn(),
+    VERFUEGT: vitest.fn(),
+    VERSENDET: vitest.fn(),
+    ZURUECKWEISEN: vitest.fn(),
+    STATUS_PRUEFUNG_AUSLOESEN: vitest.fn(),
   } satisfies Record<StatusUebergang, unknown>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SachbearbeitungAppPatternGesuchHeaderComponent],
+      imports: [
+        SachbearbeitungAppPatternGesuchHeaderComponent,
+        getTranslocoModule(),
+      ],
       providers: [
+        GesuchInfoStore,
         provideRouter([]),
         provideHttpClient(),
         provideMockStore({
@@ -45,7 +53,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
             },
           },
         }),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
         {
           provide: MatDialog,
           useValue: {
@@ -78,9 +86,11 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
   });
 
   it.each([
+    ['SET_TO_BEARBEITUNG'],
+    ['ANSPRUCH_PRUEFEN'],
     ['BEARBEITUNG_ABSCHLIESSEN'],
-    ['BEREIT_FUER_BEARBEITUNG'],
     // ['ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'], is the same as 'BEREIT_FUER_BEARBEITUNG'
+    ['BEREIT_FUER_BEARBEITUNG'],
     ['NEGATIVE_VERFUEGUNG_ERSTELLEN'],
     ['VERFUEGT'],
     ['STATUS_PRUEFUNG_AUSLOESEN'],

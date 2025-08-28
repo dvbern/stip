@@ -21,7 +21,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { BuchhaltungStore } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
@@ -44,7 +44,7 @@ import { restrictNumberParam } from '@dv/shared/util/table';
   imports: [
     A11yModule,
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,

@@ -10,7 +10,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { BuchhaltungEntry } from '@dv/shared/model/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
@@ -19,7 +19,7 @@ type BuchhaltungInfoData = BuchhaltungEntry;
 
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-buchhaltung-info',
-  imports: [CommonModule, TranslatePipe, SharedUiFormatChfPipe],
+  imports: [CommonModule, TranslocoPipe, SharedUiFormatChfPipe],
   templateUrl: './sachbearbeitung-app-dialog-buchhaltung-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

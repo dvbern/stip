@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   INFOS_OPTIONS,
@@ -25,7 +25,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   selector: 'dv-sachbearbeitung-app-pattern-infos-layout',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,

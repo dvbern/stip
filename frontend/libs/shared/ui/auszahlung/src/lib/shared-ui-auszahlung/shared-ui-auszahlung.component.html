@@ -18,14 +18,14 @@
         [formControl]="form.controls.auszahlungAnSozialdienst"
         data-testid="form-auszahlung-auszahlungAnSozialdienst"
       >
-        {{ 'shared.form.auszahlung.anSozialidenst' | translate }}
+        {{ 'shared.form.auszahlung.anSozialidenst' | transloco }}
       </mat-checkbox>
     }
 
     @if (!form.controls.auszahlungAnSozialdienst.value) {
       <!-- Nachname -->
       <mat-form-field dvSharedUiFormField>
-        <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
+        <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
         <input
           matInput
           dvMaxLength
@@ -34,13 +34,13 @@
           data-testid="form-auszahlung-nachname"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
 
       <!-- Vorname -->
       <mat-form-field dvSharedUiFormField>
-        <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
+        <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
         <input
           matInput
           dvMaxLength
@@ -49,7 +49,7 @@
           data-testid="form-auszahlung-vorname"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
 
@@ -63,7 +63,7 @@
 
       <!-- IBAN -->
       <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-flex-grow">
-        <mat-label>{{ 'shared.form.auszahlung.iban.label' | translate }}</mat-label>
+        <mat-label>{{ 'shared.form.auszahlung.iban.label' | transloco }}</mat-label>
         <span matTextPrefix>CH</span>
         <input
           data-testid="form-auszahlung-iban"
@@ -73,13 +73,13 @@
           [maskito]="MASK_IBAN"
         />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | translate }}
+          {{ 'shared.form.error.invalidIBAN' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | translate }}
+          {{ 'shared.form.error.invalidIBAN' | transloco }}
         </mat-error>
       </mat-form-field>
 
@@ -87,7 +87,7 @@
         type="button"
         (click)="ibanDialog.toggle()"
         class="dv-icon-button dv-icon-button-md text-info mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | translate"
+        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
       >
         <span class="material-symbols-rounded"> info </span>
       </button>
@@ -103,12 +103,12 @@
     <dv-shared-ui-step-form-buttons class="md:tw-col-span-2 lg:tw-col-span-3">
       @if (view.backlink) {
         <a [routerLink]="view.backlink" class="btn btn-secondary" data-testid="button-back">
-          {{ 'shared.form.back' | translate }}
+          {{ 'shared.form.back' | transloco }}
         </a>
       }
       @if (view.readonly) {
         <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
-          {{ 'shared.form.gonext' | translate }}
+          {{ 'shared.form.gonext' | transloco }}
         </button>
       } @else {
         <dv-shared-ui-form-save

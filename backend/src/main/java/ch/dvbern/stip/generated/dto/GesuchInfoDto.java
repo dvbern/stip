@@ -29,6 +29,7 @@ public class GesuchInfoDto  implements Serializable {
   private @Valid Boolean canGetBerechnung;
   private @Valid Boolean beschwerdeHaengig;
   private @Valid Boolean canTriggerManuellPruefen;
+  private @Valid Boolean canChangeGesuchsperiode;
 
   /**
    **/
@@ -182,6 +183,25 @@ public class GesuchInfoDto  implements Serializable {
     this.canTriggerManuellPruefen = canTriggerManuellPruefen;
   }
 
+  /**
+   **/
+  public GesuchInfoDto canChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+    return this;
+  }
+
+  
+  @JsonProperty("canChangeGesuchsperiode")
+  @NotNull
+  public Boolean getCanChangeGesuchsperiode() {
+    return canChangeGesuchsperiode;
+  }
+
+  @JsonProperty("canChangeGesuchsperiode")
+  public void setCanChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -199,12 +219,13 @@ public class GesuchInfoDto  implements Serializable {
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
         Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
         Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
-        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen);
+        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen) &&
+        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode);
   }
 
   @Override
@@ -220,6 +241,7 @@ public class GesuchInfoDto  implements Serializable {
     sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
     sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
+    sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

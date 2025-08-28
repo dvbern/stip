@@ -3,17 +3,17 @@
 
   <!-- Strasse -->
   <mat-form-field dvSharedUiFormField class="col-8 col-lg-4 pe-0">
-    <mat-label>{{ 'shared.form.shared.address.street.label' | translate }} </mat-label>
+    <mat-label>{{ 'shared.form.shared.address.street.label' | transloco }} </mat-label>
     <input matInput dvMaxLength type="text" formControlName="strasse" data-testid="form-address-strasse" />
     <mat-hint *dvZuvorHint="changes?.strasse"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
+      {{ 'shared.form.error.required' | transloco }}
     </mat-error>
   </mat-form-field>
 
   <!-- Nr -->
   <mat-form-field dvSharedUiFormField class="col-4 col-lg-2 ps-2">
-    <mat-label>{{ 'shared.form.shared.address.number.label' | translate }} </mat-label>
+    <mat-label>{{ 'shared.form.shared.address.number.label' | transloco }} </mat-label>
     <input
       matInput
       [dvMaxLength]="'small'"
@@ -23,7 +23,7 @@
     />
     <mat-hint *dvZuvorHint="changes?.hausnummer"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | translate }}
+      {{ 'shared.form.error.required' | transloco }}
     </mat-error>
   </mat-form-field>
 
@@ -35,7 +35,7 @@
     (plzLookupValuesSig)="plzValues = $event"
   >
     <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-lg-2 pe-2">
-      <mat-label>{{ 'shared.form.shared.address.zipcode.label' | translate }} </mat-label>
+      <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
       <input
         matInput
         [dvMaxLength]="'small'"
@@ -46,7 +46,7 @@
       />
       <mat-hint *dvZuvorHint="changes?.plz"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.requiredShort' | translate }}
+        {{ 'shared.form.error.requiredShort' | transloco }}
       </mat-error>
       <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
         @for (lookup of plzValues; track $index) {
@@ -58,11 +58,11 @@
     </mat-form-field>
 
     <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-lg-4 ps-0">
-      <mat-label>{{ 'shared.form.shared.address.city.label' | translate }} </mat-label>
+      <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }} </mat-label>
       <input matInput dvMaxLength type="text" formControlName="ort" data-testid="form-address-ort" />
       <mat-hint *dvZuvorHint="changes?.ort"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
   </ng-container>
@@ -70,8 +70,8 @@
   <!-- c/o -->
   <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
     <mat-label
-      >{{ 'shared.form.shared.address.co.label' | translate }} ({{
-        'shared.form.optional.label' | translate
+      >{{ 'shared.form.shared.address.co.label' | transloco }} ({{
+        'shared.form.optional.label' | transloco
       }})</mat-label
     >
     <input matInput dvMaxLength type="text" formControlName="coAdresse" data-testid="form-address-coAdresse" />

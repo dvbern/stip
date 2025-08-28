@@ -13,7 +13,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { startOfDay } from 'date-fns';
 
 import {
@@ -37,7 +37,7 @@ type EditNachfristResult = {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,

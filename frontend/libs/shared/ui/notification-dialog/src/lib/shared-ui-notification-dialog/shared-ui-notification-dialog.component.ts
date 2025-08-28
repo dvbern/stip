@@ -5,7 +5,7 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { Notification } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
@@ -19,7 +19,7 @@ type NotificationDialogData = {
   selector: 'dv-shared-ui-notification-dialog',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiTooltipDateComponent,
     SharedUiDownloadButtonDirective,
   ],

@@ -12,7 +12,7 @@
               <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
                 <i class="material-symbols-rounded fs-4">close</i>
                 <span>
-                  {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+                  {{ 'shared.dokumente.dokumentStatus.action.reject' | transloco }}
                 </span>
               </button>
               <button
@@ -22,23 +22,23 @@
               >
                 <i class="material-symbols-rounded fs-4">check</i>
                 <span>
-                  {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+                  {{ 'shared.dokumente.dokumentStatus.action.accept' | transloco }}
                 </span>
               </button>
             } @else {
               <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
-                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | translate }}
+                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | transloco }}
               </dv-shared-ui-icon-badge>
             }
           }
           @case ('AKZEPTIERT') {
             <dv-shared-ui-icon-badge type="success" class="status ms-auto">
-              {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+              {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | transloco }}
             </dv-shared-ui-icon-badge>
           }
           @case ('ABGELEHNT') {
             <dv-shared-ui-icon-badge type="danger" class="status ms-auto">
-              {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+              {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | transloco }}
             </dv-shared-ui-icon-badge>
           }
         }
@@ -46,7 +46,7 @@
     } @else {
       <div class="d-flex">
         <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
-          {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+          {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
         </dv-shared-ui-icon-badge>
       </div>
     }

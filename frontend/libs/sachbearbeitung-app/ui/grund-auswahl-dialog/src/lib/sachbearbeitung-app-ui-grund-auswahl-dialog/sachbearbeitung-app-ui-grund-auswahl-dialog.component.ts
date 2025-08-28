@@ -24,7 +24,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { AblehnungGrundStore } from '@dv/shared/global/ablehnung-grund';
 import {
@@ -70,7 +70,7 @@ const GRUND_MANUELL = { id: undefined, stipDecision: 'MANUELL' as const };
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,

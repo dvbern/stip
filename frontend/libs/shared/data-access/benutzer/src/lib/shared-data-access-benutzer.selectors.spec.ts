@@ -7,6 +7,7 @@ describe('selectSharedDataAccessBenutzersView', () => {
     const state = {
       currentBenutzerRd: initial(),
       lastFetchTs: null,
+      rolesMap: {},
     };
     const result = selectSharedDataAccessBenutzersView.projector(state);
     expect(result).toEqual(state);

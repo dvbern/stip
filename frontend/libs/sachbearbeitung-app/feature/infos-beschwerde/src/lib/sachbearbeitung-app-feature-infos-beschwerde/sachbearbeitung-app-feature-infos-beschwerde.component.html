@@ -1,4 +1,4 @@
-@let beschwerdeHaengig = gesuchStore.gesuchInfo.data()?.beschwerdeHaengig ?? null;
+@let beschwerdeHaengig = gesuchInfoStore.gesuchInfo.data()?.beschwerdeHaengig ?? null;
 @if (beschwerdeHaengig === null) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
@@ -11,7 +11,7 @@
   >
     @for (tab of tabsSig(); track tab.name) {
       <a mat-tab-link [routerLink]="[tab.name]" [active]="tab.active" class="btn btn-nav" [class.active]="tab.active">
-        {{ `sachbearbeitung-app.infos.beschwerde.${tab.name}` | translate }}
+        {{ `sachbearbeitung-app.infos.beschwerde.${tab.name}` | transloco }}
       </a>
     }
   </nav>

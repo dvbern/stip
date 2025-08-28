@@ -10,19 +10,19 @@
 >
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="nachname" data-testid="form-kind-nachname" type="text" />
       <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="vorname" data-testid="form-kind-vorname" type="text" />
       <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -30,7 +30,7 @@
   <div class="row g-4 my-2">
     <!-- GEBURTSDATUM -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
       <input
         placeholder="dd.mm.yyyy"
@@ -43,22 +43,22 @@
       <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | translate }}
+        {{ 'shared.form.error.dateFormat' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'minDate'">
-        {{ 'shared.form.error.minDatePast' | translate }}
+        {{ 'shared.form.error.minDatePast' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDatePast' | translate }}
+        {{ 'shared.form.error.maxDatePast' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- Wohnsitz -->
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-      <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | transloco }}</mat-label>
       <input
         type="text"
         data-testid="form-kind-wohnsitzAnteilPia"
@@ -66,15 +66,15 @@
         formControlName="wohnsitzAnteilPia"
         [maskito]="maskitoOptionsPercent"
       />
-      <mat-hint *dvZuvorHint="changes?.wohnsitzAnteilPia | translateChange: '$VALUE%'"></mat-hint>
+      <mat-hint *dvZuvorHint="changes?.wohnsitzAnteilPia | dvTranslateChange: '$VALUE%' | async"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'pattern'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'minlength'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -82,7 +82,7 @@
   <div class="row g-4 my-2">
     <!-- Ausbildungssituation -->
     <div class="col-12 col-md-6 col-xl-4">
-      <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | translate }}</label>
+      <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
       <mat-radio-group
         class="d-flex flex-column"
         formControlName="ausbildungssituation"
@@ -91,18 +91,20 @@
       >
         @for (a of ausbildungssituationValues; track trackByIndex($index)) {
           <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-            'shared.form.geschwister.ausbildungssituation.select.' + a | translate
+            'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
           }}</mat-radio-button>
         }
         <div class="group-errors">
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </div>
       </mat-radio-group>
       <mat-hint
         *dvZuvorHint="
-          changes?.ausbildungssituation | translateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+          changes?.ausbildungssituation
+            | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+            | async
         "
       ></mat-hint>
     </div>
@@ -114,10 +116,12 @@
         formControlName="alimentenregelungExistiert"
         data-testid="form-education-alimentenregelungExistiert"
       >
-        {{ 'shared.form.kinder.alimentenregelungExistiert.label' | translate }}
+        {{ 'shared.form.kinder.alimentenregelungExistiert.label' | transloco }}
       </mat-checkbox>
       <dv-shared-ui-form-zuvor-hint
-        [changes]="alimentenregelungExistiertChangeSig() | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+        [changes]="
+          alimentenregelungExistiertChangeSig() | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+        "
       ></dv-shared-ui-form-zuvor-hint>
     </div>
   </div>
@@ -125,7 +129,7 @@
     @if (alimentenregelungExistiertSig()) {
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'shared.form.kinder.erhalteneAlimentebeitraege.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.kinder.erhalteneAlimentebeitraege.label' | transloco }}</mat-label>
           <input
             matInput
             [maskito]="maskitoNumber"
@@ -135,7 +139,7 @@
           />
           <mat-hint *dvZuvorHint="changes?.erhalteneAlimentebeitraege"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
         @if (alimenteDocumentSig(); as options) {
@@ -151,11 +155,11 @@
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
     <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
-      {{ 'shared.form.cancel-and-back' | translate }}
+      {{ 'shared.form.cancel-and-back' | transloco }}
     </button>
     @if (!viewSig().readonly) {
       <button type="submit" class="btn btn-primary" data-testid="button-save">
-        {{ 'shared.form.save-and-back' | translate }}
+        {{ 'shared.form.save-and-back' | transloco }}
       </button>
     }
   </dv-shared-ui-step-form-buttons>

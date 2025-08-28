@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "../../../../dist/out-tsc",
+    "target": "es2021",
+    "types": [
+      "vitest/globals",
+      "vitest/importMeta",
+      "vite/client",
+      "node",
+      "vitest"
+    ]
+  },
+  "files": ["test-setup.ts"],
+  "include": [
+    "vite.config.mts",
+    "apps/**/*.test.ts",
+    "libs/**/*.test.ts",
+    "apps/**/*.spec.ts",
+    "libs/**/*.spec.ts",
+    "apps/**/*.d.ts",
+    "libs/**/*.d.ts"
+  ],
+  "exclude": ["libs/tooling/**/__*", "**/*-e2e/**/*"]
+}

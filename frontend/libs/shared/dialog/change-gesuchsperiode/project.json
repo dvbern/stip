@@ -1,0 +1,9 @@
+{
+  "name": "shared-dialog-change-gesuchsperiode",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/dialog/change-gesuchsperiode/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:dialog", "scope:shared"],
+  "targets": {}
+}

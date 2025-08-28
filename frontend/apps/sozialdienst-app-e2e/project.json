@@ -12,10 +12,6 @@
       "options": {
         "config": "apps/sozialdienst-app-e2e/playwright.config.ts"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
     }
   }
 }

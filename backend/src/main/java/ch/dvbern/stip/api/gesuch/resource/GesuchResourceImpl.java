@@ -77,6 +77,7 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
@@ -561,5 +562,15 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.gesuchFehlendeDokumenteEinreichen(gesuchTrancheId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public GesuchDto setGesuchsperiodeForGesuch(UUID gesuchTrancheId, @NotNull UUID gesuchsperiodeId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchsperiodeForGesuch(gesuchId);
+
+        return gesuchService.setGesuchsperiodeForGesuch(gesuchTrancheId, gesuchsperiodeId);
     }
 }

@@ -37,7 +37,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG,
   GesuchInfoDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN
+  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN,
+  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE
 })
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -65,6 +66,9 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN = "canTriggerManuellPruefen";
   private Boolean canTriggerManuellPruefen;
+
+  public static final String JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE = "canChangeGesuchsperiode";
+  private Boolean canChangeGesuchsperiode;
 
   public GesuchInfoDtoSpec() {
   }
@@ -276,6 +280,32 @@ public class GesuchInfoDtoSpec {
     this.canTriggerManuellPruefen = canTriggerManuellPruefen;
   }
 
+
+  public GesuchInfoDtoSpec canChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+    
+    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+    return this;
+  }
+
+   /**
+   * Get canChangeGesuchsperiode
+   * @return canChangeGesuchsperiode
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanChangeGesuchsperiode() {
+    return canChangeGesuchsperiode;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -292,12 +322,13 @@ public class GesuchInfoDtoSpec {
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
         Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
         Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
-        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen);
+        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen) &&
+        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode);
   }
 
   @Override
@@ -312,6 +343,7 @@ public class GesuchInfoDtoSpec {
     sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
     sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
+    sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

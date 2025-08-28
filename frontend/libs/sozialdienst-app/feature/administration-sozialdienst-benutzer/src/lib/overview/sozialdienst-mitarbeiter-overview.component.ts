@@ -17,7 +17,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, map } from 'rxjs';
 
 import {
@@ -42,7 +42,7 @@ const INPUT_DELAY = 600;
 @Component({
   imports: [
     RouterLink,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     MatTooltipModule,
     MatFormFieldModule,

@@ -14,7 +14,7 @@
           >
             <i class="material-symbols-rounded tw-text-xl/none">check</i>
             <span>
-              {{ 'shared.dokumente.dokumentStatus.action.accept' | translate }}
+              {{ 'shared.dokumente.dokumentStatus.action.accept' | transloco }}
             </span>
           </button>
           <button
@@ -25,18 +25,18 @@
           >
             <i class="material-symbols-rounded tw-text-xl/none">close</i>
             <span>
-              {{ 'shared.dokumente.dokumentStatus.action.reject' | translate }}
+              {{ 'shared.dokumente.dokumentStatus.action.reject' | transloco }}
             </span>
           </button>
         }
         @case ('AKZEPTIERT') {
           <dv-shared-ui-icon-badge type="success" class="tw-min-w-[138px]">
-            {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+            {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
         @case ('ABGELEHNT') {
           <dv-shared-ui-icon-badge type="danger" class="tw-min-w-[138px]">
-            {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+            {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
       }
@@ -44,7 +44,7 @@
       @switch (dokument?.gesuchDokument?.status) {
         @case ('AKZEPTIERT') {
           <dv-shared-ui-icon-badge type="success" class="tw-min-w-[138px]">
-            {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | translate }}
+            {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
         @case ('AUSSTEHEND') {
@@ -54,29 +54,29 @@
               (view.gesuchStatus === 'FEHLENDE_DOKUMENTE' || view.gesuchStatus === 'IN_BEARBEITUNG_GS')
             ) {
               <dv-shared-ui-icon-badge type="info" class="tw-min-w-[138px]">
-                {{ 'shared.dokumente.dokumentStatus.DOKUMENT_VORHANDEN' | translate }}
+                {{ 'shared.dokumente.dokumentStatus.DOKUMENT_VORHANDEN' | transloco }}
               </dv-shared-ui-icon-badge>
             } @else {
               <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-[138px]">
-                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | translate }}
+                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | transloco }}
               </dv-shared-ui-icon-badge>
             }
           } @else {
             <dv-shared-ui-icon-badge type="warning" class="tw-min-w-[138px]">
-              {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+              {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
             </dv-shared-ui-icon-badge>
           }
         }
         @case ('ABGELEHNT') {
           <dv-shared-ui-icon-badge type="danger" class="tw-min-w-[138px]">
-            {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | translate }}
+            {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
       }
     }
   } @else {
     <dv-shared-ui-icon-badge type="warning" class="tw-min-w-[138px]">
-      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | translate }}
+      {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
     </dv-shared-ui-icon-badge>
   }
 </div>

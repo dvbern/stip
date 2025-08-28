@@ -1,0 +1,9 @@
+{
+  "name": "shared-data-access-gesuch-info",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/data-access/gesuch-info/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:shared"],
+  "targets": {}
+}

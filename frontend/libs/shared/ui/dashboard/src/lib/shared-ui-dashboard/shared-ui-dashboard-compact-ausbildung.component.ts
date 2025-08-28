@@ -7,7 +7,7 @@ import {
   output,
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden } from '@dv/shared/model/gesuch';
@@ -20,7 +20,7 @@ import { SharedUiDashboardGesuchComponent } from './shared-ui-dashboard-gesuch.c
   selector: 'dv-shared-ui-dashboard-compact-ausbildung',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatExpansionModule,
     SharedUiDashboardGesuchComponent,
     SharedUiIconChipComponent,

@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideTranslateService } from '@ngx-translate/core';
+
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiNotificationsComponent } from './shared-ui-notifications.component';
 
@@ -9,8 +11,7 @@ describe('SharedUiNotificationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUiNotificationsComponent],
-      providers: [provideTranslateService()],
+      imports: [SharedUiNotificationsComponent, getTranslocoModule()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUiNotificationsComponent);

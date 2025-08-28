@@ -4,14 +4,14 @@
 }
 
 <h3>
-  {{ 'shared.dokumente.table.title.additionalDocuments' | translate }}
+  {{ 'shared.dokumente.table.title.additionalDocuments' | transloco }}
 </h3>
 
 <div class="tw-dv-table">
   <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
     <caption class="cdk-visually-hidden">
       {{
-        'shared.dokumente.table.title.additionalDocuments' | translate
+        'shared.dokumente.table.title.additionalDocuments' | transloco
       }}
     </caption>
 
@@ -24,18 +24,18 @@
     <!-- required document -->
     <ng-container matColumnDef="documentName">
       <th mat-header-cell *matHeaderCellDef class="tw-min-w-96">
-        {{ 'shared.dokumente.table.documentName' | translate }}
+        {{ 'shared.dokumente.table.documentName' | transloco }}
       </th>
       <td mat-cell class="tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-py-3">
-          {{ dokument.dokumentOptions.titleKey | translate }}
+          {{ dokument.dokumentOptions.info.title | transloco }}
         </div>
       </td>
     </ng-container>
 
     <!-- actions -->
     <ng-container matColumnDef="actions">
-      <th [title]="'shared.dokumente.table.actions' | translate" mat-header-cell *matHeaderCellDef></th>
+      <th [title]="'shared.dokumente.table.actions' | transloco" mat-header-cell *matHeaderCellDef></th>
       <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
         <div class="tw-flex tw-justify-end">
           <dv-shared-pattern-document-upload

@@ -23,8 +23,10 @@ import java.util.Optional;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -89,5 +91,18 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
                 gesuchsperiode.gesuchsperiodeStart.loe(ausbildungBegin)
                     .and(gesuchsperiode.gesuchsperiodeStopp.goe(ausbildungBegin))
             );
+    }
+
+    public List<Gesuchsperiode> getAllAssignableGesuchsperiodenWithStartBetween(final DateRange range) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+        return queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(gesuchsperiode.gueltigkeitStatus.in(GueltigkeitStatus.ASSIGNABLE_GUELTIGKEIT_STATUS))
+            .where(
+                Expressions.numberTemplate(Integer.class, "date_part('doy', {0})", gesuchsperiode.gesuchsperiodeStart)
+                    .between(range.getGueltigAb().getDayOfYear(), range.getGueltigBis().getDayOfYear())
+            )
+            .stream()
+            .toList();
     }
 }

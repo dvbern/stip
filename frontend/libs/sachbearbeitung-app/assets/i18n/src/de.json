@@ -119,6 +119,7 @@
   "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Gesuchsjahr erstellen",
   "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Gesuchsjahr Detail Ansicht",
 
+  "sachbearbeitung-app.admin.benutzerverwaltung.description": "Benutzerverwaltungsübersicht",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Benutzer",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Benutzer Erstellen",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.edit": "Benutzer Bearbeiten",
@@ -128,6 +129,7 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label": "Funktion (Deutsch)",
   "sachbearbeitung-app.admin.benutzerverwaltung.funktionFr.label": "Funktion (Französisch)",
   "sachbearbeitung-app.admin.benutzerverwaltung.rollen.title": "Rollen",
+  "sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten": "Benutzer bearbeiten",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen": "Benutzer löschen",
   "sachbearbeitung-app.admin.benutzerverwaltung.sachbearbeiter.label": "Sachbearbeiter",
   "sachbearbeitung-app.admin.benutzerverwaltung.administration.label": "Administration",
