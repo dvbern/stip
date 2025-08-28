@@ -17,32 +17,31 @@
 
 package ch.dvbern.stip.api.nesko.service;
 
-import java.util.Base64;
+import io.quarkus.arc.profile.UnlessBuildProfile;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import ch.dvbern.stip.api.nesko.entity.NeskoBearerTokenResponse;
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+@RequestScoped
+@UnlessBuildProfile("test")
+@RequiredArgsConstructor
+public class NeskoGetBearerTokenService {
+    @ConfigProperty(name = "kstip.nesko.username")
+    String username;
 
-@Path("/token")
-@RegisterRestClient(configKey = "NeskoGetBearerToken-api")
-public interface NeskoGetBearerTokenService {
-    default String getAuthorization(final String username, final String password) {
-        final String userPassword = String.format("%s:%s", username, password);
+    @ConfigProperty(name = "kstip.nesko.password")
+    String password;
 
-        return "Basic " +
-        Base64.getEncoder().encodeToString(userPassword.getBytes());
+    @Inject
+    @RestClient
+    NeskoGetBearerTokenRequestService neskoGetBearerTokenRequestService;
+
+    public String getToken() {
+        return neskoGetBearerTokenRequestService.post(
+            neskoGetBearerTokenRequestService.getAuthorization(username, password),
+            neskoGetBearerTokenRequestService.getGrantType()
+        ).getAccess_token();
     }
-
-    default String getGrantType() {
-        return "client_credentials";
-    }
-
-    @POST
-    NeskoBearerTokenResponse post(
-        @HeaderParam("Authorization") String authorization,
-        @FormParam("grant_type") String grantType
-    );
 }

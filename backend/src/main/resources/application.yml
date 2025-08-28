@@ -77,7 +77,6 @@ kstip:
   should-clear-database: false
   nesko:
     wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
-    token-url: 'https://nesko-int.sv.fin.be.ch/sso/auth/realms/hades-int/protocol/openid-connect/token'
     username: '${NESKO_TECHNICAL_USER_NAME}'
     password: '${NESKO_TECHNICAL_USER_PASSWORD}'
   tenancy:
@@ -306,6 +305,9 @@ quarkus:
         kc-path: '/realms/bern/protocol/openid-connect/auth'
         kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
         kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
+    nesko:
+      username: 'username'
+      password: 'password'
 '%prod':
   quarkus:
     s3:
