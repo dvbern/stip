@@ -393,6 +393,7 @@
   "shared.form.tranche.gesuchsnummer.label": "Gesuchsnummer",
   "shared.form.tranche.fallnummer.label": "Fallnummer",
   "shared.form.tranche.gesuchsperiode.label": "Gesuchsperiode",
+  "shared.form.tranche.gesuchsperiode.change": "Gesuchsperiode ändern",
   "shared.form.tranche.gesuchsperiode": "{{ bezeichnungDe }}",
   "shared.form.tranche.einreichefrist.label": "Einreichefrist",
   "shared.form.tranche.sachbearbeiter.label": "Sachbearbeiter",
