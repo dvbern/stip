@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenRequiredIfVolljaehrigConstraint;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenStatusNotNullConstraint;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -56,6 +57,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTabRequiredConstraint;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenVeranlagungStatusNotNullConstraint;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
@@ -160,6 +162,18 @@ import org.hibernate.envers.Audited;
         Default.class,
         SteuerdatenPageValidation.class
     }, property = "steuerdaten"
+)
+@SteuerdatenVeranlagungStatusNotNullConstraint(
+    groups = {
+        Default.class,
+        SteuerdatenPageValidation.class
+    }, property = "steuerdaten"
+)
+@EinnahmenKostenStatusNotNullConstraint(
+    groups = {
+        Default.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten"
 )
 @AusbildungskostenStufeRequiredConstraint(
     groups = {

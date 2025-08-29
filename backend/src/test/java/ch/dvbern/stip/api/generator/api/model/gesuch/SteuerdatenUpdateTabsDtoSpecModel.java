@@ -44,6 +44,7 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setVerpflegungPartner(TestUtil.getRandomInt(1, 10000));
             model.setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
             model.setSteuerjahr(2022);
+            model.setVeranlagungsStatus("test");
         });
     }
 
