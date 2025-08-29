@@ -449,9 +449,8 @@
                 formControlName="veranlagungsStatus"
                 data-testid="form-einnahmen-kosten-veranlagungsStatus"
                 matInput
-                type="number"
-                min="0"
-                max="99"
+                dvMaxLength
+                type="text"
               />
               <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsStatus"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">

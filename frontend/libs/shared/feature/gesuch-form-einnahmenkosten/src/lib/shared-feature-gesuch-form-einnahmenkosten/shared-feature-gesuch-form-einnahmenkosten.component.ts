@@ -51,6 +51,7 @@ import {
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -104,6 +105,7 @@ type MainBildungskategorie =
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
     SharedUiInfoDialogDirective,
+    SharedUiMaxLengthDirective,
     SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-einnahmenkosten.component.html',
