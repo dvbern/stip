@@ -39,6 +39,7 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
@@ -63,6 +64,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten.component.html',
