@@ -17,15 +17,15 @@
 
 package ch.dvbern.stip.api.nesko.service;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-
-import java.math.BigDecimal;
-import java.util.Objects;
 
 @Slf4j
 @UtilityClass
