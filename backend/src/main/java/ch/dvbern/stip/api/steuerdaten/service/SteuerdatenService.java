@@ -109,8 +109,12 @@ public class SteuerdatenService {
 
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
 
-        var getSteuerdatenResponse =
-            neskoGetSteuerdatenService.getSteuerdatenResponse(ssvn, steuerjahr);
+        var getSteuerdatenResponse = neskoGetSteuerdatenService.getSteuerdatenResponse(
+            ssvn,
+            steuerjahr,
+            gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
+            gesuchtranche.getGesuch().getGesuchNummer()
+        );
 
         steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);
