@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenRequiredIfVolljaehrigConstraint;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenStatusNotNullConstraint;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenVeranlagungsStatusNotNullConstraint;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -169,7 +169,7 @@ import org.hibernate.envers.Audited;
         SteuerdatenPageValidation.class
     }, property = "steuerdaten"
 )
-@EinnahmenKostenStatusNotNullConstraint(
+@EinnahmenKostenVeranlagungsStatusNotNullConstraint(
     groups = {
         GesuchNachInBearbeitungSBValidationGroup.class
     }, property = "einnahmenKosten"

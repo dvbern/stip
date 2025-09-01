@@ -27,11 +27,11 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
 
 public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
-    implements ConstraintValidator<EinnahmenKostenStatusNotNullConstraint, GesuchFormular> {
+    implements ConstraintValidator<EinnahmenKostenVeranlagungsStatusNotNullConstraint, GesuchFormular> {
     private String property;
 
     @Override
-    public void initialize(EinnahmenKostenStatusNotNullConstraint constraintAnnotation) {
+    public void initialize(EinnahmenKostenVeranlagungsStatusNotNullConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
     }
 
