@@ -32,7 +32,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = SteuerdatenVeranlagungsStatusNotNullConstraintValidator.class)
 @Documented
-public @interface SteuerdatenVeranlagungStatusNotNullConstraint {
+public @interface SteuerdatenVeranlagungsStatusNotNullConstraint {
     String message() default VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
 
     Class<?>[] groups() default {};

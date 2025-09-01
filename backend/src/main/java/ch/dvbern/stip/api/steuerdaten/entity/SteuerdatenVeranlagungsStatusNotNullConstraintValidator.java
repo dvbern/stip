@@ -27,11 +27,11 @@ import jakarta.validation.ConstraintValidatorContext;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
 
 public class SteuerdatenVeranlagungsStatusNotNullConstraintValidator
-    implements ConstraintValidator<SteuerdatenVeranlagungStatusNotNullConstraint, GesuchFormular> {
+    implements ConstraintValidator<SteuerdatenVeranlagungsStatusNotNullConstraint, GesuchFormular> {
     private String property;
 
     @Override
-    public void initialize(SteuerdatenVeranlagungStatusNotNullConstraint constraintAnnotation) {
+    public void initialize(SteuerdatenVeranlagungsStatusNotNullConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
     }
 
