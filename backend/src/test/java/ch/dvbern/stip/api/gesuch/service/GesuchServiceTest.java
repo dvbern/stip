@@ -1087,6 +1087,10 @@ class GesuchServiceTest {
         tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(null);
 
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(1990);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus("test");
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -1096,6 +1100,13 @@ class GesuchServiceTest {
         assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuerjahr(),
             Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
+        );
+        assertThat(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getEinnahmenKosten()
+                .getVeranlagungsStatus(),
+            Matchers.nullValue()
         );
         assertThat(
             gesuchUpdateDto.getGesuchTrancheToWorkWith()
