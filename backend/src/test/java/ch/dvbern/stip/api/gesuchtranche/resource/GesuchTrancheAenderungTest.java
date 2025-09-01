@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
@@ -24,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -37,6 +39,11 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
@@ -334,7 +341,14 @@ class GesuchTrancheAenderungTest {
     @TestAsGesuchsteller
     @Order(15)
     void aenderungEinreichenTest() {
-        createAenderungsanstrag()
+        gesuchTrancheApiSpec.createAenderungsantrag()
+            .gesuchIdPath(gesuch.getId())
+            .body(
+                new CreateAenderungsantragRequestDtoSpec().comment("aenderung1")
+                    .start(gesuch.getGesuchTrancheToWorkWith().getGueltigAb())
+                    .end(gesuch.getGesuchTrancheToWorkWith().getGueltigBis())
+            )
+            .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
@@ -355,12 +369,108 @@ class GesuchTrancheAenderungTest {
             .get()
             .getId();
 
+        final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+
+        final var aenderung = gesuchApiSpec.getGesuchGS()
+            .gesuchTrancheIdPath(aenderungId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
+        final var tranche = fullGesuch.getGesuchTrancheToWorkWith();
+        tranche.setId(aenderungId);
+        final var formular = tranche.getGesuchFormular();
+        formular.getPersonInAusbildung()
+            .getAdresse()
+            .setId(
+                aenderung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId()
+            );
+        formular.getPartner()
+            .getAdresse()
+            .setId(
+                aenderung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId()
+            );
+
+        formular.getElterns()
+            .forEach(
+                eltern -> eltern.getAdresse()
+                    .setId(
+                        aenderung.getGesuchTrancheToWorkWith()
+                            .getGesuchFormular()
+                            .getElterns()
+                            .get(0)
+                            .getAdresse()
+                            .getId()
+                    )
+            );
+
+        tranche.getGesuchFormular()
+            .getEinnahmenKosten()
+            .setNettoerwerbseinkommen(
+                fullGesuch.getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getEinnahmenKosten()
+                    .getNettoerwerbseinkommen()
+                + 20
+            );
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(fullGesuch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        for (final var dokTyp : DokumentTypDtoSpec.values()) {
+            final var file = TestUtil.getTestPng();
+            TestUtil.uploadFile(dokumentApiSpec, aenderungId, dokTyp, file);
+        }
+
         gesuchTrancheApiSpec.aenderungEinreichen()
             .aenderungIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(16)
+    void gesuchDokumentAblehnen() {
+        final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(aenderungId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentDtoSpec[].class);
+
+        for (final var gesuchDokument : gesuchDokuments) {
+            if (gesuchDokument.getStatus() == DokumentstatusDtoSpec.AUSSTEHEND) {
+                final var kommentarRequestDto = new GesuchDokumentAblehnenRequestDtoSpec();
+                final var kommentarDto = new GesuchDokumentKommentarDtoSpec();
+                kommentarDto.setKommentar("asdasd");
+                kommentarDto.setGesuchDokumentId(gesuchDokument.getId());
+                kommentarDto.setGesuchTrancheId(aenderungId);
+                kommentarRequestDto.setKommentar(kommentarDto);
+
+                dokumentApiSpec.gesuchDokumentAblehnen()
+                    .gesuchDokumentIdPath(gesuchDokument.getId())
+                    .body(kommentarRequestDto)
+                    .execute(TestUtil.PEEK_IF_ENV_SET)
+                    .then()
+                    .assertThat()
+                    .statusCode(Status.NO_CONTENT.getStatusCode());
+            }
+        }
     }
 
     @Test
@@ -396,6 +506,21 @@ class GesuchTrancheAenderungTest {
             .as(GesuchTrancheListDtoSpec.class);
 
         assertThat(gesuchtranchen.getAbgelehnteAenderungen().size()).isEqualTo(1);
+
+        final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(aenderungId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentDtoSpec[].class);
+
+        for (final var gesuchDokument : gesuchDokuments) {
+            assertThat(gesuchDokument.getStatus())
+                .isIn(List.of(DokumentstatusDtoSpec.AUSSTEHEND, DokumentstatusDtoSpec.AKZEPTIERT));
+        }
     }
     // todo KSTIP-KSTIP-1158: a Aenderung should be accepted/denied by an SB
 
