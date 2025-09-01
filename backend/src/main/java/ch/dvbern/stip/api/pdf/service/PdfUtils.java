@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.pdf.service;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.properties.AreaBreakType;
@@ -24,6 +27,12 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class PdfUtils {
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
+
+    public static String formatNumber(Number number) {
+        return NUMBER_FORMAT.format(number);
+    }
+
     public void makePageNumberEven(Document document) {
         if (document.getPdfDocument().getNumberOfPages() % 2 == 0) {
             return;

@@ -30,6 +30,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
+import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -84,6 +86,7 @@ public class PdfService {
     private static final String FONT_PATH = "/fonts/arial.ttf";
     private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
     private static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
+    private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
 
     private static final String LOGO_PATH = "/images/bern_logo.svg";
 
@@ -95,10 +98,9 @@ public class PdfService {
     private static final float FONT_SIZE_SMALL = 6.5f;
     private static final PageSize PAGE_SIZE = PageSize.A4;
 
-    private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
-
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final BerechnungsblattService berechnungsblattService;
+    private final BuchhaltungRepository buchhaltungRepository;
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
@@ -114,6 +116,14 @@ public class PdfService {
     ) {
         final PdfSection negativeVerfuegungSection =
             this::verfuegungOhneAnspruch;
+        return this.createPdf(verfuegung, negativeVerfuegungSection, true);
+    }
+
+    public ByteArrayOutputStream createVerfuegungMitAnspruchPdf(
+        final Verfuegung verfuegung
+    ) {
+        final PdfSection negativeVerfuegungSection =
+            this::verfuegungMitAnspruch;
         return this.createPdf(verfuegung, negativeVerfuegungSection, true);
     }
 
@@ -552,7 +562,7 @@ public class PdfService {
         final Document document,
         final float leftMargin,
         final TL translator
-    ) throws IOException {
+    ) {
         final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
             .getGesuchTranchen()
             .stream()
@@ -673,6 +683,255 @@ public class PdfService {
         );
     }
 
+    private void verfuegungMitAnspruch(
+        final Verfuegung verfuegung,
+        final Document document,
+        final float leftMargin,
+        final TL translator
+    ) {
+        final var buchhaltungs =
+            buchhaltungRepository.findAllForFallId(verfuegung.getGesuch().getAusbildung().getFall().getId())
+                .sorted(Comparator.comparing(AbstractEntity::getTimestampErstellt).reversed())
+                .toList();
+
+        final var lastBuchhaltung = buchhaltungs.stream().findFirst().orElseThrow();
+        final var secondLastBuchhaltung = buchhaltungs.stream().skip(1).findFirst().orElse(null);
+
+        final boolean isAenderung = verfuegung.getGesuch().getVerfuegungs().size() > 1;
+        final boolean isRueckforderung =
+            secondLastBuchhaltung != null && secondLastBuchhaltung.getSaldo() < 0;
+
+        final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
+            .getGesuchTranchen()
+            .stream()
+            .map(GesuchTranche::getGueltigkeit)
+            .min(Comparator.comparing(DateRange::getGueltigAb))
+            .get()
+            .getGueltigAb();
+
+        final LocalDate ausbildungsjahrBis = verfuegung.getGesuch()
+            .getGesuchTranchen()
+            .stream()
+            .map(GesuchTranche::getGueltigkeit)
+            .max(Comparator.comparing(DateRange::getGueltigBis))
+            .get()
+            .getGueltigBis();
+
+        final String ausbildungsjahr = String.format(
+            " %d/%d",
+            ausbildungsjahrVon.getYear(),
+            ausbildungsjahrBis.getYear()
+        );
+
+        final String fullAusbildungsjahr = String.format(
+            " (%s - %s)",
+            DateUtil.formatDate(ausbildungsjahrVon),
+            DateUtil.formatDate(ausbildungsjahrBis)
+        );
+
+        String fullTitle = ausbildungsjahr + fullAusbildungsjahr;
+
+        if (isRueckforderung) {
+            fullTitle =
+                fullTitle.concat("- ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.rueckforderung"));
+        } else if (isAenderung) {
+            fullTitle =
+                fullTitle.concat(" - ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.aenderung"));
+        }
+
+        document.add(
+            createParagraph(
+                pdfFontBold,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegung.ausbildungsjahr"
+                ),
+                fullTitle
+            )
+        );
+
+        if (isAenderung) {
+            final LocalDate datumLetzteVerfuegung = verfuegung.getGesuch()
+                .getVerfuegungs()
+                .stream()
+                .sorted(Comparator.comparing(Verfuegung::getTimestampErstellt).reversed())
+                .skip(1)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No previous Verfuegung available"))
+                .getTimestampErstellt()
+                .toLocalDate();
+
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate(
+                        "stip.pdf.verfuegungMitAnspruch.textBlock.aenderung.eins",
+                        "DATUM_LETZTE_VERFUEGUNG",
+                        DateUtil.formatDate(datumLetzteVerfuegung)
+                        // todo: link
+                    )
+                )
+            );
+        } else {
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate(
+                        "stip.pdf.verfuegungMitAnspruch.textBlock.standard.eins"
+                    )
+                )
+            );
+        }
+
+        final float[] columnWidths = { 50, 50 };
+        final Table calculationTable = createTable(columnWidths, leftMargin);
+        calculationTable.setMarginTop(SPACING_MEDIUM);
+        calculationTable.setMarginBottom(SPACING_MEDIUM);
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.anspruch")
+            ).setPadding(0)
+        );
+
+        final int anspruch = lastBuchhaltung.getStipendium();
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                PdfUtils.formatNumber(anspruch)
+            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+        );
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.ausbezahlt")
+            ).setPadding(0)
+        );
+
+        final int ausbezahlt = anspruch - lastBuchhaltung.getSaldo();
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                PdfUtils.formatNumber(ausbezahlt)
+            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+        );
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.rueckforderungen")
+            ).setPadding(0)
+        );
+
+        final int rueckforderungen = isRueckforderung ? secondLastBuchhaltung.getSaldo() : 0;
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                PdfUtils.formatNumber(rueckforderungen)
+            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+        );
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total")
+            ).setPadding(0)
+        );
+
+        final int total = anspruch - rueckforderungen;
+
+        calculationTable.addCell(
+            createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                PdfUtils.formatNumber(total)
+            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+        );
+
+        document.add(calculationTable);
+
+        if (total > 0) {
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.pdf.verfuegungMitAnspruch.textBlock.rueckforderung.eins")
+                )
+            );
+        } else {
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    // todo: auszahlung
+                    translator.translate("stip.pdf.verfuegungMitAnspruch.textBlock.standard.zwei")
+                )
+            );
+            document.add(
+                createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.pdf.verfuegungMitAnspruch.textBlock.standard.drei")
+                )
+            );
+        }
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.textBlock.standard.vier")
+            )
+        );
+
+        document.add(
+            createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.textBlock.standard.fuenf")
+            )
+        );
+
+    }
+
     private void addCopieAnParagraph(
         final Gesuch gesuch,
         final TL translator,
@@ -716,7 +975,7 @@ public class PdfService {
         final Document document,
         final float leftMargin,
         final TL translator
-    ) throws IOException {
+    ) {
         final var gesuch = verfuegung.getGesuch();
 
         final Locale locale = gesuch
@@ -868,7 +1127,7 @@ public class PdfService {
     }
 
     @FunctionalInterface
-    private static interface PdfSection {
+    private interface PdfSection {
         void render(Verfuegung verfuegung, Document document, float leftMargin, TL translator)
         throws IOException;
     }
