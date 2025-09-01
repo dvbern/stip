@@ -17,13 +17,12 @@
 
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import java.util.Objects;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
 
@@ -49,10 +48,6 @@ public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
             gesuchFormular.getTranche() == null ||
             gesuchFormular.getTranche().getGesuch() == null
         ) {
-            return true;
-        }
-
-        if (!gesuchFormular.getTranche().getGesuch().getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)) {
             return true;
         }
 
