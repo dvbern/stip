@@ -6317,13 +6317,10 @@ components:
           type: string
     NeskoGetSteuerdatenRequest:
       required:
-        - token
         - steuerdatenTyp
         - steuerjahr
       type: object
       properties:
-        token:
-          type: string
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuerjahr:

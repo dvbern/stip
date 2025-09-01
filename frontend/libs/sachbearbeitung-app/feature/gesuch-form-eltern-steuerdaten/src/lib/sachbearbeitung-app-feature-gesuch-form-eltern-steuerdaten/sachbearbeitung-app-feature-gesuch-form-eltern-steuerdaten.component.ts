@@ -203,15 +203,12 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       .subscribe((result) => {
         if (!result) return;
 
-        const { token, steuerjahr } = result;
-        if (token) {
-          this.steuerdatenStore.updateSteuerdatenFromNesko$({
-            gesuchTrancheId,
-            steuerdatenTyp,
-            steuerjahr,
-            token,
-          });
-        }
+        const { steuerjahr } = result;
+        this.steuerdatenStore.updateSteuerdatenFromNesko$({
+          gesuchTrancheId,
+          steuerdatenTyp,
+          steuerjahr,
+        });
       });
   }
 
