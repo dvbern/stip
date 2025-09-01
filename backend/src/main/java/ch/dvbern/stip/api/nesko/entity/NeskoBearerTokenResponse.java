@@ -18,11 +18,17 @@
 package ch.dvbern.stip.api.nesko.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 public class NeskoBearerTokenResponse {
-    String refresh_token;
-    String access_token;
+    @JsonProperty("refresh_token")
+    String refreshToken;
+
+    @JsonProperty("access_token")
+    String accessToken;
 }

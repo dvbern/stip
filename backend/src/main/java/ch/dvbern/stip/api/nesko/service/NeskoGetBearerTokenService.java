@@ -42,6 +42,6 @@ public class NeskoGetBearerTokenService {
         return neskoGetBearerTokenRequestService.post(
             neskoGetBearerTokenRequestService.getAuthorization(username, password),
             neskoGetBearerTokenRequestService.getGrantType()
-        ).getAccess_token();
+        ).getAccessToken();
     }
 }

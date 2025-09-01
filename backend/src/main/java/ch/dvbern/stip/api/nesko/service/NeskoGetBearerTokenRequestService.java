@@ -32,8 +32,7 @@ public interface NeskoGetBearerTokenRequestService {
     default String getAuthorization(final String username, final String password) {
         final String userPassword = String.format("%s:%s", username, password);
 
-        return "Basic " +
-        Base64.getEncoder().encodeToString(userPassword.getBytes());
+        return "Basic " + Base64.getEncoder().encodeToString(userPassword.getBytes());
     }
 
     default String getGrantType() {
