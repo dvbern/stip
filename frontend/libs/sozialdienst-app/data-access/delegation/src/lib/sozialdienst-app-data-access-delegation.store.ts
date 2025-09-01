@@ -79,39 +79,48 @@ export class DelegationStore extends signalStore(
     ),
   );
 
-  delegierterMitarbeiterAendern$ =
-    rxMethod<DelegierenServiceDelegierterMitarbeiterAendernRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, (state) => ({
-            delegierenState: cachedPending(state.delegierenState),
-          }));
-        }),
-        switchMap((params) =>
-          this.delegierenService.delegierterMitarbeiterAendern$(params).pipe(
-            handleApiResponse((response) =>
-              patchState(this, {
-                delegierenState: response,
-              }),
-            ),
-          ),
-        ),
-      ),
-    );
-
-  delegierungAblehnen$ = rxMethod<{ delegierungId: string }>(
+  delegierterMitarbeiterAendern$ = rxMethod<{
+    req: DelegierenServiceDelegierterMitarbeiterAendernRequestParams;
+    onSuccess: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           delegierenState: cachedPending(state.delegierenState),
         }));
       }),
-      switchMap((params) =>
-        this.delegierenService.delegierungAblehnen$(params).pipe(
-          handleApiResponse((response) =>
-            patchState(this, {
-              delegierenState: response,
-            }),
+      switchMap(({ req, onSuccess }) =>
+        this.delegierenService.delegierterMitarbeiterAendern$(req).pipe(
+          handleApiResponse(
+            (response) =>
+              patchState(this, {
+                delegierenState: response,
+              }),
+            { onSuccess },
+          ),
+        ),
+      ),
+    ),
+  );
+
+  delegierungAblehnen$ = rxMethod<{
+    delegierungId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          delegierenState: cachedPending(state.delegierenState),
+        }));
+      }),
+      switchMap(({ delegierungId, onSuccess }) =>
+        this.delegierenService.delegierungAblehnen$({ delegierungId }).pipe(
+          handleApiResponse(
+            (response) =>
+              patchState(this, {
+                delegierenState: response,
+              }),
+            { onSuccess },
           ),
         ),
       ),

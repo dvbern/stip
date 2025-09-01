@@ -38,7 +38,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { isPending, isSuccess } from '@dv/shared/util/remote-data';
+import { isPending } from '@dv/shared/util/remote-data';
 import {
   MAX_AGE_GESUCHSSTELLER,
   MEDIUM_AGE_GESUCHSSTELLER,
@@ -177,15 +177,6 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
         this.dialogRef.disableClose = false;
       }
     });
-
-    effect(() => {
-      const state = this.delegationStore.delegierenState();
-
-      if (!this.zuweisungSozMitarbeiterForm.pristine && isSuccess(state)) {
-        this.dialogRef.disableClose = false;
-        this.dialogRef.close(true);
-      }
-    });
   }
 
   ngOnInit() {
@@ -226,10 +217,15 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
 
     if (mitarbeiterId && delegierungId) {
       this.delegationStore.delegierterMitarbeiterAendern$({
-        delegierterMitarbeiterAendern: {
-          mitarbeiterId,
+        req: {
+          delegierterMitarbeiterAendern: {
+            mitarbeiterId,
+          },
+          delegierungId,
         },
-        delegierungId,
+        onSuccess: () => {
+          this.dialogRef.close(true);
+        },
       });
     }
   }
@@ -240,6 +236,9 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
     if (delegierungId) {
       this.delegationStore.delegierungAblehnen$({
         delegierungId,
+        onSuccess: () => {
+          this.dialogRef.close(true);
+        },
       });
     }
   }

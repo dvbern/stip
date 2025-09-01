@@ -153,15 +153,17 @@
           {{ 'shared.cancel' | transloco }}
         </button>
 
-        <button
-          *dvHasRoles="['V0_Sozialdienst-Admin']"
-          type="button"
-          data-testid="dialog-sozAdmin-delegierung-reject"
-          class="btn btn-danger"
-          (click)="rejectDelegation()"
-        >
-          {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
-        </button>
+        @if (!dialogData.fall.delegierung.delegierungAngenommen) {
+          <button
+            *dvHasRoles="['V0_Sozialdienst-Admin']"
+            type="button"
+            data-testid="dialog-sozAdmin-delegierung-reject"
+            class="btn btn-danger"
+            (click)="rejectDelegation()"
+          >
+            {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
+          </button>
+        }
 
         <dv-shared-ui-form-save
           [disabled]="zuweisungSozMitarbeiterForm.pristine"
