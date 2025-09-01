@@ -210,7 +210,7 @@ export class SozialdienstAppFeatureCockpitComponent
     },
     {
       typ: 'OFFEN',
-      icon: 'fiber_new',
+      icon: 'approval_delegation',
       roles: ['V0_Sozialdienst-Admin'],
     },
   ];

@@ -273,7 +273,6 @@
                   </td>
                 </ng-container>
 
-                <!-- todo: might not be necessary -->
                 @if (permissionStore.rolesMapSig()['V0_Sozialdienst-Admin']) {
                   <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
@@ -322,7 +321,14 @@
                       class="dv-icon-button dv-icon-button-md text-info"
                       (click)="openDialog(fall); $event.stopPropagation()"
                     >
-                      <span class="material-symbols-rounded"> info </span>
+                      @if (
+                        permissionStore.rolesMapSig()['V0_Sozialdienst-Admin'] &&
+                        !fall.delegierung.delegierungAngenommen
+                      ) {
+                        <span class="material-symbols-rounded"> approval_delegation</span>
+                      } @else {
+                        <span class="material-symbols-rounded"> info </span>
+                      }
                     </button>
                   </td>
                 </ng-container>
