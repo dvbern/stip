@@ -440,7 +440,7 @@
           </div>
         }
 
-        <!-- veranlagungsStatus 0 - 99 -->
+        <!-- veranlagungsStatus -->
         @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsStatus)) {
           <div class="row g-4">
             <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
@@ -455,9 +455,6 @@
               <mat-hint *dvZuvorHint="view.formChanges?.veranlagungsStatus"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ t('shared.form.error.required') }}
-              </mat-error>
-              <mat-error *dvSharedUiFormMessageError="'range'">
-                {{ t('shared.form.error.range', { min: 0, max: 99 }) }}
               </mat-error>
             </mat-form-field>
           </div>
