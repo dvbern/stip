@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -38,8 +39,7 @@ public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
         if (
-            gesuchFormular.getSteuerdaten() == null ||
-            gesuchFormular.getSteuerdaten().isEmpty()
+            gesuchFormular.getEinnahmenKosten() == null
         ) {
             return true;
         }
@@ -49,6 +49,10 @@ public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
             gesuchFormular.getTranche() == null ||
             gesuchFormular.getTranche().getGesuch() == null
         ) {
+            return true;
+        }
+
+        if (!gesuchFormular.getTranche().getGesuch().getGesuchStatus().equals(Gesuchstatus.IN_BEARBEITUNG_SB)) {
             return true;
         }
 

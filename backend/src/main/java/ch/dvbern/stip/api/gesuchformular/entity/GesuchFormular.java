@@ -171,8 +171,7 @@ import org.hibernate.envers.Audited;
 )
 @EinnahmenKostenStatusNotNullConstraint(
     groups = {
-        Default.class,
-        EinnahmenKostenPageValidation.class
+        GesuchNachInBearbeitungSBValidationGroup.class
     }, property = "einnahmenKosten"
 )
 @AusbildungskostenStufeRequiredConstraint(
