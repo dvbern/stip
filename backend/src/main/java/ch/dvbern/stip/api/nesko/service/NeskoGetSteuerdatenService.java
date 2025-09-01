@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdat
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.InfrastructureFault;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.InvalidArgumentsFault;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.PermissionDeniedFault;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.StipendienAuskunftPort;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.StipendienAuskunftService;
 import ch.dvbern.stip.api.nesko.type.NeskoSteuerdatenError;
 import jakarta.enterprise.context.RequestScoped;
@@ -48,7 +49,32 @@ public class NeskoGetSteuerdatenService {
     @ConfigProperty(name = "kstip.nesko-wsdl-url")
     String wsdlLocation;
 
-    public GetSteuerdatenResponse getSteuerdatenResponse(String token, String ssvn, Integer steuerjahr) {
+    private final NeskoAccessLoggerService neskoAccessLoggerService;
+
+    public GetSteuerdatenResponse getSteuerdatenResponse(
+        String token,
+        String ssvn,
+        Integer steuerjahr,
+        final String gesuchNummer,
+        final String fallNr
+    ) {
+        var request = new GetSteuerdaten();
+        request.setSteuerjahr(steuerjahr);
+        request.setSozialversicherungsnummer(Long.valueOf(ssvn.replace(".", "")));
+        try {
+            final var port = getStipendianAuskunftPort(token);
+            neskoAccessLoggerService.logAccess(gesuchNummer, fallNr, ssvn);
+            final var steuerdaten = port.getSteuerdaten(request);
+            return steuerdaten;
+        } catch (
+        SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
+        ) {
+            NeskoSteuerdatenError.handleException(e);
+            throw new InternalServerErrorException(e);
+        }
+    }
+
+    public StipendienAuskunftPort getStipendianAuskunftPort(final String token) {
         StipendienAuskunftService stipendienAuskunftService = null;
         try {
             stipendienAuskunftService = new StipendienAuskunftService(new URL(wsdlLocation));
@@ -61,18 +87,6 @@ public class NeskoGetSteuerdatenService {
         var port = stipendienAuskunftService.getStipendienAuskunft();
         ((BindingProvider) port).getRequestContext()
             .put(MessageContext.HTTP_REQUEST_HEADERS, headers);
-
-        var request = new GetSteuerdaten();
-        request.setSteuerjahr(steuerjahr);
-        request.setSozialversicherungsnummer(Long.valueOf(ssvn.replace(".", "")));
-
-        try {
-            return port.getSteuerdaten(request);
-        } catch (
-        SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
-        ) {
-            NeskoSteuerdatenError.handleException(e);
-            throw new InternalServerErrorException(e);
-        }
+        return port;
     }
 }

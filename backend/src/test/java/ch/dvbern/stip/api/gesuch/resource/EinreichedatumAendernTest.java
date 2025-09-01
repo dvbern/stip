@@ -159,11 +159,16 @@ class EinreichedatumAendernTest {
     @TestAsSachbearbeiter
     @Order(4)
     void einreichedatumAendern() {
+        var newEinreichedatum = gesuch.getGesuchsperiode().getGesuchsperiodeStart().plusMonths(2);
+        if (newEinreichedatum.equals(oldEinreichedatum)) {
+            newEinreichedatum = newEinreichedatum.plusDays(1);
+        }
+
         gesuch = gesuchApiSpec.einreichedatumManuellAendern()
             .gesuchIdPath(gesuch.getId())
             .body(
                 new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(oldEinreichedatum.minusMonths(2))
+                    .newEinreichedatum(newEinreichedatum)
                     .text("Test notizen Text")
                     .betreff("Test betreff Text")
             )
