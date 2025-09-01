@@ -57,7 +57,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenSteuerjahrInPastOrCurrentConstraint;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenTabRequiredConstraint;
-import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenVeranlagungStatusNotNullConstraint;
+import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenVeranlagungsStatusNotNullConstraint;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
@@ -163,7 +163,7 @@ import org.hibernate.envers.Audited;
         SteuerdatenPageValidation.class
     }, property = "steuerdaten"
 )
-@SteuerdatenVeranlagungStatusNotNullConstraint(
+@SteuerdatenVeranlagungsStatusNotNullConstraint(
     groups = {
         Default.class,
         SteuerdatenPageValidation.class
