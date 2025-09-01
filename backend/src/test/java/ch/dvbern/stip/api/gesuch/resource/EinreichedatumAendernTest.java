@@ -163,7 +163,7 @@ class EinreichedatumAendernTest {
             .gesuchIdPath(gesuch.getId())
             .body(
                 new EinreichedatumAendernRequestDtoSpec()
-                    .newEinreichedatum(gesuch.getGesuchsperiode().getGesuchsperiodeStart().plusMonths(2))
+                    .newEinreichedatum(oldEinreichedatum.minusMonths(2))
                     .text("Test notizen Text")
                     .betreff("Test betreff Text")
             )

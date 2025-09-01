@@ -494,6 +494,7 @@ public class GesuchTrancheService {
         for (final var gesuchDokument : lastFreigegebenTranche.getGesuchDokuments()) {
             final var existingDokument = gesuchDokumentRepository.findById(gesuchDokument.getId());
             if (existingDokument == null) {
+                gesuchDokument.getDokumente().forEach(dokument -> dokument.setId(null));
                 gesuchDokumentRepository.persist((GesuchDokument) gesuchDokument.setId(null));
             } else if (
                 gesuchDokument.getStatus() != existingDokument.getStatus() &&
