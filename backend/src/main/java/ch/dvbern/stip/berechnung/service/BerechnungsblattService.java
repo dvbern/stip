@@ -71,7 +71,7 @@ public class BerechnungsblattService {
     private static final int FONT_SIZE = 10;
     private static final int FONT_SIZE_SMALL = 8;
 
-    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(new Locale("de", "CH"));
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
 
     private static final PageSize PAGE_SIZE = PageSize.A4;
 
