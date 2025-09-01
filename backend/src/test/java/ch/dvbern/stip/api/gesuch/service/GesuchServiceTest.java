@@ -979,7 +979,7 @@ class GesuchServiceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     void validateEinreichenValid() {
         EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
         final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
@@ -1000,7 +1000,9 @@ class GesuchServiceTest {
         tranche.setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
                 .map(x -> {
-                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche);
+                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x)
+                        .setGesuchTranche(tranche)
+                        .setStatus(GesuchDokumentStatus.AKZEPTIERT);
                     gesuchDokument.addDokument(new Dokument());
                     return gesuchDokument;
                 })
