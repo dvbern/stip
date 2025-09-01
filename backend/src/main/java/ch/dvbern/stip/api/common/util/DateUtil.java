@@ -22,8 +22,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import jakarta.ws.rs.NotFoundException;
 import lombok.experimental.UtilityClass;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
@@ -161,4 +164,23 @@ public class DateUtil {
         return left.isBefore(date) && right.isAfter(date);
     }
 
+    public int getActualDuration(final Gesuch gesuch) {
+        final var lastTranche = gesuch.getTranchenTranchen()
+            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
+            .orElseThrow(NotFoundException::new);
+
+        final var roundedEingereicht = roundToStartOrEnd(
+            gesuch.getEinreichedatum(),
+            14,
+            true,
+            false
+        );
+
+        return getMonthsBetween(roundedEingereicht, lastTranche.getGueltigkeit().getGueltigBis());
+    }
+
+    public boolean wasEingereichtAfterDueDate(final Gesuch gesuch) {
+        final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
+        return gesuch.getEinreichedatum().isAfter(einreichefrist);
+    }
 }

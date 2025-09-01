@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -40,15 +41,13 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @Slf4j
 class BerechnungServiceTest {
-    private final BerechnungService berechnungService;
-
     @Test
     void wasEingereichtAfterDueDateFalseTest() {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
         gesuch.getGesuchsperiode().setEinreichefristNormal(LocalDate.now());
 
         final var eingereicht = LocalDate.now();
-        final var wasEingereichtAfterDueDate = berechnungService.wasEingereichtAfterDueDate(gesuch, eingereicht);
+        final var wasEingereichtAfterDueDate = DateUtil.wasEingereichtAfterDueDate(gesuch);
         assertThat(wasEingereichtAfterDueDate, is(false));
     }
 
@@ -58,7 +57,7 @@ class BerechnungServiceTest {
         gesuch.getGesuchsperiode().setEinreichefristNormal(LocalDate.now());
 
         final var eingereicht = LocalDate.now().plusDays(1);
-        final var wasEingereichtAfterDueDate = berechnungService.wasEingereichtAfterDueDate(gesuch, eingereicht);
+        final var wasEingereichtAfterDueDate = DateUtil.wasEingereichtAfterDueDate(gesuch);
         assertThat(wasEingereichtAfterDueDate, is(true));
     }
 
@@ -116,7 +115,7 @@ class BerechnungServiceTest {
         );
         final var eingereicht = LocalDate.now().withDayOfMonth(1);
 
-        final var monthsBetween = berechnungService.getActualDuration(gesuch, eingereicht);
+        final var monthsBetween = DateUtil.getActualDuration(gesuch);
         assertThat(monthsBetween, equalTo(monthsToBeBetween));
     }
 
@@ -174,7 +173,7 @@ class BerechnungServiceTest {
         );
         final var eingereicht = LocalDate.now().withDayOfMonth(27);
 
-        final var monthsBetween = berechnungService.getActualDuration(gesuch, eingereicht);
+        final var monthsBetween = DateUtil.getActualDuration(gesuch);
         assertThat(monthsBetween, equalTo(monthsToBeBetween - 1));
     }
 

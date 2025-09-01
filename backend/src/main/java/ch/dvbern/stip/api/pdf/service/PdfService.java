@@ -44,6 +44,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
@@ -101,6 +103,7 @@ public class PdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final BerechnungsblattService berechnungsblattService;
     private final BuchhaltungRepository buchhaltungRepository;
+    private final TenantConfigService tenantConfigService;
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
@@ -689,17 +692,13 @@ public class PdfService {
         final float leftMargin,
         final TL translator
     ) {
-        final var buchhaltungs =
+        final var relevantBuchhaltung =
             buchhaltungRepository.findAllForFallId(verfuegung.getGesuch().getAusbildung().getFall().getId())
-                .sorted(Comparator.comparing(AbstractEntity::getTimestampErstellt).reversed())
-                .toList();
-
-        final var lastBuchhaltung = buchhaltungs.stream().findFirst().orElseThrow();
-        final var secondLastBuchhaltung = buchhaltungs.stream().skip(1).findFirst().orElse(null);
-
+                .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
+                .orElseThrow();
         final boolean isAenderung = verfuegung.getGesuch().getVerfuegungs().size() > 1;
         final boolean isRueckforderung =
-            secondLastBuchhaltung != null && secondLastBuchhaltung.getSaldo() < 0;
+            verfuegung.getGesuch().getVerfuegungs().size() == 1 && relevantBuchhaltung.getSaldo() < 0;
 
         final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
             .getGesuchTranchen()
@@ -733,7 +732,7 @@ public class PdfService {
 
         if (isRueckforderung) {
             fullTitle =
-                fullTitle.concat("- ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.rueckforderung"));
+                fullTitle.concat(" - ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.rueckforderung"));
         } else if (isAenderung) {
             fullTitle =
                 fullTitle.concat(" - ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.aenderung"));
@@ -770,19 +769,25 @@ public class PdfService {
                     translator.translate(
                         "stip.pdf.verfuegungMitAnspruch.textBlock.aenderung.eins",
                         "DATUM_LETZTE_VERFUEGUNG",
-                        DateUtil.formatDate(datumLetzteVerfuegung)
-                        // todo: link
+                        DateUtil.formatDate(datumLetzteVerfuegung),
+                        "LINK_TO_DASHBOARD",
+                        tenantConfigService.getFrontendURI()
                     )
                 )
             );
         } else {
+            final String einreichedatum =
+                DateUtil.formatDate(Objects.requireNonNull(verfuegung.getGesuch().getEinreichedatum()));
+
             document.add(
                 createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
                     translator.translate(
-                        "stip.pdf.verfuegungMitAnspruch.textBlock.standard.eins"
+                        "stip.pdf.verfuegungMitAnspruch.textBlock.standard.eins",
+                        "DATUM",
+                        einreichedatum
                     )
                 )
             );
@@ -792,6 +797,11 @@ public class PdfService {
         final Table calculationTable = createTable(columnWidths, leftMargin);
         calculationTable.setMarginTop(SPACING_MEDIUM);
         calculationTable.setMarginBottom(SPACING_MEDIUM);
+        calculationTable.setPaddingRight(SPACING_MEDIUM);
+
+        final var actualDuration = DateUtil.wasEingereichtAfterDueDate(verfuegung.getGesuch())
+            ? DateUtil.getActualDuration(verfuegung.getGesuch())
+            : 12;
 
         calculationTable.addCell(
             createCell(
@@ -799,11 +809,15 @@ public class PdfService {
                 FONT_SIZE_BIG,
                 1,
                 1,
-                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.anspruch")
-            ).setPadding(0)
+                translator.translate(
+                    "stip.pdf.verfuegungMitAnspruch.berechnung.anspruch",
+                    "X_MONATE",
+                    actualDuration
+                )
+            ).setPadding(1)
         );
 
-        final int anspruch = lastBuchhaltung.getStipendium();
+        final int anspruch = relevantBuchhaltung.getStipendium();
 
         calculationTable.addCell(
             createCell(
@@ -812,7 +826,7 @@ public class PdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(anspruch)
-            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -822,10 +836,10 @@ public class PdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.ausbezahlt")
-            ).setPadding(0)
+            ).setPadding(1)
         );
 
-        final int ausbezahlt = anspruch - lastBuchhaltung.getSaldo();
+        final int ausbezahlt = isRueckforderung ? 0 : anspruch - relevantBuchhaltung.getSaldo();
 
         calculationTable.addCell(
             createCell(
@@ -834,7 +848,7 @@ public class PdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(ausbezahlt)
-            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -844,10 +858,11 @@ public class PdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.rueckforderungen")
-            ).setPadding(0)
+            ).setPadding(1)
         );
 
-        final int rueckforderungen = isRueckforderung ? secondLastBuchhaltung.getSaldo() : 0;
+        final int rueckforderungen =
+            isRueckforderung ? relevantBuchhaltung.getStipendium() - relevantBuchhaltung.getSaldo() : 0;
 
         calculationTable.addCell(
             createCell(
@@ -856,7 +871,7 @@ public class PdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(rueckforderungen)
-            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -866,10 +881,10 @@ public class PdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total")
-            ).setPadding(0)
+            ).setPadding(1)
         );
 
-        final int total = anspruch - rueckforderungen;
+        final int total = relevantBuchhaltung.getSaldo();
 
         calculationTable.addCell(
             createCell(
@@ -878,12 +893,12 @@ public class PdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(total)
-            ).setPadding(0).setTextAlignment(TextAlignment.RIGHT)
+            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
         document.add(calculationTable);
 
-        if (total > 0) {
+        if (total < 0) {
             document.add(
                 createParagraph(
                     pdfFont,
@@ -893,13 +908,38 @@ public class PdfService {
                 )
             );
         } else {
+
+            final var zahlungsverbindung =
+                verfuegung.getGesuch().getAusbildung().getFall().getRelevantZahlungsverbindung();
+            final var sprache = verfuegung.getGesuch()
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .getKorrespondenzSprache();
+            final var land = sprache.equals(Sprache.DEUTSCH) ? zahlungsverbindung.getAdresse().getLand().getDeKurzform()
+                : zahlungsverbindung.getAdresse().getLand().getFrKurzform();
+            final String auszahlung = String.format(
+                "%s %s, %s, %s %s, %s %s, %s",
+                zahlungsverbindung.getVorname(),
+                zahlungsverbindung.getNachname(),
+                zahlungsverbindung.getIban(),
+                zahlungsverbindung.getAdresse().getStrasse(),
+                zahlungsverbindung.getAdresse().getHausnummer(),
+                zahlungsverbindung.getAdresse().getPlz(),
+                zahlungsverbindung.getAdresse().getOrt(),
+                land
+            );
+
             document.add(
                 createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    // todo: auszahlung
-                    translator.translate("stip.pdf.verfuegungMitAnspruch.textBlock.standard.zwei")
+                    translator.translate(
+                        "stip.pdf.verfuegungMitAnspruch.textBlock.standard.zwei",
+                        "AUSZAHLUNG",
+                        auszahlung
+                    )
                 )
             );
             document.add(
