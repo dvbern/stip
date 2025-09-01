@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
@@ -69,18 +70,9 @@ public class ValidateUpdateLegalityUtil {
                 )
             )
         ) {
-            return updateLegalityNullableValue(existingValue, defaultValue);
+            return Optional.ofNullable(existingValue).orElse(defaultValue);
         }
 
-        return updateLegalityNullableValue(dtoValue, defaultValue);
-
-    }
-
-    private <T> T updateLegalityNullableValue(final T newValue, final T defaultValue) {
-        if (Objects.isNull(newValue)) {
-            return defaultValue;
-        }
-
-        return newValue;
+        return Optional.ofNullable(dtoValue).orElse(defaultValue);
     }
 }
