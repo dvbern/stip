@@ -46,13 +46,13 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @RequestScoped
 @RequiredArgsConstructor
 public class NeskoGetSteuerdatenService {
-    @ConfigProperty(name = "kstip.nesko-wsdl-url")
+    @ConfigProperty(name = "kstip.nesko.wsdl-url")
     String wsdlLocation;
 
+    private final NeskoGetBearerTokenService neskoGetBearerTokenService;
     private final NeskoAccessLoggerService neskoAccessLoggerService;
 
     public GetSteuerdatenResponse getSteuerdatenResponse(
-        String token,
         String ssvn,
         Integer steuerjahr,
         final String gesuchNummer,
@@ -62,10 +62,9 @@ public class NeskoGetSteuerdatenService {
         request.setSteuerjahr(steuerjahr);
         request.setSozialversicherungsnummer(Long.valueOf(ssvn.replace(".", "")));
         try {
-            final var port = getStipendianAuskunftPort(token);
+            final var port = getStipendianAuskunftPort(neskoGetBearerTokenService.getToken());
             neskoAccessLoggerService.logAccess(gesuchNummer, fallNr, ssvn);
-            final var steuerdaten = port.getSteuerdaten(request);
-            return steuerdaten;
+            return port.getSteuerdaten(request);
         } catch (
         SOAPFaultException | InvalidArgumentsFault | PermissionDeniedFault | InfrastructureFault | BusinessFault e
         ) {
@@ -83,7 +82,7 @@ public class NeskoGetSteuerdatenService {
         }
 
         Map<String, List<String>> headers = new HashMap<>();
-        headers.put("authorization", Collections.singletonList("Bearer " + token));
+        headers.put("authorization", Collections.singletonList("Bearer " + neskoGetBearerTokenService.getToken()));
         var port = stipendienAuskunftService.getStipendienAuskunft();
         ((BindingProvider) port).getRequestContext()
             .put(MessageContext.HTTP_REQUEST_HEADERS, headers);

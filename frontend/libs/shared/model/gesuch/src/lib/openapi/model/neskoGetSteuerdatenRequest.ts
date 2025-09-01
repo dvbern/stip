@@ -12,7 +12,6 @@
 import { SteuerdatenTyp } from './steuerdatenTyp';
 
 export interface NeskoGetSteuerdatenRequest { 
-    token: string;
     steuerdatenTyp: SteuerdatenTyp;
     steuerjahr: number;
 }
