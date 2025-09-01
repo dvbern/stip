@@ -92,13 +92,20 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         final var targetUser = sozialdienstBenutzerRepository.requireById(
             delegierterMitarbeiterAendernDto.getMitarbeiterId()
         );
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
 
         if (
             sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId())
             && sozialdienstService
                 .isBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId(), targetUser)
         ) {
-            return;
+            if (delegierung.getDelegierterMitarbeiter() == null) {
+                if (delegierung.getSozialdienst().isBenutzerAdmin(currentBenutzer)) {
+                    return;
+                }
+            } else {
+                return;
+            }
         }
 
         forbidden();
@@ -112,6 +119,7 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         if (
             sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId())
             && delegierung.getSozialdienst().isBenutzerAdmin(currentBenutzer)
+            && delegierung.getDelegierterMitarbeiter() == null
         ) {
             return;
         }

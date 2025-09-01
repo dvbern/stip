@@ -38,7 +38,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
@@ -79,13 +78,6 @@ public class DelegierenService {
     public void delegierterMitarbeiterAendern(final UUID delegierungId, final DelegierterMitarbeiterAendernDto dto) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
-
-        if (delegierung.getDelegierterMitarbeiter() == null) {
-            final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
-            if (!delegierung.getSozialdienst().isBenutzerAdmin(currentBenutzer)) {
-                throw new ForbiddenException();
-            }
-        }
 
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
     }
