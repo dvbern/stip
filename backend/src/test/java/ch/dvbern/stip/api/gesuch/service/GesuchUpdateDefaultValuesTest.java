@@ -96,16 +96,16 @@ class GesuchUpdateDefaultValuesTest {
 
     @Test
     @TestAsGesuchsteller
-    void testUpdateEinnahmeKostenVeranlagungscodeAsGS() {
+    void testUpdateEinnahmeKostenVeranlagungscodeAsGSShouldNotBePossible() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
+            .getEinnahmenKosten();
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(null);
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang());

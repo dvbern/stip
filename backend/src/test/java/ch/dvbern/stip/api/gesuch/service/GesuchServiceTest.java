@@ -1016,6 +1016,8 @@ class GesuchServiceTest {
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
+        tranche.getGesuchFormular().getSteuerdaten().stream().toList().get(0).setVeranlagungsStatus("test");
+
         var zahlungsverbindung = new Zahlungsverbindung();
         zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         zahlungsverbindung.setAdresse(tranche.getGesuchFormular().getPersonInAusbildung().getAdresse());
