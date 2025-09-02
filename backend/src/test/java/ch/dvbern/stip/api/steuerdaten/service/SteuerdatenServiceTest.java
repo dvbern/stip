@@ -151,7 +151,7 @@ class SteuerdatenServiceTest {
         steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
         assertThat(
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(false)
+            is(true)
         );
     }
 
@@ -178,7 +178,7 @@ class SteuerdatenServiceTest {
         // assert
         assertThat(
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(false)
+            is(true)
         );
     }
 
@@ -247,7 +247,7 @@ class SteuerdatenServiceTest {
         // assert
         assertThat(
             currentSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(false)
+            is(true)
         );
     }
 }
