@@ -17,30 +17,7 @@
 
 package ch.dvbern.stip.berechnung.service.v1;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-import lombok.experimental.UtilityClass;
-
-@UtilityClass
-public class CalculatorUtilV1 {
-    public <T> Function<T, Integer> mapAndReturn(
-        final BiConsumer<T, Integer> setter,
-        final Integer value
-    ) {
-        return (result) -> {
-            setter.accept(result, value);
-            return value;
-        };
-    }
-
-    public <T> int applyAndSum(
-        final Stream<Function<T, Integer>> toApply,
-        final T result
-    ) {
-        return toApply.map(applier -> applier.apply(result))
-            .mapToInt(Integer::intValue)
-            .sum();
-    }
+@FunctionalInterface
+public interface BiConsumerAndIntegerProducer<T> {
+    int apply(final T t, final Integer u);
 }

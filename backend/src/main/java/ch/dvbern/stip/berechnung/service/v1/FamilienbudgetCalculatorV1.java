@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputFamilienbudgetV1;
@@ -72,7 +73,7 @@ public class FamilienbudgetCalculatorV1 {
             mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson2, elternteil.getEssenskostenPerson2())
         );
 
-        final var ausgaben = applyAndSum(toApply, result, elternteil);
+        final var ausgaben = applyAndSum(toApply, result);
         result.setAusgabenFamilienbudget(ausgaben);
     }
 
@@ -134,11 +135,9 @@ public class FamilienbudgetCalculatorV1 {
             );
         }
 
-        final var summand = applyAndSum(Stream.concat(summands, conditionalSummands).toList(), result, elternteil);
-        final var subtrahend =
-            applyAndSum(Stream.concat(subtrahends, conditionalSubtrahends).toList(), result, elternteil);
-        final var vermoegen =
-            applyAndSum(Stream.concat(conditionalSummands, conditionalSubtrahends).toList(), result, elternteil);
+        final var summand = applyAndSum(Stream.concat(summands, conditionalSummands).toList(), result);
+        final var subtrahend = applyAndSum(Stream.concat(subtrahends, conditionalSubtrahends).toList(), result);
+        final var vermoegen = applyAndSum(Stream.concat(conditionalSummands, conditionalSubtrahends).toList(), result);
 
         final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0) + vermoegen;
         result.setEinnahmenFamilienbudget(einnahmen);
@@ -154,25 +153,23 @@ public class FamilienbudgetCalculatorV1 {
     }
 
     private interface FamilienbudgetFunction
-        extends GenericBiConsumerAndIntegerProducer<FamilienBudgetresultatDto, ElternteilV1> {
+        extends Function<FamilienBudgetresultatDto, Integer> {
     }
 
     private FamilienbudgetFunction mapAndReturn(
         final BiConsumer<FamilienBudgetresultatDto, Integer> setter,
         final int value
     ) {
-        return (FamilienbudgetFunction) CalculatorUtilV1
-            .<FamilienBudgetresultatDto, ElternteilV1>mapAndReturn(setter, value);
+        return (FamilienbudgetFunction) CalculatorUtilV1.mapAndReturn(setter, value);
     }
 
     private int applyAndSum(
         final List<FamilienbudgetFunction> toApply,
-        final FamilienBudgetresultatDto result,
-        final ElternteilV1 elternteil
+        final FamilienBudgetresultatDto result
     ) {
-        return toApply.stream()
-            .map(applier -> applier.apply(result, elternteil))
-            .mapToInt(Integer::intValue)
-            .sum();
+        return CalculatorUtilV1.applyAndSum(
+            toApply.stream().map(x -> x),
+            result
+        );
     }
 }
