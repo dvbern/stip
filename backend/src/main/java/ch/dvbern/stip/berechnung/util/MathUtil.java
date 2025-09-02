@@ -20,11 +20,12 @@ package ch.dvbern.stip.berechnung.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import lombok.experimental.UtilityClass;
+public final class MathUtil {
+    private MathUtil() {
+        throw new UnsupportedOperationException();
+    }
 
-@UtilityClass
-public class MathUtil {
-    public int roundHalfUp(BigDecimal value) {
+    public static int roundHalfUp(BigDecimal value) {
         return value.setScale(0, RoundingMode.HALF_UP).intValue();
     }
 }

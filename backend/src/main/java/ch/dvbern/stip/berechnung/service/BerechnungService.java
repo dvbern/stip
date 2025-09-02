@@ -82,63 +82,64 @@ public class BerechnungService {
         final int majorVersion,
         final int minorVersion
     ) {
-        final var mapper = persoenlichesBudgetResultatMappers.stream().filter(persoenlichesBudgetResultatMapper -> {
-            final var versionAnnotation =
-                persoenlichesBudgetResultatMapper.getClass().getAnnotation(DmnModelVersion.class);
-            return (versionAnnotation != null) &&
-            (versionAnnotation.major() == majorVersion) &&
-            (versionAnnotation.minor() == minorVersion);
-        }).findFirst();
-
-        if (mapper.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
-            );
-        }
-        final var decisionResults = berechnungResult.getDecisionEventList()
-            .stream()
-            .filter(
-                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision()
-                    .getName()
-                    .equals("PersoenlichesbudgetBerechnet")
-            )
-            .toList()
-            .get(0)
-            .getResult()
-            .getDecisionResults();
-
-        final int einnahmenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
-            .filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenPersoenlichesBudget")
-            )
-            .toList()
-            .get(0)
-            .getResult()).intValue();
-
-        final int ausgabenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
-            .filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenPersoenlichesBudget")
-            )
-            .toList()
-            .get(0)
-            .getResult()).intValue();
-
-        final int persoenlichesbudgetBerechnet = ((BigDecimal) decisionResults.stream()
-            .filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("PersoenlichesbudgetBerechnet")
-            )
-            .toList()
-            .get(0)
-            .getResult()).intValue();
-
-        return mapper.get()
-            .mapFromRequest(
-                berechnungRequest,
-                einnahmenPersoenlichesBudget,
-                ausgabenPersoenlichesBudget,
-                persoenlichesbudgetBerechnet,
-                familienBudgetresultatList
-            );
+        return null;
+//        final var mapper = persoenlichesBudgetResultatMappers.stream().filter(persoenlichesBudgetResultatMapper -> {
+//            final var versionAnnotation =
+//                persoenlichesBudgetResultatMapper.getClass().getAnnotation(DmnModelVersion.class);
+//            return (versionAnnotation != null) &&
+//            (versionAnnotation.major() == majorVersion) &&
+//            (versionAnnotation.minor() == minorVersion);
+//        }).findFirst();
+//
+//        if (mapper.isEmpty()) {
+//            throw new IllegalArgumentException(
+//                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
+//            );
+//        }
+//        final var decisionResults = berechnungResult.getDecisionEventList()
+//            .stream()
+//            .filter(
+//                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision()
+//                    .getName()
+//                    .equals("PersoenlichesbudgetBerechnet")
+//            )
+//            .toList()
+//            .get(0)
+//            .getResult()
+//            .getDecisionResults();
+//
+//        final int einnahmenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
+//            .filter(
+//                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenPersoenlichesBudget")
+//            )
+//            .toList()
+//            .get(0)
+//            .getResult()).intValue();
+//
+//        final int ausgabenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
+//            .filter(
+//                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenPersoenlichesBudget")
+//            )
+//            .toList()
+//            .get(0)
+//            .getResult()).intValue();
+//
+//        final int persoenlichesbudgetBerechnet = ((BigDecimal) decisionResults.stream()
+//            .filter(
+//                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("PersoenlichesbudgetBerechnet")
+//            )
+//            .toList()
+//            .get(0)
+//            .getResult()).intValue();
+//
+//        return mapper.get()
+//            .mapFromRequest(
+//                berechnungRequest,
+//                einnahmenPersoenlichesBudget,
+//                ausgabenPersoenlichesBudget,
+//                persoenlichesbudgetBerechnet,
+//                familienBudgetresultatList
+//            );
     }
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(

@@ -20,6 +20,7 @@ package ch.dvbern.stip.berechnung.dto;
 import java.util.List;
 
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -28,4 +29,5 @@ import lombok.RequiredArgsConstructor;
 public class BerechnungResult {
     private final Integer stipendien;
     private final List<FamilienBudgetresultatDto> familienBudgetresultate;
+    private final PersoenlichesBudgetresultatDto persoenlichesBudgetresultate;
 }

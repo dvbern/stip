@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -66,9 +65,13 @@ public class PersonenImHaushaltRequestV1 implements DmnRequest {
     }
 
     @Override
-    @JsonIgnore
-    public String getVersion() {
-        return String.format("v%s.%s", majorVersion(), minorVersion());
+    public int majorVersion() {
+        return 1;
+    }
+
+    @Override
+    public int minorVersion() {
+        return 0;
     }
 
     public static PersonenImHaushaltRequestV1 createRequest(

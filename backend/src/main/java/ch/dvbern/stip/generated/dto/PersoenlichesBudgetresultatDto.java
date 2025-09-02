@@ -49,6 +49,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer ausgabenPersoenlichesBudget;
   private @Valid Integer persoenlichesbudgetBerechnet;
   private @Valid Integer totalVorTeilung;
+  private @Valid Integer elternbeitrag1;
+  private @Valid Integer elternbeitrag2;
 
   /**
    **/
@@ -581,6 +583,42 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     this.totalVorTeilung = totalVorTeilung;
   }
 
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto elternbeitrag1(Integer elternbeitrag1) {
+    this.elternbeitrag1 = elternbeitrag1;
+    return this;
+  }
+
+  
+  @JsonProperty("elternbeitrag1")
+  public Integer getElternbeitrag1() {
+    return elternbeitrag1;
+  }
+
+  @JsonProperty("elternbeitrag1")
+  public void setElternbeitrag1(Integer elternbeitrag1) {
+    this.elternbeitrag1 = elternbeitrag1;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto elternbeitrag2(Integer elternbeitrag2) {
+    this.elternbeitrag2 = elternbeitrag2;
+    return this;
+  }
+
+  
+  @JsonProperty("elternbeitrag2")
+  public Integer getElternbeitrag2() {
+    return elternbeitrag2;
+  }
+
+  @JsonProperty("elternbeitrag2")
+  public void setElternbeitrag2(Integer elternbeitrag2) {
+    this.elternbeitrag2 = elternbeitrag2;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -618,12 +656,14 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.ausbildungskosten, persoenlichesBudgetresultat.ausbildungskosten) &&
         Objects.equals(this.ausgabenPersoenlichesBudget, persoenlichesBudgetresultat.ausgabenPersoenlichesBudget) &&
         Objects.equals(this.persoenlichesbudgetBerechnet, persoenlichesBudgetresultat.persoenlichesbudgetBerechnet) &&
-        Objects.equals(this.totalVorTeilung, persoenlichesBudgetresultat.totalVorTeilung);
+        Objects.equals(this.totalVorTeilung, persoenlichesBudgetresultat.totalVorTeilung) &&
+        Objects.equals(this.elternbeitrag1, persoenlichesBudgetresultat.elternbeitrag1) &&
+        Objects.equals(this.elternbeitrag2, persoenlichesBudgetresultat.elternbeitrag2);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -659,6 +699,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    ausgabenPersoenlichesBudget: ").append(toIndentedString(ausgabenPersoenlichesBudget)).append("\n");
     sb.append("    persoenlichesbudgetBerechnet: ").append(toIndentedString(persoenlichesbudgetBerechnet)).append("\n");
     sb.append("    totalVorTeilung: ").append(toIndentedString(totalVorTeilung)).append("\n");
+    sb.append("    elternbeitrag1: ").append(toIndentedString(elternbeitrag1)).append("\n");
+    sb.append("    elternbeitrag2: ").append(toIndentedString(elternbeitrag2)).append("\n");
     sb.append("}");
     return sb.toString();
   }
