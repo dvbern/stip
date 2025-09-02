@@ -15,14 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.service;
 
-public interface DmnRequest {
-    default String getVersion() {
-        return String.format("v%s.%s", majorVersion(), minorVersion());
-    }
+import ch.dvbern.stip.berechnung.dto.BerechnungResult;
+import ch.dvbern.stip.berechnung.dto.DmnRequest;
 
-    int majorVersion();
-
-    int minorVersion();
+public interface StipendienCalculator {
+    BerechnungResult calculateStipendien(final DmnRequest model);
 }

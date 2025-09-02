@@ -15,14 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.util;
 
-public interface DmnRequest {
-    default String getVersion() {
-        return String.format("v%s.%s", majorVersion(), minorVersion());
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class MathUtil {
+    public int roundHalfUp(BigDecimal value) {
+        return value.setScale(0, RoundingMode.HALF_UP).intValue();
     }
-
-    int majorVersion();
-
-    int minorVersion();
 }

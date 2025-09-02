@@ -1,0 +1,18 @@
+services:
+  cors-proxy:
+    image: quay.io/kogito_tooling_bot/cors-proxy-image:0.16.0
+    ports:
+      - 8081:8080
+
+  sandbox-extended:
+    image: quay.io/kogito_tooling_bot/kie-sandbox-extended-services-image:0.16.0
+    ports:
+      - 21347:21345
+
+  sanbox:
+    image: quay.io/kogito_tooling_bot/kie-sandbox-image:0.16.0
+    ports:
+      - 8080:8080
+    environment:
+      KIE_SANDBOX_EXTENDED_SERVICES_URL: http://localhost:21347
+      CORS_PROXY_URL: http://localhost:8081

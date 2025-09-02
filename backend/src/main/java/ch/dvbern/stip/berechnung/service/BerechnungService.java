@@ -22,17 +22,12 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
-import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -42,7 +37,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
@@ -51,8 +45,6 @@ import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
 import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
-import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
-import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
@@ -63,12 +55,6 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kie.api.builder.Message;
-import org.kie.api.io.Resource;
-import org.kie.dmn.api.core.DMNDecisionResult;
-import org.kie.dmn.api.core.DMNDecisionResult.DecisionEvaluationStatus;
-import org.kie.dmn.api.core.event.AfterEvaluateDecisionEvent;
-import org.kie.dmn.core.api.event.DefaultDMNRuntimeEventListener;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -84,6 +70,7 @@ public class BerechnungService {
     private final Instance<PersoenlichesBudgetResultatMapper> persoenlichesBudgetResultatMappers;
     private final Instance<FamilienBudgetresultatMapper> familienBudgetresultatMappers;
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
+    private final Instance<StipendienCalculator> stipendienCalculators;
     private final DMNService dmnService;
     private final TenantService tenantService;
     private final GesuchHistoryRepository gesuchHistoryRepository;
@@ -155,91 +142,11 @@ public class BerechnungService {
     }
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
-        final DmnRequest berechnungRequest,
         final BerechnungResult berechnungResult,
-        final SteuerdatenTyp steuerdatenTyp,
-        final int budgetToUse,
-        final int majorVersion,
-        final int minorVersion
+        final int budgetToUse
     ) {
-        final var mapper = familienBudgetresultatMappers.stream().filter(familienBudgetresultatMapper -> {
-            final var versionAnnotation = familienBudgetresultatMapper.getClass().getAnnotation(DmnModelVersion.class);
-            return (versionAnnotation != null) &&
-            (versionAnnotation.major() == majorVersion) &&
-            (versionAnnotation.minor() == minorVersion);
-        }).findFirst();
-
-        if (mapper.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Cannot find a FamilienBudgetresultatMapper for version " + majorVersion + '.' + minorVersion
-            );
-        }
-        final var decisionResults = berechnungResult.getDecisionEventList()
-            .stream()
-            .filter(
-                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision()
-                    .getName()
-                    .equals("Familienbudget_" + (budgetToUse + 1))
-            )
-            .toList()
-            .get(0)
-            .getResult()
-            .getDecisionResults();
-
-        @SuppressWarnings("unchecked") // It's fine (and necessary)
-        final var familienbudgetMap = ((HashMap<String, BigDecimal>) decisionResults.stream()
-            .filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("Familienbudget_" + (budgetToUse + 1))
-            )
-            .toList()
-            .get(0)
-            .getResult());
-        final int familienbudgetBerechnet = familienbudgetMap.get("familienbudgetBerechnet").intValue();
-
-        final String fambudgetKey = "familienbudgetBerechnet";
-        final var einnahmenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList()
-            .stream()
-            .filter(
-                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
-            )
-            .toList()
-            .get(budgetToUse)
-            .getResult()
-            .getDecisionResults()
-            .stream()
-            .filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenFamilienbudget")
-            )
-            .toList()
-            .get(0)
-            .getResult()).intValue();
-
-        final var ausgabenFamilienbudget = ((BigDecimal) berechnungResult.getDecisionEventList()
-            .stream()
-            .filter(
-                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision().getName().equals(fambudgetKey)
-            )
-            .toList()
-            .get(budgetToUse)
-            .getResult()
-            .getDecisionResults()
-            .stream()
-            .filter(
-                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenFamilienbudget")
-            )
-            .toList()
-            .get(0)
-            .getResult()).intValue();
-
-        return mapper.get()
-            .mapFromRequest(
-                berechnungRequest,
-                steuerdatenTyp,
-                budgetToUse,
-                einnahmenFamilienbudget,
-                ausgabenFamilienbudget,
-                familienbudgetBerechnet
-            );
+        // TODO DVSTIP-50: Replace this with something better?
+        return berechnungResult.getFamilienBudgetresultate().get(budgetToUse);
     }
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
@@ -382,7 +289,7 @@ public class BerechnungService {
         }
 
         for (final var elternTypToSolveFor : toSolveFor) {
-            final var berechnungsRequest = (BerechnungRequestV1) getBerechnungRequest(
+            final var berechnungsRequest = getBerechnungRequest(
                 majorVersion,
                 minorVersion,
                 gesuchTranche.getGesuch(),
@@ -403,15 +310,10 @@ public class BerechnungService {
 
             while (steuerdatenListIterator.hasNext()) {
                 final var budgetIndex = steuerdatenListIterator.nextIndex();
-                final Steuerdaten steuerdatum = steuerdatenListIterator.next();
                 familienBudgetresultatList.add(
                     familienBudgetresultatFromRequest(
-                        berechnungsRequest,
                         stipendienCalculated,
-                        steuerdatum.getSteuerdatenTyp(),
-                        budgetIndex,
-                        majorVersion,
-                        minorVersion
+                        budgetIndex
                     )
                 );
             }
@@ -525,60 +427,20 @@ public class BerechnungService {
     }
 
     public BerechnungResult calculateStipendien(final DmnRequest request) {
-        List<Resource> models = new ArrayList<>(BERECHNUNG_MODEL_NAMES.size());
-        for (var modelName : BERECHNUNG_MODEL_NAMES) {
-            models.add(
-                dmnService.loadModelsForTenantAndVersionByName(
-                    tenantService.getCurrentTenantIdentifier(),
-                    request.getVersion(),
-                    modelName
-                ).get(0)
+        final var calculator = stipendienCalculators.stream().filter(stipendienCalculator -> {
+            final var versionAnnotation = stipendienCalculator.getClass().getAnnotation(DmnModelVersion.class);
+            return (versionAnnotation != null) &&
+            (versionAnnotation.major() == request.majorVersion()) &&
+            (versionAnnotation.minor() == request.minorVersion());
+        }).findFirst();
+
+        if (calculator.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Cannot find a Stipendien Calculator for version " + request.getVersion()
             );
         }
 
-        final var listener = new DefaultDMNRuntimeEventListener() {
-            final HashSet<AfterEvaluateDecisionEvent> decisionNodeSet = new HashSet<>();
-            final HashSet<DMNDecisionResult> failedResultsSet = new HashSet<>();
-
-            @Override
-            public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
-                decisionNodeSet.add(event);
-                event.getResult()
-                    .getDecisionResults()
-                    .stream()
-                    .filter(r -> r.getEvaluationStatus() == DecisionEvaluationStatus.FAILED)
-                    .forEach(failedResultsSet::add);
-            }
-        };
-
-        final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request), listener);
-        if (!listener.failedResultsSet.isEmpty()) {
-            LOG.warn(
-                "DMN evaluation had decision results that did not succeed: {}",
-                Arrays.toString(listener.failedResultsSet.toArray())
-            );
-            LOG.warn(
-                "DMN evaluation Messages: {}",
-                Arrays.toString(
-                    Stream.concat(
-                        listener.failedResultsSet.stream()
-                            .flatMap(d -> d.getMessages().stream()),
-                        result.getMessages().stream()
-                    )
-                        .map(Message::getText)
-                        .toArray()
-                )
-            );
-        }
-
-        final var stipendien = (BigDecimal) result.getDecisionResultByName(STIPENDIUM_DECISION_NAME).getResult();
-        if (stipendien == null) {
-            throw new AppErrorException("Result of Stipendienberechnung was null!");
-        }
-
-        return new BerechnungResult(
-            stipendien.intValue(), result.getDecisionResults(), listener.decisionNodeSet.stream().toList()
-        );
+        return calculator.get().calculateStipendien(request);
     }
 
     boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDate eingereicht) {

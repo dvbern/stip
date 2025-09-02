@@ -68,7 +68,7 @@ public class PersonenImHaushaltRequestV1 implements DmnRequest {
     @Override
     @JsonIgnore
     public String getVersion() {
-        return "v1.0";
+        return String.format("v%s.%s", majorVersion(), minorVersion());
     }
 
     public static PersonenImHaushaltRequestV1 createRequest(

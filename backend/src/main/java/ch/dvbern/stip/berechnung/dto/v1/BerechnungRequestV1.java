@@ -35,12 +35,12 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
@@ -64,6 +64,7 @@ public class BerechnungRequestV1 implements DmnRequest {
     @AllArgsConstructor
     @Builder
     @Jacksonized
+    @Getter
     public static class InputFamilienbudgetV1 {
         @JsonProperty("elternteil")
         ElternteilV1 elternteil;
@@ -81,9 +82,13 @@ public class BerechnungRequestV1 implements DmnRequest {
     }
 
     @Override
-    @JsonIgnore
-    public String getVersion() {
-        return "v1.0";
+    public int majorVersion() {
+        return 1;
+    }
+
+    @Override
+    public int minorVersion() {
+        return 0;
     }
 
     public static BerechnungRequestV1 createRequest(

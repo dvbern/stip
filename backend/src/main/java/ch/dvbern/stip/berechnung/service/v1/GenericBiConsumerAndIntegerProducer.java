@@ -15,14 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.service.v1;
 
-public interface DmnRequest {
-    default String getVersion() {
-        return String.format("v%s.%s", majorVersion(), minorVersion());
-    }
-
-    int majorVersion();
-
-    int minorVersion();
+@FunctionalInterface
+public interface GenericBiConsumerAndIntegerProducer<T, U> {
+    int apply(final T t, final U u);
 }
