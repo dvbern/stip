@@ -3937,7 +3937,9 @@ paths:
         - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/nameDe'
         - $ref: '#/components/parameters/nameFr'
-        - $ref: '#/components/parameters/ausbildungsstaetteNummer'
+        - $ref: '#/components/parameters/chShis'
+        - $ref: '#/components/parameters/burNo'
+        - $ref: '#/components/parameters/ctNo'
         - $ref: '#/components/parameters/aktiv'
       responses:
         '200':
