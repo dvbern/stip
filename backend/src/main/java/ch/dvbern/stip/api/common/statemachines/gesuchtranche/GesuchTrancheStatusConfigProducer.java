@@ -36,6 +36,7 @@ import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -112,14 +113,15 @@ public class GesuchTrancheStatusConfigProducer {
         Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         Object[] args
     ) {
-        GesuchTranche gesuchTranche = extractGesuchFromStateMachineArgs(args);
-        String comment = extractCommentFromStateMachineArgs(args);
+        final var gesuchAndComment = extractGesuchAndCommentFromStateMachineArgs(args);
+        final var gesuchTranche = gesuchAndComment.getLeft();
+        final var comment = gesuchAndComment.getRight();
 
         statusprotokollService.createStatusprotokoll(
             transition.getDestination().toString(),
             transition.getSource().toString(),
             StatusprotokollEntryTyp.AENDERUNG,
-            Objects.isNull(comment) ? gesuchTranche.getComment() : comment,
+            comment,
             gesuchTranche.getGesuch()
         );
 
@@ -132,28 +134,20 @@ public class GesuchTrancheStatusConfigProducer {
         );
     }
 
-    private GesuchTranche extractGesuchFromStateMachineArgs(Object[] args) {
-        if (args.length <= 1 || !(args[0] instanceof GesuchTranche gesuchTranche)) {
-            throw new AppErrorException(
-                "State Transition args sollte einen GesuchTranche Objekt enthalten, es gibt einen Problem in die "
-                + "Statemachine args"
-            );
-        }
-
-        return gesuchTranche;
-    }
-
-    private String extractCommentFromStateMachineArgs(Object[] args) {
-        if (args.length <= 1 || !(args[1] instanceof String comment)) {
-            if (args[1] == null) {
-                return null;
+    private Pair<GesuchTranche, String> extractGesuchAndCommentFromStateMachineArgs(Object[] args) {
+        if (
+            args.length == 2
+            && args[0] instanceof GesuchTranche gesuchTranche
+        ) {
+            if (args[1] instanceof String comment) {
+                return Pair.of(gesuchTranche, comment);
             }
-            throw new AppErrorException(
-                "State Transition args sollte eine String Objekt enthalten, es gibt einen Problem in die "
-                + "Statemachine args"
-            );
+            if (Objects.isNull(args[1])) {
+                return Pair.of(gesuchTranche, gesuchTranche.getComment());
+            }
         }
-
-        return comment;
+        throw new AppErrorException(
+            "State Transition args sollte ein String+GesuchTranche Objekt enthalten, es gibt ein Problem in den Statemachine args"
+        );
     }
 }
