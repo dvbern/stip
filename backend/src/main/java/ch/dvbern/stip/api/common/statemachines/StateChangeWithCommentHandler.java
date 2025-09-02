@@ -15,14 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
+package ch.dvbern.stip.api.common.statemachines;
 
-import ch.dvbern.stip.api.common.statemachines.StateChangeHandler;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import jakarta.ws.rs.BadRequestException;
 
-public interface GesuchTrancheStatusChangeHandler extends StateChangeHandler<GesuchTranche> {
-    @Override
-    void handle(
-        GesuchTranche gesuchTranche
-    );
+public interface StateChangeWithCommentHandler<T> {
+    void handle(final T parameter, final String comment);
+
+    default void illegalHandleCall() {
+        throw new BadRequestException();
+    }
+
 }

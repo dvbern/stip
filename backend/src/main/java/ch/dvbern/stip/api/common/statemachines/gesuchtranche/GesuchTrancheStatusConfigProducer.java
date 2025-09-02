@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche;
 
 import java.util.EnumMap;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AkzeptiertHandler;
@@ -31,7 +32,7 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +51,12 @@ public class GesuchTrancheStatusConfigProducer {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
             new StateMachineConfig<>();
         final var triggers =
-            new EnumMap<GesuchTrancheStatusChangeEvent, TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent>>(
+            new EnumMap<GesuchTrancheStatusChangeEvent, TriggerWithParameters2<GesuchTranche, String, GesuchTrancheStatusChangeEvent>>(
                 GesuchTrancheStatusChangeEvent.class
             );
 
         for (GesuchTrancheStatusChangeEvent event : GesuchTrancheStatusChangeEvent.values()) {
-            triggers.put(event, config.setTriggerParameters(event, GesuchTranche.class));
+            triggers.put(event, config.setTriggerParameters(event, GesuchTranche.class, String.class));
         }
 
         config.configure(GesuchTrancheStatus.IN_BEARBEITUNG_GS)
@@ -112,14 +113,14 @@ public class GesuchTrancheStatusConfigProducer {
         Object[] args
     ) {
         GesuchTranche gesuchTranche = extractGesuchFromStateMachineArgs(args);
+        String comment = extractCommentFromStateMachineArgs(args);
 
         statusprotokollService.createStatusprotokoll(
             transition.getDestination().toString(),
             transition.getSource().toString(),
             StatusprotokollEntryTyp.AENDERUNG,
-            gesuchTranche.getComment(),
+            Objects.isNull(comment) ? gesuchTranche.getComment() : comment,
             gesuchTranche.getGesuch()
-
         );
 
         LOG.info(
@@ -132,7 +133,7 @@ public class GesuchTrancheStatusConfigProducer {
     }
 
     private GesuchTranche extractGesuchFromStateMachineArgs(Object[] args) {
-        if (args.length == 0 || !(args[0] instanceof GesuchTranche gesuchTranche)) {
+        if (args.length <= 1 || !(args[0] instanceof GesuchTranche gesuchTranche)) {
             throw new AppErrorException(
                 "State Transition args sollte einen GesuchTranche Objekt enthalten, es gibt einen Problem in die "
                 + "Statemachine args"
@@ -140,5 +141,19 @@ public class GesuchTrancheStatusConfigProducer {
         }
 
         return gesuchTranche;
+    }
+
+    private String extractCommentFromStateMachineArgs(Object[] args) {
+        if (args.length <= 1 || !(args[1] instanceof String comment)) {
+            if (args[1] == null) {
+                return null;
+            }
+            throw new AppErrorException(
+                "State Transition args sollte eine String Objekt enthalten, es gibt einen Problem in die "
+                + "Statemachine args"
+            );
+        }
+
+        return comment;
     }
 }
