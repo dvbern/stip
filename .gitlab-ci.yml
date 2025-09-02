@@ -48,6 +48,18 @@ include:
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.3.0'
     inputs:
+      name: 'deploy:schulung'
+      deployment-environment: 'schulung'
+      deployment-environment-url: 'https://schulung-stip.kibon.ch'
+      deployment-environment-values-path: 'charts/stip/environments/schulung/values.yaml'
+      deployment-on: 'tag'
+      deployment-mode: 'manual'
+      argocd-server: '$ARGOCD_SERVER'
+      argocd-token: '$ARGOCD_TOKEN'
+      argocd-app-name: '$ARGOCD_APP'
+
+  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.3.0'
+    inputs:
       name: 'deploy:prod'
       deployment-environment: 'prod'
       deployment-environment-url: 'https://stip.kibon.ch'
@@ -224,6 +236,14 @@ db-clear:uat:start:
   rules:
     - if: $PIPELINE_TYPE == 'tag'
 
+db-clear:schulung:start:
+  resource_group: 'argocd:uat'
+  extends: .db-clear:start
+  environment:
+    name: schulung
+  rules:
+    - if: $PIPELINE_TYPE == 'tag'
+
 .set-replica-zero:
   extends: .install-argocd
   stage: deploy
@@ -254,6 +274,16 @@ db-clear:uat:stop:
   resource_group: 'argocd:uat'
   environment:
     name: uat
+  needs:
+    - db-clear:uat:start
+  rules:
+    - if: $PIPELINE_TYPE == 'tag'
+
+db-clear:schulung:stop:
+  extends: .db-clear:stop
+  resource_group: 'argocd:uat'
+  environment:
+    name: schulung
   needs:
     - db-clear:uat:start
   rules:

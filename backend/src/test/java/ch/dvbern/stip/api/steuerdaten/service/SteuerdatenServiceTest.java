@@ -22,12 +22,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.kind.repo.NeskoAccessRepository;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
@@ -35,6 +39,7 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenT
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -50,13 +55,10 @@ class SteuerdatenServiceTest {
     private SteuerdatenRepository steuerdatenRepository;
 
     private NeskoGetSteuerdatenService neskoGetSteuerdatenService;
+    private NeskoAccessRepository neskoAccessRepository;
 
     private GesuchTranche gesuchTranche;
     private GesuchFormular gesuchFormular;
-
-    private Steuerdaten steuerdatenFamilie;
-    private Steuerdaten steuerdatenVater;
-    private Steuerdaten steuerdatenMutter;
 
     GetSteuerdatenResponse getSteuerdatenResponse;
 
@@ -82,16 +84,34 @@ class SteuerdatenServiceTest {
         eltern2.setElternTyp(ElternTyp.MUTTER);
         eltern2.setSozialversicherungsnummer("");
 
+        var ausbildung = new Ausbildung();
+        var fall = new Fall();
+        fall.setFallNummer(UUID.randomUUID().toString());
+        ausbildung.setFall(fall);
+        var gesuch = new Gesuch();
+        gesuch.setAusbildung(ausbildung);
+        gesuchTranche.setGesuch(gesuch);
+        gesuch.setGesuchNummer(UUID.randomUUID().toString());
+        gesuchFormular.setTranche(gesuchTranche);
+        gesuchFormular.getTranche().setGesuch(gesuch);
+
         gesuchFormular.setElterns(Set.of(eltern1, eltern2));
 
+        gesuchFormular.setTranche(gesuchTranche);
         gesuchTranche.setGesuchFormular(gesuchFormular);
+        gesuch.setGesuchNummer(TestUtil.getFullGesuch().getGesuchNummer());
 
         trancheRepository = Mockito.mock(GesuchTrancheRepository.class);
         when(trancheRepository.requireById(any())).thenReturn(gesuchTranche);
 
         steuerdatenRepository = Mockito.mock(SteuerdatenRepository.class);
         neskoGetSteuerdatenService = Mockito.mock(NeskoGetSteuerdatenService.class);
-        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any())).thenReturn(getSteuerdatenResponse);
+
+        neskoAccessRepository = Mockito.mock(NeskoAccessRepository.class);
+        Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
+
+        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any(), any()))
+            .thenReturn(getSteuerdatenResponse);
 
         steuerdatenService = new SteuerdatenService(
             null, trancheRepository, null, steuerdatenRepository, neskoGetSteuerdatenService, null
@@ -116,7 +136,7 @@ class SteuerdatenServiceTest {
         getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(false);
 
         // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, "", 2021);
+        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
 
         // assert
         assertThat(
@@ -128,7 +148,7 @@ class SteuerdatenServiceTest {
 
         getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
         getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(false);
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, "", 2021);
+        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
         assertThat(
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
             is(false)
@@ -153,7 +173,7 @@ class SteuerdatenServiceTest {
         getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(false);
 
         // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, "", 2021);
+        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
 
         // assert
         assertThat(
@@ -187,7 +207,7 @@ class SteuerdatenServiceTest {
         getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
 
         // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, "", 2021);
+        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, 2021);
 
         // assert
         assertThat(
@@ -222,7 +242,7 @@ class SteuerdatenServiceTest {
         getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
 
         // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, "", 2021);
+        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, 2021);
 
         // assert
         assertThat(
