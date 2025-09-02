@@ -6779,8 +6779,12 @@ components:
         - FEHLENDE_DOKUMENTE
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
+        - AENDERUNG_EINGEREICHT,
+        - NACHFRIST_DOKUMENTE_CHANGED,
         - NEUE_VERFUEGUNG
         - FAILED_AUSZAHLUNG
+        - DELEGIERUNG_ANGENOMMEN
+        - DELEGIERUNG_ABGELEHNT
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:

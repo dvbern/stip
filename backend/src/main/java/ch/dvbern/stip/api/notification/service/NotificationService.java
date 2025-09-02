@@ -18,11 +18,14 @@
 package ch.dvbern.stip.api.notification.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
@@ -41,6 +44,50 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    private final GesuchRepository gesuchRepository;
+
+    @Transactional
+    public void createDelegierungAbgelehntNotification(final Delegierung delegierung) {
+        final var gesuch = gesuchRepository.findAllForFall(delegierung.getDelegierterFall().getId())
+            .max(Comparator.comparing(Gesuch::getTimestampErstellt))
+            .orElseThrow();
+        final var sprache = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.DELEGIERUNG_ABGELEHNT)
+            .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
+
+        final String msg = Templates.getDelegierungAbgelehnt(sprache, delegierung.getSozialdienst().getName()).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    @Transactional
+    public void createDelegierungAngenommenNotification(final Delegierung delegierung) {
+        final var gesuch = gesuchRepository.findAllForFall(delegierung.getDelegierterFall().getId())
+            .max(Comparator.comparing(Gesuch::getTimestampErstellt))
+            .orElseThrow();
+        final var sprache = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.DELEGIERUNG_ANGENOMMEN)
+            .setGesuch(gesuch);
+        setAbsender(gesuch, notification);
+
+        final String msg =
+            Templates.getDelegierungAngenommen(sprache, delegierung.getSozialdienst().getName()).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
 
     @Transactional
     public void deleteNotificationsForGesuch(final UUID gesuchId) {
@@ -425,6 +472,34 @@ public class NotificationService {
                 return gesuchFehlendeDokumenteNichtEingereichtFr(anrede, nachname, sbVorname, sbNachname);
             }
             return gesuchFehlendeDokumenteNichtEingereichtDe(anrede, nachname, sbVorname, sbNachname);
+        }
+
+        public static native TemplateInstance delegierungAbgelehntDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungAbgelehntFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungAbgelehnt(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungAbgelehntFR(sozialdienstName);
+            }
+            return delegierungAbgelehntDE(sozialdienstName);
+        }
+
+        public static native TemplateInstance delegierungAngenommenDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungAngenommenFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungAngenommen(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungAngenommenFR(sozialdienstName);
+            }
+            return delegierungAngenommenDE(sozialdienstName);
         }
 
         public static native TemplateInstance nachfristDokumenteChangedDE(final String nachfristDokumente);

@@ -25,10 +25,10 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
@@ -52,7 +52,7 @@ public class DelegierenService {
     private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
     private final ConfigService configService;
     private final DelegierungMapper delegierungMapper;
-    private final SozialdienstBenutzerService sozialdienstBenutzerService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
@@ -79,12 +79,19 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
 
+        if (delegierung.getDelegierterMitarbeiter() == null) {
+            notificationService.createDelegierungAngenommenNotification(delegierung);
+        }
+
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
     }
 
     @Transactional
     public void delegierungAblehnen(final UUID delegierungId) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
+        notificationService.createDelegierungAbgelehntNotification(delegierung);
+        delegierung.getDelegierterFall().setDelegierung(null);
+        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
         delegierungRepository.delete(delegierung);
     }
 

@@ -265,6 +265,8 @@
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Délai pour soumettre les documents modifié",
   "shared.nachrichten.type.NEUE_VERFUEGUNG": "Nouvelle décision",
   "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Retrait échoué",
+  "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Délégation Acceptée",
+  "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Délégation refusée",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",

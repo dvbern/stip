@@ -266,6 +266,8 @@
   "shared.nachrichten.type.NEUE_VERFUEGUNG": "Neue Verfügung",
   "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Auszahlung fehlgeschlagen",
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
+  "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Delegierung Angenommen",
+  "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Delegierung Abgelehnt",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",

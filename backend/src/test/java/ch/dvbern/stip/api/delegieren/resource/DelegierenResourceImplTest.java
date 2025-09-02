@@ -86,7 +86,7 @@ class DelegierenResourceImplTest {
         DelegierenService delegierenService = new DelegierenService(
             delegierungRepository, fallRepository, sozialdienstRepository, sozialdienstService,
             sozialdienstBenutzerRepository, persoenlicheAngabenMapper, null, null,
-            null, sozialdienstBenutzerService
+            null, null
         );
         delegierenApi = new DelegierenResourceImpl(delegierenAuthorizer, delegierenService);
     }
