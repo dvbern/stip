@@ -75,7 +75,12 @@ public class SozialdienstDashboardQueryBuilder {
     }
 
     public void delegierungAngenommen(final JPAQuery<Delegierung> query, final Boolean delegierungAngenommen) {
-        query.where(qDelegierung.delegierterMitarbeiter.isNotNull().eq(delegierungAngenommen));
+        if (delegierungAngenommen) {
+            query.where(qDelegierung.delegierterMitarbeiter.isNotNull());
+        } else {
+            query.where(qDelegierung.delegierterMitarbeiter.isNull());
+        }
+
     }
 
     public void orderBy(
@@ -88,7 +93,7 @@ public class SozialdienstDashboardQueryBuilder {
             case VORNAME -> qDelegierung.persoenlicheAngaben.vorname;
             case NACHNAME -> qDelegierung.persoenlicheAngaben.nachname;
             case WOHNORT -> qDelegierung.persoenlicheAngaben.adresse.ort;
-            case DELEGIERUNG_ANGENOMMEN -> qDelegierung.persoenlicheAngaben.adresse.ort;
+            case DELEGIERUNG_ANGENOMMEN -> qDelegierung.delegierterMitarbeiter.isNotNull();
             case GEBURTSDATUM -> qDelegierung.persoenlicheAngaben.geburtsdatum;
         };
 
