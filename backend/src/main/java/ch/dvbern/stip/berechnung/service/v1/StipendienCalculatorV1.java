@@ -24,6 +24,7 @@ import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.service.StipendienCalculator;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 
 public class StipendienCalculatorV1 implements StipendienCalculator {
     @Override
@@ -36,9 +37,12 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
     }
 
     public BerechnungResult calculateStipendien(final BerechnungRequestV1 model) {
+        final var familienbudgets = calculateFamilienbudgets(model);
+
         return new BerechnungResult(
             0,
-            calculateFamilienbudgets(model)
+            familienbudgets,
+            calculatePersoenlichesBudgetresult(model, familienbudgets.get(0), familienbudgets.get(1))
         );
     }
 
@@ -54,5 +58,14 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
         );
 
         return List.of(one, two);
+    }
+
+    private PersoenlichesBudgetresultatDto calculatePersoenlichesBudgetresult(final BerechnungRequestV1 model, final FamilienBudgetresultatDto familienBudgetresultat1, final FamilienBudgetresultatDto familienBudgetresultat2) {
+        return PersoenlichesBudgetCalculatorV1.calculatePersoenlichesBudget(
+            model.getInputPersoenlichesBudget(),
+            familienBudgetresultat1,
+            familienBudgetresultat2,
+            model.getStammdaten()
+        );
     }
 }

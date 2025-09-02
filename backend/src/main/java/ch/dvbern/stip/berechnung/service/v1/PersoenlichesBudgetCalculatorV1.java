@@ -52,7 +52,143 @@ public class PersoenlichesBudgetCalculatorV1 {
             stammdaten
         );
 
+        calculateAndSetAusgaben(
+            result,
+            antragssteller,
+            familienbudget1,
+            familienbudget2,
+            stammdaten
+        );
+
+        final var rawBerechnet = BigDecimal.valueOf(result.getEinnahmenPersoenlichesBudget() - result.getAusgabenPersoenlichesBudget());
+        if (antragssteller.isVerheiratetKonkubinat() && antragssteller.isEigenerHaushalt()) {
+            result.setPersoenlichesbudgetBerechnet(rawBerechnet.divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP).intValue());
+        } else {
+            result.setPersoenlichesbudgetBerechnet(rawBerechnet.intValue());
+        }
+
         return result;
+    }
+
+    private void calculateAndSetAusgaben(
+        final PersoenlichesBudgetresultatDto result,
+        final AntragsstellerV1 antragssteller,
+        final FamilienBudgetresultatDto familienbudget1,
+        final FamilienBudgetresultatDto familienbudget2,
+        final StammdatenV1 stammdaten
+    ) {
+        List<PersoenlichesBudgetFunction> haushaltToApply;
+        PersoenlichesBudgetFunction verpflegungApplier;
+        if (antragssteller.isEigenerHaushalt()) {
+            haushaltToApply = List.of(
+                mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, antragssteller.getGrundbedarf()),
+                mapAndReturn(PersoenlichesBudgetresultatDto::setWohnkosten, antragssteller.getWohnkosten()),
+                mapAndReturn(
+                    PersoenlichesBudgetresultatDto::setMedizinischeGrundversorgung,
+                    antragssteller.getMedizinischeGrundversorgung()
+                )
+            );
+
+            verpflegungApplier = mapAndReturn(PersoenlichesBudgetresultatDto::setVerpflegung, 0);
+        } else {
+            haushaltToApply = List.of(
+                mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, 0),
+                mapAndReturn(PersoenlichesBudgetresultatDto::setWohnkosten, 0),
+                mapAndReturn(PersoenlichesBudgetresultatDto::setMedizinischeGrundversorgung, 0)
+            );
+
+            if (antragssteller.isLehre()) {
+                verpflegungApplier = mapAndReturn(
+                    PersoenlichesBudgetresultatDto::setVerpflegung,
+                    antragssteller.getVerpflegung() * stammdaten.getAnzahlWochenLehre()
+                );
+            } else {
+                verpflegungApplier = mapAndReturn(
+                    PersoenlichesBudgetresultatDto::setVerpflegung,
+                    antragssteller.getVerpflegung() * stammdaten.getAnzahlWochenSchule()
+                );
+            }
+        }
+
+        List<PersoenlichesBudgetFunction> verheiratetKonkubinatToApply;
+        if (antragssteller.isVerheiratetKonkubinat()) {
+            verheiratetKonkubinatToApply = List.of(
+                mapAndReturn(
+                    PersoenlichesBudgetresultatDto::setAusbildungskosten,
+                    antragssteller.getAusbildungskosten() * antragssteller.getAnzahlPersonenImHaushalt()
+                ),
+                mapAndReturn(
+                    PersoenlichesBudgetresultatDto::setFahrkosten,
+                    antragssteller.getFahrkosten() * antragssteller.getAnzahlPersonenImHaushalt()
+                )
+            );
+        } else {
+            verheiratetKonkubinatToApply = List.of(
+                mapAndReturn(
+                    PersoenlichesBudgetresultatDto::setAusbildungskosten,
+                    antragssteller.getAusbildungskosten()
+                ),
+                mapAndReturn(PersoenlichesBudgetresultatDto::setFahrkosten, antragssteller.getFahrkosten())
+            );
+        }
+
+        final var basicToApply = List.of(
+            mapAndReturn(PersoenlichesBudgetresultatDto::setVerpflegungPartner, antragssteller.getVerpflegungPartner()),
+            mapAndReturn(PersoenlichesBudgetresultatDto::setFremdbetreuung, antragssteller.getFremdbetreuung())
+        );
+
+        final var anteilFamilienbudget1 = calculateAnteilFamilienbudget(
+            antragssteller,
+            familienbudget1,
+            2,
+            1
+        );
+
+        final var anteilFamilienbudget2 = calculateAnteilFamilienbudget(
+            antragssteller,
+            familienbudget2,
+            1,
+            2
+        );
+
+        final var wohnkostenAbhaengig = applyAndSum(haushaltToApply, result);
+        final var verpflegung = applyAndSum(List.of(verpflegungApplier), result);
+        final var verheiratetKonkubinatAbhaengig = applyAndSum(verheiratetKonkubinatToApply, result);
+        final var basic = applyAndSum(basicToApply, result);
+
+        result.setAusgabenPersoenlichesBudget(
+            wohnkostenAbhaengig + verpflegung + verheiratetKonkubinatAbhaengig + basic + anteilFamilienbudget1
+            + anteilFamilienbudget2
+        );
+    }
+
+    private Integer calculateAnteilFamilienbudget(
+        final AntragsstellerV1 antragssteller,
+        final FamilienBudgetresultatDto familienbudget,
+        final int wohntImHaushaltZero,
+        final int wohntImHaushaltAnrechnen
+    ) {
+        if (familienbudget == null) {
+            return null;
+        }
+
+        if (familienbudget.getFamilienbudgetBerechnet() < 0) {
+            if (!antragssteller.isEigenerHaushalt()) {
+                if (antragssteller.getPiaWohntInElternHaushalt() == wohntImHaushaltZero) {
+                    return 0;
+                } else if (antragssteller.getPiaWohntInElternHaushalt() == wohntImHaushaltAnrechnen) {
+                    return roundHalfUp(
+                        BigDecimal.valueOf(familienbudget.getFamilienbudgetBerechnet())
+                            .divide(
+                                BigDecimal.valueOf(familienbudget.getAnzahlPersonenImHaushalt()),
+                                RoundingMode.HALF_UP
+                            )
+                    );
+                }
+            }
+        }
+
+        return 0;
     }
 
     private void calculateAndSetEinnahmen(
