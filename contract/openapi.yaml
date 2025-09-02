@@ -5891,6 +5891,11 @@ components:
           type: string
         bezeichnungFr:
           type: string
+    AusbildungsstaetteNummerTyp:
+      enum:
+        - CH_SHIS
+        - BUR_NO
+        - CT_NO
     AusbildungsstaetteSortColumn:
       enum:
         - NAME_DE
@@ -5906,6 +5911,7 @@ components:
         - nameDe
         - nameFr
         - aktiv
+        - nummerTyp
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5913,12 +5919,10 @@ components:
           type: string
         nameFr:
           type: string
-        chShis:
+        nummer:
           type: string
-        burNo:
-          type: string
-        ctNo:
-          type: string
+        nummerTyp:
+          $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
         aktiv:
           type: boolean
     PaginatedAusbildungsstaette:
@@ -5934,15 +5938,16 @@ components:
       required:
         - nameDe
         - nameFr
+        - nummerTyp
       properties:
         nameDe:
           type: string
         nameFr:
           type: string
-        burNo:
+        nummer:
           type: string
-        ctNo:
-          type: string
+        nummerTyp:
+          $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
     AusbildungsgangSortColumn:
       enum:
         - ABSCHLUSS_BEZEICHNUNG_DE
