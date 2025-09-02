@@ -76,6 +76,7 @@ public class BerechnungRequestV1 implements DmnRequest {
     @AllArgsConstructor
     @Builder
     @Jacksonized
+    @Getter
     public static class InputPersoenlichesbudgetV1 {
         @JsonProperty("antragssteller")
         AntragsstellerV1 antragssteller;

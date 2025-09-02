@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputFamilienbudgetV1;
@@ -57,20 +56,20 @@ public class FamilienbudgetCalculatorV1 {
 
     private void calculateAndSetAusgaben(final FamilienBudgetresultatDto result, final ElternteilV1 elternteil) {
         final var toApply = List.of(
-            mapAndReturn(FamilienBudgetresultatDto::setGrundbedarf, e -> e.getGrundbedarf()),
-            mapAndReturn(FamilienBudgetresultatDto::setEffektiveWohnkosten, e -> e.getEffektiveWohnkosten()),
+            mapAndReturn(FamilienBudgetresultatDto::setGrundbedarf, elternteil.getGrundbedarf()),
+            mapAndReturn(FamilienBudgetresultatDto::setEffektiveWohnkosten, elternteil.getEffektiveWohnkosten()),
             mapAndReturn(
                 FamilienBudgetresultatDto::setMedizinischeGrundversorgung,
-                e -> e.getMedizinischeGrundversorgung()
+                elternteil.getMedizinischeGrundversorgung()
             ),
-            mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, e -> e.getSteuernBund()),
-            mapAndReturn(FamilienBudgetresultatDto::setSteuernKantonGemeinde, e -> e.getSteuernStaat()),
-            mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, e -> e.getSteuernBund()),
-            mapAndReturn(FamilienBudgetresultatDto::setIntegrationszulage, e -> e.getIntegrationszulage()),
-            mapAndReturn(FamilienBudgetresultatDto::setFahrkostenPerson1, e -> e.getFahrkostenPerson1()),
-            mapAndReturn(FamilienBudgetresultatDto::setFahrkostenPerson2, e -> e.getFahrkostenPerson2()),
-            mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson1, e -> e.getEssenskostenPerson1()),
-            mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson2, e -> e.getEssenskostenPerson2())
+            mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, elternteil.getSteuernBund()),
+            mapAndReturn(FamilienBudgetresultatDto::setSteuernKantonGemeinde, elternteil.getSteuernStaat()),
+            mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, elternteil.getSteuernBund()),
+            mapAndReturn(FamilienBudgetresultatDto::setIntegrationszulage, elternteil.getIntegrationszulage()),
+            mapAndReturn(FamilienBudgetresultatDto::setFahrkostenPerson1, elternteil.getFahrkostenPerson1()),
+            mapAndReturn(FamilienBudgetresultatDto::setFahrkostenPerson2, elternteil.getFahrkostenPerson2()),
+            mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson1, elternteil.getEssenskostenPerson1()),
+            mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson2, elternteil.getEssenskostenPerson2())
         );
 
         final var ausgaben = applyAndSum(toApply, result, elternteil);
@@ -83,13 +82,13 @@ public class FamilienbudgetCalculatorV1 {
         final StammdatenV1 stammdaten
     ) {
         final var summands = Stream.of(
-            mapAndReturn(FamilienBudgetresultatDto::setErgaenzungsleistungen, e -> e.getErgaenzungsleistungen()),
-            mapAndReturn(FamilienBudgetresultatDto::setTotalEinkuenfte, e -> e.getTotalEinkuenfte())
+            mapAndReturn(FamilienBudgetresultatDto::setErgaenzungsleistungen, elternteil.getErgaenzungsleistungen()),
+            mapAndReturn(FamilienBudgetresultatDto::setTotalEinkuenfte, elternteil.getTotalEinkuenfte())
         );
 
         final var subtrahends = Stream.of(
-            mapAndReturn(FamilienBudgetresultatDto::setEigenmietwert, e -> e.getEigenmietwert()),
-            mapAndReturn(FamilienBudgetresultatDto::setAlimente, e -> e.getAlimente())
+            mapAndReturn(FamilienBudgetresultatDto::setEigenmietwert, elternteil.getEigenmietwert()),
+            mapAndReturn(FamilienBudgetresultatDto::setAlimente, elternteil.getAlimente())
         );
 
         final Stream<FamilienbudgetFunction> conditionalSummands;
@@ -98,35 +97,36 @@ public class FamilienbudgetCalculatorV1 {
             conditionalSubtrahends = Stream.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSaeule3a,
-                    e -> max(e.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0)
+                    max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0)
                 ),
-                mapAndReturn(FamilienBudgetresultatDto::setSaeule2, e -> e.getEinzahlungSaeule2())
+                mapAndReturn(FamilienBudgetresultatDto::setSaeule2, elternteil.getEinzahlungSaeule2())
             );
 
             conditionalSummands = Stream.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSteuerbaresVermoegen,
-                    e -> roundHalfUp(
+                    roundHalfUp(
                         BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent())
                             .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
                             .multiply(
-                                BigDecimal
-                                    .valueOf(max(e.getSteuerbaresVermoegen() - stammdaten.getFreibetragVermoegen(), 0))
+                                BigDecimal.valueOf(
+                                    max(elternteil.getSteuerbaresVermoegen() - stammdaten.getFreibetragVermoegen(), 0)
+                                )
                             )
                     )
                 )
             );
         } else {
             conditionalSubtrahends = Stream.of(
-                mapAndReturn(FamilienBudgetresultatDto::setSaeule3a, e -> 0),
-                mapAndReturn(FamilienBudgetresultatDto::setSaeule2, e -> 0)
+                mapAndReturn(FamilienBudgetresultatDto::setSaeule3a, 0),
+                mapAndReturn(FamilienBudgetresultatDto::setSaeule2, 0)
             );
 
             conditionalSummands = Stream.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSteuerbaresVermoegen,
-                    e -> roundHalfUp(
-                        BigDecimal.valueOf(e.getSteuerbaresVermoegen())
+                    roundHalfUp(
+                        BigDecimal.valueOf(elternteil.getSteuerbaresVermoegen())
                             .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
                             .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
                     )
@@ -159,13 +159,10 @@ public class FamilienbudgetCalculatorV1 {
 
     private FamilienbudgetFunction mapAndReturn(
         final BiConsumer<FamilienBudgetresultatDto, Integer> setter,
-        final Function<ElternteilV1, Integer> getter
+        final int value
     ) {
-        return (result, input) -> {
-            final var value = getter.apply(input);
-            setter.accept(result, value);
-            return value;
-        };
+        return (FamilienbudgetFunction) CalculatorUtilV1
+            .<FamilienBudgetresultatDto, ElternteilV1>mapAndReturn(setter, value);
     }
 
     private int applyAndSum(
