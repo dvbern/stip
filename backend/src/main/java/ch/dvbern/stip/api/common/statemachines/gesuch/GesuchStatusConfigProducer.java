@@ -273,12 +273,12 @@ public class GesuchStatusConfigProducer {
     }
 
     private Gesuch extractGesuchFromStateMachineArgs(Object[] args) {
-        if (args.length == 0 || !(args[0] instanceof Gesuch)) {
+        if (args.length == 0 || !(args[0] instanceof Gesuch gesuch)) {
             throw new AppErrorException(
-                "State Transition args sollten einen Gesuch Objekt enthalten, es gibt ein Problem in den "
+                "State Transition args sollte ein Gesuch Objekt enthalten, es gibt ein Problem in den "
                 + "Statemachine args"
             );
         }
-        return (Gesuch) args[0];
+        return gesuch;
     }
 }
