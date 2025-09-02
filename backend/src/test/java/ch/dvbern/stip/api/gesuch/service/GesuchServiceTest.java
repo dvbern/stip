@@ -87,6 +87,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
@@ -125,6 +126,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
@@ -135,6 +138,7 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -1873,6 +1877,51 @@ class GesuchServiceTest {
         when(fallRepository.requireById(any())).thenReturn(fall);
         final var result = gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(UUID.randomUUID());
         assertNotNull(result);
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void bearbeitungAbschliessen_shouldNotBePossible_without_veranlagungsStatus() {
+        // arrange
+        var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        var gesuchFormular = gesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular();
+        gesuch.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+
+        gesuchFormular
+            .getFamiliensituation()
+            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        gesuchFormular.getSteuererklaerung()
+            .add(new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER).setSteuererklaerungInBern(true));
+        gesuchFormular.getSteuerdaten().add(new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.MUTTER));
+
+        // act
+        var validationReport = gesuchTrancheService.einreichenValidierenSB(UUID.randomUUID());
+        var validationErrors = validationReport.getValidationErrors()
+            .stream()
+            .map(validationErrorDto -> validationErrorDto.getMessageTemplate())
+            .toList();
+
+        // assert
+        assertThat(
+            validationErrors,
+            hasItem(
+                VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE
+            )
+        );
+
+        assertThat(
+            validationErrors,
+            hasItem(
+                VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE
+            )
+        );
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
