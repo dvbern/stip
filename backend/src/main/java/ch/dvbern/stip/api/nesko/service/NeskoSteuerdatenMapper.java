@@ -49,10 +49,10 @@ public class NeskoSteuerdatenMapper {
             Objects.requireNonNullElse(steuerdatenNesko.getMietwertKanton(), BigDecimal.ZERO).intValue()
         );
         boolean isArbeitsverhaeltnisSelbstaendig = switch (steuerdaten.getSteuerdatenTyp()) {
-            case FAMILIE -> Objects.requireNonNullElse(steuerdatenNesko.isFrauErwerbstaetigkeitSUS(), false)
-            || Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), false);
-            case MUTTER -> Objects.requireNonNullElse(steuerdatenNesko.isFrauErwerbstaetigkeitSUS(), false);
-            case VATER -> Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), false);
+            case FAMILIE -> !Objects.requireNonNullElse(steuerdatenNesko.isFrauErwerbstaetigkeitSUS(), false)
+            || !Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), false);
+            case MUTTER -> !Objects.requireNonNullElse(steuerdatenNesko.isFrauErwerbstaetigkeitSUS(), false);
+            case VATER -> !Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), false);
         };
         steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(isArbeitsverhaeltnisSelbstaendig);
         int saeule3a = 0;
