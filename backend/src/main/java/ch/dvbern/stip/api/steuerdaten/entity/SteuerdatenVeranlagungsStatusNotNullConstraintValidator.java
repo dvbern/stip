@@ -37,21 +37,6 @@ public class SteuerdatenVeranlagungsStatusNotNullConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
-        if (
-            gesuchFormular.getSteuerdaten() == null ||
-            gesuchFormular.getSteuerdaten().isEmpty()
-        ) {
-            return true;
-        }
-
-        // This is fine, the @NotNull constraints on the properties will trigger
-        if (
-            gesuchFormular.getTranche() == null ||
-            gesuchFormular.getTranche().getGesuch() == null
-        ) {
-            return true;
-        }
-
         final var invalidSteuerdaten = gesuchFormular.getSteuerdaten()
             .stream()
             .filter(
