@@ -141,40 +141,44 @@ public class AusbildungSeeding extends Seeder {
                     )
                     .build();
             ) {
-                final var x = Streams.of(reader.iterator())
-                    .map(
-                        ausbildungsstaetteLine -> new Ausbildungsstaette()
-                            .setNameDe(ausbildungsstaetteLine[0])
-                            .setNameFr(ausbildungsstaetteLine[1])
-                            // todo: complete
-                            // .setNummerTyp(AusbildungsstaetteNummerTyp.CH_SHIS)
-                            .setNummerTyp(AusbildungsstaetteNummerTyp.CT_NO)
-                        /*
-                         * .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
-                         * .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])
-                         * .setCtNo(ausbildungsstaetteLine[4].isEmpty() ? null : ausbildungsstaetteLine[4])
-                         *
-                         */
-                    )
-                    .toList();
                 return Streams.of(reader.iterator())
                     .map(
                         ausbildungsstaetteLine -> new Ausbildungsstaette()
                             .setNameDe(ausbildungsstaetteLine[0])
                             .setNameFr(ausbildungsstaetteLine[1])
-                            // todo: complete
-                            // .setNummerTyp(AusbildungsstaetteNummerTyp.CH_SHIS)
-                            .setNummerTyp(AusbildungsstaetteNummerTyp.CT_NO)
-                        /*
-                         * .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
-                         * .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])
-                         * .setCtNo(ausbildungsstaetteLine[4].isEmpty() ? null : ausbildungsstaetteLine[4])
-                         *
-                         */
+                            .setNummerTyp(parseAusbildungsstaetteNummerTyp(ausbildungsstaetteLine))
+                            .setNummer(parseAusbildungsstaetteNummer(ausbildungsstaetteLine))
                     )
                     .toList();
             }
         }
+    }
+
+    private AusbildungsstaetteNummerTyp parseAusbildungsstaetteNummerTyp(final String[] ausbildungsstaetteLine) {
+        if (!ausbildungsstaetteLine[2].isEmpty()) {
+            return AusbildungsstaetteNummerTyp.CH_SHIS;
+        } else if (!ausbildungsstaetteLine[3].isEmpty()) {
+            return AusbildungsstaetteNummerTyp.BUR_NO;
+
+        } else if (!ausbildungsstaetteLine[4].isEmpty()) {
+            return AusbildungsstaetteNummerTyp.CT_NO;
+        } else {
+            return null;
+        }
+
+    }
+
+    private String parseAusbildungsstaetteNummer(final String[] ausbildungsstaetteLine) {
+        if (!ausbildungsstaetteLine[2].isEmpty()) {
+            return ausbildungsstaetteLine[2];
+        } else if (!ausbildungsstaetteLine[3].isEmpty()) {
+            return ausbildungsstaetteLine[3];
+        } else if (!ausbildungsstaetteLine[4].isEmpty()) {
+            return ausbildungsstaetteLine[4];
+        } else {
+            return null;
+        }
+
     }
 
     @SneakyThrows
