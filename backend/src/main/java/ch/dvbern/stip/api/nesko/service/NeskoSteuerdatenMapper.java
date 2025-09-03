@@ -49,7 +49,8 @@ public class NeskoSteuerdatenMapper {
             Objects.requireNonNullElse(steuerdatenNesko.getMietwertKanton(), BigDecimal.ZERO).intValue()
         );
 
-        // Default ist steuerdatenNesko.isFrauErwerbstaetigkeitSUS == true --> isArbeitsverhaeltnisSelbstaendig == false
+        // Default ist: steuerdatenNesko.isFrauErwerbstaetigkeitSUS == true
+        // --> isArbeitsverhaeltnisSelbstaendig == false
         // Gemäss Spec isFrauErwerbstaetigkeitSUS:
         // - true=Unselbstaendige Erwerbstaetigkeit Frau
         // - false=Selbstaendige Erwerbstaetigkeit Frau
