@@ -24,7 +24,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 
 public class SteuerdatenVeranlagungsStatusNotNullConstraintValidator
     implements ConstraintValidator<SteuerdatenVeranlagungsStatusNotNullConstraint, GesuchFormular> {
@@ -58,7 +58,7 @@ public class SteuerdatenVeranlagungsStatusNotNullConstraintValidator
 
             GesuchValidatorUtil.addProperty(
                 constraintValidatorContext,
-                VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE,
+                VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE,
                 property + pagePostfix
             );
         }

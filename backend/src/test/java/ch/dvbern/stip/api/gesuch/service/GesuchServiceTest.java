@@ -127,8 +127,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
@@ -1917,14 +1917,14 @@ class GesuchServiceTest {
         assertThat(
             validationErrors,
             hasItem(
-                VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE
+                VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE
             )
         );
 
         assertThat(
             validationErrors,
             hasItem(
-                VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE
+                VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE
             )
         );
     }

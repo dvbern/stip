@@ -24,7 +24,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 
 public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
     implements ConstraintValidator<EinnahmenKostenVeranlagungsStatusNotNullConstraint, GesuchFormular> {
@@ -47,7 +47,7 @@ public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
 
         GesuchValidatorUtil.addProperty(
             constraintValidatorContext,
-            VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE,
+            VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE,
             property
         );
 

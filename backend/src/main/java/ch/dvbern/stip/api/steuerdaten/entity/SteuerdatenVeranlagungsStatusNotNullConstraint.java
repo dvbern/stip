@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = SteuerdatenVeranlagungsStatusNotNullConstraintValidator.class)
 @Documented
 public @interface SteuerdatenVeranlagungsStatusNotNullConstraint {
-    String message() default VALIDATION_STEUERDATEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+    String message() default VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 
     Class<?>[] groups() default {};
 

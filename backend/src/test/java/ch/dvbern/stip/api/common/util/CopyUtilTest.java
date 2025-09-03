@@ -37,7 +37,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingExcept
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -77,7 +77,7 @@ class CopyUtilTest {
                                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
                                 VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE,
                                 VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE,
-                                VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSTATUS_INVALID_MESSAGE
+                                VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE
                             )
                         )
                     )
