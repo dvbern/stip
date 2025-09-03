@@ -19,12 +19,12 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 
 public class GesuchTrancheStatusChangeEventTrigger
-extends TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent> {
+extends TriggerWithParameters2<GesuchTranche, String, GesuchTrancheStatusChangeEvent> {
     private GesuchTrancheStatusChangeEventTrigger(GesuchTrancheStatusChangeEvent underlyingTrigger) {
-        super(underlyingTrigger, GesuchTranche.class);
+        super(underlyingTrigger, GesuchTranche.class, String.class);
     }
 
     public static GesuchTrancheStatusChangeEventTrigger createTrigger(final GesuchTrancheStatusChangeEvent event) {

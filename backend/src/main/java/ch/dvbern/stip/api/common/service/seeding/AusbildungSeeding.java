@@ -141,13 +141,30 @@ public class AusbildungSeeding extends Seeder {
                     )
                     .build();
             ) {
+                final var x = Streams.of(reader.iterator())
+                    .map(
+                        ausbildungsstaetteLine -> new Ausbildungsstaette()
+                            .setNameDe(ausbildungsstaetteLine[0])
+                            .setNameFr(ausbildungsstaetteLine[1])
+                            // todo: complete
+                            // .setNummerTyp(AusbildungsstaetteNummerTyp.CH_SHIS)
+                            .setNummerTyp(AusbildungsstaetteNummerTyp.CT_NO)
+                        /*
+                         * .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
+                         * .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])
+                         * .setCtNo(ausbildungsstaetteLine[4].isEmpty() ? null : ausbildungsstaetteLine[4])
+                         *
+                         */
+                    )
+                    .toList();
                 return Streams.of(reader.iterator())
                     .map(
                         ausbildungsstaetteLine -> new Ausbildungsstaette()
                             .setNameDe(ausbildungsstaetteLine[0])
                             .setNameFr(ausbildungsstaetteLine[1])
                             // todo: complete
-                            .setNummerTyp(AusbildungsstaetteNummerTyp.CH_SHIS)
+                            // .setNummerTyp(AusbildungsstaetteNummerTyp.CH_SHIS)
+                            .setNummerTyp(AusbildungsstaetteNummerTyp.CT_NO)
                         /*
                          * .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
                          * .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])

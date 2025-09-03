@@ -18,6 +18,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import { Gesuchsjahr } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
@@ -60,6 +61,8 @@ export class GesuchsjahrComponent implements OnInit {
     'gueltigkeitStatus',
     'actions',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
 
   sortSig = viewChild('sort', { read: MatSort });
   paginatorSig = viewChild('paginator', {

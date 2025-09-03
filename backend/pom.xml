@@ -729,6 +729,8 @@
                     AbschlussSortColumn=ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn,
                     AusbildungsstaetteSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn,
                     AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn,
+                    StatusprotokollEntryTyp=ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp,
+                    AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn,
                     AusbildungsstaetteNummerTyp=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>

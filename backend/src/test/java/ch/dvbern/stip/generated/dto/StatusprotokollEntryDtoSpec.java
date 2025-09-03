@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.StatusprotokollEntryTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,7 +29,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_TIMESTAMP,
-  StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS_FROM,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_STATUS_TO,
+  StatusprotokollEntryDtoSpec.JSON_PROPERTY_TYP,
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_BENUTZER,
   StatusprotokollEntryDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
@@ -39,8 +41,14 @@ public class StatusprotokollEntryDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP = "timestamp";
   private java.time.LocalDateTime timestamp;
 
-  public static final String JSON_PROPERTY_STATUS = "status";
-  private GesuchstatusDtoSpec status;
+  public static final String JSON_PROPERTY_STATUS_FROM = "statusFrom";
+  private String statusFrom;
+
+  public static final String JSON_PROPERTY_STATUS_TO = "statusTo";
+  private String statusTo;
+
+  public static final String JSON_PROPERTY_TYP = "typ";
+  private StatusprotokollEntryTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_BENUTZER = "benutzer";
   private String benutzer;
@@ -61,9 +69,9 @@ public class StatusprotokollEntryDtoSpec {
    * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
    * @return timestamp
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TIMESTAMP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public java.time.LocalDateTime getTimestamp() {
     return timestamp;
@@ -71,35 +79,87 @@ public class StatusprotokollEntryDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TIMESTAMP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTimestamp(java.time.LocalDateTime timestamp) {
     this.timestamp = timestamp;
   }
 
 
-  public StatusprotokollEntryDtoSpec status(GesuchstatusDtoSpec status) {
+  public StatusprotokollEntryDtoSpec statusFrom(String statusFrom) {
     
-    this.status = status;
+    this.statusFrom = statusFrom;
     return this;
   }
 
    /**
-   * Get status
-   * @return status
+   * Get statusFrom
+   * @return statusFrom
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(JSON_PROPERTY_STATUS_FROM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public GesuchstatusDtoSpec getStatus() {
-    return status;
+  public String getStatusFrom() {
+    return statusFrom;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonProperty(JSON_PROPERTY_STATUS_FROM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStatus(GesuchstatusDtoSpec status) {
-    this.status = status;
+  public void setStatusFrom(String statusFrom) {
+    this.statusFrom = statusFrom;
+  }
+
+
+  public StatusprotokollEntryDtoSpec statusTo(String statusTo) {
+    
+    this.statusTo = statusTo;
+    return this;
+  }
+
+   /**
+   * Get statusTo
+   * @return statusTo
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STATUS_TO)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getStatusTo() {
+    return statusTo;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS_TO)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatusTo(String statusTo) {
+    this.statusTo = statusTo;
+  }
+
+
+  public StatusprotokollEntryDtoSpec typ(StatusprotokollEntryTypDtoSpec typ) {
+    
+    this.typ = typ;
+    return this;
+  }
+
+   /**
+   * Get typ
+   * @return typ
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public StatusprotokollEntryTypDtoSpec getTyp() {
+    return typ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTyp(StatusprotokollEntryTypDtoSpec typ) {
+    this.typ = typ;
   }
 
 
@@ -113,9 +173,9 @@ public class StatusprotokollEntryDtoSpec {
    * Der Benutzer welcher den Statuswechsel ausgelöst hat
    * @return benutzer
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_BENUTZER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBenutzer() {
     return benutzer;
@@ -123,7 +183,7 @@ public class StatusprotokollEntryDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BENUTZER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBenutzer(String benutzer) {
     this.benutzer = benutzer;
   }
@@ -139,9 +199,9 @@ public class StatusprotokollEntryDtoSpec {
    * Kommentar vom SB über die Statusänderung
    * @return kommentar
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getKommentar() {
     return kommentar;
@@ -149,7 +209,7 @@ public class StatusprotokollEntryDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -164,14 +224,16 @@ public class StatusprotokollEntryDtoSpec {
     }
     StatusprotokollEntryDtoSpec statusprotokollEntry = (StatusprotokollEntryDtoSpec) o;
     return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
-        Objects.equals(this.status, statusprotokollEntry.status) &&
+        Objects.equals(this.statusFrom, statusprotokollEntry.statusFrom) &&
+        Objects.equals(this.statusTo, statusprotokollEntry.statusTo) &&
+        Objects.equals(this.typ, statusprotokollEntry.typ) &&
         Objects.equals(this.benutzer, statusprotokollEntry.benutzer) &&
         Objects.equals(this.kommentar, statusprotokollEntry.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, status, benutzer, kommentar);
+    return Objects.hash(timestamp, statusFrom, statusTo, typ, benutzer, kommentar);
   }
 
   @Override
@@ -179,7 +241,9 @@ public class StatusprotokollEntryDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class StatusprotokollEntryDtoSpec {\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    statusFrom: ").append(toIndentedString(statusFrom)).append("\n");
+    sb.append("    statusTo: ").append(toIndentedString(statusTo)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");

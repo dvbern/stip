@@ -17,6 +17,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -55,6 +56,8 @@ export class GesuchsperiodeComponent implements OnInit {
     'gueltigkeitStatus',
     'actions',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
 
   sortSig = viewChild('sort', { read: MatSort });
   paginatorSig = viewChild('paginator', {

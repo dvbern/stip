@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchhistory.repository;
+package ch.dvbern.stip.api.gesuchhistory.repo;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
