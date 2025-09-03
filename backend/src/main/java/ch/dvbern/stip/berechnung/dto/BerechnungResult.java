@@ -29,5 +29,5 @@ import lombok.RequiredArgsConstructor;
 public class BerechnungResult {
     private final Integer stipendien;
     private final List<FamilienBudgetresultatDto> familienBudgetresultate;
-    private final PersoenlichesBudgetresultatDto persoenlichesBudgetresultate;
+    private final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
 }

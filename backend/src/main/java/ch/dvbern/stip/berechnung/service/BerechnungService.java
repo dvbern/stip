@@ -43,12 +43,9 @@ import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
-import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
-import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -67,80 +64,11 @@ public class BerechnungService {
 
     private final PersonenImHaushaltService personenImHaushaltService;
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
-    private final Instance<PersoenlichesBudgetResultatMapper> persoenlichesBudgetResultatMappers;
-    private final Instance<FamilienBudgetresultatMapper> familienBudgetresultatMappers;
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final DMNService dmnService;
     private final TenantService tenantService;
     private final GesuchHistoryRepository gesuchHistoryRepository;
-
-    private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
-        final DmnRequest berechnungRequest,
-        final BerechnungResult berechnungResult,
-        final List<FamilienBudgetresultatDto> familienBudgetresultatList,
-        final int majorVersion,
-        final int minorVersion
-    ) {
-        return null;
-//        final var mapper = persoenlichesBudgetResultatMappers.stream().filter(persoenlichesBudgetResultatMapper -> {
-//            final var versionAnnotation =
-//                persoenlichesBudgetResultatMapper.getClass().getAnnotation(DmnModelVersion.class);
-//            return (versionAnnotation != null) &&
-//            (versionAnnotation.major() == majorVersion) &&
-//            (versionAnnotation.minor() == minorVersion);
-//        }).findFirst();
-//
-//        if (mapper.isEmpty()) {
-//            throw new IllegalArgumentException(
-//                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
-//            );
-//        }
-//        final var decisionResults = berechnungResult.getDecisionEventList()
-//            .stream()
-//            .filter(
-//                afterEvaluateDecisionEvent -> afterEvaluateDecisionEvent.getDecision()
-//                    .getName()
-//                    .equals("PersoenlichesbudgetBerechnet")
-//            )
-//            .toList()
-//            .get(0)
-//            .getResult()
-//            .getDecisionResults();
-//
-//        final int einnahmenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
-//            .filter(
-//                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("EinnahmenPersoenlichesBudget")
-//            )
-//            .toList()
-//            .get(0)
-//            .getResult()).intValue();
-//
-//        final int ausgabenPersoenlichesBudget = ((BigDecimal) decisionResults.stream()
-//            .filter(
-//                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("AusgabenPersoenlichesBudget")
-//            )
-//            .toList()
-//            .get(0)
-//            .getResult()).intValue();
-//
-//        final int persoenlichesbudgetBerechnet = ((BigDecimal) decisionResults.stream()
-//            .filter(
-//                dmnDecisionResult -> dmnDecisionResult.getDecisionName().equals("PersoenlichesbudgetBerechnet")
-//            )
-//            .toList()
-//            .get(0)
-//            .getResult()).intValue();
-//
-//        return mapper.get()
-//            .mapFromRequest(
-//                berechnungRequest,
-//                einnahmenPersoenlichesBudget,
-//                ausgabenPersoenlichesBudget,
-//                persoenlichesbudgetBerechnet,
-//                familienBudgetresultatList
-//            );
-    }
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
         final BerechnungResult berechnungResult,
@@ -339,13 +267,7 @@ public class BerechnungService {
                             majorVersion,
                             minorVersion
                         ),
-                        persoenlichesBudgetresultatFromRequest(
-                            berechnungsRequest,
-                            stipendienCalculated,
-                            familienBudgetresultatList,
-                            majorVersion,
-                            minorVersion
-                        ),
+                        stipendienCalculated.getPersoenlichesBudgetresultat(),
                         familienBudgetresultatList
                     )
                 );
@@ -389,13 +311,7 @@ public class BerechnungService {
                             majorVersion,
                             minorVersion
                         ),
-                        persoenlichesBudgetresultatFromRequest(
-                            berechnungsRequest,
-                            stipendienCalculated,
-                            familienBudgetresultatList,
-                            majorVersion,
-                            minorVersion
-                        ),
+                        stipendienCalculated.getPersoenlichesBudgetresultat(),
                         familienBudgetresultatList
                     )
                 );

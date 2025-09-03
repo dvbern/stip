@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
+import ch.dvbern.stip.berechnung.service.v1.PersonenImHaushaltCalculatorV1;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -107,7 +108,16 @@ public class BerechnungRequestV1 implements DmnRequest {
             gesuchFormular,
             elternTyp
         );
-        final var personenImHaushalt = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequest);
+
+        if (!(personenImHaushaltRequest instanceof PersonenImHaushaltRequestV1)) {
+            throw new IllegalStateException(
+                "Tried to calculate Stipendien for V1, but failed to construct a PersonenImHaushaltRequestV1"
+            );
+        }
+
+        final var personenImHaushalt = PersonenImHaushaltCalculatorV1
+            .calculatePersonenImHaushalt((PersonenImHaushaltRequestV1) personenImHaushaltRequest);
+
         final List<Integer> personenImHaushaltList = List.of(
             personenImHaushalt.getPersonenImHaushalt1(),
             personenImHaushalt.getPersonenImHaushalt2()

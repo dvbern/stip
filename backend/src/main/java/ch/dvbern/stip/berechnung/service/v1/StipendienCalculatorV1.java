@@ -60,7 +60,11 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
         return List.of(one, two);
     }
 
-    private PersoenlichesBudgetresultatDto calculatePersoenlichesBudgetresult(final BerechnungRequestV1 model, final FamilienBudgetresultatDto familienBudgetresultat1, final FamilienBudgetresultatDto familienBudgetresultat2) {
+    private PersoenlichesBudgetresultatDto calculatePersoenlichesBudgetresult(
+        final BerechnungRequestV1 model,
+        final FamilienBudgetresultatDto familienBudgetresultat1,
+        final FamilienBudgetresultatDto familienBudgetresultat2
+    ) {
         return PersoenlichesBudgetCalculatorV1.calculatePersoenlichesBudget(
             model.getInputPersoenlichesBudget(),
             familienBudgetresultat1,

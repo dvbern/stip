@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
@@ -44,6 +45,7 @@ public class PersonenImHaushaltRequestV1 implements DmnRequest {
     @AllArgsConstructor
     @Builder
     @Jacksonized
+    @Getter
     public static class PersonenImHaushaltInputV1 {
         @JsonProperty
         FamiliensituationV1 familiensituation;

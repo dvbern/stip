@@ -60,9 +60,14 @@ public class PersoenlichesBudgetCalculatorV1 {
             stammdaten
         );
 
-        final var rawBerechnet = BigDecimal.valueOf(result.getEinnahmenPersoenlichesBudget() - result.getAusgabenPersoenlichesBudget());
+        final var rawBerechnet =
+            BigDecimal.valueOf(result.getEinnahmenPersoenlichesBudget() - result.getAusgabenPersoenlichesBudget());
         if (antragssteller.isVerheiratetKonkubinat() && antragssteller.isEigenerHaushalt()) {
-            result.setPersoenlichesbudgetBerechnet(rawBerechnet.divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP).intValue());
+            result.setPersoenlichesbudgetBerechnet(
+                rawBerechnet
+                    .divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP)
+                    .intValue()
+            );
         } else {
             result.setPersoenlichesbudgetBerechnet(rawBerechnet.intValue());
         }
