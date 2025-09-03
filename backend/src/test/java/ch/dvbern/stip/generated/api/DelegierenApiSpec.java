@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDtoSpec;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDtoSpec;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMaDtoSpec;
+import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMitarbeiterDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
@@ -68,7 +68,7 @@ public class DelegierenApiSpec {
                 delegierungAblehnen(),
                 fallDelegieren(),
                 getDelegierungsOfSozialdienstAdmin(),
-                getDelegierungsOfSozialdienstMa()
+                getDelegierungsOfSozialdienstMitarbeiter()
         );
     }
 
@@ -88,8 +88,8 @@ public class DelegierenApiSpec {
         return new GetDelegierungsOfSozialdienstAdminOper(createReqSpec());
     }
 
-    public GetDelegierungsOfSozialdienstMaOper getDelegierungsOfSozialdienstMa() {
-        return new GetDelegierungsOfSozialdienstMaOper(createReqSpec());
+    public GetDelegierungsOfSozialdienstMitarbeiterOper getDelegierungsOfSozialdienstMitarbeiter() {
+        return new GetDelegierungsOfSozialdienstMitarbeiterOper(createReqSpec());
     }
 
     /**
@@ -531,7 +531,7 @@ public class DelegierenApiSpec {
      * @see #sortOrderQuery  (optional)
      * return PaginatedSozDashboardDtoSpec
      */
-    public static class GetDelegierungsOfSozialdienstMaOper implements Oper {
+    public static class GetDelegierungsOfSozialdienstMitarbeiterOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/delegierung/{getDelegierungSozQueryType}/ma";
@@ -539,7 +539,7 @@ public class DelegierenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetDelegierungsOfSozialdienstMaOper(RequestSpecBuilder reqSpec) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -569,10 +569,10 @@ public class DelegierenApiSpec {
         public static final String GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH = "getDelegierungSozQueryType";
 
         /**
-         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeMaDtoSpec)  (required)
+         * @param getDelegierungSozQueryType (GetDelegierungSozQueryTypeMitarbeiterDtoSpec)  (required)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper getDelegierungSozQueryTypePath(Object getDelegierungSozQueryType) {
             reqSpec.addPathParam(GET_DELEGIERUNG_SOZ_QUERY_TYPE_PATH, getDelegierungSozQueryType);
             return this;
         }
@@ -583,7 +583,7 @@ public class DelegierenApiSpec {
          * @param fallNummer (String)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper fallNummerQuery(Object... fallNummer) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper fallNummerQuery(Object... fallNummer) {
             reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
             return this;
         }
@@ -594,7 +594,7 @@ public class DelegierenApiSpec {
          * @param nachname (String)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper nachnameQuery(Object... nachname) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper nachnameQuery(Object... nachname) {
             reqSpec.addQueryParam(NACHNAME_QUERY, nachname);
             return this;
         }
@@ -605,7 +605,7 @@ public class DelegierenApiSpec {
          * @param vorname (String)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper vornameQuery(Object... vorname) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper vornameQuery(Object... vorname) {
             reqSpec.addQueryParam(VORNAME_QUERY, vorname);
             return this;
         }
@@ -616,7 +616,7 @@ public class DelegierenApiSpec {
          * @param geburtsdatum (LocalDate)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper geburtsdatumQuery(Object... geburtsdatum) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper geburtsdatumQuery(Object... geburtsdatum) {
             reqSpec.addQueryParam(GEBURTSDATUM_QUERY, geburtsdatum);
             return this;
         }
@@ -627,7 +627,7 @@ public class DelegierenApiSpec {
          * @param wohnort (String)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper wohnortQuery(Object... wohnort) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper wohnortQuery(Object... wohnort) {
             reqSpec.addQueryParam(WOHNORT_QUERY, wohnort);
             return this;
         }
@@ -638,7 +638,7 @@ public class DelegierenApiSpec {
          * @param page (Integer)  (required)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper pageQuery(Object... page) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper pageQuery(Object... page) {
             reqSpec.addQueryParam(PAGE_QUERY, page);
             return this;
         }
@@ -649,7 +649,7 @@ public class DelegierenApiSpec {
          * @param pageSize (Integer)  (required)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper pageSizeQuery(Object... pageSize) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper pageSizeQuery(Object... pageSize) {
             reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
             return this;
         }
@@ -660,7 +660,7 @@ public class DelegierenApiSpec {
          * @param sortColumn (SozDashboardColumnDtoSpec)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper sortColumnQuery(Object... sortColumn) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper sortColumnQuery(Object... sortColumn) {
             reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
             return this;
         }
@@ -671,7 +671,7 @@ public class DelegierenApiSpec {
          * @param sortOrder (SortOrderDtoSpec)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper sortOrderQuery(Object... sortOrder) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper sortOrderQuery(Object... sortOrder) {
             reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
             return this;
         }
@@ -681,7 +681,7 @@ public class DelegierenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -691,7 +691,7 @@ public class DelegierenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstMaOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetDelegierungsOfSozialdienstMitarbeiterOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

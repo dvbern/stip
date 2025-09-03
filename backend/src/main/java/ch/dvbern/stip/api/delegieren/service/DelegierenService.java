@@ -23,17 +23,14 @@ import java.util.UUID;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
-import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
-import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
-import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
@@ -95,9 +92,42 @@ public class DelegierenService {
         delegierungRepository.delete(delegierung);
     }
 
+    public PaginatedSozDashboardDto getDelegierungSoz(
+        GetDelegierungSozQueryTypeMitarbeiter getDelegierungSozQueryType,
+        @NotNull Integer page,
+        @NotNull Integer pageSize,
+        String fallNummer,
+        String nachname,
+        String vorname,
+        LocalDate geburtsdatum,
+        String wohnort,
+        Boolean delegierungAngenommen,
+        SozDashboardColumnDto sortColumn,
+        SortOrder sortOrder
+    ) {
+        var adminDto = switch (getDelegierungSozQueryType) {
+            case ALLE -> GetDelegierungSozQueryTypeAdmin.ALLE;
+            case ALLE_BEARBEITBAR_MEINE -> GetDelegierungSozQueryTypeAdmin.ALLE_BEARBEITBAR_MEINE;
+        };
+
+        return getDelegierungSoz(
+            adminDto,
+            page,
+            pageSize,
+            fallNummer,
+            nachname,
+            vorname,
+            geburtsdatum,
+            wohnort,
+            delegierungAngenommen,
+            sortColumn,
+            sortOrder
+        );
+    }
+
     @Transactional
     public PaginatedSozDashboardDto getDelegierungSoz(
-        GetDelegierungSozQueryTypeAdminDto getDelegierungSozQueryType,
+        GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,
         @NotNull Integer page,
         @NotNull Integer pageSize,
         String fallNummer,

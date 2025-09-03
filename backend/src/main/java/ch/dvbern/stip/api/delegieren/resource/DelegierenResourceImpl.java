@@ -23,12 +23,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DelegierenResource;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMaDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -55,8 +55,8 @@ public class DelegierenResourceImpl implements DelegierenResource {
 
     @Override
     @RolesAllowed(DELEGIERUNG_READ)
-    public PaginatedSozDashboardDto getDelegierungsOfSozialdienstMa(
-        GetDelegierungSozQueryTypeMaDto getDelegierungSozQueryType,
+    public PaginatedSozDashboardDto getDelegierungsOfSozialdienstMitarbeiter(
+        GetDelegierungSozQueryTypeMitarbeiter getDelegierungSozQueryType,
         Integer page,
         Integer pageSize,
         String fallNummer,
@@ -67,15 +67,10 @@ public class DelegierenResourceImpl implements DelegierenResource {
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
-        delegierenAuthorizer.canReadDelegierungMa();
-
-        var adminDto = switch (getDelegierungSozQueryType) {
-            case ALLE -> GetDelegierungSozQueryTypeAdminDto.ALLE;
-            case ALLE_BEARBEITBAR_MEINE -> GetDelegierungSozQueryTypeAdminDto.ALLE_BEARBEITBAR_MEINE;
-        };
+        delegierenAuthorizer.canReadDelegierungMitarbeiter();
 
         return delegierenService.getDelegierungSoz(
-            adminDto,
+            getDelegierungSozQueryType,
             page,
             pageSize,
             fallNummer,
@@ -109,7 +104,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
     @Override
     @RolesAllowed(DELEGIERUNG_READ)
     public PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(
-        GetDelegierungSozQueryTypeAdminDto getDelegierungSozQueryType,
+        GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,
         Integer page,
         Integer pageSize,
         String fallNummer,

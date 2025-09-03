@@ -2082,7 +2082,7 @@ paths:
       parameters:
         - name: getDelegierungSozQueryType
           schema:
-            $ref: '#/components/schemas/GetDelegierungSozQueryTypeMa'
+            $ref: '#/components/schemas/GetDelegierungSozQueryTypeMitarbeiter'
           in: path
           required: true
         - $ref: '#/components/parameters/fallNummer'
@@ -2111,7 +2111,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDelegierungsOfSozialdienstMa
+      operationId: getDelegierungsOfSozialdienstMitarbeiter
       summary: Returns a list of Faelle with Delegierung that are accepted
   /land:
     get:
@@ -4446,7 +4446,7 @@ components:
         - ALLE_MEINE
         - ALLE
       type: string
-    GetDelegierungSozQueryTypeMa:
+    GetDelegierungSozQueryTypeMitarbeiter:
       enum:
         - ALLE_BEARBEITBAR_MEINE
         - ALLE
