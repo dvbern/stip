@@ -15,19 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.api.model.gesuch;
+package ch.dvbern.stip.api.ausbildung.type;
 
-import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
-
-public class AusbildungsstaetteCreateDtoSpecModel {
-    public static AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(AusbildungsstaetteCreateDtoSpec::new, (model) -> {
-            model.setNameDe("Uni Bern");
-            model.setNameFr("Uni Bern");
-            // todo: clarify
-            // model.setCtNo(null);
-            // model.setBurNo(null);
-        });
-    }
+public enum AusbildungsstaetteNummerTyp {
+    CH_SHIS, BUR_NO, CT_NO;
 }

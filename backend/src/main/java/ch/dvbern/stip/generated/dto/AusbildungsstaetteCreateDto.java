@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungsstaetteCreateDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
-  private @Valid String burNo;
-  private @Valid String ctNo;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
+  private @Valid String nummer;
 
   /**
    **/
@@ -64,38 +64,39 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsstaetteCreateDto burNo(String burNo) {
-    this.burNo = burNo;
+  public AusbildungsstaetteCreateDto nummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
+    this.nummerTyp = nummerTyp;
     return this;
   }
 
   
-  @JsonProperty("burNo")
-  public String getBurNo() {
-    return burNo;
+  @JsonProperty("nummerTyp")
+  @NotNull
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp getNummerTyp() {
+    return nummerTyp;
   }
 
-  @JsonProperty("burNo")
-  public void setBurNo(String burNo) {
-    this.burNo = burNo;
+  @JsonProperty("nummerTyp")
+  public void setNummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
+    this.nummerTyp = nummerTyp;
   }
 
   /**
    **/
-  public AusbildungsstaetteCreateDto ctNo(String ctNo) {
-    this.ctNo = ctNo;
+  public AusbildungsstaetteCreateDto nummer(String nummer) {
+    this.nummer = nummer;
     return this;
   }
 
   
-  @JsonProperty("ctNo")
-  public String getCtNo() {
-    return ctNo;
+  @JsonProperty("nummer")
+  public String getNummer() {
+    return nummer;
   }
 
-  @JsonProperty("ctNo")
-  public void setCtNo(String ctNo) {
-    this.ctNo = ctNo;
+  @JsonProperty("nummer")
+  public void setNummer(String nummer) {
+    this.nummer = nummer;
   }
 
 
@@ -110,13 +111,13 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     AusbildungsstaetteCreateDto ausbildungsstaetteCreate = (AusbildungsstaetteCreateDto) o;
     return Objects.equals(this.nameDe, ausbildungsstaetteCreate.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaetteCreate.nameFr) &&
-        Objects.equals(this.burNo, ausbildungsstaetteCreate.burNo) &&
-        Objects.equals(this.ctNo, ausbildungsstaetteCreate.ctNo);
+        Objects.equals(this.nummerTyp, ausbildungsstaetteCreate.nummerTyp) &&
+        Objects.equals(this.nummer, ausbildungsstaetteCreate.nummer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameDe, nameFr, burNo, ctNo);
+    return Objects.hash(nameDe, nameFr, nummerTyp, nummer);
   }
 
   @Override
@@ -126,8 +127,8 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
     
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
-    sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
-    sb.append("    ctNo: ").append(toIndentedString(ctNo)).append("\n");
+    sb.append("    nummerTyp: ").append(toIndentedString(nummerTyp)).append("\n");
+    sb.append("    nummer: ").append(toIndentedString(nummer)).append("\n");
     sb.append("}");
     return sb.toString();
   }

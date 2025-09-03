@@ -24,6 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
@@ -157,7 +158,7 @@ public class AusbildungsstaetteService {
     @Transactional
     public AusbildungsstaetteDto setAusbildungsstaetteInaktiv(final UUID ausbildungsstaetteId) {
         final var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
-        if (Objects.nonNull(ausbildungsstaette.getChShis())) {
+        if (ausbildungsstaette.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CH_SHIS)) {
             throw new ForbiddenException("Can't set ausbildungsstaette inaktiv that was not user created");
         }
         ausbildungsgangService.setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(ausbildungsstaetteId);

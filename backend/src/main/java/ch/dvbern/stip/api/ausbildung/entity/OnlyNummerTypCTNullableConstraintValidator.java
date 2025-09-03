@@ -15,19 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.api.model.gesuch;
+package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
+import java.util.Objects;
 
-public class AusbildungsstaetteCreateDtoSpecModel {
-    public static AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec() {
-        return TestUtil.createUpdateDtoSpec(AusbildungsstaetteCreateDtoSpec::new, (model) -> {
-            model.setNameDe("Uni Bern");
-            model.setNameFr("Uni Bern");
-            // todo: clarify
-            // model.setCtNo(null);
-            // model.setBurNo(null);
-        });
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+public class OnlyNummerTypCTNullableConstraintValidator
+    implements ConstraintValidator<OnlyNummerTypCTNullableConstraint, Ausbildungsstaette> {
+    @Override
+    public boolean isValid(Ausbildungsstaette ausbildungsstaette, ConstraintValidatorContext context) {
+        if (ausbildungsstaette.getNummerTyp() == AusbildungsstaetteNummerTyp.CT_NO) {
+            return true;
+        }
+        return Objects.nonNull(ausbildungsstaette.getNummer());
     }
 }

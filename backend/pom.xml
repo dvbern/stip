@@ -728,7 +728,8 @@
                     AbschlussZusatzfrage=ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage,
                     AbschlussSortColumn=ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn,
                     AusbildungsstaetteSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn,
-                    AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn
+                    AusbildungsgangSortColumn=ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn,
+                    AusbildungsstaetteNummerTyp=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

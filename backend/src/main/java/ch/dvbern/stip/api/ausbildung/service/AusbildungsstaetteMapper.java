@@ -17,16 +17,12 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import ch.dvbern.stip.generated.dto.RenameAusbildungsstaetteDto;
-import jakarta.ws.rs.BadRequestException;
-import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -36,17 +32,6 @@ import org.mapstruct.MappingTarget;
 )
 public abstract class AusbildungsstaetteMapper {
     abstract Ausbildungsstaette toEntity(AusbildungsstaetteCreateDto ausbildungsstaetteDto);
-
-    @BeforeMapping
-    protected void ensureOnlyOneNoIsSet(AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto) {
-        final boolean ctIsNull = Objects.isNull(ausbildungsstaetteCreateDto.getCtNo());
-        final boolean burIsNull = Objects.isNull(ausbildungsstaetteCreateDto.getBurNo());
-
-        // !XOR
-        if (ctIsNull == burIsNull) {
-            throw new BadRequestException("(Only) One of CtNo and BurNo must be set");
-        }
-    }
 
     abstract AusbildungsstaetteDto toDto(Ausbildungsstaette ausbildungsstaette);
 
