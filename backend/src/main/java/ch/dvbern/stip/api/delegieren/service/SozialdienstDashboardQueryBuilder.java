@@ -93,7 +93,6 @@ public class SozialdienstDashboardQueryBuilder {
             case VORNAME -> qDelegierung.persoenlicheAngaben.vorname;
             case NACHNAME -> qDelegierung.persoenlicheAngaben.nachname;
             case WOHNORT -> qDelegierung.persoenlicheAngaben.adresse.ort;
-            case DELEGIERUNG_ANGENOMMEN -> qDelegierung.delegierterMitarbeiter.isNotNull();
             case GEBURTSDATUM -> qDelegierung.persoenlicheAngaben.geburtsdatum;
         };
 
