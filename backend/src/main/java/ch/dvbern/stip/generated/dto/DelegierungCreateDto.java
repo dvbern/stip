@@ -25,9 +25,9 @@ public class DelegierungCreateDto  implements Serializable {
   private @Valid String nachname;
   private @Valid String vorname;
   private @Valid LocalDate geburtsdatum;
-  private @Valid AdresseDto adresse;
   private @Valid String email;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
+  private @Valid AdresseDto adresse;
 
   /**
    **/
@@ -107,25 +107,6 @@ public class DelegierungCreateDto  implements Serializable {
 
   /**
    **/
-  public DelegierungCreateDto adresse(AdresseDto adresse) {
-    this.adresse = adresse;
-    return this;
-  }
-
-  
-  @JsonProperty("adresse")
-  @NotNull
-  public AdresseDto getAdresse() {
-    return adresse;
-  }
-
-  @JsonProperty("adresse")
-  public void setAdresse(AdresseDto adresse) {
-    this.adresse = adresse;
-  }
-
-  /**
-   **/
   public DelegierungCreateDto email(String email) {
     this.email = email;
     return this;
@@ -133,6 +114,7 @@ public class DelegierungCreateDto  implements Serializable {
 
   
   @JsonProperty("email")
+  @NotNull
   public String getEmail() {
     return email;
   }
@@ -151,6 +133,7 @@ public class DelegierungCreateDto  implements Serializable {
 
   
   @JsonProperty("sprache")
+  @NotNull
   public ch.dvbern.stip.api.personinausbildung.type.Sprache getSprache() {
     return sprache;
   }
@@ -158,6 +141,25 @@ public class DelegierungCreateDto  implements Serializable {
   @JsonProperty("sprache")
   public void setSprache(ch.dvbern.stip.api.personinausbildung.type.Sprache sprache) {
     this.sprache = sprache;
+  }
+
+  /**
+   **/
+  public DelegierungCreateDto adresse(AdresseDto adresse) {
+    this.adresse = adresse;
+    return this;
+  }
+
+  
+  @JsonProperty("adresse")
+  @NotNull
+  public AdresseDto getAdresse() {
+    return adresse;
+  }
+
+  @JsonProperty("adresse")
+  public void setAdresse(AdresseDto adresse) {
+    this.adresse = adresse;
   }
 
 
@@ -174,14 +176,14 @@ public class DelegierungCreateDto  implements Serializable {
         Objects.equals(this.nachname, delegierungCreate.nachname) &&
         Objects.equals(this.vorname, delegierungCreate.vorname) &&
         Objects.equals(this.geburtsdatum, delegierungCreate.geburtsdatum) &&
-        Objects.equals(this.adresse, delegierungCreate.adresse) &&
         Objects.equals(this.email, delegierungCreate.email) &&
-        Objects.equals(this.sprache, delegierungCreate.sprache);
+        Objects.equals(this.sprache, delegierungCreate.sprache) &&
+        Objects.equals(this.adresse, delegierungCreate.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anrede, nachname, vorname, geburtsdatum, adresse, email, sprache);
+    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse);
   }
 
   @Override
@@ -193,9 +195,9 @@ public class DelegierungCreateDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    sprache: ").append(toIndentedString(sprache)).append("\n");
+    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();
   }

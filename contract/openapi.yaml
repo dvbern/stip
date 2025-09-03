@@ -4995,6 +4995,8 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - email
+        - sprache
         - adresse
       type: object
       properties:
@@ -5006,6 +5008,10 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
+        email:
+          type: string
+        sprache:
+          $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
     Delegierung:
@@ -5034,6 +5040,8 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - email
+        - sprache
         - adresse
       type: object
       properties:

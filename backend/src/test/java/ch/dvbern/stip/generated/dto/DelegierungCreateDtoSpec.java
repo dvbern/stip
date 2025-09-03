@@ -180,9 +180,9 @@ public class DelegierungCreateDtoSpec {
    * Get email
    * @return email
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EMAIL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getEmail() {
     return email;
@@ -190,7 +190,7 @@ public class DelegierungCreateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EMAIL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEmail(String email) {
     this.email = email;
   }
@@ -206,9 +206,9 @@ public class DelegierungCreateDtoSpec {
    * Get sprache
    * @return sprache
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SPRACHE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SpracheDtoSpec getSprache() {
     return sprache;
@@ -216,7 +216,7 @@ public class DelegierungCreateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SPRACHE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSprache(SpracheDtoSpec sprache) {
     this.sprache = sprache;
   }
