@@ -39,7 +39,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @BurAndCTNummerTypAlphaNumericConstraint
-@OnlyNummerTypCTNullableConstraint // todo fix
+@OnlyNummerTypCTNullableConstraint
 @Audited
 @Entity
 @Table(name = "ausbildungsstaette", indexes = @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant"))
@@ -55,9 +55,7 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "name_fr", nullable = false, length = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nameFr;
-    // todo: durch constraint ersetzen: wenn type == CT -> may be null ; OnlyNummerTypCTNullableConstraint
 
-    // todo: use @Pattern(regexp = "^[A-Za-z0-9]+$") for burNo & ct_no; BurAndCTNummerTypAlphaNumericConstraint
     @Nullable
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "nummer", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)

@@ -25,9 +25,6 @@ public class AusbildungsstaetteCreateDtoSpecModel {
         return TestUtil.createUpdateDtoSpec(AusbildungsstaetteCreateDtoSpec::new, (model) -> {
             model.setNameDe("Uni Bern");
             model.setNameFr("Uni Bern");
-            // todo: clarify
-            // model.setCtNo(null);
-            // model.setBurNo(null);
         });
     }
 }
