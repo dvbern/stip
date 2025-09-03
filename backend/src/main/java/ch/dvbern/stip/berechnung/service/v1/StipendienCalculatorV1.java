@@ -20,12 +20,14 @@ package ch.dvbern.stip.berechnung.service.v1;
 import java.util.List;
 
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.service.StipendienCalculator;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 
+@CalculatorVersion(major = 1, minor = 0)
 public class StipendienCalculatorV1 implements StipendienCalculator {
     @Override
     public BerechnungResult calculateStipendien(final DmnRequest model) {
@@ -38,11 +40,13 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
 
     public BerechnungResult calculateStipendien(final BerechnungRequestV1 model) {
         final var familienbudgets = calculateFamilienbudgets(model);
+        final var persoenlichesBudget =
+            calculatePersoenlichesBudgetresult(model, familienbudgets.get(0), familienbudgets.get(1));
 
         return new BerechnungResult(
-            0,
+            persoenlichesBudget.getPersoenlichesbudgetBerechnet(),
             familienbudgets,
-            calculatePersoenlichesBudgetresult(model, familienbudgets.get(0), familienbudgets.get(1))
+            persoenlichesBudget
         );
     }
 

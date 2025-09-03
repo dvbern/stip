@@ -32,16 +32,14 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
@@ -57,18 +55,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class BerechnungService {
-    private static final String STIPENDIUM_DECISION_NAME = "Stipendium";
-
-    private static final List<String> BERECHNUNG_MODEL_NAMES =
-        List.of(STIPENDIUM_DECISION_NAME, "Familienbudget", "PersoenlichesBudget");
-
-    private final PersonenImHaushaltService personenImHaushaltService;
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
-    private final DMNService dmnService;
-    private final TenantService tenantService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
         final BerechnungResult berechnungResult,
@@ -84,7 +73,7 @@ public class BerechnungService {
         final int minorVersion
     ) {
         final var mapper = berechnungsStammdatenMappers.stream().filter(berechnungsStammdatenMapper -> {
-            final var versionAnnotation = berechnungsStammdatenMapper.getClass().getAnnotation(DmnModelVersion.class);
+            final var versionAnnotation = berechnungsStammdatenMapper.getClass().getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&
             (versionAnnotation.major() == majorVersion) &&
             (versionAnnotation.minor() == minorVersion);
@@ -328,7 +317,7 @@ public class BerechnungService {
         final ElternTyp elternTyp
     ) {
         final var builder = berechnungRequests.stream().filter(berechnungRequestBuilder -> {
-            final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
+            final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&
             (versionAnnotation.major() == majorVersion) &&
             (versionAnnotation.minor() == minorVersion);
@@ -345,7 +334,7 @@ public class BerechnungService {
 
     public BerechnungResult calculateStipendien(final DmnRequest request) {
         final var calculator = stipendienCalculators.stream().filter(stipendienCalculator -> {
-            final var versionAnnotation = stipendienCalculator.getClass().getAnnotation(DmnModelVersion.class);
+            final var versionAnnotation = stipendienCalculator.getClass().getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&
             (versionAnnotation.major() == request.majorVersion()) &&
             (versionAnnotation.minor() == request.minorVersion());

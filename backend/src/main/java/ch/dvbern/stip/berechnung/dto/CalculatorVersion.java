@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface DmnModelVersion {
+public @interface CalculatorVersion {
     int major();
 
     int minor();

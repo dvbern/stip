@@ -22,7 +22,7 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.ListIterator;
 
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Singleton
 @Slf4j
-@DmnModelVersion(major = 1, minor = 0)
+@CalculatorVersion(major = 1, minor = 0)
 public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetResultatMapper {
     @Override
     public PersoenlichesBudgetresultatDto mapFromRequest(

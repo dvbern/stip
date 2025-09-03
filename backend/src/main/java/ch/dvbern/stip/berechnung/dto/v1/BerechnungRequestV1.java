@@ -32,10 +32,9 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
-import ch.dvbern.stip.berechnung.service.v1.PersonenImHaushaltCalculatorV1;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -101,23 +100,14 @@ public class BerechnungRequestV1 implements DmnRequest {
     ) {
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
-            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class)
+            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(CalculatorVersion.class)
                 .major(),
-            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class)
+            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(CalculatorVersion.class)
                 .minor(),
             gesuchFormular,
             elternTyp
         );
-
-        if (!(personenImHaushaltRequest instanceof PersonenImHaushaltRequestV1)) {
-            throw new IllegalStateException(
-                "Tried to calculate Stipendien for V1, but failed to construct a PersonenImHaushaltRequestV1"
-            );
-        }
-
-        final var personenImHaushalt = PersonenImHaushaltCalculatorV1
-            .calculatePersonenImHaushalt((PersonenImHaushaltRequestV1) personenImHaushaltRequest);
-
+        final var personenImHaushalt = personenImHaushaltService.calculatePersonenImHaushalt(personenImHaushaltRequest);
         final List<Integer> personenImHaushaltList = List.of(
             personenImHaushalt.getPersonenImHaushalt1(),
             personenImHaushalt.getPersonenImHaushalt2()

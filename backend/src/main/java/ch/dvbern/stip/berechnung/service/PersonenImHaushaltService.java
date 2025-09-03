@@ -17,18 +17,13 @@
 
 package ch.dvbern.stip.berechnung.service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-
-import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
-import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +46,7 @@ public class PersonenImHaushaltService {
     ) {
         final var builder = personenImHaushaltRequestBuilders.stream().filter(personenImHaushaltRequestBuilder -> {
             final var versionAnnotation =
-                personenImHaushaltRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
+                personenImHaushaltRequestBuilder.getClass().getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&
             (versionAnnotation.major() == majorVersion) &&
             (versionAnnotation.minor() == minorVersion);
@@ -70,29 +65,31 @@ public class PersonenImHaushaltService {
     }
 
     public PersonenImHaushaltResult calculatePersonenImHaushalt(final DmnRequest request) {
-        final var models = dmnService.loadModelsForTenantAndVersionByName(
-            tenantService.getCurrentTenantIdentifier(),
-            request.getVersion(),
-            PERSONEN_IM_HAUSHALT_MODEL_NAME
-        );
-
-        final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
-
-        @SuppressWarnings("unchecked") // It's fine
-        final var personenImHaushaltOutput = (HashMap<String, BigDecimal>) result
-            .getDecisionResultByName(PERSONEN_IM_HAUSHALT_DECISION_NAME)
-            .getResult();
-        if (personenImHaushaltOutput == null) {
-            throw new AppErrorException("Result of PersonenImHaushalt decision was null");
-        }
-
-        return PersonenImHaushaltResult.builder()
-            .noBudgetsRequired(personenImHaushaltOutput.get("noBudgetsRequired").intValue())
-            .kinderImHaushalt1(personenImHaushaltOutput.get("kinderImHaushalt1").intValue())
-            .kinderImHaushalt2(personenImHaushaltOutput.get("kinderImHaushalt2").intValue())
-            .personenImHaushalt1(personenImHaushaltOutput.get("personenImHaushalt1").intValue())
-            .personenImHaushalt2(personenImHaushaltOutput.get("personenImHaushalt2").intValue())
-            .decisionResults(result.getDecisionResults())
-            .build();
+        // TODO DVSTIP-50: Call calculator
+        return null;
+        // final var models = dmnService.loadModelsForTenantAndVersionByName(
+        // tenantService.getCurrentTenantIdentifier(),
+        // request.getVersion(),
+        // PERSONEN_IM_HAUSHALT_MODEL_NAME
+        // );
+        //
+        // final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
+        //
+        // @SuppressWarnings("unchecked") // It's fine
+        // final var personenImHaushaltOutput = (HashMap<String, BigDecimal>) result
+        // .getDecisionResultByName(PERSONEN_IM_HAUSHALT_DECISION_NAME)
+        // .getResult();
+        // if (personenImHaushaltOutput == null) {
+        // throw new AppErrorException("Result of PersonenImHaushalt decision was null");
+        // }
+        //
+        // return PersonenImHaushaltResult.builder()
+        // .noBudgetsRequired(personenImHaushaltOutput.get("noBudgetsRequired").intValue())
+        // .kinderImHaushalt1(personenImHaushaltOutput.get("kinderImHaushalt1").intValue())
+        // .kinderImHaushalt2(personenImHaushaltOutput.get("kinderImHaushalt2").intValue())
+        // .personenImHaushalt1(personenImHaushaltOutput.get("personenImHaushalt1").intValue())
+        // .personenImHaushalt2(personenImHaushaltOutput.get("personenImHaushalt2").intValue())
+        // .decisionResults(result.getDecisionResults())
+        // .build();
     }
 }
