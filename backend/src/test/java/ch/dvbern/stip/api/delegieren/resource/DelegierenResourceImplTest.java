@@ -81,7 +81,7 @@ class DelegierenResourceImplTest {
         PersoenlicheAngabenMapper persoenlicheAngabenMapper = new PersoenlicheAngabenMapperImpl(adresseMapper);
         DelegierenAuthorizer delegierenAuthorizer = new DelegierenAuthorizer(
             benutzerService, fallRepository, delegierungRepository, sozialdienstService,
-            sozialdienstBenutzerRepository, null
+            sozialdienstBenutzerRepository, sozialdienstBenutzerService
         );
         DelegierenService delegierenService = new DelegierenService(
             delegierungRepository, fallRepository, sozialdienstRepository, sozialdienstService,
