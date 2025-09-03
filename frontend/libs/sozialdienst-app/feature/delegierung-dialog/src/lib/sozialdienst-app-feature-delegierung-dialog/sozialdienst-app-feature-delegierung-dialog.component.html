@@ -136,6 +136,9 @@
           </mat-option>
         }
       </mat-select>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
     </mat-form-field>
 
     @let pending = isPending(delegationStore.delegierenState());

@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { Notification } from '@dv/shared/model/gesuch';
+import { SharedModelNachricht } from '@dv/shared/model/nachricht';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationDialogComponent } from '@dv/shared/ui/notification-dialog';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
@@ -34,8 +34,10 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 export class SharedUiNotificationsComponent {
   private dialog = inject(MatDialog);
   readonly pageSize = 5;
-  // eslint-disable-next-line @angular-eslint/no-input-rename
-  notificationsSig = input.required<Notification[]>({ alias: 'notifications' });
+  notificationsSig = input.required<SharedModelNachricht[]>({
+    // eslint-disable-next-line @angular-eslint/no-input-rename
+    alias: 'notifications',
+  });
   newPageSig = signal<PageEvent | null>(null);
 
   notificationsViewSig = computed(() => {
@@ -51,7 +53,7 @@ export class SharedUiNotificationsComponent {
     );
   });
 
-  openNotification(notification: Notification) {
+  openNotification(notification: SharedModelNachricht) {
     SharedUiNotificationDialogComponent.open(this.dialog, notification);
   }
 }
