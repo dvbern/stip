@@ -162,8 +162,8 @@
           </tr>
         </table>
         <mat-paginator
-          [pageSizeOptions]="[10, 20, 50]"
-          pageSize="20"
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="defaultPageSize"
           [length]="sozialdienstListSource.data.length"
           showFirstLastButtons
         >

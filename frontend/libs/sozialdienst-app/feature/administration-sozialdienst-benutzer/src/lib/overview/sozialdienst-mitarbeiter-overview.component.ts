@@ -25,6 +25,11 @@ import {
   SozialdienstStore,
 } from '@dv/shared/data-access/sozialdienst';
 import { SozialdienstBenutzer } from '@dv/shared/model/gesuch';
+import {
+  DEFAULT_PAGE_SIZE,
+  INPUT_DELAY,
+  PAGE_SIZES,
+} from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -36,8 +41,6 @@ import {
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-
-const INPUT_DELAY = 600;
 
 @Component({
   imports: [
@@ -108,6 +111,8 @@ export class SozialdienstMitarbeiterOverviewComponent {
     return datasource;
   });
   displayedColumns = ['name', 'email', 'actions'];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
 
   constructor() {
     this.store.loadSozialdienstBenutzerList$();

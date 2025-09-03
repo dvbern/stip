@@ -37,8 +37,10 @@ import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import io.quarkus.mailer.MockMailbox;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.ext.mail.MailMessage;
@@ -59,6 +61,9 @@ class NotificationServiceTest {
 
     @Inject
     GesuchStatusService gesuchStatusService;
+
+    @InjectMock
+    StatusprotokollService statusprotokollService;
 
     NotificationRepository notificationRepositoryMock;
 

@@ -21,6 +21,7 @@ import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde'
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
 import { BeschwerdeVerlaufEntry } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
@@ -59,6 +60,8 @@ export class VerlaufComponent {
     'document',
     'actions',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
   beschwerdeVerlaufSig = computed(() => {

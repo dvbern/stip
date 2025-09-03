@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruc
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -54,7 +55,8 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(AenderungZurueckweisenHandler.class),
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class),
             Mockito.mock(StipendienAnspruchHandler.class),
-            Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class)
+            Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class),
+            Mockito.mock(StatusprotokollService.class)
         )
             .createStateMachineConfig();
 
