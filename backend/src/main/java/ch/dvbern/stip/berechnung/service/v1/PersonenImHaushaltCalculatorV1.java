@@ -21,17 +21,30 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import ch.dvbern.stip.api.common.util.StringUtil;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
+import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
 import ch.dvbern.stip.berechnung.dto.v1.FamiliensituationV1;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1;
+import ch.dvbern.stip.berechnung.service.PersonenImHaushaltCalculator;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@UtilityClass
-public class PersonenImHaushaltCalculatorV1 {
+@ApplicationScoped
+@CalculatorVersion(major = 1, minor = 0)
+public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalculator {
+    @Override
+    public PersonenImHaushaltResult calculatePersonenImHaushalt(DmnRequest request) {
+        if (request instanceof PersonenImHaushaltRequestV1 input) {
+            return calculatePersonenImHaushalt(input);
+        }
+
+        throw new IllegalArgumentException("Called PersonenImHaushaltCalculatorV1 with a wrong request type");
+    }
+
     public PersonenImHaushaltResult calculatePersonenImHaushalt(final PersonenImHaushaltRequestV1 input) {
         final var personenImHaushalt = input.getPersonenImHaushaltInput();
         final var elternImHaushalt = calculateElternImHaushalt(personenImHaushalt.getFamiliensituation());
