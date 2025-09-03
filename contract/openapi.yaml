@@ -2056,7 +2056,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SozDashboardColumnAdmin'
+            $ref: '#/components/schemas/SozDashboardColumn'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -2094,7 +2094,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SozDashboardColumnMa'
+            $ref: '#/components/schemas/SozDashboardColumn'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -5045,6 +5045,10 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
+        email:
+          type: string
+        sprache:
+          $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
     DelegierterMitarbeiterAendern:
@@ -7232,21 +7236,13 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    SozDashboardColumnMa:
+    SozDashboardColumn:
       enum:
         - FALLNUMMER
         - NACHNAME
         - VORNAME
         - GEBURTSDATUM
         - WOHNORT
-    SozDashboardColumnAdmin:
-      enum:
-        - FALLNUMMER
-        - NACHNAME
-        - VORNAME
-        - GEBURTSDATUM
-        - WOHNORT
-        - DELEGIERUNG_ANGENOMMEN
     SortOrder:
       enum:
         - ASCENDING
