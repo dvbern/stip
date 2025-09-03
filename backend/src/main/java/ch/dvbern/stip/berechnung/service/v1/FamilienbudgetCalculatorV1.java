@@ -82,20 +82,20 @@ public class FamilienbudgetCalculatorV1 {
         final ElternteilV1 elternteil,
         final StammdatenV1 stammdaten
     ) {
-        final var summands = Stream.of(
+        final var summands = List.of(
             mapAndReturn(FamilienBudgetresultatDto::setErgaenzungsleistungen, elternteil.getErgaenzungsleistungen()),
             mapAndReturn(FamilienBudgetresultatDto::setTotalEinkuenfte, elternteil.getTotalEinkuenfte())
         );
 
-        final var subtrahends = Stream.of(
+        final var subtrahends = List.of(
             mapAndReturn(FamilienBudgetresultatDto::setEigenmietwert, elternteil.getEigenmietwert()),
             mapAndReturn(FamilienBudgetresultatDto::setAlimente, elternteil.getAlimente())
         );
 
-        final Stream<FamilienbudgetFunction> conditionalSummands;
-        final Stream<FamilienbudgetFunction> conditionalSubtrahends;
+        final List<Function<FamilienBudgetresultatDto, Integer>> conditionalSummands;
+        final List<Function<FamilienBudgetresultatDto, Integer>> conditionalSubtrahends;
         if (elternteil.isSelbststaendigErwerbend()) {
-            conditionalSubtrahends = Stream.of(
+            conditionalSubtrahends = List.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSaeule3a,
                     max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0)
@@ -103,7 +103,7 @@ public class FamilienbudgetCalculatorV1 {
                 mapAndReturn(FamilienBudgetresultatDto::setSaeule2, elternteil.getEinzahlungSaeule2())
             );
 
-            conditionalSummands = Stream.of(
+            conditionalSummands = List.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSteuerbaresVermoegen,
                     roundHalfUp(
@@ -118,12 +118,12 @@ public class FamilienbudgetCalculatorV1 {
                 )
             );
         } else {
-            conditionalSubtrahends = Stream.of(
+            conditionalSubtrahends = List.of(
                 mapAndReturn(FamilienBudgetresultatDto::setSaeule3a, 0),
                 mapAndReturn(FamilienBudgetresultatDto::setSaeule2, 0)
             );
 
-            conditionalSummands = Stream.of(
+            conditionalSummands = List.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSteuerbaresVermoegen,
                     roundHalfUp(
@@ -135,9 +135,12 @@ public class FamilienbudgetCalculatorV1 {
             );
         }
 
-        final var summand = applyAndSum(Stream.concat(summands, conditionalSummands).toList(), result);
-        final var subtrahend = applyAndSum(Stream.concat(subtrahends, conditionalSubtrahends).toList(), result);
-        final var vermoegen = applyAndSum(Stream.concat(conditionalSummands, conditionalSubtrahends).toList(), result);
+        final var summand =
+            applyAndSum(Stream.concat(summands.stream(), conditionalSummands.stream()).toList(), result);
+        final var subtrahend =
+            applyAndSum(Stream.concat(subtrahends.stream(), conditionalSubtrahends.stream()).toList(), result);
+        final var vermoegen =
+            applyAndSum(Stream.concat(conditionalSummands.stream(), conditionalSubtrahends.stream()).toList(), result);
 
         final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0) + vermoegen;
         result.setEinnahmenFamilienbudget(einnahmen);
@@ -152,23 +155,19 @@ public class FamilienbudgetCalculatorV1 {
         );
     }
 
-    private interface FamilienbudgetFunction
-        extends Function<FamilienBudgetresultatDto, Integer> {
-    }
-
-    private FamilienbudgetFunction mapAndReturn(
+    private Function<FamilienBudgetresultatDto, Integer> mapAndReturn(
         final BiConsumer<FamilienBudgetresultatDto, Integer> setter,
         final int value
     ) {
-        return (FamilienbudgetFunction) CalculatorUtilV1.mapAndReturn(setter, value);
+        return CalculatorUtilV1.mapAndReturn(setter, value);
     }
 
     private int applyAndSum(
-        final List<FamilienbudgetFunction> toApply,
+        final List<Function<FamilienBudgetresultatDto, Integer>> toApply,
         final FamilienBudgetresultatDto result
     ) {
         return CalculatorUtilV1.applyAndSum(
-            toApply.stream().map(x -> x),
+            toApply.stream(),
             result
         );
     }

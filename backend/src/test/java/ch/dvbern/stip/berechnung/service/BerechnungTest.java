@@ -53,10 +53,10 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
-import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -68,11 +68,15 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@QuarkusTest
 @RequiredArgsConstructor
 @Slf4j
 class BerechnungTest {
-    private final BerechnungService berechnungService;
+    private BerechnungService berechnungService;
+
+    @BeforeEach
+    void setUpEach() {
+        berechnungService = BerechnungUtil.getMockBerechnungService();
+    }
 
     @Test
     void getV1Test() {

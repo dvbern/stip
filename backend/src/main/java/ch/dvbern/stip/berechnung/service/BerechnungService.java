@@ -24,7 +24,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
@@ -219,19 +218,17 @@ public class BerechnungService {
 
             final List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
 
-            final ListIterator<Steuerdaten> steuerdatenListIterator = steuerdaten.stream()
+            final var steuerdatenList = steuerdaten.stream()
                 .sorted(
                     Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
                 )
-                .toList()
-                .listIterator();
+                .toList();
 
-            while (steuerdatenListIterator.hasNext()) {
-                final var budgetIndex = steuerdatenListIterator.nextIndex();
+            for (int i = 0; i < steuerdatenList.size(); i++) {
                 familienBudgetresultatList.add(
                     familienBudgetresultatFromRequest(
                         stipendienCalculated,
-                        budgetIndex
+                        i
                     )
                 );
             }

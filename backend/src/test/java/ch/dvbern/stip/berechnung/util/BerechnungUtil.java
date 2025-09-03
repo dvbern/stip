@@ -21,11 +21,26 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
+import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
+import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
+import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder;
+import ch.dvbern.stip.berechnung.dto.v1.BerechnungsStammdatenV1Mapper;
+import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.service.PersonenImHaushaltCalculator;
+import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
+import ch.dvbern.stip.berechnung.service.StipendienCalculator;
+import ch.dvbern.stip.berechnung.service.v1.PersonenImHaushaltCalculatorV1;
+import ch.dvbern.stip.berechnung.service.v1.StipendienCalculatorV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
+import org.mockito.Mockito;
 
 @UtilityClass
 public class BerechnungUtil {
@@ -40,5 +55,42 @@ public class BerechnungUtil {
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public BerechnungService getMockBerechnungService() {
+        final var personenImHaushaltCalculators = (Instance<PersonenImHaushaltCalculator>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltCalculatorV1()))
+            .when(personenImHaushaltCalculators)
+            .stream();
+
+        final var personenImHaushaltRequestBuilders =
+            (Instance<PersonenImHaushaltRequestBuilder>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltRequestV1Builder()))
+            .when(personenImHaushaltRequestBuilders)
+            .stream();
+
+        final var personenImHaushaltService = new PersonenImHaushaltService(
+            personenImHaushaltCalculators,
+            personenImHaushaltRequestBuilders
+        );
+
+        final var requestBuilders = (Instance<BerechnungRequestBuilder>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new BerechnungRequestV1Builder(personenImHaushaltService)))
+            .when(requestBuilders)
+            .stream();
+
+        final var berechnungStammdatenMapper = (Instance<BerechnungsStammdatenMapper>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new BerechnungsStammdatenV1Mapper()))
+            .when(berechnungStammdatenMapper)
+            .stream();
+
+        final var calculators = (Instance<StipendienCalculator>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new StipendienCalculatorV1())).when(calculators).stream();
+
+        return new BerechnungService(
+            requestBuilders,
+            berechnungStammdatenMapper,
+            calculators
+        );
     }
 }

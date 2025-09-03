@@ -82,8 +82,8 @@ public class PersoenlichesBudgetCalculatorV1 {
         final FamilienBudgetresultatDto familienbudget2,
         final StammdatenV1 stammdaten
     ) {
-        List<PersoenlichesBudgetFunction> haushaltToApply;
-        PersoenlichesBudgetFunction verpflegungApplier;
+        List<Function<PersoenlichesBudgetresultatDto, Integer>> haushaltToApply;
+        Function<PersoenlichesBudgetresultatDto, Integer> verpflegungApplier;
         if (antragssteller.isEigenerHaushalt()) {
             haushaltToApply = List.of(
                 mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, antragssteller.getGrundbedarf()),
@@ -115,7 +115,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             }
         }
 
-        List<PersoenlichesBudgetFunction> verheiratetKonkubinatToApply;
+        List<Function<PersoenlichesBudgetresultatDto, Integer>> verheiratetKonkubinatToApply;
         if (antragssteller.isVerheiratetKonkubinat()) {
             verheiratetKonkubinatToApply = List.of(
                 mapAndReturn(
@@ -270,19 +270,19 @@ public class PersoenlichesBudgetCalculatorV1 {
         extends Function<PersoenlichesBudgetresultatDto, Integer> {
     }
 
-    private PersoenlichesBudgetFunction mapAndReturn(
+    private Function<PersoenlichesBudgetresultatDto, Integer> mapAndReturn(
         final BiConsumer<PersoenlichesBudgetresultatDto, Integer> getter,
         final Integer value
     ) {
-        return (PersoenlichesBudgetFunction) CalculatorUtilV1.mapAndReturn(getter, value);
+        return CalculatorUtilV1.mapAndReturn(getter, value);
     }
 
     private int applyAndSum(
-        final List<PersoenlichesBudgetFunction> toApply,
+        final List<Function<PersoenlichesBudgetresultatDto, Integer>> toApply,
         final PersoenlichesBudgetresultatDto result
     ) {
         return CalculatorUtilV1.applyAndSum(
-            toApply.stream().map(function -> function),
+            toApply.stream(),
             result
         );
     }
