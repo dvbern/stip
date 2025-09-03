@@ -26,9 +26,9 @@ import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.service.StipendienCalculator;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 
-@ApplicationScoped
+@Singleton
 @CalculatorVersion(major = 1, minor = 0)
 public class StipendienCalculatorV1 implements StipendienCalculator {
     @Override

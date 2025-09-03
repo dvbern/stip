@@ -20,6 +20,7 @@ package ch.dvbern.stip.berechnung.service;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -30,11 +31,14 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.util.TestUtil;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
+import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
+import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
+import ch.dvbern.stip.berechnung.service.v1.PersonenImHaushaltCalculatorV1;
+import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -42,10 +46,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
-@QuarkusTest
 @Slf4j
 class PersonenImHaushaltServiceTest {
-    @Inject
     PersonenImHaushaltService personenImHaushaltService;
 
     GesuchFormular gesuchFormular;
@@ -59,6 +61,19 @@ class PersonenImHaushaltServiceTest {
             .setFamiliensituation(
                 new Familiensituation()
             );
+
+        final var calculators = (Instance<PersonenImHaushaltCalculator>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltCalculatorV1())).when(calculators).stream();
+
+        final var requestBuilders = (Instance<PersonenImHaushaltRequestBuilder>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltRequestV1Builder()))
+            .when(requestBuilders)
+            .stream();
+
+        personenImHaushaltService = new PersonenImHaushaltService(
+            calculators,
+            requestBuilders
+        );
     }
 
     @Test
