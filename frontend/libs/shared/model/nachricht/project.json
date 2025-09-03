@@ -1,0 +1,9 @@
+{
+  "name": "shared-model-nachricht",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/model/nachricht/src",
+  "projectType": "library",
+  "tags": ["type:model", "scope:shared"],
+  "// targets": "to see all targets run: nx show project shared-model-nachricht --web",
+  "targets": {}
+}

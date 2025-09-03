@@ -153,6 +153,7 @@
       "@dv/shared/model/global-notification": ["libs/shared/model/global-notification/src/index.ts"],
       "@dv/shared/model/language": ["libs/shared/model/language/src/index.ts"],
       "@dv/shared/model/lebenslauf": ["libs/shared/model/lebenslauf/src/index.ts"],
+      "@dv/shared/model/nachricht": ["libs/shared/model/nachricht/src/index.ts"],
       "@dv/shared/model/permission-state": ["libs/shared/model/permission-state/src/index.ts"],
       "@dv/shared/model/router": ["libs/shared/model/router/src/index.ts"],
       "@dv/shared/model/select-search": ["libs/shared/model/select-search/src/index.ts"],

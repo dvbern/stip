@@ -7,12 +7,12 @@ import {
 } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { Notification } from '@dv/shared/model/gesuch';
+import { SharedModelNachricht } from '@dv/shared/model/nachricht';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 
 type NotificationDialogData = {
-  notification: Notification;
+  notification: SharedModelNachricht;
 };
 
 @Component({
@@ -32,7 +32,7 @@ export class SharedUiNotificationDialogComponent {
 
   data = inject<NotificationDialogData>(MAT_DIALOG_DATA);
 
-  static open(dialog: MatDialog, notification: Notification) {
+  static open(dialog: MatDialog, notification: SharedModelNachricht) {
     dialog.open(SharedUiNotificationDialogComponent, {
       data: { notification },
     });
