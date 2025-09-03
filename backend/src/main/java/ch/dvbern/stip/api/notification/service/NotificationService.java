@@ -23,6 +23,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -45,17 +47,14 @@ import lombok.RequiredArgsConstructor;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final GesuchRepository gesuchRepository;
+    private final MailService mailService;
 
     @Transactional
     public void createDelegierungAbgelehntNotification(final Delegierung delegierung) {
         final var gesuch = gesuchRepository.findAllForFall(delegierung.getDelegierterFall().getId())
             .max(Comparator.comparing(Gesuch::getTimestampErstellt))
             .orElseThrow();
-        final var sprache = gesuch.getNewestGesuchTranche()
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache();
+        final var sprache = delegierung.getPersoenlicheAngaben().getSprache();
 
         Notification notification = new Notification()
             .setNotificationType(NotificationType.DELEGIERUNG_ABGELEHNT)
@@ -65,6 +64,8 @@ public class NotificationService {
         final String msg = Templates.getDelegierungAbgelehnt(sprache, delegierung.getSozialdienst().getName()).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
 
     @Transactional
@@ -87,6 +88,8 @@ public class NotificationService {
             Templates.getDelegierungAngenommen(sprache, delegierung.getSozialdienst().getName()).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+
+        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
     }
 
     @Transactional
