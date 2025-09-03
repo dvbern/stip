@@ -37,19 +37,6 @@ public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
-        if (
-            gesuchFormular.getEinnahmenKosten() == null
-        ) {
-            return true;
-        }
-
-        // This is fine, the @NotNull constraints on the properties will trigger
-        if (
-            gesuchFormular.getTranche() == null ||
-            gesuchFormular.getTranche().getGesuch() == null
-        ) {
-            return true;
-        }
 
         if (
             Objects.nonNull(gesuchFormular.getEinnahmenKosten().getVeranlagungsStatus()) &&
