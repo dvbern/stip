@@ -185,8 +185,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <mat-paginator
-        [pageSizeOptions]="[10, 20, 50]"
-        pageSize="10"
+        [pageSizeOptions]="pageSizes"
+        [pageSize]="defaultPageSize"
         [length]="countryDataSourceSig().data.length"
         showFirstLastButtons
       >

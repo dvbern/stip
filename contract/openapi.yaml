@@ -6386,13 +6386,10 @@ components:
           type: string
     NeskoGetSteuerdatenRequest:
       required:
-        - token
         - steuerdatenTyp
         - steuerjahr
       type: object
       properties:
-        token:
-          type: string
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuerjahr:
@@ -6696,17 +6693,30 @@ components:
               $ref: '#/components/schemas/Zahlungsverbindung'
             aktiv:
               type: boolean
+    StatusprotokollEntryTyp:
+      enum:
+        - GESUCH
+        - AENDERUNG
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
+      required:
+        - timestamp
+        - statusTo
+        - typ
+        - benutzer
+        - kommentar
       properties:
         timestamp:
           description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
           type: string
           format: date-time
-        status:
-          description: 'Status welcher am stichtag erreicht wurde'
-          $ref: '#/components/schemas/Gesuchstatus'
+        statusFrom:
+          type: string
+        statusTo:
+          type: string
+        typ:
+          $ref: '#/components/schemas/StatusprotokollEntryTyp'
         benutzer:
           description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
           type: string

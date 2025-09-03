@@ -494,9 +494,12 @@
   "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.infos.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Datum",
+  "sachbearbeitung-app.infos.protokoll.table.typ": "Typ",
   "sachbearbeitung-app.infos.protokoll.table.status": "Status",
   "sachbearbeitung-app.infos.protokoll.table.user": "User",
   "sachbearbeitung-app.infos.protokoll.table.kommentar": "Kommentar",
+  "sachbearbeitung-app.infos.protokoll.table.typ.GESUCH": "Gesuch",
+  "sachbearbeitung-app.infos.protokoll.table.typ.AENDERUNG": "Änderung",
 
   "sachbearbeitung-app.infos.notizen.description": "Eine Übersicht aller Notizen",
   "sachbearbeitung-app.infos.notizen.title": "Notizen",
@@ -657,7 +660,6 @@
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Steuerdaten mittels Nesko aktualisieren",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Wollen sie wirklich die Daten für das definierte Jahr aus Nesko laden?<br>Die Formularfelder werden überschrieben.",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label": "Steuerjahr um die Daten aus Nesko zu laden",
-  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.token.label": "Authentifizierungstoken",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Daten laden",
 
   "sachbearbeitung-app.unauthorized.title": "Zugriff verweigert",

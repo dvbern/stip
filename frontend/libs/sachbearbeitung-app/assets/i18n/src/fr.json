@@ -494,9 +494,12 @@
   "sachbearbeitung-app.infos.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
   "sachbearbeitung-app.infos.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Date",
+  "sachbearbeitung-app.infos.protokoll.table.typ": "Type",
   "sachbearbeitung-app.infos.protokoll.table.status": "Statut",
   "sachbearbeitung-app.infos.protokoll.table.user": "User",
   "sachbearbeitung-app.infos.protokoll.table.kommentar": "Commentaire",
+  "sachbearbeitung-app.infos.protokoll.table.typ.GESUCH": "Demande",
+  "sachbearbeitung-app.infos.protokoll.table.typ.AENDERUNG": "Modification",
 
   "sachbearbeitung-app.infos.notizen.description": "Un aperçu de toutes les notes",
   "sachbearbeitung-app.infos.notizen.title": "Notes",
@@ -657,7 +660,6 @@
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Mettre à jour les données fiscales via Nesko",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Voulez-vous vraiment charger les données de Nesko pour l'année définie?<br>Les champs du formulaire seront écrasés.",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label": "Année fiscale pour charger les données de Nesko",
-  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.token.label": "Token d'authentification",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Charger les données",
 
   "sachbearbeitung-app.unauthorized.title": "Accès refusé",

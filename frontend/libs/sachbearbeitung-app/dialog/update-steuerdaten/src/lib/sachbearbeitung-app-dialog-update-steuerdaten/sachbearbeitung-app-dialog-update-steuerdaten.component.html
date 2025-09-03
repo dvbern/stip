@@ -21,15 +21,6 @@
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field dvSharedUiFormField class="mt-4 tw-w-full">
-      <mat-label>{{
-        'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.token.label' | transloco
-      }}</mat-label>
-      <textarea data-testid="steuerdaten-update-token" matInput formControlName="token" cols="4"></textarea>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-    </mat-form-field>
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}

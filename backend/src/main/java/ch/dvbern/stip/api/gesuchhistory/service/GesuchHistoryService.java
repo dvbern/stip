@@ -17,18 +17,16 @@
 
 package ch.dvbern.stip.api.gesuchhistory.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollMapper;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -38,12 +36,6 @@ public class GesuchHistoryService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final GesuchRepository gesuchRepository;
     private final StatusprotokollMapper statusprotokollMapper;
-
-    @Transactional
-    public List<StatusprotokollEntryDto> getStatusprotokoll(final UUID gesuchId) {
-        final var revisions = gesuchHistoryRepository.getStatusHistory(gesuchId);
-        return revisions.stream().map(statusprotokollMapper::toDto).toList();
-    }
 
     public Optional<Gesuch> getFirstWhereStatusChangedTo(
         final UUID gesuchId,

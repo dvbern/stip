@@ -190,6 +190,7 @@ export * from './sozialdienstSlim';
 export * from './sozialdienstUpdate';
 export * from './sprache';
 export * from './statusprotokollEntry';
+export * from './statusprotokollEntryTyp';
 export * from './steuerdaten';
 export * from './steuerdatenTyp';
 export * from './steuererklaerungUpdate';
