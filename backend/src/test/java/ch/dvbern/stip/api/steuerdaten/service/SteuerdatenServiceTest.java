@@ -146,8 +146,8 @@ class SteuerdatenServiceTest {
 
         actualSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
 
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
-        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(false);
+        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
+        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(true);
         steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
         assertThat(
             actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
@@ -169,8 +169,8 @@ class SteuerdatenServiceTest {
         steuerdatenSet.add(actualSteuerdaten);
         gesuchFormular.setSteuerdaten(steuerdatenSet);
 
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
-        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(false);
+        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
+        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(true);
 
         // act
         steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
@@ -239,7 +239,7 @@ class SteuerdatenServiceTest {
         gesuchFormular.setSteuerdaten(steuerdatenSet);
 
         // none of the parents is selbstaendig -> isArbeitsverhaeltnisSelbstaendig = false
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
+        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
 
         // act
         steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, 2021);
