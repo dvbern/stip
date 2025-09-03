@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
+import ch.dvbern.stip.api.common.statemachines.StateChangeWithCommentHandler;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -25,13 +26,14 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class GesuchTrancheFehlendeDokumenteHandler implements GesuchTrancheStatusChangeHandler {
+public class GesuchTrancheFehlendeDokumenteHandler implements StateChangeWithCommentHandler<GesuchTranche> {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchService gesuchService;
 
     @Override
     public void handle(
-        GesuchTranche gesuchTranche
+        GesuchTranche gesuchTranche,
+        String comment
     ) {
         gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuchTranche.getGesuch());
         gesuchService.setDefaultNachfristDokumente(gesuchTranche.getGesuch());

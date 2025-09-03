@@ -99,7 +99,7 @@
         </tr>
       </table>
 
-      <mat-paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+      <mat-paginator showFirstLastButtons [pageSizeOptions]="pageSizes" [pageSize]="defaultPageSize"></mat-paginator>
     </div>
     <dv-shared-ui-form-save class="tw-mt-6" [loading]="store.sachbearbeiter() | rdIsPending"></dv-shared-ui-form-save>
   </form>

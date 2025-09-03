@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusChangeEventTrigger;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,6 +62,7 @@ class GesuchStatusStateMachineTest {
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
+    private StatusprotokollService statusprotokollService;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
     @BeforeEach
@@ -79,6 +81,7 @@ class GesuchStatusStateMachineTest {
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class);
         stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
+        statusprotokollService = Mockito.mock(StatusprotokollService.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -92,7 +95,8 @@ class GesuchStatusStateMachineTest {
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
             stipendienAnspruchHandlerSpy,
-            juristischeAbklaerungDurchPruefungHandlerSpy
+            juristischeAbklaerungDurchPruefungHandlerSpy,
+            statusprotokollService
         ).createStateMachineConfig();
     }
 

@@ -25,6 +25,11 @@ import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/ben
 import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { Sachbearbeiter } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
+import {
+  DEFAULT_PAGE_SIZE,
+  INPUT_DELAY,
+  PAGE_SIZES,
+} from '@dv/shared/model/ui-constants';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -38,7 +43,6 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
-const INPUT_DELAY = 600;
 const ROLE_TRANSATION_PREFIX = 'shared.role.';
 
 @Component({
@@ -76,6 +80,8 @@ export class BenutzerOverviewComponent {
 
   displayedColumns = ['name', 'email', 'roles', 'actions'];
   showFullListForBenutzer: Record<string, boolean> = {};
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
