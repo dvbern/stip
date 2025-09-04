@@ -140,8 +140,6 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.steuerdaten.steuerjahr.invalid.message}";
     public static final String VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE =
         "{jakarta.validation.constraints.steuerdaten.veranlagungsstatus.invalid.message}";
-    public static final String VALIDATION_EINNAHMENKOSTEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE =
-        "{jakarta.validation.constraints.einnahmenkosten.veranlagungsstatus.invalid.message}";
     public static final String VALIDATION_STEUERDATEN_TAB_INVALID_MESSAGE =
         "{jakarta.validation.constraints.steuerdaten.tab.invalid.message}";
     public static final String VALIDATION_LEBENSLAUF_AUSBILDUNG_UEBERSCHNEIDEN_MESSAGE =

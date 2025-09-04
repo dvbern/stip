@@ -101,7 +101,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_veranlagung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String veranlagungsStatus;
+    private String veranlagungsStatus = "Manuell";
 
     @NotNull
     @Column(name = "steuerjahr", nullable = false)
