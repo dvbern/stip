@@ -5896,6 +5896,7 @@ components:
         - CH_SHIS
         - BUR_NO
         - CT_NO
+        - OHNE_NO
     AusbildungsstaetteSortColumn:
       enum:
         - NAME_DE
