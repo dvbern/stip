@@ -2,8 +2,6 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMaDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
@@ -46,10 +44,10 @@ public interface DelegierenResource {
     @GET
     @Path("/delegierung/{getDelegierungSozQueryType}/admin")
     @Produces({ "application/json", "text/plain" })
-    PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(@PathParam("getDelegierungSozQueryType") GetDelegierungSozQueryTypeAdminDto getDelegierungSozQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("nachname")   String nachname,@QueryParam("vorname")   String vorname,@QueryParam("geburtsdatum")   LocalDate geburtsdatum,@QueryParam("wohnort")   String wohnort,@QueryParam("delegierungAngenommen")   Boolean delegierungAngenommen,@QueryParam("sortColumn")   SozDashboardColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(@PathParam("getDelegierungSozQueryType") ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("nachname")   String nachname,@QueryParam("vorname")   String vorname,@QueryParam("geburtsdatum")   LocalDate geburtsdatum,@QueryParam("wohnort")   String wohnort,@QueryParam("delegierungAngenommen")   Boolean delegierungAngenommen,@QueryParam("sortColumn")   SozDashboardColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
     @Path("/delegierung/{getDelegierungSozQueryType}/ma")
     @Produces({ "application/json", "text/plain" })
-    PaginatedSozDashboardDto getDelegierungsOfSozialdienstMa(@PathParam("getDelegierungSozQueryType") GetDelegierungSozQueryTypeMaDto getDelegierungSozQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("nachname")   String nachname,@QueryParam("vorname")   String vorname,@QueryParam("geburtsdatum")   LocalDate geburtsdatum,@QueryParam("wohnort")   String wohnort,@QueryParam("sortColumn")   SozDashboardColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    PaginatedSozDashboardDto getDelegierungsOfSozialdienstMitarbeiter(@PathParam("getDelegierungSozQueryType") ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter getDelegierungSozQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("nachname")   String nachname,@QueryParam("vorname")   String vorname,@QueryParam("geburtsdatum")   LocalDate geburtsdatum,@QueryParam("wohnort")   String wohnort,@QueryParam("sortColumn")   SozDashboardColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 }

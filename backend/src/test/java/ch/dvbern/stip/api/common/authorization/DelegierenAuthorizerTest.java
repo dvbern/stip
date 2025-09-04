@@ -110,7 +110,7 @@ class DelegierenAuthorizerTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(any())).thenReturn(true);
 
         // act & assert
-        assertDoesNotThrow(() -> delegierenAuthorizer.canReadDelegierungMa());
+        assertDoesNotThrow(() -> delegierenAuthorizer.canReadDelegierungMitarbeiter());
     }
 
     @Test

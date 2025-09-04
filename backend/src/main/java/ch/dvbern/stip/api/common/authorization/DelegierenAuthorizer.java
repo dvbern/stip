@@ -44,7 +44,7 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
     @Transactional
-    public void canReadDelegierungMa() {
+    public void canReadDelegierungMitarbeiter() {
         permitAll();
     }
 

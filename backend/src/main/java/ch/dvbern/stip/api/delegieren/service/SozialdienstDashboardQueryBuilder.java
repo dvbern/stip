@@ -24,9 +24,9 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,7 +41,7 @@ public class SozialdienstDashboardQueryBuilder {
     private static final QDelegierung qDelegierung = QDelegierung.delegierung;
 
     public JPAQuery<Delegierung> baseQuery(
-        final GetDelegierungSozQueryTypeAdminDto queryType,
+        final GetDelegierungSozQueryTypeAdmin queryType,
         final UUID sozialdienstId
     ) {
         final var me = benutzerService.getCurrentBenutzer();
