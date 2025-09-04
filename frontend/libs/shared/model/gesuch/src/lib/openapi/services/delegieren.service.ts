@@ -24,8 +24,7 @@ import { GetDelegierungSozQueryTypeAdmin } from '../model/getDelegierungSozQuery
 import { GetDelegierungSozQueryTypeMa } from '../model/getDelegierungSozQueryTypeMa';
 import { PaginatedSozDashboard } from '../model/paginatedSozDashboard';
 import { SortOrder } from '../model/sortOrder';
-import { SozDashboardColumnAdmin } from '../model/sozDashboardColumnAdmin';
-import { SozDashboardColumnMa } from '../model/sozDashboardColumnMa';
+import { SozDashboardColumn } from '../model/sozDashboardColumn';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -59,7 +58,7 @@ export interface DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParam
     delegierungAngenommen?: boolean;
     page: number;
     pageSize: number;
-    sortColumn?: SozDashboardColumnAdmin;
+    sortColumn?: SozDashboardColumn;
     sortOrder?: SortOrder;
 }
 
@@ -72,7 +71,7 @@ export interface DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams {
     wohnort?: string;
     page: number;
     pageSize: number;
-    sortColumn?: SozDashboardColumnMa;
+    sortColumn?: SozDashboardColumn;
     sortOrder?: SortOrder;
 }
 

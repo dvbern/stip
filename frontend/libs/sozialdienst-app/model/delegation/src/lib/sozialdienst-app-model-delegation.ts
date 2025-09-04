@@ -8,8 +8,7 @@ import {
   GetDelegierungSozQueryTypeAdmin,
   GetDelegierungSozQueryTypeMa,
   PersoenlicheAngaben,
-  SozDashboardColumnAdmin,
-  SozDashboardColumnMa,
+  SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
 
@@ -45,13 +44,13 @@ export type WohnortKey = `wohn${OrtKey}`;
 
 export type SozCockpitFilterFormKeys =
   | FallWithDelegierungKeys
-  | PersoehnelicheAngabenKeys
+  | Exclude<PersoehnelicheAngabenKeys, 'email' | 'sprache'>
   | WohnortKey
   | StatusKey;
 
 export type SozCockpitFilterKeys =
   | FallWithDelegierungKeys
-  | PersoehnelicheAngabenKeys
+  | Exclude<PersoehnelicheAngabenKeys, 'email' | 'sprache'>
   | WohnortKey;
 
 export type SozCockpitFilterInputs = Record<
@@ -60,7 +59,7 @@ export type SozCockpitFilterInputs = Record<
 >;
 
 export interface SozCockpitBaseFilterInputs
-  extends SortAndPageInputs<SozDashboardColumnAdmin | SozDashboardColumnMa> {
+  extends SortAndPageInputs<SozDashboardColumn> {
   show: InputSignal<GetDelegierungSozQueryType | undefined>;
 }
 

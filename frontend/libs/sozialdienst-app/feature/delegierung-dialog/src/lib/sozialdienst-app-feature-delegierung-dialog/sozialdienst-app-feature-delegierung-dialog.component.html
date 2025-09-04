@@ -37,6 +37,28 @@
       </mat-error>
     </mat-form-field>
 
+    <div class="tw-w-full md:tw-row-span-2">
+      <!-- Sprache -->
+      <label>{{ 'shared.form.delegation.sprache.label' | transloco }}</label>
+      <mat-radio-group
+        class="d-flex flex-column"
+        [formControl]="form.controls.sprache"
+        data-testid="form-delegieren-sprache"
+        dvSharedUiFormField
+      >
+        @for (sprache of spracheValues; track $index) {
+          <mat-radio-button [attr.data-testid]="sprache" [value]="sprache">{{
+            'shared.language.' + sprache | transloco
+          }}</mat-radio-button>
+        }
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </div>
+      </mat-radio-group>
+    </div>
+
     <!-- Anrede -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
       <mat-label>{{ 'shared.form.person.salutation.label' | transloco }}</mat-label>
@@ -103,6 +125,24 @@
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'maxDate'">
         {{ 'shared.form.error.maxDatePast' | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <!-- E-Mail -->
+      <mat-label>{{ 'shared.form.delegation.email.label' | transloco }}</mat-label>
+      <input
+        matInput
+        dvMaxLength
+        type="email"
+        [formControl]="form.controls.email"
+        data-testid="form-delegieren-email"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'pattern'">
+        {{ 'shared.form.error.email' | transloco }}
       </mat-error>
     </mat-form-field>
   </form>

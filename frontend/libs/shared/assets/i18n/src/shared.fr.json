@@ -412,6 +412,9 @@
   "shared.form.aenderung.action.reject": "Rejeter",
   "shared.form.aenderung.action.manuallyChange": "Apporter des modifications manuelles",
 
+  "shared.form.delegation.email.label": "Email",
+  "shared.form.delegation.sprache.label": "Langue de correspondance",
+
   "shared.person.title": "Person in Education",
   "shared.form.person.sozialversicherungsnummer.info": "Le numéro d’assurance sociale correspond au numéro AVS. Ce numéro à 13 chiffres figure sur la carte d’assurance-maladie ou peut être obtenu auprès de l’administration communale de la commune de résidence. Si vous n’avez pas de numéro d’assurance sociale, veuillez nous contacter.",
   "shared.form.person.sozialversicherungsnummer.infoTitle": "Informations sur le numéro de sécurité sociale",

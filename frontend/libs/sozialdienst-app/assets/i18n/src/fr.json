@@ -11,8 +11,10 @@
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Gestion des utilisateurs",
 
   "sozialdienst-app.admin.sozialdienstBenutzer.route.overview": "Gestion des utilisateurs",
+  "sozialdienst-app.admin.sozialdienstBenutzer.overview.description": "Un aperçu de tous les utilisateurs du service social.",
   "sozialdienst-app.admin.sozialdienstBenutzer.create": "Créer",
   "sozialdienst-app.admin.sozialdienstBenutzer.edit": "Modifier",
+  "sozialdienst-app.admin.sozialdienstBenutzer.delete": "Supprimer",
   "sozialdienst-app.admin.sozialdienstBenutzer.name.label": "Nom",
   "sozialdienst-app.admin.sozialdienstBenutzer.nachname.label": "Nom",
   "sozialdienst-app.admin.sozialdienstBenutzer.vorname.label": "Prénom",
@@ -45,5 +47,6 @@
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Travailleur social",
   "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Modifier l'affectation",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Veuillez enregistrer les modifications avant de fermer la boîte de dialogue.",
-  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Rejeter la délégation"
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Rejeter la délégation",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Voulez-vous vraiment rejeter la demande de délégation ?"
 }

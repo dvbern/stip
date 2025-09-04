@@ -11,8 +11,10 @@
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Benutzerverwaltung",
 
   "sozialdienst-app.admin.sozialdienstBenutzer.route.overview": "Benutzerverwaltung",
+  "sozialdienst-app.admin.sozialdienstBenutzer.overview.description": "Eine Übersicht aller Sozialdienst Benutzer.",
   "sozialdienst-app.admin.sozialdienstBenutzer.create": "Erstellen",
   "sozialdienst-app.admin.sozialdienstBenutzer.edit": "Bearbeiten",
+  "sozialdienst-app.admin.sozialdienstBenutzer.delete": "Löschen",
   "sozialdienst-app.admin.sozialdienstBenutzer.name.label": "Name",
   "sozialdienst-app.admin.sozialdienstBenutzer.nachname.label": "Name",
   "sozialdienst-app.admin.sozialdienstBenutzer.vorname.label": "Vorname",
@@ -45,5 +47,6 @@
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Sozialdienstmitarbeiter",
   "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Zuweisung ändern",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Bitte speichern Sie die Änderungen, bevor Sie den Dialog schließen.",
-  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Anfrage ablehnen"
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Anfrage ablehnen",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Wollen Sie die Delegierungsanfrage wirklich ablehnen?"
 }

@@ -333,17 +333,17 @@
                   </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsSig()"></tr>
                 <tr
                   dvSharedUiFocusableListItem
                   mat-row
                   tabindex="-1"
-                  *dvMatRowDef="let fall; dataSource: faelleDataSourceSig(); columns: displayedColumns"
+                  *dvMatRowDef="let fall; dataSource: faelleDataSourceSig(); columns: displayedColumnsSig()"
                   [routerLink]="['/fall', fall.id]"
                   class="highlightable"
                 ></tr>
                 <tr class="mat-mdc-row" *matNoDataRow>
-                  <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                  <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumnsSig().length">
                     {{ 'shared.table.noData' | transloco }}
                   </td>
                 </tr>

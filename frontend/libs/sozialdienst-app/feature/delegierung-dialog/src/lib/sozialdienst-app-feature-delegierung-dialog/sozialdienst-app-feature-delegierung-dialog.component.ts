@@ -21,14 +21,17 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { Anrede, FallWithDelegierung } from '@dv/shared/model/gesuch';
+import { Anrede, FallWithDelegierung, Sprache } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -40,15 +43,11 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
-  MAX_AGE_GESUCHSSTELLER,
   MEDIUM_AGE_GESUCHSSTELLER,
-  MIN_AGE_GESUCHSSTELLER,
-  maxDateValidatorForLocale,
-  minDateValidatorForLocale,
   onDateInputBlur,
   parseBackendLocalDateAndPrint,
-  parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+import { SozialdienstAppTranslationKey } from '@dv/sozialdienst-app/assets/i18n';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 
 export interface DelegierungDialogData {
@@ -64,6 +63,7 @@ export interface DelegierungDialogData {
     MatInputModule,
     MatInputModule,
     MatSelectModule,
+    MatRadioModule,
     SharedUiHasRolesDirective,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -78,6 +78,7 @@ export interface DelegierungDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DelegierungDialogComponent implements OnInit, OnDestroy {
+  private dialog = inject(MatDialog);
   private dialogRef =
     inject<MatDialogRef<DelegierungDialogComponent, boolean>>(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
@@ -86,6 +87,7 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   dialogData = inject<DelegierungDialogData>(MAT_DIALOG_DATA);
 
   readonly anredeValues = Object.values(Anrede);
+  readonly spracheValues = Object.values(Sprache);
 
   isPending = isPending;
 
@@ -102,33 +104,16 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   }
 
   form = this.formBuilder.group({
-    fallNummer: ['', [Validators.required]],
-    anrede: this.formBuilder.control<Anrede>('' as Anrede, {
-      validators: Validators.required,
-    }),
-    nachname: ['', [Validators.required]],
-    vorname: ['', [Validators.required]],
+    fallNummer: [''],
+    anrede: [''],
+    nachname: [''],
+    vorname: [''],
     adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
       this.formBuilder,
     ),
-    geburtsdatum: [
-      '',
-      [
-        Validators.required,
-        parseableDateValidatorForLocale(this.languageSig(), 'date'),
-        minDateValidatorForLocale(
-          this.languageSig(),
-          subYears(new Date(), MAX_AGE_GESUCHSSTELLER),
-          'date',
-        ),
-
-        maxDateValidatorForLocale(
-          this.languageSig(),
-          subYears(new Date(), MIN_AGE_GESUCHSSTELLER),
-          'date',
-        ),
-      ],
-    ],
+    geburtsdatum: [''],
+    email: [''],
+    sprache: [''],
   });
 
   zuweisungSozMitarbeiterForm = this.formBuilder.group({
@@ -190,6 +175,8 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
         this.dialogData.fall.delegierung.persoenlicheAngaben?.geburtsdatum,
         this.languageSig(),
       ),
+      email: this.dialogData.fall.delegierung.persoenlicheAngaben?.email,
+      sprache: this.dialogData.fall.delegierung.persoenlicheAngaben?.sprache,
     });
     if (this.dialogData.fall.delegierung.persoenlicheAngaben?.adresse) {
       SharedUiFormAddressComponent.patchForm(
@@ -232,14 +219,26 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
 
   rejectDelegation() {
     const delegierungId = this.dialogData.fall.delegierung.id;
-
     if (delegierungId) {
-      this.delegationStore.delegierungAblehnen$({
-        delegierungId,
-        onSuccess: () => {
-          this.dialogRef.close(true);
-        },
-      });
+      SharedUiConfirmDialogComponent.open<
+        SharedTranslationKey | SozialdienstAppTranslationKey
+      >(this.dialog, {
+        title:
+          'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject',
+        message:
+          'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message',
+      })
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.delegationStore.delegierungAblehnen$({
+              delegierungId,
+              onSuccess: () => {
+                this.dialogRef.close(true);
+              },
+            });
+          }
+        });
     }
   }
 

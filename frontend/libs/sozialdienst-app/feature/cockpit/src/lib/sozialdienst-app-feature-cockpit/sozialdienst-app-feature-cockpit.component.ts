@@ -36,8 +36,7 @@ import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
   FallWithDelegierung,
   SortOrder,
-  SozDashboardColumnAdmin,
-  SozDashboardColumnMa,
+  SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
 import {
   DEFAULT_PAGE_SIZE,
@@ -82,6 +81,10 @@ import {
 } from '@dv/sozialdienst-app/model/delegation';
 
 const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
+type DisplayColumns =
+  | SozDashboardColumn
+  | 'DELEGIERUNG_ANGENOMMEN'
+  | 'AKTIONEN';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-cockpit',
@@ -141,9 +144,7 @@ export class SozialdienstAppFeatureCockpitComponent
   vorname = input<string | undefined>(undefined);
   geburtsdatum = input<string | undefined>(undefined);
   wohnort = input<string | undefined>(undefined);
-  sortColumn = input<
-    SozDashboardColumnAdmin | SozDashboardColumnMa | undefined
-  >(undefined);
+  sortColumn = input<SozDashboardColumn | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
@@ -163,9 +164,21 @@ export class SozialdienstAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = this.permissionStore.rolesMapSig()['V0_Sozialdienst-Admin']
-    ? [...Object.keys(SozDashboardColumnAdmin), 'AKTIONEN']
-    : [...Object.keys(SozDashboardColumnMa), 'AKTIONEN'];
+  displayedColumnsSig = computed(() => {
+    const roles = this.permissionStore.rolesMapSig();
+
+    return [
+      'FALLNUMMER',
+      'NACHNAME',
+      'VORNAME',
+      'GEBURTSDATUM',
+      'WOHNORT',
+      ...(roles['V0_Sozialdienst-Admin']
+        ? ['DELEGIERUNG_ANGENOMMEN' as const]
+        : []),
+      'AKTIONEN',
+    ] satisfies DisplayColumns[];
+  });
 
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
