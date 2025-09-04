@@ -25,6 +25,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = MappingConfig.class)
 public interface NotificationMapper {
-    @Mapping(source = "gesuch.id", target = "gesuchId")
+    @Mapping(source = "fall.id", target = "fallId")
     NotificationDto toDto(Notification notification);
 }

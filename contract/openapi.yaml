@@ -6770,8 +6770,8 @@ components:
       type: object
       required:
         - notificationType
-        - gesuchId
-        - timestamp
+        - fallId
+        - timestampErstellt
         - userErstellt
         - absender
       properties:
@@ -6779,7 +6779,7 @@ components:
           type: string
         notificationType:
           $ref: '#/components/schemas/NotificationType'
-        gesuchId:
+        fallId:
           $ref: '#/components/schemas/UUID'
         contextId:
           $ref: '#/components/schemas/UUID'

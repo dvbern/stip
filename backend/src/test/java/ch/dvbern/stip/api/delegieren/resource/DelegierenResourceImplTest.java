@@ -29,13 +29,17 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.delegieren.entity.PersoenlicheAngaben;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
 import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapper;
 import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapperImpl;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -66,6 +70,8 @@ class DelegierenResourceImplTest {
     private SozialdienstService sozialdienstService;
     private SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private SozialdienstBenutzerService sozialdienstBenutzerService;
+    private NotificationService notificationService;
+    private MailService mailService;
 
     @BeforeEach
     void setup() {
@@ -77,16 +83,18 @@ class DelegierenResourceImplTest {
         sozialdienstBenutzerRepository = Mockito.mock(SozialdienstBenutzerRepository.class);
         sozialdienstBenutzerService = Mockito.mock(SozialdienstBenutzerService.class);
         adresseMapper = Mockito.mock(AdresseMapperImpl.class);
+        notificationService = Mockito.mock(NotificationService.class);
+        mailService = Mockito.mock(MailService.class);
 
         PersoenlicheAngabenMapper persoenlicheAngabenMapper = new PersoenlicheAngabenMapperImpl(adresseMapper);
         DelegierenAuthorizer delegierenAuthorizer = new DelegierenAuthorizer(
             benutzerService, fallRepository, delegierungRepository, sozialdienstService,
-            sozialdienstBenutzerRepository, null
+            sozialdienstBenutzerRepository, sozialdienstBenutzerService
         );
         DelegierenService delegierenService = new DelegierenService(
             delegierungRepository, fallRepository, sozialdienstRepository, sozialdienstService,
             sozialdienstBenutzerRepository, persoenlicheAngabenMapper, null, null,
-            null, null
+            null, notificationService, mailService
         );
         delegierenApi = new DelegierenResourceImpl(delegierenAuthorizer, delegierenService);
     }
@@ -216,9 +224,20 @@ class DelegierenResourceImplTest {
         sozialdienst.setSozialdienstBenutzers(List.of(currentBenutzer, targetBenutzer));
         sozialdienst.setSozialdienstAdmin(currentBenutzer);
 
+        var persoenlicheAngaben = new PersoenlicheAngaben();
+        persoenlicheAngaben.setNachname("Test N");
+        persoenlicheAngaben.setVorname("Test V");
+        persoenlicheAngaben.setEmail("stip-delegierung@mailbucket.dvbern.ch");
+        persoenlicheAngaben.setSprache(Sprache.DEUTSCH);
+
+        var fall = new Fall();
+        fall.setId(UUID.randomUUID());
+
         var delegierung = new Delegierung();
         delegierung.setId(UUID.randomUUID());
         delegierung.setSozialdienst(sozialdienst);
+        delegierung.setPersoenlicheAngaben(persoenlicheAngaben);
+        delegierung.setDelegierterFall(fall);
 
         var delegierterMitarbeiterAendern = new DelegierterMitarbeiterAendernDto();
         delegierterMitarbeiterAendern.mitarbeiterId(UUID.randomUUID());

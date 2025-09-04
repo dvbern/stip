@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.delegieren.service;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
@@ -53,6 +54,7 @@ public class DelegierenService {
     private final ConfigService configService;
     private final DelegierungMapper delegierungMapper;
     private final NotificationService notificationService;
+    private final MailService mailService;
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
@@ -81,6 +83,10 @@ public class DelegierenService {
 
         if (delegierung.getDelegierterMitarbeiter() == null) {
             notificationService.createDelegierungAngenommenNotification(delegierung);
+            mailService.sendStandardNotificationEmailForFall(
+                delegierung.getPersoenlicheAngaben(),
+                delegierung.getDelegierterFall()
+            );
         }
 
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
@@ -90,6 +96,10 @@ public class DelegierenService {
     public void delegierungAblehnen(final UUID delegierungId) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         notificationService.createDelegierungAbgelehntNotification(delegierung);
+        mailService.sendStandardNotificationEmailForFall(
+            delegierung.getPersoenlicheAngaben(),
+            delegierung.getDelegierterFall()
+        );
         delegierung.getDelegierterFall().setDelegierung(null);
         delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
         delegierungRepository.delete(delegierung);

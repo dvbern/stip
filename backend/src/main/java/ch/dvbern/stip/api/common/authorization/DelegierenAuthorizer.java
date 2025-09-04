@@ -50,8 +50,12 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canReadDelegierungAdmin() {
-        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
-        if (sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer().isBenutzerAdmin(currentBenutzer)) {
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer();
+        if (currentBenutzer.isEmpty()) {
+            forbidden();
+            return;
+        }
+        if (sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer().isBenutzerAdmin(currentBenutzer.get())) {
             return;
         }
 

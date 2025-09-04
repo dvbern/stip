@@ -50,7 +50,6 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
@@ -489,13 +488,13 @@ public class GesuchService {
 
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
-        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var ausbildung = gesuch.getAusbildung();
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
-        notificationService.deleteNotificationsForGesuch(gesuchId);
+        notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
-        final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
 
@@ -1024,7 +1023,7 @@ public class GesuchService {
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
         notificationService.createMissingDocumentNotification(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     public void setDefaultNachfristDokumente(Gesuch gesuch) {
