@@ -85,7 +85,7 @@ class DeleteChangedDocumentsUtilTest {
         final var oldFormular = new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
 
         // Act
-        final var documentsToDelete = DeleteChangedDocumentsUtil.deleteChangedDocuments(null, oldFormular);
+        final var documentsToDelete = DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(null, oldFormular);
 
         // Assert
         assertEquals(documentsToDelete.size(), 0);

@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class DeleteChangedDocumentsUtil {
-    public ArrayList<DokumentTyp> deleteChangedDocuments(
+    public ArrayList<DokumentTyp> getChangedDocumentsToDelete(
         final GesuchFormularUpdateDto newFormular,
         final GesuchFormular oldFormular
     ) {

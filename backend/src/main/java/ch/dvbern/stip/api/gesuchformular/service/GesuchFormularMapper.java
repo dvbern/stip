@@ -200,7 +200,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
-        final var documentsToDelete = DeleteChangedDocumentsUtil.deleteChangedDocuments(newFormular, targetFormular);
+        final var documentsToDelete =
+            DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(newFormular, targetFormular);
 
         resetEinnahmenKosten(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
@@ -209,7 +210,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetSteuererklaerungTabs(newFormular, targetFormular);
         resetSteuererdatenTabs(newFormular, targetFormular);
 
-        gesuchDokumentService.deleteDokumenteForTranche(targetFormular.getTranche().getId(), documentsToDelete);
+        if (!documentsToDelete.isEmpty()) {
+            gesuchDokumentService.deleteDokumenteForTranche(targetFormular.getTranche().getId(), documentsToDelete);
+        }
     }
 
     @AfterMapping
