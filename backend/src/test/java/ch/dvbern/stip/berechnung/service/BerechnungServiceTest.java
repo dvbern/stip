@@ -41,12 +41,15 @@ import static org.hamcrest.Matchers.is;
 @RequiredArgsConstructor
 @Slf4j
 class BerechnungServiceTest {
+
     @Test
     void wasEingereichtAfterDueDateFalseTest() {
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        gesuch.getGesuchsperiode().setEinreichefristNormal(LocalDate.now());
+        final var now = LocalDate.now();
 
-        final var eingereicht = LocalDate.now();
+        gesuch.getGesuchsperiode().setEinreichefristNormal(now);
+        gesuch.setEinreichedatum(now);
+
         final var wasEingereichtAfterDueDate = DateUtil.wasEingereichtAfterDueDate(gesuch);
         assertThat(wasEingereichtAfterDueDate, is(false));
     }
@@ -114,8 +117,9 @@ class BerechnungServiceTest {
             )
         );
         final var eingereicht = LocalDate.now().withDayOfMonth(1);
+        gesuch.setEinreichedatum(eingereicht);
 
-        final var monthsBetween = DateUtil.getActualDuration(gesuch);
+        final var monthsBetween = DateUtil.getStipendiumDurationRoundDown(gesuch);
         assertThat(monthsBetween, equalTo(monthsToBeBetween));
     }
 
@@ -172,8 +176,9 @@ class BerechnungServiceTest {
             )
         );
         final var eingereicht = LocalDate.now().withDayOfMonth(27);
+        gesuch.setEinreichedatum(eingereicht);
 
-        final var monthsBetween = DateUtil.getActualDuration(gesuch);
+        final var monthsBetween = DateUtil.getStipendiumDurationRoundDown(gesuch);
         assertThat(monthsBetween, equalTo(monthsToBeBetween - 1));
     }
 
