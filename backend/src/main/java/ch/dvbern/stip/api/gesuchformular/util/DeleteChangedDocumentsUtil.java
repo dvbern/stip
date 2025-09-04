@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -44,14 +43,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class DeleteChangedDocumentsUtil {
-    public void deleteChangedDocuments(
-        final GesuchDokumentService gesuchDokumentService,
+    public ArrayList<DokumentTyp> deleteChangedDocuments(
         final GesuchFormularUpdateDto newFormular,
         final GesuchFormular oldFormular
     ) {
         if (oldFormular.getTranche().getTyp() != GesuchTrancheTyp.AENDERUNG) {
             LOG.info("Skipping deleting documents on fields that changed for Tranche that is not AENDERUNG");
-            return;
+            return new ArrayList<>();
         }
 
         final var documentTypesToDelete = new ArrayList<DokumentTyp>();
@@ -69,6 +67,7 @@ public class DeleteChangedDocumentsUtil {
                     elternUpdateDto -> elternUpdateDto.getElternTyp() == oldEltern.getElternTyp()
                 )
                 .findFirst();
+
             if (newEltern.isPresent()) {
                 documentTypesToDelete.addAll(
                     getDocumentsToDeleteForEltern(newEltern.get(), oldEltern)
@@ -81,12 +80,6 @@ public class DeleteChangedDocumentsUtil {
                     }
                 );
             }
-
-            newEltern.ifPresent(
-                elternUpdateDto -> documentTypesToDelete.addAll(
-                    getDocumentsToDeleteForEltern(elternUpdateDto, oldEltern)
-                )
-            );
         }
 
         documentTypesToDelete.addAll(
@@ -106,7 +99,7 @@ public class DeleteChangedDocumentsUtil {
             getDocumentsToDeleteForDarlehen(newFormular.getDarlehen(), oldFormular.getDarlehen())
         );
 
-        gesuchDokumentService.deleteDokumenteForTranche(oldFormular.getTranche().getId(), documentTypesToDelete);
+        return documentTypesToDelete;
     }
 
     List<DokumentTyp> getDocumentsToDeleteForPersonInAusbildung(

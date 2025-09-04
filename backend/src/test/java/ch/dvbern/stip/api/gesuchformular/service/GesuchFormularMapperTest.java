@@ -593,7 +593,7 @@ class GesuchFormularMapperTest {
         assertThat(formular.getTranche().getGesuch().getUnterschriftenblaetter().size(), is(1));
 
         // Act
-        mapper.resetUnterschriftenblaetter(formular);
+        mapper.resetUnterschriftenblaetterIfNotVerfuegt(formular);
 
         // Assert
         assertThat(formular.getTranche().getGesuch().getUnterschriftenblaetter().size(), is(0));

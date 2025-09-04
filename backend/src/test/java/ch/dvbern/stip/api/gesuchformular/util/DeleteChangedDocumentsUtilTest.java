@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuchformular.util;
 import java.util.List;
 
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -38,7 +37,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -84,16 +82,13 @@ class DeleteChangedDocumentsUtilTest {
     @Test
     void deleteChangedDocumentsDoesNothingIfTrancheIsUpdated() {
         // Arrange
-        final var gesuchDokumentService = Mockito.mock(GesuchDokumentService.class);
-        Mockito.doNothing().when(gesuchDokumentService).deleteDokumenteForTranche(Mockito.any(), Mockito.any());
-
         final var oldFormular = new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
 
         // Act
-        DeleteChangedDocumentsUtil.deleteChangedDocuments(gesuchDokumentService, null, oldFormular);
+        final var documentsToDelete = DeleteChangedDocumentsUtil.deleteChangedDocuments(null, oldFormular);
 
         // Assert
-        Mockito.verify(gesuchDokumentService, Mockito.never()).deleteDokumenteForTranche(Mockito.any(), Mockito.any());
+        assertEquals(documentsToDelete.size(), 0);
     }
 
     @ParameterizedTest
