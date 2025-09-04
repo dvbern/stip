@@ -37,6 +37,11 @@ public class EinnahmenKostenVeranlagungsStatusNotNullConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext constraintValidatorContext) {
+        if (
+            gesuchFormular.getEinnahmenKosten() == null
+        ) {
+            return true;
+        }
 
         if (
             Objects.nonNull(gesuchFormular.getEinnahmenKosten().getVeranlagungsStatus()) &&
