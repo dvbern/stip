@@ -164,7 +164,7 @@ public class DateUtil {
         return left.isBefore(date) && right.isAfter(date);
     }
 
-    public int getActualDuration(final Gesuch gesuch) {
+    public int getStipendiumDurationRoundDown(final Gesuch gesuch) {
         final var lastTranche = gesuch.getTranchenTranchen()
             .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
             .orElseThrow(NotFoundException::new);

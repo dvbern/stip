@@ -297,7 +297,7 @@ public class BerechnungService {
         }
 
         final var actualDuration = DateUtil.wasEingereichtAfterDueDate(gesuch)
-            ? DateUtil.getActualDuration(gesuch)
+            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
             : null;
 
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());

@@ -800,7 +800,7 @@ public class PdfService {
         calculationTable.setPaddingRight(SPACING_MEDIUM);
 
         final var actualDuration = DateUtil.wasEingereichtAfterDueDate(verfuegung.getGesuch())
-            ? DateUtil.getActualDuration(verfuegung.getGesuch())
+            ? DateUtil.getStipendiumDurationRoundDown(verfuegung.getGesuch())
             : 12;
 
         calculationTable.addCell(
