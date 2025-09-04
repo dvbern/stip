@@ -255,7 +255,7 @@ public class GesuchService {
 
             final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
             final String veranlagungsStatusExistingValue = einnahmenKosten.getVeranlagungsStatus();
-            veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityNullableValue(
+            veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
                 veranlagungsStatusDtoValue,
                 veranlagungsStatusExistingValue,
