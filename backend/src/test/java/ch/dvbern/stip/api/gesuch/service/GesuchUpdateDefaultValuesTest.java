@@ -42,10 +42,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 @Slf4j
 @QuarkusTest
@@ -91,7 +91,7 @@ class GesuchUpdateDefaultValuesTest {
             .setVeranlagungsStatus(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(nullValue()));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
     }
 
     @Test
@@ -111,7 +111,7 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang());
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(nullValue()));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
@@ -119,7 +119,7 @@ class GesuchUpdateDefaultValuesTest {
             .setVeranlagungsStatus(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(nullValue()));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
     }
 
     @Test

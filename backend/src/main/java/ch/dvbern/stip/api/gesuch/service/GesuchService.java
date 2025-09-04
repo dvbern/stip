@@ -140,6 +140,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
 @RequestScoped
@@ -240,7 +241,7 @@ public class GesuchService {
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
-        String veranlagungsStatusToSet = null;
+        String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 
         if (einnahmenKosten != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
@@ -259,7 +260,7 @@ public class GesuchService {
                 benutzerRollenIdentifiers,
                 veranlagungsStatusDtoValue,
                 veranlagungsStatusExistingValue,
-                null
+                VERANLAGUNGSSTATUS_DEFAULT_VALUE
             );
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);

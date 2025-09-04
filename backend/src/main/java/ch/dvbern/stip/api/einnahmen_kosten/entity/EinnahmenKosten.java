@@ -32,6 +32,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 
 @Audited
 @Entity
@@ -101,7 +102,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_veranlagung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String veranlagungsStatus = "Manuell";
+    private String veranlagungsStatus = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 
     @NotNull
     @Column(name = "steuerjahr", nullable = false)

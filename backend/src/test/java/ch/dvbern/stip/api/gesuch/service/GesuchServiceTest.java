@@ -127,6 +127,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
@@ -1114,14 +1115,7 @@ class GesuchServiceTest {
                 .getGesuchFormular()
                 .getEinnahmenKosten()
                 .getVeranlagungsStatus(),
-            Matchers.nullValue()
-        );
-        assertThat(
-            gesuchUpdateDto.getGesuchTrancheToWorkWith()
-                .getGesuchFormular()
-                .getEinnahmenKosten()
-                .getVeranlagungsStatus(),
-            Matchers.equalTo(null)
+            Matchers.is(VERANLAGUNGSSTATUS_DEFAULT_VALUE)
         );
     }
 
