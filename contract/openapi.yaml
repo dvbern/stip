@@ -5900,9 +5900,8 @@ components:
       enum:
         - NAME_DE
         - NAME_FR
-        - CH_SHIS
-        - BUR_NO
-        - CT_NO
+        - NUMMER
+        - NUMMER_TYP
         - AKTIV
     Ausbildungsstaette:
       type: object
