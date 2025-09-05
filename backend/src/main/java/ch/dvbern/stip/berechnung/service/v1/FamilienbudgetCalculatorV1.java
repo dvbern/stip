@@ -91,7 +91,7 @@ public class FamilienbudgetCalculatorV1 {
             mapAndReturn(FamilienBudgetresultatDto::setAlimente, elternteil.getAlimente())
         );
 
-        final List<Function<FamilienBudgetresultatDto, Integer>> conditionalSummands;
+        final List<Function<FamilienBudgetresultatDto, Integer>> einkommenApplier;
         final List<Function<FamilienBudgetresultatDto, Integer>> conditionalSubtrahends;
         if (elternteil.isSelbststaendigErwerbend()) {
             conditionalSubtrahends = List.of(
@@ -102,11 +102,12 @@ public class FamilienbudgetCalculatorV1 {
                 mapAndReturn(FamilienBudgetresultatDto::setSaeule2, elternteil.getEinzahlungSaeule2())
             );
 
-            conditionalSummands = List.of(
+            einkommenApplier = List.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSteuerbaresVermoegen,
                     roundHalfUp(
                         BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent())
+                            .setScale(2, RoundingMode.HALF_UP)
                             .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
                             .multiply(
                                 BigDecimal.valueOf(
@@ -122,7 +123,7 @@ public class FamilienbudgetCalculatorV1 {
                 mapAndReturn(FamilienBudgetresultatDto::setSaeule2, 0)
             );
 
-            conditionalSummands = List.of(
+            einkommenApplier = List.of(
                 mapAndReturn(
                     FamilienBudgetresultatDto::setSteuerbaresVermoegen,
                     roundHalfUp(
@@ -134,12 +135,12 @@ public class FamilienbudgetCalculatorV1 {
             );
         }
 
-        final var summand =
-            applyAndSum(Stream.concat(summands.stream(), conditionalSummands.stream()).toList(), result);
+        final var summand = applyAndSum(summands, result);
         final var subtrahend =
             applyAndSum(Stream.concat(subtrahends.stream(), conditionalSubtrahends.stream()).toList(), result);
+        final var einkommen = applyAndSum(einkommenApplier, result);
 
-        final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0);
+        final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0) + einkommen;
         result.setEinnahmenFamilienbudget(einnahmen);
     }
 

@@ -20,6 +20,7 @@ package ch.dvbern.stip.berechnung.service.v1;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -71,6 +72,10 @@ public class PersoenlichesBudgetCalculatorV1 {
         } else {
             result.setPersoenlichesbudgetBerechnet(rawBerechnet.intValue());
         }
+
+        result.setAnteilLebenshaltungskosten(
+            calculateAnteilLebenshaltungskosten(List.of(familienbudget1, familienbudget2), antragssteller)
+        );
 
         return result;
     }
@@ -275,8 +280,23 @@ public class PersoenlichesBudgetCalculatorV1 {
         return 0;
     }
 
-    private interface PersoenlichesBudgetFunction
-        extends Function<PersoenlichesBudgetresultatDto, Integer> {
+    private static int calculateAnteilLebenshaltungskosten(
+        List<FamilienBudgetresultatDto> familienBudgetresultatList,
+        AntragsstellerV1 antragssteller
+    ) {
+        int anteilLebenshaltungskosten = 0;
+        int piaWohntInElternHaushalt = antragssteller.getPiaWohntInElternHaushalt();
+        ListIterator<FamilienBudgetresultatDto> iterator = familienBudgetresultatList.listIterator();
+        while (iterator.hasNext()) {
+            final FamilienBudgetresultatDto familienBudgetresultat = iterator.next();
+            final var budgetIdx = iterator.nextIndex();
+            final var familienBudget = familienBudgetresultat.getFamilienbudgetBerechnet();
+            if (familienBudget >= 0 || antragssteller.isEigenerHaushalt() || budgetIdx != piaWohntInElternHaushalt) {
+                continue;
+            }
+            anteilLebenshaltungskosten += familienBudget / familienBudgetresultat.getAnzahlPersonenImHaushalt();
+        }
+        return anteilLebenshaltungskosten;
     }
 
     private Function<PersoenlichesBudgetresultatDto, Integer> mapAndReturn(
