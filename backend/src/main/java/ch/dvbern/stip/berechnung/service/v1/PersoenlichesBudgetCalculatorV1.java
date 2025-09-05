@@ -83,7 +83,6 @@ public class PersoenlichesBudgetCalculatorV1 {
         final StammdatenV1 stammdaten
     ) {
         List<Function<PersoenlichesBudgetresultatDto, Integer>> haushaltToApply;
-        Function<PersoenlichesBudgetresultatDto, Integer> verpflegungApplier;
         if (antragssteller.isEigenerHaushalt()) {
             haushaltToApply = List.of(
                 mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, antragssteller.getGrundbedarf()),
@@ -93,27 +92,27 @@ public class PersoenlichesBudgetCalculatorV1 {
                     antragssteller.getMedizinischeGrundversorgung()
                 )
             );
-
-            verpflegungApplier = mapAndReturn(PersoenlichesBudgetresultatDto::setVerpflegung, 0);
         } else {
             haushaltToApply = List.of(
                 mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, 0),
                 mapAndReturn(PersoenlichesBudgetresultatDto::setWohnkosten, 0),
                 mapAndReturn(PersoenlichesBudgetresultatDto::setMedizinischeGrundversorgung, 0)
             );
+        }
 
+        int anzahlWochen = 0;
+        if (!antragssteller.isEigenerHaushalt()) {
             if (antragssteller.isLehre()) {
-                verpflegungApplier = mapAndReturn(
-                    PersoenlichesBudgetresultatDto::setVerpflegung,
-                    antragssteller.getVerpflegung() * stammdaten.getAnzahlWochenLehre()
-                );
+                anzahlWochen = stammdaten.getAnzahlWochenLehre();
             } else {
-                verpflegungApplier = mapAndReturn(
-                    PersoenlichesBudgetresultatDto::setVerpflegung,
-                    antragssteller.getVerpflegung() * stammdaten.getAnzahlWochenSchule()
-                );
+                anzahlWochen = stammdaten.getAnzahlWochenSchule();
             }
         }
+
+        final Function<PersoenlichesBudgetresultatDto, Integer> verpflegungApplier = mapAndReturn(
+            PersoenlichesBudgetresultatDto::setVerpflegung,
+            antragssteller.getVerpflegung() * anzahlWochen * stammdaten.getPreisProMahlzeit()
+        );
 
         List<Function<PersoenlichesBudgetresultatDto, Integer>> verheiratetKonkubinatToApply;
         if (antragssteller.isVerheiratetKonkubinat()) {
@@ -142,18 +141,22 @@ public class PersoenlichesBudgetCalculatorV1 {
             mapAndReturn(PersoenlichesBudgetresultatDto::setFremdbetreuung, antragssteller.getFremdbetreuung())
         );
 
-        final var anteilFamilienbudget1 = calculateAnteilFamilienbudget(
-            antragssteller,
-            familienbudget1,
-            2,
-            1
+        final var anteilFamilienbudget1 = Math.abs(
+            calculateAnteilFamilienbudget(
+                antragssteller,
+                familienbudget1,
+                2,
+                1
+            )
         );
 
-        final var anteilFamilienbudget2 = calculateAnteilFamilienbudget(
-            antragssteller,
-            familienbudget2,
-            1,
-            2
+        final var anteilFamilienbudget2 = Math.abs(
+            calculateAnteilFamilienbudget(
+                antragssteller,
+                familienbudget2,
+                1,
+                2
+            )
         );
 
         final var wohnkostenAbhaengig = applyAndSum(haushaltToApply, result);
@@ -217,7 +220,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             mapAndReturn(PersoenlichesBudgetresultatDto::setEinkommen, einkommen),
             mapAndReturn(PersoenlichesBudgetresultatDto::setEinkommenPartner, antragssteller.getEinkommenPartner()),
             mapAndReturn(
-                PersoenlichesBudgetresultatDto::setSteuerbaresVermoegen,
+                PersoenlichesBudgetresultatDto::setAnrechenbaresVermoegen,
                 roundHalfUp(
                     BigDecimal.valueOf(antragssteller.getVermoegen())
                         .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
