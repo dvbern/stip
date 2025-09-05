@@ -43,10 +43,12 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.util.VerfuegungUtil;
 import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.io.font.FontProgram;
@@ -696,9 +698,9 @@ public class PdfService {
             buchhaltungRepository.findAllForFallId(verfuegung.getGesuch().getAusbildung().getFall().getId())
                 .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
                 .orElseThrow();
-        final boolean isAenderung = verfuegung.getGesuch().getVerfuegungs().size() > 1;
-        final boolean isRueckforderung =
-            verfuegung.getGesuch().getVerfuegungs().size() == 1 && relevantBuchhaltung.getSaldo() < 0;
+
+        final boolean isAenderung = VerfuegungUtil.isAenderung(verfuegung);
+        final boolean isRueckforderung = VerfuegungUtil.isRueckforderung(verfuegung, buchhaltungRepository);
 
         final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
             .getGesuchTranchen()
@@ -731,11 +733,17 @@ public class PdfService {
         String fullTitle = ausbildungsjahr + fullAusbildungsjahr;
 
         if (isRueckforderung) {
-            fullTitle =
-                fullTitle.concat(" - ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.rueckforderung"));
+            fullTitle = String.format(
+                "%s - %s",
+                fullTitle,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.rueckforderung")
+            );
         } else if (isAenderung) {
-            fullTitle =
-                fullTitle.concat(" - ").concat(translator.translate("stip.pdf.verfuegungMitAnspruch.aenderung"));
+            fullTitle = String.format(
+                "%s - %s",
+                fullTitle,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.aenderung")
+            );
         }
 
         document.add(
