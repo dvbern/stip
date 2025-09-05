@@ -23,6 +23,7 @@ import ch.dvbern.stip.generated.dto.AusbildungsgangSortColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungskategorieDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteNummerTypDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSortColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.BildungsrichtungDtoSpec;
@@ -918,9 +919,8 @@ public class AusbildungsstaetteApiSpec {
      * @see #sortOrderQuery  (optional)
      * @see #nameDeQuery  (optional)
      * @see #nameFrQuery  (optional)
-     * @see #chShisQuery  (optional)
-     * @see #burNoQuery  (optional)
-     * @see #ctNoQuery  (optional)
+     * @see #nummerQuery  (optional)
+     * @see #nummerTypQuery  (optional)
      * @see #aktivQuery  (optional)
      * return PaginatedAusbildungsstaetteDtoSpec
      */
@@ -1025,36 +1025,25 @@ public class AusbildungsstaetteApiSpec {
             return this;
         }
 
-        public static final String CH_SHIS_QUERY = "chShis";
+        public static final String NUMMER_QUERY = "nummer";
 
         /**
-         * @param chShis (String)  (optional)
+         * @param nummer (String)  (optional)
          * @return operation
          */
-        public GetAllAusbildungsstaetteForUebersichtOper chShisQuery(Object... chShis) {
-            reqSpec.addQueryParam(CH_SHIS_QUERY, chShis);
+        public GetAllAusbildungsstaetteForUebersichtOper nummerQuery(Object... nummer) {
+            reqSpec.addQueryParam(NUMMER_QUERY, nummer);
             return this;
         }
 
-        public static final String BUR_NO_QUERY = "burNo";
+        public static final String NUMMER_TYP_QUERY = "nummerTyp";
 
         /**
-         * @param burNo (String)  (optional)
+         * @param nummerTyp (AusbildungsstaetteNummerTypDtoSpec)  (optional)
          * @return operation
          */
-        public GetAllAusbildungsstaetteForUebersichtOper burNoQuery(Object... burNo) {
-            reqSpec.addQueryParam(BUR_NO_QUERY, burNo);
-            return this;
-        }
-
-        public static final String CT_NO_QUERY = "ctNo";
-
-        /**
-         * @param ctNo (String)  (optional)
-         * @return operation
-         */
-        public GetAllAusbildungsstaetteForUebersichtOper ctNoQuery(Object... ctNo) {
-            reqSpec.addQueryParam(CT_NO_QUERY, ctNo);
+        public GetAllAusbildungsstaetteForUebersichtOper nummerTypQuery(Object... nummerTyp) {
+            reqSpec.addQueryParam(NUMMER_TYP_QUERY, nummerTyp);
             return this;
         }
 

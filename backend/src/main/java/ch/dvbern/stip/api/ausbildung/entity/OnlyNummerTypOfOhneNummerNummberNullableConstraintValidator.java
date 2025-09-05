@@ -23,11 +23,11 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class OnlyNummerTypCTNullableConstraintValidator
-    implements ConstraintValidator<OnlyNummerTypCTNullableConstraint, Ausbildungsstaette> {
+public class OnlyNummerTypOfOhneNummerNummberNullableConstraintValidator
+    implements ConstraintValidator<OnlyNummerTypOfOhneNummerNummberNullableConstraint, Ausbildungsstaette> {
     @Override
     public boolean isValid(Ausbildungsstaette ausbildungsstaette, ConstraintValidatorContext context) {
-        if (ausbildungsstaette.getNummerTyp() == AusbildungsstaetteNummerTyp.CT_NO) {
+        if (ausbildungsstaette.getNummerTyp() == AusbildungsstaetteNummerTyp.OHNE_NO) {
             return true;
         }
         return Objects.nonNull(ausbildungsstaette.getNummer());

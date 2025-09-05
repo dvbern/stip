@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.ausbildung.repo;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -46,16 +47,14 @@ public class AusbildungsstaetteQueryBuilder {
         query.where(Q_AUSBILDUNGSSTAETTE.nameFr.containsIgnoreCase(nameFr));
     }
 
-    public void chShisFilter(final JPAQuery<Ausbildungsstaette> query, final String chShis) {
-        query.where(Q_AUSBILDUNGSSTAETTE.nummer.containsIgnoreCase(chShis));
+    public void nummerFilter(final JPAQuery<Ausbildungsstaette> query, final String nummer) {
+        query.where(Q_AUSBILDUNGSSTAETTE.nummer.containsIgnoreCase(nummer));
+
     }
 
-    public void burNoFilter(final JPAQuery<Ausbildungsstaette> query, final String burNo) {
-        query.where(Q_AUSBILDUNGSSTAETTE.nummer.containsIgnoreCase(burNo));
-    }
+    public void nummerTypFilter(final JPAQuery<Ausbildungsstaette> query, final AusbildungsstaetteNummerTyp nummerTyp) {
+        query.where(Q_AUSBILDUNGSSTAETTE.nummerTyp.eq(nummerTyp));
 
-    public void ctNoFilter(final JPAQuery<Ausbildungsstaette> query, final String ctNo) {
-        query.where(Q_AUSBILDUNGSSTAETTE.nummer.containsIgnoreCase(ctNo));
     }
 
     public void aktivFilter(final JPAQuery<Ausbildungsstaette> query, final Boolean aktiv) {

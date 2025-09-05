@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_FORMAT_NOT_VALID;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = BurAndCTNummerTypAlphaNumericConstraintValidator.class)
 @Documented
 public @interface BurAndCTNummerTypAlphaNumericConstraint {
-    String message() default VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID; // todo: new message
+    String message() default VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_FORMAT_NOT_VALID;
 
     Class<?>[] groups() default {};
 

@@ -101,9 +101,8 @@ public class AusbildungsstaetteService {
         final SortOrder sortOrder,
         final String nameDe,
         final String nameFr,
-        final String chShis,
-        final String burNo,
-        final String ctNo,
+        final AusbildungsstaetteNummerTyp nummerTyp,
+        final String nummer,
         final Boolean aktiv
     ) {
         if (pageSize > configService.getMaxAllowedPageSize()) {
@@ -118,14 +117,11 @@ public class AusbildungsstaetteService {
         if (Objects.nonNull(nameFr)) {
             ausbildungsstaetteQueryBuilder.nameFrFilter(baseQuery, nameFr);
         }
-        if (Objects.nonNull(chShis)) {
-            ausbildungsstaetteQueryBuilder.chShisFilter(baseQuery, chShis);
+        if (Objects.nonNull(nummerTyp)) {
+            ausbildungsstaetteQueryBuilder.nummerTypFilter(baseQuery, nummerTyp);
         }
-        if (Objects.nonNull(burNo)) {
-            ausbildungsstaetteQueryBuilder.burNoFilter(baseQuery, burNo);
-        }
-        if (Objects.nonNull(ctNo)) {
-            ausbildungsstaetteQueryBuilder.ctNoFilter(baseQuery, ctNo);
+        if (Objects.nonNull(nummer)) {
+            ausbildungsstaetteQueryBuilder.nummerFilter(baseQuery, nummer);
         }
         if (Objects.nonNull(aktiv)) {
             ausbildungsstaetteQueryBuilder.aktivFilter(baseQuery, aktiv);

@@ -18,5 +18,5 @@
 package ch.dvbern.stip.api.ausbildung.type;
 
 public enum AusbildungsstaetteNummerTyp {
-    CH_SHIS, BUR_NO, CT_NO;
+    CH_SHIS, BUR_NO, CT_NO, OHNE_NO;
 }
