@@ -49,6 +49,7 @@ public class FamilienbudgetCalculatorV1 {
         calculateAndSetAusgaben(result, elternteil);
         calculateAndSetEinnahmen(result, elternteil, stammdaten);
         calculateAndSetFamilienbudgetBerechnet(result);
+        result.familienBudgetTyp(elternteil.getSteuerdatenTyp());
         result.setAnzahlGeschwisterInAusbildung(elternteil.getAnzahlGeschwisterInAusbildung());
         result.setAnzahlPersonenImHaushalt(elternteil.getAnzahlPersonenImHaushalt());
 
