@@ -30,10 +30,18 @@ import {
   Ausbildungskategorie,
   Ausbildungsstaette,
   AusbildungsstaetteNummerTyp,
+  AusbildungsstaetteSortColumn,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
-import { getCurrentLanguageSig, type } from '@dv/shared/model/type-util';
+import {
+  assertUnreachable,
+  getCorrectPropertyName,
+  getCurrentLanguageSig,
+  isDefined,
+  type,
+  uppercased,
+} from '@dv/shared/model/type-util';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -48,6 +56,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
+  getSortAndPageInputs,
   limitPageToNumberOfEntriesEffect,
   makeEmptyStringPropertiesNull,
   paginateList,
@@ -133,9 +142,7 @@ export class AusbildungsstaetteComponent
     const ausbildungsstaettenLoading = isPending(
       this.ausbildungsstaetteStore.ausbildungsstaetten(),
     );
-    // todo: remove debug
-    // todo: cleanup translations
-    console.log({ abschluesseLoading, ausbildungsstaettenLoading });
+
     return abschluesseLoading || ausbildungsstaettenLoading;
   });
 
@@ -172,8 +179,8 @@ export class AusbildungsstaetteComponent
     'nummerTyp',
   ]);
   ausbildungsstaettenDataSourceSig = computed(() => {
-    const abschluesse = this.viewSig().ausbildungsstaetten;
-    const datasource = new MatTableDataSource(abschluesse);
+    const staetten = this.viewSig().ausbildungsstaetten;
+    const datasource = new MatTableDataSource(staetten);
 
     return datasource;
   });
@@ -214,28 +221,26 @@ export class AusbildungsstaetteComponent
     });
 
     // when the route param inputs change, load the data
-    // effect(() => {
-    //   const { sortColumn, sortOrder, page, pageSize } =
-    //     getSortAndPageInputs(this);
+    effect(() => {
+      const { sortColumn, sortOrder, page, pageSize } =
+        getSortAndPageInputs(this);
 
-    //   this.reloadAusbildungsstaettenSig();
-    //   const active = this.status();
-    //   // this.administrationAusbildungsstaetteStore.loadAusbildungsstaetten$({
-    //   //   filter: {
-    //   //     // [getCorrectPropertyName('name', this.currentLangSig())]:
-    //   //     //   this.ausbildungsstaette(),
-    //   //     // burNo: this.burNummer(),
-    //   //     // chShis: this.chShisNummer(),
-    //   //     // ctNo: this.ctNummer(),
-
-    //   //     // sortColumn: useCorrectSortColumn(sortColumn, this.currentLangSig()),
-    //   //     // sortOrder,
-    //   //     // page,
-    //   //     // pageSize,
-    //   //     // ...(isDefined(active) ? { aktiv: active === 'ACTIVE' } : {}),
-    //   //   },
-    //   // });
-    // });
+      this.reloadAusbildungsstaettenSig();
+      const active = this.status();
+      this.administrationAusbildungsstaetteStore.loadAusbildungsstaetten$({
+        filter: {
+          [getCorrectPropertyName('name', this.currentLangSig())]:
+            this.ausbildungsstaette(),
+          nummerTyp: this.nummerTyp(),
+          nummer: this.nummer(),
+          sortColumn: useCorrectSortColumn(sortColumn, this.currentLangSig()),
+          sortOrder,
+          page,
+          pageSize,
+          ...(isDefined(active) ? { aktiv: active === 'ACTIVE' } : {}),
+        },
+      });
+    });
   }
 
   archive(ausbildungsstaette: Ausbildungsstaette) {
@@ -316,29 +321,21 @@ export class AusbildungsstaetteComponent
   }
 }
 
-// function useCorrectSortColumn(
-//   sortColumn: DisplayColumns | undefined,
-//   currentLang: 'de' | 'fr',
-// ): AusbildungsstaetteSortColumn | undefined {
-//   switch (sortColumn) {
-//     case 'AUSBILDUNGSSTAETTE':
-//       return `NAME_${uppercased(currentLang)}`;
-//     case 'BUR_NUMMER':
-//     case 'CH_SHIS_NUMMER':
-//     case 'CT_NUMMER': {
-//       const nameMap = {
-//         BUR_NUMMER: 'BUR_NO',
-//         CH_SHIS_NUMMER: 'CH_SHIS',
-//         CT_NUMMER: 'CT_NO',
-//       } satisfies Partial<Record<DisplayColumns, AusbildungsstaetteSortColumn>>;
-//       return nameMap[sortColumn];
-//     }
-//     case 'AKTIV':
-//       return sortColumn;
-//     case 'AKTIONEN':
-//     case undefined:
-//       return undefined;
-//     default:
-//       assertUnreachable(sortColumn);
-//   }
-// }
+function useCorrectSortColumn(
+  sortColumn: DisplayColumns | undefined,
+  currentLang: 'de' | 'fr',
+): AusbildungsstaetteSortColumn | undefined {
+  switch (sortColumn) {
+    case 'AUSBILDUNGSSTAETTE':
+      return `NAME_${uppercased(currentLang)}`;
+    case 'NUMMER_TYP':
+    case 'NUMMER':
+    case 'AKTIV':
+      return sortColumn;
+    case 'AKTIONEN':
+    case undefined:
+      return undefined;
+    default:
+      assertUnreachable(sortColumn);
+  }
+}

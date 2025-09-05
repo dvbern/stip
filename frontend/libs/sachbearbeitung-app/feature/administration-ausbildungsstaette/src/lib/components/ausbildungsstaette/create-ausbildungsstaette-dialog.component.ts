@@ -21,7 +21,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
 
@@ -37,10 +37,7 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import {
-  SharedUtilFormService,
-  convertTempFormToRealValues,
-} from '@dv/shared/util/form';
+import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type CreateAbschlussData = {
   ausbildungsstaetten: AusbildungsstaetteSlim[];
@@ -69,8 +66,6 @@ export class CreateAusbildungsstaetteDialogComponent {
       MatDialogRef,
     );
   private formBuilder = inject(NonNullableFormBuilder);
-  private formUtils = inject(SharedUtilFormService);
-  translate = inject(TranslocoService);
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
   alphanumericMask: MaskitoOptions = {
