@@ -122,7 +122,7 @@ export * from './gesuchsperiodeWithDaten';
 export * from './gesuchsperiodeWithDatenAllOf';
 export * from './gesuchstatus';
 export * from './getDelegierungSozQueryTypeAdmin';
-export * from './getDelegierungSozQueryTypeMa';
+export * from './getDelegierungSozQueryTypeMitarbeiter';
 export * from './getGesucheSBQueryType';
 export * from './gueltigkeitStatus';
 export * from './juristischeAbklaerungNotizAntwort';

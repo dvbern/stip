@@ -335,12 +335,12 @@
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsSig()"></tr>
                 <tr
-                  dvSharedUiFocusableListItem
+                  [dvSharedUiFocusableListItem]="!!fall.delegierung.delegierungAngenommen"
                   mat-row
                   tabindex="-1"
                   *dvMatRowDef="let fall; dataSource: faelleDataSourceSig(); columns: displayedColumnsSig()"
-                  [routerLink]="['/fall', fall.id]"
-                  class="highlightable"
+                  [routerLink]="!fall.delegierung.delegierungAngenommen ? null : ['/fall', fall.id]"
+                  [class.highlightable]="!!fall.delegierung.delegierungAngenommen"
                 ></tr>
                 <tr class="mat-mdc-row" *matNoDataRow>
                   <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumnsSig().length">

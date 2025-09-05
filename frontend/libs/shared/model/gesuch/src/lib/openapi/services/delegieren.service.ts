@@ -21,7 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { DelegierterMitarbeiterAendern } from '../model/delegierterMitarbeiterAendern';
 import { DelegierungCreate } from '../model/delegierungCreate';
 import { GetDelegierungSozQueryTypeAdmin } from '../model/getDelegierungSozQueryTypeAdmin';
-import { GetDelegierungSozQueryTypeMa } from '../model/getDelegierungSozQueryTypeMa';
+import { GetDelegierungSozQueryTypeMitarbeiter } from '../model/getDelegierungSozQueryTypeMitarbeiter';
 import { PaginatedSozDashboard } from '../model/paginatedSozDashboard';
 import { SortOrder } from '../model/sortOrder';
 import { SozDashboardColumn } from '../model/sozDashboardColumn';
@@ -62,8 +62,8 @@ export interface DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParam
     sortOrder?: SortOrder;
 }
 
-export interface DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams {
-    getDelegierungSozQueryType: GetDelegierungSozQueryTypeMa;
+export interface DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams {
+    getDelegierungSozQueryType: GetDelegierungSozQueryTypeMitarbeiter;
     fallNummer?: string;
     nachname?: string;
     vorname?: string;
@@ -522,13 +522,13 @@ export class DelegierenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDelegierungsOfSozialdienstMa$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
-     public getDelegierungsOfSozialdienstMa$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
-     public getDelegierungsOfSozialdienstMa$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
-     public getDelegierungsOfSozialdienstMa$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
         if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
-            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienstMa$.');
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
         }
         const fallNummer = requestParameters.fallNummer;
         const nachname = requestParameters.nachname;
@@ -537,11 +537,11 @@ export class DelegierenService {
         const wohnort = requestParameters.wohnort;
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstMa$.');
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
         }
         const pageSize = requestParameters.pageSize;
         if (pageSize === null || pageSize === undefined) {
-            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienstMa$.');
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortOrder = requestParameters.sortOrder;
@@ -629,7 +629,7 @@ export class DelegierenService {
             }
         }
 
-        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryTypeMa", dataFormat: undefined})}/ma`;
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryTypeMitarbeiter", dataFormat: undefined})}/ma`;
         return this.httpClient.request<PaginatedSozDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

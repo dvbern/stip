@@ -9,10 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SozialdienstSlim } from './sozialdienstSlim';
 
-export interface DelegierungSlim { 
-    delegierungAngenommen?: boolean;
-    sozialdienst?: SozialdienstSlim;
-}
+export type GetDelegierungSozQueryTypeMitarbeiter = 'ALLE_BEARBEITBAR_MEINE' | 'ALLE';
+
+export const GetDelegierungSozQueryTypeMitarbeiter = {
+    ALLE_BEARBEITBAR_MEINE: 'ALLE_BEARBEITBAR_MEINE' as GetDelegierungSozQueryTypeMitarbeiter,
+    ALLE: 'ALLE' as GetDelegierungSozQueryTypeMitarbeiter
+};
 

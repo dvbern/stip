@@ -8,7 +8,7 @@ import {
   DelegierenService,
   DelegierenServiceDelegierterMitarbeiterAendernRequestParams,
   DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
-  DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams,
   PaginatedSozDashboard,
   SozialdienstBenutzer,
   SozialdienstService,
@@ -154,8 +154,8 @@ export class DelegationStore extends signalStore(
         req as DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
       );
     } else {
-      return this.delegierenService.getDelegierungsOfSozialdienstMa$(
-        req as DelegierenServiceGetDelegierungsOfSozialdienstMaRequestParams,
+      return this.delegierenService.getDelegierungsOfSozialdienstMitarbeiter$(
+        req as DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams,
       );
     }
   }
