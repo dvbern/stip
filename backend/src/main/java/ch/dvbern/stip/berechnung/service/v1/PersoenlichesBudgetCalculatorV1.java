@@ -206,11 +206,15 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
         final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
 
+        final int einkommen;
+        if (antragssteller.isTertiaerstufe()) {
+            einkommen = max(antragssteller.getEinkommen() - stammdaten.getEinkommensfreibetrag(), 0);
+        } else {
+            einkommen = antragssteller.getEinkommen();
+        }
+
         final var toApply = List.of(
-            mapAndReturn(
-                PersoenlichesBudgetresultatDto::setEinkommen,
-                max(antragssteller.getEinkommen() - stammdaten.getEinkommensfreibetrag(), 0)
-            ),
+            mapAndReturn(PersoenlichesBudgetresultatDto::setEinkommen, einkommen),
             mapAndReturn(PersoenlichesBudgetresultatDto::setEinkommenPartner, antragssteller.getEinkommenPartner()),
             mapAndReturn(
                 PersoenlichesBudgetresultatDto::setSteuerbaresVermoegen,
