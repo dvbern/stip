@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.berechnung.dto;
 
-public interface DmnRequest {
+public interface CalculatorRequest {
     default String getVersion() {
         return String.format("v%s.%s", majorVersion(), minorVersion());
     }

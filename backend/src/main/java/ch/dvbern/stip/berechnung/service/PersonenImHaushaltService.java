@@ -19,8 +19,8 @@ package ch.dvbern.stip.berechnung.service;
 
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,7 +33,7 @@ public class PersonenImHaushaltService {
     private final Instance<PersonenImHaushaltCalculator> personenImHaushaltCalculators;
     private final Instance<PersonenImHaushaltRequestBuilder> personenImHaushaltRequestBuilders;
 
-    public DmnRequest getPersonenImHaushaltRequest(
+    public CalculatorRequest getPersonenImHaushaltRequest(
         final int majorVersion,
         final int minorVersion,
         final GesuchFormular gesuchFormular,
@@ -59,7 +59,7 @@ public class PersonenImHaushaltService {
         return builder.get().buildRequest(gesuchFormular, elternToPrioritize);
     }
 
-    public PersonenImHaushaltResult calculatePersonenImHaushalt(final DmnRequest request) {
+    public PersonenImHaushaltResult calculatePersonenImHaushalt(final CalculatorRequest request) {
         final var calculator = personenImHaushaltCalculators.stream()
             .filter(possibleCalculator -> {
                 final var versionAnnotation = possibleCalculator.getClass().getAnnotation(CalculatorVersion.class);

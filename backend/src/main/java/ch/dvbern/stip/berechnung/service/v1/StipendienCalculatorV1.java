@@ -20,8 +20,8 @@ package ch.dvbern.stip.berechnung.service.v1;
 import java.util.List;
 
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.service.StipendienCalculator;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
@@ -32,7 +32,7 @@ import jakarta.inject.Singleton;
 @CalculatorVersion(major = 1, minor = 0)
 public class StipendienCalculatorV1 implements StipendienCalculator {
     @Override
-    public BerechnungResult calculateStipendien(final DmnRequest model) {
+    public BerechnungResult calculateStipendien(final CalculatorRequest model) {
         if (model instanceof BerechnungRequestV1 v1) {
             return calculateStipendien(v1);
         }

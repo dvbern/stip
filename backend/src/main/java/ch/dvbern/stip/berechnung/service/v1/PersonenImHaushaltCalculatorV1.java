@@ -20,8 +20,8 @@ package ch.dvbern.stip.berechnung.service.v1;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
 import ch.dvbern.stip.berechnung.dto.v1.FamiliensituationV1;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @CalculatorVersion(major = 1, minor = 0)
 public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalculator {
     @Override
-    public PersonenImHaushaltResult calculatePersonenImHaushalt(DmnRequest request) {
+    public PersonenImHaushaltResult calculatePersonenImHaushalt(CalculatorRequest request) {
         if (request instanceof PersonenImHaushaltRequestV1 input) {
             return calculatePersonenImHaushalt(input);
         }

@@ -18,8 +18,8 @@
 package ch.dvbern.stip.berechnung.service;
 
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 
 public interface StipendienCalculator {
-    BerechnungResult calculateStipendien(final DmnRequest model);
+    BerechnungResult calculateStipendien(final CalculatorRequest model);
 }

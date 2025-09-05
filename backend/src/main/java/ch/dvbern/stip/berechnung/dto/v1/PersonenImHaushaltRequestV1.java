@@ -23,7 +23,7 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Value
 @JsonIgnoreProperties
-public class PersonenImHaushaltRequestV1 implements DmnRequest {
+public class PersonenImHaushaltRequestV1 implements CalculatorRequest {
     @JsonProperty
     PersonenImHaushaltInputV1 personenImHaushaltInput;
 

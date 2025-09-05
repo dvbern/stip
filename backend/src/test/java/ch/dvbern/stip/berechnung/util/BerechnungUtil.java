@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder;
@@ -44,7 +44,7 @@ import org.mockito.Mockito;
 
 @UtilityClass
 public class BerechnungUtil {
-    public DmnRequest getRequest(final int fall) {
+    public CalculatorRequest getRequest(final int fall) {
         try {
             final var resource =
                 BerechnungUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));

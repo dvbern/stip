@@ -32,8 +32,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -51,7 +51,7 @@ import static ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1.getAlterForMediz
 @Jacksonized
 @Value
 @JsonIgnoreProperties
-public class BerechnungRequestV1 implements DmnRequest {
+public class BerechnungRequestV1 implements CalculatorRequest {
     @JsonProperty("Stammdaten_V1")
     StammdatenV1 stammdaten;
 

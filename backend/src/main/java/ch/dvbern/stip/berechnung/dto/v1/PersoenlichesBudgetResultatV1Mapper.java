@@ -22,8 +22,8 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.ListIterator;
 
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetResultatMapper {
     @Override
     public PersoenlichesBudgetresultatDto mapFromRequest(
-        final DmnRequest request,
+        final CalculatorRequest request,
         final int einnahmenPersoenlichesBudget,
         final int ausgabenPersoenlichesBudget,
         final int persoenlichesbudgetBerechnet,

@@ -38,8 +38,8 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
@@ -67,7 +67,7 @@ public class BerechnungService {
     }
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
-        final DmnRequest berechnungRequest,
+        final CalculatorRequest berechnungRequest,
         final int majorVersion,
         final int minorVersion
     ) {
@@ -306,7 +306,7 @@ public class BerechnungService {
         return berechnungsresultatDtoList;
     }
 
-    public DmnRequest getBerechnungRequest(
+    public CalculatorRequest getBerechnungRequest(
         final int majorVersion,
         final int minorVersion,
         final Gesuch gesuch,
@@ -329,7 +329,7 @@ public class BerechnungService {
         return builder.get().buildRequest(gesuch, gesuchTranche, elternTyp);
     }
 
-    public BerechnungResult calculateStipendien(final DmnRequest request) {
+    public BerechnungResult calculateStipendien(final CalculatorRequest request) {
         final var calculator = stipendienCalculators.stream().filter(stipendienCalculator -> {
             final var versionAnnotation = stipendienCalculator.getClass().getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&

@@ -17,9 +17,9 @@
 
 package ch.dvbern.stip.berechnung.service;
 
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
 
 public interface PersonenImHaushaltCalculator {
-    PersonenImHaushaltResult calculatePersonenImHaushalt(final DmnRequest request);
+    PersonenImHaushaltResult calculatePersonenImHaushalt(final CalculatorRequest request);
 }
