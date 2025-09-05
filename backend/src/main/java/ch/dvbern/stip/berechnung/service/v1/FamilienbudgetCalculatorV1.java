@@ -63,7 +63,6 @@ public class FamilienbudgetCalculatorV1 {
                 FamilienBudgetresultatDto::setMedizinischeGrundversorgung,
                 elternteil.getMedizinischeGrundversorgung()
             ),
-            mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, elternteil.getSteuernBund()),
             mapAndReturn(FamilienBudgetresultatDto::setSteuernKantonGemeinde, elternteil.getSteuernStaat()),
             mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, elternteil.getSteuernBund()),
             mapAndReturn(FamilienBudgetresultatDto::setIntegrationszulage, elternteil.getIntegrationszulage()),
