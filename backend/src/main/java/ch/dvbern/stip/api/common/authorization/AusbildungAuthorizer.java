@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -38,10 +39,18 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
     private final AusbildungRepository ausbildungRepository;
     private final SozialdienstService sozialdienstService;
     private final FallService fallService;
+    private final FallRepository fallRepository;
 
     @Transactional
     public void canCreate(final UUID fallId) {
-        if (!fallService.hasAktiveAusbildung(fallId)) {
+        if (
+            !fallService.hasAktiveAusbildung(fallId)
+            && AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                fallRepository.requireById(fallId),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
             return;
         }
 

@@ -5032,6 +5032,8 @@ components:
     DelegierungSlim:
       type: object
       properties:
+        delegierungAngenommen:
+          type: boolean
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
     DelegierungCreate:

@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.DelegierungDto;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,6 +35,9 @@ public abstract class DelegierungMapper {
 
     @Mapping(source = ".", target = "delegierungAngenommen", qualifiedByName = "delegierungAngenommen")
     public abstract DelegierungDto toDto(final Delegierung delegierung);
+
+    @Mapping(source = ".", target = "delegierungAngenommen", qualifiedByName = "delegierungAngenommen")
+    public abstract DelegierungSlimDto toSlimDto(final Delegierung delegierung);
 
     public abstract FallWithDelegierungDto toFallWithDto(Fall fall);
 

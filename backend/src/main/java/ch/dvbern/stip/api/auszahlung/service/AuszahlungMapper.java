@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -50,6 +48,6 @@ public abstract class AuszahlungMapper {
 
     @AfterMapping
     protected void setIsDelegatedFlag(final Fall fall, @MappingTarget FallAuszahlungDto auszahlungDto) {
-        auszahlungDto.setIsDelegated(Objects.nonNull(fall.getDelegierung()));
+        auszahlungDto.setIsDelegated(fall.isDelegiert());
     }
 }

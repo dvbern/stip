@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import jakarta.inject.Inject;
@@ -27,7 +28,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MappingConfig.class, uses = AusbildungDashboardItemMapper.class)
+@Mapper(config = MappingConfig.class, uses = { AusbildungDashboardItemMapper.class, DelegierungMapper.class })
 public abstract class FallDashboardItemMapper {
     @Inject
     BenutzerService benutzerService;
