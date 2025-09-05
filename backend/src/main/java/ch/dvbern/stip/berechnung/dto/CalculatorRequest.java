@@ -17,7 +17,10 @@
 
 package ch.dvbern.stip.berechnung.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface CalculatorRequest {
+    @JsonIgnore
     default String getVersion() {
         return String.format("v%s.%s", majorVersion(), minorVersion());
     }

@@ -21,10 +21,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
+import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import com.savoirtech.json.JsonComparatorBuilder;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -33,12 +31,8 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@QuarkusTest
 @Slf4j
 class V1StructureTest {
-    @Inject
-    PersonenImHaushaltService personenImHaushaltService;
-
     private static final String EXPECTED = """
         {
             "templateJson": {
@@ -148,7 +142,7 @@ class V1StructureTest {
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             ElternTyp.VATER,
-            personenImHaushaltService
+            BerechnungUtil.getPersonenImHaushaltService()
         );
         final var actual = new ObjectMapper().writeValueAsString(request);
         final var comparator = new JsonComparatorBuilder().build();

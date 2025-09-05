@@ -59,21 +59,7 @@ public class BerechnungUtil {
     }
 
     public BerechnungService getMockBerechnungService() {
-        final var personenImHaushaltCalculators = (Instance<PersonenImHaushaltCalculator>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltCalculatorV1()))
-            .when(personenImHaushaltCalculators)
-            .stream();
-
-        final var personenImHaushaltRequestBuilders =
-            (Instance<PersonenImHaushaltRequestBuilder>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltRequestV1Builder()))
-            .when(personenImHaushaltRequestBuilders)
-            .stream();
-
-        final var personenImHaushaltService = new PersonenImHaushaltService(
-            personenImHaushaltCalculators,
-            personenImHaushaltRequestBuilders
-        );
+        final var personenImHaushaltService = getPersonenImHaushaltService();
 
         final var requestBuilders = (Instance<BerechnungRequestBuilder>) Mockito.mock(Instance.class);
         Mockito.doAnswer((ignored) -> Stream.of(new BerechnungRequestV1Builder(personenImHaushaltService)))
@@ -93,6 +79,24 @@ public class BerechnungUtil {
             berechnungStammdatenMapper,
             calculators,
             new MockTenantService()
+        );
+    }
+
+    public PersonenImHaushaltService getPersonenImHaushaltService() {
+        final var personenImHaushaltCalculators = (Instance<PersonenImHaushaltCalculator>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltCalculatorV1()))
+            .when(personenImHaushaltCalculators)
+            .stream();
+
+        final var personenImHaushaltRequestBuilders =
+            (Instance<PersonenImHaushaltRequestBuilder>) Mockito.mock(Instance.class);
+        Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltRequestV1Builder()))
+            .when(personenImHaushaltRequestBuilders)
+            .stream();
+
+        return new PersonenImHaushaltService(
+            personenImHaushaltCalculators,
+            personenImHaushaltRequestBuilders
         );
     }
 }
