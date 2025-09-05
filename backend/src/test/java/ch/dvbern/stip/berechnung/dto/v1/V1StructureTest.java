@@ -69,7 +69,8 @@ class V1StructureTest {
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0
+                        "anzahlGeschwisterInAusbildung": 0,
+                        "steuerdatenTyp": "VATER"
                     }
                 },
                 "InputFamilienbudget_2_V1": {
@@ -93,7 +94,8 @@ class V1StructureTest {
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0
+                        "anzahlGeschwisterInAusbildung": 0,
+                        "steuerdatenTyp": "MUTTER"
                     }
                 },
                 "InputPersoenlichesbudget_V1": {
@@ -148,7 +150,9 @@ class V1StructureTest {
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(EXPECTED, actual);
-        LOG.info("Actual: " + actual.toString());
+        if (!result.isMatch()) {
+            LOG.error("Mismatched results. Actual: " + actual.toString());
+        }
         assertTrue(result.isMatch(), result.getErrorMessage());
     }
 }
