@@ -33,7 +33,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
-import ch.dvbern.stip.berechnung.service.v1.PersonenImHaushaltCalculatorV1;
+import ch.dvbern.stip.berechnung.service.bern.v1.PersonenImHaushaltCalculatorV1;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

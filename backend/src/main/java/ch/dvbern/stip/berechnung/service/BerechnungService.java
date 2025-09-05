@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
@@ -57,6 +58,7 @@ public class BerechnungService {
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
+    private final TenantService tenantService;
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
         final BerechnungResult berechnungResult,
@@ -331,7 +333,13 @@ public class BerechnungService {
 
     public BerechnungResult calculateStipendien(final CalculatorRequest request) {
         final var calculator = stipendienCalculators.stream().filter(stipendienCalculator -> {
-            final var versionAnnotation = stipendienCalculator.getClass().getAnnotation(CalculatorVersion.class);
+            final var clazz = stipendienCalculator.getClass();
+            final var forMandant = clazz.getAnnotation(CalculatorMandant.class);
+            if (forMandant != null && forMandant.value() != tenantService.getCurrentMandantIdentifier()) {
+                return false;
+            }
+
+            final var versionAnnotation = clazz.getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&
             (versionAnnotation.major() == request.majorVersion()) &&
             (versionAnnotation.minor() == request.minorVersion());
