@@ -29,7 +29,6 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type EntityTypes = 'ausbildungsgang' | 'abschluss' | 'ausbildungsstaette';
@@ -198,8 +197,8 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   }>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          lastCreate: pending(),
+        patchState(this, (state) => ({
+          ausbildungsstaetten: cachedPending(state.ausbildungsstaetten),
         }));
       }),
       switchMap(({ values, onSuccess }) =>
@@ -260,8 +259,8 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   }>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          lastCreate: pending(),
+        patchState(this, (state) => ({
+          abschluesse: cachedPending(state.abschluesse),
         }));
       }),
       switchMap(({ values, onSuccess }) =>
