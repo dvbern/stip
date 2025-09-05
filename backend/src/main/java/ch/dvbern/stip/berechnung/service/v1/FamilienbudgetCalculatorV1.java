@@ -139,10 +139,8 @@ public class FamilienbudgetCalculatorV1 {
             applyAndSum(Stream.concat(summands.stream(), conditionalSummands.stream()).toList(), result);
         final var subtrahend =
             applyAndSum(Stream.concat(subtrahends.stream(), conditionalSubtrahends.stream()).toList(), result);
-        final var vermoegen =
-            applyAndSum(Stream.concat(conditionalSummands.stream(), conditionalSubtrahends.stream()).toList(), result);
 
-        final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0) + vermoegen;
+        final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0);
         result.setEinnahmenFamilienbudget(einnahmen);
     }
 
