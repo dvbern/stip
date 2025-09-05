@@ -279,8 +279,8 @@
 
                 @if (permissionStore.rolesMapSig()['V0_Sozialdienst-Admin']) {
                   <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
-                      {{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco }}
+                    <th mat-header-cell *matHeaderCellDef class="filtered tw-w-52 tw-whitespace-nowrap">
+                      <div>{{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco }}</div>
                       <mat-form-field class="tw-w-full">
                         <mat-select
                           [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco"

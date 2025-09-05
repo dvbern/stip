@@ -80,7 +80,6 @@ import {
   SozCockpitFilterFormKeys,
 } from '@dv/sozialdienst-app/model/delegation';
 
-const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
 type DisplayColumns =
   | SozDashboardColumn
   | 'DELEGIERUNG_ANGENOMMEN'
@@ -197,11 +196,15 @@ export class SozialdienstAppFeatureCockpitComponent
   defaultPageSize = DEFAULT_PAGE_SIZE;
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
-  showViewSig = computed<GetDelegierungSozQueryType>(() => {
+  private defaultQueryTypeSig = computed(() => {
     const roles = this.permissionStore.rolesMapSig();
+    return roles['V0_Sozialdienst-Admin'] ? 'ALLE' : 'ALLE_BEARBEITBAR_MEINE';
+  });
+  showViewSig = computed<GetDelegierungSozQueryType>(() => {
+    const defaultQueryType = this.defaultQueryTypeSig();
 
     const show = this.show();
-    return show ?? (roles['V0_Sozialdienst-Admin'] ? 'ALLE' : DEFAULT_FILTER);
+    return show ?? defaultQueryType;
   });
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
@@ -302,12 +305,13 @@ export class SozialdienstAppFeatureCockpitComponent
     );
     effect(() => {
       const query = quickFilterChanged();
+      const defaultQueryType = this.defaultQueryTypeSig();
       if (!query) {
         return;
       }
       this.router.navigate(['.'], {
         queryParams: {
-          show: query === DEFAULT_FILTER ? undefined : query,
+          show: query === defaultQueryType ? undefined : query,
         },
         queryParamsHandling: 'merge',
         replaceUrl: true,
