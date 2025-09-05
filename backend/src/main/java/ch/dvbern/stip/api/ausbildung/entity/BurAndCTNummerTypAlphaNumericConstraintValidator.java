@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -27,6 +29,9 @@ public class BurAndCTNummerTypAlphaNumericConstraintValidator
 
     @Override
     public boolean isValid(Ausbildungsstaette ausbildungsstaette, ConstraintValidatorContext context) {
+        if (Objects.isNull(ausbildungsstaette.getNummer())) {
+            return true;
+        }
         if (ausbildungsstaette.getNummerTyp() == AusbildungsstaetteNummerTyp.CH_SHIS) {
             return true;
         }

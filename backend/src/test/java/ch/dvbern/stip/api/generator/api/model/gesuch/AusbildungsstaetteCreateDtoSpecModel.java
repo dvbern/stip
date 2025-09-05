@@ -27,4 +27,12 @@ public class AusbildungsstaetteCreateDtoSpecModel {
             model.setNameFr("Uni Bern");
         });
     }
+
+    public static AusbildungsstaetteCreateDtoSpec ausbildungsstaetteCreateDtoSpec2() {
+        return TestUtil.createUpdateDtoSpec(AusbildungsstaetteCreateDtoSpec::new, (model) -> {
+            model.setNameDe("Uni Zürich");
+            model.setNameFr("Uni Zürich");
+        });
+    }
+
 }
