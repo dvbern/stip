@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -41,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -68,7 +70,10 @@ class GesuchUpdateDefaultValuesTest {
     @TestAsSachbearbeiter
     void testUpdateEinnahmeKostenVeranlagungscodeAsSB() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
@@ -78,34 +83,43 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang());
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(99));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE));
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
     }
 
     @Test
     @TestAsGesuchsteller
-    void testUpdateEinnahmeKostenVeranlagungscodeAsGS() {
+    void testUpdateEinnahmeKostenVeranlagungscodeAsGSShouldNotBePossible() {
         var gesuchUpdateDTO = GesuchGenerator.createFullGesuch();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten();
         var einnahmeKostenUpdateDto =
             gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten();
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
+        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(null);
         tranche.getGesuchFormular()
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang());
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus(null);
 
         gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsCode(), is(0));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
     }
 
     @Test

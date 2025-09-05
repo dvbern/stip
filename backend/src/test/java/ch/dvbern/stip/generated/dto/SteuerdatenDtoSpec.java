@@ -38,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuerdatenDtoSpec.JSON_PROPERTY_VERPFLEGUNG,
   SteuerdatenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
   SteuerdatenDtoSpec.JSON_PROPERTY_STEUERJAHR,
-  SteuerdatenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_CODE,
+  SteuerdatenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS,
   SteuerdatenDtoSpec.JSON_PROPERTY_TOTAL_EINKUENFTE,
   SteuerdatenDtoSpec.JSON_PROPERTY_EIGENMIETWERT,
   SteuerdatenDtoSpec.JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG,
@@ -77,8 +77,8 @@ public class SteuerdatenDtoSpec {
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
 
-  public static final String JSON_PROPERTY_VERANLAGUNGS_CODE = "veranlagungsCode";
-  private Integer veranlagungsCode;
+  public static final String JSON_PROPERTY_VERANLAGUNGS_STATUS = "veranlagungsStatus";
+  private String veranlagungsStatus;
 
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
   private Integer totalEinkuenfte;
@@ -338,29 +338,29 @@ public class SteuerdatenDtoSpec {
   }
 
 
-  public SteuerdatenDtoSpec veranlagungsCode(Integer veranlagungsCode) {
+  public SteuerdatenDtoSpec veranlagungsStatus(String veranlagungsStatus) {
     
-    this.veranlagungsCode = veranlagungsCode;
+    this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
    /**
-   * Get veranlagungsCode
-   * @return veranlagungsCode
+   * Get veranlagungsStatus
+   * @return veranlagungsStatus
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getVeranlagungsCode() {
-    return veranlagungsCode;
+  public String getVeranlagungsStatus() {
+    return veranlagungsStatus;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_CODE)
+  @JsonProperty(JSON_PROPERTY_VERANLAGUNGS_STATUS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVeranlagungsCode(Integer veranlagungsCode) {
-    this.veranlagungsCode = veranlagungsCode;
+  public void setVeranlagungsStatus(String veranlagungsStatus) {
+    this.veranlagungsStatus = veranlagungsStatus;
   }
 
 
@@ -563,7 +563,7 @@ public class SteuerdatenDtoSpec {
         Objects.equals(this.verpflegung, steuerdaten.verpflegung) &&
         Objects.equals(this.verpflegungPartner, steuerdaten.verpflegungPartner) &&
         Objects.equals(this.steuerjahr, steuerdaten.steuerjahr) &&
-        Objects.equals(this.veranlagungsCode, steuerdaten.veranlagungsCode) &&
+        Objects.equals(this.veranlagungsStatus, steuerdaten.veranlagungsStatus) &&
         Objects.equals(this.totalEinkuenfte, steuerdaten.totalEinkuenfte) &&
         Objects.equals(this.eigenmietwert, steuerdaten.eigenmietwert) &&
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
@@ -575,7 +575,7 @@ public class SteuerdatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsCode, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen);
+    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen);
   }
 
   @Override
@@ -591,7 +591,7 @@ public class SteuerdatenDtoSpec {
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
-    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");

@@ -107,8 +107,6 @@ import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.SteuerdatenDto;
-import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
@@ -129,6 +127,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.AUFGELOESTE_PARTNERSCHAFT;
@@ -139,6 +139,7 @@ import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.LEDIG;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERHEIRATET;
 import static ch.dvbern.stip.api.personinausbildung.type.Zivilstand.VERWITWET;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -987,7 +988,7 @@ class GesuchServiceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSachbearbeiter
     void validateEinreichenValid() {
         EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec().setSteuerjahr(0);
         final var gesuchUpdateDto = GesuchGenerator.createFullGesuch();
@@ -1008,7 +1009,9 @@ class GesuchServiceTest {
         tranche.setGesuchDokuments(
             Arrays.stream(DokumentTyp.values())
                 .map(x -> {
-                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x).setGesuchTranche(tranche);
+                    final var gesuchDokument = new GesuchDokument().setDokumentTyp(x)
+                        .setGesuchTranche(tranche)
+                        .setStatus(GesuchDokumentStatus.AKZEPTIERT);
                     gesuchDokument.addDokument(new Dokument());
                     return gesuchDokument;
                 })
@@ -1024,6 +1027,8 @@ class GesuchServiceTest {
         Set<Steuerdaten> list = new LinkedHashSet<>();
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
+        tranche.getGesuchFormular().getSteuerdaten().stream().toList().get(0).setVeranlagungsStatus("test");
+
         var zahlungsverbindung = new Zahlungsverbindung();
         zahlungsverbindung.setIban(TestConstants.IBAN_CH_NUMMER_VALID);
         zahlungsverbindung.setAdresse(tranche.getGesuchFormular().getPersonInAusbildung().getAdresse());
@@ -1081,33 +1086,6 @@ class GesuchServiceTest {
     // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
     // }
 
-    private SteuerdatenDto initSteuerdatenDto(SteuerdatenTyp typ) {
-        SteuerdatenDto steuerdatenDto = new SteuerdatenDto();
-        steuerdatenDto.setId(UUID.randomUUID());
-        steuerdatenDto.setSteuerdatenTyp(typ);
-        steuerdatenDto.setVeranlagungsCode(5);
-        steuerdatenDto.setSteuerjahr(2010);
-        steuerdatenDto.setFahrkosten(0);
-        steuerdatenDto.setEigenmietwert(0);
-        steuerdatenDto.setIsArbeitsverhaeltnisSelbstaendig(false);
-        steuerdatenDto.setKinderalimente(0);
-        steuerdatenDto.setSteuernBund(0);
-        steuerdatenDto.setSteuernKantonGemeinde(0);
-        steuerdatenDto.setTotalEinkuenfte(0);
-        steuerdatenDto.setTotalEinkuenfte(0);
-        steuerdatenDto.setVerpflegung(0);
-        steuerdatenDto.setVermoegen(0);
-        return steuerdatenDto;
-    }
-
-    private SteuererklaerungUpdateDto initSteuererklaerungUpdateDto(SteuerdatenTyp typ) {
-        SteuererklaerungUpdateDto steuererklaerungUpdateDto = new SteuererklaerungUpdateDto();
-        steuererklaerungUpdateDto.setId(UUID.randomUUID());
-        steuererklaerungUpdateDto.setSteuerdatenTyp(typ);
-        steuererklaerungUpdateDto.setSteuererklaerungInBern(true);
-        return steuererklaerungUpdateDto;
-    }
-
     @Test
     @TestAsGesuchsteller
     void gesuchUpdateEinnahmenkostenDoNotSetSteuerdatenTest() {
@@ -1115,10 +1093,13 @@ class GesuchServiceTest {
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(null);
+        tranche.getGesuchFormular().getEinnahmenKosten().setVeranlagungsStatus(null);
 
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setVeranlagungsCode(5);
         gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(1990);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setVeranlagungsStatus("test");
 
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
@@ -1130,8 +1111,11 @@ class GesuchServiceTest {
             Matchers.equalTo(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
         );
         assertThat(
-            gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getVeranlagungsCode(),
-            Matchers.equalTo(0)
+            gesuchUpdateDto.getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getEinnahmenKosten()
+                .getVeranlagungsStatus(),
+            Matchers.is(VERANLAGUNGSSTATUS_DEFAULT_VALUE)
         );
     }
 
@@ -1891,6 +1875,44 @@ class GesuchServiceTest {
         when(fallRepository.requireById(any())).thenReturn(fall);
         final var result = gesuchService.getSozialdienstMitarbeiterFallDashboardItemDtos(UUID.randomUUID());
         assertNotNull(result);
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    void bearbeitungAbschliessen_shouldNotBePossible_without_veranlagungsStatus() {
+        // arrange
+        var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
+        var gesuchFormular = gesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular();
+        gesuch.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+
+        gesuchFormular
+            .getFamiliensituation()
+            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        gesuchFormular.getSteuererklaerung()
+            .add(new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER).setSteuererklaerungInBern(true));
+        gesuchFormular.getSteuerdaten().add(new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.MUTTER));
+
+        // act
+        var validationReport = gesuchTrancheService.einreichenValidierenSB(UUID.randomUUID());
+        var validationErrors = validationReport.getValidationErrors()
+            .stream()
+            .map(validationErrorDto -> validationErrorDto.getMessageTemplate())
+            .toList();
+
+        // assert
+        assertThat(
+            validationErrors,
+            hasItem(
+                VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE
+            )
+        );
     }
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {

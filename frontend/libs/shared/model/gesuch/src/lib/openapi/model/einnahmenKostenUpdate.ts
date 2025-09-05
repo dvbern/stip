@@ -47,9 +47,9 @@ export interface EinnahmenKostenUpdate {
      */
     betreuungskostenKinder?: number;
     /**
-     * 2-Stelliger Veranlagungscode (0-99)
+     * Veranlagungsstatus
      */
-    veranlagungsCode?: number;
+    veranlagungsStatus?: string;
     /**
      * Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
      */

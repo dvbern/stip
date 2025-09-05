@@ -43,7 +43,7 @@ public class EinnahmenKostenCopyUtil {
         target.setAusbildungskosten(source.getAusbildungskosten());
         target.setAuswaertigeMittagessenProWoche(source.getAuswaertigeMittagessenProWoche());
         target.setBetreuungskostenKinder(source.getBetreuungskostenKinder());
-        target.setVeranlagungsCode(source.getVeranlagungsCode());
+        target.setVeranlagungsStatus(source.getVeranlagungsStatus());
         target.setSteuerjahr(source.getSteuerjahr());
         target.setVermoegen(source.getVermoegen());
     }

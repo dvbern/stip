@@ -140,6 +140,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
 @RequestScoped
@@ -238,9 +239,10 @@ public class GesuchService {
 
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-        Integer veranlagungsCodeToSet = 0;
 
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+        String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
+
         if (einnahmenKosten != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
@@ -252,18 +254,17 @@ public class GesuchService {
                 steuerjahrDefaultValue
             );
 
-            final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
-            final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
-            final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+            final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
+            final String veranlagungsStatusExistingValue = einnahmenKosten.getVeranlagungsStatus();
+            veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
-                veranlagungsCodeDtoValue,
-                veranlagungsCodeExistingValue,
-                veranlagungscodeDefaltValue
+                veranlagungsStatusDtoValue,
+                veranlagungsStatusExistingValue,
+                VERANLAGUNGSSTATUS_DEFAULT_VALUE
             );
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
+        einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
     }
 
     @Transactional

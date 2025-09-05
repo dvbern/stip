@@ -553,6 +553,22 @@ public class GesuchTrancheService {
         return gesuchTrancheMapper.toDto(aenderung);
     }
 
+    private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {
+        final var documents = gesuchTranche.getGesuchDokuments();
+        final var hasDocuments = documents != null && !documents.isEmpty();
+
+        try {
+            gesuchTrancheValidatorService.validateAenderungForAkzeptiert(gesuchTranche);
+
+        } catch (ValidationsException e) {
+            return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+        } catch (CustomValidationsException e) {
+            return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+        }
+
+        return new ValidationReportDto().hasDocuments(hasDocuments);
+    }
+
     private ValidationReportDto einreichenValidationReport(final GesuchTranche gesuchTranche) {
         final var documents = gesuchTranche.getGesuchDokuments();
         final var hasDocuments = documents != null && !documents.isEmpty();
@@ -584,7 +600,7 @@ public class GesuchTrancheService {
     @Transactional
     public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
-        return einreichenValidationReport(gesuchTranche);
+        return bearbeitungAbschliessenValidationReport(gesuchTranche);
     }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {

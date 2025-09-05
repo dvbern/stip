@@ -135,7 +135,7 @@ export const gesuchFormularUpdateFn = (
     wgWohnend: false,
     auswaertigeMittagessenProWoche: null,
     betreuungskostenKinder: null,
-    veranlagungsCode: 0,
+    veranlagungsStatus: 'Provisorisch Veranlagt',
     steuerjahr: 2023,
     vermoegen: 20900,
     steuernKantonGemeinde: 0,
