@@ -121,7 +121,6 @@ class V1StructureTest {
                         "medizinischeGrundversorgung": 2800,
                         "ausbildungskosten": 450,
                         "steuern": 0,
-                        "steuernKonkubinatspartner": 0,
                         "fahrkosten": 523,
                         "fahrkostenPartner": 0,
                         "verpflegung": 0,
