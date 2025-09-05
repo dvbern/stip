@@ -124,8 +124,8 @@
           </tr>
         </table>
         <mat-paginator
-          [pageSizeOptions]="[10, 20, 50]"
-          pageSize="10"
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="defaultPageSize"
           [length]="benutzerListSource.data.length"
           showFirstLastButtons
         >

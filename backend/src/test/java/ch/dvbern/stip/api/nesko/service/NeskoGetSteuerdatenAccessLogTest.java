@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.NeskoGetBearerTokenServiceMock;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -87,7 +88,8 @@ public class NeskoGetSteuerdatenAccessLogTest {
         Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
 
         neskoAccessLoggerService = Mockito.spy(new NeskoAccessLoggerService(neskoAccessRepository));
-        neskoGetSteuerdatenService = Mockito.spy(new NeskoGetSteuerdatenService(neskoAccessLoggerService));
+        neskoGetSteuerdatenService =
+            Mockito.spy(new NeskoGetSteuerdatenService(new NeskoGetBearerTokenServiceMock(), neskoAccessLoggerService));
 
         Mockito.doReturn(Mockito.mock(StipendienAuskunftPort.class))
             .when(neskoGetSteuerdatenService)
@@ -100,7 +102,6 @@ public class NeskoGetSteuerdatenAccessLogTest {
 
         // act
         neskoGetSteuerdatenService.getSteuerdatenResponse(
-            UUID.randomUUID().toString(),
             TestConstants.AHV_NUMMER_VALID_MUTTER,
             Year.now().getValue() - 1,
             UUID.randomUUID().toString(),

@@ -36,7 +36,7 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -174,11 +174,15 @@ public class UnterschriftenblattService {
 
     @Transactional
     public boolean requiredUnterschriftenblaetterExistOrIsVerfuegt(final Gesuch gesuch) {
+        if (gesuch.isVerfuegt()) {
+            return true;
+        }
+
         final var required = getUnterschriftenblaetterToUpload(gesuch);
         final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTypes(gesuch.getId(), required);
 
         final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
-        return existingSet.containsAll(required) || gesuch.isVerfuegt();
+        return existingSet.containsAll(required);
     }
 
     private Unterschriftenblatt createUnterschriftenblatt(

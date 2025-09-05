@@ -71,8 +71,8 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public boolean canUpdateCheck(final UUID ausbildungId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
         final var ausbildung = ausbildungRepository.requireById(ausbildungId);
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         // If a Folgegesuch was created, we can't update the Ausbildung anymore
         if (ausbildung.getGesuchs().stream().anyMatch(gesuch -> !gesuch.isErstgesuch())) {

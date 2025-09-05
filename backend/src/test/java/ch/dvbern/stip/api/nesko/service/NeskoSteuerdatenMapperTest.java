@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.VeranlagungsStatusType;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,7 @@ class NeskoSteuerdatenMapperTest {
         getSteuerdatenResponse.getSteuerdaten().setSteuerbaresVermoegenKanton(steuerbaresVermoegenKanton);
         getSteuerdatenResponse.getSteuerdaten().setFahrkosten(new MannFrauEffSatzType());
         getSteuerdatenResponse.getSteuerdaten().setKostenAuswaertigeVerpflegung(new MannFrauEffSatzType());
-
+        getSteuerdatenResponse.getSteuerdaten().setStatusVeranlagung(VeranlagungsStatusType.DEFINITIV_BEARBEITET);
         steuerdaten = new Steuerdaten();
         steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
     }

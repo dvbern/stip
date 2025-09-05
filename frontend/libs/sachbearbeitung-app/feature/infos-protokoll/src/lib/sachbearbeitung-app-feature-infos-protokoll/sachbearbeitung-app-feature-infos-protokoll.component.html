@@ -17,7 +17,22 @@
         {{ 'sachbearbeitung-app.infos.protokoll.table.datum' | transloco }}
       </th>
       <td mat-cell *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()" class="tw-whitespace-nowrap">
-        {{ protokoll.timestamp | date: 'dd.MM.yyyy' }}
+        <dv-shared-ui-tooltip-date [dateSig]="protokoll.timestamp"></dv-shared-ui-tooltip-date>
+      </td>
+    </ng-container>
+
+    <!-- Typ -->
+    <ng-container matColumnDef="typ">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ 'sachbearbeitung-app.infos.protokoll.table.typ' | transloco }}
+      </th>
+      <td
+        mat-cell
+        *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
+        class="tw-max-w-32 tw-whitespace-nowrap"
+        [dvTruncateTooltip]="'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | transloco"
+      >
+        {{ 'sachbearbeitung-app.infos.protokoll.table.typ.' + protokoll.typ | transloco }}
       </td>
     </ng-container>
 
@@ -29,10 +44,10 @@
       <td
         mat-cell
         *dvMatCellDef="let protokoll; dataSource: statusprotokollSig()"
-        class="tw-max-w-32 tw-whitespace-nowrap"
-        [dvTruncateTooltip]="'sachbearbeitung-app.gesuch.status.contract.' + protokoll.status | transloco"
+        class="tw-max-w-48 tw-whitespace-nowrap"
+        [dvTruncateTooltip]="protokoll.statusKey | transloco"
       >
-        {{ 'sachbearbeitung-app.gesuch.status.contract.' + protokoll.status | transloco }}
+        {{ protokoll.statusKey | transloco }}
       </td>
     </ng-container>
 
@@ -70,5 +85,5 @@
     </tr>
   </table>
 
-  <mat-paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+  <mat-paginator showFirstLastButtons [pageSizeOptions]="pageSizes" [pageSize]="defaultPageSize"></mat-paginator>
 </div>

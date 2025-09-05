@@ -28,7 +28,7 @@ export class EinnahmenKostenPO {
     betreuungskostenKinder: Locator;
     steuerjahr: Locator;
     vermoegen: Locator;
-    veranlagungsCode: Locator;
+    veranlagungsStatus: Locator;
 
     incompleteWarning: () => Locator;
 
@@ -74,8 +74,8 @@ export class EinnahmenKostenPO {
       ),
       steuerjahr: page.getByTestId('form-einnahmen-kosten-steuerjahr'),
       vermoegen: page.getByTestId('form-einnahmen-kosten-vermoegen'),
-      veranlagungsCode: page.getByTestId(
-        'form-einnahmen-kosten-veranlagungsCode',
+      veranlagungsStatus: page.getByTestId(
+        'form-einnahmen-kosten-veranlagungsStatus',
       ),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),

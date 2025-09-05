@@ -609,7 +609,7 @@ class BerechnungTest {
                 .setWgWohnend(false)
                 .setVermoegen(12)
                 .setSteuerjahr(2023)
-                .setVeranlagungsCode(0)
+                .setVeranlagungsStatus(null)
                 .setVerdienstRealisiert(false)
                 .setAuswaertigeMittagessenProWoche(0)
         );
@@ -746,7 +746,7 @@ class BerechnungTest {
                 .setWgWohnend(true)
                 .setVermoegen(0)
                 .setSteuerjahr(2023)
-                .setVeranlagungsCode(0)
+                .setVeranlagungsStatus(null)
                 .setVerdienstRealisiert(false)
                 .setAuswaertigeMittagessenProWoche(0)
         );

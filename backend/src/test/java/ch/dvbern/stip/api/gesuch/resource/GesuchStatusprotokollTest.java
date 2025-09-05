@@ -53,6 +53,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -136,11 +137,11 @@ class GesuchStatusprotokollTest {
         final var sorted = Arrays.stream(statusProtokoll)
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
-        assertThat(sorted.get(0).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS));
-        assertThat(sorted.get(1).getStatus(), is(GesuchstatusDtoSpec.EINGEREICHT));
-        assertThat(sorted.get(2).getStatus(), is(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN));
-        assertThat(sorted.get(3).getStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-        assertThat(sorted.get(4).getStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+        assertThat(sorted.get(0).getStatusTo(), equalTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS.toString()));
+        assertThat(sorted.get(1).getStatusTo(), equalTo(GesuchstatusDtoSpec.EINGEREICHT.toString()));
+        assertThat(sorted.get(2).getStatusTo(), equalTo(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN.toString()));
+        assertThat(sorted.get(3).getStatusTo(), equalTo(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG.toString()));
+        assertThat(sorted.get(4).getStatusTo(), equalTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB.toString()));
     }
 
     @Test

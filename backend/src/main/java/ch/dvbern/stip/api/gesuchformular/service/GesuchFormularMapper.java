@@ -200,7 +200,8 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
-        DeleteChangedDocumentsUtil.deleteChangedDocuments(gesuchDokumentService, newFormular, targetFormular);
+        final var documentsToDelete =
+            DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(newFormular, targetFormular);
 
         resetEinnahmenKosten(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
@@ -208,6 +209,10 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetPartner(newFormular, targetFormular);
         resetSteuererklaerungTabs(newFormular, targetFormular);
         resetSteuererdatenTabs(newFormular, targetFormular);
+
+        if (!documentsToDelete.isEmpty()) {
+            gesuchDokumentService.deleteDokumenteForTranche(targetFormular.getTranche().getId(), documentsToDelete);
+        }
     }
 
     @AfterMapping
@@ -216,7 +221,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final @MappingTarget GesuchFormular targetFormular
     ) {
         resetDarlehen(targetFormular);
-        resetUnterschriftenblaetter(targetFormular);
+        resetUnterschriftenblaetterIfNotVerfuegt(targetFormular);
     }
 
     @AfterMapping
@@ -304,7 +309,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         );
     }
 
-    void resetUnterschriftenblaetter(final GesuchFormular targetFormular) {
+    void resetUnterschriftenblaetterIfNotVerfuegt(final GesuchFormular targetFormular) {
         resetFieldIf(
             () -> true,
             "Delete not required Unterschriftenblaetter",
@@ -319,7 +324,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     return;
                 }
 
-                if (gesuch.getId() == null) {
+                if (gesuch.getId() == null || gesuch.isVerfuegt()) {
                     return;
                 }
 

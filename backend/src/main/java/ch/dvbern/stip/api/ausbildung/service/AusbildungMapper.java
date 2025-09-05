@@ -17,7 +17,10 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungDiffUtil;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
@@ -35,6 +38,7 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(
     config = MappingConfig.class,
@@ -43,6 +47,9 @@ import org.mapstruct.MappingTarget;
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Inject
     AusbildungAuthorizer ausbildungAuthorizer;
+
+    @Inject
+    AusbildungsgangService ausbildungsgangService;
 
     @Mapping(
         source = "ausbildungBegin",
@@ -91,7 +98,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     @Mapping(source = "fallId", target = "fall.id")
     public abstract Ausbildung toNewEntity(AusbildungUpdateDto ausbildungDto);
 
-    @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
+    @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang", qualifiedByName = "mapAusbildungsgang")
     @Mapping(
         source = "ausbildungBegin",
         target = "ausbildungBegin",
@@ -104,6 +111,14 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     )
     @Mapping(source = "fallId", target = "fall.id")
     public abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
+
+    @Named("mapAusbildungsgang")
+    protected Ausbildungsgang mapAusbildungsgang(final UUID ausbildungsgangId) {
+        if (ausbildungsgangId == null) {
+            return null;
+        }
+        return ausbildungsgangService.requireById(ausbildungsgangId);
+    }
 
     @AfterMapping
     public void resetAusbildungsgangIfNull(

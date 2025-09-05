@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuchtranche;
 
 import java.util.EnumMap;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AkzeptiertHandler;
@@ -27,12 +28,15 @@ import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTran
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -42,17 +46,18 @@ public class GesuchTrancheStatusConfigProducer {
     private final GesuchTrancheFehlendeDokumenteEinreichenHandler gesuchTrancheFehlendeDokumenteEinreichenHandler;
     private final AkzeptiertHandler akzeptiertHandler;
     private final GesuchTrancheFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
+    private final StatusprotokollService statusprotokollService;
 
     public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> config =
             new StateMachineConfig<>();
         final var triggers =
-            new EnumMap<GesuchTrancheStatusChangeEvent, TriggerWithParameters1<GesuchTranche, GesuchTrancheStatusChangeEvent>>(
+            new EnumMap<GesuchTrancheStatusChangeEvent, TriggerWithParameters2<GesuchTranche, String, GesuchTrancheStatusChangeEvent>>(
                 GesuchTrancheStatusChangeEvent.class
             );
 
         for (GesuchTrancheStatusChangeEvent event : GesuchTrancheStatusChangeEvent.values()) {
-            triggers.put(event, config.setTriggerParameters(event, GesuchTranche.class));
+            triggers.put(event, config.setTriggerParameters(event, GesuchTranche.class, String.class));
         }
 
         config.configure(GesuchTrancheStatus.IN_BEARBEITUNG_GS)
@@ -108,7 +113,17 @@ public class GesuchTrancheStatusConfigProducer {
         Transition<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> transition,
         Object[] args
     ) {
-        GesuchTranche gesuchTranche = extractGesuchFromStateMachineArgs(args);
+        final var gesuchAndComment = extractGesuchAndCommentFromStateMachineArgs(args);
+        final var gesuchTranche = gesuchAndComment.getLeft();
+        final var comment = gesuchAndComment.getRight();
+
+        statusprotokollService.createStatusprotokoll(
+            transition.getDestination().toString(),
+            transition.getSource().toString(),
+            StatusprotokollEntryTyp.AENDERUNG,
+            comment,
+            gesuchTranche.getGesuch()
+        );
 
         LOG.info(
             "KSTIP: GesuchTranche mit id {} wurde von Status {} nach Status {} durch event {} geandert",
@@ -119,14 +134,20 @@ public class GesuchTrancheStatusConfigProducer {
         );
     }
 
-    private GesuchTranche extractGesuchFromStateMachineArgs(Object[] args) {
-        if (args.length == 0 || !(args[0] instanceof GesuchTranche gesuchTranche)) {
-            throw new AppErrorException(
-                "State Transition args sollte einen GesuchTranche Objekt enthalten, es gibt einen Problem in die "
-                + "Statemachine args"
-            );
+    private Pair<GesuchTranche, String> extractGesuchAndCommentFromStateMachineArgs(Object[] args) {
+        if (
+            args.length == 2
+            && args[0] instanceof GesuchTranche gesuchTranche
+        ) {
+            if (args[1] instanceof String comment) {
+                return Pair.of(gesuchTranche, comment);
+            }
+            if (Objects.isNull(args[1])) {
+                return Pair.of(gesuchTranche, gesuchTranche.getComment());
+            }
         }
-
-        return gesuchTranche;
+        throw new AppErrorException(
+            "State Transition args sollte ein String+GesuchTranche Objekt enthalten, es gibt ein Problem in den Statemachine args"
+        );
     }
 }

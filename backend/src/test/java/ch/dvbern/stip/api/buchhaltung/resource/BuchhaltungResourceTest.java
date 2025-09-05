@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -136,6 +137,21 @@ class BuchhaltungResourceTest {
     @Test
     @TestAsSachbearbeiter
     @Order(5)
+    void fillRequiredVeranlagungStatus() {
+        var gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(gesuchUpdateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(6)
     void gesuchAddSteuerdaten() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
@@ -150,7 +166,7 @@ class BuchhaltungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void gesuchDokumenteAkzeptieren() {
         final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -188,7 +204,7 @@ class BuchhaltungResourceTest {
 
     @Test
     @TestAsFreigabestelle
-    @Order(7)
+    @Order(8)
     void gesuchVerfuegen() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -200,7 +216,7 @@ class BuchhaltungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void getBuchhaltung() {
         final var buchhaltungOverview = buchhaltungApiSpec.getBuchhaltungEntrys()
             .gesuchIdPath(gesuch.getId())

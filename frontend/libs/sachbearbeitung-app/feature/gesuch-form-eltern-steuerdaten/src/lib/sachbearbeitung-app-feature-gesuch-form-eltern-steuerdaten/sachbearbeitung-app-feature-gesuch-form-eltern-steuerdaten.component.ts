@@ -39,13 +39,13 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
-import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
@@ -64,6 +64,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten.component.html',
@@ -105,10 +106,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
         /** @see // this.steuerjahrValidation */
       ],
     ],
-    veranlagungsCode: [
-      <number | null>null,
-      [Validators.required, sharedUtilValidatorRange(0, 99)],
-    ],
+    veranlagungsStatus: [<string | null>null, [Validators.required]],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
@@ -205,15 +203,12 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       .subscribe((result) => {
         if (!result) return;
 
-        const { token, steuerjahr } = result;
-        if (token) {
-          this.steuerdatenStore.updateSteuerdatenFromNesko$({
-            gesuchTrancheId,
-            steuerdatenTyp,
-            steuerjahr,
-            token,
-          });
-        }
+        const { steuerjahr } = result;
+        this.steuerdatenStore.updateSteuerdatenFromNesko$({
+          gesuchTrancheId,
+          steuerdatenTyp,
+          steuerjahr,
+        });
       });
   }
 
@@ -270,7 +265,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       'fahrkosten',
       'verpflegung',
       'steuerjahr',
-      'veranlagungsCode',
+      'veranlagungsStatus',
     ]);
     const originalSteuerdaten = this.originalSteuerdatenSig();
     const steuerdaten = {
