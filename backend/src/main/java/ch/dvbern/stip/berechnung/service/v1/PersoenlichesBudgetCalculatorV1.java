@@ -137,8 +137,10 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
 
         final var basicToApply = List.of(
+            mapAndReturn(PersoenlichesBudgetresultatDto::setSteuernKantonGemeinde, antragssteller.getSteuern()),
             mapAndReturn(PersoenlichesBudgetresultatDto::setVerpflegungPartner, antragssteller.getVerpflegungPartner()),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setFremdbetreuung, antragssteller.getFremdbetreuung())
+            mapAndReturn(PersoenlichesBudgetresultatDto::setFremdbetreuung, antragssteller.getFremdbetreuung()),
+            mapAndReturn(PersoenlichesBudgetresultatDto::setFahrkostenPartner, antragssteller.getFahrkostenPartner())
         );
 
         final var anteilFamilienbudget1 = Math.abs(

@@ -64,7 +64,6 @@ public class AntragsstellerV1 {
     int medizinischeGrundversorgung;
     int ausbildungskosten;
     int steuern;
-    int steuernKonkubinatspartner;
     int fahrkosten;
     int fahrkostenPartner;
     int verpflegung;
