@@ -21,7 +21,6 @@ import java.time.ZonedDateTime;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -38,7 +37,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
         notificationService.createGesuchEingereichtNotification(gesuch);
         gesuch.getGesuchTranchen()
             .stream()

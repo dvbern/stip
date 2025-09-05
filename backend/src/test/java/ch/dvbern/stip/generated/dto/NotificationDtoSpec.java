@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TEXT,
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TYPE,
-  NotificationDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  NotificationDtoSpec.JSON_PROPERTY_FALL_ID,
   NotificationDtoSpec.JSON_PROPERTY_CONTEXT_ID,
   NotificationDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   NotificationDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
@@ -47,8 +47,8 @@ public class NotificationDtoSpec {
   public static final String JSON_PROPERTY_NOTIFICATION_TYPE = "notificationType";
   private NotificationTypeDtoSpec notificationType;
 
-  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
-  private UUID gesuchId;
+  public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  private UUID fallId;
 
   public static final String JSON_PROPERTY_CONTEXT_ID = "contextId";
   private UUID contextId;
@@ -117,29 +117,29 @@ public class NotificationDtoSpec {
   }
 
 
-  public NotificationDtoSpec gesuchId(UUID gesuchId) {
+  public NotificationDtoSpec fallId(UUID fallId) {
     
-    this.gesuchId = gesuchId;
+    this.fallId = fallId;
     return this;
   }
 
    /**
-   * Get gesuchId
-   * @return gesuchId
+   * Get fallId
+   * @return fallId
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public UUID getGesuchId() {
-    return gesuchId;
+  public UUID getFallId() {
+    return fallId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
 
@@ -205,9 +205,9 @@ public class NotificationDtoSpec {
    * Get timestampErstellt
    * @return timestampErstellt
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getTimestampErstellt() {
     return timestampErstellt;
@@ -215,7 +215,7 @@ public class NotificationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTimestampErstellt(LocalDate timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
@@ -257,7 +257,7 @@ public class NotificationDtoSpec {
     NotificationDtoSpec notification = (NotificationDtoSpec) o;
     return Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.notificationType, notification.notificationType) &&
-        Objects.equals(this.gesuchId, notification.gesuchId) &&
+        Objects.equals(this.fallId, notification.fallId) &&
         Objects.equals(this.contextId, notification.contextId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt) &&
@@ -266,7 +266,7 @@ public class NotificationDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationText, notificationType, gesuchId, contextId, userErstellt, timestampErstellt, absender);
+    return Objects.hash(notificationText, notificationType, fallId, contextId, userErstellt, timestampErstellt, absender);
   }
 
   @Override
@@ -275,7 +275,7 @@ public class NotificationDtoSpec {
     sb.append("class NotificationDtoSpec {\n");
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");

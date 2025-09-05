@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
@@ -42,6 +43,7 @@ import org.mapstruct.Named;
 @Mapper(
     config = MappingConfig.class,
     uses = {
+        DelegierungMapper.class,
         FallMapper.class,
         GesuchsperiodeMapper.class,
         GesuchTrancheMapper.class,

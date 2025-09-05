@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import jakarta.persistence.AssociationOverride;
 import jakarta.persistence.AssociationOverrides;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -68,10 +67,6 @@ public class Delegierung extends AbstractMandantEntity {
         nullable = false
     )
     private @Valid Fall delegierterFall;
-
-    @NotNull
-    @Column(name = "delegierung_angenommen")
-    private boolean delegierungAngenommen;
 
     @Embedded
     @AssociationOverrides(

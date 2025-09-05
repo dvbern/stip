@@ -1,7 +1,4 @@
-import {
-  AssertMatchAndMergeTranslations,
-  type,
-} from '@dv/shared/model/type-util';
+import { AssertMatchAndMergeTranslations } from '@dv/shared/model/type-util';
 
 import type de from './shared.de.json';
 import type fr from './shared.fr.json';
@@ -11,4 +8,6 @@ export type SharedTranslationKey = AssertMatchAndMergeTranslations<
   typeof fr
 >;
 
-export const translatableShared = type<SharedTranslationKey>;
+export const translatableShared = <const T extends SharedTranslationKey>(
+  value: T,
+) => value;

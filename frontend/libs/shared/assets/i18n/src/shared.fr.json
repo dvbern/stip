@@ -265,6 +265,8 @@
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Délai pour soumettre les documents modifié",
   "shared.nachrichten.type.NEUE_VERFUEGUNG": "Nouvelle décision",
   "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Retrait échoué",
+  "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Délégation Acceptée",
+  "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Délégation refusée",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",
@@ -410,6 +412,9 @@
   "shared.form.aenderung.action.accept": "Accepter",
   "shared.form.aenderung.action.reject": "Rejeter",
   "shared.form.aenderung.action.manuallyChange": "Apporter des modifications manuelles",
+
+  "shared.form.delegation.email.label": "Email",
+  "shared.form.delegation.sprache.label": "Langue de correspondance",
 
   "shared.person.title": "Person in Education",
   "shared.form.person.sozialversicherungsnummer.info": "Le numéro d’assurance sociale correspond au numéro AVS. Ce numéro à 13 chiffres figure sur la carte d’assurance-maladie ou peut être obtenu auprès de l’administration communale de la commune de résidence. Si vous n’avez pas de numéro d’assurance sociale, veuillez nous contacter.",

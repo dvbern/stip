@@ -199,5 +199,6 @@
   <include file="/db/migration/0.52/0.52.0-KSTIP-2569.xml" />
   <include file="/db/migration/0.52/0.52.0-KSTIP-2595.xml" />
   <include file="/db/migration/0.52/0.52.0-KSTIP-2591.xml" />
+  <include file="/db/migration/0.52/0.52.0-KSTIP-1437.xml" />
   <!--  </editor-fold> -->
 </databaseChangeLog>

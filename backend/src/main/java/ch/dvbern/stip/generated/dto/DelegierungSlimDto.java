@@ -20,7 +20,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DelegierungSlimDto  implements Serializable {
+  private @Valid Boolean delegierungAngenommen;
   private @Valid SozialdienstSlimDto sozialdienst;
+
+  /**
+   **/
+  public DelegierungSlimDto delegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+    return this;
+  }
+
+  
+  @JsonProperty("delegierungAngenommen")
+  public Boolean getDelegierungAngenommen() {
+    return delegierungAngenommen;
+  }
+
+  @JsonProperty("delegierungAngenommen")
+  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+  }
 
   /**
    **/
@@ -50,12 +69,13 @@ public class DelegierungSlimDto  implements Serializable {
       return false;
     }
     DelegierungSlimDto delegierungSlim = (DelegierungSlimDto) o;
-    return Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
+    return Objects.equals(this.delegierungAngenommen, delegierungSlim.delegierungAngenommen) &&
+        Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialdienst);
+    return Objects.hash(delegierungAngenommen, sozialdienst);
   }
 
   @Override
@@ -63,6 +83,7 @@ public class DelegierungSlimDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungSlimDto {\n");
     
+    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("}");
     return sb.toString();

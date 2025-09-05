@@ -34,9 +34,7 @@ import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  DelegierenServiceGetDelegierungsOfSozialdienstRequestParams,
   FallWithDelegierung,
-  GetDelegierungSozQueryType,
   SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
@@ -76,11 +74,16 @@ import { parseDate, toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 import { DelegierungDialogComponent } from '@dv/sozialdienst-app/feature/delegierung-dialog';
 import {
+  GetDelegierungSozQueryType,
+  LoadPaginatedDashboardByRoles,
   SozCockitComponentInputs,
   SozCockpitFilterFormKeys,
 } from '@dv/sozialdienst-app/model/delegation';
 
-const DEFAULT_FILTER: GetDelegierungSozQueryType = 'ALLE_BEARBEITBAR_MEINE';
+type DisplayColumns =
+  | SozDashboardColumn
+  | 'DELEGIERUNG_ANGENOMMEN'
+  | 'AKTIONEN';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-cockpit',
@@ -122,7 +125,6 @@ export class SozialdienstAppFeatureCockpitComponent
 {
   private sidenavSig = viewChild.required(MatSidenav);
   private formBuilder = inject(NonNullableFormBuilder);
-  private permissionStore = inject(PermissionStore);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private store = inject(Store);
@@ -130,6 +132,7 @@ export class SozialdienstAppFeatureCockpitComponent
   private dialog = inject(MatDialog);
   delegationStore = inject(DelegationStore);
   versionSig = this.store.selectSignal(selectVersion);
+  permissionStore = inject(PermissionStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
@@ -160,7 +163,21 @@ export class SozialdienstAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = [...Object.keys(SozDashboardColumn), 'AKTIONEN'];
+  displayedColumnsSig = computed(() => {
+    const roles = this.permissionStore.rolesMapSig();
+
+    return [
+      'FALLNUMMER',
+      'NACHNAME',
+      'VORNAME',
+      'GEBURTSDATUM',
+      'WOHNORT',
+      ...(roles['V0_Sozialdienst-Admin']
+        ? ['DELEGIERUNG_ANGENOMMEN' as const]
+        : []),
+      'AKTIONEN',
+    ] satisfies DisplayColumns[];
+  });
 
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
@@ -179,11 +196,15 @@ export class SozialdienstAppFeatureCockpitComponent
   defaultPageSize = DEFAULT_PAGE_SIZE;
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
-  showViewSig = computed<GetDelegierungSozQueryType>(() => {
+  private defaultQueryTypeSig = computed(() => {
     const roles = this.permissionStore.rolesMapSig();
+    return roles['V0_Sozialdienst-Admin'] ? 'ALLE' : 'ALLE_BEARBEITBAR_MEINE';
+  });
+  showViewSig = computed<GetDelegierungSozQueryType>(() => {
+    const defaultQueryType = this.defaultQueryTypeSig();
 
     const show = this.show();
-    return show ?? (roles['V0_Sozialdienst-Admin'] ? 'ALLE' : DEFAULT_FILTER);
+    return show ?? defaultQueryType;
   });
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
@@ -202,6 +223,11 @@ export class SozialdienstAppFeatureCockpitComponent
       typ: 'ALLE',
       icon: 'all_inclusive',
       roles: ['V0_Sozialdienst-Mitarbeiter'],
+    },
+    {
+      typ: 'OFFEN',
+      icon: 'approval_delegation',
+      roles: ['V0_Sozialdienst-Admin'],
     },
   ];
 
@@ -279,12 +305,13 @@ export class SozialdienstAppFeatureCockpitComponent
     );
     effect(() => {
       const query = quickFilterChanged();
+      const defaultQueryType = this.defaultQueryTypeSig();
       if (!query) {
         return;
       }
       this.router.navigate(['.'], {
         queryParams: {
-          show: query === DEFAULT_FILTER ? undefined : query,
+          show: query === defaultQueryType ? undefined : query,
         },
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -383,10 +410,7 @@ const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
   return value === 'true';
 };
 
-const createQuery = <
-  T extends
-    Partial<DelegierenServiceGetDelegierungsOfSozialdienstRequestParams>,
->(
+const createQuery = <T extends Partial<LoadPaginatedDashboardByRoles>>(
   value: T,
 ) => {
   return value;

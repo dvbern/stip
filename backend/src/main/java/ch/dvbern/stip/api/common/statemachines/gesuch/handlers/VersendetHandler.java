@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 import java.util.Comparator;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -42,7 +41,7 @@ public class VersendetHandler implements GesuchStatusChangeHandler {
 
         if (latestVerfuegung.isPresent()) {
             notificationService.createNeueVerfuegungNotification(latestVerfuegung.get());
-            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            mailService.sendStandardNotificationEmailForGesuch(gesuch);
         }
     }
 }

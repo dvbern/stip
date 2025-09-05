@@ -3,6 +3,7 @@ import {
   AusbildungsStatus,
   FallDashboardItem,
 } from '@dv/shared/model/gesuch';
+import { SharedModelNachricht } from '@dv/shared/model/nachricht';
 import { Modify } from '@dv/shared/model/type-util';
 
 export type SharedModelGsGesuchView = Modify<
@@ -35,12 +36,13 @@ export type SharedModelGsAusbildungView = Modify<
 >;
 export type SharedModelGsDashboardView = Omit<
   FallDashboardItem,
-  'ausbildungDashboardItems'
+  'ausbildungDashboardItems' | 'notifications'
 > & {
   hasActiveAusbildungen: boolean;
   canCreateAusbildung: boolean;
   activeAusbildungen: SharedModelGsAusbildungView[];
   inactiveAusbildungen: SharedModelGsAusbildungView[];
+  notifications: SharedModelNachricht[];
 };
 
 export type StatusType = 'ACTIVE' | 'INACTIVE' | undefined;

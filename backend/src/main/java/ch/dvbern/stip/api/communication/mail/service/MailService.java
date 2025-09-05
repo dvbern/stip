@@ -18,11 +18,15 @@
 package ch.dvbern.stip.api.communication.mail.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
+import ch.dvbern.stip.api.delegieren.entity.PersoenlicheAngaben;
+import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notification.service.MailAlreadySentCheckerService;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
@@ -45,7 +49,42 @@ public class MailService {
     private final TenantConfigService tenantConfigService;
     private final MailAlreadySentCheckerService mailAlreadySentCheckerService;
 
-    public void sendStandardNotificationEmails(
+    public void sendStandardNotificationEmailForGesuch(final Gesuch gesuch) {
+        final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        sendStandardNotificationEmails(
+            pia.getNachname(),
+            pia.getVorname(),
+            AppLanguages.fromLocale(pia.getKorrespondenzSprache().getLocale()),
+            gatherRecipients(pia.getEmail(), gesuch.getAusbildung().getFall())
+        );
+    }
+
+    public void sendStandardNotificationEmailForFall(
+        final PersoenlicheAngaben persoenlicheAngaben,
+        final Fall fall
+    ) {
+        sendStandardNotificationEmails(
+            persoenlicheAngaben.getNachname(),
+            persoenlicheAngaben.getVorname(),
+            AppLanguages.fromLocale(persoenlicheAngaben.getSprache().getLocale()),
+            gatherRecipients(persoenlicheAngaben.getEmail(), fall)
+        );
+    }
+
+    private List<String> gatherRecipients(final String primaryEmail, final Fall fall) {
+        final var result = new ArrayList<String>();
+
+        final var delegierung = fall.getDelegierung();
+        if (delegierung != null && delegierung.getDelegierterMitarbeiter() != null) {
+            result.add(delegierung.getDelegierterMitarbeiter().getEmail());
+        }
+
+        result.add(primaryEmail);
+
+        return result;
+    }
+
+    void sendStandardNotificationEmails(
         final String nachname,
         final String vorname,
         final AppLanguages language,
@@ -96,7 +135,7 @@ public class MailService {
             .asCompletionStage();
     }
 
-    public Uni<Void> sendEmail(String to, String subject, String htmlContent) {
+    Uni<Void> sendEmail(String to, String subject, String htmlContent) {
         return reactiveMailer.send(
             Mail.withHtml(
                 to,
@@ -106,7 +145,7 @@ public class MailService {
         );
     }
 
-    public void sendEmailSync(String to, String subject, String htmlContent) {
+    void sendEmailSync(String to, String subject, String htmlContent) {
         mailer.send(
             Mail.withHtml(
                 to,
