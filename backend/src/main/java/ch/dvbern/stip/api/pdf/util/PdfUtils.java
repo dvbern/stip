@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.pdf.service;
+package ch.dvbern.stip.api.pdf.util;
 
 import java.text.NumberFormat;
 import java.util.Locale;
