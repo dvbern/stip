@@ -326,30 +326,44 @@ export class AusbildungsgangComponent
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaetteBezeichnungFr',
           ausbildungsgang.ausbildungsstaette.nameFr,
         ),
-        ...(ausbildungsgang.ausbildungsstaette.chShis
+        // todo:
+        // ...(ausbildungsgang.ausbildungsstaette.chShis
+        //   ? [
+        //       info(
+        //         'sachbearbeitung-app.feature.administration.ausbildungsstaette.chShisNummer',
+        //         ausbildungsgang.ausbildungsstaette.chShis,
+        //       ),
+        //     ]
+        //   : []),
+        // ...(ausbildungsgang.ausbildungsstaette.ctNo
+        //   ? [
+        //       info(
+        //         'sachbearbeitung-app.feature.administration.ausbildungsstaette.ctNummer',
+        //         ausbildungsgang.ausbildungsstaette.ctNo,
+        //       ),
+        //     ]
+        //   : []),
+        // ...(ausbildungsgang.ausbildungsstaette.burNo
+        //   ? [
+        //       info(
+        //         'sachbearbeitung-app.feature.administration.ausbildungsstaette.burNummer',
+        //         ausbildungsgang.ausbildungsstaette.burNo,
+        //       ),
+        //     ]
+        //   : []),
+        info(
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.nummerTyp',
+          ausbildungsgang.ausbildungsstaette.nummerTyp,
+        ),
+        ...(ausbildungsgang.ausbildungsstaette.nummer
           ? [
               info(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.chShisNummer',
-                ausbildungsgang.ausbildungsstaette.chShis,
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.nummer',
+                ausbildungsgang.ausbildungsstaette.nummer,
               ),
             ]
           : []),
-        ...(ausbildungsgang.ausbildungsstaette.ctNo
-          ? [
-              info(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ctNummer',
-                ausbildungsgang.ausbildungsstaette.ctNo,
-              ),
-            ]
-          : []),
-        ...(ausbildungsgang.ausbildungsstaette.burNo
-          ? [
-              info(
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.burNummer',
-                ausbildungsgang.ausbildungsstaette.burNo,
-              ),
-            ]
-          : []),
+
         spacer(),
         info(
           'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschlussBezeichnungDe',

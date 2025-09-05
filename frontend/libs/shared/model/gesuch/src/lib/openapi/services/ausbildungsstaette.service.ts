@@ -28,6 +28,7 @@ import { AusbildungsgangSortColumn } from '../model/ausbildungsgangSortColumn';
 import { Ausbildungskategorie } from '../model/ausbildungskategorie';
 import { Ausbildungsstaette } from '../model/ausbildungsstaette';
 import { AusbildungsstaetteCreate } from '../model/ausbildungsstaetteCreate';
+import { AusbildungsstaetteNummerTyp } from '../model/ausbildungsstaetteNummerTyp';
 import { AusbildungsstaetteSlim } from '../model/ausbildungsstaetteSlim';
 import { AusbildungsstaetteSortColumn } from '../model/ausbildungsstaetteSortColumn';
 import { Bildungsrichtung } from '../model/bildungsrichtung';
@@ -87,9 +88,8 @@ export interface AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtR
     sortOrder?: SortOrder;
     nameDe?: string;
     nameFr?: string;
-    chShis?: string;
-    burNo?: string;
-    ctNo?: string;
+    nummer?: string;
+    nummerTyp?: AusbildungsstaetteNummerTyp;
     aktiv?: boolean;
 }
 
@@ -905,9 +905,8 @@ export class AusbildungsstaetteService {
         const sortOrder = requestParameters.sortOrder;
         const nameDe = requestParameters.nameDe;
         const nameFr = requestParameters.nameFr;
-        const chShis = requestParameters.chShis;
-        const burNo = requestParameters.burNo;
-        const ctNo = requestParameters.ctNo;
+        const nummer = requestParameters.nummer;
+        const nummerTyp = requestParameters.nummerTyp;
         const aktiv = requestParameters.aktiv;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -935,17 +934,13 @@ export class AusbildungsstaetteService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>nameFr, 'nameFr');
         }
-        if (chShis !== undefined && chShis !== null) {
+        if (nummer !== undefined && nummer !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>chShis, 'chShis');
+            <any>nummer, 'nummer');
         }
-        if (burNo !== undefined && burNo !== null) {
+        if (nummerTyp !== undefined && nummerTyp !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>burNo, 'burNo');
-        }
-        if (ctNo !== undefined && ctNo !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>ctNo, 'ctNo');
+            <any>nummerTyp, 'nummerTyp');
         }
         if (aktiv !== undefined && aktiv !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

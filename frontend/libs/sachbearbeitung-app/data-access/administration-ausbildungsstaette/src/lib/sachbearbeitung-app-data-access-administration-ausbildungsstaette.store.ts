@@ -9,6 +9,7 @@ import {
   Ausbildungsgang,
   AusbildungsgangSlim,
   Ausbildungsstaette,
+  AusbildungsstaetteNummerTyp,
   AusbildungsstaetteService,
   AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams,
   AusbildungsstaetteServiceCreateAusbildungsgangRequestParams,
@@ -28,6 +29,7 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
+  pending,
 } from '@dv/shared/util/remote-data';
 
 type EntityTypes = 'ausbildungsgang' | 'abschluss' | 'ausbildungsstaette';
@@ -61,16 +63,19 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   ausbildungsgaengeViewSig = computed(() => {
     return this.ausbildungsgaenge.data();
   });
+
   abschluesseViewSig = computed(() => {
     return preparePaginatedData(this.abschluesse.data(), (e) => ({
       ...e,
       canArchive: e.aktiv && e.ausbildungskategorie === 'BRUECKENANGEBOT',
     }));
   });
+
   ausbildungsstaettenViewSig = computed(() => {
     return preparePaginatedData(this.ausbildungsstaetten.data(), (e) => ({
       ...e,
-      canArchive: e.aktiv && !e.chShis,
+      canArchive:
+        e.aktiv && e.nummerTyp !== AusbildungsstaetteNummerTyp.CH_SHIS,
     }));
   });
 
@@ -193,8 +198,8 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   }>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          ausbildungsstaetten: cachedPending(state.ausbildungsstaetten),
+        patchState(this, () => ({
+          lastCreate: pending(),
         }));
       }),
       switchMap(({ values, onSuccess }) =>
@@ -255,8 +260,8 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   }>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          abschluesse: cachedPending(state.abschluesse),
+        patchState(this, () => ({
+          lastCreate: pending(),
         }));
       }),
       switchMap(({ values, onSuccess }) =>

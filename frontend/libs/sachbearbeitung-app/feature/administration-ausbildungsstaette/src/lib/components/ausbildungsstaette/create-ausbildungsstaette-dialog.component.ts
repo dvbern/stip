@@ -29,6 +29,7 @@ import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets
 import {
   AbschlussSlim,
   AusbildungsstaetteCreate,
+  AusbildungsstaetteNummerTyp,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
 import { KnownLanguage } from '@dv/shared/model/type-util';
@@ -45,8 +46,6 @@ type CreateAbschlussData = {
   ausbildungsstaetten: AusbildungsstaetteSlim[];
   abschluesse: AbschlussSlim[];
 };
-
-type SchulType = 'CT' | 'BUR';
 
 @Component({
   selector: 'dv-create-ausbildungsstaette-dialog',
@@ -78,7 +77,10 @@ export class CreateAusbildungsstaetteDialogComponent {
     mask: /^[a-zA-Z\d]+$/,
   };
   form = this.formBuilder.group({
-    schule: [<SchulType | undefined>undefined, Validators.required],
+    schuleNummerTyp: [
+      <AusbildungsstaetteNummerTyp | undefined>undefined,
+      Validators.required,
+    ],
     nameDe: [
       <string | null>null,
       [
@@ -99,32 +101,38 @@ export class CreateAusbildungsstaetteDialogComponent {
         ),
       ],
     ],
-    burNo: [<string | undefined>undefined],
-    ctNo: [<string | undefined>undefined],
+    nummer: [<string | undefined>undefined],
   });
-  schuleChangedSig = toSignal(this.form.controls.schule.valueChanges);
-  numberFields = {
-    BUR: {
-      labelSubKey: 'burNummer',
-      control: this.form.controls.burNo,
-    },
-    CT: {
-      labelSubKey: 'ctNummer',
-      control: this.form.controls.ctNo,
-    },
-  } satisfies Record<SchulType, unknown>;
-  schulen = [
+
+  schuleNummerTypChangedSig = toSignal(
+    this.form.controls.schuleNummerTyp.valueChanges,
+  );
+
+  schuleNummerTypes = [
     {
-      value: 'CT',
+      value: 'CH_SHIS',
       label:
-        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.CT',
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.CH_SHIS',
     },
     {
-      value: 'BUR',
+      value: 'BUR_NO',
       label:
-        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.BUR',
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.BUR_NO',
     },
-  ] satisfies { value: SchulType; label: SachbearbeitungAppTranslationKey }[];
+    {
+      value: 'CT_NO',
+      label:
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.CT_NO',
+    },
+    {
+      value: 'OHNE_NO',
+      label:
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.OHNE_NO',
+    },
+  ] satisfies {
+    value: AusbildungsstaetteNummerTyp;
+    label: SachbearbeitungAppTranslationKey;
+  }[];
 
   static open(dialog: MatDialog, data: CreateAbschlussData) {
     return dialog.open<
@@ -136,9 +144,15 @@ export class CreateAusbildungsstaetteDialogComponent {
 
   constructor() {
     effect(() => {
-      const schule = this.schuleChangedSig();
+      const schuleNummerTyp = this.schuleNummerTypChangedSig();
 
-      this.formUtils.setRequired(this.form.controls.burNo, schule === 'BUR');
+      if (schuleNummerTyp === 'OHNE_NO') {
+        this.form.controls.nummer.setValue(undefined);
+        this.form.controls.nummer.clearValidators();
+      } else {
+        this.form.controls.nummer.setValidators([Validators.required]);
+      }
+      this.form.controls.nummer.updateValueAndValidity();
     });
   }
 
@@ -147,12 +161,16 @@ export class CreateAusbildungsstaetteDialogComponent {
       return;
     }
 
-    const values = convertTempFormToRealValues(this.form, ['nameDe', 'nameFr']);
+    const values = convertTempFormToRealValues(this.form, [
+      'nameDe',
+      'nameFr',
+      'schuleNummerTyp',
+    ]);
     this.dialogRef.close({
       nameDe: values.nameDe,
       nameFr: values.nameFr,
-      burNo: values.burNo,
-      ctNo: values.ctNo,
+      nummerTyp: values.schuleNummerTyp,
+      nummer: values.nummer,
     });
   }
 

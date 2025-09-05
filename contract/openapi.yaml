@@ -3937,9 +3937,8 @@ paths:
         - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/nameDe'
         - $ref: '#/components/parameters/nameFr'
-        - $ref: '#/components/parameters/chShis'
-        - $ref: '#/components/parameters/burNo'
-        - $ref: '#/components/parameters/ctNo'
+        - $ref: '#/components/parameters/nummer'
+        - $ref: '#/components/parameters/nummerTyp'
         - $ref: '#/components/parameters/aktiv'
       responses:
         '200':
@@ -7689,20 +7688,15 @@ components:
       schema:
         type: string
       in: query
-    chShis:
-      name: chShis
+    nummer:
+      name: nummer
       schema:
         type: string
       in: query
-    burNo:
-      name: burNo
+    nummerTyp:
+      name: nummerTyp
       schema:
-        type: string
-      in: query
-    ctNo:
-      name: ctNo
-      schema:
-        type: string
+        $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
       in: query
     abschlussBezeichnungDe:
       name: abschlussBezeichnungDe

@@ -23,6 +23,7 @@ export * from './ausbildungskategorie';
 export * from './ausbildungssituation';
 export * from './ausbildungsstaette';
 export * from './ausbildungsstaetteCreate';
+export * from './ausbildungsstaetteNummerTyp';
 export * from './ausbildungsstaetteSlim';
 export * from './ausbildungsstaetteSortColumn';
 export * from './ausgewaehlterGrund';
