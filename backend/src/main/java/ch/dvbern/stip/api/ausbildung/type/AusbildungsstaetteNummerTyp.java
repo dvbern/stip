@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.ausbildung.type;
 
-public enum AusbildungsstaetteSortColumn {
-    NAME_DE,
-    NAME_FR,
-    NUMMER,
-    NUMMER_TYP,
-    AKTIV
+public enum AusbildungsstaetteNummerTyp {
+    CH_SHIS, BUR_NO, CT_NO, OHNE_NO;
 }

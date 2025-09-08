@@ -10,14 +10,13 @@
  * Do not edit the class manually.
  */
 
-export type AusbildungsstaetteSortColumn = 'NAME_DE' | 'NAME_FR' | 'CH_SHIS' | 'BUR_NO' | 'CT_NO' | 'AKTIV';
+export type AusbildungsstaetteSortColumn = 'NAME_DE' | 'NAME_FR' | 'NUMMER' | 'NUMMER_TYP' | 'AKTIV';
 
 export const AusbildungsstaetteSortColumn = {
     NAME_DE: 'NAME_DE' as AusbildungsstaetteSortColumn,
     NAME_FR: 'NAME_FR' as AusbildungsstaetteSortColumn,
-    CH_SHIS: 'CH_SHIS' as AusbildungsstaetteSortColumn,
-    BUR_NO: 'BUR_NO' as AusbildungsstaetteSortColumn,
-    CT_NO: 'CT_NO' as AusbildungsstaetteSortColumn,
+    NUMMER: 'NUMMER' as AusbildungsstaetteSortColumn,
+    NUMMER_TYP: 'NUMMER_TYP' as AusbildungsstaetteSortColumn,
     AKTIV: 'AKTIV' as AusbildungsstaetteSortColumn
 };
 

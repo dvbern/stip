@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
@@ -145,12 +146,35 @@ public class AusbildungSeeding extends Seeder {
                         ausbildungsstaetteLine -> new Ausbildungsstaette()
                             .setNameDe(ausbildungsstaetteLine[0])
                             .setNameFr(ausbildungsstaetteLine[1])
-                            .setChShis(ausbildungsstaetteLine[2].isEmpty() ? null : ausbildungsstaetteLine[2])
-                            .setBurNo(ausbildungsstaetteLine[3].isEmpty() ? null : ausbildungsstaetteLine[3])
-                            .setCtNo(ausbildungsstaetteLine[4].isEmpty() ? null : ausbildungsstaetteLine[4])
+                            .setNummerTyp(parseAusbildungsstaetteNummerTyp(ausbildungsstaetteLine))
+                            .setNummer(parseAusbildungsstaetteNummer(ausbildungsstaetteLine))
                     )
                     .toList();
             }
+        }
+    }
+
+    private AusbildungsstaetteNummerTyp parseAusbildungsstaetteNummerTyp(final String[] ausbildungsstaetteLine) {
+        if (!ausbildungsstaetteLine[2].isEmpty()) {
+            return AusbildungsstaetteNummerTyp.CH_SHIS;
+        } else if (!ausbildungsstaetteLine[3].isEmpty()) {
+            return AusbildungsstaetteNummerTyp.BUR_NO;
+        } else if (!ausbildungsstaetteLine[4].isEmpty()) {
+            return AusbildungsstaetteNummerTyp.CT_NO;
+        } else {
+            return null;
+        }
+    }
+
+    private String parseAusbildungsstaetteNummer(final String[] ausbildungsstaetteLine) {
+        if (!ausbildungsstaetteLine[2].isEmpty()) {
+            return ausbildungsstaetteLine[2];
+        } else if (!ausbildungsstaetteLine[3].isEmpty()) {
+            return ausbildungsstaetteLine[3];
+        } else if (!ausbildungsstaetteLine[4].isEmpty()) {
+            return ausbildungsstaetteLine[4];
+        } else {
+            return null;
         }
     }
 
