@@ -30,6 +30,7 @@ public class VerfuegungUtil {
     public static boolean isRueckforderung(Verfuegung verfuegung, BuchhaltungService buchhaltungService) {
         final var relevantBuchhaltung =
             buchhaltungService.getLatestBuchhaltungEntry(verfuegung.getGesuch().getAusbildung().getFall().getId());
-        return relevantBuchhaltung.getSaldo() < 0;
+        return verfuegung.getGesuch().isVerfuegt()
+        && (relevantBuchhaltung.getSaldo() - relevantBuchhaltung.getBetrag()) < 0;
     }
 }
