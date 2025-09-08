@@ -159,13 +159,11 @@ public class AusbildungSeeding extends Seeder {
             return AusbildungsstaetteNummerTyp.CH_SHIS;
         } else if (!ausbildungsstaetteLine[3].isEmpty()) {
             return AusbildungsstaetteNummerTyp.BUR_NO;
-
         } else if (!ausbildungsstaetteLine[4].isEmpty()) {
             return AusbildungsstaetteNummerTyp.CT_NO;
         } else {
             return null;
         }
-
     }
 
     private String parseAusbildungsstaetteNummer(final String[] ausbildungsstaetteLine) {
@@ -178,7 +176,6 @@ public class AusbildungSeeding extends Seeder {
         } else {
             return null;
         }
-
     }
 
     @SneakyThrows
