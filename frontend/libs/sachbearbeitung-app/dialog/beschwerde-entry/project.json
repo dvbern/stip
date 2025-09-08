@@ -5,22 +5,5 @@
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:dialog", "scope:sachbearbeitung-app"],
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/sachbearbeitung-app/dialog/beschwerde-entry/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "libs/sachbearbeitung-app/dialog/beschwerde-entry/jest.config.ts"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }

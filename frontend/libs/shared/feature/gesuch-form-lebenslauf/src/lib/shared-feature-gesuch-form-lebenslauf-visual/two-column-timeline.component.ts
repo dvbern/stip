@@ -9,7 +9,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import {
@@ -39,14 +39,14 @@ import {
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf-visual',
-  imports: [CommonModule, TranslatePipe, TranslatedPropertyPipe],
+  imports: [CommonModule, TranslocoPipe, TranslatedPropertyPipe],
   templateUrl: './two-column-timeline.component.html',
   styleUrls: ['./two-column-timeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwoColumnTimelineComponent {
   cd = inject(ChangeDetectorRef);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
   ausbildungsstaetteStore = inject(AusbildungsstaetteStore);
 
   @Output() addAusbildungTriggered = new EventEmitter<TimelineAddCommand>();

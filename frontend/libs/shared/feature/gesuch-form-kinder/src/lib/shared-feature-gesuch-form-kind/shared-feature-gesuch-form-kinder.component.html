@@ -21,10 +21,10 @@
               <tr>
                 <th scope="col"></th>
                 <th scope="col">
-                  {{ 'shared.form.geschwister.name' | translate }}
+                  {{ 'shared.form.geschwister.name' | transloco }}
                 </th>
                 <th scope="col">
-                  {{ 'shared.form.geschwister.geburtsdatum.label' | translate }}
+                  {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
                 </th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -38,7 +38,7 @@
                       @if (view.listChanges | dvZuvorListContains: $index) {
                         <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                       }
-                      <i class="material-symbols-rounded align-middle" aria-hidden>done</i>
+                      <i class="material-symbols-rounded align-middle" aria-hidden="true">done</i>
                     </td>
                     <td>{{ kinder.vorname }} {{ kinder.nachname }}</td>
                     <td>
@@ -50,7 +50,7 @@
                           type="button"
                           class="btn btn-link p-0 lh-1"
                           (click)="handleSelectKinder(kinder, $index)"
-                          [title]="'shared.form.kinder.edit' | translate"
+                          [title]="'shared.form.kinder.edit' | transloco"
                         >
                           <i class="material-symbols-rounded">edit</i>
                         </button>
@@ -62,7 +62,7 @@
                           type="button"
                           class="btn btn-link p-0 lh-1"
                           (click)="handleDeleteKinder(kinder)"
-                          [title]="'shared.form.kinder.delete' | translate"
+                          [title]="'shared.form.kinder.delete' | transloco"
                         >
                           <i class="material-symbols-rounded">delete</i>
                         </button>
@@ -71,7 +71,7 @@
                           type="button"
                           class="btn btn-link p-0 lh-1"
                           (click)="handleSelectKinder(kinder, $index)"
-                          [title]="'shared.form.kinder.view' | translate"
+                          [title]="'shared.form.kinder.view' | transloco"
                         >
                           <i class="material-symbols-rounded">visibility</i>
                         </button>
@@ -91,7 +91,7 @@
   <div class="d-flex flex-column flex-md-row">
     @if (!view.readonly) {
       <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()" data-testid="button-add-kind">
-        {{ 'shared.form.kinder.add' | translate }}
+        {{ 'shared.form.kinder.add' | transloco }}
       </button>
     }
   </div>
@@ -105,7 +105,7 @@
       [disabled]="!view.gesuchId"
       data-testid="button-continue"
     >
-      {{ 'shared.form.gonext' | translate }}
+      {{ 'shared.form.gonext' | transloco }}
     </button>
   </dv-shared-ui-step-form-buttons>
 }

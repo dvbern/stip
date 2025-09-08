@@ -7,3 +7,7 @@ export type GesuchAppTranslationKey = AssertMatchAndMergeTranslations<
   typeof de,
   typeof fr
 >;
+
+export const translatableGs = <const T extends GesuchAppTranslationKey>(
+  value: T,
+) => value;

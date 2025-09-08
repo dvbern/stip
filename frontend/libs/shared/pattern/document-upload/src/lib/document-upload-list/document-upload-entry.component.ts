@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { Observable, filter, map, switchMap } from 'rxjs';
 
 import {
@@ -19,6 +18,7 @@ import {
   UploadView,
   isUploadable,
 } from '@dv/shared/model/dokument';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
@@ -28,12 +28,11 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
   selector: 'dv-shared-pattern-document-upload-entry',
   imports: [
     CommonModule,
-    TranslatePipe,
-    TranslateDirective,
+    FilesizePipe,
+    MatProgressBarModule,
     SharedUiIconChipComponent,
     SharedUiDownloadButtonDirective,
-    MatProgressBarModule,
-    FilesizePipe,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './document-upload-entry.component.html',
   styleUrls: ['./document-upload-entry.component.scss'],

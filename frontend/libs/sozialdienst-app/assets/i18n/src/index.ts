@@ -7,3 +7,7 @@ export type SozialdienstAppTranslationKey = AssertMatchAndMergeTranslations<
   typeof de,
   typeof fr
 >;
+
+export const translatableSd = <const T extends SozialdienstAppTranslationKey>(
+  value: T,
+) => value;

@@ -5,13 +5,13 @@ import {
   HostBinding,
   Input,
 } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-ui-form-save',
-  imports: [CommonModule, SharedUiLoadingComponent, TranslatePipe],
+  imports: [CommonModule, SharedUiLoadingComponent, TranslocoPipe],
   templateUrl: './shared-ui-form-save.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
 import { BENUTZER_ROLES, BenutzerRole } from '@dv/shared/model/benutzer';
@@ -40,7 +40,7 @@ import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-tele
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormSaveComponent,

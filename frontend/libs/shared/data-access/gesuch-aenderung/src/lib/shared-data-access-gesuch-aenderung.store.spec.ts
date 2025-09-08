@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { provideSharedPatternJestTestSetup } from '@dv/shared/pattern/jest-test-setup';
+import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 
 import { GesuchAenderungStore } from './shared-data-access-gesuch-aenderung.store';
 
@@ -13,7 +13,7 @@ describe('GesuchAenderungStore', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
         GesuchAenderungStore,
         provideHttpClient(),
         provideMockStore(),

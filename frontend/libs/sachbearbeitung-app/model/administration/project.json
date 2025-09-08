@@ -4,9 +4,5 @@
   "sourceRoot": "libs/sachbearbeitung-app/model/administration/src",
   "projectType": "library",
   "tags": ["type:model", "scope:sachbearbeitung-app"],
-  "targets": {
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
-  }
+  "targets": {}
 }

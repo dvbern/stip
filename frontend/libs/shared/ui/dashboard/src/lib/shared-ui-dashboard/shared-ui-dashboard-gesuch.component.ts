@@ -7,7 +7,7 @@ import {
   output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
 import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
@@ -17,7 +17,7 @@ import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry
   imports: [
     CommonModule,
     RouterLink,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiAenderungsEntryComponent,
   ],
   templateUrl: './shared-ui-dashboard-gesuch.component.html',

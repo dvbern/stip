@@ -10,14 +10,13 @@
  * Do not edit the class manually.
  */
 
-export type SozDashboardColumn = 'FALLNUMMER' | 'NACHNAME' | 'VORNAME' | 'GEBURTSDATUM' | 'WOHNORT' | 'DELEGIERUNG_ANGENOMMEN';
+export type SozDashboardColumn = 'FALLNUMMER' | 'NACHNAME' | 'VORNAME' | 'GEBURTSDATUM' | 'WOHNORT';
 
 export const SozDashboardColumn = {
     FALLNUMMER: 'FALLNUMMER' as SozDashboardColumn,
     NACHNAME: 'NACHNAME' as SozDashboardColumn,
     VORNAME: 'VORNAME' as SozDashboardColumn,
     GEBURTSDATUM: 'GEBURTSDATUM' as SozDashboardColumn,
-    WOHNORT: 'WOHNORT' as SozDashboardColumn,
-    DELEGIERUNG_ANGENOMMEN: 'DELEGIERUNG_ANGENOMMEN' as SozDashboardColumn
+    WOHNORT: 'WOHNORT' as SozDashboardColumn
 };
 

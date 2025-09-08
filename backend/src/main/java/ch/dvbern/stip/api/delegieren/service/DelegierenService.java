@@ -20,17 +20,20 @@ package ch.dvbern.stip.api.delegieren.service;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -51,6 +54,8 @@ public class DelegierenService {
     private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
     private final ConfigService configService;
     private final DelegierungMapper delegierungMapper;
+    private final NotificationService notificationService;
+    private final MailService mailService;
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
@@ -77,12 +82,66 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
 
+        if (delegierung.getDelegierterMitarbeiter() == null) {
+            notificationService.createDelegierungAngenommenNotification(delegierung);
+            mailService.sendStandardNotificationEmailForFall(
+                delegierung.getPersoenlicheAngaben(),
+                delegierung.getDelegierterFall()
+            );
+        }
+
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
     }
 
     @Transactional
+    public void delegierungAblehnen(final UUID delegierungId) {
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+        notificationService.createDelegierungAbgelehntNotification(delegierung);
+        mailService.sendStandardNotificationEmailForFall(
+            delegierung.getPersoenlicheAngaben(),
+            delegierung.getDelegierterFall()
+        );
+        delegierung.getDelegierterFall().setDelegierung(null);
+        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
+        delegierungRepository.delete(delegierung);
+    }
+
     public PaginatedSozDashboardDto getDelegierungSoz(
-        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+        GetDelegierungSozQueryTypeMitarbeiter getDelegierungSozQueryType,
+        @NotNull Integer page,
+        @NotNull Integer pageSize,
+        String fallNummer,
+        String nachname,
+        String vorname,
+        LocalDate geburtsdatum,
+        String wohnort,
+        Boolean delegierungAngenommen,
+        SozDashboardColumnDto sortColumn,
+        SortOrder sortOrder
+    ) {
+        var adminDto = switch (getDelegierungSozQueryType) {
+            case ALLE -> GetDelegierungSozQueryTypeAdmin.ALLE;
+            case ALLE_BEARBEITBAR_MEINE -> GetDelegierungSozQueryTypeAdmin.ALLE_BEARBEITBAR_MEINE;
+        };
+
+        return getDelegierungSoz(
+            adminDto,
+            page,
+            pageSize,
+            fallNummer,
+            nachname,
+            vorname,
+            geburtsdatum,
+            wohnort,
+            delegierungAngenommen,
+            sortColumn,
+            sortOrder
+        );
+    }
+
+    @Transactional
+    public PaginatedSozDashboardDto getDelegierungSoz(
+        GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,
         @NotNull Integer page,
         @NotNull Integer pageSize,
         String fallNummer,

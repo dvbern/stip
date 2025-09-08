@@ -10,16 +10,17 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { Subject, mergeMap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
+  CustomDokumentOptions,
   DokumentOptions,
   SharedModelGesuchDokument,
-  UploadView,
   isUploadable,
 } from '@dv/shared/model/dokument';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 import { SharedUtilDocumentMergerService } from '@dv/shared/util/document-merger';
 
@@ -30,12 +31,12 @@ import { UploadStore } from '../upload.store';
 @Component({
   selector: 'dv-shared-pattern-document-upload-dialog',
   imports: [
-    TranslatePipe,
     MatDialogModule,
     MatFormFieldModule,
     SharedUiDropFileComponent,
     SharedPatternDocumentUploadListComponent,
     DocumentUploadApprovalComponent,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './document-upload-dialog.component.html',
   styleUrls: ['./document-upload-dialog.component.scss'],
@@ -43,16 +44,16 @@ import { UploadStore } from '../upload.store';
 })
 export class SharedPatternDocumentUploadDialogComponent {
   data = inject<{
-    options: DokumentOptions;
+    options: DokumentOptions | CustomDokumentOptions;
     dokumentModel: SharedModelGesuchDokument;
     store: UploadStore;
   }>(MAT_DIALOG_DATA);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   private dialogRef = inject(MatDialogRef);
   private documentMerger = inject(SharedUtilDocumentMergerService);
   private config = inject(SharedModelCompileTimeConfig);
 
-  uploadViewSig = computed<UploadView>(() => ({
+  uploadViewSig = computed(() => ({
     type: this.data.options.dokument.art,
     permissions: this.data.options.permissions,
     dokumentModel: this.data.dokumentModel,
@@ -75,11 +76,14 @@ export class SharedPatternDocumentUploadDialogComponent {
 
   constructor() {
     const { options, store } = this.data;
+    const info = options.info;
     this.newDocuments$
       .pipe(
         mergeMap((files) =>
           this.documentMerger.mergeImageDocuments(
-            this.translate.instant(options.titleKey),
+            info.type === 'TEXT'
+              ? info.title
+              : this.translate.translate(info.title),
             files,
           ),
         ),

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import {
   SharedUiFormatChfNegativePipe,
@@ -19,7 +19,7 @@ import { Berechnung } from '../../../models';
     CommonModule,
     MatCardModule,
     MatExpansionModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
     BerechnungsExpansionPanelComponent,
@@ -33,7 +33,7 @@ import { Berechnung } from '../../../models';
               <span class="text-muted mb-1">{{
                 'sachbearbeitung-app.verfuegung.berechnung.' +
                   berechnung.typ +
-                  '.title' | translate
+                  '.title' | transloco
               }}</span>
               <h3 class="mb-4 fs-4">
                 @switch (berechnung.typ) {
@@ -41,7 +41,7 @@ import { Berechnung } from '../../../models';
                     {{ berechnung.name }}
                   }
                   @case ('familien') {
-                    {{ berechnung.nameKey | translate: berechnung }}
+                    {{ berechnung.nameKey | transloco: berechnung }}
                   }
                 }
               </h3>
@@ -75,7 +75,7 @@ import { Berechnung } from '../../../models';
                 {{
                   'sachbearbeitung-app.verfuegung.berechnung.' +
                     berechnung.typ +
-                    '.total' | translate
+                    '.total' | transloco
                 }}
               </div>
               <div>
@@ -87,7 +87,7 @@ import { Berechnung } from '../../../models';
                 {{
                   'sachbearbeitung-app.verfuegung.berechnung.' +
                     berechnung.typ +
-                    '.anzahlPersonen' | translate
+                    '.anzahlPersonen' | transloco
                 }}
               </div>
               <div>
@@ -99,7 +99,7 @@ import { Berechnung } from '../../../models';
                 {{
                   'sachbearbeitung-app.verfuegung.berechnung.' +
                     berechnung.typ +
-                    '.totalVorTeilung' | translate
+                    '.totalVorTeilung' | transloco
                 }}
               </div>
               <div>
@@ -111,7 +111,7 @@ import { Berechnung } from '../../../models';
               {{
                 'sachbearbeitung-app.verfuegung.berechnung.' +
                   berechnung.typ +
-                  '.total' | translate
+                  '.total' | transloco
               }}
               <span
                 class="text-nowrap"
@@ -130,7 +130,7 @@ import { Berechnung } from '../../../models';
                 'sachbearbeitung-app.verfuegung.berechnung.' +
                   berechnung.typ +
                   '.geteilteBerechnung'
-                  | translate: berechnung.geteilteBerechnung
+                  | transloco: berechnung.geteilteBerechnung
               }}
               <span
                 class="text-nowrap"

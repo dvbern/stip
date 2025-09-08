@@ -183,9 +183,7 @@ and then start e2e tests in GUI mode with `npm run e2e:gs:open` which will start
 
 ### Component tests
 
-Component testing is performed with Jest and [testing-library](https://testing-library.com/docs/angular-testing-library/intro/). To create a new test, just add a file ending with .test.spec (whereas unit tests end with .spec.ts) to the component you want to test.
-
-We strongly recomment using vscode and the orta.vscode-jest extentsion for best DX.
+Component testing is performed with Vitest and [testing-library](https://testing-library.com/docs/angular-testing-library/intro/). To create a new test, just add a file ending with .test.spec (whereas unit tests end with .spec.ts) to the component you want to test.
 
 #### Testing Library
 

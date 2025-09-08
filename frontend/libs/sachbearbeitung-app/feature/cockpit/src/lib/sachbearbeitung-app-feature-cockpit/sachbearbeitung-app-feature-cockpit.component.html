@@ -18,7 +18,7 @@
           </dv-shared-ui-icon-chip>
           <div class="flex-grow-1 tw-text-start tw-leading-4">
             <span class="fw-bold fs-7 mb-0">
-              {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | translate }}
+              {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | transloco }}
             </span>
             <input
               #radio
@@ -28,14 +28,14 @@
               labelPosition="before"
               formControlName="query"
               [value]="quickFilter.typ"
-              [attr.aria-label]="'sachbearbeitung-app.cockpit.quick-filter.label.' + quickFilter.typ | translate"
+              [attr.aria-label]="'sachbearbeitung-app.cockpit.quick-filter.label.' + quickFilter.typ | transloco"
             />
           </div>
         </button>
       }
     </div>
     <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
-      {{ 'sachbearbeitung-app.cockpit.gesuche' | translate }}
+      {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
     </h1>
     <div class="tw-my-6">
       <div class="tw-dv-table">
@@ -52,14 +52,14 @@
             >
               <caption class="cdk-visually-hidden">
                 {{
-                  'sachbearbeitung-app.cockpit.table.description' | translate
+                  'sachbearbeitung-app.cockpit.table.description' | transloco
                 }}
               </caption>
 
               <ng-container matColumnDef="FALLNUMMER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
                   <label class="pe-none" for="fallNummer">{{
-                    'sachbearbeitung-app.cockpit.table.fall' | translate
+                    'sachbearbeitung-app.cockpit.table.fall' | transloco
                   }}</label>
                   <div class="tw-relative tw-flex">
                     <mat-form-field>
@@ -102,10 +102,10 @@
               <!-- typ -->
               <ng-container matColumnDef="TYP">
                 <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
-                  {{ 'sachbearbeitung-app.cockpit.table.typ' | translate }}
+                  {{ 'sachbearbeitung-app.cockpit.table.typ' | transloco }}
                   <mat-form-field class="d-flex">
                     <mat-select
-                      [aria-label]="'sachbearbeitung-app.cockpit.table.typ' | translate"
+                      [aria-label]="'sachbearbeitung-app.cockpit.table.typ' | transloco"
                       formControlName="typ"
                       (click)="$event.stopPropagation()"
                       class="fw-normal"
@@ -114,7 +114,7 @@
                     >
                       @for (typ of availableTypes; track typ) {
                         <mat-option [value]="typ">
-                          {{ 'shared.gesuch.tranche.typ.' + typ | translate }}
+                          {{ 'shared.gesuch.tranche.typ.' + typ | transloco }}
                         </mat-option>
                       }
                     </mat-select>
@@ -125,14 +125,14 @@
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
                   class="tw-whitespace-nowrap"
                 >
-                  {{ 'shared.gesuch.tranche.typ.' + gesuch.typ | translate }}
+                  {{ 'shared.gesuch.tranche.typ.' + gesuch.typ | transloco }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="PIA_NACHNAME">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                   <label class="pe-none" for="piaNachname">{{
-                    'sachbearbeitung-app.cockpit.table.nachname' | translate
+                    'sachbearbeitung-app.cockpit.table.nachname' | transloco
                   }}</label>
                   <div class="tw-relative tw-flex">
                     <mat-form-field>
@@ -166,7 +166,7 @@
               <ng-container matColumnDef="PIA_VORNAME">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                   <label class="pe-none" for="piaVorname">{{
-                    'sachbearbeitung-app.cockpit.table.vorname' | translate
+                    'sachbearbeitung-app.cockpit.table.vorname' | transloco
                   }}</label>
                   <div class="tw-relative tw-flex">
                     <mat-form-field>
@@ -207,7 +207,7 @@
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="piaGeburtsdatum">{{
-                    'sachbearbeitung-app.cockpit.table.geburtsdatum' | translate
+                    'sachbearbeitung-app.cockpit.table.geburtsdatum' | transloco
                   }}</label>
                   <div class="tw-relative tw-flex">
                     <mat-form-field>
@@ -252,22 +252,22 @@
 
               <ng-container matColumnDef="STATUS">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
-                  {{ 'sachbearbeitung-app.cockpit.table.status' | translate }}
+                  {{ 'sachbearbeitung-app.cockpit.table.status' | transloco }}
                   <mat-form-field class="tw-w-full">
                     <mat-select
-                      [aria-label]="'sachbearbeitung-app.cockpit.table.status' | translate"
+                      [aria-label]="'sachbearbeitung-app.cockpit.table.status' | transloco"
                       formControlName="status"
                       (click)="$event.stopPropagation()"
                       class="!tw-font-normal"
-                      [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | translate"
+                      [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | transloco"
                       panelClass="table-select"
                     >
                       <mat-option [value]="null">
-                        {{ 'sachbearbeitung-app.cockpit.no-status-filter' | translate }}
+                        {{ 'sachbearbeitung-app.cockpit.no-status-filter' | transloco }}
                       </mat-option>
                       @for (status of statusValuesSig()?.status; track status) {
                         <mat-option [value]="status">
-                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status | translate }}
+                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status | transloco }}
                         </mat-option>
                       }
                     </mat-select>
@@ -278,14 +278,14 @@
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
                   class="tw-w-48 tw-whitespace-nowrap"
                 >
-                  {{ gesuch.translationKey | translate }}
+                  {{ gesuch.translationKey | transloco }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="BEARBEITER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
                   <label class="pe-none" for="bearbeiter">{{
-                    'sachbearbeitung-app.cockpit.table.bearbeiter' | translate
+                    'sachbearbeitung-app.cockpit.table.bearbeiter' | transloco
                   }}</label>
                   <div class="tw-relative tw-flex">
                     <mat-form-field>
@@ -325,7 +325,7 @@
                   class="filtered tw-w-40 tw-whitespace-nowrap"
                 >
                   <label class="pe-none" for="letzteAktivitaet">{{
-                    'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | translate
+                    'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | transloco
                   }}</label>
                   <div class="tw-relative tw-flex">
                     <mat-form-field>
@@ -358,12 +358,12 @@
                         <input
                           [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
                           matStartDate
-                          [placeholder]="'shared.label.von' | translate"
+                          [placeholder]="'shared.label.von' | transloco"
                         />
                         <input
                           [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
                           matEndDate
-                          [placeholder]="'shared.label.bis' | translate"
+                          [placeholder]="'shared.label.bis' | transloco"
                         />
                       </mat-date-range-input>
                       <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
@@ -405,7 +405,7 @@
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
                 <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
-                  {{ 'shared.table.noData' | translate }}
+                  {{ 'shared.table.noData' | transloco }}
                 </td>
               </tr>
             </table>

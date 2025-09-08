@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.notification.entity.Notification;
@@ -43,8 +44,41 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void deleteNotificationsForGesuch(final UUID gesuchId) {
-        notificationRepository.deleteAllForGesuch(gesuchId);
+    public void createDelegierungAbgelehntNotification(final Delegierung delegierung) {
+        createDelegierungNotification(NotificationType.DELEGIERUNG_ABGELEHNT, delegierung);
+    }
+
+    @Transactional
+    public void createDelegierungAngenommenNotification(final Delegierung delegierung) {
+        createDelegierungNotification(NotificationType.DELEGIERUNG_ANGENOMMEN, delegierung);
+    }
+
+    private void createDelegierungNotification(final NotificationType notificationType, final Delegierung delegierung) {
+        final var fall = delegierung.getDelegierterFall();
+        final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
+        final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
+
+        Notification notification = new Notification()
+            .setNotificationType(notificationType)
+            .setFall(fall);
+        setAbsender(absender, notification);
+
+        final String msg = switch (notificationType) {
+            case DELEGIERUNG_ANGENOMMEN -> Templates
+                .getDelegierungAngenommen(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
+                .render();
+            case DELEGIERUNG_ABGELEHNT -> Templates
+                .getDelegierungAbgelehnt(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
+                .render();
+            default -> throw new IllegalStateException("Unexpected value: " + notificationType);
+        };
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    @Transactional
+    public void deleteNotificationsForFall(final UUID fallId) {
+        notificationRepository.deleteAllForFall(fallId);
     }
 
     @Transactional
@@ -57,7 +91,7 @@ public class NotificationService {
 
         Notification notification = new Notification()
             .setNotificationType(NotificationType.NACHFRIST_DOKUMENTE_CHANGED)
-            .setGesuch(gesuch);
+            .setFall(gesuch.getAusbildung().getFall());
         setAbsender(gesuch, notification);
         var nachfristDokumente = "";
         if (Objects.nonNull(gesuch.getNachfristDokumente())) {
@@ -72,7 +106,7 @@ public class NotificationService {
     public void createGesuchEingereichtNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
-            .setGesuch(gesuch);
+            .setFall(gesuch.getAusbildung().getFall());
         setAbsender(gesuch, notification);
 
         final var pia = gesuch.getNewestGesuchTranche()
@@ -92,7 +126,7 @@ public class NotificationService {
     public void createAenderungEingereichtNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.AENDERUNG_EINGEREICHT)
-            .setGesuch(gesuch);
+            .setFall(gesuch.getAusbildung().getFall());
         setAbsender(gesuch, notification);
 
         final var pia = gesuch.getGesuchTranchen().get(0).getGesuchFormular().getPersonInAusbildung();
@@ -113,7 +147,7 @@ public class NotificationService {
     ) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.AENDERUNG_ABGELEHNT)
-            .setGesuch(gesuch);
+            .setFall(gesuch.getAusbildung().getFall());
         setAbsender(gesuch, notification);
 
         final var pia = aenderung.getGesuchFormular().getPersonInAusbildung();
@@ -130,7 +164,7 @@ public class NotificationService {
     public void createGesuchStatusChangeWithCommentNotification(final Gesuch gesuch, final KommentarDto kommentar) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
-            .setGesuch(gesuch);
+            .setFall(gesuch.getAusbildung().getFall());
         setAbsender(gesuch, notification);
 
         final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
@@ -146,7 +180,7 @@ public class NotificationService {
     public void createMissingDocumentNotification(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
-            .setGesuch(gesuch);
+            .setFall(gesuch.getAusbildung().getFall());
         setAbsender(gesuch, notification);
 
         final var pia = gesuch.getNewestGesuchTranche()
@@ -186,7 +220,7 @@ public class NotificationService {
 
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_EINREICHEN)
-            .setGesuch(gesuch)
+            .setFall(gesuch.getAusbildung().getFall())
             .setNotificationText(msg);
         setAbsender(gesuch, notification);
 
@@ -204,7 +238,7 @@ public class NotificationService {
         final var msg = Templates.getNeueVerfuegungText(sprache).render();
         Notification notification = new Notification()
             .setNotificationType(NotificationType.NEUE_VERFUEGUNG)
-            .setGesuch(verfuegung.getGesuch())
+            .setFall(verfuegung.getGesuch().getAusbildung().getFall())
             .setNotificationText(msg)
             .setContextId(verfuegung.getId());
         setAbsender(verfuegung.getGesuch(), notification);
@@ -239,7 +273,7 @@ public class NotificationService {
 
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT)
-            .setGesuch(gesuch)
+            .setFall(gesuch.getAusbildung().getFall())
             .setNotificationText(msg);
         setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
@@ -254,7 +288,7 @@ public class NotificationService {
         String message = Templates.getFailedAuszahlungBuchhaltungText(sprache).render();
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FAILED_AUSZAHLUNG)
-            .setGesuch(gesuch)
+            .setFall(gesuch.getAusbildung().getFall())
             .setNotificationText(message);
         setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
@@ -263,6 +297,10 @@ public class NotificationService {
     private void setAbsender(final Gesuch gesuch, Notification notification) {
         final var absender =
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        setAbsender(absender, notification);
+    }
+
+    private void setAbsender(String absender, Notification notification) {
         notification.setAbsender(absender);
     }
 
@@ -425,6 +463,34 @@ public class NotificationService {
                 return gesuchFehlendeDokumenteNichtEingereichtFr(anrede, nachname, sbVorname, sbNachname);
             }
             return gesuchFehlendeDokumenteNichtEingereichtDe(anrede, nachname, sbVorname, sbNachname);
+        }
+
+        public static native TemplateInstance delegierungAbgelehntDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungAbgelehntFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungAbgelehnt(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungAbgelehntFR(sozialdienstName);
+            }
+            return delegierungAbgelehntDE(sozialdienstName);
+        }
+
+        public static native TemplateInstance delegierungAngenommenDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungAngenommenFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungAngenommen(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungAngenommenFR(sozialdienstName);
+            }
+            return delegierungAngenommenDE(sozialdienstName);
         }
 
         public static native TemplateInstance nachfristDokumenteChangedDE(final String nachfristDokumente);

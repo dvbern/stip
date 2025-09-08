@@ -3,7 +3,7 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
@@ -11,15 +11,15 @@
   <!-- dialog  title  -->
   <h1 class="title h2 tw-mb-8">
     @if (dialogData.fall.delegierung.delegierungAngenommen) {
-      {{ 'sozialdienst-app.cockpit.table.delegierung.title.delegierung' | translate }}
+      {{ 'sozialdienst-app.cockpit.table.delegierung.title.delegierung' | transloco }}
     } @else {
-      {{ 'sozialdienst-app.cockpit.table.delegierung.title.anfrage' | translate }}
+      {{ 'sozialdienst-app.cockpit.table.delegierung.title.anfrage' | transloco }}
     }
   </h1>
 
   <!-- readonly angaben form -->
   <h3 class="title h3">
-    {{ 'shared.form.shared.section.personal-details' | translate }}
+    {{ 'shared.form.shared.section.personal-details' | transloco }}
   </h3>
   <form
     [formGroup]="form"
@@ -30,46 +30,68 @@
   >
     <!-- fallNummer -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sozialdienst-app.delegierung-dialog.fallNummer.label' | translate }}</mat-label>
+      <mat-label>{{ 'sozialdienst-app.delegierung-dialog.fallNummer.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="fallNummer" data-testid="form-delegierung-fallNummer" />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
+    <div class="tw-w-full md:tw-row-span-2">
+      <!-- Sprache -->
+      <label>{{ 'shared.form.delegation.sprache.label' | transloco }}</label>
+      <mat-radio-group
+        class="d-flex flex-column"
+        [formControl]="form.controls.sprache"
+        data-testid="form-delegieren-sprache"
+        dvSharedUiFormField
+      >
+        @for (sprache of spracheValues; track $index) {
+          <mat-radio-button [attr.data-testid]="sprache" [value]="sprache">{{
+            'shared.language.' + sprache | transloco
+          }}</mat-radio-button>
+        }
+        <div class="group-errors">
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </div>
+      </mat-radio-group>
+    </div>
+
     <!-- Anrede -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
-      <mat-label>{{ 'shared.form.person.salutation.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.person.salutation.label' | transloco }}</mat-label>
       <mat-select
         formControlName="anrede"
         data-testid="form-delegierung-anrede"
-        [placeholder]="'shared.form.select.empty' | translate"
+        [placeholder]="'shared.form.select.empty' | transloco"
       >
         @for (a of anredeValues; track $index) {
           <mat-option [attr.data-testid]="a" [value]="a">
-            {{ 'shared.form.select.salutation.' + (a | lowercase) | translate }}
+            {{ 'shared.form.select.salutation.' + (a | lowercase) | transloco }}
           </mat-option>
         }
       </mat-select>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- nachname -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
-      <mat-label>{{ 'shared.form.shared.lastname.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-delegierung-nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
     <!-- Vorname -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'shared.form.shared.firstname.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-delegierung-vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
@@ -82,7 +104,7 @@
 
     <!-- Geburtsdatum -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'shared.form.shared.birthday.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
       <input
         matInput
@@ -93,16 +115,34 @@
         (blur)="onGeburtsdatumBlur()"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | translate }}
+        {{ 'shared.form.error.dateFormat' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'minDate'">
-        {{ 'shared.form.error.minDatePast' | translate }}
+        {{ 'shared.form.error.minDatePast' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDatePast' | translate }}
+        {{ 'shared.form.error.maxDatePast' | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field dvSharedUiFormField class="tw-w-full">
+      <!-- E-Mail -->
+      <mat-label>{{ 'shared.form.delegation.email.label' | transloco }}</mat-label>
+      <input
+        matInput
+        dvMaxLength
+        type="email"
+        [formControl]="form.controls.email"
+        data-testid="form-delegieren-email"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'pattern'">
+        {{ 'shared.form.error.email' | transloco }}
       </mat-error>
     </mat-form-field>
   </form>
@@ -112,7 +152,7 @@
 
   <!-- change zuweisung form -->
   <h3 class="title h3">
-    {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | translate }}
+    {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | transloco }}
   </h3>
   <form
     [formGroup]="zuweisungSozMitarbeiterForm"
@@ -123,11 +163,11 @@
   >
     <!-- sozMitarbeiter Select -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.label' | translate }}</mat-label>
+      <mat-label>{{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.label' | transloco }}</mat-label>
       <mat-select
         formControlName="sozMitarbeiter"
         data-testid="form-sozMitarbeiter-select"
-        [placeholder]="'shared.form.select.empty' | translate"
+        [placeholder]="'shared.form.select.empty' | transloco"
       >
         @for (sozMitarbeiter of delegationStore.sozialdienstMitrabeiterListSig().list; track sozMitarbeiter.id) {
           <mat-option [value]="sozMitarbeiter.id" [attr.data-testid]="'sozMitarbeiter-' + sozMitarbeiter.id">
@@ -136,6 +176,9 @@
           </mat-option>
         }
       </mat-select>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
     </mat-form-field>
 
     @let pending = isPending(delegationStore.delegierenState());
@@ -144,14 +187,26 @@
       <div class="tw-mb-8 tw-h-8 tw-self-end">
         @if (showUnsavedChangesErrorSig()) {
           <div class="tw-text-red-500">
-            {{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges' | translate }}
+            {{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges' | transloco }}
           </div>
         }
       </div>
       <div class="justify-content-between tw-flex tw-w-full">
-        <button type="button" data-testid="sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
-          {{ 'shared.cancel' | translate }}
+        <button type="button" data-testid="dialog-sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
+          {{ 'shared.cancel' | transloco }}
         </button>
+
+        @if (!dialogData.fall.delegierung.delegierungAngenommen) {
+          <button
+            *dvHasRoles="['V0_Sozialdienst-Admin']"
+            type="button"
+            data-testid="dialog-sozAdmin-delegierung-reject"
+            class="btn btn-danger"
+            (click)="rejectDelegation()"
+          >
+            {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
+          </button>
+        }
 
         <dv-shared-ui-form-save
           [disabled]="zuweisungSozMitarbeiterForm.pristine"

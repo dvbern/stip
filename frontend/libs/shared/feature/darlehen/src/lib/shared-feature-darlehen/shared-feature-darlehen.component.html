@@ -19,15 +19,15 @@
       data-testid="form-darlehen-willDarlehen"
       dvSharedUiFormField
     >
-      <mat-label>{{ 'shared.form.darlehen.willDarlehen.label' | translate }}</mat-label>
-      <mat-radio-button data-testid="yes" [value]="true"> {{ 'shared.form.radio.yes' | translate }}</mat-radio-button>
-      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | translate }}</mat-radio-button>
+      <mat-label>{{ 'shared.form.darlehen.willDarlehen.label' | transloco }}</mat-label>
+      <mat-radio-button data-testid="yes" [value]="true"> {{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
+      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
       <dv-shared-ui-form-zuvor-hint
-        [changes]="view.formChanges?.willDarlehen | translateChange: 'shared.form.zuvor.radio.$VALUE'"
+        [changes]="view.formChanges?.willDarlehen | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
       ></dv-shared-ui-form-zuvor-hint>
       <div class="group-errors">
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </div>
     </mat-radio-group>
@@ -36,7 +36,7 @@
       <div class="tw-dv-form-half tw-pt-4">
         <!-- Darlehensbetrag -->
         <mat-form-field dvSharedUiFormField class="tw-mt-4 tw-w-full">
-          <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
           <input
             formControlName="betragDarlehen"
             data-testid="form-darlehen-betragDarlehen"
@@ -46,13 +46,13 @@
           />
           <mat-hint *dvZuvorHint="view.formChanges?.betragDarlehen"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
 
         <!-- betragBezogenKanton -->
         <mat-form-field dvSharedUiFormField class="tw-w-full">
-          <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | transloco }}</mat-label>
           <input
             formControlName="betragBezogenKanton"
             data-testid="form-darlehen-betragBezogenKanton"
@@ -62,13 +62,13 @@
           />
           <mat-hint *dvZuvorHint="view.formChanges?.betragBezogenKanton"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
 
         <!-- schulden -->
         <mat-form-field dvSharedUiFormField class="tw-w-full">
-          <mat-label>{{ 'shared.form.darlehen.schulden.label' | translate }}</mat-label>
+          <mat-label>{{ 'shared.form.darlehen.schulden.label' | transloco }}</mat-label>
           <input
             formControlName="schulden"
             data-testid="form-darlehen-schulden"
@@ -78,14 +78,14 @@
           />
           <mat-hint *dvZuvorHint="view.formChanges?.schulden"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
 
         <!-- anzahlBetreibungen mit upload-->
         <div class="tw-flex tw-w-full tw-gap-2">
           <mat-form-field dvSharedUiFormField class="tw-w-full">
-            <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | translate }}</mat-label>
+            <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | transloco }}</mat-label>
             <input
               formControlName="anzahlBetreibungen"
               data-testid="form-darlehen-anzahlBetreibungen"
@@ -95,7 +95,7 @@
             />
             <mat-hint *dvZuvorHint="view.formChanges?.anzahlBetreibungen"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | translate }}
+              {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </mat-form-field>
           @if (anzahlBetreibungenDocSig(); as options) {
@@ -112,7 +112,7 @@
         >
           <legend class="tw-col-span-2">
             <h3 class="tw-mb-0">
-              {{ 'shared.form.darlehen.gruende.label' | translate }}
+              {{ 'shared.form.darlehen.gruende.label' | transloco }}
             </h3>
           </legend>
           <!-- grundNichtBerechtigt -->
@@ -122,10 +122,12 @@
               formControlName="grundNichtBerechtigt"
               data-testid="form-darlehen-grundNichtBerechtigt"
             >
-              {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | translate }}
+              {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | transloco }}
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
-              [changes]="view.formChanges?.grundNichtBerechtigt | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+              [changes]="
+                view.formChanges?.grundNichtBerechtigt | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+              "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
           @if (grundNichtBerechtigtDocSig(); as options) {
@@ -142,11 +144,13 @@
               formControlName="grundAusbildungZwoelfJahre"
               data-testid="form-darlehen-grundAusbildungZwoelfJahre"
             >
-              {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | translate }}
+              {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | transloco }}
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.grundAusbildungZwoelfJahre | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
+                view.formChanges?.grundAusbildungZwoelfJahre
+                  | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
+                  | async
               "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
@@ -158,10 +162,12 @@
               formControlName="grundHoheGebuehren"
               data-testid="form-darlehen-grundHoheGebuehren"
             >
-              {{ 'shared.form.darlehen.grundHoheGebuehren.label' | translate }}
+              {{ 'shared.form.darlehen.grundHoheGebuehren.label' | transloco }}
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
-              [changes]="view.formChanges?.grundHoheGebuehren | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+              [changes]="
+                view.formChanges?.grundHoheGebuehren | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+              "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
           @if (grundHoheGebuehrenDocSig(); as options) {
@@ -178,12 +184,13 @@
               formControlName="grundAnschaffungenFuerAusbildung"
               data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
             >
-              {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | translate }}
+              {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | transloco }}
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
                 view.formChanges?.grundAnschaffungenFuerAusbildung
-                  | translateChange: 'shared.form.zuvor.checkbox.$VALUE'
+                  | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
+                  | async
               "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
@@ -201,10 +208,12 @@
               formControlName="grundZweitausbildung"
               data-testid="form-darlehen-grundZweitausbildung"
             >
-              {{ 'shared.form.darlehen.grundZweitausbildung.label' | translate }}
+              {{ 'shared.form.darlehen.grundZweitausbildung.label' | transloco }}
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
-              [changes]="view.formChanges?.grundZweitausbildung | translateChange: 'shared.form.zuvor.checkbox.$VALUE'"
+              [changes]="
+                view.formChanges?.grundZweitausbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+              "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
         </fieldset>
@@ -215,11 +224,11 @@
     <dv-shared-ui-step-form-buttons class="tw-col-span-2">
       @if (!view.readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
-          {{ 'shared.form.save-and-continue' | translate }}
+          {{ 'shared.form.save-and-continue' | transloco }}
         </button>
       } @else {
         <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
-          {{ 'shared.form.gonext' | translate }}
+          {{ 'shared.form.gonext' | transloco }}
         </button>
       }
     </dv-shared-ui-step-form-buttons>

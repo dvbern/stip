@@ -33,7 +33,7 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Boolean wgWohnend;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer betreuungskostenKinder;
-  private @Valid Integer veranlagungsCode = 0;
+  private @Valid String veranlagungsStatus;
   private @Valid Integer steuerjahr;
   private @Valid Integer vermoegen;
   private @Valid Integer steuernKantonGemeinde;
@@ -301,24 +301,22 @@ public class EinnahmenKostenDto  implements Serializable {
   }
 
   /**
-   * 2-Stelliger Veranlagungscode (0-99)
-   * minimum: 0
-   * maximum: 99
+   * Veranlagungsstatus
    **/
-  public EinnahmenKostenDto veranlagungsCode(Integer veranlagungsCode) {
-    this.veranlagungsCode = veranlagungsCode;
+  public EinnahmenKostenDto veranlagungsStatus(String veranlagungsStatus) {
+    this.veranlagungsStatus = veranlagungsStatus;
     return this;
   }
 
   
-  @JsonProperty("veranlagungsCode")
- @Min(0) @Max(99)  public Integer getVeranlagungsCode() {
-    return veranlagungsCode;
+  @JsonProperty("veranlagungsStatus")
+  public String getVeranlagungsStatus() {
+    return veranlagungsStatus;
   }
 
-  @JsonProperty("veranlagungsCode")
-  public void setVeranlagungsCode(Integer veranlagungsCode) {
-    this.veranlagungsCode = veranlagungsCode;
+  @JsonProperty("veranlagungsStatus")
+  public void setVeranlagungsStatus(String veranlagungsStatus) {
+    this.veranlagungsStatus = veranlagungsStatus;
   }
 
   /**
@@ -408,7 +406,7 @@ public class EinnahmenKostenDto  implements Serializable {
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
-        Objects.equals(this.veranlagungsCode, einnahmenKosten.veranlagungsCode) &&
+        Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
         Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
         Objects.equals(this.steuernKantonGemeinde, einnahmenKosten.steuernKantonGemeinde);
@@ -416,7 +414,7 @@ public class EinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsCode, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -438,7 +436,7 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
-    sb.append("    veranlagungsCode: ").append(toIndentedString(veranlagungsCode)).append("\n");
+    sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");

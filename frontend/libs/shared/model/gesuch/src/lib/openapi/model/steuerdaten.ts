@@ -21,7 +21,7 @@ export interface Steuerdaten {
     verpflegung: number;
     verpflegungPartner?: number;
     steuerjahr?: number;
-    veranlagungsCode?: number;
+    veranlagungsStatus?: string;
     totalEinkuenfte: number;
     eigenmietwert: number;
     isArbeitsverhaeltnisSelbstaendig: boolean;

@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -231,6 +232,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         sozialdienst.setId(UUID.randomUUID());
         Delegierung delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
+        delegierung.setDelegierterMitarbeiter(new SozialdienstBenutzer());
         fall.setDelegierung(delegierung);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setFall(fall);

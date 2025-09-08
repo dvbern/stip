@@ -7,14 +7,14 @@
         <table mat-table [dataSource]="sozialdienstListSource" matSort>
           <caption class="cdk-visually-hidden">
             {{
-              'sachbearbeitung-app.admin.sozialdienst.route.overview' | translate
+              'sachbearbeitung-app.admin.sozialdienst.route.overview' | transloco
             }}
           </caption>
 
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
               <label class="pe-none" for="nameFilter">
-                {{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | translate }}
+                {{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}
               </label>
               <div class="d-flex position-relative align-items-center justify-content-end">
                 <mat-form-field class="filter-form-field">
@@ -49,7 +49,7 @@
           <ng-container matColumnDef="ort">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
               <label for="ortFilter">
-                {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | translate }}
+                {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | transloco }}
               </label>
               <div class="d-flex position-relative align-items-center justify-content-end">
                 <mat-form-field class="filter-form-field">
@@ -78,7 +78,7 @@
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32">
               <label for="statusFilter">
-                {{ 'sachbearbeitung-app.admin.sozialdienst.status' | translate }}
+                {{ 'sachbearbeitung-app.admin.sozialdienst.status' | transloco }}
               </label>
               <div class="d-flex position-relative align-items-center justify-content-end">
                 <mat-form-field class="filter-form-field">
@@ -90,7 +90,7 @@
                   >
                     @for (status of availableStatus; track status) {
                       <mat-option [value]="status">
-                        {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + status | translate }}
+                        {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + status | transloco }}
                       </mat-option>
                     }
                   </mat-select>
@@ -98,7 +98,7 @@
               </div>
             </th>
             <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
-              {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + booleanToStatus(sozialdienst.aktiv) | translate }}
+              {{ 'sachbearbeitung-app.admin.sozialdienst.status.' + booleanToStatus(sozialdienst.aktiv) | transloco }}
             </td>
           </ng-container>
 
@@ -106,7 +106,7 @@
             <th mat-header-cell *matHeaderCellDef>
               <div class="action-cell-content">
                 <a
-                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.erstellen' | translate"
+                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.erstellen' | transloco"
                   [routerLink]="['.', 'create']"
                   class="btn btn-outline-primary btn-sm"
                   data-testid="sozialdienst-create"
@@ -120,7 +120,7 @@
                 <a
                   [routerLink]="['.', 'edit', sozialdienst.id]"
                   class="btn btn-link"
-                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | translate"
+                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | transloco"
                   data-testid="sozialdienst-edit"
                 >
                   <i class="material-symbols-rounded fs-5">edit</i>
@@ -131,7 +131,7 @@
                   (click)="toggleStatus(sozialdienst); $event.stopPropagation()"
                   [matTooltip]="
                     'sachbearbeitung-app.admin.sozialdienst.status.action.' + booleanToStatus(sozialdienst.aktiv)
-                      | translate
+                      | transloco
                   "
                 >
                   @if (sozialdienst.aktiv) {
@@ -144,7 +144,7 @@
                   type="button"
                   class="btn btn-link"
                   (click)="deleteSozialdienst(sozialdienst)"
-                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | translate"
+                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | transloco"
                   data-testid="sozialdienst-delete"
                 >
                   <i class="material-symbols-rounded fs-5">delete</i>
@@ -157,13 +157,13 @@
           <tr mat-row *matRowDef="let sozialdienst; columns: displayedColumns"></tr>
           <tr class="mat-mdc-row" *matNoDataRow>
             <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-              {{ 'shared.table.noData' | translate }}
+              {{ 'shared.table.noData' | transloco }}
             </td>
           </tr>
         </table>
         <mat-paginator
-          [pageSizeOptions]="[10, 20, 50]"
-          pageSize="20"
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="defaultPageSize"
           [length]="sozialdienstListSource.data.length"
           showFirstLastButtons
         >

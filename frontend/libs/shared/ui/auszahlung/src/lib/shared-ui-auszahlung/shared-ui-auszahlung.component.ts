@@ -20,8 +20,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
 import { AuszahlungUpdate, MASK_IBAN } from '@dv/shared/model/gesuch';
@@ -53,7 +53,7 @@ import { ibanValidator } from '@dv/shared/util/validator-iban';
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,
-    TranslatePipe,
+    TranslocoPipe,
     MaskitoDirective,
     SharedUiFormAddressComponent,
     SharedUiStepFormButtonsComponent,

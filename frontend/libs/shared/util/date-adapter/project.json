@@ -5,19 +5,5 @@
   "prefix": "dv",
   "tags": ["type:util", "scope:shared"],
   "projectType": "library",
-  "targets": {
-    "build": {
-      "executor": "nx:noop",
-      "options": {
-        "tsConfig": "libs/shared/util/date-adapter/tsconfig.lib.json"
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "libs/shared/util/date-adapter/jest.config.ts"
-      }
-    }
-  }
+  "targets": {}
 }

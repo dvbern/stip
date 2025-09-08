@@ -2,30 +2,30 @@
   <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
     <i class="material-symbols-rounded fs-5">mail</i>
   </dv-shared-ui-icon-chip>
-  <span>{{ 'shared.nachrichten.title' | translate }}</span>
+  <span>{{ 'shared.nachrichten.title' | transloco }}</span>
 </h3>
 
 @let notifications = notificationsSig();
 @if (notifications.length > 0) {
   <div class="notifications gap-2 mt-4">
     <h4 class="subgrid subgrid-3 m-0">
-      <span>{{ 'shared.nachrichten.subject' | translate }}</span>
-      <span>{{ 'shared.nachrichten.sender' | translate }}</span>
-      <span>{{ 'shared.nachrichten.date' | translate }}</span>
+      <span>{{ 'shared.nachrichten.subject' | transloco }}</span>
+      <span>{{ 'shared.nachrichten.sender' | transloco }}</span>
+      <span>{{ 'shared.nachrichten.date' | transloco }}</span>
     </h4>
     @for (notification of notificationsViewSig(); track notification) {
       <button
         class="btn btn-link text-decoration-none subgrid subgrid-3 px-0 py-2 text-start border-top border-1"
         (click)="openNotification(notification)"
       >
-        <span>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</span>
+        <span>{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</span>
         <span>{{ notification.absender }}</span>
         <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
       </button>
     }
   </div>
 } @else {
-  <div>{{ 'shared.nachrichten.noNotifications' | translate }}</div>
+  <div>{{ 'shared.nachrichten.noNotifications' | transloco }}</div>
 }
 
 @if (notificationsSig().length > 5) {

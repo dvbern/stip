@@ -18,7 +18,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -27,6 +27,7 @@ import {
   GesuchNotizCreate,
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiFocusableListDirective,
@@ -45,7 +46,7 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
   selector: 'dv-sachbearbeitung-app-feature-infos-notizen',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     MatMenuModule,
@@ -69,6 +70,8 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
   displayedColumns = ['notizTyp', 'datum', 'user', 'betreff', 'actions'];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   notizStore = inject(NotizStore);
   permissionStore = inject(PermissionStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename

@@ -5,9 +5,10 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { provideTranslateService } from '@ngx-translate/core';
 
 import { GesuchDokument } from '@dv/shared/model/gesuch';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import { SharedUiRejectDokumentComponent } from './shared-ui-reject-dokument.component';
 
@@ -30,9 +31,9 @@ describe('SharedUiRejectDokumentComponent', () => {
         SharedUiRejectDokumentComponent,
         MatDialogModule,
         NoopAnimationsModule,
+        getTranslocoModule(),
       ],
       providers: [
-        provideTranslateService(),
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
       ],

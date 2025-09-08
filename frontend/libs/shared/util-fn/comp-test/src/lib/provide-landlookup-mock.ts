@@ -49,7 +49,7 @@ const mockLaender = [
 
 // Mock LandLookupService
 const mockLandLookupService = {
-  getCachedLandLookup: jest.fn().mockReturnValue(signal(mockLaender)),
+  getCachedLandLookup: vitest.fn().mockReturnValue(signal(mockLaender)),
 
   isValidLandEntry(land: Land | undefined): boolean {
     if (!land) {

@@ -1,4 +1,5 @@
 import {
+  AllFormSteps,
   AppTrancheChange,
   Eltern,
   ElternAbwesenheitsGrund,
@@ -6,7 +7,6 @@ import {
   Familiensituation,
   GesuchFormular,
   PersonInAusbildung,
-  SharedModelGesuchFormularProps,
 } from '@dv/shared/model/gesuch';
 
 import {
@@ -69,7 +69,7 @@ describe('calculate differences', () => {
           strasse: 'Musterstrasse',
           plz: '1234',
           ort: 'Musterort',
-          land: 'CH',
+          landId: '1',
         },
       },
       {
@@ -80,7 +80,7 @@ describe('calculate differences', () => {
           strasse: 'Musterstrasse',
           plz: '1234',
           ort: 'Musterort',
-          land: 'CH',
+          landId: '1',
         },
       },
     ] satisfies Partial<PersonInAusbildung>[] as PersonInAusbildung[];
@@ -204,7 +204,7 @@ describe('selectChangeForView', () => {
         },
       } as AppTrancheChange,
     };
-    const key: SharedModelGesuchFormularProps = 'personInAusbildung';
+    const key: AllFormSteps = 'personInAusbildung';
 
     const result = selectChangeForView(view, key);
 
@@ -238,7 +238,7 @@ describe('selectChangeForView', () => {
         },
       } as AppTrancheChange,
     };
-    const key: SharedModelGesuchFormularProps = 'personInAusbildung';
+    const key: AllFormSteps = 'personInAusbildung';
 
     const result = selectChangeForView(view, key);
 
@@ -255,7 +255,7 @@ describe('selectChangeForView', () => {
       } as GesuchFormular,
       tranchenChanges: null,
     };
-    const key: SharedModelGesuchFormularProps = 'personInAusbildung';
+    const key: AllFormSteps = 'personInAusbildung';
 
     const result = selectChangeForView(view, key);
 

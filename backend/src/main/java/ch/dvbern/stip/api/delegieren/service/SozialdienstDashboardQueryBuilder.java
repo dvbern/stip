@@ -24,9 +24,9 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,10 +40,14 @@ public class SozialdienstDashboardQueryBuilder {
     private final DelegierungRepository delegierungRepository;
     private static final QDelegierung qDelegierung = QDelegierung.delegierung;
 
-    public JPAQuery<Delegierung> baseQuery(final GetDelegierungSozQueryTypeDto queryType, final UUID sozialdienstId) {
+    public JPAQuery<Delegierung> baseQuery(
+        final GetDelegierungSozQueryTypeAdmin queryType,
+        final UUID sozialdienstId
+    ) {
         final var me = benutzerService.getCurrentBenutzer();
         final var sozialdienstBenutzer = sozialdienstBenutzerRepository.requireById(me.getId());
         return switch (queryType) {
+            case OFFEN -> delegierungRepository.getFindAllOffen(sozialdienstId);
             case ALLE -> delegierungRepository.getFindAlleOfSozialdienstQuery(sozialdienstId);
             case ALLE_BEARBEITBAR_MEINE -> delegierungRepository
                 .getFindAlleMeineQuery(sozialdienstBenutzer, sozialdienstId);
@@ -71,7 +75,12 @@ public class SozialdienstDashboardQueryBuilder {
     }
 
     public void delegierungAngenommen(final JPAQuery<Delegierung> query, final Boolean delegierungAngenommen) {
-        query.where(qDelegierung.delegierungAngenommen.eq(delegierungAngenommen));
+        if (delegierungAngenommen) {
+            query.where(qDelegierung.delegierterMitarbeiter.isNotNull());
+        } else {
+            query.where(qDelegierung.delegierterMitarbeiter.isNull());
+        }
+
     }
 
     public void orderBy(
@@ -84,7 +93,6 @@ public class SozialdienstDashboardQueryBuilder {
             case VORNAME -> qDelegierung.persoenlicheAngaben.vorname;
             case NACHNAME -> qDelegierung.persoenlicheAngaben.nachname;
             case WOHNORT -> qDelegierung.persoenlicheAngaben.adresse.ort;
-            case DELEGIERUNG_ANGENOMMEN -> qDelegierung.persoenlicheAngaben.adresse.ort;
             case GEBURTSDATUM -> qDelegierung.persoenlicheAngaben.geburtsdatum;
         };
 

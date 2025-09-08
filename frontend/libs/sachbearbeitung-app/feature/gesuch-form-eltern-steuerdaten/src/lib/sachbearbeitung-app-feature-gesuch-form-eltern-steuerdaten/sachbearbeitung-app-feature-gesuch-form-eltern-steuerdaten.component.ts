@@ -19,9 +19,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
@@ -39,13 +39,13 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
-import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
@@ -54,7 +54,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     CommonModule,
     ReactiveFormsModule,
     MaskitoDirective,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
@@ -64,6 +64,7 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten.component.html',
@@ -105,10 +106,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
         /** @see // this.steuerjahrValidation */
       ],
     ],
-    veranlagungsCode: [
-      <number | null>null,
-      [Validators.required, sharedUtilValidatorRange(0, 99)],
-    ],
+    veranlagungsStatus: [<string | null>null, [Validators.required]],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
@@ -205,15 +203,12 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       .subscribe((result) => {
         if (!result) return;
 
-        const { token, steuerjahr } = result;
-        if (token) {
-          this.steuerdatenStore.updateSteuerdatenFromNesko$({
-            gesuchTrancheId,
-            steuerdatenTyp,
-            steuerjahr,
-            token,
-          });
-        }
+        const { steuerjahr } = result;
+        this.steuerdatenStore.updateSteuerdatenFromNesko$({
+          gesuchTrancheId,
+          steuerdatenTyp,
+          steuerjahr,
+        });
       });
   }
 
@@ -270,7 +265,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       'fahrkosten',
       'verpflegung',
       'steuerjahr',
-      'veranlagungsCode',
+      'veranlagungsStatus',
     ]);
     const originalSteuerdaten = this.originalSteuerdatenSig();
     const steuerdaten = {

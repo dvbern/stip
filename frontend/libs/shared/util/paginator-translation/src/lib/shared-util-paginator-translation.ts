@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatPaginatorIntl } from '@angular/material/paginator';
-import { TranslateParser, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { startWith, switchMap } from 'rxjs';
 
 type TranslatableProperties = keyof Pick<
@@ -21,6 +21,7 @@ export const paginatorTranslationProvider = () => ({
 
 @Injectable()
 export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
+  private translateService = inject(TranslocoService);
   public rangeLabel?: string;
   private labelMap: Record<TranslatableProperties, string> = {
     itemsPerPageLabel: 'shared.table.paginator.itemsPerPage',
@@ -31,18 +32,15 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
     rangeLabel: 'shared.table.paginator.range',
   };
 
-  constructor(
-    private translateService: TranslateService,
-    private translateParser: TranslateParser,
-  ) {
+  constructor() {
     super();
 
-    this.translateService.onLangChange
+    this.translateService.langChanges$
       .pipe(
         takeUntilDestroyed(),
         startWith({}),
         switchMap(() =>
-          this.translateService.get(Object.values(this.labelMap)),
+          this.translateService.selectTranslate(Object.values(this.labelMap)),
         ),
       )
       .subscribe((translation) => {
@@ -63,7 +61,7 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
       return '';
     }
     return (
-      this.translateParser.interpolate(rangeLabel, {
+      this.translateService.translate(rangeLabel, {
         page: page + 1,
         pages: Math.ceil(length / pageSize),
       }) ?? ''

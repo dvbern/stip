@@ -8,8 +8,6 @@ import {
   getWorkspaceLayout,
   names,
   offsetFromRoot,
-  readProjectConfiguration,
-  updateProjectConfiguration,
 } from '@nx/devkit';
 import {
   camelize,
@@ -31,6 +29,8 @@ import { uiTypeFactory } from './types/ui';
 import { utilTypeFactory } from './types/util';
 import { utilDataAccessTypeFactory } from './types/util-data-access';
 import { utilFnTypeFactory } from './types/util-fn';
+import { UnitTestRunner } from '@nx/angular/generators';
+import { updateSpecTsConfig } from './types/helpers/tsconfig';
 
 const LIB_TYPE_GENERATOR_MAP: LibTypeGeneratorMap = {
   feature: featureTypeFactory,
@@ -80,37 +80,14 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
 
   await libGenerator(tree, {
     ...libDefaultOptions,
+    linter: 'none',
+    unitTestRunner: UnitTestRunner.None,
     prefix: normalizedOptions.prefix,
     name: normalizedOptions.projectName,
     directory: normalizedOptions.projectDirectory,
     importPath: normalizedOptions.projectImportPath,
     tags: normalizedOptions.parsedTags.join(','),
   });
-  const projectConfig = readProjectConfiguration(
-    tree,
-    normalizedOptions.projectName,
-  );
-  // Add a dummy build target if it no target exists which configures    node_modules/@nx/devkit/src/generators/project-name-and-root-utils.js:115:19
-  // the location of the tsconfig file.
-  // @see {@link file://./../../../../../../eslint.config.js} -> enforceBuildableLibDependency
-  if (
-    ['test', 'build'].some(
-      (target) => !projectConfig.targets?.[target]?.options?.tsConfig,
-    )
-  ) {
-    updateProjectConfiguration(tree, normalizedOptions.projectName, {
-      ...projectConfig,
-      targets: {
-        build: {
-          executor: 'nx:noop',
-          options: {
-            tsConfig: `${normalizedOptions.projectRoot}/tsconfig.lib.json`,
-          },
-        },
-        ...projectConfig.targets,
-      },
-    });
-  }
 
   for (const { generator, defaultOptions } of generators) {
     await generator(tree, {
@@ -123,6 +100,7 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
 
   addFiles(tree, normalizedOptions);
   postprocess(tree, normalizedOptions);
+  updateSpecTsConfig(tree, normalizedOptions);
   await formatFiles(tree);
 
   return async () => {

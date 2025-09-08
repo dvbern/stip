@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class NotificationDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.notification.type.NotificationType notificationType;
-  private @Valid UUID gesuchId;
+  private @Valid UUID fallId;
   private @Valid String userErstellt;
+  private @Valid LocalDate timestampErstellt;
   private @Valid String absender;
   private @Valid String notificationText;
   private @Valid UUID contextId;
-  private @Valid LocalDate timestampErstellt;
 
   /**
    **/
@@ -52,21 +52,21 @@ public class NotificationDto  implements Serializable {
 
   /**
    **/
-  public NotificationDto gesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
+  public NotificationDto fallId(UUID fallId) {
+    this.fallId = fallId;
     return this;
   }
 
   
-  @JsonProperty("gesuchId")
+  @JsonProperty("fallId")
   @NotNull
-  public UUID getGesuchId() {
-    return gesuchId;
+  public UUID getFallId() {
+    return fallId;
   }
 
-  @JsonProperty("gesuchId")
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
+  @JsonProperty("fallId")
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
   /**
@@ -86,6 +86,25 @@ public class NotificationDto  implements Serializable {
   @JsonProperty("userErstellt")
   public void setUserErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
+  }
+
+  /**
+   **/
+  public NotificationDto timestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  @NotNull
+  public LocalDate getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(LocalDate timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
   }
 
   /**
@@ -143,24 +162,6 @@ public class NotificationDto  implements Serializable {
     this.contextId = contextId;
   }
 
-  /**
-   **/
-  public NotificationDto timestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-  
-  @JsonProperty("timestampErstellt")
-  public LocalDate getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-  @JsonProperty("timestampErstellt")
-  public void setTimestampErstellt(LocalDate timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -172,17 +173,17 @@ public class NotificationDto  implements Serializable {
     }
     NotificationDto notification = (NotificationDto) o;
     return Objects.equals(this.notificationType, notification.notificationType) &&
-        Objects.equals(this.gesuchId, notification.gesuchId) &&
+        Objects.equals(this.fallId, notification.fallId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
+        Objects.equals(this.timestampErstellt, notification.timestampErstellt) &&
         Objects.equals(this.absender, notification.absender) &&
         Objects.equals(this.notificationText, notification.notificationText) &&
-        Objects.equals(this.contextId, notification.contextId) &&
-        Objects.equals(this.timestampErstellt, notification.timestampErstellt);
+        Objects.equals(this.contextId, notification.contextId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, gesuchId, userErstellt, absender, notificationText, contextId, timestampErstellt);
+    return Objects.hash(notificationType, fallId, userErstellt, timestampErstellt, absender, notificationText, contextId);
   }
 
   @Override
@@ -191,12 +192,12 @@ public class NotificationDto  implements Serializable {
     sb.append("class NotificationDto {\n");
     
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    absender: ").append(toIndentedString(absender)).append("\n");
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
-    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -21,11 +21,7 @@ import java.time.ZonedDateTime;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.gesuchhistory.repository.GesuchHistoryRepository;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -38,13 +34,10 @@ import lombok.extern.slf4j.Slf4j;
 public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
     private final MailService mailService;
     private final NotificationService notificationService;
-    private final GesuchStatusService gesuchStatusService;
-    private final GesuchService gesuchService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
 
     @Override
     public void handle(Gesuch gesuch) {
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
         notificationService.createGesuchEingereichtNotification(gesuch);
         gesuch.getGesuchTranchen()
             .stream()

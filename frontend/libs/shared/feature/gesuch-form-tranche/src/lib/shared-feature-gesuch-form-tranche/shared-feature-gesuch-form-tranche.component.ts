@@ -6,7 +6,7 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormsModule,
   NonNullableFormBuilder,
@@ -16,8 +16,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
+import {
+  TranslocoPipe,
+  TranslocoService,
+  translateSignal,
+} from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -69,7 +73,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiFormReadonlyDirective,
-    TranslatePipe,
+    TranslocoPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -78,10 +82,10 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private store = inject(Store);
   private router = inject(Router);
   private dialog = inject(MatDialog);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   private formBuilder = inject(NonNullableFormBuilder);
-  private defaultCommentSig = toSignal(
-    this.translate.stream('shared.form.tranche.bemerkung.initialgesuch'),
+  private defaultCommentSig = translateSignal(
+    'shared.form.tranche.bemerkung.initialgesuch',
   );
 
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
@@ -186,14 +190,14 @@ export class SharedFeatureGesuchFormTrancheComponent {
       const appPrefix = type === 'contract' ? appType : 'shared';
 
       this.form.patchValue({
-        status: this.translate.instant(
+        status: this.translate.translate(
           `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
         ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,
         fallnummer: fallNummer,
         gesuchsperiode: periode
-          ? this.translate.instant(
+          ? this.translate.translate(
               'shared.form.tranche.gesuchsperiode',
               periode,
             )

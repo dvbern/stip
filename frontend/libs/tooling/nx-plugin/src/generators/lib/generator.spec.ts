@@ -1,5 +1,5 @@
-import { Tree, readProjectConfiguration } from '@nrwl/devkit';
-import { createTreeWithEmptyWorkspace } from '@nrwl/devkit/testing';
+import { Tree, readProjectConfiguration } from '@nx/devkit';
+import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 
 import generator from './generator';
 import { LibType } from './generator.interface';
@@ -83,11 +83,6 @@ describe('lib generator', () => {
       expect(
         tree.exists(
           'libs/shared/util-fn/example/src/lib/shared-util-fn-example.ts',
-        ),
-      ).toBeTruthy();
-      expect(
-        tree.exists(
-          'libs/shared/util-fn/example/src/lib/shared-util-fn-example.spec.ts',
         ),
       ).toBeTruthy();
     });

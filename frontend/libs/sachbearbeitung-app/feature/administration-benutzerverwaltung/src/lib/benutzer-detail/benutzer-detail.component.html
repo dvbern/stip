@@ -11,7 +11,7 @@
   } @else {
     <!-- Name -->
     <mat-form-field dvSharedUiFormField>
-      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.name.label' | transloco }}</mat-label>
       <input
         [formControl]="controls.nachname"
         data-testid="form-benutzerverwaltung-name"
@@ -20,13 +20,13 @@
         type="text"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- Vorname -->
     <mat-form-field dvSharedUiFormField>
-      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.vorname.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.vorname.label' | transloco }}</mat-label>
       <input
         [formControl]="controls.vorname"
         data-testid="form-benutzerverwaltung-vorname"
@@ -35,13 +35,13 @@
         type="text"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- Telefonnummer -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-      <mat-label>{{ 'shared.form.shared.phone.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.form.shared.phone.label' | transloco }}</mat-label>
       <input
         type="text"
         matInput
@@ -50,17 +50,17 @@
         data-testid="form-benutzerverwaltung-telefonnummer"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'telefonnummer'">
-        {{ 'shared.form.error.telefonnummer' | translate }}
+        {{ 'shared.form.error.telefonnummer' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- E-Mail Adresse -->
     <mat-form-field dvSharedUiFormField [class.readonly]="form.controls.email.disabled">
       <mat-label>
-        {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | translate }}
+        {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | transloco }}
       </mat-label>
       <input
         data-testid="form-benutzerverwaltung-email"
@@ -71,16 +71,16 @@
         (blur)="trimEmail()"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'pattern'">
-        {{ 'shared.form.error.email' | translate }}
+        {{ 'shared.form.error.email' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- Funktion DE -->
     <mat-form-field dvSharedUiFormField class="tw-col-start-1">
-      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label' | transloco }}</mat-label>
       <input
         type="text"
         matInput
@@ -89,13 +89,13 @@
         data-testid="form-benutzerverwaltung-funktionDe"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <!-- Funktion FR -->
     <mat-form-field dvSharedUiFormField>
-      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionFr.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionFr.label' | transloco }}</mat-label>
       <input
         type="text"
         matInput
@@ -104,17 +104,17 @@
         data-testid="form-benutzerverwaltung-funktionFr"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
     <h2 class="h4 tw-col-start-1 tw-pt-3">
-      {{ 'sachbearbeitung-app.admin.benutzerverwaltung.rollen.title' | translate }}
+      {{ 'sachbearbeitung-app.admin.benutzerverwaltung.rollen.title' | transloco }}
     </h2>
     <mat-selection-list [formControl]="controls.sachbearbeiterRollen" class="tw-col-start-1" [disableRipple]="true">
       @for (role of availableRoles; track role) {
         <mat-list-option [value]="role" togglePosition="before">{{
-          'shared.role.' + role | translate
+          'shared.role.' + role | transloco
         }}</mat-list-option>
       }
     </mat-selection-list>

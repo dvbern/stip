@@ -18,12 +18,18 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime, map, startWith } from 'rxjs';
 
 import { BenutzerverwaltungStore } from '@dv/sachbearbeitung-app/data-access/benutzerverwaltung';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { Sachbearbeiter } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
+import {
+  DEFAULT_PAGE_SIZE,
+  INPUT_DELAY,
+  PAGE_SIZES,
+} from '@dv/shared/model/ui-constants';
 import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -37,13 +43,11 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
-const INPUT_DELAY = 600;
 const ROLE_TRANSATION_PREFIX = 'shared.role.';
 
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
@@ -60,6 +64,7 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
     ReactiveFormsModule,
     SharedUiClearButtonComponent,
     SharedUiMaxLengthDirective,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './benutzer-overview.component.html',
   styleUrls: ['./benutzer-overview.component.scss'],
@@ -69,12 +74,14 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
 export class BenutzerOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   store = inject(BenutzerverwaltungStore);
   destroyRef = inject(DestroyRef);
 
   displayedColumns = ['name', 'email', 'roles', 'actions'];
   showFullListForBenutzer: Record<string, boolean> = {};
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
@@ -91,15 +98,11 @@ export class BenutzerOverviewComponent {
     ),
   );
   private rolesTranslationsSig = toSignal(
-    this.translate.onLangChange.pipe(
-      startWith({
-        translations:
-          this.translate.translations[
-            this.translate.currentLang ?? this.translate.defaultLang
-          ],
-      }),
-      map(({ translations }) =>
-        Object.entries<string>(translations).filter(([key]) =>
+    this.translate.langChanges$.pipe(
+      map(() => this.translate.getTranslation()),
+      startWith(this.translate.getTranslation()),
+      map((translations) =>
+        Array.from(translations.entries()).filter(([key]) =>
           key.startsWith(ROLE_TRANSATION_PREFIX),
         ),
       ),
@@ -126,7 +129,7 @@ export class BenutzerOverviewComponent {
           )
           .filter(isDefined);
         return roleNames.some(([, role]) =>
-          role.toLowerCase().includes(roles.toLowerCase()),
+          role.toString().toLowerCase().includes(roles.toLowerCase()),
         );
       }
       return true;

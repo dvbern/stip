@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { SharedFeatureAuszahlungComponent } from '@dv/shared/feature/auszahlung';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
@@ -10,8 +10,7 @@ import { SharedUiAuszahlungComponent } from '@dv/shared/ui/auszahlung';
   selector: 'dv-gesuch-app-feature-auszahlung',
   imports: [
     RouterLink,
-    TranslatePipe,
-    TranslateDirective,
+    TranslocoDirective,
     SharedPatternMainLayoutComponent,
     SharedUiAuszahlungComponent,
   ],

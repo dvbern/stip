@@ -28,16 +28,46 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DelegierungSlimDtoSpec
  */
 @JsonPropertyOrder({
+  DelegierungSlimDtoSpec.JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN,
   DelegierungSlimDtoSpec.JSON_PROPERTY_SOZIALDIENST
 })
 @JsonTypeName("DelegierungSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DelegierungSlimDtoSpec {
+  public static final String JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN = "delegierungAngenommen";
+  private Boolean delegierungAngenommen;
+
   public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
   private SozialdienstSlimDtoSpec sozialdienst;
 
   public DelegierungSlimDtoSpec() {
   }
+
+  public DelegierungSlimDtoSpec delegierungAngenommen(Boolean delegierungAngenommen) {
+    
+    this.delegierungAngenommen = delegierungAngenommen;
+    return this;
+  }
+
+   /**
+   * Get delegierungAngenommen
+   * @return delegierungAngenommen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getDelegierungAngenommen() {
+    return delegierungAngenommen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
+    this.delegierungAngenommen = delegierungAngenommen;
+  }
+
 
   public DelegierungSlimDtoSpec sozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
     
@@ -73,18 +103,20 @@ public class DelegierungSlimDtoSpec {
       return false;
     }
     DelegierungSlimDtoSpec delegierungSlim = (DelegierungSlimDtoSpec) o;
-    return Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
+    return Objects.equals(this.delegierungAngenommen, delegierungSlim.delegierungAngenommen) &&
+        Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialdienst);
+    return Objects.hash(delegierungAngenommen, sozialdienst);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungSlimDtoSpec {\n");
+    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("}");
     return sb.toString();

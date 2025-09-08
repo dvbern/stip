@@ -19,11 +19,16 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { debounceTime, map } from 'rxjs';
 
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { Sozialdienst } from '@dv/shared/model/gesuch';
+import {
+  DEFAULT_PAGE_SIZE,
+  INPUT_DELAY,
+  PAGE_SIZES,
+} from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -36,15 +41,13 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
-const INPUT_DELAY = 600;
-
 const availableStatus = ['AKTIV', 'INAKTIV', 'ALL'] as const;
 type SozialdienstStatus = (typeof availableStatus)[number];
 
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     MatTableModule,
     MatSelectModule,
@@ -70,11 +73,13 @@ type SozialdienstStatus = (typeof availableStatus)[number];
 export class SozialdienstOverviewComponent {
   private dialog = inject(MatDialog);
   private formBuilder = inject(NonNullableFormBuilder);
-  private translate = inject(TranslateService);
+  private translate = inject(TranslocoService);
   store = inject(SozialdienstStore);
   destroyRef = inject(DestroyRef);
 
   displayedColumns = ['name', 'ort', 'status', 'actions'];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   availableStatus = availableStatus;
 
   sortSig = viewChild(MatSort);

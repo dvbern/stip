@@ -22,7 +22,7 @@
           <div class="col-12 col-xl-8 my-3">
             <span>{{
               'shared.form.lebenslauf.top.info'
-                | translate
+                | transloco
                   : {
                       von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
                       bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?',
@@ -43,7 +43,7 @@
                   data-testid="lebenslauf-add-ausbildung"
                 >
                   <i class="material-symbols-rounded fs-1">school</i>
-                  {{ 'shared.form.lebenslauf.add.ausbildung' | translate }}
+                  {{ 'shared.form.lebenslauf.add.ausbildung' | transloco }}
                 </button>
               </div>
               <div class="col-6 my-3">
@@ -54,7 +54,7 @@
                   data-testid="lebenslauf-add-taetigkeit"
                 >
                   <i class="material-symbols-rounded fs-1">work</i>
-                  {{ 'shared.form.lebenslauf.add.taetigkeit' | translate }}
+                  {{ 'shared.form.lebenslauf.add.taetigkeit' | transloco }}
                 </button>
               </div>
             </div>
@@ -91,14 +91,14 @@
           [disabled]="!viewSig().gesuch?.id"
           data-testid="button-continue"
         >
-          {{ 'shared.form.gonext' | translate }}
+          {{ 'shared.form.gonext' | transloco }}
         </button>
       </dv-shared-ui-step-form-buttons>
     } @else {
       <div class="row">
         <div class="col-12 col-xl-8 my-3">
           <dv-shared-ui-info-container>{{
-            'shared.form.lebenslauf.top.missing-dates' | translate
+            'shared.form.lebenslauf.top.missing-dates' | transloco
           }}</dv-shared-ui-info-container>
         </div>
       </div>

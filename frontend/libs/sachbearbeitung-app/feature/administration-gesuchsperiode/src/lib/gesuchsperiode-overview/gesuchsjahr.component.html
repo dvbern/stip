@@ -3,7 +3,7 @@
 } @else {
   @if (gesuchsJahrDatasourceSig(); as gesuchsjahrSource) {
     <h2 class="tw-my-6 tw-text-2xl">
-      {{ 'sachbearbeitung-app.admin.gesuchsjahr.title' | translate }}
+      {{ 'sachbearbeitung-app.admin.gesuchsjahr.title' | transloco }}
     </h2>
     <div class="tw-dv-table">
       <table
@@ -17,22 +17,22 @@
       >
         <caption class="cdk-visually-hidden">
           {{
-            'sachbearbeitung-app.admin.gesuchsjahr.table.description' | translate
+            'sachbearbeitung-app.admin.gesuchsjahr.table.description' | transloco
           }}
         </caption>
 
         <ng-container matColumnDef="bezeichnung">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource" class="fw-bold">
-            {{ gesuchsjahr | translatedProp: 'bezeichnung' : translate.currentLang }}
+            {{ gesuchsjahr | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="ausbildungsjahr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.ausbilduingsjahr' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             {{ gesuchsjahr.ausbildungsjahr }}
@@ -41,18 +41,18 @@
 
         <ng-container matColumnDef="gueltigkeitStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.status' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.status' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             <mat-chip [color]="gesuchsjahr.statusColor" highlighted>{{
-              'shared.gesuch.periode.status.' + gesuchsjahr.gueltigkeitStatus | translate
+              'shared.gesuch.periode.status.' + gesuchsjahr.gueltigkeitStatus | transloco
             }}</mat-chip>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="technischesJahr">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.technischesJahr' | translate }}
+            {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.technischesJahr' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             {{ gesuchsjahr.technischesJahr }}
@@ -62,7 +62,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="tw-text-right">
             <a
-              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               [routerLink]="['.', 'create']"
               class="btn btn-outline-primary btn-sm"
             >
@@ -78,7 +78,7 @@
                   <button
                     type="button"
                     class="btn btn-link me-2"
-                    [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | translate: gesuchsjahr"
+                    [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | transloco: gesuchsjahr"
                     (click)="deleteGesuchsjahr(gesuchsjahr); $event.stopPropagation()"
                   >
                     <i class="material-symbols-rounded fs-5">delete</i>
@@ -100,11 +100,16 @@
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-            {{ 'shared.table.noData' | translate }}
+            {{ 'shared.table.noData' | transloco }}
           </td>
         </tr>
       </table>
-      <mat-paginator #paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+      <mat-paginator
+        #paginator
+        showFirstLastButtons
+        [pageSizeOptions]="pageSizes"
+        [pageSize]="defaultPageSize"
+      ></mat-paginator>
     </div>
   }
 }

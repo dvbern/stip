@@ -17,8 +17,8 @@ import {
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { GesuchsperiodeStore } from '@dv/sachbearbeitung-app/data-access/gesuchsperiode';
 import {
@@ -49,7 +49,7 @@ import { PublishComponent } from '../publish/publish.component';
     MatError,
     MatFormFieldModule,
     MatInput,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,

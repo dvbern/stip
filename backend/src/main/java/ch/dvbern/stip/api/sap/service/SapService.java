@@ -35,7 +35,6 @@ import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -164,7 +163,7 @@ public class SapService {
         if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.FAILURE) {
             gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(BUSINESSPARTNER_CREATE);
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
-            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            mailService.sendStandardNotificationEmailForGesuch(gesuch);
         } else if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.SUCCESS) {
             gesuch.getAusbildung()
                 .getFall()
@@ -280,7 +279,7 @@ public class SapService {
         if (buchhaltung.getSapStatus() == SapStatus.FAILURE) {
             gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(buchhaltung.getBuchhaltungType());
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
-            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            mailService.sendStandardNotificationEmailForGesuch(gesuch);
         }
         return vendorPostingCreateStatus;
     }

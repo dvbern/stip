@@ -11,8 +11,10 @@
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Gestion des utilisateurs",
 
   "sozialdienst-app.admin.sozialdienstBenutzer.route.overview": "Gestion des utilisateurs",
+  "sozialdienst-app.admin.sozialdienstBenutzer.overview.description": "Un aperçu de tous les utilisateurs du service social.",
   "sozialdienst-app.admin.sozialdienstBenutzer.create": "Créer",
   "sozialdienst-app.admin.sozialdienstBenutzer.edit": "Modifier",
+  "sozialdienst-app.admin.sozialdienstBenutzer.delete": "Supprimer",
   "sozialdienst-app.admin.sozialdienstBenutzer.name.label": "Nom",
   "sozialdienst-app.admin.sozialdienstBenutzer.nachname.label": "Nom",
   "sozialdienst-app.admin.sozialdienstBenutzer.vorname.label": "Prénom",
@@ -22,6 +24,7 @@
   "sozialdienst-app.admin.sozialdienstBenutzer.confirmDelete.text": "Voulez-vous vraiment supprimer l'employé du service social \"{{ name }}\" ?",
 
   "sozialdienst-app.cockpit.quick-filter.ALLE": "Tous",
+  "sozialdienst-app.cockpit.quick-filter.OFFEN": "Demandes de délégation",
   "sozialdienst-app.cockpit.quick-filter.ALLE_BEARBEITBAR_MEINE": "Mes demandes modifiables",
 
   "sozialdienst-app.cockpit.table.description": "Description de la table",
@@ -43,5 +46,7 @@
   "sozialdienst-app.delegierung-dialog.fallNummer.label": "Numéro de cas",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.label": "Travailleur social",
   "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Modifier l'affectation",
-  "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Veuillez enregistrer les modifications avant de fermer la boîte de dialogue."
+  "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Veuillez enregistrer les modifications avant de fermer la boîte de dialogue.",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Rejeter la délégation",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Voulez-vous vraiment rejeter la demande de délégation ?"
 }

@@ -27,8 +27,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -76,7 +76,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    TranslatePipe,
+    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -100,7 +100,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
-  private translateService = inject(TranslateService);
+  private translateService = inject(TranslocoService);
 
   itemSig = input.required<Partial<SharedModelLebenslauf>>();
   ausbildungenSig = input.required<LebenslaufItemUpdate[]>();
@@ -320,8 +320,8 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     }
     kantonValues.sort((a, b) =>
       this.translateService
-        .instant(`shared.kanton.${a}`)
-        .localeCompare(this.translateService.instant(`shared.kanton.${b}`)),
+        .translate(`shared.kanton.${a}`)
+        .localeCompare(this.translateService.translate(`shared.kanton.${b}`)),
     );
     //add Ausland after sort
     kantonValues.push(WohnsitzKanton.AUSLAND);
