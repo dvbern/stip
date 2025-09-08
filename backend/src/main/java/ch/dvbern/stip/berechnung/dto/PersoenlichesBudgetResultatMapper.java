@@ -24,7 +24,7 @@ import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 
 public interface PersoenlichesBudgetResultatMapper {
     PersoenlichesBudgetresultatDto mapFromRequest(
-        final DmnRequest request,
+        final CalculatorRequest request,
         final int einnahmenPersoenlichesBudget,
         final int ausgabenPersoenlichesBudget,
         final int persoenlichesbudgetBerechnet,

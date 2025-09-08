@@ -59,6 +59,7 @@ public class ElternteilV1 {
     boolean selbststaendigErwerbend;
     int anzahlPersonenImHaushalt;
     int anzahlGeschwisterInAusbildung;
+    SteuerdatenTyp steuerdatenTyp;
 
     public static ElternteilV1Builder builderWithDefaults() {
         return new ElternteilV1Builder();
@@ -78,6 +79,7 @@ public class ElternteilV1 {
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
 
+        builder.steuerdatenTyp(steuerdaten.getSteuerdatenTyp());
         builder.essenskostenPerson1(steuerdaten.getVerpflegung());
         builder.essenskostenPerson2(Objects.requireNonNullElse(steuerdaten.getVerpflegungPartner(), 0));
 

@@ -21,6 +21,6 @@ import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 
 public interface BerechnungsStammdatenMapper {
     BerechnungsStammdatenDto mapFromRequest(
-        final DmnRequest request
+        final CalculatorRequest request
     );
 }

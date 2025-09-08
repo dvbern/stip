@@ -32,15 +32,15 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
@@ -51,7 +51,7 @@ import static ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1.getAlterForMediz
 @Jacksonized
 @Value
 @JsonIgnoreProperties
-public class BerechnungRequestV1 implements DmnRequest {
+public class BerechnungRequestV1 implements CalculatorRequest {
     @JsonProperty("Stammdaten_V1")
     StammdatenV1 stammdaten;
 
@@ -64,6 +64,7 @@ public class BerechnungRequestV1 implements DmnRequest {
     @AllArgsConstructor
     @Builder
     @Jacksonized
+    @Getter
     public static class InputFamilienbudgetV1 {
         @JsonProperty("elternteil")
         ElternteilV1 elternteil;
@@ -75,15 +76,20 @@ public class BerechnungRequestV1 implements DmnRequest {
     @AllArgsConstructor
     @Builder
     @Jacksonized
+    @Getter
     public static class InputPersoenlichesbudgetV1 {
         @JsonProperty("antragssteller")
         AntragsstellerV1 antragssteller;
     }
 
     @Override
-    @JsonIgnore
-    public String getVersion() {
-        return "v1.0";
+    public int majorVersion() {
+        return 1;
+    }
+
+    @Override
+    public int minorVersion() {
+        return 0;
     }
 
     public static BerechnungRequestV1 createRequest(
@@ -94,9 +100,9 @@ public class BerechnungRequestV1 implements DmnRequest {
     ) {
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
-            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class)
+            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(CalculatorVersion.class)
                 .major(),
-            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(DmnModelVersion.class)
+            ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder.class.getAnnotation(CalculatorVersion.class)
                 .minor(),
             gesuchFormular,
             elternTyp

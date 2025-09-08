@@ -47,6 +47,11 @@ public class MockTenantService extends TenantService {
     }
 
     @Override
+    public MandantIdentifier getCurrentMandantIdentifier() {
+        return MandantIdentifier.BERN;
+    }
+
+    @Override
     public MandantIdentifier resolveTenant(String subdomain) {
         return MandantIdentifier.BERN;
     }

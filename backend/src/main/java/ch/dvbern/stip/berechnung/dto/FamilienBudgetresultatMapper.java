@@ -22,7 +22,7 @@ import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 
 public interface FamilienBudgetresultatMapper {
     FamilienBudgetresultatDto mapFromRequest(
-        final DmnRequest request,
+        final CalculatorRequest request,
         final SteuerdatenTyp steuerdatenTyp,
         final int budgetToUse,
         final int einnahmenFamilienbudget,

@@ -69,6 +69,10 @@ public class TenantService {
         return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
     }
 
+    public MandantIdentifier getCurrentMandantIdentifier() {
+        return MandantIdentifier.of(getCurrentTenantIdentifier());
+    }
+
     public MandantIdentifier resolveTenant(final String subdomain) {
         for (final var perTenantSubdomain : perTenantSubdomains) {
             if (perTenantSubdomain.subdomains().contains(subdomain)) {

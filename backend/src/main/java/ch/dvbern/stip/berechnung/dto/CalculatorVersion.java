@@ -17,9 +17,14 @@
 
 package ch.dvbern.stip.berechnung.dto;
 
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public interface PersonenImHaushaltRequestBuilder {
-    CalculatorRequest buildRequest(final GesuchFormular gesuchFormular, final ElternTyp elternToPrioritize);
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface CalculatorVersion {
+    int major();
+
+    int minor();
 }
