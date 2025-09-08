@@ -1,0 +1,9 @@
+{
+  "name": "shared-pattern-vitest-test-setup",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/pattern/vitest-test-setup/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:pattern", "scope:shared"],
+  "targets": {}
+}

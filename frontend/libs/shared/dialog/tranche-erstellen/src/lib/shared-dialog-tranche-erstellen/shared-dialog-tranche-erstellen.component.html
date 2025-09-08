@@ -1,7 +1,7 @@
 <button
   type="button"
   class="dv-icon-button dv-icon-button-lg m-2 position-absolute top-0 end-0"
-  [attr.aria-label]="'shared.cancel' | translate"
+  [attr.aria-label]="'shared.cancel' | transloco"
   (click)="cancel()"
 >
   <span class="material-symbols-rounded">close</span>
@@ -13,13 +13,13 @@
   (ngSubmit)="confirm()"
 >
   <h3 class="mb-4">
-    {{ titleKeys.title | translate }}
+    {{ titleKeys.title | transloco }}
   </h3>
-  <div class="mb-4" [innerHTML]="titleKeys.text | translate"></div>
+  <div class="mb-4" [innerHTML]="titleKeys.text | transloco"></div>
   <div class="row">
     <div class="col-6">
       <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | translate }}</mat-label>
+        <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | transloco }}</mat-label>
         <input
           matInput
           [dvMaxLength]="'small'"
@@ -28,24 +28,24 @@
           [max]="dialogData.maxDate"
           formControlName="gueltigAb"
           data-testid="form-aenderung-melden-dialog-gueltig-ab"
-          [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
+          [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | transloco"
         />
         <mat-datepicker-toggle matIconSuffix [for]="vonPicker"></mat-datepicker-toggle>
         <mat-datepicker #vonPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
-          {{ 'shared.form.error.minDate' | translate: { date: dialogData.minDate | date: 'dd.MM.yyyy' } }}
+          {{ 'shared.form.error.minDate' | transloco: { date: dialogData.minDate | date: 'dd.MM.yyyy' } }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
-          {{ 'shared.form.error.maxDate' | translate: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
+          {{ 'shared.form.error.maxDate' | transloco: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
         </mat-error>
       </mat-form-field>
     </div>
     <div class="col-6">
       <mat-form-field dvSharedUiFormField class="tw-w-full">
-        <mat-label>{{ 'shared.dialog.gesuch-aenderung.bis.label' | translate }}</mat-label>
+        <mat-label>{{ 'shared.dialog.gesuch-aenderung.bis.label' | transloco }}</mat-label>
         <input
           matInput
           [dvMaxLength]="'small'"
@@ -54,42 +54,42 @@
           [max]="dialogData.maxDate"
           formControlName="gueltigBis"
           data-testid="form-aenderung-melden-dialog-gueltig-bis"
-          [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | translate"
+          [placeholder]="'shared.dialog.gesuch-aenderung.date.placeholder' | transloco"
         />
         <mat-datepicker-toggle matIconSuffix [for]="bisPicker"></mat-datepicker-toggle>
         <mat-datepicker #bisPicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
-          {{ 'shared.form.error.minDate' | translate: { date: form.controls.gueltigAb.value | date: 'dd.MM.yyyy' } }}
+          {{ 'shared.form.error.minDate' | transloco: { date: form.controls.gueltigAb.value | date: 'dd.MM.yyyy' } }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
-          {{ 'shared.form.error.maxDate' | translate: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
+          {{ 'shared.form.error.maxDate' | transloco: { date: dialogData.maxDate | date: 'dd.MM.yyyy' } }}
         </mat-error>
       </mat-form-field>
     </div>
   </div>
   <div class="group-errors tw-mt-1 tw-text-sm">
     @if (form.errors?.['dateRangeTooShort']) {
-      <mat-error> {{ 'shared.form.error.dateRangeTooShort' | translate }}</mat-error>
+      <mat-error> {{ 'shared.form.error.dateRangeTooShort' | transloco }}</mat-error>
     }
   </div>
   <div class="row mt-4">
     <mat-form-field class="col-12" dvSharedUiFormField>
-      <mat-label>{{ 'shared.dialog.gesuch-aenderung.comment.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.dialog.gesuch-aenderung.comment.label' | transloco }}</mat-label>
       <textarea
         matInput
         [dvMaxLength]="'large'"
         formControlName="kommentar"
         data-testid="form-aenderung-melden-dialog-kommentar"
-        [placeholder]="'shared.dialog.gesuch-aenderung.comment.placeholder' | translate"
+        [placeholder]="'shared.dialog.gesuch-aenderung.comment.placeholder' | transloco"
       ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
   </div>
   <div class="d-flex mt-5 justify-content-between">
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
-      {{ 'shared.cancel' | translate }}
+      {{ 'shared.cancel' | transloco }}
     </button>
     <dv-shared-ui-form-save
       data-testid="dialog-confirm"

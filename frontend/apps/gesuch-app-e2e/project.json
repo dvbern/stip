@@ -12,10 +12,6 @@
       "options": {
         "config": "apps/gesuch-app-e2e/playwright.config.ts"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
     }
   }
 }

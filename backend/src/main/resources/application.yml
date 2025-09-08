@@ -76,7 +76,10 @@ kstip:
   pagination:
     max-allowed-page-size: 50
   should-clear-database: false
-  nesko-wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
+  nesko:
+    wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
+    username: '${NESKO_TECHNICAL_USER_NAME}'
+    password: '${NESKO_TECHNICAL_USER_PASSWORD}'
   tenancy:
     bern:
       subdomains:
@@ -206,6 +209,8 @@ quarkus:
   rest-client:
     GeoCollection-api:
       url: 'https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo-vd.ortschaftenverzeichnis_plz'
+    NeskoGetBearerToken-api:
+      url: 'https://nesko-int.sv.fin.be.ch/sso/auth/realms/hades-int/protocol/openid-connect'
 #   store-type: jdbc-tx
 '%dev':
   quarkus:
@@ -301,6 +306,9 @@ quarkus:
         kc-path: '/realms/bern/protocol/openid-connect/auth'
         kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
         kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
+    nesko:
+      username: 'username'
+      password: 'password'
 '%prod':
   quarkus:
     s3:

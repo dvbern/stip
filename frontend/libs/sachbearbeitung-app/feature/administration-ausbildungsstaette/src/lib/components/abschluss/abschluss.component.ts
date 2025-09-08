@@ -19,7 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { AdministrationAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/administration-ausbildungsstaette';
@@ -84,7 +84,7 @@ type DisplayColumns =
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatFormFieldModule,
@@ -113,7 +113,7 @@ export class AbschlussComponent
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
-  translate = inject(TranslateService);
+  translate = inject(TranslocoService);
 
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   abschluss = input<string | undefined>(undefined);

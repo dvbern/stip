@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
+import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -40,10 +41,24 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
     private final DelegierungRepository delegierungRepository;
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
+    private final SozialdienstBenutzerService sozialdienstBenutzerService;
 
     @Transactional
-    public void canReadDelegierung() {
+    public void canReadDelegierungMitarbeiter() {
         permitAll();
+    }
+
+    @Transactional
+    public void canReadDelegierungAdmin() {
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer();
+        if (currentBenutzer.isEmpty()) {
+            forbidden();
+        }
+        if (sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer().isBenutzerAdmin(currentBenutzer.get())) {
+            return;
+        }
+
+        forbidden();
     }
 
     @Transactional
@@ -80,11 +95,33 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         final var targetUser = sozialdienstBenutzerRepository.requireById(
             delegierterMitarbeiterAendernDto.getMitarbeiterId()
         );
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
 
         if (
             sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId())
             && sozialdienstService
                 .isBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId(), targetUser)
+        ) {
+            if (delegierung.getDelegierterMitarbeiter() == null) {
+                if (delegierung.getSozialdienst().isBenutzerAdmin(currentBenutzer)) {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+
+        forbidden();
+    }
+
+    @Transactional
+    public void canAblehnen(final UUID delegierungId) {
+        final var currentBenutzer = sozialdienstBenutzerService.getCurrentSozialdienstBenutzer().orElseThrow();
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+
+        if (
+            delegierung.getSozialdienst().isBenutzerAdmin(currentBenutzer)
+            && delegierung.getDelegierterMitarbeiter() == null
         ) {
             return;
         }

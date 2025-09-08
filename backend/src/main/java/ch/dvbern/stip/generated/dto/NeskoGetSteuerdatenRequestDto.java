@@ -19,28 +19,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class NeskoGetSteuerdatenRequestDto  implements Serializable {
-  private @Valid String token;
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
   private @Valid Integer steuerjahr;
-
-  /**
-   **/
-  public NeskoGetSteuerdatenRequestDto token(String token) {
-    this.token = token;
-    return this;
-  }
-
-  
-  @JsonProperty("token")
-  @NotNull
-  public String getToken() {
-    return token;
-  }
-
-  @JsonProperty("token")
-  public void setToken(String token) {
-    this.token = token;
-  }
 
   /**
    **/
@@ -90,14 +70,13 @@ public class NeskoGetSteuerdatenRequestDto  implements Serializable {
       return false;
     }
     NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequest = (NeskoGetSteuerdatenRequestDto) o;
-    return Objects.equals(this.token, neskoGetSteuerdatenRequest.token) &&
-        Objects.equals(this.steuerdatenTyp, neskoGetSteuerdatenRequest.steuerdatenTyp) &&
+    return Objects.equals(this.steuerdatenTyp, neskoGetSteuerdatenRequest.steuerdatenTyp) &&
         Objects.equals(this.steuerjahr, neskoGetSteuerdatenRequest.steuerjahr);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, steuerdatenTyp, steuerjahr);
+    return Objects.hash(steuerdatenTyp, steuerjahr);
   }
 
   @Override
@@ -105,7 +84,6 @@ public class NeskoGetSteuerdatenRequestDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class NeskoGetSteuerdatenRequestDto {\n");
     
-    sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("}");

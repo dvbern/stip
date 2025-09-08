@@ -1,5 +1,6 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
+import { of } from 'rxjs';
 
 import { FormularChangeTypes } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -9,14 +10,12 @@ type Placeholder = typeof PLACEHOLDER;
 
 @Pipe({
   standalone: true,
-  name: 'translateChange',
+  name: 'dvTranslateChange',
   pure: false,
 })
-export class SharedUiTranslateChangePipe
-  extends TranslatePipe
-  implements PipeTransform
-{
-  override transform(
+export class SharedUiTranslateChangePipe implements PipeTransform {
+  private translate = inject(TranslocoService);
+  transform(
     value: FormularChangeTypes,
     translationKey:
       | `shared.form.zuvor.checkbox.${Placeholder}`
@@ -24,13 +23,13 @@ export class SharedUiTranslateChangePipe
       | (`${string}${typeof PLACEHOLDER}${string}` & {}),
   ) {
     if (value === '') {
-      return '';
+      return of('');
     }
     if (isDefined(value)) {
-      return super.transform(
+      return this.translate.selectTranslate(
         translationKey.replace(`${PLACEHOLDER}`, value.toString()),
       );
     }
-    return null;
+    return of(null);
   }
 }

@@ -15,12 +15,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
 import { BeschwerdeVerlaufEntry } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
@@ -29,7 +30,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 @Component({
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -59,6 +60,8 @@ export class VerlaufComponent {
     'document',
     'actions',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
   beschwerdeVerlaufSig = computed(() => {

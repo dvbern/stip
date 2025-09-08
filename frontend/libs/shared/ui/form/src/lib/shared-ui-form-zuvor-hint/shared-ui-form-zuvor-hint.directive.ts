@@ -25,7 +25,7 @@ import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template
  *
  * @example <caption>Translated or values which need parsing</caption>
  * <mat-hint
- *   *dvZuvorHint="view.formChanges?.anrede | lowercase | translateChange: 'shared.form.select.salutation.$VALUE'"
+ *   *dvZuvorHint="view.formChanges?.anrede | lowercase | dvTranslateChange: 'shared.form.select.salutation.$VALUE' | async"
  * ></mat-hint>
  *
  * @example <caption>With a suffix</caption>

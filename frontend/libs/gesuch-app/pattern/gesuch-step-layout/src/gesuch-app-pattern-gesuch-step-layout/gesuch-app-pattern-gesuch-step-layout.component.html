@@ -1,9 +1,10 @@
-<dv-shared-pattern-main-layout [closeMenu]="navClicked | async">
+<dv-shared-pattern-main-layout [closeMenu]="navClicked | async" *dvTranslocoGs="let t">
   <div class="d-flex h-100">
     <!-- left step nav (Desktop) -->
     <div class="d-none d-lg-block border-end bg-white">
       <p class="m-4">
-        <span class="small" translate>shared.menu.workedBy</span><br />
+        <span class="small">{{ t('shared.menu.workedBy') }}</span
+        ><br />
         <span class="fw-medium">Eva Mendes</span>
       </p>
 
@@ -17,12 +18,12 @@
           <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
           <div class="text-end">
             <h5 class="step-title">
-              {{ step.translationKey | translate }}
+              {{ t(step.translationKey) }}
             </h5>
             @if (step.nextStep?.translationKey; as nextStepKey) {
               <p class="fst-italic mb-0">
-                {{ 'shared.form.next' | translate }}:
-                {{ nextStepKey | translate }}
+                {{ t('shared.form.next') }}:
+                {{ t(nextStepKey) }}
               </p>
             }
           </div>
@@ -34,7 +35,7 @@
           </dv-shared-ui-icon-chip>
 
           <h2 class="fw-bold" data-testid="step-title">
-            {{ step.titleTranslationKey | translate }}
+            {{ t(step.titleTranslationKey) }}
           </h2>
           <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
         </div>
@@ -47,7 +48,7 @@
   </div>
 
   <div dvHeaderMobileAddons>
-    <a routerLink="/" class="dv-icon-button" [attr.aria-label]="'shared.home' | translate">
+    <a routerLink="/" class="dv-icon-button" [attr.aria-label]="t('gesuch-app.dashboard.title')">
       <span class="material-symbols-rounded text-black">home</span>
     </a>
   </div>
@@ -66,7 +67,7 @@
       data-testid="gesuch-step-nav-dashboard"
     >
       <i class="material-symbols-rounded text-white me-2">dashboard</i>
-      <span translate>shared.menu.dashboard</span>
+      <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
 
     @let gesuchId = gesuchIdSig();
@@ -82,7 +83,7 @@
         [matMenuTriggerFor]="gesuchMenu"
       >
         <i class="material-symbols-rounded text-white me-2">checklist</i>
-        <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+        <span>{{ t('shared.header.tranchenAuswahl') }}</span>
         <i class="material-symbols-rounded ms-2">expand_more</i>
       </button>
       <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
@@ -96,10 +97,7 @@
               [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
             >
               <span>
-                {{
-                  'shared.header.tranche.item'
-                    | translate: { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }
-                }}
+                {{ t('shared.header.tranche.item', { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 }) }}
                 -
                 {{ tranche.gueltigBis | date: 'MM.yyyy' }}
               </span>
@@ -116,7 +114,7 @@
         [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
       >
         <i class="material-symbols-rounded text-white me-2">checklist</i>
-        <span>{{ 'shared.header.tranchenAuswahl' | translate }}</span>
+        <span>{{ t('shared.header.tranchenAuswahl') }}</span>
       </a>
     }
     @let fallId = fallIdSig();
@@ -127,7 +125,7 @@
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
-      <span translate>shared.menu.auszahlung</span>
+      <span>{{ t('shared.menu.auszahlung') }}</span>
     </a>
   </div>
 

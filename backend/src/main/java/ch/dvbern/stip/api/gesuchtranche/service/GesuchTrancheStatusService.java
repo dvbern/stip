@@ -56,7 +56,7 @@ public class GesuchTrancheStatusService {
         final GesuchTrancheStatusChangeEvent event
     ) {
         final var sm = createStateMachine(gesuchTranche);
-        sm.fire(GesuchTrancheStatusChangeEventTrigger.createTrigger(event), gesuchTranche);
+        sm.fire(GesuchTrancheStatusChangeEventTrigger.createTrigger(event), gesuchTranche, null);
     }
 
     @Transactional
@@ -68,7 +68,8 @@ public class GesuchTrancheStatusService {
         final var sm = createStateMachine(gesuchTranche);
         sm.fire(
             GesuchTrancheStatusChangeEventTrigger.createTrigger(event),
-            gesuchTranche
+            gesuchTranche,
+            kommentarDto.getText()
         );
 
         // TODO: KSTIP-XXXX - Save kommentarDto.getText() in Nachricht and Protokoll

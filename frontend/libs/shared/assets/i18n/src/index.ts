@@ -7,3 +7,7 @@ export type SharedTranslationKey = AssertMatchAndMergeTranslations<
   typeof de,
   typeof fr
 >;
+
+export const translatableShared = <const T extends SharedTranslationKey>(
+  value: T,
+) => value;

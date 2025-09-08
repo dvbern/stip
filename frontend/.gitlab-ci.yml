@@ -13,6 +13,8 @@ include:
       lint-on: '(branch|mr|default)'
       test-on: '(branch|mr|default)'
       build-additional-args: '--verbose'
+      node-image: '$DVB_DOCKER_REGISTRY/dockerhub/library/node'
+      node-version: ':22'
 
   # - component: 'gitlab.dvbern.ch/components/verify/sonarqube@1.2.0'
   #   inputs:

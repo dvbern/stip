@@ -8,8 +8,8 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { BuchhaltungSaldokorrektur } from '@dv/shared/model/gesuch';
 import {
@@ -26,7 +26,7 @@ import {
   selector: 'dv-sachbearbeitung-app-dialog-create-buchhaltungs-korrektur',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     MaskitoDirective,
     MatFormFieldModule,

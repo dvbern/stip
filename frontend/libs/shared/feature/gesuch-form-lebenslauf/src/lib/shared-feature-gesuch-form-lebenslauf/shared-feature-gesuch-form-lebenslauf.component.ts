@@ -7,8 +7,8 @@ import {
   computed,
   inject,
 } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { addYears, max, setMonth, startOfMonth, subMonths } from 'date-fns';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
@@ -39,7 +39,7 @@ const MIN_EDUCATION_AGE = 16;
   imports: [
     CommonModule,
     SharedFeatureGesuchFormLebenslaufEditorComponent,
-    TranslatePipe,
+    TranslocoPipe,
     TwoColumnTimelineComponent,
     SharedUiRdIsPendingPipe,
     SharedUiInfoContainerComponent,

@@ -30,7 +30,6 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -41,6 +40,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
@@ -67,6 +67,8 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -122,6 +124,7 @@ public class GesuchTrancheService {
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final BenutzerService benutzerService;
+    private final StatusprotokollService statusprotokollService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -363,6 +366,13 @@ public class GesuchTrancheService {
 
         // Manually persist so that when mapping happens the IDs on the new objects are set
         gesuchRepository.persistAndFlush(gesuch);
+        statusprotokollService.createStatusprotokoll(
+            GesuchTrancheStatus.IN_BEARBEITUNG_GS.toString(),
+            null,
+            StatusprotokollEntryTyp.AENDERUNG,
+            null,
+            gesuch
+        );
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
@@ -413,7 +423,7 @@ public class GesuchTrancheService {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
         notificationService.createAenderungEingereichtNotification(aenderung.getGesuch());
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
+        mailService.sendStandardNotificationEmailForGesuch(aenderung.getGesuch());
     }
 
     @Transactional
@@ -493,11 +503,18 @@ public class GesuchTrancheService {
         for (final var gesuchDokument : lastFreigegebenTranche.getGesuchDokuments()) {
             final var existingDokument = gesuchDokumentRepository.findById(gesuchDokument.getId());
             if (existingDokument == null) {
+                gesuchDokument.getDokumente().forEach(dokument -> dokument.setId(null));
                 gesuchDokumentRepository.persist((GesuchDokument) gesuchDokument.setId(null));
+            } else if (
+                gesuchDokument.getStatus() != existingDokument.getStatus() &&
+                gesuchDokument.getStatus() == GesuchDokumentStatus.AUSSTEHEND
+            ) {
+                existingDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
+                gesuchDokumentKommentarService.deleteForGesuchDokument(existingDokument.getId());
             }
         }
 
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, aenderung.getGesuch());
+        mailService.sendStandardNotificationEmailForGesuch(aenderung.getGesuch());
 
         notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
 
@@ -535,6 +552,22 @@ public class GesuchTrancheService {
         return gesuchTrancheMapper.toDto(aenderung);
     }
 
+    private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {
+        final var documents = gesuchTranche.getGesuchDokuments();
+        final var hasDocuments = documents != null && !documents.isEmpty();
+
+        try {
+            gesuchTrancheValidatorService.validateAenderungForAkzeptiert(gesuchTranche);
+
+        } catch (ValidationsException e) {
+            return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+        } catch (CustomValidationsException e) {
+            return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+        }
+
+        return new ValidationReportDto().hasDocuments(hasDocuments);
+    }
+
     private ValidationReportDto einreichenValidationReport(final GesuchTranche gesuchTranche) {
         final var documents = gesuchTranche.getGesuchDokuments();
         final var hasDocuments = documents != null && !documents.isEmpty();
@@ -566,7 +599,7 @@ public class GesuchTrancheService {
     @Transactional
     public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
-        return einreichenValidationReport(gesuchTranche);
+        return bearbeitungAbschliessenValidationReport(gesuchTranche);
     }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {

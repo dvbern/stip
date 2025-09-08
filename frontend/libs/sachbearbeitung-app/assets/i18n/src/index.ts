@@ -7,3 +7,9 @@ export type SachbearbeitungAppTranslationKey = AssertMatchAndMergeTranslations<
   typeof de,
   typeof fr
 >;
+
+export const translatableSb = <
+  const T extends SachbearbeitungAppTranslationKey,
+>(
+  value: T,
+) => value;

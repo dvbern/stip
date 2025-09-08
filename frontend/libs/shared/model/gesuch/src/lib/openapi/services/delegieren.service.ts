@@ -20,7 +20,8 @@ import { Observable }                                        from 'rxjs';
 
 import { DelegierterMitarbeiterAendern } from '../model/delegierterMitarbeiterAendern';
 import { DelegierungCreate } from '../model/delegierungCreate';
-import { GetDelegierungSozQueryType } from '../model/getDelegierungSozQueryType';
+import { GetDelegierungSozQueryTypeAdmin } from '../model/getDelegierungSozQueryTypeAdmin';
+import { GetDelegierungSozQueryTypeMitarbeiter } from '../model/getDelegierungSozQueryTypeMitarbeiter';
 import { PaginatedSozDashboard } from '../model/paginatedSozDashboard';
 import { SortOrder } from '../model/sortOrder';
 import { SozDashboardColumn } from '../model/sozDashboardColumn';
@@ -35,6 +36,11 @@ export interface DelegierenServiceDelegierterMitarbeiterAendernRequestParams {
     delegierterMitarbeiterAendern: DelegierterMitarbeiterAendern;
 }
 
+export interface DelegierenServiceDelegierungAblehnenRequestParams {
+    /** Die ID der Delegierung */
+    delegierungId: string;
+}
+
 export interface DelegierenServiceFallDelegierenRequestParams {
     /** Die ID vom Fall */
     fallId: string;
@@ -42,14 +48,27 @@ export interface DelegierenServiceFallDelegierenRequestParams {
     delegierungCreate: DelegierungCreate;
 }
 
-export interface DelegierenServiceGetDelegierungsOfSozialdienstRequestParams {
-    getDelegierungSozQueryType: GetDelegierungSozQueryType;
+export interface DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams {
+    getDelegierungSozQueryType: GetDelegierungSozQueryTypeAdmin;
     fallNummer?: string;
     nachname?: string;
     vorname?: string;
     geburtsdatum?: string;
     wohnort?: string;
     delegierungAngenommen?: boolean;
+    page: number;
+    pageSize: number;
+    sortColumn?: SozDashboardColumn;
+    sortOrder?: SortOrder;
+}
+
+export interface DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams {
+    getDelegierungSozQueryType: GetDelegierungSozQueryTypeMitarbeiter;
+    fallNummer?: string;
+    nachname?: string;
+    vorname?: string;
+    geburtsdatum?: string;
+    wohnort?: string;
     page: number;
     pageSize: number;
     sortColumn?: SozDashboardColumn;
@@ -210,6 +229,77 @@ export class DelegierenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+     public delegierungAblehnen$(requestParameters: DelegierenServiceDelegierungAblehnenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public delegierungAblehnen$(requestParameters: DelegierenServiceDelegierungAblehnenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public delegierungAblehnen$(requestParameters: DelegierenServiceDelegierungAblehnenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public delegierungAblehnen$(requestParameters: DelegierenServiceDelegierungAblehnenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const delegierungId = requestParameters.delegierungId;
+        if (delegierungId === null || delegierungId === undefined) {
+            throw new Error('Required parameter delegierungId was null or undefined when calling delegierungAblehnen$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "delegierungId", value: delegierungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/ablehnen`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
      public fallDelegieren$(requestParameters: DelegierenServiceFallDelegierenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
      public fallDelegieren$(requestParameters: DelegierenServiceFallDelegierenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
      public fallDelegieren$(requestParameters: DelegierenServiceFallDelegierenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
@@ -295,18 +385,18 @@ export class DelegierenService {
     }
 
     /**
-     * Returns a list of Faelle with Delegierung
+     * Returns a list of all Faelle with Delegierung
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
-     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
-     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
-     public getDelegierungsOfSozialdienst$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getDelegierungsOfSozialdienstAdmin$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
+     public getDelegierungsOfSozialdienstAdmin$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienstAdmin$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienstAdmin$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
         if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
-            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienst$.');
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
         }
         const fallNummer = requestParameters.fallNummer;
         const nachname = requestParameters.nachname;
@@ -316,11 +406,11 @@ export class DelegierenService {
         const delegierungAngenommen = requestParameters.delegierungAngenommen;
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienst$.');
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
         }
         const pageSize = requestParameters.pageSize;
         if (pageSize === null || pageSize === undefined) {
-            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienst$.');
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortOrder = requestParameters.sortOrder;
@@ -412,7 +502,134 @@ export class DelegierenService {
             }
         }
 
-        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryType", dataFormat: undefined})}`;
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryTypeAdmin", dataFormat: undefined})}/admin`;
+        return this.httpClient.request<PaginatedSozDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns a list of Faelle with Delegierung that are accepted
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSozDashboard>;
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSozDashboard>>;
+     public getDelegierungsOfSozialdienstMitarbeiter$(requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
+        if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
+        }
+        const fallNummer = requestParameters.fallNummer;
+        const nachname = requestParameters.nachname;
+        const vorname = requestParameters.vorname;
+        const geburtsdatum = requestParameters.geburtsdatum;
+        const wohnort = requestParameters.wohnort;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (fallNummer !== undefined && fallNummer !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>fallNummer, 'fallNummer');
+        }
+        if (nachname !== undefined && nachname !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>nachname, 'nachname');
+        }
+        if (vorname !== undefined && vorname !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>vorname, 'vorname');
+        }
+        if (geburtsdatum !== undefined && geburtsdatum !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>geburtsdatum, 'geburtsdatum');
+        }
+        if (wohnort !== undefined && wohnort !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>wohnort, 'wohnort');
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>pageSize, 'pageSize');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'sortColumn');
+        }
+        if (sortOrder !== undefined && sortOrder !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortOrder, 'sortOrder');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryTypeMitarbeiter", dataFormat: undefined})}/ma`;
         return this.httpClient.request<PaginatedSozDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

@@ -3,7 +3,7 @@
     <span class="p-1 me-2 text-info upload-icon material-symbols-rounded rounded-circle align-self-start mt-1"
       >mail</span
     >
-    {{ 'shared.nachricht.title' | translate }}
+    {{ 'shared.nachricht.title' | transloco }}
     <span class="flex-grow-1"></span>
     <button type="button" class="dv-icon-button ms-2 align-self-start close" (click)="close()">
       <span class="material-symbols-rounded align-middle">close</span>
@@ -14,28 +14,28 @@
   <dl class="d-flex flex-column mt-4 tw-mb-0">
     <div class="d-flex gap-4">
       <div class="d-flex flex-column">
-        <dt>{{ 'shared.nachrichten.sender' | translate }}:</dt>
+        <dt>{{ 'shared.nachrichten.sender' | transloco }}:</dt>
         <dd>{{ notification.absender }}</dd>
       </div>
 
       <div class="d-flex flex-column">
-        <dt>{{ 'shared.nachrichten.date' | translate }}:</dt>
+        <dt>{{ 'shared.nachrichten.date' | transloco }}:</dt>
         <dd>
           <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
         </dd>
       </div>
     </div>
-    <dt>{{ 'shared.nachrichten.subject' | translate }}:</dt>
-    <dd>{{ 'shared.nachrichten.type.' + notification.notificationType | translate }}</dd>
+    <dt>{{ 'shared.nachrichten.subject' | transloco }}:</dt>
+    <dd>{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</dd>
     @if (notification.notificationText) {
-      <dt>{{ 'shared.nachrichten.text' | translate }}:</dt>
+      <dt>{{ 'shared.nachrichten.text' | transloco }}:</dt>
       <dd class="text-pre-wrap">
         {{ notification.notificationText }}
         @if (notification.notificationType === 'NEUE_VERFUEGUNG' && notification.contextId) {
           <button
             type="button"
             class="btn btn-outline-primary tw-mt-11"
-            [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | translate"
+            [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | transloco"
             [dvDownloadButton]="{
               type: 'verfuegung',
               id: notification.contextId,

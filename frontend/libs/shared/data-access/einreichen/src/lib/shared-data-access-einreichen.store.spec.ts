@@ -7,8 +7,8 @@ import { State as GesuchState } from '@dv/shared/data-access/gesuch';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   DeepPartial,
-  provideSharedPatternJestTestSetup,
-} from '@dv/shared/pattern/jest-test-setup';
+  provideSharedPatternVitestTestSetup,
+} from '@dv/shared/pattern/vitest-test-setup';
 import { success } from '@dv/shared/util/remote-data';
 
 import { EinreichenStore } from './shared-data-access-einreichen.store';
@@ -18,7 +18,7 @@ describe('EinreichenStore', () => {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
-        provideSharedPatternJestTestSetup(),
+        provideSharedPatternVitestTestSetup(),
         provideMockStore({
           initialState: {
             gesuchs: {

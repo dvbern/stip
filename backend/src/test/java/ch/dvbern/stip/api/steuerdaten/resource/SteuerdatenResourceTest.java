@@ -22,6 +22,7 @@ import java.util.List;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -160,6 +161,21 @@ class SteuerdatenResourceTest {
     @Test
     @TestAsSachbearbeiter
     @Order(6)
+    void fillRequiredVeranlagungStatus() {
+        var gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(gesuchUpdateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(7)
     void gesuchAddSteuerdaten() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
@@ -174,7 +190,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void gesuchAddSteuerdatenBadType() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.MUTTER);
@@ -196,7 +212,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void gesuchAddSteuerdatenBadYear() {
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
@@ -219,7 +235,7 @@ class SteuerdatenResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(9)
+    @Order(10)
     void getAndSetAsGSShouldFail() {
         steuerdatenApiSpec.getSteuerdaten()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())

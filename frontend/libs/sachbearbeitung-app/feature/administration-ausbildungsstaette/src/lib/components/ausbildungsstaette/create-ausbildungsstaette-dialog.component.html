@@ -3,13 +3,13 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw-mb-8 tw-text-xl">
     {{
-      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.createDialog.title' | translate
+      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.createDialog.title' | transloco
     }}
   </h1>
 
@@ -17,53 +17,53 @@
     <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco }}
         </mat-label>
         <mat-select
           [formControl]="form.controls.schule"
-          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | translate"
+          [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco"
         >
           @for (schule of schulen; track schule) {
-            <mat-option [value]="schule.value">{{ schule.label | translate }}</mat-option>
+            <mat-option [value]="schule.value">{{ schule.label | transloco }}</mat-option>
           }
         </mat-select>
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameDe' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameDe' | transloco }}
         </mat-label>
         <input matInput [formControl]="form.controls.nameDe" />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'notUniqueAusbildungsstaette'">
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | transloco }}
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw-w-full">
         <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameFr' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameFr' | transloco }}
         </mat-label>
         <input matInput [formControl]="form.controls.nameFr" />
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'notUniqueAusbildungsstaette'">
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | transloco }}
         </mat-error>
       </mat-form-field>
       @if (schuleChangedSig(); as schulType) {
         @let schule = numberFields[schulType];
         <mat-form-field dvSharedUiFormField class="tw-w-full">
           <mat-label>
-            {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.' + schule.labelSubKey | translate }}
+            {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.' + schule.labelSubKey | transloco }}
           </mat-label>
           <input matInput [maskito]="alphanumericMask" [formControl]="schule.control" />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
       }
@@ -71,10 +71,10 @@
 
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
-        {{ 'shared.form.save' | translate }}
+        {{ 'shared.form.save' | transloco }}
       </button>
     </div>
   </form>

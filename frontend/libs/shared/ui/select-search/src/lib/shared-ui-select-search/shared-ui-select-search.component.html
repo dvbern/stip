@@ -1,12 +1,12 @@
 <mat-form-field dvSharedUiFormField class="clearable-select tw-w-full">
-  <mat-label>{{ labelKeySig() | translate }}</mat-label>
+  <mat-label>{{ labelKeySig() | transloco }}</mat-label>
 
   @if (form.controls.select.value && form.controls.select.enabled) {
     <button
       type="button"
       matSuffix
       mat-icon-button
-      [attr.aria-label]="'shared.ui.clear' | translate"
+      [attr.aria-label]="'shared.ui.clear' | transloco"
       (click)="resetControl()"
       [attr.data-testid]="clearTestIdSig()"
     >
@@ -17,13 +17,13 @@
     [panelWidth]="panelWidthSig()"
     [formControl]="form.controls.select"
     [attr.data-testid]="testIdSig()"
-    [placeholder]="'shared.form.select.empty' | translate"
+    [placeholder]="'shared.form.select.empty' | transloco"
   >
     <mat-option>
       <ngx-mat-select-search
         [formControl]="form.controls.search"
-        [placeholderLabel]="'shared.form.select.search' | translate"
-        [noEntriesFoundLabel]="'shared.form.select.nothingFound' | translate"
+        [placeholderLabel]="'shared.form.select.search' | transloco"
+        [noEntriesFoundLabel]="'shared.form.select.nothingFound' | transloco"
       >
         <span ngxMatSelectSearchClear class="material-symbols-rounded tw-flex">clear</span>
       </ngx-mat-select-search>
@@ -33,7 +33,7 @@
         @if (optionTemplateSig(); as optionTemplate) {
           <ng-container *ngTemplateOutlet="optionTemplate.templateRef; context: { $implicit: value }"></ng-container>
         } @else {
-          {{ value | translatedProp: 'displayValue' : translate.currentLang }}
+          {{ value | translatedProp: 'displayValue' : translate.getActiveLang() }}
         }
       </mat-option>
     }
@@ -43,11 +43,11 @@
     <mat-hint *dvZuvorHint="zuvorValue; testId: zuvorHintTestIdSig()"></mat-hint>
   }
   <mat-error *dvSharedUiFormMessageError="'required'">
-    {{ 'shared.form.error.required' | translate }}
+    {{ 'shared.form.error.required' | transloco }}
   </mat-error>
   @if (invalidValueLabelKeySig(); as invalidValueLabelKey) {
     <mat-error *dvSharedUiFormMessageError="'invalidValue'">
-      {{ invalidValueLabelKey | translate }}
+      {{ invalidValueLabelKey | transloco }}
     </mat-error>
   }
 </mat-form-field>

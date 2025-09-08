@@ -4,8 +4,8 @@ import {
   effect,
   inject,
 } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -31,7 +31,7 @@ import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern',
   imports: [
-    TranslatePipe,
+    TranslocoPipe,
     SharedFeatureGesuchFormElternEditorComponent,
     ElternteilCardComponent,
     SharedUiStepFormButtonsComponent,

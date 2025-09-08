@@ -12,13 +12,9 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  TranslateDirective,
-  TranslatePipe,
-  isDefined,
-} from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 
+import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
@@ -36,6 +32,7 @@ import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
@@ -51,12 +48,11 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     CommonModule,
     SharedPatternGesuchStepNavComponent,
     SharedUiProgressBarComponent,
-    TranslateDirective,
-    TranslatePipe,
     MatMenuModule,
     SharedUiIconChipComponent,
     SharedPatternMainLayoutComponent,
     SharedPatternAppHeaderPartsDirective,
+    GesuchAppUiAdvTranslocoDirective,
     RouterLink,
   ],
   templateUrl: './gesuch-app-pattern-gesuch-step-layout.component.html',

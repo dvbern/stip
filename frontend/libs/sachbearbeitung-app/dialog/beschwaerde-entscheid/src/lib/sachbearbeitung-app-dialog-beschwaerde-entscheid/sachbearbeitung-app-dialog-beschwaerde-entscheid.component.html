@@ -1,6 +1,6 @@
 <section class="tw-relative tw-flex tw-shrink tw-flex-col tw-p-12" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   <h1 class="tw-mb-8 tw-text-xl">
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | translate }}
+    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | transloco }}
   </h1>
 
   <form [formGroup]="form" (ngSubmit)="confirm()" class="tw-flex tw-flex-col tw-gap-3">
@@ -10,10 +10,10 @@
       <label class="tw-flex tw-flex-col tw-items-center">
         <div
           class="text-center text-muted text-italic my-4 d-md-block d-none"
-          [innerHTML]="'shared.file.dropZone' | translate"
+          [innerHTML]="'shared.file.dropZone' | transloco"
         ></div>
         <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
-          {{ 'shared.file.upload' | translate }}
+          {{ 'shared.file.upload' | transloco }}
         </button>
         <input
           #fileInput
@@ -36,7 +36,7 @@
         <button
           type="button"
           class="dv-icon-button flex-shrink-0 tw-ml-2 tw-h-auto tw-w-auto tw-self-end"
-          [attr.aria-label]="'shared.form.delete' | translate"
+          [attr.aria-label]="'shared.form.delete' | transloco"
           (click)="resetSelectedFile()"
         >
           <span class="material-symbols-rounded align-middle text-muted !tw-text-xl/none">delete</span>
@@ -46,14 +46,14 @@
       <div class="group-errors tw-mb-[3px] tw-text-sm">
         <mat-error>
           @if (form.touched && form.controls.fileUpload.touched && fileInput.files?.length === 0) {
-            {{ 'shared.form.error.required' | translate }}
+            {{ 'shared.form.error.required' | transloco }}
           }
         </mat-error>
       </div>
     }
 
     <mat-form-field class="tw-mt-3 tw-w-full" dvSharedUiFormField>
-      <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.kommentar.label' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.kommentar.label' | transloco }}</mat-label>
       <textarea
         formControlName="kommentar"
         maxlength="2000"
@@ -64,7 +64,7 @@
         rows="4"
       ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
 
@@ -74,30 +74,30 @@
       dvSharedUiFormField
       class="tw-w-full"
     >
-      <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.erfolgreich' | translate }}</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.erfolgreich' | transloco }}</mat-label>
       <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
         <div class="d-flex flex-column">
           <mat-radio-button data-testid="yes" [value]="true">{{
-            'sachbearbeitung-app.infos.beschwerde.infoDialog.true' | translate
+            'sachbearbeitung-app.infos.beschwerde.infoDialog.true' | transloco
           }}</mat-radio-button>
           <mat-radio-button data-testid="no" [value]="false">{{
-            'sachbearbeitung-app.infos.beschwerde.infoDialog.false' | translate
+            'sachbearbeitung-app.infos.beschwerde.infoDialog.false' | transloco
           }}</mat-radio-button>
         </div>
       </div>
       <div class="group-errors">
         <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | translate }}
+          {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </div>
     </mat-radio-group>
 
     <div class="d-flex mt-4 justify-content-between">
       <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
-        {{ 'shared.close' | translate }}
+        {{ 'shared.close' | transloco }}
       </button>
       <button type="submit" class="btn btn-primary ms-2" data-testid="dialog-confirm">
-        {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.confirm' | translate }}
+        {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.confirm' | transloco }}
       </button>
     </div>
   </form>
@@ -106,7 +106,7 @@
     type="button"
     (click)="close()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>

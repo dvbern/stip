@@ -19,9 +19,8 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-// eslint-disable-next-line @nx/enforce-module-boundaries
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 import { addDays } from 'date-fns';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
@@ -72,7 +71,7 @@ const titleKeysByTypeMap = {
   selector: 'dv-shared-dialog-tranche-erstellen',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,

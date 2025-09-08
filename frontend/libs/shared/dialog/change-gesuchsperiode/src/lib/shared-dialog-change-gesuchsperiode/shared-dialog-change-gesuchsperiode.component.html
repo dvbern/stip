@@ -1,7 +1,7 @@
 <button
   type="button"
   class="dv-icon-button dv-icon-button-lg !tw-absolute tw-end-0 tw-top-0 tw-m-1"
-  [attr.aria-label]="'shared.cancel' | translate"
+  [attr.aria-label]="'shared.cancel' | transloco"
   (click)="cancel()"
 >
   <span class="material-symbols-rounded">close</span>
@@ -13,21 +13,21 @@
   (ngSubmit)="confirm()"
 >
   <h3 class="tw-mb-6">
-    {{ 'shared.dialog.change-gesuchsperiode.title' | translate }}
+    {{ 'shared.dialog.change-gesuchsperiode.title' | transloco }}
   </h3>
-  <div class="tw-mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | translate"></div>
+  <div class="tw-mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | transloco"></div>
 
   <div class="tw-w-full">
     <!-- gesuchsperiode select -->
     <mat-form-field dvSharedUiFormField class="tw-w-full">
-      <mat-label>{{ 'shared.dialog.change-gesuchsperiode.gesuchsperiode.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.dialog.change-gesuchsperiode.gesuchsperiode.label' | transloco }}</mat-label>
       <mat-select formControlName="gesuchsperiodeId" data-testid="form-change-gesuchsperiode-dialog-gesuchsperiode">
         @for (gesuchsperiode of gesuchsperiodenViewSig(); track gesuchsperiode.id) {
           <mat-option [value]="gesuchsperiode.id">{{ gesuchsperiode.displayName }}</mat-option>
         }
       </mat-select>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
   </div>
@@ -36,14 +36,14 @@
     <dv-shared-ui-info-container class="d-block" [type]="'warning'" data-testid="alert-warning">
       <div class="d-flex gap-2">
         <span class="text-warning material-symbols-rounded me-3">warning</span>
-        <span [innerHTML]="'shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error' | translate"></span>
+        <span [innerHTML]="'shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error' | transloco"></span>
       </div>
 
       <ul class="mt-4">
         @for (step of changeGesuchsperiodeErrorSig(); track step) {
           @if (step.routeParts; as link) {
             <li>
-              <a (click)="cancel()" [routerLink]="link">{{ step.translationKey | translate }}</a>
+              <a (click)="cancel()" [routerLink]="link">{{ step.translationKey | transloco }}</a>
             </li>
           }
         }
@@ -53,7 +53,7 @@
 
   <div class="tw-mt-10 tw-flex tw-justify-between">
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
-      {{ 'shared.cancel' | translate }}
+      {{ 'shared.cancel' | transloco }}
     </button>
     <dv-shared-ui-form-save
       data-testid="dialog-confirm"

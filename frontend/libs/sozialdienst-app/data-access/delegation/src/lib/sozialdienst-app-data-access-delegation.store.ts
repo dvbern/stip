@@ -3,10 +3,12 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { PermissionStore } from '@dv/shared/global/permission';
 import {
   DelegierenService,
   DelegierenServiceDelegierterMitarbeiterAendernRequestParams,
-  DelegierenServiceGetDelegierungsOfSozialdienstRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
+  DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams,
   PaginatedSozDashboard,
   SozialdienstBenutzer,
   SozialdienstService,
@@ -19,6 +21,7 @@ import {
   initial,
   isPending,
 } from '@dv/shared/util/remote-data';
+import { LoadPaginatedDashboardByRoles } from '@dv/sozialdienst-app/model/delegation';
 
 type DelegationState = {
   paginatedSozDashboard: CachedRemoteData<PaginatedSozDashboard>;
@@ -41,6 +44,7 @@ export class DelegationStore extends signalStore(
 ) {
   private delegierenService = inject(DelegierenService);
   private sozialdienstService = inject(SozialdienstService);
+  private permissionStore = inject(PermissionStore);
 
   cockpitViewSig = computed(() => {
     return {
@@ -75,45 +79,86 @@ export class DelegationStore extends signalStore(
     ),
   );
 
-  delegierterMitarbeiterAendern$ =
-    rxMethod<DelegierenServiceDelegierterMitarbeiterAendernRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, (state) => ({
-            delegierenState: cachedPending(state.delegierenState),
-          }));
-        }),
-        switchMap((params) =>
-          this.delegierenService.delegierterMitarbeiterAendern$(params).pipe(
-            handleApiResponse((response) =>
+  delegierterMitarbeiterAendern$ = rxMethod<{
+    req: DelegierenServiceDelegierterMitarbeiterAendernRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          delegierenState: cachedPending(state.delegierenState),
+        }));
+      }),
+      switchMap(({ req, onSuccess }) =>
+        this.delegierenService.delegierterMitarbeiterAendern$(req).pipe(
+          handleApiResponse(
+            (response) =>
               patchState(this, {
                 delegierenState: response,
               }),
-            ),
+            { onSuccess },
           ),
         ),
       ),
-    );
+    ),
+  );
 
-  loadPaginatedSozDashboard$ =
-    rxMethod<DelegierenServiceGetDelegierungsOfSozialdienstRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, (state) => ({
-            paginatedSozDashboard: cachedPending(state.paginatedSozDashboard),
-          }));
-        }),
-        switchMap((params) =>
-          this.delegierenService.getDelegierungsOfSozialdienst$(params).pipe(
-            handleApiResponse((paginatedSozDashboard) =>
+  delegierungAblehnen$ = rxMethod<{
+    delegierungId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          delegierenState: cachedPending(state.delegierenState),
+        }));
+      }),
+      switchMap(({ delegierungId, onSuccess }) =>
+        this.delegierenService.delegierungAblehnen$({ delegierungId }).pipe(
+          handleApiResponse(
+            (response) =>
               patchState(this, {
-                paginatedSozDashboard: paginatedSozDashboard,
+                delegierenState: response,
               }),
-            ),
+            { onSuccess },
           ),
         ),
       ),
-    );
+    ),
+  );
+
+  loadPaginatedSozDashboard$ = rxMethod<LoadPaginatedDashboardByRoles>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          paginatedSozDashboard: cachedPending(state.paginatedSozDashboard),
+        }));
+      }),
+      switchMap((params) => {
+        return this.loadPaginatedDashboardByRoles$(params).pipe(
+          handleApiResponse((paginatedSozDashboard) =>
+            patchState(this, {
+              paginatedSozDashboard: paginatedSozDashboard,
+            }),
+          ),
+        );
+      }),
+    ),
+  );
+
+  private loadPaginatedDashboardByRoles$(req: LoadPaginatedDashboardByRoles) {
+    const roles = this.permissionStore.rolesMapSig();
+
+    if (roles['V0_Sozialdienst-Admin']) {
+      return this.delegierenService.getDelegierungsOfSozialdienstAdmin$(
+        req as DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
+      );
+    } else {
+      return this.delegierenService.getDelegierungsOfSozialdienstMitarbeiter$(
+        req as DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams,
+      );
+    }
+  }
 
   resetDelegierenState() {
     patchState(this, {

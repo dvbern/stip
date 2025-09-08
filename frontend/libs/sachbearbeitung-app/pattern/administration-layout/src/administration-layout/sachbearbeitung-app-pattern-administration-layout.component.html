@@ -11,7 +11,7 @@
           data-testid="gesuch-step-nav-overview"
         >
           <i class="material-symbols-rounded text-white me-2">list</i>
-          <span>{{ 'sachbearbeitung-app.header.antraege' | translate }}</span>
+          <span>{{ 'sachbearbeitung-app.header.antraege' | transloco }}</span>
         </a>
         <!-- Fehlgeschlagene Zahlungen -->
         <a
@@ -21,12 +21,12 @@
         >
           <i class="material-symbols-rounded text-white me-2">error_outline</i>
           <span>
-            {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | translate }}
+            {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | transloco }}
           </span>
         </a>
         <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
           <i class="material-symbols-rounded text-white me-2">settings</i>
-          <span>{{ 'sachbearbeitung-app.header.administration' | translate }}</span>
+          <span>{{ 'sachbearbeitung-app.header.administration' | transloco }}</span>
         </div>
       </div>
     </dv-shared-pattern-app-header>
@@ -48,7 +48,7 @@
           >
             <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
             <span class="text-start">
-              {{ option.translationKey | translate }}
+              {{ option.translationKey | transloco }}
             </span>
           </a>
         }
@@ -88,7 +88,7 @@
               }
 
               <h2 class="fw-bold m-0 d-flex" data-testid="step-title">
-                {{ option.titleTranslationKey | translate }}
+                {{ option.titleTranslationKey | transloco }}
                 <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
               </h2>
             </div>

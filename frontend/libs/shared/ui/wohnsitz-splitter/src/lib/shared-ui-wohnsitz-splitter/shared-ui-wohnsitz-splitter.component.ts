@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedUiZuvorHintDirective } from '@dv/shared/ui/form';
 import {
@@ -14,7 +14,7 @@ import {
     SharedUiPercentageSplitterComponent,
     SharedUiPercentageSplitterDirective,
     SharedUiZuvorHintDirective,
-    TranslatePipe,
+    TranslocoPipe,
   ],
   templateUrl: './shared-ui-wohnsitz-splitter.component.html',
   styleUrls: ['./shared-ui-wohnsitz-splitter.component.scss'],

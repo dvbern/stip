@@ -12,26 +12,26 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'sachbearbeitung-app.infos.notizen.description' | translate
+          'sachbearbeitung-app.infos.notizen.description' | transloco
         }}
       </caption>
 
       <!-- notizTyp  -->
       <ng-container matColumnDef="notizTyp">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-14">
-          {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | translate }}
+          {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center">
             @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
               <i
-                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | transloco"
                 class="material-symbols-rounded fs-4"
                 >notes</i
               >
             } @else {
               <i
-                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | transloco"
                 class="material-symbols-rounded fs-4"
                 >gavel</i
               >
@@ -43,7 +43,7 @@
       <!-- Datum -->
       <ng-container matColumnDef="datum">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
-          {{ 'sachbearbeitung-app.infos.notizen.table.datum' | translate }}
+          {{ 'sachbearbeitung-app.infos.notizen.table.datum' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center tw-truncate">
@@ -55,7 +55,7 @@
       <!-- User -->
       <ng-container matColumnDef="user">
         <th mat-header-cell *matHeaderCellDef class="tw-w-36">
-          {{ 'sachbearbeitung-app.infos.notizen.table.user' | translate }}
+          {{ 'sachbearbeitung-app.infos.notizen.table.user' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-whitespace-nowrap tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center">
@@ -69,12 +69,12 @@
       <!-- Betreff -->
       <ng-container matColumnDef="betreff">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-auto">
-          {{ 'sachbearbeitung-app.infos.notizen.table.betreff' | translate }}
+          {{ 'sachbearbeitung-app.infos.notizen.table.betreff' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-whitespace-nowrap tw-align-top">
           <div class="tw-flex tw-h-[53px] tw-items-center">
             <span class="tw-truncate" [dvTruncateTooltip]="notiz.betreff">
-              {{ notiz.betreff | translate }}
+              {{ notiz.betreff | transloco }}
             </span>
           </div>
         </td>
@@ -87,7 +87,7 @@
             <button
               type="button"
               class="btn btn-outline-dark btn-sm p-2 d-inline-flex lh-1 align-items-center"
-              [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | translate"
+              [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | transloco"
               [class.active]="aktionTrigger.menuOpen"
               #aktionTrigger="matMenuTrigger"
               [matMenuTriggerFor]="notizMenu"
@@ -109,7 +109,7 @@
               >
                 <div class="d-flex gap-2 align-items-center">
                   <i class="material-symbols-rounded fs-4">notes</i>
-                  <span>{{ 'sachbearbeitung-app.infos.notiz.erstellen' | translate }}</span>
+                  <span>{{ 'sachbearbeitung-app.infos.notiz.erstellen' | transloco }}</span>
                 </div>
               </button>
 
@@ -122,7 +122,7 @@
               >
                 <div class="d-flex gap-2 align-items-center">
                   <i class="material-symbols-rounded fs-4">gavel</i>
-                  <span>{{ 'sachbearbeitung-app.infos.juristischeNotiz.erstellen' | translate }}</span>
+                  <span>{{ 'sachbearbeitung-app.infos.juristischeNotiz.erstellen' | transloco }}</span>
                 </div>
               </button>
             </div>
@@ -135,7 +135,7 @@
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
-                [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | transloco"
               >
                 <i class="material-symbols-rounded fs-4">edit</i>
               </button>
@@ -144,7 +144,7 @@
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
-                [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | transloco"
               >
                 <i class="material-symbols-rounded fs-4">visibility</i>
               </button>
@@ -155,7 +155,7 @@
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
-                [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | transloco"
               >
                 <i class="material-symbols-rounded fs-4">edit</i>
               </button>
@@ -163,7 +163,7 @@
                 type="button"
                 (click)="deleteNotiz(notiz.id); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
-                [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | transloco"
               >
                 <i class="material-symbols-rounded fs-4">delete</i>
               </button>
@@ -172,7 +172,7 @@
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
                 class="btn btn-link btn-sm"
-                [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | translate"
+                [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | transloco"
               >
                 <i class="material-symbols-rounded fs-4">visibility</i>
               </button>
@@ -192,11 +192,11 @@
       ></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
-          {{ 'sachbearbeitung-app.infos.notizen.noData' | translate }}
+          {{ 'sachbearbeitung-app.infos.notizen.noData' | transloco }}
         </td>
       </tr>
     </table>
 
-    <mat-paginator showFirstLastButtons [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+    <mat-paginator showFirstLastButtons [pageSizeOptions]="pageSizes" [pageSize]="defaultPageSize"></mat-paginator>
   </div>
 }

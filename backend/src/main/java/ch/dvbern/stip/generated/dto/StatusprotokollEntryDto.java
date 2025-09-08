@@ -22,9 +22,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class StatusprotokollEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestamp;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status;
+  private @Valid String statusTo;
+  private @Valid ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ;
   private @Valid String benutzer;
   private @Valid String kommentar;
+  private @Valid String statusFrom;
 
   /**
    * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
@@ -36,6 +38,7 @@ public class StatusprotokollEntryDto  implements Serializable {
 
   
   @JsonProperty("timestamp")
+  @NotNull
   public java.time.LocalDateTime getTimestamp() {
     return timestamp;
   }
@@ -47,20 +50,40 @@ public class StatusprotokollEntryDto  implements Serializable {
 
   /**
    **/
-  public StatusprotokollEntryDto status(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status) {
-    this.status = status;
+  public StatusprotokollEntryDto statusTo(String statusTo) {
+    this.statusTo = statusTo;
     return this;
   }
 
   
-  @JsonProperty("status")
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getStatus() {
-    return status;
+  @JsonProperty("statusTo")
+  @NotNull
+  public String getStatusTo() {
+    return statusTo;
   }
 
-  @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus status) {
-    this.status = status;
+  @JsonProperty("statusTo")
+  public void setStatusTo(String statusTo) {
+    this.statusTo = statusTo;
+  }
+
+  /**
+   **/
+  public StatusprotokollEntryDto typ(ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ) {
+    this.typ = typ;
+    return this;
+  }
+
+  
+  @JsonProperty("typ")
+  @NotNull
+  public ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp getTyp() {
+    return typ;
+  }
+
+  @JsonProperty("typ")
+  public void setTyp(ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ) {
+    this.typ = typ;
   }
 
   /**
@@ -73,6 +96,7 @@ public class StatusprotokollEntryDto  implements Serializable {
 
   
   @JsonProperty("benutzer")
+  @NotNull
   public String getBenutzer() {
     return benutzer;
   }
@@ -92,6 +116,7 @@ public class StatusprotokollEntryDto  implements Serializable {
 
   
   @JsonProperty("kommentar")
+  @NotNull
   public String getKommentar() {
     return kommentar;
   }
@@ -99,6 +124,24 @@ public class StatusprotokollEntryDto  implements Serializable {
   @JsonProperty("kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
+  }
+
+  /**
+   **/
+  public StatusprotokollEntryDto statusFrom(String statusFrom) {
+    this.statusFrom = statusFrom;
+    return this;
+  }
+
+  
+  @JsonProperty("statusFrom")
+  public String getStatusFrom() {
+    return statusFrom;
+  }
+
+  @JsonProperty("statusFrom")
+  public void setStatusFrom(String statusFrom) {
+    this.statusFrom = statusFrom;
   }
 
 
@@ -112,14 +155,16 @@ public class StatusprotokollEntryDto  implements Serializable {
     }
     StatusprotokollEntryDto statusprotokollEntry = (StatusprotokollEntryDto) o;
     return Objects.equals(this.timestamp, statusprotokollEntry.timestamp) &&
-        Objects.equals(this.status, statusprotokollEntry.status) &&
+        Objects.equals(this.statusTo, statusprotokollEntry.statusTo) &&
+        Objects.equals(this.typ, statusprotokollEntry.typ) &&
         Objects.equals(this.benutzer, statusprotokollEntry.benutzer) &&
-        Objects.equals(this.kommentar, statusprotokollEntry.kommentar);
+        Objects.equals(this.kommentar, statusprotokollEntry.kommentar) &&
+        Objects.equals(this.statusFrom, statusprotokollEntry.statusFrom);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, status, benutzer, kommentar);
+    return Objects.hash(timestamp, statusTo, typ, benutzer, kommentar, statusFrom);
   }
 
   @Override
@@ -128,9 +173,11 @@ public class StatusprotokollEntryDto  implements Serializable {
     sb.append("class StatusprotokollEntryDto {\n");
     
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    statusTo: ").append(toIndentedString(statusTo)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    benutzer: ").append(toIndentedString(benutzer)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    statusFrom: ").append(toIndentedString(statusFrom)).append("\n");
     sb.append("}");
     return sb.toString();
   }

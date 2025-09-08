@@ -8,8 +8,8 @@ import {
   inject,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuszahlungStore } from '@dv/shared/data-access/auszahlung';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -29,7 +29,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   selector: 'dv-shared-feature-gesuch-form-auszahlung',
   imports: [
     RouterLink,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiAuszahlungComponent,
     SharedUiIfGesuchstellerDirective,
   ],

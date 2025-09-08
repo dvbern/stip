@@ -8,7 +8,6 @@
     "recommendations": [
       "nrwl.angular-console",
       "esbenp.prettier-vscode",
-      "Orta.vscode-jest",
       "dbaeumer.vscode-eslint",
       "SonarSource.sonarlint-vscode",
       "bradlc.vscode-tailwindcss",
@@ -52,9 +51,7 @@
     "files.exclude": {
       "backend/**": true
     },
-    "eslint.validate": ["json"],
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
-    "jest.rootPath": "frontend",
     "tailwindCSS.experimental.classRegex": [
       "HostBinding.*class[\\s\\S*]*['\"`](.+?)['\"`]",
       "tw([\\s\\S*]*['\"`](.+?)['\"`],?[\\s\\S*]*)"
@@ -139,13 +136,6 @@
     "files.eol": "\n",
     "exportall.config.relExclusion": [],
     "testing.openTesting": "neverOpen",
-    "jest.outputConfig": "neutral",
-    "jest.runMode": {
-      "type": "on-save",
-      "runAllTestsOnStartup": false,
-      "showInlineError": true,
-      "testFileOnly": true
-    },
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     },
@@ -157,6 +147,13 @@
     "testing.automaticallyOpenTestResults": "neverOpen",
     "angular.forceStrictTemplates": true,
     "git.blame.statusBarItem.enabled": false,
-    "editor.suggest.preview": true
+    "editor.suggest.preview": true,
+    "eslint.useFlatConfig": true,
+    "eslint.workingDirectories": ["frontend/"],
+    "eslint.validate": [
+      "typescript",
+      "json",
+      "javascript"
+    ]
   }
 }

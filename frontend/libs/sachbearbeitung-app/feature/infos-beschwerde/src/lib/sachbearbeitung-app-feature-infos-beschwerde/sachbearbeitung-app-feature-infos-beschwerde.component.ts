@@ -10,7 +10,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { map, startWith } from 'rxjs';
 
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
@@ -26,7 +26,7 @@ const ALL_TABS = ['verlauf', 'verwaltung'] as const;
     RouterLink,
     RouterOutlet,
     MatTabsModule,
-    TranslatePipe,
+    TranslocoPipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',

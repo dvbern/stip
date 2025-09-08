@@ -4,7 +4,7 @@ import {
   GesuchFormularUpdate,
 } from '@dv/shared/model/gesuch';
 import {
-  DeepNullable,
+  ExplicitNull,
   fruehlingOrHerbst,
   generateSVN,
   specificMonthPlusYears,
@@ -49,13 +49,14 @@ export const gesuchFormularUpdateFn = (
   seed: string,
   abschluesse: AbschlussSlim[],
   landId: string,
-): DeepNullable<GesuchFormularUpdate> => ({
+): ExplicitNull<GesuchFormularUpdate> => ({
   personInAusbildung: {
     sozialversicherungsnummer: generateSVN(seed + '_person'),
     anrede: 'FRAU',
     nachname: 'Sanchez',
     vorname: 'E2E',
     adresse: {
+      id: null,
       coAdresse: null,
       strasse: 'Hausmatte',
       hausnummer: '42B',
@@ -70,6 +71,7 @@ export const gesuchFormularUpdateFn = (
     telefonnummer: '0791231212',
     geburtsdatum: `${specificYearsAgo(20)}-01-01`,
     nationalitaetId: landId,
+    heimatortPLZ: '3011',
     heimatort: 'Bern',
     niederlassungsstatus: null,
     vormundschaft: false,
@@ -77,6 +79,10 @@ export const gesuchFormularUpdateFn = (
     wohnsitz: 'EIGENER_HAUSHALT',
     sozialhilfebeitraege: false,
     korrespondenzSprache: 'DEUTSCH',
+    einreisedatum: null,
+    wohnsitzAnteilMutter: null,
+    wohnsitzAnteilVater: null,
+    zustaendigeKESB: null,
   },
   familiensituation: {
     elternVerheiratetZusammen: false,
@@ -96,15 +102,17 @@ export const gesuchFormularUpdateFn = (
   geschwisters: null,
   lebenslaufItems: [
     {
+      id: null,
       von: `01.${specificYearsAgo(4)}`,
       bis: `08.${specificYearsAgo(1)}`,
       wohnsitz: 'AG',
-      abschlussId: abschluesse.find(
-        (abschluss) =>
-          abschluss.bezeichnungDe.includes('Eidg. Berufsattest') &&
-          abschluss.ausbildungskategorie ===
-            'BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE',
-      )?.id,
+      abschlussId:
+        abschluesse.find(
+          (abschluss) =>
+            abschluss.bezeichnungDe.includes('Eidg. Berufsattest') &&
+            abschluss.ausbildungskategorie ===
+              'BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE',
+        )?.id ?? null,
       ausbildungAbgeschlossen: false,
       fachrichtungBerufsbezeichnung: 'Informatik',
       taetigkeitsart: null,
@@ -127,7 +135,7 @@ export const gesuchFormularUpdateFn = (
     wgWohnend: false,
     auswaertigeMittagessenProWoche: null,
     betreuungskostenKinder: null,
-    veranlagungsCode: 0,
+    veranlagungsStatus: 'Provisorisch Veranlagt',
     steuerjahr: 2023,
     vermoegen: 20900,
     steuernKantonGemeinde: 0,

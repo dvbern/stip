@@ -4,10 +4,5 @@
   "sourceRoot": "libs/shared/event/gesuch-form-person/src",
   "projectType": "library",
   "tags": ["scope:shared", "type:event"],
-  "targets": {
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
-    }
-  }
+  "targets": {}
 }

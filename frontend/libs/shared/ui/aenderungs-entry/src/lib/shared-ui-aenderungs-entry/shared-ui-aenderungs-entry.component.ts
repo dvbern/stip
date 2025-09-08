@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
 import { GesuchTrancheSlim } from '@dv/shared/model/gesuch';
@@ -15,7 +15,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 @Component({
   selector: 'dv-shared-ui-aenderungs-entry',
-  imports: [CommonModule, TranslatePipe, RouterLink, SharedUiIconChipComponent],
+  imports: [CommonModule, TranslocoPipe, RouterLink, SharedUiIconChipComponent],
   templateUrl: './shared-ui-aenderungs-entry.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

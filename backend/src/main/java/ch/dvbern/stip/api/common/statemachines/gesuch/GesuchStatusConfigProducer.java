@@ -35,6 +35,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
@@ -58,6 +60,7 @@ public class GesuchStatusConfigProducer {
     private final AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandler;
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
+    private final StatusprotokollService statusprotokollService;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -252,6 +255,14 @@ public class GesuchStatusConfigProducer {
     private void logTransition(Transition<Gesuchstatus, GesuchStatusChangeEvent> transition, Object[] args) {
         Gesuch gesuch = extractGesuchFromStateMachineArgs(args);
 
+        statusprotokollService.createStatusprotokoll(
+            transition.getDestination().toString(),
+            transition.getSource().toString(),
+            StatusprotokollEntryTyp.GESUCH,
+            gesuch.getComment(),
+            gesuch
+        );
+
         LOG.info(
             "KSTIP: Gesuch mit id {} wurde von Status {} nach Status {} durch event {} geandert",
             gesuch.getId(),
@@ -262,12 +273,12 @@ public class GesuchStatusConfigProducer {
     }
 
     private Gesuch extractGesuchFromStateMachineArgs(Object[] args) {
-        if (args.length == 0 || !(args[0] instanceof Gesuch)) {
+        if (args.length == 0 || !(args[0] instanceof Gesuch gesuch)) {
             throw new AppErrorException(
-                "State Transition args sollten einen Gesuch Objekt enthalten, es gibt ein Problem in den "
+                "State Transition args sollte ein Gesuch Objekt enthalten, es gibt ein Problem in den "
                 + "Statemachine args"
             );
         }
-        return (Gesuch) args[0];
+        return gesuch;
     }
 }

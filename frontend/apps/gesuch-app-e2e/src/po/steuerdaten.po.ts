@@ -25,7 +25,7 @@ export class SteuerdatenPO {
     verpflegung: Locator;
     verpflegungPartner: Locator;
     steuerjahr: Locator;
-    veranlagungsCode: Locator;
+    veranlagungsStatus: Locator;
 
     loading: Locator;
 
@@ -64,8 +64,8 @@ export class SteuerdatenPO {
         'form-eltern-steuerdaten.verpflegungPartner',
       ),
       steuerjahr: page.getByTestId('form-eltern-steuerdaten.steuerjahr'),
-      veranlagungsCode: page.getByTestId(
-        'form-eltern-steuerdaten.veranlagungsCode',
+      veranlagungsStatus: page.getByTestId(
+        'form-eltern-steuerdaten.veranlagungsStatus',
       ),
 
       loading: page.getByTestId('form-eltern-steuerdaten-loading'),
@@ -99,7 +99,7 @@ export class SteuerdatenPO {
     await this.elems.verpflegung.fill(`${item.verpflegung}`);
     await this.elems.verpflegungPartner.fill(`${item.verpflegungPartner}`);
     await this.elems.steuerjahr.fill(`${item.steuerjahr}`);
-    await this.elems.veranlagungsCode.fill(`${item.veranlagungsCode}`);
+    await this.elems.veranlagungsStatus.fill(`${item.veranlagungsStatus}`);
 
     await expectFormToBeValid(this.elems.form);
   }

@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
 import ch.dvbern.stip.generated.dto.AnredeDtoSpec;
+import ch.dvbern.stip.generated.dto.SpracheDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,6 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlicheAngabenDtoSpec.JSON_PROPERTY_NACHNAME,
   PersoenlicheAngabenDtoSpec.JSON_PROPERTY_VORNAME,
   PersoenlicheAngabenDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  PersoenlicheAngabenDtoSpec.JSON_PROPERTY_EMAIL,
+  PersoenlicheAngabenDtoSpec.JSON_PROPERTY_SPRACHE,
   PersoenlicheAngabenDtoSpec.JSON_PROPERTY_ADRESSE
 })
 @JsonTypeName("PersoenlicheAngaben")
@@ -50,6 +53,12 @@ public class PersoenlicheAngabenDtoSpec {
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
   private LocalDate geburtsdatum;
+
+  public static final String JSON_PROPERTY_EMAIL = "email";
+  private String email;
+
+  public static final String JSON_PROPERTY_SPRACHE = "sprache";
+  private SpracheDtoSpec sprache;
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;
@@ -161,6 +170,58 @@ public class PersoenlicheAngabenDtoSpec {
   }
 
 
+  public PersoenlicheAngabenDtoSpec email(String email) {
+    
+    this.email = email;
+    return this;
+  }
+
+   /**
+   * Get email
+   * @return email
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getEmail() {
+    return email;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EMAIL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+
+  public PersoenlicheAngabenDtoSpec sprache(SpracheDtoSpec sprache) {
+    
+    this.sprache = sprache;
+    return this;
+  }
+
+   /**
+   * Get sprache
+   * @return sprache
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_SPRACHE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public SpracheDtoSpec getSprache() {
+    return sprache;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SPRACHE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setSprache(SpracheDtoSpec sprache) {
+    this.sprache = sprache;
+  }
+
+
   public PersoenlicheAngabenDtoSpec adresse(AdresseDtoSpec adresse) {
     
     this.adresse = adresse;
@@ -199,12 +260,14 @@ public class PersoenlicheAngabenDtoSpec {
         Objects.equals(this.nachname, persoenlicheAngaben.nachname) &&
         Objects.equals(this.vorname, persoenlicheAngaben.vorname) &&
         Objects.equals(this.geburtsdatum, persoenlicheAngaben.geburtsdatum) &&
+        Objects.equals(this.email, persoenlicheAngaben.email) &&
+        Objects.equals(this.sprache, persoenlicheAngaben.sprache) &&
         Objects.equals(this.adresse, persoenlicheAngaben.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anrede, nachname, vorname, geburtsdatum, adresse);
+    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse);
   }
 
   @Override
@@ -215,6 +278,8 @@ public class PersoenlicheAngabenDtoSpec {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    sprache: ").append(toIndentedString(sprache)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();

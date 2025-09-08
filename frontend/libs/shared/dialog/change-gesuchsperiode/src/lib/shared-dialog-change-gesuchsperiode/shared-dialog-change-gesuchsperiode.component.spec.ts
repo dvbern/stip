@@ -6,9 +6,10 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 
 import {
   ChangeGesuchsperiodeDialogData,
@@ -49,7 +50,7 @@ describe('SharedDialogChangeGesuchsperiodeComponent', () => {
       imports: [
         SharedDialogChangeGesuchsperiodeComponent,
         MatDialogModule,
-        TranslateModule.forRoot(),
+        getTranslocoModule(),
       ],
       providers: [
         provideMockStore(),

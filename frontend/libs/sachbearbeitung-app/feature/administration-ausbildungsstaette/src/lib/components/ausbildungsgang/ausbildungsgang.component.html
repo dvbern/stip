@@ -13,7 +13,7 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.description' | translate
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.description' | transloco
         }}
       </caption>
 
@@ -21,7 +21,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
           <label class="pe-none" for="ausbildungsstaette">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.ausbildungsstaette'
-              | translate
+              | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
@@ -45,10 +45,10 @@
         <td
           mat-cell
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
-          [dvTruncateTooltip]="ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.currentLang"
+          [dvTruncateTooltip]="ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang()"
           class="tw-w-32 tw-whitespace-nowrap"
         >
-          {{ ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.currentLang }}
+          {{ ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang() }}
         </td>
       </ng-container>
 
@@ -56,33 +56,33 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
           <label class="pe-none" for="ausbildungskategorie">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.ausbildungskategorie'
-              | translate
+              | transloco
           }}</label>
           <mat-form-field class="tw-w-full">
             <mat-select
               [aria-label]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.ausbildungskategorie'
-                  | translate
+                  | transloco
               "
               [formControl]="filterForm.controls.ausbildungskategorie"
               (click)="$event.stopPropagation()"
               class="!tw-font-normal"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.ausbildungskategorie'
-                  | translate
+                  | transloco
               "
               panelClass="table-select"
             >
               <mat-option [value]="undefined">
                 {{
                   'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.ausbildungskategorie'
-                    | translate
+                    | transloco
                 }}
               </mat-option>
 
               @for (ausbildungskategorie of ausbildungskategorieValues; track ausbildungskategorie) {
                 <mat-option [value]="ausbildungskategorie">
-                  {{ 'shared.ausbildungskategorie.' + ausbildungskategorie | translate }}
+                  {{ 'shared.ausbildungskategorie.' + ausbildungskategorie | transloco }}
                 </mat-option>
               }
             </mat-select>
@@ -93,11 +93,11 @@
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
           class="tw-w-32 tw-whitespace-nowrap"
           [dvTruncateTooltip]="
-            'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | translate
+            'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | transloco
           "
         >
           @if (ausbildungsgang.abschluss.ausbildungskategorie) {
-            {{ 'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | translate }}
+            {{ 'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | transloco }}
           }
         </td>
       </ng-container>
@@ -105,7 +105,7 @@
       <ng-container matColumnDef="ABSCHLUSS">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
           <label class="pe-none" for="abschluss">{{
-            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.abschluss' | translate
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.abschluss' | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
@@ -130,37 +130,37 @@
           mat-cell
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
           class="tw-w-32 tw-whitespace-nowrap"
-          [dvTruncateTooltip]="ausbildungsgang.abschluss | translatedProp: 'bezeichnung' : translate.currentLang"
+          [dvTruncateTooltip]="ausbildungsgang.abschluss | translatedProp: 'bezeichnung' : translate.getActiveLang()"
         >
-          {{ ausbildungsgang.abschluss | translatedProp: 'bezeichnung' : translate.currentLang }}
+          {{ ausbildungsgang.abschluss | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="AKTIV">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status' | translate }}
+          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status' | transloco }}
           <mat-form-field class="tw-w-full">
             <mat-select
               [aria-label]="
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status' | translate
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status' | transloco
               "
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
               class="!tw-font-normal"
               [placeholder]="
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate
+                'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco
               "
               panelClass="table-select"
             >
               <mat-option [value]="undefined">
-                {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | translate }}
+                {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco }}
               </mat-option>
 
               @for (status of statusValues; track status) {
                 <mat-option [value]="status">
                   {{
                     'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status.' +
-                      status | translate
+                      status | transloco
                   }}
                 </mat-option>
               }
@@ -175,7 +175,7 @@
           @let key = abschluss.aktiv ? 'ACTIVE' : 'INACTIVE';
           {{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.status.' + key
-              | translate
+              | transloco
           }}
         </td>
       </ng-container>
@@ -190,7 +190,7 @@
             <button
               type="button"
               class="btn btn-outline-primary btn-sm"
-              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | translate"
+              [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               (click)="createAusbildungsgang()"
               [disabled]="addAusbildungsgangIsLoadingSig()"
             >
@@ -227,7 +227,7 @@
       ></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
-          {{ 'shared.table.noData' | translate }}
+          {{ 'shared.table.noData' | transloco }}
         </td>
       </tr>
     </table>

@@ -12,8 +12,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   BuchhaltungEntryView,
@@ -23,6 +23,7 @@ import { SachbearbeitungAppDialogBuchhaltungInfoComponent } from '@dv/sachbearbe
 import { SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent } from '@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { BuchhaltungEntry } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
@@ -41,7 +42,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
   selector: 'dv-sachbearbeitung-app-feature-infos-buchhaltung',
   imports: [
     CommonModule,
-    TranslatePipe,
+    TranslocoPipe,
     MatTableModule,
     MatTooltipModule,
     MatPaginatorModule,
@@ -78,6 +79,8 @@ export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
     'sapStatus',
     'info',
   ];
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
   buchhaltungDataSourceSig = computed(() => {
     const buchhaltungEntries =
       this.buchhaltungStore.buchhaltungEntriesViewSig().buchhaltungEntrys;

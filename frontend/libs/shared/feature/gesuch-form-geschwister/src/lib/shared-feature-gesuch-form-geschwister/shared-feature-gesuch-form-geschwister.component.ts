@@ -4,8 +4,8 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from '@ngx-translate/core';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
@@ -24,7 +24,7 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   imports: [
-    TranslatePipe,
+    TranslocoPipe,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,

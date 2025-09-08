@@ -23,11 +23,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
+import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DelegierenResource;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
-import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -53,6 +54,37 @@ public class DelegierenResourceImpl implements DelegierenResource {
     }
 
     @Override
+    @RolesAllowed(DELEGIERUNG_READ)
+    public PaginatedSozDashboardDto getDelegierungsOfSozialdienstMitarbeiter(
+        GetDelegierungSozQueryTypeMitarbeiter getDelegierungSozQueryType,
+        Integer page,
+        Integer pageSize,
+        String fallNummer,
+        String nachname,
+        String vorname,
+        LocalDate geburtsdatum,
+        String wohnort,
+        SozDashboardColumnDto sortColumn,
+        SortOrder sortOrder
+    ) {
+        delegierenAuthorizer.canReadDelegierungMitarbeiter();
+
+        return delegierenService.getDelegierungSoz(
+            getDelegierungSozQueryType,
+            page,
+            pageSize,
+            fallNummer,
+            nachname,
+            vorname,
+            geburtsdatum,
+            wohnort,
+            true,
+            sortColumn,
+            sortOrder
+        );
+    }
+
+    @Override
     @RolesAllowed(DELEGIERUNG_UPDATE)
     public void delegierterMitarbeiterAendern(
         UUID delegierungId,
@@ -62,10 +94,17 @@ public class DelegierenResourceImpl implements DelegierenResource {
         delegierenService.delegierterMitarbeiterAendern(delegierungId, delegierterMitarbeiterAendernDto);
     }
 
-    @RolesAllowed(DELEGIERUNG_READ)
     @Override
-    public PaginatedSozDashboardDto getDelegierungsOfSozialdienst(
-        GetDelegierungSozQueryTypeDto getDelegierungSozQueryType,
+    @RolesAllowed(DELEGIERUNG_UPDATE)
+    public void delegierungAblehnen(UUID delegierungId) {
+        delegierenAuthorizer.canAblehnen(delegierungId);
+        delegierenService.delegierungAblehnen(delegierungId);
+    }
+
+    @Override
+    @RolesAllowed(DELEGIERUNG_READ)
+    public PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(
+        GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,
         Integer page,
         Integer pageSize,
         String fallNummer,
@@ -77,7 +116,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
-        delegierenAuthorizer.canReadDelegierung();
+        delegierenAuthorizer.canReadDelegierungAdmin();
 
         return delegierenService.getDelegierungSoz(
             getDelegierungSozQueryType,

@@ -2018,14 +2018,32 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: delegierterMitarbeiterAendern
-  /delegierung/{getDelegierungSozQueryType}:
+  /delegierung/{delegierungId}/ablehnen:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    delete:
+      tags:
+        - Delegieren
+      responses:
+        204:
+          description: Die deleguerung wurde erfolgreich geloescht
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: delegierungAblehnen
+  /delegierung/{getDelegierungSozQueryType}/admin:
     get:
       tags:
         - Delegieren
       parameters:
         - name: getDelegierungSozQueryType
           schema:
-            $ref: '#/components/schemas/GetDelegierungSozQueryType'
+            $ref: '#/components/schemas/GetDelegierungSozQueryTypeAdmin'
           in: path
           required: true
         - $ref: '#/components/parameters/fallNummer'
@@ -2055,8 +2073,46 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDelegierungsOfSozialdienst
-      summary: Returns a list of Faelle with Delegierung
+      operationId: getDelegierungsOfSozialdienstAdmin
+      summary: Returns a list of all Faelle with Delegierung
+  /delegierung/{getDelegierungSozQueryType}/ma:
+    get:
+      tags:
+        - Delegieren
+      parameters:
+        - name: getDelegierungSozQueryType
+          schema:
+            $ref: '#/components/schemas/GetDelegierungSozQueryTypeMitarbeiter'
+          in: path
+          required: true
+        - $ref: '#/components/parameters/fallNummer'
+        - $ref: '#/components/parameters/nachname'
+        - $ref: '#/components/parameters/vorname'
+        - $ref: '#/components/parameters/geburtsdatum'
+        - $ref: '#/components/parameters/wohnort'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/SozDashboardColumn'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSozDashboard'
+          description: Returns FallWithDelegierung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDelegierungsOfSozialdienstMitarbeiter
+      summary: Returns a list of Faelle with Delegierung that are accepted
   /land:
     get:
       tags:
@@ -4390,9 +4446,15 @@ components:
         - ALLE_MEINE
         - ALLE
       type: string
-    GetDelegierungSozQueryType:
+    GetDelegierungSozQueryTypeMitarbeiter:
       enum:
         - ALLE_BEARBEITBAR_MEINE
+        - ALLE
+      type: string
+    GetDelegierungSozQueryTypeAdmin:
+      enum:
+        - ALLE_BEARBEITBAR_MEINE
+        - OFFEN
         - ALLE
       type: string
     GueltigkeitStatus:
@@ -4933,6 +4995,8 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - email
+        - sprache
         - adresse
       type: object
       properties:
@@ -4944,6 +5008,10 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
+        email:
+          type: string
+        sprache:
+          $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
     Delegierung:
@@ -4964,6 +5032,8 @@ components:
     DelegierungSlim:
       type: object
       properties:
+        delegierungAngenommen:
+          type: boolean
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
     DelegierungCreate:
@@ -4972,6 +5042,8 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - email
+        - sprache
         - adresse
       type: object
       properties:
@@ -4983,6 +5055,10 @@ components:
           type: string
         geburtsdatum:
           $ref: '#/components/schemas/LocalDate'
+        email:
+          type: string
+        sprache:
+          $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
     DelegierterMitarbeiterAendern:
@@ -5633,12 +5709,9 @@ components:
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
           type: integer
-        veranlagungsCode:
-          description: 2-Stelliger Veranlagungscode (0-99)
-          type: integer
-          minimum: 0
-          maximum: 99
-          default: 0
+        veranlagungsStatus:
+          description: Veranlagungsstatus
+          type: string
         steuerjahr:
           description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
           type: integer
@@ -6320,13 +6393,10 @@ components:
           type: string
     NeskoGetSteuerdatenRequest:
       required:
-        - token
         - steuerdatenTyp
         - steuerjahr
       type: object
       properties:
-        token:
-          type: string
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuerjahr:
@@ -6502,8 +6572,8 @@ components:
           type: integer
         steuerjahr:
           type: integer
-        veranlagungsCode:
-          type: integer
+        veranlagungsStatus:
+          type: string
         totalEinkuenfte:
           type: integer
         eigenmietwert:
@@ -6630,17 +6700,30 @@ components:
               $ref: '#/components/schemas/Zahlungsverbindung'
             aktiv:
               type: boolean
+    StatusprotokollEntryTyp:
+      enum:
+        - GESUCH
+        - AENDERUNG
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
+      required:
+        - timestamp
+        - statusTo
+        - typ
+        - benutzer
+        - kommentar
       properties:
         timestamp:
           description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
           type: string
           format: date-time
-        status:
-          description: 'Status welcher am stichtag erreicht wurde'
-          $ref: '#/components/schemas/Gesuchstatus'
+        statusFrom:
+          type: string
+        statusTo:
+          type: string
+        typ:
+          $ref: '#/components/schemas/StatusprotokollEntryTyp'
         benutzer:
           description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
           type: string
@@ -6686,8 +6769,8 @@ components:
       type: object
       required:
         - notificationType
-        - gesuchId
-        - timestamp
+        - fallId
+        - timestampErstellt
         - userErstellt
         - absender
       properties:
@@ -6695,7 +6778,7 @@ components:
           type: string
         notificationType:
           $ref: '#/components/schemas/NotificationType'
-        gesuchId:
+        fallId:
           $ref: '#/components/schemas/UUID'
         contextId:
           $ref: '#/components/schemas/UUID'
@@ -6717,8 +6800,12 @@ components:
         - FEHLENDE_DOKUMENTE
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
+        - AENDERUNG_EINGEREICHT
+        - NACHFRIST_DOKUMENTE_CHANGED
         - NEUE_VERFUEGUNG
         - FAILED_AUSZAHLUNG
+        - DELEGIERUNG_ANGENOMMEN
+        - DELEGIERUNG_ABGELEHNT
     Berechnungsresultat:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
@@ -7173,7 +7260,6 @@ components:
         - VORNAME
         - GEBURTSDATUM
         - WOHNORT
-        - DELEGIERUNG_ANGENOMMEN
     SortOrder:
       enum:
         - ASCENDING

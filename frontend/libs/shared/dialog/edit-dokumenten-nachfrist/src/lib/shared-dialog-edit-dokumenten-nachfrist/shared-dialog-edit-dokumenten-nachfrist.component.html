@@ -3,17 +3,17 @@
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
-    [attr.aria-label]="'shared.close' | translate"
+    [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <h1 class="tw-mb-8 tw-text-xl">
-    {{ 'shared.dokumente.nachfrist.dialog.title' | translate }}
+    {{ 'shared.dokumente.nachfrist.dialog.title' | transloco }}
   </h1>
 
   <form [formGroup]="form" data-testid="form-update-nachfrist-form" class="tw-mt-5" (ngSubmit)="handleSave()">
     <mat-form-field dvSharedUiFormField class="tw-w-56">
-      <mat-label>{{ 'shared.dokumente.nachfrist.dialog.label' | translate }}</mat-label>
+      <mat-label>{{ 'shared.dokumente.nachfrist.dialog.label' | transloco }}</mat-label>
       <input
         formControlName="newNachfrist"
         data-testid="form-nachfrist-date"
@@ -25,15 +25,15 @@
       <mat-datepicker-toggle matIconSuffix [for]="nachfristDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #nachfristDatepicker></mat-datepicker>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | translate }}
+        {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
     <div class="tw-mt-5 tw-flex tw-justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | translate }}
+        {{ 'shared.cancel' | transloco }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2">
-        {{ 'shared.accept' | translate }}
+        {{ 'shared.accept' | transloco }}
       </button>
     </div>
   </form>
