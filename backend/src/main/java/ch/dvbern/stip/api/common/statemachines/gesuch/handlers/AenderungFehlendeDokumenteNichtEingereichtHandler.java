@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -42,6 +41,6 @@ public class AenderungFehlendeDokumenteNichtEingereichtHandler implements Gesuch
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotification(gesuch);
         gesuch.setNachfristDokumente(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 }

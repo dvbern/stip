@@ -12,6 +12,7 @@
 import { SozialdienstSlim } from './sozialdienstSlim';
 
 export interface DelegierungSlim { 
+    delegierungAngenommen?: boolean;
     sozialdienst?: SozialdienstSlim;
 }
 

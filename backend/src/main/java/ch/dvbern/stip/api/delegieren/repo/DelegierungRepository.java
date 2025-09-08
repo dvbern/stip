@@ -42,6 +42,12 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
         return addMeineFilter(sozialdienstBenutzer, getFindAlleOfSozialdienstQuery(sozialdienstId));
     }
 
+    public JPAQuery<Delegierung> getFindAllOffen(
+        final UUID sozialdienstId
+    ) {
+        return getFindAlleOfSozialdienstQuery(sozialdienstId).where(qDelegierung.delegierterMitarbeiter.isNull());
+    }
+
     public JPAQuery<Delegierung> getFindAlleOfSozialdienstQuery(UUID sozialdienstId) {
         return addOfSozialdienstFilter(sozialdienstId, new JPAQueryFactory(entityManager).selectFrom(qDelegierung));
     }

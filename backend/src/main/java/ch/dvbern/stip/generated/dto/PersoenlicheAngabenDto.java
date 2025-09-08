@@ -25,6 +25,8 @@ public class PersoenlicheAngabenDto  implements Serializable {
   private @Valid String nachname;
   private @Valid String vorname;
   private @Valid LocalDate geburtsdatum;
+  private @Valid String email;
+  private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
   private @Valid AdresseDto adresse;
 
   /**
@@ -105,6 +107,44 @@ public class PersoenlicheAngabenDto  implements Serializable {
 
   /**
    **/
+  public PersoenlicheAngabenDto email(String email) {
+    this.email = email;
+    return this;
+  }
+
+  
+  @JsonProperty("email")
+  @NotNull
+  public String getEmail() {
+    return email;
+  }
+
+  @JsonProperty("email")
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  /**
+   **/
+  public PersoenlicheAngabenDto sprache(ch.dvbern.stip.api.personinausbildung.type.Sprache sprache) {
+    this.sprache = sprache;
+    return this;
+  }
+
+  
+  @JsonProperty("sprache")
+  @NotNull
+  public ch.dvbern.stip.api.personinausbildung.type.Sprache getSprache() {
+    return sprache;
+  }
+
+  @JsonProperty("sprache")
+  public void setSprache(ch.dvbern.stip.api.personinausbildung.type.Sprache sprache) {
+    this.sprache = sprache;
+  }
+
+  /**
+   **/
   public PersoenlicheAngabenDto adresse(AdresseDto adresse) {
     this.adresse = adresse;
     return this;
@@ -136,12 +176,14 @@ public class PersoenlicheAngabenDto  implements Serializable {
         Objects.equals(this.nachname, persoenlicheAngaben.nachname) &&
         Objects.equals(this.vorname, persoenlicheAngaben.vorname) &&
         Objects.equals(this.geburtsdatum, persoenlicheAngaben.geburtsdatum) &&
+        Objects.equals(this.email, persoenlicheAngaben.email) &&
+        Objects.equals(this.sprache, persoenlicheAngaben.sprache) &&
         Objects.equals(this.adresse, persoenlicheAngaben.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anrede, nachname, vorname, geburtsdatum, adresse);
+    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse);
   }
 
   @Override
@@ -153,6 +195,8 @@ public class PersoenlicheAngabenDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    sprache: ").append(toIndentedString(sprache)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();

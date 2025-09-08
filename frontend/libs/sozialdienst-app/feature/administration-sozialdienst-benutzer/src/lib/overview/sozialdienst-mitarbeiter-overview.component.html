@@ -96,7 +96,7 @@
                 <a
                   [routerLink]="['.', 'edit', benutzer.id]"
                   class="btn btn-link"
-                  [attr.aria-label]="'sozialdienst-app.admin.benutzerverwaltung.benutzerBearbeiten' | transloco"
+                  [attr.aria-label]="'sozialdienst-app.admin.sozialdienstBenutzer.edit' | transloco"
                   data-testid="sozialdienst-mitarbeiter-edit"
                 >
                   <i class="material-symbols-rounded fs-5">edit</i>
@@ -104,7 +104,7 @@
                 <button
                   type="button"
                   class="btn btn-link"
-                  [attr.aria-label]="'sozialdienst-app.admin.benutzerverwaltung.benutzerLoeschen' | transloco"
+                  [attr.aria-label]="'sozialdienst-app.admin.sozialdienstBenutzer.delete' | transloco"
                   (click)="deleteBenutzer(benutzer)"
                   data-testid="sozialdienst-mitarbeiter-delete"
                   [disabled]="benutzer.isAdmin"

@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Authorizer
@@ -97,8 +98,7 @@ public class CustomGesuchDokumentTypAuthorizer extends BaseAuthorizer {
     public void canDeleteTyp(final UUID gesuchDokumentTypId) {
         final var customGesuchDokument =
             gesuchDokumentRepository.findByCustomDokumentTyp(gesuchDokumentTypId)
-                .orElseThrow();
-
+                .orElseThrow(NotFoundException::new);
         final var isAnyFileAttached = !customGesuchDokument.getDokumente().isEmpty();
 
         if (isAnyFileAttached) {

@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.notification.entity;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -46,7 +46,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "notification",
     indexes = {
-        @Index(name = "IX_notification_gesuch_id", columnList = "gesuch_id"),
+        @Index(name = "IX_notification_fall_id", columnList = "fall_id"),
         @Index(name = "IX_notification_mandant", columnList = "mandant")
     }
 )
@@ -64,11 +64,11 @@ public class Notification extends AbstractMandantEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(
-        name = "gesuch_id",
+        name = "fall_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "FK_notification_gesuch")
+        foreignKey = @ForeignKey(name = "FK_notification_fall")
     )
-    private Gesuch gesuch;
+    private Fall fall;
 
     @Nullable
     @Column(name = "context_id")

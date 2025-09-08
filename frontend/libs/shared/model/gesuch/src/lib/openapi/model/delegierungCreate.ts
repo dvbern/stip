@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
+import { Sprache } from './sprache';
 import { Anrede } from './anrede';
 
 export interface DelegierungCreate { 
@@ -17,6 +18,8 @@ export interface DelegierungCreate {
     nachname: string;
     vorname: string;
     geburtsdatum: string;
+    email: string;
+    sprache: Sprache;
     adresse: Adresse;
 }
 

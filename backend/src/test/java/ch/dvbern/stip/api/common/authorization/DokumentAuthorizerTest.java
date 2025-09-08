@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -101,6 +102,7 @@ class DokumentAuthorizerTest {
         var sozialdienst = new Sozialdienst();
         sozialdienst.setId(UUID.randomUUID());
         delegierung.setSozialdienst(sozialdienst);
+        delegierung.setDelegierterMitarbeiter(new SozialdienstBenutzer());
         fall.setDelegierung(delegierung);
     }
 

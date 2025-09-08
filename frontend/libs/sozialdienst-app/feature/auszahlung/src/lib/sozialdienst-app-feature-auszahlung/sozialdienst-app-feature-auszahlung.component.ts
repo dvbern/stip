@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedFeatureAuszahlungComponent } from '@dv/shared/feature/auszahlung';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
@@ -12,7 +12,6 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
   imports: [
     RouterLink,
     TranslocoPipe,
-    TranslocoDirective,
     SharedPatternMainLayoutComponent,
     SharedUiAuszahlungComponent,
     SharedUiHasRolesDirective,
