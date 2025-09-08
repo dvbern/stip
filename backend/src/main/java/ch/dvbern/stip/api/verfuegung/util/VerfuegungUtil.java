@@ -17,10 +17,7 @@
 
 package ch.dvbern.stip.api.verfuegung.util;
 
-import java.util.Comparator;
-
-import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import lombok.experimental.UtilityClass;
 
@@ -30,12 +27,9 @@ public class VerfuegungUtil {
         return verfuegung.getGesuch().getVerfuegungs().size() > 1;
     }
 
-    public static boolean isRueckforderung(Verfuegung verfuegung, BuchhaltungRepository buchhaltungRepository) {
+    public static boolean isRueckforderung(Verfuegung verfuegung, BuchhaltungService buchhaltungService) {
         final var relevantBuchhaltung =
-            buchhaltungRepository.findAllForFallId(verfuegung.getGesuch().getAusbildung().getFall().getId())
-                .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
-                .orElseThrow();
-
+            buchhaltungService.getLatestBuchhaltungEntry(verfuegung.getGesuch().getAusbildung().getFall().getId());
         return relevantBuchhaltung.getSaldo() < 0;
     }
 }

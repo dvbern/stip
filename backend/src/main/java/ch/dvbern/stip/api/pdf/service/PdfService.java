@@ -30,8 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
-import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -104,8 +103,8 @@ public class PdfService {
 
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final BerechnungsblattService berechnungsblattService;
-    private final BuchhaltungRepository buchhaltungRepository;
     private final TenantConfigService tenantConfigService;
+    private final BuchhaltungService buchhaltungService;
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
@@ -695,12 +694,10 @@ public class PdfService {
         final TL translator
     ) {
         final var relevantBuchhaltung =
-            buchhaltungRepository.findAllForFallId(verfuegung.getGesuch().getAusbildung().getFall().getId())
-                .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
-                .orElseThrow();
+            buchhaltungService.getLatestBuchhaltungEntry(verfuegung.getGesuch().getAusbildung().getFall().getId());
 
         final boolean isAenderung = VerfuegungUtil.isAenderung(verfuegung);
-        final boolean isRueckforderung = VerfuegungUtil.isRueckforderung(verfuegung, buchhaltungRepository);
+        final boolean isRueckforderung = VerfuegungUtil.isRueckforderung(verfuegung, buchhaltungService);
 
         final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
             .getGesuchTranchen()
