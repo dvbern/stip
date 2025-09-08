@@ -30,6 +30,7 @@ public final class NeskoExceptionMapper {
 
         neskoErrorDto.setType(exception.getMessage());
         neskoErrorDto.setNeskoError(exception.getNeskoError());
+        neskoErrorDto.setUserMessage(exception.getUserMessage());
 
         return neskoErrorDto;
     }
@@ -42,6 +43,7 @@ public final class NeskoExceptionMapper {
 
         neskoErrorDto.setType(exception.getMessage());
         neskoErrorDto.setNeskoError(exception.getNeskoError());
+        neskoErrorDto.setUserMessage(exception.getUserMessage());
 
         return neskoErrorDto;
     }

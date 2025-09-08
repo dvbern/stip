@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class NeskoErrorDto  implements Serializable {
   private @Valid String type;
   private @Valid String neskoError;
+  private @Valid String userMessage;
 
   /**
    **/
@@ -60,6 +61,25 @@ public class NeskoErrorDto  implements Serializable {
     this.neskoError = neskoError;
   }
 
+  /**
+   **/
+  public NeskoErrorDto userMessage(String userMessage) {
+    this.userMessage = userMessage;
+    return this;
+  }
+
+  
+  @JsonProperty("userMessage")
+  @NotNull
+  public String getUserMessage() {
+    return userMessage;
+  }
+
+  @JsonProperty("userMessage")
+  public void setUserMessage(String userMessage) {
+    this.userMessage = userMessage;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -71,12 +91,13 @@ public class NeskoErrorDto  implements Serializable {
     }
     NeskoErrorDto neskoError = (NeskoErrorDto) o;
     return Objects.equals(this.type, neskoError.type) &&
-        Objects.equals(this.neskoError, neskoError.neskoError);
+        Objects.equals(this.neskoError, neskoError.neskoError) &&
+        Objects.equals(this.userMessage, neskoError.userMessage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, neskoError);
+    return Objects.hash(type, neskoError, userMessage);
   }
 
   @Override
@@ -86,6 +107,7 @@ public class NeskoErrorDto  implements Serializable {
     
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    neskoError: ").append(toIndentedString(neskoError)).append("\n");
+    sb.append("    userMessage: ").append(toIndentedString(userMessage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

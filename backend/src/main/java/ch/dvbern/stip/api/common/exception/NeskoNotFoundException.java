@@ -23,9 +23,11 @@ import lombok.Getter;
 public class NeskoNotFoundException extends RuntimeException {
 
     private final transient String neskoError;
+    private final transient String userMessage;
 
-    public NeskoNotFoundException(String message, String neskoError) {
+    public NeskoNotFoundException(String message, String neskoError, String userMessage) {
         super(message);
         this.neskoError = neskoError;
+        this.userMessage = userMessage;
     }
 }

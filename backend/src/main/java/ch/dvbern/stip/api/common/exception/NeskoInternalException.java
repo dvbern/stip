@@ -23,9 +23,11 @@ import lombok.Getter;
 public class NeskoInternalException extends RuntimeException {
 
     private final transient String neskoError;
+    private final transient String userMessage;
 
-    public NeskoInternalException(String message, String neskoError) {
+    public NeskoInternalException(String message, String neskoError, String userMessage) {
         super(message);
         this.neskoError = neskoError;
+        this.userMessage = userMessage;
     }
 }
