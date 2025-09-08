@@ -79,7 +79,7 @@ public interface AusbildungsstaetteResource {
     @GET
     @Path("/ausbildungsstaette")
     @Produces({ "application/json", "text/plain" })
-    PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("nameDe")   String nameDe,@QueryParam("nameFr")   String nameFr,@QueryParam("chShis")   String chShis,@QueryParam("burNo")   String burNo,@QueryParam("ctNo")   String ctNo,@QueryParam("aktiv")   Boolean aktiv);
+    PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("sortColumn")   ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder,@QueryParam("nameDe")   String nameDe,@QueryParam("nameFr")   String nameFr,@QueryParam("nummer")   String nummer,@QueryParam("nummerTyp")   ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp,@QueryParam("aktiv")   Boolean aktiv);
 
     @PATCH
     @Path("/abschluss/rename/{abschlussId}")

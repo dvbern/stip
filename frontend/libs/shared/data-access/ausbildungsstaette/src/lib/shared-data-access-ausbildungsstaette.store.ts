@@ -25,6 +25,9 @@ const initialState: AusbildungsstaetteState = {
   abschluesse: initial(),
 };
 
+/**
+ * Store for AusbildungsstaetteSlim data
+ */
 @Injectable()
 export class AusbildungsstaetteStore extends signalStore(
   { protectedState: false },

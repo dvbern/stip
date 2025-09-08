@@ -20,22 +20,26 @@ package ch.dvbern.stip.api.ausbildung.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+@BurAndCTNummerTypAlphaNumericConstraint
+@OnlyNummerTypOfOhneNummerCanBeNullableConstraint
 @Audited
 @Entity
 @Table(name = "ausbildungsstaette", indexes = @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant"))
@@ -54,20 +58,12 @@ public class Ausbildungsstaette extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "ch_shis", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    private String chShis;
+    @Column(name = "nummer", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String nummer;
 
-    @Nullable
-    @Pattern(regexp = "^[A-Za-z0-9]+$")
-    @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "bur_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    private String burNo;
-
-    @Nullable
-    @Pattern(regexp = "^[A-Za-z0-9]+$")
-    @Size(max = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "ct_no", length = Constants.DB_DEFAULT_STRING_SMALL_LENGTH)
-    private String ctNo;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nummer_typ", nullable = false)
+    private AusbildungsstaetteNummerTyp nummerTyp;
 
     @NotNull
     @Column(name = "aktiv", nullable = false)

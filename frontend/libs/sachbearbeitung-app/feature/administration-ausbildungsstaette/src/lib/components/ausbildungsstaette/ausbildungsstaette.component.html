@@ -53,28 +53,47 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="CH_SHIS_NUMMER">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-28 tw-whitespace-nowrap">
-          <label class="pe-none" for="chShisNummer">{{
-            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.chShisNummer'
+      <!-- NUMMER_TYP -->
+      <ng-container matColumnDef="NUMMER_TYP">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+          <label id="nummerTypLabel">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp'
               | transloco
           }}</label>
           <div class="tw-relative tw-flex">
-            <mat-form-field>
-              <input
-                matInput
-                id="chShisNummer"
-                class="tw-w-full"
-                [formControl]="filterForm.controls.chShisNummer"
-                data-testid="ausbildungsstaetten-filter-chShisNummer"
+            <mat-form-field class="tw-w-full">
+              <mat-select
+                aria-labelledby="nummerTypLabel"
+                [formControl]="filterForm.controls.nummerTyp"
                 (click)="$event.stopPropagation()"
-                (keydown)="$event.stopPropagation()"
-              />
+                class="!tw-font-normal"
+                [placeholder]="
+                  'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.alle'
+                    | transloco
+                "
+                panelClass="table-select"
+              >
+                <mat-option [value]="undefined">
+                  {{
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.alle'
+                      | transloco
+                  }}
+                </mat-option>
+
+                @for (type of nummerTypValues; track type) {
+                  <mat-option [value]="type">
+                    {{
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.' +
+                        type | transloco
+                    }}
+                  </mat-option>
+                }
+              </mat-select>
             </mat-form-field>
             <dv-shared-ui-clear-button
               class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-              (clear)="filterForm.controls.chShisNummer.reset()"
-              [valueSig]="filterForm.controls.chShisNummer.value"
+              (clear)="filterForm.controls.nummerTyp.reset()"
+              [valueSig]="filterForm.controls.nummerTyp.value"
             ></dv-shared-ui-clear-button>
           </div>
         </th>
@@ -83,32 +102,35 @@
           *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
           class="tw-whitespace-nowrap"
         >
-          {{ ausbildungsstaette.chShis | dvPadText: 4 }}
+          {{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.' +
+              ausbildungsstaette.nummerTyp | transloco
+          }}
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="CT_NUMMER">
+      <!-- NUMMER -->
+      <ng-container matColumnDef="NUMMER">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-28 tw-whitespace-nowrap">
-          <label class="pe-none" for="ctNummer">{{
-            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.ctNummer'
-              | transloco
+          <label class="pe-none" for="nummer">{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummer' | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field>
               <input
                 matInput
-                id="ctNummer"
+                id="nummer"
                 class="tw-w-full"
-                [formControl]="filterForm.controls.ctNummer"
-                data-testid="ausbildungsstaetten-filter-ctNummer"
+                [formControl]="filterForm.controls.nummer"
+                data-testid="ausbildungsstaetten-filter-nummer"
                 (click)="$event.stopPropagation()"
                 (keydown)="$event.stopPropagation()"
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
               class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-              (clear)="filterForm.controls.ctNummer.reset()"
-              [valueSig]="filterForm.controls.ctNummer.value"
+              (clear)="filterForm.controls.nummer.reset()"
+              [valueSig]="filterForm.controls.nummer.value"
             ></dv-shared-ui-clear-button>
           </div>
         </th>
@@ -117,55 +139,18 @@
           *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
           class="tw-whitespace-nowrap"
         >
-          {{ ausbildungsstaette.ctNo }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="BUR_NUMMER">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-28 tw-whitespace-nowrap">
-          <label class="pe-none" for="burNummer">{{
-            'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.burNummer'
-              | transloco
-          }}</label>
-          <div class="tw-relative tw-flex">
-            <mat-form-field>
-              <input
-                matInput
-                id="burNummer"
-                class="tw-w-full"
-                [formControl]="filterForm.controls.burNummer"
-                data-testid="ausbildungsstaetten-filter-burNummer"
-                (click)="$event.stopPropagation()"
-                (keydown)="$event.stopPropagation()"
-              />
-            </mat-form-field>
-            <dv-shared-ui-clear-button
-              class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
-              (clear)="filterForm.controls.burNummer.reset()"
-              [valueSig]="filterForm.controls.burNummer.value"
-            ></dv-shared-ui-clear-button>
-          </div>
-        </th>
-        <td
-          mat-cell
-          *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
-          class="tw-whitespace-nowrap"
-        >
-          {{ ausbildungsstaette.burNo }}
+          {{ ausbildungsstaette.nummer }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="AKTIV">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
-          {{
+          <label id="statusLabel">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status' | transloco
-          }}
+          }}</label>
           <mat-form-field class="tw-w-full">
             <mat-select
-              [aria-label]="
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status'
-                  | transloco
-              "
+              aria-labelledby="statusLabel"
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
               class="!tw-font-normal"

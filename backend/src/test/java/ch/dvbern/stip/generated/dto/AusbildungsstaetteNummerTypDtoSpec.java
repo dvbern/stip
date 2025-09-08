@@ -22,23 +22,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets AusbildungsstaetteSortColumn
+ * Gets or Sets AusbildungsstaetteNummerTyp
  */
-public enum AusbildungsstaetteSortColumnDtoSpec {
+public enum AusbildungsstaetteNummerTypDtoSpec {
   
-  NAME_DE("NAME_DE"),
+  CH_SHIS("CH_SHIS"),
   
-  NAME_FR("NAME_FR"),
+  BUR_NO("BUR_NO"),
   
-  NUMMER("NUMMER"),
+  CT_NO("CT_NO"),
   
-  NUMMER_TYP("NUMMER_TYP"),
-  
-  AKTIV("AKTIV");
+  OHNE_NO("OHNE_NO");
 
   private String value;
 
-  AusbildungsstaetteSortColumnDtoSpec(String value) {
+  AusbildungsstaetteNummerTypDtoSpec(String value) {
     this.value = value;
   }
 
@@ -53,8 +51,8 @@ public enum AusbildungsstaetteSortColumnDtoSpec {
   }
 
   @JsonCreator
-  public static AusbildungsstaetteSortColumnDtoSpec fromValue(String value) {
-    for (AusbildungsstaetteSortColumnDtoSpec b : AusbildungsstaetteSortColumnDtoSpec.values()) {
+  public static AusbildungsstaetteNummerTypDtoSpec fromValue(String value) {
+    for (AusbildungsstaetteNummerTypDtoSpec b : AusbildungsstaetteNummerTypDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

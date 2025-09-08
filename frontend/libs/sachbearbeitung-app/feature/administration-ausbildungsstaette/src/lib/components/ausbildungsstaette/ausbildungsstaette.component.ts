@@ -29,6 +29,7 @@ import { StatusType } from '@dv/shared/model/ausbildung';
 import {
   Ausbildungskategorie,
   Ausbildungsstaette,
+  AusbildungsstaetteNummerTyp,
   AusbildungsstaetteSortColumn,
   SortOrder,
 } from '@dv/shared/model/gesuch';
@@ -69,15 +70,13 @@ import { EditAusbildungsstaetteDialogComponent } from './edit-ausbildungsstaette
 
 type AusbildungsstaetteFilterFormKeys =
   | 'ausbildungsstaette'
-  | 'chShisNummer'
-  | 'ctNummer'
-  | 'burNummer'
+  | 'nummerTyp'
+  | 'nummer'
   | 'status';
 type DisplayColumns =
   | 'AUSBILDUNGSSTAETTE'
-  | 'CH_SHIS_NUMMER'
-  | 'CT_NUMMER'
-  | 'BUR_NUMMER'
+  | 'NUMMER_TYP'
+  | 'NUMMER'
   | 'AKTIV'
   | 'AKTIONEN';
 
@@ -121,9 +120,8 @@ export class AusbildungsstaetteComponent
 
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   ausbildungsstaette = input<string | undefined>(undefined);
-  chShisNummer = input<string | undefined>(undefined);
-  ctNummer = input<string | undefined>(undefined);
-  burNummer = input<string | undefined>(undefined);
+  nummerTyp = input<AusbildungsstaetteNummerTyp | undefined>(undefined);
+  nummer = input<string | undefined>(undefined);
   status = input<StatusType>(undefined);
   sortColumn = input<DisplayColumns | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
@@ -144,25 +142,25 @@ export class AusbildungsstaetteComponent
     const ausbildungsstaettenLoading = isPending(
       this.ausbildungsstaetteStore.ausbildungsstaetten(),
     );
+
     return abschluesseLoading || ausbildungsstaettenLoading;
   });
 
   filterForm = this.formBuilder.group({
     ausbildungsstaette: [<string | undefined>undefined],
-    chShisNummer: [<string | undefined>undefined],
-    ctNummer: [<string | undefined>undefined],
-    burNummer: [<string | undefined>undefined],
+    nummerTyp: [<AusbildungsstaetteNummerTyp | undefined>undefined],
+    nummer: [<string | undefined>undefined],
     status: [type<StatusType>('ACTIVE')],
   } satisfies Record<AusbildungsstaetteFilterFormKeys, unknown>);
 
   displayedColumns = [
     'AUSBILDUNGSSTAETTE',
-    'CH_SHIS_NUMMER',
-    'CT_NUMMER',
-    'BUR_NUMMER',
+    'NUMMER_TYP',
+    'NUMMER',
     'AKTIV',
     'AKTIONEN',
   ] satisfies DisplayColumns[];
+
   viewSig = computed(() => {
     const ausbildungsstaetten =
       this.administrationAusbildungsstaetteStore.ausbildungsstaettenViewSig();
@@ -175,12 +173,14 @@ export class AusbildungsstaetteComponent
       totalEntries: ausbildungsstaetten?.totalEntries ?? 0,
     };
   });
+
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'status',
+    'nummerTyp',
   ]);
   ausbildungsstaettenDataSourceSig = computed(() => {
-    const abschluesse = this.viewSig().ausbildungsstaetten;
-    const datasource = new MatTableDataSource(abschluesse);
+    const staetten = this.viewSig().ausbildungsstaetten;
+    const datasource = new MatTableDataSource(staetten);
 
     return datasource;
   });
@@ -192,6 +192,8 @@ export class AusbildungsstaetteComponent
   ausbildungskategorieValues = Object.values(Ausbildungskategorie);
   statusValues = Object.values(StatusFilter);
   totalEntriesSig = computed(() => this.viewSig().totalEntries);
+
+  nummerTypValues = Object.values(AusbildungsstaetteNummerTyp);
 
   private reloadAusbildungsstaettenSig = signal<unknown>(null);
 
@@ -229,10 +231,8 @@ export class AusbildungsstaetteComponent
         filter: {
           [getCorrectPropertyName('name', this.currentLangSig())]:
             this.ausbildungsstaette(),
-          burNo: this.burNummer(),
-          chShis: this.chShisNummer(),
-          ctNo: this.ctNummer(),
-
+          nummerTyp: this.nummerTyp(),
+          nummer: this.nummer(),
           sortColumn: useCorrectSortColumn(sortColumn, this.currentLangSig()),
           sortOrder,
           page,
@@ -311,9 +311,8 @@ export class AusbildungsstaetteComponent
   ngOnInit() {
     this.filterForm.reset({
       ausbildungsstaette: this.ausbildungsstaette(),
-      chShisNummer: this.chShisNummer(),
-      ctNummer: this.ctNummer(),
-      burNummer: this.burNummer(),
+      nummerTyp: this.nummerTyp(),
+      nummer: this.nummer(),
       status: this.status(),
     });
 
@@ -329,16 +328,8 @@ function useCorrectSortColumn(
   switch (sortColumn) {
     case 'AUSBILDUNGSSTAETTE':
       return `NAME_${uppercased(currentLang)}`;
-    case 'BUR_NUMMER':
-    case 'CH_SHIS_NUMMER':
-    case 'CT_NUMMER': {
-      const nameMap = {
-        BUR_NUMMER: 'BUR_NO',
-        CH_SHIS_NUMMER: 'CH_SHIS',
-        CT_NUMMER: 'CT_NO',
-      } satisfies Partial<Record<DisplayColumns, AusbildungsstaetteSortColumn>>;
-      return nameMap[sortColumn];
-    }
+    case 'NUMMER_TYP':
+    case 'NUMMER':
     case 'AKTIV':
       return sortColumn;
     case 'AKTIONEN':

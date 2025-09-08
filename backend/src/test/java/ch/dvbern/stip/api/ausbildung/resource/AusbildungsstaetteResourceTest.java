@@ -17,9 +17,8 @@
 
 package ch.dvbern.stip.api.ausbildung.resource;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -34,6 +33,7 @@ import ch.dvbern.stip.generated.api.AusbildungsstaetteApiSpec;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteNummerTypDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteSlimDto;
 import ch.dvbern.stip.generated.dto.BildungsrichtungDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedAbschlussDto;
@@ -67,8 +67,32 @@ class AusbildungsstaetteResourceTest {
         AusbildungsstaetteApiSpec.ausbildungsstaette(RequestSpecUtil.quarkusSpec());
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsJurist
     @Order(1)
+    void createAusbildungsstaetteWithoutNummerValidationTest() {
+        final var ausbildungsstaetteCreateDtoSpec =
+            AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec2();
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.CT_NO);
+        var response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
+            .body(ausbildungsstaetteCreateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then();
+
+        response.assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.OHNE_NO);
+        response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
+            .body(ausbildungsstaetteCreateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then();
+        response.assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
     void createAusbildungsstaetteAsGesuchstellerForbidden() {
         ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
@@ -80,11 +104,12 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsJurist
-    @Order(2)
+    @Order(3)
     void createAusbildungsstaetteAsJurist() {
         final var ausbildungsstaetteCreateDtoSpec =
             AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
-        ausbildungsstaetteCreateDtoSpec.setCtNo("asdasd");
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.CT_NO);
+        ausbildungsstaetteCreateDtoSpec.setNummer("asdasd");
         var response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(ausbildungsstaetteCreateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -96,7 +121,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsJurist
-    @Order(3)
+    @Order(4)
     void createAusbildungsstaetteAsJuristNotUniqueFail() {
         var response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec())
@@ -108,8 +133,25 @@ class AusbildungsstaetteResourceTest {
     }
 
     @Test
+    @TestAsJurist
+    @Order(5)
+    void createAusbildungsstaetteAsJuristNummerTypInvalid() {
+        final var ausbildungsstaetteCreateDtoSpec =
+            AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.CH_SHIS);
+        ausbildungsstaetteCreateDtoSpec.setNummer("test");
+        var response = ausbildungsstaetteApiSpec.createAusbildungsstaette()
+            .body(ausbildungsstaetteCreateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then();
+
+        response.assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
     @TestAsGesuchsteller
-    @Order(4)
+    @Order(6)
     void getAusbildungsstaetten() {
         var res = ausbildungsstaetteApiSpec.getAllAusbildungsgangForUebersicht()
             .pageQuery(0)
@@ -126,7 +168,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(7)
     void createAbschlussBrueckenangebotTest() {
         final var brueckenangebotCreateDtoSpec = BrueckenangebotCreateDtoSpecModel.brueckenangebotCreateDtoSpec();
 
@@ -166,7 +208,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(8)
     void createAbschlussBrueckenangebotFailTest() {
         final var brueckenangebotCreateDtoSpec = BrueckenangebotCreateDtoSpecModel.brueckenangebotCreateDtoSpec();
         brueckenangebotCreateDtoSpec.setBildungsrichtung(BildungsrichtungDtoSpec.OBLIGATORISCHE_SCHULE);
@@ -181,7 +223,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(9)
     void createAusbildungsstaetteTestCtNo() {
         final var ausbildungsstaetteCreateDtoSpec =
             AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
@@ -189,7 +231,8 @@ class AusbildungsstaetteResourceTest {
         ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestCtNo");
 
         final var ctNo = "CTNO";
-        ausbildungsstaetteCreateDtoSpec.setCtNo(ctNo);
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.CT_NO);
+        ausbildungsstaetteCreateDtoSpec.setNummer(ctNo);
 
         final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(ausbildungsstaetteCreateDtoSpec)
@@ -201,19 +244,20 @@ class AusbildungsstaetteResourceTest {
             .body()
             .as(AusbildungsstaetteDto.class);
 
-        assertThat(ausbildungsstaetteDto.getCtNo(), Matchers.containsString(ctNo));
+        assertThat(ausbildungsstaetteDto.getNummer(), Matchers.containsString(ctNo));
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(10)
     void createAusbildungsstaetteTestBurNo() {
         final var ausbildungsstaetteCreateDtoSpec =
             AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
         ausbildungsstaetteCreateDtoSpec.setNameDe("createAusbildungsstaetteTestBurNo");
         ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestBurNo");
 
-        ausbildungsstaetteCreateDtoSpec.setBurNo("1234");
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.BUR_NO);
+        ausbildungsstaetteCreateDtoSpec.setNummer("1234");
 
         final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(ausbildungsstaetteCreateDtoSpec)
@@ -225,12 +269,12 @@ class AusbildungsstaetteResourceTest {
             .body()
             .as(AusbildungsstaetteDto.class);
 
-        assertThat(ausbildungsstaetteDto.getBurNo(), Matchers.containsString("1234"));
+        assertThat(ausbildungsstaetteDto.getNummer(), Matchers.containsString("1234"));
     }
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(11)
     void createAusbildungsgangTest() {
         final var paginatedAbschlussDto = ausbildungsstaetteApiSpec.getAllAbschlussForUebersicht()
             .pageQuery(0)
@@ -274,7 +318,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(12)
     void getAllAbschlussForUebersichtTest() {
         final var paginatedAbschlussDto = ausbildungsstaetteApiSpec.getAllAbschlussForUebersicht()
             .pageQuery(0)
@@ -292,7 +336,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(13)
     void getAllAusbildungsgangForUebersichtTest() {
         final var paginatedAusbildungsgangDto = ausbildungsstaetteApiSpec.getAllAusbildungsgangForUebersicht()
             .pageQuery(0)
@@ -310,7 +354,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
+    @Order(14)
     void getAllAusbildungsstaetteForAuswahlTest() {
         final var ausbildungsstaetteSlimDtos = ausbildungsstaetteApiSpec.getAllAusbildungsstaetteForAuswahl()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -326,7 +370,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(15)
     void getAllAusbildungsstaetteForUebersichtTest() {
         final var paginatedAusbildungsstaetteDto = ausbildungsstaetteApiSpec.getAllAusbildungsstaetteForUebersicht()
             .pageQuery(0)
@@ -344,7 +388,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(16)
     void setAbschlussInaktivTest() {
         final var paginatedAbschlussDto = ausbildungsstaetteApiSpec.getAllAbschlussForUebersicht()
             .pageQuery(0)
@@ -391,7 +435,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(17)
     void setAusbildungsgangInaktivTest() {
         final var paginatedAusbildungsgangDto = ausbildungsstaetteApiSpec.getAllAusbildungsgangForUebersicht()
             .pageQuery(0)
@@ -419,7 +463,7 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(18)
     void setAusbildungsstaetteInaktivTest() {
         final var paginatedAusbildungsstaetteDto = ausbildungsstaetteApiSpec.getAllAusbildungsstaetteForUebersicht()
             .pageQuery(0)
@@ -435,7 +479,10 @@ class AusbildungsstaetteResourceTest {
         final var ausbildungsstaetten = paginatedAusbildungsstaetteDto.getEntries();
 
         final var ausbildungsstaetteCannotSetInaktiv = ausbildungsstaetten.stream()
-            .filter(ausbildungsstaetteDto -> Objects.nonNull(ausbildungsstaetteDto.getChShis()))
+            .filter(
+                ausbildungsstaetteDto -> ausbildungsstaetteDto.getNummerTyp()
+                    .equals(AusbildungsstaetteNummerTyp.CH_SHIS)
+            )
             .findFirst()
             .get();
 
@@ -447,7 +494,10 @@ class AusbildungsstaetteResourceTest {
             .statusCode(Status.FORBIDDEN.getStatusCode());
 
         final var ausbildungsstaetteCanSetInaktiv = ausbildungsstaetten.stream()
-            .filter(ausbildungsstaetteDto -> Objects.isNull(ausbildungsstaetteDto.getChShis()))
+            .filter(
+                ausbildungsstaetteDto -> !ausbildungsstaetteDto.getNummerTyp()
+                    .equals(AusbildungsstaetteNummerTyp.CH_SHIS)
+            )
             .findFirst()
             .get();
 
@@ -466,13 +516,14 @@ class AusbildungsstaetteResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(17)
+    @Order(19)
     void createAusbildungsstaetteTestNonAlphaNumFails() {
         final var ausbildungsstaetteCreateDtoSpec =
             AusbildungsstaetteCreateDtoSpecModel.ausbildungsstaetteCreateDtoSpec();
         ausbildungsstaetteCreateDtoSpec.setNameDe("createAusbildungsstaetteTestNonAlphaNumFails");
         ausbildungsstaetteCreateDtoSpec.setNameFr("createAusbildungsstaetteTestNonAlphaNumFails");
-        ausbildungsstaetteCreateDtoSpec.setCtNo("./123123");
+        ausbildungsstaetteCreateDtoSpec.setNummerTyp(AusbildungsstaetteNummerTypDtoSpec.CT_NO);
+        ausbildungsstaetteCreateDtoSpec.setNummer("./123123");
 
         final var ausbildungsstaetteDto = ausbildungsstaetteApiSpec.createAusbildungsstaette()
             .body(ausbildungsstaetteCreateDtoSpec)
