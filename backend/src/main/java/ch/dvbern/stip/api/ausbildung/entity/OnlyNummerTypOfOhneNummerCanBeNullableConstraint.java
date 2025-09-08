@@ -30,9 +30,9 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = OnlyNummerTypOfOhneNummerNummberNullableConstraintValidator.class)
+@Constraint(validatedBy = OnlyNummerTypOfOhneNummerCanBeNullableConstraintValidator.class)
 @Documented
-public @interface OnlyNummerTypOfOhneNummerNummberNullableConstraint {
+public @interface OnlyNummerTypOfOhneNummerCanBeNullableConstraint {
     String message() default VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_NOT_VALID;
 
     Class<?>[] groups() default {};

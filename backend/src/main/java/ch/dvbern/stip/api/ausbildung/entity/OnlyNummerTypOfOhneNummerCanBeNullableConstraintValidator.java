@@ -23,8 +23,8 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class OnlyNummerTypOfOhneNummerNummberNullableConstraintValidator
-    implements ConstraintValidator<OnlyNummerTypOfOhneNummerNummberNullableConstraint, Ausbildungsstaette> {
+public class OnlyNummerTypOfOhneNummerCanBeNullableConstraintValidator
+    implements ConstraintValidator<OnlyNummerTypOfOhneNummerCanBeNullableConstraint, Ausbildungsstaette> {
     @Override
     public boolean isValid(Ausbildungsstaette ausbildungsstaette, ConstraintValidatorContext context) {
         if (ausbildungsstaette.getNummerTyp() == AusbildungsstaetteNummerTyp.OHNE_NO) {

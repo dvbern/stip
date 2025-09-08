@@ -39,7 +39,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @BurAndCTNummerTypAlphaNumericConstraint
-@OnlyNummerTypOfOhneNummerNummberNullableConstraint
+@OnlyNummerTypOfOhneNummerCanBeNullableConstraint
 @Audited
 @Entity
 @Table(name = "ausbildungsstaette", indexes = @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant"))
