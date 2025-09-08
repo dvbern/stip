@@ -105,11 +105,6 @@ export class CreateAusbildungsstaetteDialogComponent {
 
   schuleNummerTypes = [
     {
-      value: 'CH_SHIS',
-      label:
-        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.CH_SHIS',
-    },
-    {
       value: 'BUR_NO',
       label:
         'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.BUR_NO',
