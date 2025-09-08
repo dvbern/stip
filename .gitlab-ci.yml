@@ -237,7 +237,7 @@ db-clear:uat:start:
     - if: $PIPELINE_TYPE == 'tag'
 
 db-clear:schulung:start:
-  resource_group: 'argocd:uat'
+  resource_group: 'argocd:schulung'
   extends: .db-clear:start
   environment:
     name: schulung
