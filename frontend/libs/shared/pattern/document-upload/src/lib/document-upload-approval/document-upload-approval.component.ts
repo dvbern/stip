@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -30,7 +29,6 @@ import { isInitial } from '@dv/shared/util/remote-data';
 @Component({
   selector: 'dv-shared-pattern-document-upload-approval',
   imports: [
-    CommonModule,
     SharedUiIconBadgeComponent,
     SharedUiReplaceAppTypePipe,
     SharedUiRdIsPendingWithoutCachePipe,

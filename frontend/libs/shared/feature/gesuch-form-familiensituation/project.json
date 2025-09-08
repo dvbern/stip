@@ -5,5 +5,12 @@
   "prefix": "dv-shared-feature-gesuch-form-familiensituation",
   "projectType": "library",
   "tags": ["scope:shared", "type:feature"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/feature/gesuch-form-familiensituation/tsconfig.lib.json"
+      }
+    }
+  }
 }

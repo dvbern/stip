@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -51,7 +50,6 @@ type SchulType = 'CT' | 'BUR';
 @Component({
   selector: 'dv-create-ausbildungsstaette-dialog',
   imports: [
-    CommonModule,
     MaskitoDirective,
     ReactiveFormsModule,
     TranslocoPipe,

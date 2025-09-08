@@ -1,7 +1,7 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   OnDestroy,
   effect,
   inject,
@@ -35,7 +35,6 @@ import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-tele
 
 @Component({
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

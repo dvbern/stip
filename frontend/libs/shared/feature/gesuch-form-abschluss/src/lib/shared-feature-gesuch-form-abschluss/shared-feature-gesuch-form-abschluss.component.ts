@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -31,7 +30,6 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 @Component({
   selector: 'dv-shared-feature-gesuch-form-abschluss',
   imports: [
-    CommonModule,
     RouterLink,
     TranslocoPipe,
     SharedUiInfoContainerComponent,

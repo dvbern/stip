@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -82,7 +81,6 @@ type DisplayColumns =
 @Component({
   selector: 'dv-abschluss',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslocoPipe,
     MatTableModule,

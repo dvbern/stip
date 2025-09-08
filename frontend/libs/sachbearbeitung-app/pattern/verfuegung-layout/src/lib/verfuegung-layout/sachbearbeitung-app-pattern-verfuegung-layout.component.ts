@@ -90,6 +90,12 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
 
     return berechnungenOptions.map((option) => ({
       ...option,
+      active: this.route.isActive(option.route, {
+        paths: 'subset',
+        queryParams: 'subset',
+        fragment: 'ignored',
+        matrixParams: 'ignored',
+      }),
       fullRoute: ['/', 'verfuegung', gesuchId, ...option.route.split('/')],
     }));
   });

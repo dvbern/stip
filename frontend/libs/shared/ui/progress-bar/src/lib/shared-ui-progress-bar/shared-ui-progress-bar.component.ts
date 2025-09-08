@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,7 +16,7 @@ import { isDefined } from '@dv/shared/model/type-util';
 
 @Component({
   selector: 'dv-shared-ui-progress-bar',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './shared-ui-progress-bar.component.html',
   styleUrls: ['./shared-ui-progress-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

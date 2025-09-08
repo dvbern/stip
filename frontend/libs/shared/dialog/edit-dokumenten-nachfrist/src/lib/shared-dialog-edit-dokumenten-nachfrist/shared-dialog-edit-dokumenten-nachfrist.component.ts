@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -35,7 +34,6 @@ type EditNachfristResult = {
 @Component({
   selector: 'dv-shared-dialog-edit-dokumenten-nachfrist',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslocoPipe,
     MatFormFieldModule,
