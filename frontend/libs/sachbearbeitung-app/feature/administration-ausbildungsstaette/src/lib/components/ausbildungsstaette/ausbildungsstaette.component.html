@@ -56,17 +56,14 @@
       <!-- NUMMER_TYP -->
       <ng-container matColumnDef="NUMMER_TYP">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
-          <label class="pe-none" for="nummerTyp">{{
+          <label id="nummerTypLabel">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp'
               | transloco
           }}</label>
           <div class="tw-relative tw-flex">
             <mat-form-field class="tw-w-full">
               <mat-select
-                [aria-label]="
-                  'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp'
-                    | transloco
-                "
+                aria-labelledby="nummerTypLabel"
                 [formControl]="filterForm.controls.nummerTyp"
                 (click)="$event.stopPropagation()"
                 class="!tw-font-normal"
@@ -148,15 +145,12 @@
 
       <ng-container matColumnDef="AKTIV">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
-          {{
+          <label id="statusLabel">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status' | transloco
-          }}
+          }}</label>
           <mat-form-field class="tw-w-full">
             <mat-select
-              [aria-label]="
-                'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.status'
-                  | transloco
-              "
+              aria-labelledby="statusLabel"
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
               class="!tw-font-normal"
