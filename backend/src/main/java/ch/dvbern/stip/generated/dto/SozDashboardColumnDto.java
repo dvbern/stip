@@ -20,9 +20,7 @@ public enum SozDashboardColumnDto {
   
   GEBURTSDATUM("GEBURTSDATUM"),
   
-  WOHNORT("WOHNORT"),
-  
-  DELEGIERUNG_ANGENOMMEN("DELEGIERUNG_ANGENOMMEN");
+  WOHNORT("WOHNORT");
 
   private String value;
 

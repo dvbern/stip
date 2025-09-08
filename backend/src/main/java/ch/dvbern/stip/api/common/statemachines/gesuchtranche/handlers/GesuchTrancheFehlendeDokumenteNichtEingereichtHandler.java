@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers;
 
 import ch.dvbern.stip.api.common.statemachines.StateChangeWithCommentHandler;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,6 +39,6 @@ public class GesuchTrancheFehlendeDokumenteNichtEingereichtHandler
         notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotification(gesuchTranche.getGesuch());
         gesuchTranche.getGesuch().setNachfristDokumente(null);
         gesuchTranche.getGesuch().setEinreichedatum(null);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuchTranche.getGesuch());
+        mailService.sendStandardNotificationEmailForGesuch(gesuchTranche.getGesuch());
     }
 }

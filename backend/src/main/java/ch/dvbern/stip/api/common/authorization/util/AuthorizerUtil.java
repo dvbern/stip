@@ -33,7 +33,7 @@ public class AuthorizerUtil {
         final SozialdienstService sozialdienstService
     ) {
         final var delegierung = fall.getDelegierung();
-        if (delegierung == null) {
+        if (delegierung == null || !fall.isDelegiert()) {
             return false;
         }
 
@@ -44,7 +44,7 @@ public class AuthorizerUtil {
 
     public boolean isGesuchstellerOfWithoutDelegierung(final Benutzer currentBenutzer, final Fall fall) {
         return isGesuchstellerOfIgnoreDelegation(fall, currentBenutzer)
-        && fall.getDelegierung() == null;
+        && !fall.isDelegiert();
     }
 
     public boolean isGesuchstellerOfIgnoreDelegation(final Fall fall, final Benutzer currentBenutzer) {

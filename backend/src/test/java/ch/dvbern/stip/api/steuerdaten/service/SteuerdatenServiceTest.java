@@ -36,9 +36,11 @@ import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
 import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
+import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.VeranlagungsStatusType;
 import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,6 +76,8 @@ class SteuerdatenServiceTest {
         getSteuerdatenResponse.getSteuerdaten().setTotalEinkuenfte(new EffSatzType());
         getSteuerdatenResponse.getSteuerdaten().getTotalEinkuenfte().setEffektiv(BigDecimal.ZERO);
         getSteuerdatenResponse.getSteuerdaten().getTotalEinkuenfte().setSatzbestimmend(BigDecimal.ZERO);
+        getSteuerdatenResponse.getSteuerdaten()
+            .setStatusVeranlagung(VeranlagungsStatusType.fromValue(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE));
 
         gesuchTranche = new GesuchTranche();
         gesuchFormular = new GesuchFormular();

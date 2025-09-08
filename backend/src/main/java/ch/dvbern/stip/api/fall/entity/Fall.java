@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.fall.entity;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -44,6 +45,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -110,5 +112,10 @@ public class Fall extends AbstractMandantEntity {
             return delegierung.getSozialdienst().getZahlungsverbindung();
         }
         return auszahlung.getZahlungsverbindung();
+    }
+
+    @Transient
+    public boolean isDelegiert() {
+        return Optional.ofNullable(getDelegierung()).map(Delegierung::getDelegierterMitarbeiter).isPresent();
     }
 }

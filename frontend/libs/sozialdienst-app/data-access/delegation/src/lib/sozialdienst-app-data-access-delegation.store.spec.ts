@@ -1,5 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { provideOAuthClient } from 'angular-oauth2-oidc';
+
+import { PermissionStore } from '@dv/shared/global/permission';
 
 import { DelegationStore } from './sozialdienst-app-data-access-delegation.store';
 
@@ -8,7 +12,13 @@ describe('DelegationStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DelegationStore, provideHttpClient()],
+      providers: [
+        provideMockStore(),
+        DelegationStore,
+        PermissionStore,
+        provideHttpClient(),
+        provideOAuthClient(),
+      ],
     });
     store = TestBed.inject(DelegationStore);
   });

@@ -17,10 +17,10 @@ import { NotificationType } from './notificationType';
 export interface Notification { 
     notificationText?: string;
     notificationType: NotificationType;
-    gesuchId: string;
+    fallId: string;
     contextId?: string;
     userErstellt: string;
-    timestampErstellt?: string;
+    timestampErstellt: string;
     absender: string;
 }
 

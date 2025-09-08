@@ -50,7 +50,6 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
@@ -140,6 +139,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
 @RequestScoped
@@ -238,9 +238,10 @@ public class GesuchService {
 
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
-        Integer veranlagungsCodeToSet = 0;
 
         final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
+        String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
+
         if (einnahmenKosten != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
@@ -252,18 +253,17 @@ public class GesuchService {
                 steuerjahrDefaultValue
             );
 
-            final Integer veranlagungsCodeDtoValue = einnahmenKostenUpdateDto.getVeranlagungsCode();
-            final Integer veranlagungsCodeExistingValue = einnahmenKosten.getVeranlagungsCode();
-            final Integer veranlagungscodeDefaltValue = 0;
-            veranlagungsCodeToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+            final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
+            final String veranlagungsStatusExistingValue = einnahmenKosten.getVeranlagungsStatus();
+            veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
-                veranlagungsCodeDtoValue,
-                veranlagungsCodeExistingValue,
-                veranlagungscodeDefaltValue
+                veranlagungsStatusDtoValue,
+                veranlagungsStatusExistingValue,
+                VERANLAGUNGSSTATUS_DEFAULT_VALUE
             );
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        einnahmenKostenUpdateDto.setVeranlagungsCode(veranlagungsCodeToSet);
+        einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
     }
 
     @Transactional
@@ -489,13 +489,13 @@ public class GesuchService {
 
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
-        Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var ausbildung = gesuch.getAusbildung();
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
-        notificationService.deleteNotificationsForGesuch(gesuchId);
+        notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
-        final var ausbildung = gesuch.getAusbildung();
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
 
@@ -1024,7 +1024,7 @@ public class GesuchService {
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
         notificationService.createMissingDocumentNotification(gesuch);
-        MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     public void setDefaultNachfristDokumente(Gesuch gesuch) {

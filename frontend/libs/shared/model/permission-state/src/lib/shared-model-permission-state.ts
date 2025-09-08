@@ -223,12 +223,17 @@ export const isNotReadonly = (
       return (
         ['V0_Sachbearbeiter', 'V0_Jurist'] satisfies AvailableBenutzerRole[]
       ).some((role) => rolesMap[role] === true);
-    case 'gesuch-app':
+    case 'gesuch-app': {
+      const isDelegiert =
+        typeof delegierung === 'boolean'
+          ? delegierung
+          : delegierung?.delegierungAngenommen;
       return (
-        !delegierung ||
+        !isDelegiert ||
         // OK if it is delegated and current user is a sozialdienst-mitarbeiter
-        (!!delegierung && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
+        (!!isDelegiert && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
       );
+    }
     default:
       assertUnreachable(appType);
   }

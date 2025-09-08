@@ -48,7 +48,7 @@ public class SteuerdatenCopyUtil {
         target.setVerpflegung(source.getVerpflegung());
         target.setVerpflegungPartner(source.getVerpflegungPartner());
         target.setSteuerjahr(source.getSteuerjahr());
-        target.setVeranlagungsCode(source.getVeranlagungsCode());
+        target.setVeranlagungsStatus(source.getVeranlagungsStatus());
     }
 
     public Set<Steuerdaten> createCopySet(final Set<Steuerdaten> other) {

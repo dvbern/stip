@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestUtil;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -142,25 +143,17 @@ class EinnahmenKostenValidatorTest {
     void veranlagungsCodeRequiredValidationTest() {
         final var factory = Validation.buildDefaultValidatorFactory();
         final var validator = factory.getValidator();
-        final String propertyName = "veranlagungscode";
+        final String propertyName = "veranlagungsstatus";
         GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
         boolean isValid = false;
 
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVeranlagungsCode(null));
-        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
-        assertThat(isValid).isFalse();
-
-        gesuch.getEinnahmenKosten().setVeranlagungsCode(0);
+        gesuch.getEinnahmenKosten().setVeranlagungsStatus(null);
         isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
 
-        gesuch.getEinnahmenKosten().setVeranlagungsCode(99);
+        gesuch.getEinnahmenKosten().setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE);
         isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
         assertThat(isValid).isTrue();
-
-        gesuch.getEinnahmenKosten().setVeranlagungsCode(100);
-        isValid = validateGesuchFormularProperty(validator, gesuch, propertyName);
-        assertThat(isValid).isFalse();
     }
 
     @Test

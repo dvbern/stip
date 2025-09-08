@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.communication.mail.service.MailServiceUtils;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -69,7 +68,7 @@ public class GesuchStatusService {
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
         if (kommentarDto != null && sendNotificationIfPossible) {
-            MailServiceUtils.sendStandardNotificationEmailForGesuch(mailService, gesuch);
+            mailService.sendStandardNotificationEmailForGesuch(gesuch);
             notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
         }
     }

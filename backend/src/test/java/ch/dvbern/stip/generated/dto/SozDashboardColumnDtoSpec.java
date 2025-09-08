@@ -34,9 +34,7 @@ public enum SozDashboardColumnDtoSpec {
   
   GEBURTSDATUM("GEBURTSDATUM"),
   
-  WOHNORT("WOHNORT"),
-  
-  DELEGIERUNG_ANGENOMMEN("DELEGIERUNG_ANGENOMMEN");
+  WOHNORT("WOHNORT");
 
   private String value;
 

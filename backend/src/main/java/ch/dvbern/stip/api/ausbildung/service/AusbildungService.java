@@ -106,20 +106,17 @@ public class AusbildungService {
         final var oldAusbildungsGang = ausbildung.getAusbildungsgang();
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
 
-        if (ausbildung.getAusbildungsgang() != null) {
-            final var newAusbildungsGang =
-                ausbildungsgangRepository.requireById(ausbildung.getAusbildungsgang().getId());
-            if (!newAusbildungsGang.isAktiv()) {
+        if (ausbildungUpdateDto.getAusbildungsgangId() != null) {
+            if (!ausbildung.getAusbildungsgang().isAktiv()) {
                 if (
-                    Objects.isNull(oldAusbildungsGang) || !newAusbildungsGang.getId().equals(oldAusbildungsGang.getId())
+                    Objects.isNull(oldAusbildungsGang)
+                    || !ausbildung.getAusbildungsgang().getId().equals(oldAusbildungsGang.getId())
                 ) {
                     throw new BadRequestException("Ausbildungsgang ist nicht aktiv");
                 }
             }
-
-            ausbildung
-                .setAusbildungsgang(newAusbildungsGang);
         }
+
         Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
@@ -147,6 +144,7 @@ public class AusbildungService {
             .setGueltigkeit(
                 new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1))
             );
+
         ausbildungRepository.persistAndFlush(ausbildung);
 
         return ausbildungMapper.toDto(ausbildung);
