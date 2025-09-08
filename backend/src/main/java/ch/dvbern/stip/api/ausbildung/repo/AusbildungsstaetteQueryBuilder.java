@@ -69,15 +69,8 @@ public class AusbildungsstaetteQueryBuilder {
         final var fieldSpecified = switch (column) {
             case NAME_DE -> Q_AUSBILDUNGSSTAETTE.nameDe;
             case NAME_FR -> Q_AUSBILDUNGSSTAETTE.nameFr;
-            // Adapted from https://stackoverflow.com/a/8502570/9363973, with Postgres 16 maybe replace
-            // todo: complete
-            // case CH_SHIS -> Expressions.stringTemplate(
-            // "CAST(NULLIF(regexp_replace({0}, '\\D', '', 'g'), '') AS integer)",
-            // Q_AUSBILDUNGSSTAETTE.chShis
-            // );
-            // case BUR_NO -> Q_AUSBILDUNGSSTAETTE.burNo;
-            // case CT_NO -> Q_AUSBILDUNGSSTAETTE.ctNo;
-            case CH_SHIS, BUR_NO, CT_NO -> Q_AUSBILDUNGSSTAETTE.nummer;
+            case NUMMER_TYP -> Q_AUSBILDUNGSSTAETTE.nummerTyp;
+            case NUMMER -> Q_AUSBILDUNGSSTAETTE.nummer;
             case AKTIV -> Q_AUSBILDUNGSSTAETTE.aktiv;
         };
 
