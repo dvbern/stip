@@ -15,16 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.service;
 
-import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface DmnModelVersion {
-    int major();
-
-    int minor();
+public @interface CalculatorMandant {
+    MandantIdentifier value();
 }

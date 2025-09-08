@@ -23,13 +23,13 @@ import java.util.Objects;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
@@ -38,13 +38,14 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Value
 @JsonIgnoreProperties
-public class PersonenImHaushaltRequestV1 implements DmnRequest {
+public class PersonenImHaushaltRequestV1 implements CalculatorRequest {
     @JsonProperty
     PersonenImHaushaltInputV1 personenImHaushaltInput;
 
     @AllArgsConstructor
     @Builder
     @Jacksonized
+    @Getter
     public static class PersonenImHaushaltInputV1 {
         @JsonProperty
         FamiliensituationV1 familiensituation;
@@ -66,9 +67,13 @@ public class PersonenImHaushaltRequestV1 implements DmnRequest {
     }
 
     @Override
-    @JsonIgnore
-    public String getVersion() {
-        return "v1.0";
+    public int majorVersion() {
+        return 1;
+    }
+
+    @Override
+    public int minorVersion() {
+        return 0;
     }
 
     public static PersonenImHaushaltRequestV1 createRequest(

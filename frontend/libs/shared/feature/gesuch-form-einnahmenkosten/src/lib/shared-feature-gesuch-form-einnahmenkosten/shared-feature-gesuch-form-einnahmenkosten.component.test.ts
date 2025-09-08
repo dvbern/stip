@@ -360,6 +360,7 @@ function createEmptyAusbildung(): Ausbildung {
         id: '',
         nameDe: '',
         nameFr: '',
+        nummerTyp: 'OHNE_NO',
         aktiv: false,
       },
       aktiv: false,

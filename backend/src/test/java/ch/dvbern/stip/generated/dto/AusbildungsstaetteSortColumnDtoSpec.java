@@ -30,11 +30,9 @@ public enum AusbildungsstaetteSortColumnDtoSpec {
   
   NAME_FR("NAME_FR"),
   
-  CH_SHIS("CH_SHIS"),
+  NUMMER("NUMMER"),
   
-  BUR_NO("BUR_NO"),
-  
-  CT_NO("CT_NO"),
+  NUMMER_TYP("NUMMER_TYP"),
   
   AKTIV("AKTIV");
 

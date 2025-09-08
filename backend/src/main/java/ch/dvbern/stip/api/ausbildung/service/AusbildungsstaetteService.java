@@ -24,6 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteQueryBuilder;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsstaetteRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
@@ -40,6 +41,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_TYP_NOT_VALID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -49,6 +51,20 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
     private final AusbildungsgangService ausbildungsgangService;
     private final ConfigService configService;
+
+    private void validateAusbildungsstaetteIsOfValidNumberType(
+        final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
+    ) {
+        if (ausbildungsstaetteCreateDto.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CH_SHIS)) {
+            throw new CustomValidationsException(
+                "Creation of Ausbildungstaette of nummerTyp CH_SHIS not allowed",
+                new CustomConstraintViolation(
+                    VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_TYP_NOT_VALID,
+                    "nummerTyp"
+                )
+            );
+        }
+    }
 
     private void validateAusbildungsstaetteNameUniqueness(
         final String ausbildungsstaetteNameDe,
@@ -76,6 +92,7 @@ public class AusbildungsstaetteService {
     public AusbildungsstaetteDto createAusbildungsstaette(
         final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
     ) {
+        validateAusbildungsstaetteIsOfValidNumberType(ausbildungsstaetteCreateDto);
         validateAusbildungsstaetteNameUniqueness(
             ausbildungsstaetteCreateDto.getNameDe(),
             ausbildungsstaetteCreateDto.getNameFr()
@@ -100,9 +117,8 @@ public class AusbildungsstaetteService {
         final SortOrder sortOrder,
         final String nameDe,
         final String nameFr,
-        final String chShis,
-        final String burNo,
-        final String ctNo,
+        final AusbildungsstaetteNummerTyp nummerTyp,
+        final String nummer,
         final Boolean aktiv
     ) {
         if (pageSize > configService.getMaxAllowedPageSize()) {
@@ -117,14 +133,11 @@ public class AusbildungsstaetteService {
         if (Objects.nonNull(nameFr)) {
             ausbildungsstaetteQueryBuilder.nameFrFilter(baseQuery, nameFr);
         }
-        if (Objects.nonNull(chShis)) {
-            ausbildungsstaetteQueryBuilder.chShisFilter(baseQuery, chShis);
+        if (Objects.nonNull(nummerTyp)) {
+            ausbildungsstaetteQueryBuilder.nummerTypFilter(baseQuery, nummerTyp);
         }
-        if (Objects.nonNull(burNo)) {
-            ausbildungsstaetteQueryBuilder.burNoFilter(baseQuery, burNo);
-        }
-        if (Objects.nonNull(ctNo)) {
-            ausbildungsstaetteQueryBuilder.ctNoFilter(baseQuery, ctNo);
+        if (Objects.nonNull(nummer)) {
+            ausbildungsstaetteQueryBuilder.nummerFilter(baseQuery, nummer);
         }
         if (Objects.nonNull(aktiv)) {
             ausbildungsstaetteQueryBuilder.aktivFilter(baseQuery, aktiv);
@@ -157,7 +170,7 @@ public class AusbildungsstaetteService {
     @Transactional
     public AusbildungsstaetteDto setAusbildungsstaetteInaktiv(final UUID ausbildungsstaetteId) {
         final var ausbildungsstaette = ausbildungsstaetteRepository.requireById(ausbildungsstaetteId);
-        if (Objects.nonNull(ausbildungsstaette.getChShis())) {
+        if (ausbildungsstaette.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CH_SHIS)) {
             throw new ForbiddenException("Can't set ausbildungsstaette inaktiv that was not user created");
         }
         ausbildungsgangService.setAllAusbildungsgaengeOfAusbildungsstaetteToInaktiv(ausbildungsstaetteId);

@@ -21,7 +21,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { MaskitoOptions } from '@maskito/core';
 
@@ -29,6 +29,7 @@ import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets
 import {
   AbschlussSlim,
   AusbildungsstaetteCreate,
+  AusbildungsstaetteNummerTyp,
   AusbildungsstaetteSlim,
 } from '@dv/shared/model/gesuch';
 import { KnownLanguage } from '@dv/shared/model/type-util';
@@ -36,17 +37,12 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import {
-  SharedUtilFormService,
-  convertTempFormToRealValues,
-} from '@dv/shared/util/form';
+import { convertTempFormToRealValues } from '@dv/shared/util/form';
 
 type CreateAbschlussData = {
   ausbildungsstaetten: AusbildungsstaetteSlim[];
   abschluesse: AbschlussSlim[];
 };
-
-type SchulType = 'CT' | 'BUR';
 
 @Component({
   selector: 'dv-create-ausbildungsstaette-dialog',
@@ -70,15 +66,16 @@ export class CreateAusbildungsstaetteDialogComponent {
       MatDialogRef,
     );
   private formBuilder = inject(NonNullableFormBuilder);
-  private formUtils = inject(SharedUtilFormService);
-  translate = inject(TranslocoService);
 
   dialogData = inject<CreateAbschlussData>(MAT_DIALOG_DATA);
   alphanumericMask: MaskitoOptions = {
     mask: /^[a-zA-Z\d]+$/,
   };
   form = this.formBuilder.group({
-    schule: [<SchulType | undefined>undefined, Validators.required],
+    schuleNummerTyp: [
+      <AusbildungsstaetteNummerTyp | undefined>undefined,
+      Validators.required,
+    ],
     nameDe: [
       <string | null>null,
       [
@@ -99,32 +96,33 @@ export class CreateAusbildungsstaetteDialogComponent {
         ),
       ],
     ],
-    burNo: [<string | undefined>undefined],
-    ctNo: [<string | undefined>undefined],
+    nummer: [<string | undefined>undefined],
   });
-  schuleChangedSig = toSignal(this.form.controls.schule.valueChanges);
-  numberFields = {
-    BUR: {
-      labelSubKey: 'burNummer',
-      control: this.form.controls.burNo,
-    },
-    CT: {
-      labelSubKey: 'ctNummer',
-      control: this.form.controls.ctNo,
-    },
-  } satisfies Record<SchulType, unknown>;
-  schulen = [
+
+  schuleNummerTypChangedSig = toSignal(
+    this.form.controls.schuleNummerTyp.valueChanges,
+  );
+
+  schuleNummerTypes = [
     {
-      value: 'CT',
+      value: 'BUR_NO',
       label:
-        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.CT',
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.BUR_NO',
     },
     {
-      value: 'BUR',
+      value: 'CT_NO',
       label:
-        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.BUR',
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.CT_NO',
     },
-  ] satisfies { value: SchulType; label: SachbearbeitungAppTranslationKey }[];
+    {
+      value: 'OHNE_NO',
+      label:
+        'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule.OHNE_NO',
+    },
+  ] satisfies {
+    value: AusbildungsstaetteNummerTyp;
+    label: SachbearbeitungAppTranslationKey;
+  }[];
 
   static open(dialog: MatDialog, data: CreateAbschlussData) {
     return dialog.open<
@@ -136,9 +134,15 @@ export class CreateAusbildungsstaetteDialogComponent {
 
   constructor() {
     effect(() => {
-      const schule = this.schuleChangedSig();
+      const schuleNummerTyp = this.schuleNummerTypChangedSig();
 
-      this.formUtils.setRequired(this.form.controls.burNo, schule === 'BUR');
+      if (schuleNummerTyp === 'OHNE_NO') {
+        this.form.controls.nummer.setValue(undefined);
+        this.form.controls.nummer.clearValidators();
+      } else {
+        this.form.controls.nummer.setValidators([Validators.required]);
+      }
+      this.form.controls.nummer.updateValueAndValidity();
     });
   }
 
@@ -147,12 +151,16 @@ export class CreateAusbildungsstaetteDialogComponent {
       return;
     }
 
-    const values = convertTempFormToRealValues(this.form, ['nameDe', 'nameFr']);
+    const values = convertTempFormToRealValues(this.form, [
+      'nameDe',
+      'nameFr',
+      'schuleNummerTyp',
+    ]);
     this.dialogRef.close({
       nameDe: values.nameDe,
       nameFr: values.nameFr,
-      burNo: values.burNo,
-      ctNo: values.ctNo,
+      nummerTyp: values.schuleNummerTyp,
+      nummer: values.nummer,
     });
   }
 

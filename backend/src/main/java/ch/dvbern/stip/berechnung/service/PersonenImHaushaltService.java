@@ -17,18 +17,12 @@
 
 package ch.dvbern.stip.berechnung.service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-
-import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
-import ch.dvbern.stip.berechnung.util.DmnRequestContextUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -36,14 +30,10 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class PersonenImHaushaltService {
-    private static final String PERSONEN_IM_HAUSHALT_MODEL_NAME = "PersonenImHaushalt";
-    private static final String PERSONEN_IM_HAUSHALT_DECISION_NAME = "personenImHaushaltOutput";
-
+    private final Instance<PersonenImHaushaltCalculator> personenImHaushaltCalculators;
     private final Instance<PersonenImHaushaltRequestBuilder> personenImHaushaltRequestBuilders;
-    private final DMNService dmnService;
-    private final TenantService tenantService;
 
-    public DmnRequest getPersonenImHaushaltRequest(
+    public CalculatorRequest getPersonenImHaushaltRequest(
         final int majorVersion,
         final int minorVersion,
         final GesuchFormular gesuchFormular,
@@ -51,7 +41,7 @@ public class PersonenImHaushaltService {
     ) {
         final var builder = personenImHaushaltRequestBuilders.stream().filter(personenImHaushaltRequestBuilder -> {
             final var versionAnnotation =
-                personenImHaushaltRequestBuilder.getClass().getAnnotation(DmnModelVersion.class);
+                personenImHaushaltRequestBuilder.getClass().getAnnotation(CalculatorVersion.class);
             return (versionAnnotation != null) &&
             (versionAnnotation.major() == majorVersion) &&
             (versionAnnotation.minor() == minorVersion);
@@ -69,30 +59,22 @@ public class PersonenImHaushaltService {
         return builder.get().buildRequest(gesuchFormular, elternToPrioritize);
     }
 
-    public PersonenImHaushaltResult calculatePersonenImHaushalt(final DmnRequest request) {
-        final var models = dmnService.loadModelsForTenantAndVersionByName(
-            tenantService.getCurrentTenantIdentifier(),
-            request.getVersion(),
-            PERSONEN_IM_HAUSHALT_MODEL_NAME
-        );
+    public PersonenImHaushaltResult calculatePersonenImHaushalt(final CalculatorRequest request) {
+        final var calculator = personenImHaushaltCalculators.stream()
+            .filter(possibleCalculator -> {
+                final var versionAnnotation = possibleCalculator.getClass().getAnnotation(CalculatorVersion.class);
+                return versionAnnotation != null &&
+                versionAnnotation.major() == request.majorVersion() &&
+                versionAnnotation.minor() == request.minorVersion();
+            })
+            .findFirst();
 
-        final var result = dmnService.evaluateModel(models, DmnRequestContextUtil.toContext(request));
-
-        @SuppressWarnings("unchecked") // It's fine
-        final var personenImHaushaltOutput = (HashMap<String, BigDecimal>) result
-            .getDecisionResultByName(PERSONEN_IM_HAUSHALT_DECISION_NAME)
-            .getResult();
-        if (personenImHaushaltOutput == null) {
-            throw new AppErrorException("Result of PersonenImHaushalt decision was null");
+        if (calculator.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Cannot find a Personen im Haushalt Calculator for version " + request.getVersion()
+            );
         }
 
-        return PersonenImHaushaltResult.builder()
-            .noBudgetsRequired(personenImHaushaltOutput.get("noBudgetsRequired").intValue())
-            .kinderImHaushalt1(personenImHaushaltOutput.get("kinderImHaushalt1").intValue())
-            .kinderImHaushalt2(personenImHaushaltOutput.get("kinderImHaushalt2").intValue())
-            .personenImHaushalt1(personenImHaushaltOutput.get("personenImHaushalt1").intValue())
-            .personenImHaushalt2(personenImHaushaltOutput.get("personenImHaushalt2").intValue())
-            .decisionResults(result.getDecisionResults())
-            .build();
+        return calculator.get().calculatePersonenImHaushalt(request);
     }
 }
