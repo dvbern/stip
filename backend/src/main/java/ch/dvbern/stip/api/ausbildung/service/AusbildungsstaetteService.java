@@ -41,6 +41,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_TYP_NOT_VALID;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -50,6 +51,20 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
     private final AusbildungsgangService ausbildungsgangService;
     private final ConfigService configService;
+
+    private void validateAusbildungsstaetteIsOfValidNumberType(
+        final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
+    ) {
+        if (ausbildungsstaetteCreateDto.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CH_SHIS)) {
+            throw new CustomValidationsException(
+                "Creation of Ausbildungstaette of nummerTyp CH_SHIS not allowed",
+                new CustomConstraintViolation(
+                    VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_TYP_NOT_VALID,
+                    "nummerTyp"
+                )
+            );
+        }
+    }
 
     private void validateAusbildungsstaetteNameUniqueness(
         final String ausbildungsstaetteNameDe,
@@ -77,6 +92,7 @@ public class AusbildungsstaetteService {
     public AusbildungsstaetteDto createAusbildungsstaette(
         final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
     ) {
+        validateAusbildungsstaetteIsOfValidNumberType(ausbildungsstaetteCreateDto);
         validateAusbildungsstaetteNameUniqueness(
             ausbildungsstaetteCreateDto.getNameDe(),
             ausbildungsstaetteCreateDto.getNameFr()
