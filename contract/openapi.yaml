@@ -5623,6 +5623,17 @@ components:
         hasDocuments:
           description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
           type: boolean
+    NeskoError:
+      required:
+        - type
+        - neskoError
+      type: object
+      properties:
+        type:
+          type: string
+        neskoError:
+          type: string
+
     ValidationMessage:
       required:
         - message
