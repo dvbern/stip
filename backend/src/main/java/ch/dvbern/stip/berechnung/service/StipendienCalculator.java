@@ -15,11 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.service;
 
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.berechnung.dto.BerechnungResult;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 
-public interface PersonenImHaushaltRequestBuilder {
-    CalculatorRequest buildRequest(final GesuchFormular gesuchFormular, final ElternTyp elternToPrioritize);
+public interface StipendienCalculator {
+    BerechnungResult calculateStipendien(final CalculatorRequest model);
 }

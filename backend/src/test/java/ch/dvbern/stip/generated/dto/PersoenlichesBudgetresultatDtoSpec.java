@@ -54,7 +54,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_FREMDBETREUUNG,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_AUSGABEN_PERSOENLICHES_BUDGET,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_PERSOENLICHESBUDGET_BERECHNET
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_PERSOENLICHESBUDGET_BERECHNET,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ELTERNBEITRAG1,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ELTERNBEITRAG2
 })
 @JsonTypeName("PersoenlichesBudgetresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -142,6 +144,12 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_PERSOENLICHESBUDGET_BERECHNET = "persoenlichesbudgetBerechnet";
   private Integer persoenlichesbudgetBerechnet;
+
+  public static final String JSON_PROPERTY_ELTERNBEITRAG1 = "elternbeitrag1";
+  private Integer elternbeitrag1;
+
+  public static final String JSON_PROPERTY_ELTERNBEITRAG2 = "elternbeitrag2";
+  private Integer elternbeitrag2;
 
   public PersoenlichesBudgetresultatDtoSpec() {
   }
@@ -873,6 +881,58 @@ public class PersoenlichesBudgetresultatDtoSpec {
     this.persoenlichesbudgetBerechnet = persoenlichesbudgetBerechnet;
   }
 
+
+  public PersoenlichesBudgetresultatDtoSpec elternbeitrag1(Integer elternbeitrag1) {
+    
+    this.elternbeitrag1 = elternbeitrag1;
+    return this;
+  }
+
+   /**
+   * Get elternbeitrag1
+   * @return elternbeitrag1
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ELTERNBEITRAG1)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getElternbeitrag1() {
+    return elternbeitrag1;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ELTERNBEITRAG1)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setElternbeitrag1(Integer elternbeitrag1) {
+    this.elternbeitrag1 = elternbeitrag1;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec elternbeitrag2(Integer elternbeitrag2) {
+    
+    this.elternbeitrag2 = elternbeitrag2;
+    return this;
+  }
+
+   /**
+   * Get elternbeitrag2
+   * @return elternbeitrag2
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ELTERNBEITRAG2)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getElternbeitrag2() {
+    return elternbeitrag2;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ELTERNBEITRAG2)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setElternbeitrag2(Integer elternbeitrag2) {
+    this.elternbeitrag2 = elternbeitrag2;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -909,12 +969,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.fremdbetreuung, persoenlichesBudgetresultat.fremdbetreuung) &&
         Objects.equals(this.ausbildungskosten, persoenlichesBudgetresultat.ausbildungskosten) &&
         Objects.equals(this.ausgabenPersoenlichesBudget, persoenlichesBudgetresultat.ausgabenPersoenlichesBudget) &&
-        Objects.equals(this.persoenlichesbudgetBerechnet, persoenlichesBudgetresultat.persoenlichesbudgetBerechnet);
+        Objects.equals(this.persoenlichesbudgetBerechnet, persoenlichesBudgetresultat.persoenlichesbudgetBerechnet) &&
+        Objects.equals(this.elternbeitrag1, persoenlichesBudgetresultat.elternbeitrag1) &&
+        Objects.equals(this.elternbeitrag2, persoenlichesBudgetresultat.elternbeitrag2);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet);
+    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -949,6 +1011,8 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    ausgabenPersoenlichesBudget: ").append(toIndentedString(ausgabenPersoenlichesBudget)).append("\n");
     sb.append("    persoenlichesbudgetBerechnet: ").append(toIndentedString(persoenlichesbudgetBerechnet)).append("\n");
+    sb.append("    elternbeitrag1: ").append(toIndentedString(elternbeitrag1)).append("\n");
+    sb.append("    elternbeitrag2: ").append(toIndentedString(elternbeitrag2)).append("\n");
     sb.append("}");
     return sb.toString();
   }

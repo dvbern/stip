@@ -21,19 +21,19 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import ch.dvbern.stip.berechnung.dto.DmnModelVersion;
-import ch.dvbern.stip.berechnung.dto.DmnRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
+import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputFamilienbudgetV1;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import jakarta.inject.Singleton;
 
 @Singleton
-@DmnModelVersion(major = 1, minor = 0)
+@CalculatorVersion(major = 1, minor = 0)
 public class FamilienBudgetresultatV1Mapper implements FamilienBudgetresultatMapper {
     @Override
     public FamilienBudgetresultatDto mapFromRequest(
-        DmnRequest request,
+        CalculatorRequest request,
         final SteuerdatenTyp steuerdatenTyp,
         final int budgetToUse,
         final int einnahmenFamilienbudget,

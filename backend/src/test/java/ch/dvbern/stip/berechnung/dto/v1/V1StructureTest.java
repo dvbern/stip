@@ -21,10 +21,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
+import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import com.savoirtech.json.JsonComparatorBuilder;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -33,12 +31,8 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@QuarkusTest
 @Slf4j
 class V1StructureTest {
-    @Inject
-    PersonenImHaushaltService personenImHaushaltService;
-
     private static final String EXPECTED = """
         {
             "templateJson": {
@@ -75,7 +69,8 @@ class V1StructureTest {
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0
+                        "anzahlGeschwisterInAusbildung": 0,
+                        "steuerdatenTyp": "VATER"
                     }
                 },
                 "InputFamilienbudget_2_V1": {
@@ -99,7 +94,8 @@ class V1StructureTest {
                         "steuerbaresVermoegen": 0,
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0
+                        "anzahlGeschwisterInAusbildung": 0,
+                        "steuerdatenTyp": "MUTTER"
                     }
                 },
                 "InputPersoenlichesbudget_V1": {
@@ -121,7 +117,6 @@ class V1StructureTest {
                         "medizinischeGrundversorgung": 2800,
                         "ausbildungskosten": 450,
                         "steuern": 0,
-                        "steuernKonkubinatspartner": 0,
                         "fahrkosten": 523,
                         "fahrkostenPartner": 0,
                         "verpflegung": 0,
@@ -149,13 +144,15 @@ class V1StructureTest {
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             ElternTyp.VATER,
-            personenImHaushaltService
+            BerechnungUtil.getPersonenImHaushaltService()
         );
         final var actual = new ObjectMapper().writeValueAsString(request);
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(EXPECTED, actual);
-        LOG.info("Actual: " + actual.toString());
+        if (!result.isMatch()) {
+            LOG.error("Mismatched results. Actual: " + actual.toString());
+        }
         assertTrue(result.isMatch(), result.getErrorMessage());
     }
 }

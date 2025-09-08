@@ -6996,6 +6996,10 @@ components:
           type: integer
         persoenlichesbudgetBerechnet:
           type: integer
+        elternbeitrag1:
+          type: integer
+        elternbeitrag2:
+          type: integer
     FamilienBudgetresultat:
       description: Familien Budget daten fuer und von der Berechnung
       required:

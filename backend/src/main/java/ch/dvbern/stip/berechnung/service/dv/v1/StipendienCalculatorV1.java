@@ -15,26 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto.v1;
+package ch.dvbern.stip.berechnung.service.dv.v1;
 
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
+import ch.dvbern.stip.berechnung.service.CalculatorMandant;
+import ch.dvbern.stip.berechnung.service.StipendienCalculator;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
 @Singleton
 @RequiredArgsConstructor
 @CalculatorVersion(major = 1, minor = 0)
-public class BerechnungRequestV1Builder implements BerechnungRequestBuilder {
-    private final PersonenImHaushaltService personenImHaushaltService;
+@CalculatorMandant(MandantIdentifier.DV)
+public class StipendienCalculatorV1 implements StipendienCalculator {
+    private final ch.dvbern.stip.berechnung.service.bern.v1.StipendienCalculatorV1 stipendienCalculatorBern;
 
     @Override
-    public CalculatorRequest buildRequest(Gesuch gesuch, GesuchTranche gesuchTranche, ElternTyp elternTyp) {
-        return BerechnungRequestV1.createRequest(gesuch, gesuchTranche, elternTyp, personenImHaushaltService);
+    public BerechnungResult calculateStipendien(CalculatorRequest model) {
+        return stipendienCalculatorBern.calculateStipendien(model);
     }
 }

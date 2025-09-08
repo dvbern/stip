@@ -15,11 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.util;
 
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-public interface PersonenImHaushaltRequestBuilder {
-    CalculatorRequest buildRequest(final GesuchFormular gesuchFormular, final ElternTyp elternToPrioritize);
+public final class MathUtil {
+    private MathUtil() {
+        throw new UnsupportedOperationException();
+    }
+
+    public static int roundHalfUp(BigDecimal value) {
+        return value.setScale(0, RoundingMode.HALF_UP).intValue();
+    }
 }
