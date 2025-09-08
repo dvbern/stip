@@ -71,14 +71,14 @@
                 (click)="$event.stopPropagation()"
                 class="!tw-font-normal"
                 [placeholder]="
-                  'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.alle'
+                  'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.alle'
                     | transloco
                 "
                 panelClass="table-select"
               >
                 <mat-option [value]="undefined">
                   {{
-                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.alle'
+                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.alle'
                       | transloco
                   }}
                 </mat-option>
@@ -86,7 +86,7 @@
                 @for (type of nummerTypValues; track type) {
                   <mat-option [value]="type">
                     {{
-                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.' +
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.' +
                         type | transloco
                     }}
                   </mat-option>
@@ -126,8 +126,9 @@
                 class="tw-w-full"
                 [formControl]="filterForm.controls.nummer"
                 data-testid="ausbildungsstaetten-filter-nummer"
+                (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()"
               />
-              (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" />
             </mat-form-field>
             <dv-shared-ui-clear-button
               class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
