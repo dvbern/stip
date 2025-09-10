@@ -242,6 +242,31 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeDelegation() {
+    const delegierungId = this.dialogData.fall.delegierung.id;
+    if (delegierungId) {
+      SharedUiConfirmDialogComponent.open<
+        SharedTranslationKey | SozialdienstAppTranslationKey
+      >(this.dialog, {
+        title:
+          'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove',
+        message:
+          'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove.message',
+      })
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.delegationStore.delegierungAufloesen$({
+              delegierungId,
+              onSuccess: () => {
+                this.dialogRef.close(true);
+              },
+            });
+          }
+        });
+    }
+  }
+
   cancel() {
     this.dialogRef.disableClose = false;
     this.dialogRef.close();

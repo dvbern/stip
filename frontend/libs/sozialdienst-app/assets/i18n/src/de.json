@@ -48,5 +48,7 @@
   "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Zuweisung ändern",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Bitte speichern Sie die Änderungen, bevor Sie den Dialog schließen.",
   "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Anfrage ablehnen",
-  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Wollen Sie die Delegierungsanfrage wirklich ablehnen?"
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Wollen Sie die Delegierungsanfrage wirklich ablehnen?",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove": "Delegierung löschen",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove.message": "Wollen sie wirklich die Delegation löschen?"
 }
