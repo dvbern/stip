@@ -49,10 +49,19 @@ export type UnknownHttpError = Extends<
   HttpErrorResponse
 >;
 
+export const NeskoError = z.object({
+  type: z.string(),
+  neskoError: z.string(),
+  userMessage: z.string(),
+});
+
 export const ParseError = z.instanceof(z.ZodError);
 export type ParseError = z.infer<typeof ParseError>;
 
 const ErrorTypes = {
+  neskoError: z.object({
+    error: NeskoError,
+  }),
   validationError: z.object({
     error: z.object({
       validationErrors: z.array(ValidationError),
@@ -78,6 +87,13 @@ export type SharedModelErrorTypes = keyof typeof ErrorTypes;
 
 export const SharedModelError = z.intersection(
   z.union([
+    ErrorTypes.neskoError.transform(({ error: { neskoError, userMessage } }) =>
+      createError('neskoError', {
+        message: userMessage,
+        messageKey: 'shared.genericError.nesko',
+        errorCode: neskoError,
+      }),
+    ),
     ErrorTypes.validationError.transform(
       ({ error: { validationErrors, validationWarnings, hasDocuments } }) =>
         createError('validationError', {
