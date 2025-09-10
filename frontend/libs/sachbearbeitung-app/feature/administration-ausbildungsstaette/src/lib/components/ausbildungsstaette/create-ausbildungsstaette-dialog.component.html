@@ -20,11 +20,11 @@
           {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco }}
         </mat-label>
         <mat-select
-          [formControl]="form.controls.schule"
+          [formControl]="form.controls.schuleNummerTyp"
           [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco"
         >
-          @for (schule of schulen; track schule) {
-            <mat-option [value]="schule.value">{{ schule.label | transloco }}</mat-option>
+          @for (schulType of schuleNummerTypes; track schulType) {
+            <mat-option [value]="schulType.value">{{ schulType.label | transloco }}</mat-option>
           }
         </mat-select>
         <mat-error *dvSharedUiFormMessageError="'required'">
@@ -55,13 +55,15 @@
           {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.errors.notUnique' | transloco }}
         </mat-error>
       </mat-form-field>
-      @if (schuleChangedSig(); as schulType) {
-        @let schule = numberFields[schulType];
+      @let schuleNummerTyp = schuleNummerTypChangedSig();
+      @if (schuleNummerTyp && schuleNummerTyp !== 'OHNE_NO') {
         <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>
-            {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.' + schule.labelSubKey | transloco }}
+            {{
+              'sachbearbeitung-app.feature.administration.ausbildungsstaette.nummerTyp.' + schuleNummerTyp | transloco
+            }}
           </mat-label>
-          <input matInput [maskito]="alphanumericMask" [formControl]="schule.control" />
+          <input matInput [maskito]="alphanumericMask" [formControl]="form.controls.nummer" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>

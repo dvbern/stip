@@ -1,0 +1,45 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-2">
+        <addColumn tableName="ausbildungsstaette">
+            <column name="nummer" type="VARCHAR(20)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-3">
+        <addColumn tableName="ausbildungsstaette_aud">
+            <column name="nummer" type="VARCHAR(20)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-4">
+        <addColumn tableName="ausbildungsstaette">
+            <column name="nummer_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-5">
+        <addColumn tableName="ausbildungsstaette_aud">
+            <column name="nummer_typ" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-25">
+        <dropColumn columnName="bur_no" tableName="ausbildungsstaette"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-26">
+        <dropColumn columnName="bur_no" tableName="ausbildungsstaette_aud"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-27">
+        <dropColumn columnName="ch_shis" tableName="ausbildungsstaette"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-28">
+        <dropColumn columnName="ch_shis" tableName="ausbildungsstaette_aud"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-29">
+        <dropColumn columnName="ct_no" tableName="ausbildungsstaette"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1756820088549-30">
+        <dropColumn columnName="ct_no" tableName="ausbildungsstaette_aud"/>
+    </changeSet>
+</databaseChangeLog>

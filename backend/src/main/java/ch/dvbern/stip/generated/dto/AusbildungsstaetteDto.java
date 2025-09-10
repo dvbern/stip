@@ -23,10 +23,9 @@ public class AusbildungsstaetteDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String nameDe;
   private @Valid String nameFr;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
   private @Valid Boolean aktiv;
-  private @Valid String chShis;
-  private @Valid String burNo;
-  private @Valid String ctNo;
+  private @Valid String nummer;
 
   /**
    **/
@@ -87,6 +86,25 @@ public class AusbildungsstaetteDto  implements Serializable {
 
   /**
    **/
+  public AusbildungsstaetteDto nummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
+    this.nummerTyp = nummerTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("nummerTyp")
+  @NotNull
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp getNummerTyp() {
+    return nummerTyp;
+  }
+
+  @JsonProperty("nummerTyp")
+  public void setNummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
+    this.nummerTyp = nummerTyp;
+  }
+
+  /**
+   **/
   public AusbildungsstaetteDto aktiv(Boolean aktiv) {
     this.aktiv = aktiv;
     return this;
@@ -106,56 +124,20 @@ public class AusbildungsstaetteDto  implements Serializable {
 
   /**
    **/
-  public AusbildungsstaetteDto chShis(String chShis) {
-    this.chShis = chShis;
+  public AusbildungsstaetteDto nummer(String nummer) {
+    this.nummer = nummer;
     return this;
   }
 
   
-  @JsonProperty("chShis")
-  public String getChShis() {
-    return chShis;
+  @JsonProperty("nummer")
+  public String getNummer() {
+    return nummer;
   }
 
-  @JsonProperty("chShis")
-  public void setChShis(String chShis) {
-    this.chShis = chShis;
-  }
-
-  /**
-   **/
-  public AusbildungsstaetteDto burNo(String burNo) {
-    this.burNo = burNo;
-    return this;
-  }
-
-  
-  @JsonProperty("burNo")
-  public String getBurNo() {
-    return burNo;
-  }
-
-  @JsonProperty("burNo")
-  public void setBurNo(String burNo) {
-    this.burNo = burNo;
-  }
-
-  /**
-   **/
-  public AusbildungsstaetteDto ctNo(String ctNo) {
-    this.ctNo = ctNo;
-    return this;
-  }
-
-  
-  @JsonProperty("ctNo")
-  public String getCtNo() {
-    return ctNo;
-  }
-
-  @JsonProperty("ctNo")
-  public void setCtNo(String ctNo) {
-    this.ctNo = ctNo;
+  @JsonProperty("nummer")
+  public void setNummer(String nummer) {
+    this.nummer = nummer;
   }
 
 
@@ -171,15 +153,14 @@ public class AusbildungsstaetteDto  implements Serializable {
     return Objects.equals(this.id, ausbildungsstaette.id) &&
         Objects.equals(this.nameDe, ausbildungsstaette.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaette.nameFr) &&
+        Objects.equals(this.nummerTyp, ausbildungsstaette.nummerTyp) &&
         Objects.equals(this.aktiv, ausbildungsstaette.aktiv) &&
-        Objects.equals(this.chShis, ausbildungsstaette.chShis) &&
-        Objects.equals(this.burNo, ausbildungsstaette.burNo) &&
-        Objects.equals(this.ctNo, ausbildungsstaette.ctNo);
+        Objects.equals(this.nummer, ausbildungsstaette.nummer);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nameDe, nameFr, aktiv, chShis, burNo, ctNo);
+    return Objects.hash(id, nameDe, nameFr, nummerTyp, aktiv, nummer);
   }
 
   @Override
@@ -190,10 +171,9 @@ public class AusbildungsstaetteDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
+    sb.append("    nummerTyp: ").append(toIndentedString(nummerTyp)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
-    sb.append("    chShis: ").append(toIndentedString(chShis)).append("\n");
-    sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
-    sb.append("    ctNo: ").append(toIndentedString(ctNo)).append("\n");
+    sb.append("    nummer: ").append(toIndentedString(nummer)).append("\n");
     sb.append("}");
     return sb.toString();
   }
