@@ -6126,6 +6126,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - ausbildungskategorie
+        - bildungsrichtung
         - aktiv
       properties:
         id:
@@ -6136,6 +6137,8 @@ components:
           type: string
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
+        bildungsrichtung:
+          $ref: "#/components/schemas/Bildungsrichtung"
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:

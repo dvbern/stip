@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AbschlussZusatzfrageDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungskategorieDtoSpec;
+import ch.dvbern.stip.generated.dto.BildungsrichtungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AbschlussSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AbschlussSlimDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AbschlussSlimDtoSpec.JSON_PROPERTY_AUSBILDUNGSKATEGORIE,
+  AbschlussSlimDtoSpec.JSON_PROPERTY_BILDUNGSRICHTUNG,
   AbschlussSlimDtoSpec.JSON_PROPERTY_ZUSATZFRAGE,
   AbschlussSlimDtoSpec.JSON_PROPERTY_AKTIV
 })
@@ -51,6 +53,9 @@ public class AbschlussSlimDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNGSKATEGORIE = "ausbildungskategorie";
   private AusbildungskategorieDtoSpec ausbildungskategorie;
+
+  public static final String JSON_PROPERTY_BILDUNGSRICHTUNG = "bildungsrichtung";
+  private BildungsrichtungDtoSpec bildungsrichtung;
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
@@ -165,6 +170,32 @@ public class AbschlussSlimDtoSpec {
   }
 
 
+  public AbschlussSlimDtoSpec bildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+    
+    this.bildungsrichtung = bildungsrichtung;
+    return this;
+  }
+
+   /**
+   * Get bildungsrichtung
+   * @return bildungsrichtung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public BildungsrichtungDtoSpec getBildungsrichtung() {
+    return bildungsrichtung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+    this.bildungsrichtung = bildungsrichtung;
+  }
+
+
   public AbschlussSlimDtoSpec zusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
     
     this.zusatzfrage = zusatzfrage;
@@ -229,13 +260,14 @@ public class AbschlussSlimDtoSpec {
         Objects.equals(this.bezeichnungDe, abschlussSlim.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, abschlussSlim.bezeichnungFr) &&
         Objects.equals(this.ausbildungskategorie, abschlussSlim.ausbildungskategorie) &&
+        Objects.equals(this.bildungsrichtung, abschlussSlim.bildungsrichtung) &&
         Objects.equals(this.zusatzfrage, abschlussSlim.zusatzfrage) &&
         Objects.equals(this.aktiv, abschlussSlim.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, zusatzfrage, aktiv);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, ausbildungskategorie, bildungsrichtung, zusatzfrage, aktiv);
   }
 
   @Override
@@ -246,6 +278,7 @@ public class AbschlussSlimDtoSpec {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    ausbildungskategorie: ").append(toIndentedString(ausbildungskategorie)).append("\n");
+    sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");

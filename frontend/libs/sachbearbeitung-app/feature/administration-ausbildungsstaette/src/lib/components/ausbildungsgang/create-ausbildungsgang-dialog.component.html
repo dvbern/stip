@@ -44,9 +44,12 @@
           [languageSig]="dialogData.language"
         >
           <ng-container *dvSearchOptionLabel="dialogData.abschluesse; let abschluss">
-            @let abschlussFullname =
-              `${abschluss | translatedProp: 'bezeichnung' : dialogData.language} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}`;
-            {{ abschlussFullname }}
+            {{ abschluss | translatedProp: 'bezeichnung' : dialogData.language }} -
+            {{ `shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco }} ({{
+              `shared.bildungsrichtung.${abschluss.bildungsrichtung}` | transloco
+
+
+            }})
           </ng-container>
         </dv-shared-ui-select-search>
       </div>
