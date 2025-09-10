@@ -13,7 +13,7 @@
         @for (option of infosOptions; track $index) {
           <a
             type="button"
-            class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal shadow-none"
+            class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
             [routerLink]="['/', infosRoute, option.route, gesuchIdSig()]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"
@@ -34,10 +34,10 @@
         <div class="d-none d-lg-block border-end bg-white">
           <ng-container *ngTemplateOutlet="navigation"></ng-container>
         </div>
-        <div class="container mb-5 pt-lg-4 px-lg-4 tw-overflow-hidden">
+        <div class="pt-lg-4 px-lg-4 tw:overflow-hidden container mb-5">
           <!-- step header (mobile) -->
           <div
-            class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
+            class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3"
           >
             <ng-container *ngTemplateOutlet="navigation"></ng-container>
           </div>

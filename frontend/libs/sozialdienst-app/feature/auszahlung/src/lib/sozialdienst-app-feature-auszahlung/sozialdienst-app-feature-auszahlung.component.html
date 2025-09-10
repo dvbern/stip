@@ -1,44 +1,44 @@
 <dv-shared-pattern-main-layout>
-  <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+  <div dvHeaderDesktopLeft class="d-flex align-items-center gap-3">
     <a
       routerLink="/"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="gesuch-step-nav-overview"
     >
-      <i class="material-symbols-rounded text-white me-2">list</i>
+      <i class="material-symbols-rounded me-2 text-white">list</i>
       <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
     </a>
     @let fallId = fallIdSig();
     <a
       [routerLink]="['/fall', fallId]"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="gesuch-step-nav-overview"
       [class.disabled]="!fallId"
     >
-      <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
+      <i class="material-symbols-rounded me-2 text-white">assignment_ind</i>
       <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
     </a>
     <a
       [routerLink]="['/auszahlung', fallId]"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none active"
+      class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
       data-testid="gesuch-step-nav-auszahlung"
       [class.disabled]="!fallId"
     >
-      <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
+      <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
       {{ 'shared.menu.auszahlung' | transloco }}
     </a>
     <a
       *dvHasRoles="['V0_Sozialdienst-Admin']"
       routerLink="/administration"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="gesuch-step-nav-administration"
     >
-      <i class="material-symbols-rounded text-white me-2">settings</i>
+      <i class="material-symbols-rounded me-2 text-white">settings</i>
       <span>{{ 'sozialdienst-app.header.administration' | transloco }}</span>
     </a>
   </div>
-  <div class="container tw-relative tw-my-12 tw-justify-between">
-    <h1 class="tw-mb-8">
+  <div class="tw:relative tw:my-12 tw:justify-between container">
+    <h1 class="tw:mb-8">
       {{ 'shared.auszahlung.title' | transloco }}
     </h1>
     <dv-shared-ui-auszahlung

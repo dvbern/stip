@@ -1,7 +1,7 @@
 @let dokument = dokumentSig();
 @let view = viewSig();
 
-<div class="tw-flex tw-gap-2">
+<div class="tw:flex tw:gap-2">
   @if (dokument?.gesuchDokument?.id) {
     @if (view.canApproveDecline && !view.readonly && dokument?.gesuchDokument?.dokumente?.length) {
       @switch (dokument?.gesuchDokument?.status) {
@@ -10,9 +10,9 @@
             (click)="dokumentAkzeptieren.emit(dokument); $event.stopPropagation()"
             type="button"
             data-testid="dokument-akzeptieren"
-            class="btn table-btn btn-success text-white d-flex align-items-center gap-1"
+            class="btn table-btn btn-success d-flex align-items-center gap-1 text-white"
           >
-            <i class="material-symbols-rounded tw-text-xl/none">check</i>
+            <i class="material-symbols-rounded tw:text-xl/none">check</i>
             <span>
               {{ 'shared.dokumente.dokumentStatus.action.accept' | transloco }}
             </span>
@@ -23,19 +23,19 @@
             data-testid="dokument-ablehnen"
             class="btn table-btn btn-danger d-flex align-items-center gap-1"
           >
-            <i class="material-symbols-rounded tw-text-xl/none">close</i>
+            <i class="material-symbols-rounded tw:text-xl/none">close</i>
             <span>
               {{ 'shared.dokumente.dokumentStatus.action.reject' | transloco }}
             </span>
           </button>
         }
         @case ('AKZEPTIERT') {
-          <dv-shared-ui-icon-badge type="success" class="tw-min-w-[138px]">
+          <dv-shared-ui-icon-badge type="success" class="tw:min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
         @case ('ABGELEHNT') {
-          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-[138px]">
+          <dv-shared-ui-icon-badge type="danger" class="tw:min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
@@ -43,7 +43,7 @@
     } @else {
       @switch (dokument?.gesuchDokument?.status) {
         @case ('AKZEPTIERT') {
-          <dv-shared-ui-icon-badge type="success" class="tw-min-w-[138px]">
+          <dv-shared-ui-icon-badge type="success" class="tw:min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
@@ -53,29 +53,29 @@
               !view.isSachbearbeitungApp &&
               (view.gesuchStatus === 'FEHLENDE_DOKUMENTE' || view.gesuchStatus === 'IN_BEARBEITUNG_GS')
             ) {
-              <dv-shared-ui-icon-badge type="info" class="tw-min-w-[138px]">
+              <dv-shared-ui-icon-badge type="info" class="tw:min-w-[138px]">
                 {{ 'shared.dokumente.dokumentStatus.DOKUMENT_VORHANDEN' | transloco }}
               </dv-shared-ui-icon-badge>
             } @else {
-              <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw-min-w-[138px]">
+              <dv-shared-ui-icon-badge [type]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw:min-w-[138px]">
                 {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | transloco }}
               </dv-shared-ui-icon-badge>
             }
           } @else {
-            <dv-shared-ui-icon-badge type="warning" class="tw-min-w-[138px]">
+            <dv-shared-ui-icon-badge type="warning" class="tw:min-w-[138px]">
               {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
             </dv-shared-ui-icon-badge>
           }
         }
         @case ('ABGELEHNT') {
-          <dv-shared-ui-icon-badge type="danger" class="tw-min-w-[138px]">
+          <dv-shared-ui-icon-badge type="danger" class="tw:min-w-[138px]">
             {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | transloco }}
           </dv-shared-ui-icon-badge>
         }
       }
     }
   } @else {
-    <dv-shared-ui-icon-badge type="warning" class="tw-min-w-[138px]">
+    <dv-shared-ui-icon-badge type="warning" class="tw:min-w-[138px]">
       {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
     </dv-shared-ui-icon-badge>
   }

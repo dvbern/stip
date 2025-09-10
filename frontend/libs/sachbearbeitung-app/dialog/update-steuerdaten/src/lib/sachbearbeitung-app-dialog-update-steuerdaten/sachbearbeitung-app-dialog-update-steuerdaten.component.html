@@ -1,12 +1,12 @@
-<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
-  <h1 class="tw-mb-8 tw-text-xl">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-12">
+  <h1 class="tw:mb-8 tw:text-xl">
     {{ 'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title' | transloco }}
   </h1>
 
   <p [innerHTML]="'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description' | transloco"></p>
 
-  <form [formGroup]="form" data-testid="form-update-steuerdaten-form" class="tw-mt-5" (ngSubmit)="handleSave()">
-    <mat-form-field dvSharedUiFormField class="tw-w-96">
+  <form [formGroup]="form" data-testid="form-update-steuerdaten-form" class="tw:mt-5" (ngSubmit)="handleSave()">
+    <mat-form-field dvSharedUiFormField class="tw:w-96">
       <mat-label>{{
         'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label' | transloco
       }}</mat-label>
@@ -21,11 +21,11 @@
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
-    <div class="tw-mt-5 tw-flex tw-justify-between">
+    <div class="tw:mt-5 tw:flex tw:justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw:ml-2">
         {{ 'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm' | transloco }}
       </button>
     </div>

@@ -1,30 +1,30 @@
-<section class="tw-relative tw-flex tw-max-w-5xl tw-shrink tw-flex-col tw-rounded tw-p-12">
+<section class="tw:relative tw:flex tw:max-w-5xl tw:shrink tw:flex-col tw:rounded-sm tw:p-12">
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw-mb-8 tw-text-xl">
+  <h1 class="tw:mb-8 tw:text-xl">
     {{ 'sachbearbeitung-app.infos.beschwerde.infoDialog.title' | transloco }}
   </h1>
-  <dl class="tw-grid tw-grid-cols-[min-content_2fr] tw-gap-x-4 tw-pl-0">
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+  <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.datum' | transloco }}
     </dt>
-    <dd class="tw-font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+    <dd class="tw:font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
 
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.user' | transloco }}
     </dt>
-    <dd class="tw-font-normal">{{ dialogData.userErstellt }}</dd>
+    <dd class="tw:font-normal">{{ dialogData.userErstellt }}</dd>
 
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.title' | transloco }}
     </dt>
-    <dd class="tw-font-normal">
+    <dd class="tw:font-normal">
       @if (dialogData.beschwerdeEntscheid) {
         {{ 'sachbearbeitung-app.infos.beschwerde-entscheid.title' | transloco }}
       } @else {
@@ -33,13 +33,13 @@
     </dd>
     @let document = dialogData.beschwerdeEntscheid?.dokumente?.[0];
     @if (document) {
-      <dt class="tw-whitespace-normal tw-font-semibold">
+      <dt class="tw:whitespace-normal tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.beschwerde.document' | transloco }}
       </dt>
-      <dd class="tw-truncate">
+      <dd class="tw:truncate">
         <button
           type="button"
-          class="btn btn-link tw-flex tw-max-w-full tw-p-0"
+          class="btn btn-link tw:flex tw:max-w-full tw:p-0"
           [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.document' | transloco"
           [dvDownloadButton]="{
             type: 'dokument',
@@ -47,22 +47,22 @@
             dokumentArt: 'BESCHWERDE_ENTSCHEID',
           }"
         >
-          <span class="tw-truncate" [title]="document.filename">{{ document.filename }}</span>
-          <span class="material-symbols-rounded tw-ml-1 tw-align-middle">download</span>
+          <span class="tw:truncate" [title]="document.filename">{{ document.filename }}</span>
+          <span class="material-symbols-rounded tw:ml-1 tw:align-middle">download</span>
         </button>
       </dd>
     }
 
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.kommentar' | transloco }}
     </dt>
     <dd
-      class="tw-col-span-2 tw-col-start-1 tw-mt-1 tw-max-h-[50dvh] tw-overflow-auto tw-whitespace-pre-wrap tw-break-words tw-font-normal"
+      class="tw:col-span-2 tw:col-start-1 tw:mt-1 tw:max-h-[50dvh] tw:overflow-auto tw:whitespace-pre-wrap tw:break-words tw:font-normal"
       [innerText]="dialogData.kommentar"
     ></dd>
   </dl>
 
-  <div class="tw-mt-10 tw-flex tw-justify-end">
+  <div class="tw:mt-10 tw:flex tw:justify-end">
     <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
       {{ 'shared.close' | transloco }}
     </button>

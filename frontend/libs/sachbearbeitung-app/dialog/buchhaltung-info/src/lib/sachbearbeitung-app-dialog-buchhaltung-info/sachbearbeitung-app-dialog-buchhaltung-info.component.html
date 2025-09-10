@@ -1,69 +1,69 @@
-<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-12">
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md !tw-absolute tw-end-0 tw-top-0 tw-m-1"
+    class="dv-icon-button dv-icon-button-md tw:!absolute tw:end-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw-mb-8 tw-text-2xl">
+  <h1 class="tw:mb-8 tw:text-2xl">
     {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.title' | transloco }}
   </h1>
-  <dl class="tw-grid tw-grid-cols-[min-content_2fr] tw-gap-x-4 tw-pl-0">
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+  <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.datum' | transloco }}
     </dt>
-    <dd class="tw-font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+    <dd class="tw:font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.user' | transloco }}
     </dt>
-    <dd class="tw-font-normal">{{ dialogData.userErstellt }}</dd>
+    <dd class="tw:font-normal">{{ dialogData.userErstellt }}</dd>
     @if (dialogData.stipendienBetrag) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.stipendienbetrag' | transloco }}
       </dt>
-      <dd class="tw-font-normal">{{ dialogData.stipendienBetrag | formatChf }}</dd>
+      <dd class="tw:font-normal">{{ dialogData.stipendienBetrag | formatChf }}</dd>
     }
 
     @if (dialogData.auszahlung) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlung' | transloco }}
       </dt>
-      <dd class="tw-font-normal">{{ dialogData.auszahlung | formatChf }}</dd>
+      <dd class="tw:font-normal">{{ dialogData.auszahlung | formatChf }}</dd>
     }
 
     @if (dialogData.rueckforderung) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.rueckforderung' | transloco }}
       </dt>
-      <dd class="tw-font-normal">{{ dialogData.rueckforderung | formatChf }}</dd>
+      <dd class="tw:font-normal">{{ dialogData.rueckforderung | formatChf }}</dd>
     }
 
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldoAenderung' | transloco }}
     </dt>
-    <dd class="tw-font-normal">{{ dialogData.saldoAenderung | formatChf }}</dd>
+    <dd class="tw:font-normal">{{ dialogData.saldoAenderung | formatChf }}</dd>
 
-    <dt class="tw-whitespace-nowrap tw-font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.saldo' | transloco }}
     </dt>
-    <dd class="tw-font-normal">{{ dialogData.saldo | formatChf }}</dd>
+    <dd class="tw:font-normal">{{ dialogData.saldo | formatChf }}</dd>
 
     @if (dialogData.businessPartnerId) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapBusinessPartnerId' | transloco }}
       </dt>
-      <dd class="tw-font-normal">{{ dialogData.businessPartnerId }}</dd>
+      <dd class="tw:font-normal">{{ dialogData.businessPartnerId }}</dd>
     }
 
     <!-- auszahlung an -->
     @let zv = dialogData.zahlungsverbindung;
     @if (zv) {
-      <dt class="tw-whitespace-nowrap tw-font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.auszahlungAn' | transloco }}
       </dt>
-      <dd class="tw-font-normal">
+      <dd class="tw:font-normal">
         <div>
           <span>
             {{ zv.vorname }}
@@ -78,26 +78,26 @@
       </dd>
     }
 
-    <dt class="tw-mt-4 tw-whitespace-nowrap tw-text-xl tw-font-semibold">
+    <dt class="tw:mt-4 tw:whitespace-nowrap tw:text-xl tw:font-semibold">
       {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.bemerkung' | transloco }}
     </dt>
     <dd
-      class="tw-col-span-2 tw-col-start-1 tw-mt-1 tw-max-w-[520px] tw-whitespace-pre-wrap tw-break-words tw-font-normal"
+      class="tw:col-span-2 tw:col-start-1 tw:mt-1 tw:max-w-[520px] tw:whitespace-pre-wrap tw:break-words tw:font-normal"
       [innerText]="dialogData.comment"
     ></dd>
   </dl>
 
   <!-- SAP delivery Verlauf -->
   @if (sapDeliverysSig()?.length) {
-    <h3 class="tw-mt-4 tw-text-xl">{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf' | transloco }}</h3>
-    <div class="tw-grid tw-grid-cols-[max-content_1fr_1fr] tw-gap-x-4">
-      <div class="tw-font-semibold">
+    <h3 class="tw:mt-4 tw:text-xl">{{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.verlauf' | transloco }}</h3>
+    <div class="tw:grid tw:grid-cols-[max-content_1fr_1fr] tw:gap-x-4">
+      <div class="tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp' | transloco }}
       </div>
-      <div class="tw-font-semibold">
+      <div class="tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId' | transloco }}
       </div>
-      <div class="tw-font-semibold">
+      <div class="tw:font-semibold">
         {{ 'sachbearbeitung-app.infos.buchhaltung.infoDialog.sapStatus' | transloco }}
       </div>
 
@@ -109,7 +109,7 @@
     </div>
   }
 
-  <div class="tw-mt-10 tw-flex tw-justify-end">
+  <div class="tw:mt-10 tw:flex tw:justify-end">
     <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
       {{ 'shared.close' | transloco }}
     </button>

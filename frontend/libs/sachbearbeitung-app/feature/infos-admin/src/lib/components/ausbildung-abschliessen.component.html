@@ -1,5 +1,5 @@
 <!-- Ausbildung Abschliessen -->
-<h3 class="tw-mb-6 tw-mt-10">
+<h3 class="tw:mb-6 tw:mt-10">
   {{ 'sachbearbeitung-app.infos.admin.ausbildung-abschliessen' | transloco }}
 </h3>
 
@@ -13,7 +13,7 @@
 </button>
 
 <!-- table for abschliessen entries, with columns timestamp, user and kommentar  -->
-<div class="tw-dv-table tw-mb-6">
+<div class="tw:dv-table tw:mb-6">
   <table mat-table [dataSource]="gesuchAbschliessenSig()">
     <caption class="cdk-visually-hidden">
       {{
@@ -26,7 +26,7 @@
       <th mat-header-cell *matHeaderCellDef>
         {{ 'sachbearbeitung-app.infos.admin.table.timestamp' | transloco }}
       </th>
-      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw-whitespace-nowrap">
+      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw:whitespace-nowrap">
         {{ abschliessen.timestamp | date: 'dd.MM.yyyy' }}
       </td>
     </ng-container>
@@ -36,17 +36,17 @@
       <th mat-header-cell *matHeaderCellDef>
         {{ 'sachbearbeitung-app.infos.admin.table.user' | transloco }}
       </th>
-      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw-whitespace-nowrap">
+      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw:whitespace-nowrap">
         {{ abschliessen.user }}
       </td>
     </ng-container>
 
     <!-- Kommentar -->
     <ng-container matColumnDef="kommentar">
-      <th class="tw-min-w-80" mat-header-cell *matHeaderCellDef>
+      <th class="tw:min-w-80" mat-header-cell *matHeaderCellDef>
         {{ 'sachbearbeitung-app.infos.admin.table.kommentar' | transloco }}
       </th>
-      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw-min-w-80">
+      <td mat-cell *dvMatCellDef="let abschliessen; dataSource: gesuchAbschliessenSig()" class="tw:min-w-80">
         {{ abschliessen.kommentar }}
       </td>
     </ng-container>
@@ -54,7 +54,7 @@
     <tr mat-header-row *matHeaderRowDef="gesuchTableColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: gesuchTableColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
-      <td class="mat-mdc-cell tw-p-3" [colSpan]="gesuchTableColumns.length">
+      <td class="mat-mdc-cell tw:p-3" [colSpan]="gesuchTableColumns.length">
         {{ 'shared.table.noEntries' | transloco }}
       </td>
     </tr>

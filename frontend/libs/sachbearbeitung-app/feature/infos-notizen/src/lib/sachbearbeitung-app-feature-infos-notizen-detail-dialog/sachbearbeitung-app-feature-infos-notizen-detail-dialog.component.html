@@ -1,9 +1,9 @@
-<h1 class="tw-mb-8 tw-text-xl">
+<h1 class="tw:mb-8 tw:text-xl">
   {{ 'sachbearbeitung-app.infos.notizen.notizTyp.' + dialogData.notizTyp | transloco }}
 </h1>
 
 <form
-  class="tw-mt-4 tw-w-full"
+  class="tw:mt-4 tw:w-full"
   data-testid="form-notiz-form"
   [formGroup]="form"
   [dvSharedUiFormReadonly]="dialogData.readonly"
@@ -13,7 +13,7 @@
     @if (dialogData.notiz?.id) {
       <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
 
-      <hr class="tw-my-8" />
+      <hr class="tw:my-8" />
     }
 
     <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
@@ -22,35 +22,35 @@
   @if (isJurNotiz) {
     @if (dialogData.notiz?.id) {
       <!-- betreff -->
-      <div class="tw-flex tw-gap-2">
-        <div class="tw-font-semibold">{{ 'shared.form.notizen.betreff.label' | transloco }}:</div>
+      <div class="tw:flex tw:gap-2">
+        <div class="tw:font-semibold">{{ 'shared.form.notizen.betreff.label' | transloco }}:</div>
         <div>{{ dialogData.notiz?.betreff }}</div>
       </div>
 
-      <hr class="tw-my-8" />
+      <hr class="tw:my-8" />
 
       <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
 
       <!-- text -->
-      <div class="tw-w-full">
+      <div class="tw:w-full">
         {{ dialogData.notiz?.text }}
       </div>
 
-      <hr class="tw-my-8" />
+      <hr class="tw:my-8" />
 
       @if (dialogData.notiz?.antwort) {
-        <dl class="tw-grid tw-grid-cols-[max-content_1fr] tw-gap-x-4 tw-pl-0">
-          <dt class="tw-font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | transloco }}:</dt>
-          <dd class="tw-font-normal">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
-          <dt class="tw-font-semibold">{{ 'shared.form.notizen.userMutiert.label' | transloco }}:</dt>
-          <dd class="tw-font-normal">{{ dialogData.notiz?.userMutiert }}</dd>
+        <dl class="tw:grid tw:grid-cols-[max-content_1fr] tw:gap-x-4 tw:pl-0">
+          <dt class="tw:font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | transloco }}:</dt>
+          <dd class="tw:font-normal">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
+          <dt class="tw:font-semibold">{{ 'shared.form.notizen.userMutiert.label' | transloco }}:</dt>
+          <dd class="tw:font-normal">{{ dialogData.notiz?.userMutiert }}</dd>
         </dl>
 
-        <div class="tw-w-full">
-          <div class="tw-font-normal">{{ dialogData.notiz?.antwort }}</div>
+        <div class="tw:w-full">
+          <div class="tw:font-normal">{{ dialogData.notiz?.antwort }}</div>
         </div>
       } @else if (userIsJurist) {
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>{{ 'shared.form.notizen.antwort.label' | transloco }}</mat-label>
           <textarea
             formControlName="antwort"
@@ -66,8 +66,8 @@
           </mat-error>
         </mat-form-field>
       } @else {
-        <div class="tw-w-full">
-          <div class="tw-font-normal">
+        <div class="tw:w-full">
+          <div class="tw:font-normal">
             {{ 'sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet' | transloco }}
           </div>
         </div>
@@ -77,7 +77,7 @@
     }
   }
   @if (!dialogData.readonly) {
-    <div class="tw-mt-10 tw-flex tw-justify-end tw-gap-6">
+    <div class="tw:mt-10 tw:flex tw:justify-end tw:gap-6">
       <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
         {{ 'shared.cancel' | transloco }}
       </button>
@@ -101,7 +101,7 @@
 
   <ng-template #betreffTextControls>
     <!-- Betreff -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.form.notizen.betreff.label' | transloco }}</mat-label>
       <input formControlName="betreff" data-testid="form-notiz-betreff" matInput dvMaxLength type="text" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -110,7 +110,7 @@
     </mat-form-field>
 
     <!-- Text -->
-    <mat-form-field dvSharedUiFormField class="tw-mt-4 tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:mt-4 tw:w-full">
       <mat-label>{{ 'shared.form.notizen.text.label' | transloco }}</mat-label>
       <textarea
         formControlName="text"
@@ -128,16 +128,16 @@
   </ng-template>
 
   <ng-template #datumUserErstellt>
-    <dl class="tw-grid tw-grid-cols-[min-content_1fr] tw-gap-x-4 tw-pl-0">
+    <dl class="tw:grid tw:grid-cols-[min-content_1fr] tw:gap-x-4 tw:pl-0">
       <!-- gesuchNummer -->
-      <dt class="tw-font-semibold">{{ 'shared.form.notizen.gesuchNummer.label' | transloco }}:</dt>
-      <dd class="tw-font-normal">{{ dialogData.notiz?.gesuchNummer }}</dd>
+      <dt class="tw:font-semibold">{{ 'shared.form.notizen.gesuchNummer.label' | transloco }}:</dt>
+      <dd class="tw:font-normal">{{ dialogData.notiz?.gesuchNummer }}</dd>
       <!-- datumErstellt -->
-      <dt class="tw-font-semibold">{{ 'shared.form.notizen.datumErstellt.label' | transloco }}:</dt>
-      <dd class="tw-font-normal">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
+      <dt class="tw:font-semibold">{{ 'shared.form.notizen.datumErstellt.label' | transloco }}:</dt>
+      <dd class="tw:font-normal">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
       <!-- userErstellt -->
-      <dt class="tw-font-semibold">{{ 'shared.form.notizen.userErstellt.label' | transloco }}:</dt>
-      <dd class="tw-font-normal">{{ dialogData.notiz?.userErstellt }}</dd>
+      <dt class="tw:font-semibold">{{ 'shared.form.notizen.userErstellt.label' | transloco }}:</dt>
+      <dd class="tw:font-normal">{{ dialogData.notiz?.userErstellt }}</dd>
     </dl>
   </ng-template>
 </form>

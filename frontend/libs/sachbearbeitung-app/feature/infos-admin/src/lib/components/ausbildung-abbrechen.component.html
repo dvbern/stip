@@ -1,12 +1,12 @@
 <!-- Ausbildung Abbrechen -->
-<h3 class="tw-mb-6 tw-mt-10">{{ 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen' | transloco }}</h3>
+<h3 class="tw:mb-6 tw:mt-10">{{ 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen' | transloco }}</h3>
 
 <button class="btn btn-primary" type="button" data-testid="button-gesuch-abbrechen" (click)="gesuchAbbrechen()">
   {{ 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen' | transloco }}
 </button>
 
 <!-- table for abbrechen entries, with columns timestamp, user and kommentar  -->
-<div class="tw-dv-table tw-mb-6">
+<div class="tw:dv-table tw:mb-6">
   <table mat-table [dataSource]="gesuchAbbrechenSig()">
     <caption class="cdk-visually-hidden">
       {{
@@ -17,7 +17,7 @@
     <!-- Datum -->
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef>{{ 'sachbearbeitung-app.infos.admin.table.timestamp' | transloco }}</th>
-      <td mat-cell *dvMatCellDef="let abbrechen; dataSource: gesuchAbbrechenSig()" class="tw-whitespace-nowrap">
+      <td mat-cell *dvMatCellDef="let abbrechen; dataSource: gesuchAbbrechenSig()" class="tw:whitespace-nowrap">
         {{ abbrechen.timestamp | date: 'dd.MM.yyyy' }}
       </td>
     </ng-container>
@@ -25,17 +25,17 @@
     <!-- User -->
     <ng-container matColumnDef="user">
       <th mat-header-cell *matHeaderCellDef>{{ 'sachbearbeitung-app.infos.admin.table.user' | transloco }}</th>
-      <td mat-cell *dvMatCellDef="let abbrechen; dataSource: gesuchAbbrechenSig()" class="tw-whitespace-nowrap">
+      <td mat-cell *dvMatCellDef="let abbrechen; dataSource: gesuchAbbrechenSig()" class="tw:whitespace-nowrap">
         {{ abbrechen.user }}
       </td>
     </ng-container>
 
     <!-- Kommentar -->
     <ng-container matColumnDef="kommentar">
-      <th class="tw-min-w-80" mat-header-cell *matHeaderCellDef>
+      <th class="tw:min-w-80" mat-header-cell *matHeaderCellDef>
         {{ 'sachbearbeitung-app.infos.admin.table.kommentar' | transloco }}
       </th>
-      <td mat-cell *dvMatCellDef="let abbrechen; dataSource: gesuchAbbrechenSig()" class="tw-min-w-80">
+      <td mat-cell *dvMatCellDef="let abbrechen; dataSource: gesuchAbbrechenSig()" class="tw:min-w-80">
         {{ abbrechen.kommentar }}
       </td>
     </ng-container>
@@ -43,7 +43,7 @@
     <tr mat-header-row *matHeaderRowDef="gesuchTableColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: gesuchTableColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
-      <td class="mat-mdc-cell tw-p-3" [colSpan]="gesuchTableColumns.length">
+      <td class="mat-mdc-cell tw:p-3" [colSpan]="gesuchTableColumns.length">
         {{ 'shared.table.noEntries' | transloco }}
       </td>
     </tr>

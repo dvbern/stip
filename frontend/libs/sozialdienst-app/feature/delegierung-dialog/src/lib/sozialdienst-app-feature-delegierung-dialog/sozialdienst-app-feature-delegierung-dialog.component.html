@@ -1,15 +1,15 @@
-<section class="p-4 rounded tw-relative tw-flex tw-w-full tw-max-w-[700px] tw-flex-col">
+<section class="tw:relative tw:flex tw:w-full tw:max-w-[700px] tw:flex-col rounded p-4">
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
   <!-- dialog  title  -->
-  <h1 class="title h2 tw-mb-8">
+  <h1 class="title h2 tw:mb-8">
     @if (dialogData.fall.delegierung.delegierungAngenommen) {
       {{ 'sozialdienst-app.cockpit.table.delegierung.title.delegierung' | transloco }}
     } @else {
@@ -25,11 +25,11 @@
     [formGroup]="form"
     [dvSharedUiFormReadonly]="true"
     data-testid="form-delegierung-form"
-    class="tw-mt-4 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw:mt-4 tw:grid tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:grid-cols-2"
     novalidate
   >
     <!-- fallNummer -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sozialdienst-app.delegierung-dialog.fallNummer.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="fallNummer" data-testid="form-delegierung-fallNummer" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -37,7 +37,7 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="tw-w-full md:tw-row-span-2">
+    <div class="tw:w-full tw:md:row-span-2">
       <!-- Sprache -->
       <label>{{ 'shared.form.delegation.sprache.label' | transloco }}</label>
       <mat-radio-group
@@ -60,7 +60,7 @@
     </div>
 
     <!-- Anrede -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
       <mat-label>{{ 'shared.form.person.salutation.label' | transloco }}</mat-label>
       <mat-select
         formControlName="anrede"
@@ -79,7 +79,7 @@
     </mat-form-field>
 
     <!-- nachname -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-delegierung-nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -87,7 +87,7 @@
       </mat-error>
     </mat-form-field>
     <!-- Vorname -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-delegierung-vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -97,13 +97,13 @@
 
     <!-- Adresse -->
     <dv-shared-ui-form-address
-      class="tw-col-span-full tw-w-full"
+      class="tw:col-span-full tw:w-full"
       [group]="form.controls.adresse"
       [languageSig]="languageSig()"
     />
 
     <!-- Geburtsdatum -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
       <input
@@ -128,7 +128,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <!-- E-Mail -->
       <mat-label>{{ 'shared.form.delegation.email.label' | transloco }}</mat-label>
       <input
@@ -148,7 +148,7 @@
   </form>
 
   <!-- horizontal line -->
-  <hr class="tw-my-8 tw-border-t-2 tw-border-t-gray-500" />
+  <hr class="tw:my-8 tw:border-t-2 tw:border-t-gray-500" />
 
   <!-- change zuweisung form -->
   <h3 class="title h3">
@@ -158,11 +158,11 @@
     [formGroup]="zuweisungSozMitarbeiterForm"
     (ngSubmit)="changeSozMitarbeiter()"
     data-testid="form-sozMitarbeiter-form"
-    class="tw-mt-4 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw:mt-4 tw:grid tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:grid-cols-2"
     novalidate
   >
     <!-- sozMitarbeiter Select -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.label' | transloco }}</mat-label>
       <mat-select
         formControlName="sozMitarbeiter"
@@ -183,15 +183,15 @@
 
     @let pending = isPending(delegationStore.delegierenState());
 
-    <div class="tw-col-span-full tw-mt-4 tw-flex tw-flex-col">
-      <div class="tw-mb-8 tw-h-8 tw-self-end">
+    <div class="tw:col-span-full tw:mt-4 tw:flex tw:flex-col">
+      <div class="tw:mb-8 tw:h-8 tw:self-end">
         @if (showUnsavedChangesErrorSig()) {
-          <div class="tw-text-red-500">
+          <div class="tw:text-red-500">
             {{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges' | transloco }}
           </div>
         }
       </div>
-      <div class="justify-content-between tw-flex tw-w-full">
+      <div class="justify-content-between tw:flex tw:w-full">
         <button type="button" data-testid="dialog-sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
           {{ 'shared.cancel' | transloco }}
         </button>

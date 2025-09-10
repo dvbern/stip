@@ -1,40 +1,40 @@
-<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-12">
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw-mb-8 tw-text-xl">
+  <h1 class="tw:mb-8 tw:text-xl">
     {{ dialogData.titleKey | transloco }}
   </h1>
-  <dl class="tw-grid tw-grid-cols-[min-content_2fr] tw-gap-x-4 tw-pl-0">
+  <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
     @for (entry of dialogData.entries; track entry) {
       @switch (entry.type) {
         @case ('info') {
-          <dt class="tw-whitespace-nowrap tw-font-semibold">
+          <dt class="tw:whitespace-nowrap tw:font-semibold">
             {{ entry.labelKey | transloco }}
           </dt>
-          <dd class="tw-font-normal">{{ entry.value }}</dd>
+          <dd class="tw:font-normal">{{ entry.value }}</dd>
         }
         @case ('translatedInfo') {
-          <dt class="tw-whitespace-nowrap tw-font-semibold">
+          <dt class="tw:whitespace-nowrap tw:font-semibold">
             {{ entry.labelKey | transloco }}
           </dt>
-          <dd class="tw-font-normal">
+          <dd class="tw:font-normal">
             {{ entry.valueKey | transloco }}
           </dd>
         }
         @case ('spacer') {
-          <div class="tw-col-span-2 tw-mt-4"></div>
+          <div class="tw:col-span-2 tw:mt-4"></div>
         }
       }
     }
   </dl>
 
-  <div class="tw-mt-10 tw-flex tw-justify-end">
+  <div class="tw:mt-10 tw:flex tw:justify-end">
     <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
       {{ 'shared.close' | transloco }}
     </button>

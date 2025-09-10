@@ -6,18 +6,18 @@
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
     <dv-shared-pattern-app-header (closeSidenav)="sidenav.close()" (openSidenav)="sidenav.open()">
-      <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
-        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
-          <i class="material-symbols-rounded text-white me-2">list</i>
+      <div dvHeaderDesktopLeft class="d-flex align-items-center gap-3">
+        <div class="active btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none">
+          <i class="material-symbols-rounded me-2 text-white">list</i>
           <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
         </div>
         <a
           *dvHasRoles="['V0_Sozialdienst-Admin']"
           routerLink="/administration"
-          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
           data-testid="gesuch-step-nav-administration"
         >
-          <i class="material-symbols-rounded text-white me-2">settings</i>
+          <i class="material-symbols-rounded me-2 text-white">settings</i>
           <span>{{ 'sozialdienst-app.header.administration' | transloco }}</span>
         </a>
       </div>
@@ -30,22 +30,22 @@
       <div class="container">
         <!-- filters -->
         <div
-          class="tw-mt-2 tw-grid tw-grid-cols-1 tw-gap-6 tw-pt-6 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-6"
+          class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
           [formGroup]="quickFilterForm"
         >
           @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
             <button
               type="button"
               (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-              class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+              class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
               [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
               [class.btn-danger]="radio.checked"
               [class.btn-light]="!radio.checked"
             >
-              <dv-shared-ui-icon-chip class="me-3 chip">
+              <dv-shared-ui-icon-chip class="chip me-3">
                 <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
               </dv-shared-ui-icon-chip>
-              <div class="flex-grow-1 tw-text-start tw-leading-4">
+              <div class="tw:text-start tw:leading-4 flex-grow-1">
                 <span class="fw-bold fs-7 mb-0">
                   {{ 'sozialdienst-app.cockpit.quick-filter.' + quickFilter.typ | transloco }}
                 </span>
@@ -65,12 +65,12 @@
         </div>
 
         <!-- table -->
-        <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
+        <h1 class="tw:mb-6 tw:mt-8 tw:text-2xl" data-testid="cockpit-title">
           {{ 'sozialdienst-app.cockpit.delegierungen' | transloco }}
         </h1>
 
-        <div class="tw-dv-table tw-my-6">
-          <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+        <div class="tw:dv-table tw:my-6">
+          <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
             <div [class.opacity-50]="delegationStore.cockpitViewSig().loading">
               <table
                 [dvSharedUiFocusableList]="items"
@@ -88,17 +88,17 @@
                 </caption>
 
                 <ng-container matColumnDef="FALLNUMMER">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                     <label class="pe-none" for="fallNummer">{{
                       'sozialdienst-app.cockpit.table.fall' | transloco
                     }}</label>
-                    <div class="tw-relative tw-flex">
+                    <div class="tw:relative tw:flex">
                       <mat-form-field>
                         <input
                           id="fallNummer"
                           matInput
                           [dvMaxLength]="'small'"
-                          class="tw-w-full"
+                          class="tw:w-full"
                           formControlName="fallNummer"
                           data-testid="cockpit-filter-fall"
                           (click)="$event.stopPropagation()"
@@ -106,7 +106,7 @@
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
-                        class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                        class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                         (clear)="filterForm.controls.fallNummer.reset()"
                         [valueSig]="filterForm.controls.fallNummer.value"
                       ></dv-shared-ui-clear-button>
@@ -115,7 +115,7 @@
                   <td
                     mat-cell
                     *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
-                    class="tw-w-32 tw-whitespace-nowrap"
+                    class="tw:w-32 tw:whitespace-nowrap"
                   >
                     @if (fall.delegierung.delegierungAngenommen) {
                       <a [routerLink]="['/fall', fall.id]" (click)="$event.stopPropagation()">
@@ -128,15 +128,15 @@
                 </ng-container>
 
                 <ng-container matColumnDef="NACHNAME">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                     <label class="pe-none" for="nachname">{{
                       'sozialdienst-app.cockpit.table.nachname' | transloco
                     }}</label>
-                    <div class="tw-relative tw-flex">
+                    <div class="tw:relative tw:flex">
                       <mat-form-field>
                         <input
                           id="nachname"
-                          class="tw-w-full"
+                          class="tw:w-full"
                           matInput
                           dvMaxLength
                           formControlName="nachname"
@@ -145,7 +145,7 @@
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
-                        class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                        class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                         (clear)="filterForm.controls.nachname.reset()"
                         [valueSig]="filterForm.controls.nachname.value"
                       ></dv-shared-ui-clear-button>
@@ -154,7 +154,7 @@
                   <td
                     mat-cell
                     *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
-                    class="tw-whitespace-nowrap"
+                    class="tw:whitespace-nowrap"
                     [dvTruncateTooltip]="fall.delegierung.persoenlicheAngaben?.nachname"
                   >
                     {{ fall.delegierung.persoenlicheAngaben?.nachname }}
@@ -162,15 +162,15 @@
                 </ng-container>
 
                 <ng-container matColumnDef="VORNAME">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                     <label class="pe-none" for="vorname">{{
                       'sozialdienst-app.cockpit.table.vorname' | transloco
                     }}</label>
-                    <div class="tw-relative tw-flex">
+                    <div class="tw:relative tw:flex">
                       <mat-form-field>
                         <input
                           id="vorname"
-                          class="tw-w-full"
+                          class="tw:w-full"
                           matInput
                           dvMaxLength
                           formControlName="vorname"
@@ -179,7 +179,7 @@
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
-                        class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                        class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                         (clear)="filterForm.controls.vorname.reset()"
                         [valueSig]="filterForm.controls.vorname.value"
                       ></dv-shared-ui-clear-button>
@@ -188,7 +188,7 @@
                   <td
                     mat-cell
                     *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
-                    class="tw-max-w-32 tw-whitespace-nowrap"
+                    class="tw:max-w-32 tw:whitespace-nowrap"
                     [dvTruncateTooltip]="fall.delegierung.persoenlicheAngaben?.vorname"
                   >
                     {{ fall.delegierung.persoenlicheAngaben?.vorname }}
@@ -201,17 +201,17 @@
                     *matHeaderCellDef
                     mat-sort-header
                     [start]="'desc'"
-                    class="filtered tw-w-40 tw-whitespace-nowrap"
+                    class="filtered tw:w-40 tw:whitespace-nowrap"
                     example="01.01.2000"
                   >
                     <label class="pe-none" for="geburtsdatum">{{
                       'sozialdienst-app.cockpit.table.geburtsdatum' | transloco
                     }}</label>
-                    <div class="tw-relative tw-flex">
+                    <div class="tw:relative tw:flex">
                       <mat-form-field>
                         <input
                           id="geburtsdatum"
-                          class="tw-w-full"
+                          class="tw:w-full"
                           matInput
                           [dvMaxLength]="'small'"
                           formControlName="geburtsdatum"
@@ -222,7 +222,7 @@
                         <button
                           matIconSuffix
                           type="button"
-                          class="btn btn-link text-muted !tw-p-1"
+                          class="btn btn-link text-muted tw:!p-1"
                           [attr.aria-label]="'shared.ui.open-date-picker'"
                           (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                         >
@@ -233,26 +233,26 @@
                         <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
                       </mat-form-field>
                       <dv-shared-ui-clear-button
-                        class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                        class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                         (clear)="filterForm.controls.geburtsdatum.reset()"
                         [valueSig]="filterForm.controls.geburtsdatum.value"
                       ></dv-shared-ui-clear-button>
                     </div>
                   </th>
-                  <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw-whitespace-nowrap">
+                  <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw:whitespace-nowrap">
                     {{ fall.delegierung.persoenlicheAngaben?.geburtsdatum | date: 'dd.MM.yyyy' }}
                   </td>
                 </ng-container>
 
                 <!-- wohnort -->
                 <ng-container matColumnDef="WOHNORT">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                     <label class="pe-none" for="ort">{{ 'sozialdienst-app.cockpit.table.wohnort' | transloco }}</label>
-                    <div class="tw-relative tw-flex">
+                    <div class="tw:relative tw:flex">
                       <mat-form-field>
                         <input
                           id="ort"
-                          class="tw-w-full"
+                          class="tw:w-full"
                           matInput
                           dvMaxLength
                           formControlName="wohnort"
@@ -261,7 +261,7 @@
                         />
                       </mat-form-field>
                       <dv-shared-ui-clear-button
-                        class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                        class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                         (clear)="filterForm.controls.wohnort.reset()"
                         [valueSig]="filterForm.controls.wohnort.value"
                       ></dv-shared-ui-clear-button>
@@ -270,7 +270,7 @@
                   <td
                     mat-cell
                     *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
-                    class="tw-max-w-32 tw-whitespace-nowrap"
+                    class="tw:max-w-32 tw:whitespace-nowrap"
                     [dvTruncateTooltip]="fall.delegierung.persoenlicheAngaben?.adresse?.ort"
                   >
                     {{ fall.delegierung.persoenlicheAngaben?.adresse?.ort }}
@@ -279,14 +279,14 @@
 
                 @if (permissionStore.rolesMapSig()['V0_Sozialdienst-Admin']) {
                   <ng-container matColumnDef="DELEGIERUNG_ANGENOMMEN">
-                    <th mat-header-cell *matHeaderCellDef class="filtered tw-w-52 tw-whitespace-nowrap">
+                    <th mat-header-cell *matHeaderCellDef class="filtered tw:w-52 tw:whitespace-nowrap">
                       <div>{{ 'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco }}</div>
-                      <mat-form-field class="tw-w-full">
+                      <mat-form-field class="tw:w-full">
                         <mat-select
                           [aria-label]="'sozialdienst-app.cockpit.table.delegierungAngenommen' | transloco"
                           formControlName="delegierungAngenommen"
                           (click)="$event.stopPropagation()"
-                          class="!tw-font-normal"
+                          class="tw:!font-normal"
                           [placeholder]="'sozialdienst-app.cockpit.no-status-filter' | transloco"
                           panelClass="table-select"
                         >
@@ -305,7 +305,7 @@
                     <td
                       mat-cell
                       *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()"
-                      class="tw-w-48 tw-whitespace-nowrap"
+                      class="tw:w-48 tw:whitespace-nowrap"
                     >
                       {{
                         fall.delegierung.delegierungAngenommen
@@ -318,8 +318,8 @@
 
                 <!-- aktionen -->
                 <ng-container matColumnDef="AKTIONEN">
-                  <th mat-header-cell *matHeaderCellDef class="tw-w-11 tw-whitespace-nowrap"></th>
-                  <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw-w-11">
+                  <th mat-header-cell *matHeaderCellDef class="tw:w-11 tw:whitespace-nowrap"></th>
+                  <td mat-cell *dvMatCellDef="let fall; dataSource: faelleDataSourceSig()" class="tw:w-11">
                     <button
                       type="button"
                       class="dv-icon-button dv-icon-button-md text-info"
@@ -347,7 +347,7 @@
                   [class.highlightable]="!!fall.delegierung.delegierungAngenommen"
                 ></tr>
                 <tr class="mat-mdc-row" *matNoDataRow>
-                  <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumnsSig().length">
+                  <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumnsSig().length">
                     {{ 'shared.table.noData' | transloco }}
                   </td>
                 </tr>
@@ -355,7 +355,7 @@
             </div>
             @if (delegationStore.cockpitViewSig().loading) {
               <dv-shared-ui-loading
-                class="position-absolute top-50 start-50 translate-middle"
+                class="position-absolute translate-middle start-50 top-50"
                 [type]="'compact'"
               ></dv-shared-ui-loading>
             }

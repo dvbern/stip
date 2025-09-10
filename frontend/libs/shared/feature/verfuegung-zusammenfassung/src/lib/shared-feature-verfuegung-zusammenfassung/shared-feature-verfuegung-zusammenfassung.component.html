@@ -6,7 +6,7 @@
     <mat-card class="rounded-4 mb-4">
       <mat-card-header>
         <mat-card-title>
-          <h2 class="d-flex align-items-center gap-2 mb-0">
+          <h2 class="d-flex align-items-center mb-0 gap-2">
             <dv-shared-ui-icon-chip>
               <i class="material-symbols-rounded text-info">equal</i>
             </dv-shared-ui-icon-chip>
@@ -15,31 +15,31 @@
         </mat-card-title>
       </mat-card-header>
 
-      <div class="border-bottom border-1 mt-4"></div>
+      <div class="border-bottom mt-4 border-1"></div>
 
-      <mat-card-content class="p-5 !tw-flex tw-items-center tw-gap-5">
+      <mat-card-content class="tw:!flex tw:items-center tw:gap-5 p-5">
         @if (zusammenfassung.totalBetragStipendium > 0) {
           @if (zusammenfassung.verminderteBerechnung) {
-            <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+            <div class="accept rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert') }}
             </div>
           } @else {
-            <div class="accept p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+            <div class="accept rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen') }}
             </div>
           }
         } @else {
-          <div class="reject p-4 rounded-4 fs-3 fw-bold tw-flex-1" data-testid="zusammenfassung-resultat">
+          <div class="reject rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt') }}
           </div>
         }
         @if (gesuchIdSig(); as id) {
           <button
             type="button"
-            class="btn btn-outline-primary fs-7 tw-p-4 tw-text-sm"
+            class="btn btn-outline-primary fs-7 tw:p-4 tw:text-sm"
             [dvDownloadButton]="{ type: 'berechnungsblatt', id }"
           >
-            <span class="material-symbols-rounded tw-align-middle">download</span>
+            <span class="material-symbols-rounded tw:align-middle">download</span>
           </button>
         }
       </mat-card-content>
@@ -56,13 +56,13 @@
           } @else {
             <div class="text-muted mb-1">{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.subtitle') }}</div>
           }
-          <h3 class="mb-0 fs-4">
+          <h3 class="fs-4 mb-0">
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.title') }}
           </h3>
         </mat-card-title>
       </mat-card-header>
 
-      <div class="border-bottom border-1 mt-4 mb-4"></div>
+      <div class="border-bottom mt-4 mb-4 border-1"></div>
 
       <mat-card-content class="d-flex flex-column gap-2">
         @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
@@ -96,7 +96,7 @@
         }
       </mat-card-content>
 
-      <div class="border-bottom border-1 mt-4"></div>
+      <div class="border-bottom mt-4 border-1"></div>
 
       <mat-card-footer class="px-3 py-4">
         @if (zusammenfassung.verminderteBerechnung) {
@@ -108,7 +108,7 @@
               {{ zusammenfassung.totalBetragStipendium | formatChf }}
             </div>
           </div>
-          <div class="d-flex text-muted justify-content-between fs-5 tw-mb-2">
+          <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
             <div>
               {{
                 t('sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag', {

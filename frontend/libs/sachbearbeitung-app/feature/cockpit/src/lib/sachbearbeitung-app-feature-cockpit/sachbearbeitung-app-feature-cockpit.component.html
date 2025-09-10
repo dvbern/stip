@@ -1,22 +1,22 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
     <div
-      class="tw-mt-2 tw-grid tw-grid-cols-1 tw-gap-6 tw-pt-6 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-6"
+      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
       [formGroup]="quickFilterForm"
     >
       @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
           [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
           [class.btn-danger]="radio.checked"
           [class.btn-light]="!radio.checked"
         >
-          <dv-shared-ui-icon-chip class="me-3 chip">
+          <dv-shared-ui-icon-chip class="chip me-3">
             <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
           </dv-shared-ui-icon-chip>
-          <div class="flex-grow-1 tw-text-start tw-leading-4">
+          <div class="tw:text-start tw:leading-4 flex-grow-1">
             <span class="fw-bold fs-7 mb-0">
               {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | transloco }}
             </span>
@@ -34,12 +34,12 @@
         </button>
       }
     </div>
-    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
+    <h1 class="tw:mb-6 tw:mt-8 tw:text-2xl" data-testid="cockpit-title">
       {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
     </h1>
-    <div class="tw-my-6">
-      <div class="tw-dv-table">
-        <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+    <div class="tw:my-6">
+      <div class="tw:dv-table">
+        <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
           <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading">
             <table
               [dvSharedUiFocusableList]="items"
@@ -57,17 +57,17 @@
               </caption>
 
               <ng-container matColumnDef="FALLNUMMER">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   <label class="pe-none" for="fallNummer">{{
                     'sachbearbeitung-app.cockpit.table.fall' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="fallNummer"
                         matInput
                         [dvMaxLength]="'small'"
-                        class="tw-w-full"
+                        class="tw:w-full"
                         formControlName="fallNummer"
                         data-testid="cockpit-filter-fall"
                         (click)="$event.stopPropagation()"
@@ -75,7 +75,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.fallNummer.reset()"
                       [valueSig]="filterForm.controls.fallNummer.value"
                     ></dv-shared-ui-clear-button>
@@ -84,7 +84,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                 >
                   <a
                     [routerLink]="
@@ -101,7 +101,7 @@
 
               <!-- typ -->
               <ng-container matColumnDef="TYP">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.cockpit.table.typ' | transloco }}
                   <mat-form-field class="d-flex">
                     <mat-select
@@ -123,22 +123,22 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-whitespace-nowrap"
+                  class="tw:whitespace-nowrap"
                 >
                   {{ 'shared.gesuch.tranche.typ.' + gesuch.typ | transloco }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="PIA_NACHNAME">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="piaNachname">{{
                     'sachbearbeitung-app.cockpit.table.nachname' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="piaNachname"
-                        class="tw-w-full"
+                        class="tw:w-full"
                         matInput
                         dvMaxLength
                         formControlName="piaNachname"
@@ -147,7 +147,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.piaNachname.reset()"
                       [valueSig]="filterForm.controls.piaNachname.value"
                     ></dv-shared-ui-clear-button>
@@ -156,7 +156,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-whitespace-nowrap"
+                  class="tw:whitespace-nowrap"
                   [dvTruncateTooltip]="gesuch.piaNachname"
                 >
                   {{ gesuch.piaNachname }}
@@ -164,15 +164,15 @@
               </ng-container>
 
               <ng-container matColumnDef="PIA_VORNAME">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="piaVorname">{{
                     'sachbearbeitung-app.cockpit.table.vorname' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="piaVorname"
-                        class="tw-w-full"
+                        class="tw:w-full"
                         matInput
                         dvMaxLength
                         formControlName="piaVorname"
@@ -181,7 +181,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.piaVorname.reset()"
                       [valueSig]="filterForm.controls.piaVorname.value"
                     ></dv-shared-ui-clear-button>
@@ -190,7 +190,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-max-w-32 tw-whitespace-nowrap"
+                  class="tw:max-w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="gesuch.piaVorname"
                 >
                   {{ gesuch.piaVorname }}
@@ -203,17 +203,17 @@
                   *matHeaderCellDef
                   mat-sort-header
                   [start]="'desc'"
-                  class="filtered tw-w-40 tw-whitespace-nowrap"
+                  class="filtered tw:w-40 tw:whitespace-nowrap"
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="piaGeburtsdatum">{{
                     'sachbearbeitung-app.cockpit.table.geburtsdatum' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="piaGeburtsdatum"
-                        class="tw-w-full"
+                        class="tw:w-full"
                         matInput
                         [dvMaxLength]="'small'"
                         formControlName="piaGeburtsdatum"
@@ -224,7 +224,7 @@
                       <button
                         matIconSuffix
                         type="button"
-                        class="btn btn-link text-muted !tw-p-1"
+                        class="btn btn-link text-muted tw:!p-1"
                         [attr.aria-label]="'shared.ui.open-date-picker'"
                         (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                       >
@@ -235,7 +235,7 @@
                       <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.piaGeburtsdatum.reset()"
                       [valueSig]="filterForm.controls.piaGeburtsdatum.value"
                     ></dv-shared-ui-clear-button>
@@ -244,21 +244,21 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-whitespace-nowrap"
+                  class="tw:whitespace-nowrap"
                 >
                   {{ gesuch.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="STATUS">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-52 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.cockpit.table.status' | transloco }}
-                  <mat-form-field class="tw-w-full">
+                  <mat-form-field class="tw:w-full">
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.cockpit.table.status' | transloco"
                       formControlName="status"
                       (click)="$event.stopPropagation()"
-                      class="!tw-font-normal"
+                      class="tw:!font-normal"
                       [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | transloco"
                       panelClass="table-select"
                     >
@@ -276,22 +276,22 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-w-48 tw-whitespace-nowrap"
+                  class="tw:w-48 tw:whitespace-nowrap"
                 >
                   {{ gesuch.translationKey | transloco }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="BEARBEITER">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-40 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="bearbeiter">{{
                     'sachbearbeitung-app.cockpit.table.bearbeiter' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="bearbeiter"
-                        class="tw-w-full"
+                        class="tw:w-full"
                         matInput
                         dvMaxLength
                         formControlName="bearbeiter"
@@ -300,7 +300,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.bearbeiter.reset()"
                       [valueSig]="filterForm.controls.bearbeiter.value"
                     ></dv-shared-ui-clear-button>
@@ -309,7 +309,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-whitespace-nowrap"
+                  class="tw:whitespace-nowrap"
                   [dvTruncateTooltip]="gesuch.bearbeiter"
                 >
                   {{ gesuch.bearbeiter }}
@@ -322,12 +322,12 @@
                   *matHeaderCellDef
                   mat-sort-header
                   [start]="'desc'"
-                  class="filtered tw-w-40 tw-whitespace-nowrap"
+                  class="filtered tw:w-40 tw:whitespace-nowrap"
                 >
                   <label class="pe-none" for="letzteAktivitaet">{{
                     'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="letzteAktivitaet"
@@ -342,7 +342,7 @@
                       <button
                         matIconSuffix
                         type="button"
-                        class="btn btn-link text-muted !tw-p-1"
+                        class="btn btn-link text-muted tw:!p-1"
                         [attr.aria-label]="'shared.ui.open-date-picker'"
                         (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
                       >
@@ -351,7 +351,7 @@
                         </dv-shared-ui-icon-chip>
                       </button>
                       <mat-date-range-input
-                        class="w-100 d-none"
+                        class="d-none w-100"
                         [rangePicker]="letzteAktivitaetRangePicker"
                         (click)="$event.stopPropagation()"
                       >
@@ -369,7 +369,7 @@
                       <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="
                         filterStartEndForm.controls.letzteAktivitaetFrom.reset();
                         filterStartEndForm.controls.letzteAktivitaetTo.reset()
@@ -384,7 +384,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
-                  class="tw-whitespace-nowrap"
+                  class="tw:whitespace-nowrap"
                 >
                   {{ gesuch.letzteAktivitaet | date: 'dd.MM.yyyy' }}
                 </td>
@@ -404,7 +404,7 @@
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
-                <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
                   {{ 'shared.table.noData' | transloco }}
                 </td>
               </tr>
@@ -421,7 +421,7 @@
           </div>
           @if (gesuchStore.cockpitViewSig().loading) {
             <dv-shared-ui-loading
-              class="position-absolute top-50 start-50 translate-middle"
+              class="position-absolute translate-middle start-50 top-50"
               [type]="'compact'"
             ></dv-shared-ui-loading>
           }

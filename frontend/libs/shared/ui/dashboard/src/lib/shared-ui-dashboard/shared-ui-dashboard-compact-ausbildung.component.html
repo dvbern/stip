@@ -1,10 +1,10 @@
 @let ausbildung = ausbildungSig();
 <mat-expansion-panel [togglePosition]="'before'" class="large">
   <mat-expansion-panel-header>
-    <mat-panel-title class="tw-flex tw-flex-col tw-py-8 tw-pl-8">
-      <h2 class="tw-mb-3 tw-flex tw-w-full tw-items-center tw-gap-4 tw-text-2xl">
-        <dv-shared-ui-icon-chip class="tw-bg-gray-100 tw-text-gray-400">
-          <i class="material-symbols-rounded tw-text-2xl">school</i>
+    <mat-panel-title class="tw:flex tw:flex-col tw:py-8 tw:pl-8">
+      <h2 class="tw:mb-3 tw:flex tw:w-full tw:items-center tw:gap-4 tw:text-2xl">
+        <dv-shared-ui-icon-chip class="tw:bg-gray-100 tw:text-gray-400">
+          <i class="material-symbols-rounded tw:text-2xl">school</i>
         </dv-shared-ui-icon-chip>
         {{
           'shared.dashboard.ausbildung.title'
@@ -13,12 +13,12 @@
                   ? { bezeichnungDe: ausbildung.alternativeAusbildungsgang }
                   : ausbildung.ausbildungsgang)
         }}
-        <div class="tw-grow tw-text-end tw-text-base">
+        <div class="tw:grow tw:text-end tw:text-base">
           {{ 'shared.dashboard.ausbildung.status.' + ausbildung.status | transloco: { status: ausbildung.status } }}
         </div>
       </h2>
 
-      <p class="tw-my-0 tw-w-full">
+      <p class="tw:my-0 tw:w-full">
         {{
           'shared.dashboard.ausbildung.description'
             | transloco
@@ -31,7 +31,7 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
 
-  <div class="tw-flex tw-flex-col tw-gap-6">
+  <div class="tw:flex tw:flex-col tw:gap-6">
     @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
       <dv-shared-ui-dashboard-gesuch
         [gesuchSig]="gesuch"

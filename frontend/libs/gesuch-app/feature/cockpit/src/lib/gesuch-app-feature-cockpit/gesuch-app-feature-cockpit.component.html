@@ -3,8 +3,8 @@
     <div class="gray-bg"></div>
   </div>
 
-  <div class="container tw-relative tw-my-12 tw-justify-between">
-    <h1 class="tw-mb-8 tw-text-white">
+  <div class="tw:relative tw:my-12 tw:justify-between container">
+    <h1 class="tw:mb-8 tw:text-white">
       {{ t('gesuch-app.dashboard.welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
@@ -12,9 +12,9 @@
     @if (dashboard) {
       @let fall = dashboard.fall;
       @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
-      <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
+      <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr,1fr]">
         <!-- main column -->
-        <div class="tw-flex tw-flex-col tw-gap-8">
+        <div class="tw:flex tw:flex-col tw:gap-8">
           @if (dashboard.activeAusbildungen.length > 0) {
             @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
               <dv-shared-ui-dashboard-ausbildung
@@ -30,7 +30,7 @@
               data-testid="cockpit-create-ausbildung"
               type="button"
               (click)="createAusbildung(fall.id)"
-              class="btn btn-danger d-flex align-items-center tw-w-max"
+              class="btn btn-danger d-flex align-items-center tw:w-max"
             >
               <dv-shared-ui-icon-chip>
                 <i class="material-symbols-rounded">add</i>
@@ -38,14 +38,14 @@
               {{ t('gesuch-app.dashboard.ausbildung.create') }}
             </button>
           } @else {
-            <div class="tw tw-block tw-rounded-lg tw-bg-white tw-p-6">
-              <h3 class="tw-mb-3 tw-flex tw-items-center tw-gap-4 tw-text-2xl">
+            <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
+              <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-2xl">
                 <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
-                  <i class="material-symbols-rounded tw-text-2xl">school</i>
+                  <i class="material-symbols-rounded tw:text-2xl">school</i>
                 </dv-shared-ui-icon-chip>
                 {{ t('gesuch-app.dashboard.fall.delegated.title') }}
               </h3>
-              <p class="tw-mb-0">
+              <p class="tw:mb-0">
                 {{ t('gesuch-app.dashboard.fall.delegated.message') }}
               </p>
             </div>
@@ -58,20 +58,20 @@
         </div>
 
         <!-- side column -->
-        <div class="tw-flex tw-flex-col tw-gap-8 lg:tw-mb-8">
+        <div class="tw:flex tw:flex-col tw:gap-8 tw:lg:mb-8">
           @let sozialdienste = availableSozialdiensteSig();
           @if (sozialdienste && sozialdienste.length > 0) {
             <!-- SOZIALDIENST DELEGIEREN -->
-            <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
-              <h3 class="tw-mb-4 tw-flex tw-items-center">
+            <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
+              <h3 class="tw:mb-4 tw:flex tw:items-center">
                 <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
                   <i class="material-symbols-rounded fs-5">interpreter_mode</i>
                 </dv-shared-ui-icon-chip>
                 {{ t('shared.dashboard.gesuch.sozialdienst') }}
               </h3>
-              <div class="tw-flex tw-flex-col tw-gap-4">
-                <div class="tw-flex tw-items-center tw-gap-2">
-                  <mat-form-field class="tw-w-full">
+              <div class="tw:flex tw:flex-col tw:gap-4">
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <mat-form-field class="tw:w-full">
                     <mat-select
                       #sozialdienst
                       [placeholder]="t('shared.dashboard.gesuch.sozialdienst-waehlen')"
@@ -88,7 +88,7 @@
                   </mat-form-field>
                   @if (sozialdienst.value && !delegierterSozialdienst) {
                     <dv-shared-ui-clear-button
-                      class="tw-flex tw-h-7 tw-w-7 tw-items-center tw-justify-center tw-rounded-full tw-bg-[--dv-overridden-body-bg] tw-text-white"
+                      class="tw:flex tw:h-7 tw:w-7 tw:items-center tw:justify-center tw:rounded-full tw:bg-(--dv-overridden-body-bg) tw:text-white"
                       [valueSig]="sozialdienst.value.id"
                       (clear)="sozialdienst.value = null"
                     ></dv-shared-ui-clear-button>
@@ -108,20 +108,20 @@
           }
 
           <!-- NACHRICHTEN -->
-          <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
+          <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
             <dv-shared-ui-notifications [notifications]="dashboard.notifications"></dv-shared-ui-notifications>
           </div>
 
           <!-- INFOS -->
-          <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
-            <h3 class="tw-mb-4">Allgemeine Informationen</h3>
+          <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
+            <h3 class="tw:mb-4">Allgemeine Informationen</h3>
             <p>
               Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
               Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
               Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
               sind und weitere nützliche Grundlagen.
             </p>
-            <a class="btn btn-outline-primary tw-mt-3 tw-w-full"> Stipendien und Darlehen </a>
+            <a class="btn btn-outline-primary tw:mt-3 tw:w-full"> Stipendien und Darlehen </a>
           </div>
         </div>
       </div>
@@ -133,29 +133,29 @@
   <div dvMobileNavContent></div>
 
   <!-- DESKTOP HEADER (LEFT) -->
-  <div dvHeaderDesktopLeft class="tw-flex tw-flex-grow tw-items-center tw-gap-4">
+  <div dvHeaderDesktopLeft class="tw:flex tw:grow tw:items-center tw:gap-4">
     <a
       routerLink="/"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none active"
+      class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
       data-testid="gesuch-step-nav-dashboard"
     >
-      <i class="material-symbols-rounded text-white me-2">dashboard</i>
+      <i class="material-symbols-rounded me-2 text-white">dashboard</i>
       <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
 
     @let fallId = fallStore.currentFallViewSig()?.id;
     <a
       [routerLink]="['/auszahlung', fallId]"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="gesuch-step-nav-auszahlung"
       [class.disabled]="!fallId"
     >
-      <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
+      <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
       <span>{{ t('shared.menu.auszahlung') }}</span>
     </a>
   </div>
 
   <!-- DESKTOP HEADER (RIGHT) -->
-  <div dvHeaderDesktopRight class="d-flex gap-4 align-items-center"></div>
+  <div dvHeaderDesktopRight class="d-flex align-items-center gap-4"></div>
   <dv-shared-ui-version-text [version]="cockpitViewSig().version" class="text-white"></dv-shared-ui-version-text>
 </dv-shared-pattern-main-layout>

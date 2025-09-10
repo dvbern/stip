@@ -14,7 +14,7 @@
   >
     <!-- willDarlehen -->
     <mat-radio-group
-      class="will-darlehen-radio-group tw-flex tw-flex-col tw-pt-12"
+      class="will-darlehen-radio-group tw:flex tw:flex-col tw:pt-12"
       formControlName="willDarlehen"
       data-testid="form-darlehen-willDarlehen"
       dvSharedUiFormField
@@ -33,9 +33,9 @@
     </mat-radio-group>
 
     @if (willDarlehenChangedSig() && !view.loading) {
-      <div class="tw-dv-form-half tw-pt-4">
+      <div class="tw:dv-form-half tw:pt-4">
         <!-- Darlehensbetrag -->
-        <mat-form-field dvSharedUiFormField class="tw-mt-4 tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:mt-4 tw:w-full">
           <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
           <input
             formControlName="betragDarlehen"
@@ -51,7 +51,7 @@
         </mat-form-field>
 
         <!-- betragBezogenKanton -->
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | transloco }}</mat-label>
           <input
             formControlName="betragBezogenKanton"
@@ -67,7 +67,7 @@
         </mat-form-field>
 
         <!-- schulden -->
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>{{ 'shared.form.darlehen.schulden.label' | transloco }}</mat-label>
           <input
             formControlName="schulden"
@@ -83,8 +83,8 @@
         </mat-form-field>
 
         <!-- anzahlBetreibungen mit upload-->
-        <div class="tw-flex tw-w-full tw-gap-2">
-          <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <div class="tw:flex tw:w-full tw:gap-2">
+          <mat-form-field dvSharedUiFormField class="tw:w-full">
             <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | transloco }}</mat-label>
             <input
               formControlName="anzahlBetreibungen"
@@ -107,18 +107,18 @@
         </div>
 
         <fieldset
-          class="tw-col-span-2 tw-grid tw-grid-cols-[1fr_56px] tw-gap-x-6 tw-gap-y-4 tw-rounded"
+          class="tw:col-span-2 tw:grid tw:grid-cols-[1fr_56px] tw:gap-x-6 tw:gap-y-4 tw:rounded-sm"
           formGroupName="gruende"
         >
-          <legend class="tw-col-span-2">
-            <h3 class="tw-mb-0">
+          <legend class="tw:col-span-2">
+            <h3 class="tw:mb-0">
               {{ 'shared.form.darlehen.gruende.label' | transloco }}
             </h3>
           </legend>
           <!-- grundNichtBerechtigt -->
-          <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
             <mat-checkbox
-              class="tw-w-full"
+              class="tw:w-full"
               formControlName="grundNichtBerechtigt"
               data-testid="form-darlehen-grundNichtBerechtigt"
             >
@@ -138,9 +138,9 @@
           }
 
           <!-- grundAusbildungZwoelfJahre -->
-          <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
             <mat-checkbox
-              class="tw-w-full"
+              class="tw:w-full"
               formControlName="grundAusbildungZwoelfJahre"
               data-testid="form-darlehen-grundAusbildungZwoelfJahre"
             >
@@ -156,9 +156,9 @@
           </div>
 
           <!-- grundHoheGebuehren -->
-          <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
             <mat-checkbox
-              class="tw-w-full"
+              class="tw:w-full"
               formControlName="grundHoheGebuehren"
               data-testid="form-darlehen-grundHoheGebuehren"
             >
@@ -178,9 +178,9 @@
           }
 
           <!-- grundAnschaffungenFuerAusbildung -->
-          <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
             <mat-checkbox
-              class="tw-w-full"
+              class="tw:w-full"
               formControlName="grundAnschaffungenFuerAusbildung"
               data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
             >
@@ -202,9 +202,9 @@
           }
 
           <!-- grundZweitausbildung -->
-          <div class="tw-col-span-1 tw-col-start-1 tw-min-h-14">
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
             <mat-checkbox
-              class="tw-w-full"
+              class="tw:w-full"
               formControlName="grundZweitausbildung"
               data-testid="form-darlehen-grundZweitausbildung"
             >
@@ -221,7 +221,7 @@
     }
 
     <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons class="tw-col-span-2">
+    <dv-shared-ui-step-form-buttons class="tw:col-span-2">
       @if (!view.readonly) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | transloco }}

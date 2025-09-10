@@ -7,7 +7,7 @@
   {{ 'shared.dokumente.table.title.customDocuments' | transloco }}
 </h3>
 
-<div class="tw-dv-table">
+<div class="tw:dv-table">
   <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
     <caption class="cdk-visually-hidden">
       {{
@@ -17,11 +17,11 @@
 
     <!-- expander -->
     <ng-container matColumnDef="expander">
-      <th mat-header-cell *matHeaderCellDef class="tw-w-11"></th>
-      <td class="!tw-px-0" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <button class="btn btn-link tw-box-content tw-h-7 tw-w-7" type="button">
+      <th mat-header-cell *matHeaderCellDef class="tw:w-11"></th>
+      <td class="tw:!px-0" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <button class="btn btn-link tw:box-content tw:h-7 tw:w-7" type="button">
           <i
-            class="material-symbols-rounded tw-rounded-full tw-bg-[--dv-blue-bg] tw-align-middle tw-text-2xl/none tw-text-white"
+            class="material-symbols-rounded tw:rounded-full tw:bg-[--dv-blue-bg] tw:align-middle tw:text-2xl/none tw:text-white"
           >
             @if (expandedRowId === dokument.dokumentTyp.id) {
               expand_less
@@ -35,11 +35,11 @@
 
     <!-- required document -->
     <ng-container matColumnDef="documentName">
-      <th mat-header-cell *matHeaderCellDef class="tw-min-w-52">
+      <th mat-header-cell *matHeaderCellDef class="tw:min-w-52">
         {{ 'shared.dokumente.table.documentName' | transloco }}
       </th>
-      <td mat-cell class="tw-min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <div class="tw-py-3">
+      <td mat-cell class="tw:min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <div class="tw:py-3">
           {{ dokument.dokumentTyp.type }}
         </div>
       </td>
@@ -47,11 +47,11 @@
 
     <!-- description -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef class="tw-w-full tw-min-w-96">
+      <th mat-header-cell *matHeaderCellDef class="tw:w-full tw:min-w-96">
         {{ 'shared.dokumente.table.description' | transloco }}
       </th>
-      <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <div class="tw-py-3">
+      <td mat-cell class="tw:w-full tw:min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <div class="tw:py-3">
           {{ dokument.dokumentTyp.description }}
         </div>
       </td>
@@ -87,22 +87,22 @@
           <i class="material-symbols-rounded fs-4">add</i>
         </button>
       </th>
-      <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <div class="tw-flex tw-items-center tw-justify-end">
+      <td mat-cell class="tw:w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <div class="tw:flex tw:items-center tw:justify-end">
           <!-- delete custom documentType -->
           @if (dokument.canDelete) {
             <button
               type="button"
-              class="dv-icon-button delete-icon tw-flex-shrink-0"
+              class="dv-icon-button delete-icon tw:shrink-0"
               [attr.aria-label]="'shared.form.delete' | transloco"
               [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | transloco"
               (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw-text-xl tw-text-gray-500">delete</span>
+              <span class="material-symbols-rounded tw:text-xl tw:text-gray-500">delete</span>
             </button>
           }
           <dv-shared-pattern-document-upload
-            class="tw-max-h-11"
+            class="tw:max-h-11"
             (click)="$event.stopPropagation()"
             [optionsSig]="dokument.dokumentOptions"
           ></dv-shared-pattern-document-upload>
@@ -127,13 +127,13 @@
           "
         >
           @if (dokument.kommentarePending) {
-            <dv-shared-ui-loading class="tw-pb-2" type="icon"></dv-shared-ui-loading>
+            <dv-shared-ui-loading class="tw:pb-2" type="icon"></dv-shared-ui-loading>
           } @else if (dokument.kommentare.length === 0) {
-            <div class="text-muted tw-py-2 tw-text-center">
+            <div class="text-muted tw:py-2 tw:text-center">
               {{ 'shared.dokumente.table.noComment' | transloco }}
             </div>
           } @else {
-            <div class="tw-grid tw-grid-cols-[33px,1fr,1fr,3fr] tw-gap-4 tw-py-2">
+            <div class="tw:grid tw:grid-cols-[33px,1fr,1fr,3fr] tw:gap-4 tw:py-2">
               @for (kommentar of dokument.kommentare; track $index) {
                 <i class="material-symbols-rounded text-gray">person</i>
                 <span>{{ kommentar.user_erstellt }}</span>
@@ -159,7 +159,7 @@
             ? true
             : false
           : false,
-        '!tw-bg-dv-warning': !dokument?.gesuchDokument?.id,
+        'tw:!bg-dv-warning': !dokument?.gesuchDokument?.id,
       }"
       mat-row
       *matRowDef="let dokument; columns: displayedColumns"
@@ -168,7 +168,7 @@
     <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>
 
     <tr class="mat-mdc-row" *matNoDataRow>
-      <td class="mat-mdc-cell tw-px-3 tw-text-center" [colSpan]="displayedColumns.length">
+      <td class="mat-mdc-cell tw:px-3 tw:text-center" [colSpan]="displayedColumns.length">
         {{ 'shared.dokumente.table.noData' | transloco }}
       </td>
     </tr>
