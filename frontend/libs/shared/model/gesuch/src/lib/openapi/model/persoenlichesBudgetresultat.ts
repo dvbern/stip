@@ -42,5 +42,7 @@ export interface PersoenlichesBudgetresultat {
     ausbildungskosten: number;
     ausgabenPersoenlichesBudget: number;
     persoenlichesbudgetBerechnet: number;
+    elternbeitrag1?: number;
+    elternbeitrag2?: number;
 }
 
