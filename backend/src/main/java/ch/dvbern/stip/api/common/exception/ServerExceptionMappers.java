@@ -52,7 +52,7 @@ public class ServerExceptionMappers {
     @ServerExceptionMapper
     public RestResponse<NeskoErrorDto> mapException(NeskoInternalException e) {
         return RestResponse.status(
-            RestResponse.Status.NOT_FOUND,
+            RestResponse.Status.BAD_GATEWAY,
             NeskoExceptionMapper.toDto(e)
         );
     }

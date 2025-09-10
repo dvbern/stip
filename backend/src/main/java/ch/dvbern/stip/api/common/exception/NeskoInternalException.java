@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.common.exception;
 import lombok.Getter;
 
 @Getter
-public class NeskoInternalException extends RuntimeException {
+public class NeskoInternalException extends RuntimeException implements NeskoException {
 
     private final transient String neskoError;
     private final transient String userMessage;

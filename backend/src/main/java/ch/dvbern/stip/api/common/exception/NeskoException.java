@@ -17,21 +17,10 @@
 
 package ch.dvbern.stip.api.common.exception;
 
-import ch.dvbern.stip.generated.dto.NeskoErrorDto;
+public interface NeskoException {
+    String getMessage();
 
-public final class NeskoExceptionMapper {
-    private NeskoExceptionMapper() {}
+    String getNeskoError();
 
-    public static NeskoErrorDto toDto(NeskoException exception) {
-        NeskoErrorDto neskoErrorDto = new NeskoErrorDto();
-        if (exception == null) {
-            return neskoErrorDto;
-        }
-
-        neskoErrorDto.setType(exception.getMessage());
-        neskoErrorDto.setNeskoError(exception.getNeskoError());
-        neskoErrorDto.setUserMessage(exception.getUserMessage());
-
-        return neskoErrorDto;
-    }
+    String getUserMessage();
 }
