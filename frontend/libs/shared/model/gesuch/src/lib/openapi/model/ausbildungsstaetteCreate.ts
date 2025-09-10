@@ -9,11 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AusbildungsstaetteNummerTyp } from './ausbildungsstaetteNummerTyp';
 
 export interface AusbildungsstaetteCreate { 
     nameDe: string;
     nameFr: string;
-    burNo?: string;
-    ctNo?: string;
+    nummer?: string;
+    nummerTyp: AusbildungsstaetteNummerTyp;
 }
+
+
 

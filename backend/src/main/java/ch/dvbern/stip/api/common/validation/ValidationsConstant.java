@@ -75,6 +75,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.required.message}";
     public static final String VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID =
         "{jakarta.validation.constraints.ausbildung.besucht.bms.valid.message}";
+    public static final String VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_NOT_VALID =
+        "{jakarta.validation.constraints.ausbildungsstaette.nummer.not.valid.message}";
+    public static final String VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_FORMAT_NOT_VALID =
+        "{jakarta.validation.constraints.ausbildungsstaette.nummer.format.not.valid.message}";
     public static final String VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.ausbildung.required.null.message}";
     public static final String VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE =
@@ -211,6 +215,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.zahlungsverbindung.iso2code.must.be.set}";
     public static final String VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE =
         "{jakarta.validation.constraints.ausbildungsstaette.name.notunique}";
+    public static final String VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_TYP_NOT_VALID =
+        "{jakarta.validation.constraints.ausbildungsstaette.nummer.typ.notvalid}";
     public static final String VALIDATION_AUSBILDUNGSGANG_AUSBILDUNGSSTAETTE_ABSCHLUSS_NOT_UNIQUE =
         "{jakarta.validation.constraints.ausbildungsgang.ausbildungsstaetteAbschluss.notunique}";
     public static final String VALIDATION_AUSBILDUNG_AUSBILDUNGSGANG_MUST_BE_AKTIV =

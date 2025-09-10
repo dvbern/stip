@@ -250,6 +250,8 @@ quarkus:
         grant-type: password
         username: ${STIP_KEYCLOAK_ADMIN_USER}
         password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+    quartz:
+      clustered: false
   kstip:
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'

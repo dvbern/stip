@@ -9,6 +9,7 @@ import {
   Ausbildungsgang,
   AusbildungsgangSlim,
   Ausbildungsstaette,
+  AusbildungsstaetteNummerTyp,
   AusbildungsstaetteService,
   AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams,
   AusbildungsstaetteServiceCreateAusbildungsgangRequestParams,
@@ -61,16 +62,19 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   ausbildungsgaengeViewSig = computed(() => {
     return this.ausbildungsgaenge.data();
   });
+
   abschluesseViewSig = computed(() => {
     return preparePaginatedData(this.abschluesse.data(), (e) => ({
       ...e,
       canArchive: e.aktiv && e.ausbildungskategorie === 'BRUECKENANGEBOT',
     }));
   });
+
   ausbildungsstaettenViewSig = computed(() => {
     return preparePaginatedData(this.ausbildungsstaetten.data(), (e) => ({
       ...e,
-      canArchive: e.aktiv && !e.chShis,
+      canArchive:
+        e.aktiv && e.nummerTyp !== AusbildungsstaetteNummerTyp.CH_SHIS,
     }));
   });
 

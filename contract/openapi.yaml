@@ -3993,9 +3993,8 @@ paths:
         - $ref: '#/components/parameters/sortOrder'
         - $ref: '#/components/parameters/nameDe'
         - $ref: '#/components/parameters/nameFr'
-        - $ref: '#/components/parameters/chShis'
-        - $ref: '#/components/parameters/burNo'
-        - $ref: '#/components/parameters/ctNo'
+        - $ref: '#/components/parameters/nummer'
+        - $ref: '#/components/parameters/nummerTyp'
         - $ref: '#/components/parameters/aktiv'
       responses:
         '200':
@@ -5977,13 +5976,18 @@ components:
           type: string
         bezeichnungFr:
           type: string
+    AusbildungsstaetteNummerTyp:
+      enum:
+        - CH_SHIS
+        - BUR_NO
+        - CT_NO
+        - OHNE_NO
     AusbildungsstaetteSortColumn:
       enum:
         - NAME_DE
         - NAME_FR
-        - CH_SHIS
-        - BUR_NO
-        - CT_NO
+        - NUMMER
+        - NUMMER_TYP
         - AKTIV
     Ausbildungsstaette:
       type: object
@@ -5992,6 +5996,7 @@ components:
         - nameDe
         - nameFr
         - aktiv
+        - nummerTyp
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -5999,12 +6004,10 @@ components:
           type: string
         nameFr:
           type: string
-        chShis:
+        nummer:
           type: string
-        burNo:
-          type: string
-        ctNo:
-          type: string
+        nummerTyp:
+          $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
         aktiv:
           type: boolean
     PaginatedAusbildungsstaette:
@@ -6020,15 +6023,16 @@ components:
       required:
         - nameDe
         - nameFr
+        - nummerTyp
       properties:
         nameDe:
           type: string
         nameFr:
           type: string
-        burNo:
+        nummer:
           type: string
-        ctNo:
-          type: string
+        nummerTyp:
+          $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
     AusbildungsgangSortColumn:
       enum:
         - ABSCHLUSS_BEZEICHNUNG_DE
@@ -7777,20 +7781,15 @@ components:
       schema:
         type: string
       in: query
-    chShis:
-      name: chShis
+    nummer:
+      name: nummer
       schema:
         type: string
       in: query
-    burNo:
-      name: burNo
+    nummerTyp:
+      name: nummerTyp
       schema:
-        type: string
-      in: query
-    ctNo:
-      name: ctNo
-      schema:
-        type: string
+        $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
       in: query
     abschlussBezeichnungDe:
       name: abschlussBezeichnungDe

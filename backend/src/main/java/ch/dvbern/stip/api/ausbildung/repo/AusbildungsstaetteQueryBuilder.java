@@ -19,9 +19,9 @@ package ch.dvbern.stip.api.ausbildung.repo;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsstaette;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,16 +47,14 @@ public class AusbildungsstaetteQueryBuilder {
         query.where(Q_AUSBILDUNGSSTAETTE.nameFr.containsIgnoreCase(nameFr));
     }
 
-    public void chShisFilter(final JPAQuery<Ausbildungsstaette> query, final String chShis) {
-        query.where(Q_AUSBILDUNGSSTAETTE.chShis.containsIgnoreCase(chShis));
+    public void nummerFilter(final JPAQuery<Ausbildungsstaette> query, final String nummer) {
+        query.where(Q_AUSBILDUNGSSTAETTE.nummer.containsIgnoreCase(nummer));
+
     }
 
-    public void burNoFilter(final JPAQuery<Ausbildungsstaette> query, final String burNo) {
-        query.where(Q_AUSBILDUNGSSTAETTE.burNo.containsIgnoreCase(burNo));
-    }
+    public void nummerTypFilter(final JPAQuery<Ausbildungsstaette> query, final AusbildungsstaetteNummerTyp nummerTyp) {
+        query.where(Q_AUSBILDUNGSSTAETTE.nummerTyp.eq(nummerTyp));
 
-    public void ctNoFilter(final JPAQuery<Ausbildungsstaette> query, final String ctNo) {
-        query.where(Q_AUSBILDUNGSSTAETTE.ctNo.containsIgnoreCase(ctNo));
     }
 
     public void aktivFilter(final JPAQuery<Ausbildungsstaette> query, final Boolean aktiv) {
@@ -71,13 +69,8 @@ public class AusbildungsstaetteQueryBuilder {
         final var fieldSpecified = switch (column) {
             case NAME_DE -> Q_AUSBILDUNGSSTAETTE.nameDe;
             case NAME_FR -> Q_AUSBILDUNGSSTAETTE.nameFr;
-            // Adapted from https://stackoverflow.com/a/8502570/9363973, with Postgres 16 maybe replace
-            case CH_SHIS -> Expressions.stringTemplate(
-                "CAST(NULLIF(regexp_replace({0}, '\\D', '', 'g'), '') AS integer)",
-                Q_AUSBILDUNGSSTAETTE.chShis
-            );
-            case BUR_NO -> Q_AUSBILDUNGSSTAETTE.burNo;
-            case CT_NO -> Q_AUSBILDUNGSSTAETTE.ctNo;
+            case NUMMER_TYP -> Q_AUSBILDUNGSSTAETTE.nummerTyp;
+            case NUMMER -> Q_AUSBILDUNGSSTAETTE.nummer;
             case AKTIV -> Q_AUSBILDUNGSSTAETTE.aktiv;
         };
 

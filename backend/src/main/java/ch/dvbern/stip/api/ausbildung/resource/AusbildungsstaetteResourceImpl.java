@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungsstaetteService;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsgangSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.authorization.AusbildungsstaetteAuthorizer;
@@ -161,8 +162,8 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
         return ausbildungsstaetteService.getAllAusbildungsstaetteForAuswahl();
     }
 
-    @Override
     @RolesAllowed(AUSBILDUNGSSTAETTE_READ)
+    @Override
     public PaginatedAusbildungsstaetteDto getAllAusbildungsstaetteForUebersicht(
         Integer page,
         Integer pageSize,
@@ -170,9 +171,8 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
         SortOrder sortOrder,
         String nameDe,
         String nameFr,
-        String chShis,
-        String burNo,
-        String ctNo,
+        String nummer,
+        AusbildungsstaetteNummerTyp nummerTyp,
         Boolean aktiv
     ) {
         ausbildungsstaetteAuthorizer.canRead();
@@ -183,9 +183,8 @@ public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResourc
             sortOrder,
             nameDe,
             nameFr,
-            chShis,
-            burNo,
-            ctNo,
+            nummerTyp,
+            nummer,
             aktiv
         );
     }

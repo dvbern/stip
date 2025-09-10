@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.AusbildungsstaetteNummerTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,9 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_ID,
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_NAME_DE,
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_NAME_FR,
-  AusbildungsstaetteDtoSpec.JSON_PROPERTY_CH_SHIS,
-  AusbildungsstaetteDtoSpec.JSON_PROPERTY_BUR_NO,
-  AusbildungsstaetteDtoSpec.JSON_PROPERTY_CT_NO,
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_NUMMER,
+  AusbildungsstaetteDtoSpec.JSON_PROPERTY_NUMMER_TYP,
   AusbildungsstaetteDtoSpec.JSON_PROPERTY_AKTIV
 })
 @JsonTypeName("Ausbildungsstaette")
@@ -48,14 +48,11 @@ public class AusbildungsstaetteDtoSpec {
   public static final String JSON_PROPERTY_NAME_FR = "nameFr";
   private String nameFr;
 
-  public static final String JSON_PROPERTY_CH_SHIS = "chShis";
-  private String chShis;
+  public static final String JSON_PROPERTY_NUMMER = "nummer";
+  private String nummer;
 
-  public static final String JSON_PROPERTY_BUR_NO = "burNo";
-  private String burNo;
-
-  public static final String JSON_PROPERTY_CT_NO = "ctNo";
-  private String ctNo;
+  public static final String JSON_PROPERTY_NUMMER_TYP = "nummerTyp";
+  private AusbildungsstaetteNummerTypDtoSpec nummerTyp;
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
   private Boolean aktiv;
@@ -141,81 +138,55 @@ public class AusbildungsstaetteDtoSpec {
   }
 
 
-  public AusbildungsstaetteDtoSpec chShis(String chShis) {
+  public AusbildungsstaetteDtoSpec nummer(String nummer) {
     
-    this.chShis = chShis;
+    this.nummer = nummer;
     return this;
   }
 
    /**
-   * Get chShis
-   * @return chShis
+   * Get nummer
+   * @return nummer
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CH_SHIS)
+  @JsonProperty(JSON_PROPERTY_NUMMER)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getChShis() {
-    return chShis;
+  public String getNummer() {
+    return nummer;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CH_SHIS)
+  @JsonProperty(JSON_PROPERTY_NUMMER)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setChShis(String chShis) {
-    this.chShis = chShis;
+  public void setNummer(String nummer) {
+    this.nummer = nummer;
   }
 
 
-  public AusbildungsstaetteDtoSpec burNo(String burNo) {
+  public AusbildungsstaetteDtoSpec nummerTyp(AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
     
-    this.burNo = burNo;
+    this.nummerTyp = nummerTyp;
     return this;
   }
 
    /**
-   * Get burNo
-   * @return burNo
+   * Get nummerTyp
+   * @return nummerTyp
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BUR_NO)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NUMMER_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getBurNo() {
-    return burNo;
+  public AusbildungsstaetteNummerTypDtoSpec getNummerTyp() {
+    return nummerTyp;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BUR_NO)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBurNo(String burNo) {
-    this.burNo = burNo;
-  }
-
-
-  public AusbildungsstaetteDtoSpec ctNo(String ctNo) {
-    
-    this.ctNo = ctNo;
-    return this;
-  }
-
-   /**
-   * Get ctNo
-   * @return ctNo
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CT_NO)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getCtNo() {
-    return ctNo;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_CT_NO)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCtNo(String ctNo) {
-    this.ctNo = ctNo;
+  @JsonProperty(JSON_PROPERTY_NUMMER_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNummerTyp(AusbildungsstaetteNummerTypDtoSpec nummerTyp) {
+    this.nummerTyp = nummerTyp;
   }
 
 
@@ -256,15 +227,14 @@ public class AusbildungsstaetteDtoSpec {
     return Objects.equals(this.id, ausbildungsstaette.id) &&
         Objects.equals(this.nameDe, ausbildungsstaette.nameDe) &&
         Objects.equals(this.nameFr, ausbildungsstaette.nameFr) &&
-        Objects.equals(this.chShis, ausbildungsstaette.chShis) &&
-        Objects.equals(this.burNo, ausbildungsstaette.burNo) &&
-        Objects.equals(this.ctNo, ausbildungsstaette.ctNo) &&
+        Objects.equals(this.nummer, ausbildungsstaette.nummer) &&
+        Objects.equals(this.nummerTyp, ausbildungsstaette.nummerTyp) &&
         Objects.equals(this.aktiv, ausbildungsstaette.aktiv);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, nameDe, nameFr, chShis, burNo, ctNo, aktiv);
+    return Objects.hash(id, nameDe, nameFr, nummer, nummerTyp, aktiv);
   }
 
   @Override
@@ -274,9 +244,8 @@ public class AusbildungsstaetteDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    nameDe: ").append(toIndentedString(nameDe)).append("\n");
     sb.append("    nameFr: ").append(toIndentedString(nameFr)).append("\n");
-    sb.append("    chShis: ").append(toIndentedString(chShis)).append("\n");
-    sb.append("    burNo: ").append(toIndentedString(burNo)).append("\n");
-    sb.append("    ctNo: ").append(toIndentedString(ctNo)).append("\n");
+    sb.append("    nummer: ").append(toIndentedString(nummer)).append("\n");
+    sb.append("    nummerTyp: ").append(toIndentedString(nummerTyp)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
     sb.append("}");
     return sb.toString();
