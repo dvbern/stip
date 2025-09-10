@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { z } from 'zod';
 
 import {
+  NeskoError as DvNeskoError,
   ValidationError as DvValidationError,
   ValidationWarning as DvValidationWarning,
   ValidationReport,
@@ -54,6 +55,7 @@ export const NeskoError = z.object({
   neskoError: z.string(),
   userMessage: z.string(),
 });
+export type NeskoError = Extends<z.infer<typeof NeskoError>, DvNeskoError>;
 
 export const ParseError = z.instanceof(z.ZodError);
 export type ParseError = z.infer<typeof ParseError>;
