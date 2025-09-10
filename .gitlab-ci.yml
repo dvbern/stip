@@ -297,6 +297,6 @@ db-clear:schulung:stop:
   environment:
     name: schulung
   needs:
-    - db-clear:uat:start
+    - db-clear:schulung:start
   rules:
     - if: $PIPELINE_TYPE == 'tag'
