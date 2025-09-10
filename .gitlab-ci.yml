@@ -2,6 +2,7 @@ stages: [test, build, e2e, mirror, deploy, review-e2e]
 
 variables:
   ARGOCD_APP: stip
+  SCHULUNG_ARGOCD_APP: schulung
   ARGOCD_IMAGES: api,gesuch-app,sachbearbeitung-app
   STIP_OVERLAYS_DIR: manifests/stip/overlays
 
@@ -56,7 +57,7 @@ include:
       deployment-mode: 'manual'
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
-      argocd-app-name: '$ARGOCD_APP'
+      argocd-app-name: '$SCHULUNG_ARGOCD_APP'
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.3.0'
     inputs:
