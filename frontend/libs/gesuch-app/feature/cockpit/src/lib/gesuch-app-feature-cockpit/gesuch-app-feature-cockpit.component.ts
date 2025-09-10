@@ -5,7 +5,6 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
