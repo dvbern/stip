@@ -294,7 +294,7 @@ db-clear:schulung:stop:
   extends: .db-clear:stop
   resource_group: 'argocd:uat'
   variables:
-    APPLICATION: SCHULUNG
+    APPLICATION: schulung
   environment:
     name: schulung
   needs:
