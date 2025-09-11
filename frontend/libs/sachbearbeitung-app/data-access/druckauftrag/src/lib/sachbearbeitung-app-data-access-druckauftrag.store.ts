@@ -1,24 +1,29 @@
-import { Injectable, computed } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, tap } from 'rxjs';
 
+import {
+  DruckenService,
+  PaginatedDruckauftraege,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
   fromCachedDataSig,
   initial,
+  isPending,
   pending,
 } from '@dv/shared/util/remote-data';
 
 type DruckauftragState = {
-  cachedDruckauftrag: CachedRemoteData<unknown>;
+  cachedPaginatedDruckauftraege: CachedRemoteData<PaginatedDruckauftraege>;
   druckauftrag: RemoteData<unknown>;
 };
 
 const initialState: DruckauftragState = {
-  cachedDruckauftrag: initial(),
+  cachedPaginatedDruckauftraege: initial(),
   druckauftrag: initial(),
 };
 
@@ -27,10 +32,13 @@ export class DruckauftragStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
-  // private druckauftragService = inject(DruckauftragService);
+  private druckService = inject(DruckenService);
 
   cachedDruckauftragListViewSig = computed(() => {
-    return fromCachedDataSig(this.cachedDruckauftrag);
+    return {
+      druckauftraege: fromCachedDataSig(this.cachedPaginatedDruckauftraege),
+      loading: isPending(this.cachedPaginatedDruckauftraege()),
+    };
   });
 
   druckauftragViewSig = computed(() => {
@@ -41,7 +49,9 @@ export class DruckauftragStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          cachedDruckauftrag: cachedPending(state.cachedDruckauftrag),
+          cachedPaginatedDruckauftraege: cachedPending(
+            state.cachedPaginatedDruckauftraege,
+          ),
         }));
       }),
     ),

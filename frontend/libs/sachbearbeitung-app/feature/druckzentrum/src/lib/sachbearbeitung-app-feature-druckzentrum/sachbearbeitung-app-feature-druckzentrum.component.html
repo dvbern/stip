@@ -39,12 +39,15 @@
     </h1>
     <div class="tw-my-6">
       <div class="tw-dv-table tw-relative">
-        <div [class.opacity-50]="loading()">
+        <div [class.opacity-50]="druckauftragStore.cachedDruckauftragListViewSig().loading">
           <table
             mat-table
             [dvSharedUiFocusableList]="items"
             [dataSource]="druckzentrumDataSourceSig()"
             data-testid="sachbearbeitung-app.druckzentrum.table"
+            mat-table
+            matSort
+            (matSortChange)="sortList($event)"
             tabindex="0"
           >
             <caption class="cdk-visually-hidden">
@@ -53,7 +56,7 @@
               }}
             </caption>
 
-            <ng-container matColumnDef="batchname">
+            <ng-container matColumnDef="BATCH_NAME">
               <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
                 {{ 'sachbearbeitung-app.druckzentrum.table.batchname' | transloco }}
               </th>
@@ -61,40 +64,40 @@
                 mat-cell
                 *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                 class="tw-w-40 tw-whitespace-nowrap"
-                [dvTruncateTooltip]="item.batchname"
+                [dvTruncateTooltip]="item.batchName"
               >
-                {{ item.batchname }}
+                {{ item.batchName }}
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="auftraggeber">
+            <ng-container matColumnDef="BEARBEITER">
               <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.druckzentrum.table.auftraggeber' | transloco }}
+                {{ 'sachbearbeitung-app.druckzentrum.table.bearbeiter' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                 class="tw-w-40 tw-whitespace-nowrap"
-                [dvTruncateTooltip]="item.auftraggeber"
+                [dvTruncateTooltip]="item.bearbeiter"
               >
-                {{ item.auftraggeber }}
+                {{ item.bearbeiter }}
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="auftragsdatum">
+            <ng-container matColumnDef="ERSTELLT_AM">
               <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
-                {{ 'sachbearbeitung-app.druckzentrum.table.auftragsdatum' | transloco }}
+                {{ 'sachbearbeitung-app.druckzentrum.table.timestampErstellt' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                 class="tw-w-32 tw-whitespace-nowrap"
               >
-                {{ item.auftragsdatum | date: 'dd.MM.yyyy HH:mm' }}
+                {{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="status">
+            <ng-container matColumnDef="STATUS">
               <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
                 {{ 'sachbearbeitung-app.druckzentrum.table.status' | transloco }}
               </th>
@@ -103,11 +106,11 @@
                 *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                 class="tw-w-32 tw-whitespace-nowrap"
               >
-                {{ item.status }}
+                {{ item.druckauftragStatus }}
               </td>
             </ng-container>
 
-            <ng-container matColumnDef="typ">
+            <ng-container matColumnDef="TYP">
               <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
                 {{ 'sachbearbeitung-app.druckzentrum.table.typ' | transloco }}
               </th>
@@ -116,7 +119,7 @@
                 *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                 class="tw-w-32 tw-whitespace-nowrap"
               >
-                {{ item.typ }}
+                {{ item.druckauftragTyp }}
               </td>
             </ng-container>
 
@@ -140,7 +143,7 @@
             [pageSizeOptions]="pageSizes"
             [pageSize]="pageSize() ?? defaultPageSize"
             [pageIndex]="page() ?? 0"
-            [length]="totalEntries()"
+            [length]="totalEntriesSig()"
             (page)="paginate($event)"
           ></mat-paginator>
         </div>
