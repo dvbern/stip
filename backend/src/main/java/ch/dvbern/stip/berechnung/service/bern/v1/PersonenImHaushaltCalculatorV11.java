@@ -17,9 +17,13 @@
 
 package ch.dvbern.stip.berechnung.service.bern.v1;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
@@ -32,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Singleton
 @CalculatorVersion(major = 1, minor = 0)
-public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalculator {
+public class PersonenImHaushaltCalculatorV11 implements PersonenImHaushaltCalculator {
     @Override
     public PersonenImHaushaltResult calculatePersonenImHaushalt(CalculatorRequest request) {
         if (request instanceof PersonenImHaushaltRequestV1 input) {
@@ -58,14 +62,80 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
     }
 
     private void calculateAndSetPersonenImHaushalt(
+        final PersonenImHaushaltRequestV1.PersonenImHaushaltInputV1 personenImHaushalt,
+        final Familiensituation familiensituation,
+        final int personInAusbildungModifier,
+        final ElternImHaushalt elternImHaushalt
+    ) {
+        var noBudgetsRequired = 0;
+        var kinderImHaushalt1 = 0;
+        var kinderImHaushalt2 = 0;
+        var personenImHaushalt1 = 0;
+        var personenImHaushalt2 = 0;
+
+        // All the most simplet cases
+        // Only one budget needed
+        if (
+            // parents are together
+            familiensituation.getElternVerheiratetZusammen()
+            // One Parents pays Alimony
+            || (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
+            && (Objects.requireNonNullElse(
+                familiensituation.getWerZahltAlimente(),
+                Elternschaftsteilung.GEMEINSAM
+            ) != Elternschaftsteilung.GEMEINSAM))
+            // One parent is unknown/dead
+            || (Objects.requireNonNullElse(familiensituation.getElternteilUnbekanntVerstorben(), false)
+            && (Objects.requireNonNullElse(familiensituation.getVaterUnbekanntVerstorben(), false) != Objects
+                .requireNonNullElse(familiensituation.getMutterUnbekanntVerstorben(), false)))
+        ) {
+            noBudgetsRequired = 1;
+            kinderImHaushalt1 =
+                personInAusbildungModifier
+                + personenImHaushalt.getGeschwisterMutterVollzeit()
+                + personenImHaushalt.getGeschwisterVaterVollzeit()
+                + personenImHaushalt.getGeschwisterTeilzeit();
+            personenImHaushalt1 =
+                kinderImHaushalt1
+                + elternImHaushalt.getElternImHaushalt1();
+        }
+
+        if (
+            // Alimenteregelung exists and is payed by both parents
+            (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
+            && (Objects.requireNonNullElse(
+                familiensituation.getWerZahltAlimente(),
+                Elternschaftsteilung.VATER
+            ) == Elternschaftsteilung.GEMEINSAM))
+            // Both parents are unknown/dead
+            || (Objects.requireNonNullElse(familiensituation.getElternteilUnbekanntVerstorben(), false)
+            && (Objects.requireNonNullElse(
+                familiensituation.getVaterUnbekanntVerstorben(),
+                ElternAbwesenheitsGrund.WEDER_NOCH
+            ) != ElternAbwesenheitsGrund.WEDER_NOCH)
+            && (Objects.requireNonNullElse(
+                familiensituation.getMutterUnbekanntVerstorben(),
+                ElternAbwesenheitsGrund.WEDER_NOCH
+            ) != ElternAbwesenheitsGrund.WEDER_NOCH))
+        ) {
+
+        } else {
+            kinderImHaushalt1 += 1;
+        }
+
+    }
+
+    private void calculateAndSetPersonenImHaushalt(
         final PersonenImHaushaltResult.PersonenImHaushaltResultBuilder result,
         final PersonenImHaushaltRequestV1.PersonenImHaushaltInputV1 personenImHaushalt,
-        final ElternImHaushalt elternImHaushalt
+        final ElternImHaushalt elternImHaushalt,
+        final int bla
     ) {
         final var familiensituation = personenImHaushalt.getFamiliensituation();
 
         final var personInAusbildungModifier =
             calculatePersonInAusbildungModifier(personenImHaushalt.getPersonInAusbildung().getWohnsitz());
+
         final int geschwisterVollzeitAndTeilzeit = personenImHaushalt.getGeschwisterMutterVollzeit()
         + personenImHaushalt.getGeschwisterVaterVollzeit() + personenImHaushalt.getGeschwisterTeilzeit();
         final int kinderInEinzelnerHaushalt = personInAusbildungModifier + geschwisterVollzeitAndTeilzeit;
@@ -287,23 +357,22 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
     private ElternImHaushalt calculateElternImHaushalt(
         final FamiliensituationV1 familiensituation
     ) {
+        var elternImHaushalt1 = 0;
+        var elternImHaushalt2 = 0;
+
         if (familiensituation.getElternVerheiratetZusammen()) {
-            return new ElternImHaushalt(2, 0);
-        }
-
-        if (familiensituation.getVaterWiederverheiratet()) {
+            elternImHaushalt1 = 2;
+        } else {
+            elternImHaushalt1 = 1;
+            elternImHaushalt2 = 1;
             if (familiensituation.getMutterWiederverheiratet()) {
-                return new ElternImHaushalt(2, 2);
+                elternImHaushalt1 += 1;
             }
-
-            return new ElternImHaushalt(2, 1);
+            if (familiensituation.getVaterWiederverheiratet()) {
+                elternImHaushalt2 += 1;
+            }
         }
-
-        if (familiensituation.getMutterWiederverheiratet()) {
-            return new ElternImHaushalt(1, 2);
-        }
-
-        return new ElternImHaushalt(1, 1);
+        return new ElternImHaushalt(elternImHaushalt1, elternImHaushalt2);
     }
 
     private int calculatePersonInAusbildungModifier(final String wohnsitz) {
