@@ -68,7 +68,7 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         var personenImHaushalt1 = 0;
         var personenImHaushalt2 = 0;
 
-        // All the most simplet cases
+        // All the most simple cases
         // Only one budget needed
         if (
             // parents are together
@@ -163,13 +163,23 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         if (familiensituation.getElternVerheiratetZusammen()) {
             elternImHaushalt1 = 2;
         } else {
-            elternImHaushalt1 = 1;
-            elternImHaushalt2 = 1;
-            if (familiensituation.getMutterWiederverheiratet()) {
-                elternImHaushalt1 += 1;
-            }
-            if (familiensituation.getVaterWiederverheiratet()) {
-                elternImHaushalt2 += 1;
+            if (familiensituation.getElternteilUnbekanntVerstorben()) {
+                elternImHaushalt1 = 1;
+                if (
+                    Objects.requireNonNullElse(familiensituation.getVaterWiederverheiratet(), false) ||
+                    Objects.requireNonNullElse(familiensituation.getMutterWiederverheiratet(), false)
+                ) {
+                    elternImHaushalt1 = 2;
+                }
+            } else {
+                elternImHaushalt1 = 1;
+                elternImHaushalt2 = 1;
+                if (familiensituation.getVaterWiederverheiratet()) {
+                    elternImHaushalt1 += 1;
+                }
+                if (familiensituation.getMutterWiederverheiratet()) {
+                    elternImHaushalt2 += 1;
+                }
             }
         }
         return new ElternImHaushalt(elternImHaushalt1, elternImHaushalt2);
