@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -205,25 +206,44 @@ public class AusbildungSeeding extends Seeder {
                             final var abschlussBezeichnungDe = ausbildungsgangLine[0];
                             final var ausbildungskategorie = Ausbildungskategorie.valueOf(ausbildungsgangLine[1]);
                             final var ausbildungsstaetteNameDe = ausbildungsgangLine[2];
-                            final var abschluss = abschluesse.stream()
+                            final var abschlussOpt = abschluesse.stream()
                                 .filter(
                                     abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
                                     && abschluss1.getAusbildungskategorie() == ausbildungskategorie
                                 )
-                                .findFirst()
-                                .get();
-                            final var ausbildungsstaette = ausbildungsstaetten.stream()
+                                .findFirst();
+                            final var ausbildungsstaetteOpt = ausbildungsstaetten.stream()
                                 .filter(
                                     ausbildungsstaette1 -> ausbildungsstaette1.getNameDe()
                                         .equalsIgnoreCase(ausbildungsstaetteNameDe)
                                 )
-                                .findFirst()
-                                .get();
+                                .findFirst();
+
+                            if (abschlussOpt.isEmpty()) {
+                                LOG.warn(
+                                    String.format(
+                                        "Could not find Abschluss %s in seeded abschluesse",
+                                        abschlussBezeichnungDe
+                                    )
+                                );
+                                return null;
+                            }
+                            if (ausbildungsstaetteOpt.isEmpty()) {
+                                LOG.warn(
+                                    String.format(
+                                        "Could not find Ausbildungsstaette %s in seeded Ausbildungsstaetten",
+                                        ausbildungsstaetteNameDe
+                                    )
+                                );
+                                return null;
+                            }
+
                             return new Ausbildungsgang()
-                                .setAbschluss(abschluss)
-                                .setAusbildungsstaette(ausbildungsstaette);
+                                .setAbschluss(abschlussOpt.get())
+                                .setAusbildungsstaette(ausbildungsstaetteOpt.get());
                         }
                     )
+                    .filter(Objects::nonNull)
                     .toList();
             }
         }
