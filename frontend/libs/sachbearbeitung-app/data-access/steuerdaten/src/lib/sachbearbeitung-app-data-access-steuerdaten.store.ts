@@ -9,7 +9,7 @@ import {
   SteuerdatenService,
   SteuerdatenTyp,
 } from '@dv/shared/model/gesuch';
-import { handleUnauthorized } from '@dv/shared/util/http';
+import { handleUnauthorized, noGlobalErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   cachedPending,
@@ -17,6 +17,7 @@ import {
   handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
+import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 type SteuerdatenState = {
   cachedSteuerdaten: CachedRemoteData<Steuerdaten[]>;
@@ -104,14 +105,34 @@ export class SteuerdatenStore extends signalStore(
             undefined,
             undefined,
             {
-              context: handleUnauthorized((error) => {
-                this.globalNotificationStore.handleHttpRequestFailed([error]);
-              }),
+              context: noGlobalErrorsIf(
+                true,
+                handleUnauthorized((error) => {
+                  this.globalNotificationStore.handleHttpRequestFailed([error]);
+                }),
+              ),
             },
           )
           .pipe(
-            handleApiResponse((cachedSteuerdaten) =>
-              patchState(this, { cachedSteuerdaten }),
+            handleApiResponse(
+              (cachedSteuerdaten) => patchState(this, { cachedSteuerdaten }),
+              {
+                onFailure: (error) => {
+                  const parsedError = sharedUtilFnErrorTransformer(error);
+
+                  if (parsedError.type === 'neskoError') {
+                    this.globalNotificationStore.createNotification({
+                      type: 'ERROR_PERMANENT',
+                      message: parsedError.message,
+                      content: parsedError,
+                    });
+                  } else {
+                    this.globalNotificationStore.createNotification({
+                      type: 'ERROR',
+                    });
+                  }
+                },
+              },
             ),
           ),
       ),
