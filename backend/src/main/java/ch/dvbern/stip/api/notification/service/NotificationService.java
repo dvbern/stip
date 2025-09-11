@@ -44,6 +44,25 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
+    public void createDelegierungAufgeloestNotification(final Delegierung delegierung) {
+        final var fall = delegierung.getDelegierterFall();
+        final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
+        final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.DELEGIERUNG_AUFGELOEST)
+            .setFall(fall);
+        setAbsender(absender, notification);
+
+        final String msg = Templates
+            .getDelegierungAufgeloest(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
+            .render();
+
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
+
+    @Transactional
     public void createDelegierungAbgelehntNotification(final Delegierung delegierung) {
         createDelegierungNotification(NotificationType.DELEGIERUNG_ABGELEHNT, delegierung);
     }
@@ -491,6 +510,20 @@ public class NotificationService {
                 return delegierungAngenommenFR(sozialdienstName);
             }
             return delegierungAngenommenDE(sozialdienstName);
+        }
+
+        public static native TemplateInstance delegierungAufgeloestDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungAufgeloestFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungAufgeloest(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungAufgeloestFR(sozialdienstName);
+            }
+            return delegierungAufgeloestDE(sozialdienstName);
         }
 
         public static native TemplateInstance nachfristDokumenteChangedDE(final String nachfristDokumente);

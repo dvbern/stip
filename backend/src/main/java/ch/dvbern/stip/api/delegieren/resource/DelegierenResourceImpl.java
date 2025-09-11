@@ -102,6 +102,13 @@ public class DelegierenResourceImpl implements DelegierenResource {
     }
 
     @Override
+    @RolesAllowed(DELEGIERUNG_UPDATE)
+    public void delegierungAufloesen(UUID delegierungId) {
+        delegierenAuthorizer.canAufloesen(delegierungId);
+        delegierenService.delegierungAufloesen(delegierungId);
+    }
+
+    @Override
     @RolesAllowed(DELEGIERUNG_READ)
     public PaginatedSozDashboardDto getDelegierungsOfSozialdienstAdmin(
         GetDelegierungSozQueryTypeAdmin getDelegierungSozQueryType,

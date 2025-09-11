@@ -128,4 +128,17 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
 
         forbidden();
     }
+
+    @Transactional
+    public void canAufloesen(final UUID delegierungId) {
+        final var delegierung = delegierungRepository.requireById(delegierungId);
+
+        if (
+            sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(delegierung.getSozialdienst().getId())
+        ) {
+            return;
+        }
+
+        forbidden();
+    }
 }

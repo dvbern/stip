@@ -267,6 +267,7 @@
   "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Retrait échoué",
   "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Délégation Acceptée",
   "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Délégation refusée",
+  "shared.nachrichten.type.DELEGIERUNG_AUFGELOEST": "Délégation dissoute",
   "shared.nachrichten.noNotifications": "Aucune notification n'est disponible",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Le service social a été créé avec succès.",

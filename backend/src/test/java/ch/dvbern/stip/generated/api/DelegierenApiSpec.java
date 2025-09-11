@@ -66,6 +66,7 @@ public class DelegierenApiSpec {
         return Arrays.asList(
                 delegierterMitarbeiterAendern(),
                 delegierungAblehnen(),
+                delegierungAufloesen(),
                 fallDelegieren(),
                 getDelegierungsOfSozialdienstAdmin(),
                 getDelegierungsOfSozialdienstMitarbeiter()
@@ -78,6 +79,10 @@ public class DelegierenApiSpec {
 
     public DelegierungAblehnenOper delegierungAblehnen() {
         return new DelegierungAblehnenOper(createReqSpec());
+    }
+
+    public DelegierungAufloesenOper delegierungAufloesen() {
+        return new DelegierungAufloesenOper(createReqSpec());
     }
 
     public FallDelegierenOper fallDelegieren() {
@@ -233,6 +238,68 @@ public class DelegierenApiSpec {
          * @return operation
          */
         public DelegierungAblehnenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #delegierungIdPath Die ID der Delegierung (required)
+     */
+    public static class DelegierungAufloesenOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/delegierung/{delegierungId}/aufloesen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DelegierungAufloesenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /delegierung/{delegierungId}/aufloesen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String DELEGIERUNG_ID_PATH = "delegierungId";
+
+        /**
+         * @param delegierungId (UUID) Die ID der Delegierung (required)
+         * @return operation
+         */
+        public DelegierungAufloesenOper delegierungIdPath(Object delegierungId) {
+            reqSpec.addPathParam(DELEGIERUNG_ID_PATH, delegierungId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DelegierungAufloesenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DelegierungAufloesenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
