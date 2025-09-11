@@ -25,8 +25,8 @@ Bachelor;UNIVERSITAET_ETH;ETH Lausanne
 Master;UNIVERSITAET_ETH;ETH Lausanne
 Bachelor;UNIVERSITAET_ETH;ETH Zürich
 Master;UNIVERSITAET_ETH;ETH Zürich
-Bachelor;FACHHOCHSCHULE;Berner Fachhochschule
-Master;FACHHOCHSCHULE;Berner Fachhochschule
+Bachelor;FACHHOCHSCHULE;Berner Fachhochschule BFH
+Master;FACHHOCHSCHULE;Berner Fachhochschule BFH
 Bachelor;FACHHOCHSCHULE;Zürcher Hochschule der Künste ZHdK
 Master;FACHHOCHSCHULE;Zürcher Hochschule der Künste ZHdK
 Bachelor;FACHHOCHSCHULE;Zürcher Hochschule für angewandte Wissenschaften ZHAW
@@ -111,7 +111,7 @@ Eidg. Fähigkeitszeugnis;BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE;GiBB Bern
 10. Schuljahr;BRUECKENANGEBOT;Haarakademie
 Gymnasiale Maturität;GYMNASIUM;Freies Gymnasium Zürich
 Anschlussklasse für Mittelschule;BRUECKENANGEBOT;GiBB Bern
-Vorbereitungskurse für HF-Lehrgänge;BRUECKENANGEBOT;Scuola Universitaria Professionale della Svizzera Italiana
+Vorbereitungskurse für HF-Lehrgänge;BRUECKENANGEBOT;Scuola Universitaria Professionale della Svizzera Italiana SUPSI
 Passerelle;BRUECKENANGEBOT;Berner Fachhochschule
 10. Schuljahr;BRUECKENANGEBOT;Haarakademie
 Diplom HF;HOEHERE_FACHSCHULE;Agogis
