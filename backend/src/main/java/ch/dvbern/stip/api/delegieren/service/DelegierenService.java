@@ -84,28 +84,29 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         final var mitarbeiter = sozialdienstBenutzerRepository.requireById(dto.getMitarbeiterId());
 
-        if (delegierung.getDelegierterMitarbeiter() == null) {
+        final var mitarbeiterCurrent = delegierung.getDelegierterMitarbeiter();
+        delegierung.setDelegierterMitarbeiter(mitarbeiter);
+        if (mitarbeiterCurrent == null) {
             notificationService.createDelegierungAngenommenNotification(delegierung);
             mailService.sendStandardNotificationEmailForFall(
                 delegierung.getPersoenlicheAngaben(),
                 delegierung.getDelegierterFall()
             );
         }
-
-        delegierung.setDelegierterMitarbeiter(mitarbeiter);
     }
 
     @Transactional
     public void delegierungAblehnen(final UUID delegierungId) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         notificationService.createDelegierungAbgelehntNotification(delegierung);
+
+        delegierung.getDelegierterFall().setDelegierung(null);
+        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
+        delegierungRepository.delete(delegierung);
         mailService.sendStandardNotificationEmailForFall(
             delegierung.getPersoenlicheAngaben(),
             delegierung.getDelegierterFall()
         );
-        delegierung.getDelegierterFall().setDelegierung(null);
-        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
-        delegierungRepository.delete(delegierung);
     }
 
     @Transactional
