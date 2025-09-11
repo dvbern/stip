@@ -107,12 +107,12 @@ Bachelor;FACHHOCHSCHULE;JMC Academy
 Bachelor;FACHHOCHSCHULE;ESDI Escola sup.de Disseny Universitat Ramon Llull
 Bachelor;UNIVERSITAET_ETH;Technische Universität Darmstadt
 Master;UNIVERSITAET_ETH;Technische Universität Darmstadt
-Eidg. Fähigkeitszeugnis;BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE;GiBB Bern
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE;GiBB Bern
 10. Schuljahr;BRUECKENANGEBOT;Haarakademie
-Gymnasiale Maturität;GYMNASIUM;Freies Gymnasium Zürich
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Freies Gymnasium Zürich
 Anschlussklasse für Mittelschule;BRUECKENANGEBOT;GiBB Bern
 Vorbereitungskurse für HF-Lehrgänge;BRUECKENANGEBOT;Scuola Universitaria Professionale della Svizzera Italiana SUPSI
-Passerelle;BRUECKENANGEBOT;Berner Fachhochschule
+Passerelle Fachhochschule (FH);BRUECKENANGEBOT;Berner Fachhochschule BFH
 10. Schuljahr;BRUECKENANGEBOT;Haarakademie
 Diplom HF;HOEHERE_FACHSCHULE;Agogis
 Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;AKAD College
@@ -176,7 +176,7 @@ Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;BWZ Lyss Berufs-
 Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;BWZ Lyss Berufs- und Weiterbildungszentrum
 Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;BWZ Lyss Berufs- und Weiterbildungszentrum
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Campus Muristalden Bern
-Gymnasiale Maturität;GYMNASIUM;Campus Muristalden Bern
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Campus Muristalden Bern
 Diplom HF;HOEHERE_FACHSCHULE;Careum Bildungszentrum
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;ceff – Centre de formation professionnelle Berne francophone
 Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;ceff – Centre de formation professionnelle Berne francophone
