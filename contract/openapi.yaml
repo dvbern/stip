@@ -84,6 +84,46 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAuszahlungForGesuch
       summary: Get Auszahlung
+  /drucken/{getDruckauftraegeQueryType}:
+    get:
+      tags:
+        - Drucken
+      parameters:
+        - name: getDruckauftraegeQueryType
+          schema:
+            $ref: '#/components/schemas/GetDruckauftraegeQueryType'
+          in: path
+          required: true
+        - $ref: '#/components/parameters/batchName'
+        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: '#/components/parameters/timestampErstellt'
+        - $ref: '#/components/parameters/DruckauftragStatus'
+        - $ref: '#/components/parameters/DruckauftragTyp'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/DruckauftraegeColumn'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDruckauftraege'
+          description: Returns the PDF document for the given GesuchTrancheId and DokumentTyp
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDruckauftraege
+      summary: Get all Druckauftraege
   /gesuch:
     post:
       requestBody:
@@ -4272,6 +4312,28 @@ components:
           type: string
         stipDecision:
           $ref: '#/components/schemas/StipDecision'
+    Druckauftrag:
+      type: object
+      required:
+        - id
+        - batchName
+        - bearbeiter
+        - timestampErstellt
+        - druckauftragStatus
+        - druckauftragTyp
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        batchName:
+          type: string
+        bearbeiter:
+          type: string
+        timestampErstellt:
+          type: string
+        druckauftragStatus:
+          $ref: '#/components/schemas/DruckauftragStatus'
+        druckauftragTyp:
+          $ref: '#/components/schemas/DruckauftragTyp'
     WelcomeMail:
       type: object
       required:
@@ -4436,6 +4498,12 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
         - NEGATIVE_VERFUEGUNG
+      type: string
+    GetDruckauftraegeQueryType:
+      enum:
+        - ALLE
+        - ALLE_AKTIV
+        - ALLE_ARCHIVIERT
       type: string
     GetGesucheSBQueryType:
       enum:
@@ -6759,6 +6827,15 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    DruckauftragTyp:
+      enum:
+        - DATENSCHUTZBRIEF
+        - VERFUEGUNG
+    DruckauftragStatus:
+      enum:
+        - DRUCKBEREIT
+        - IN_GENERIERUNG
+        - VERSANDBEREIT
     GesuchTrancheTyp:
       enum:
         - AENDERUNG
@@ -7196,6 +7273,14 @@ components:
           type: integer
         totalEntries:
           type: integer
+    PaginatedDruckauftraege:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Druckauftrag'
     PaginatedSbDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7251,6 +7336,13 @@ components:
         letzteAktivitaet:
           type: string
           format: date
+    DruckauftraegeColumn:
+      enum:
+        - BATCH_NAME
+        - BEARBEITER
+        - ERSTELLT_AM
+        - STATUS
+        - TYP
     SbDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7599,6 +7691,22 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
+    batchName:
+      in: query
+      name: batchName
+      schema:
+        type: string
+    DruckauftragTyp:
+      in: query
+      name: druckauftragTyp
+      required: true
+      schema:
+        $ref: '#/components/schemas/DruckauftragTyp'
+    DruckauftragStatus:
+      in: query
+      name: druckauftragStatus
+      schema:
+        $ref: '#/components/schemas/DruckauftragStatus'
     fallNummer:
       in: query
       name: fallNummer
@@ -7661,6 +7769,12 @@ components:
       name: bearbeiter
       schema:
         type: string
+    timestampErstellt:
+      in: query
+      name: timestampErstellt
+      schema:
+        type: string
+        format: date
     letzteAktivitaetFrom:
       in: query
       name: letzteAktivitaetFrom
@@ -7815,6 +7929,7 @@ security:
   - auth-dev-bern: []
 tags:
   - name: Ausbildungsstaette
+  - name: Drucken
   - name: Auth
   - name: Configuration
   - name: Fall

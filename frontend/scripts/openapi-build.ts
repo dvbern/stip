@@ -37,6 +37,7 @@ const generatedApis = [
   'Configuration',
   'Delegieren',
   'Dokument',
+  'Drucken',
   'Fall',
   'Gesuch',
   'GesuchNotiz',
