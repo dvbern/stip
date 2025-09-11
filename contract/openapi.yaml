@@ -5875,6 +5875,8 @@ components:
         - BETRIEBE
         - OBLIGATORISCHE_SCHULE
         - BRUECKENANGEBOT
+        - HOEHERE_FACHPRUEFUNG
+        - BERUFSPRUEFUNG
     Bildungskategorie:
       enum:
         - TERTIAERSTUFE_A
