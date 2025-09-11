@@ -879,13 +879,29 @@ public class PdfService {
             ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
+        var totalLabel = translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total");
+
+        if (isRueckforderung) {
+            totalLabel = String.format(
+                "%s %s",
+                totalLabel,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.rueckforderung")
+            );
+        } else {
+            totalLabel = String.format(
+                "%s %s",
+                totalLabel,
+                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.auszahlung")
+            );
+        }
+
         calculationTable.addCell(
             createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
                 1,
-                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total")
+                totalLabel
             ).setPadding(1)
         );
 
