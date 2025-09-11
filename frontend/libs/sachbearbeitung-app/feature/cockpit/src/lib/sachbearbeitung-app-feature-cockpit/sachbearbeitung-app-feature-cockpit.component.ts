@@ -49,7 +49,6 @@ import {
   Gesuchstatus,
   SbDashboardColumn,
   SbDashboardGesuch,
-  SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
@@ -234,7 +233,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
-  dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
   quickFilters: {
     typ: GesuchFilter;

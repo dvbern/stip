@@ -36,7 +36,7 @@ export interface DruckenServiceGetAllDruckauftraegeRequestParams {
     bearbeiter?: string;
     timestampErstellt?: string;
     druckauftragStatus?: DruckauftragStatus;
-    druckauftragTyp: DruckauftragTyp;
+    druckauftragTyp?: DruckauftragTyp;
     sortColumn?: DruckauftraegeColumn;
     sortOrder?: SortOrder;
 }
@@ -124,9 +124,6 @@ export class DruckenService {
         const timestampErstellt = requestParameters.timestampErstellt;
         const druckauftragStatus = requestParameters.druckauftragStatus;
         const druckauftragTyp = requestParameters.druckauftragTyp;
-        if (druckauftragTyp === null || druckauftragTyp === undefined) {
-            throw new Error('Required parameter druckauftragTyp was null or undefined when calling getAllDruckauftraege$.');
-        }
         const sortColumn = requestParameters.sortColumn;
         const sortOrder = requestParameters.sortOrder;
 

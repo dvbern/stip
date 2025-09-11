@@ -7701,7 +7701,6 @@ components:
     DruckauftragTyp:
       in: query
       name: druckauftragTyp
-      required: true
       schema:
         $ref: '#/components/schemas/DruckauftragTyp'
     DruckauftragStatus:

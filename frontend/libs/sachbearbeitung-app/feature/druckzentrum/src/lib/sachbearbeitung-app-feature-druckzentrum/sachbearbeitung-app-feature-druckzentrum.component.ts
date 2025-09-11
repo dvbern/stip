@@ -29,46 +29,41 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { differenceInCalendarMonths } from 'date-fns/differenceInCalendarMonths';
-import { differenceInCalendarYears } from 'date-fns/differenceInCalendarYears';
-import { differenceInDays } from 'date-fns/differenceInDays';
-import { format } from 'date-fns/format';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { DruckauftragStore } from '@dv/sachbearbeitung-app/data-access/druckauftrag';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import {
   DruckauftraegeColumn,
-  Druckauftrag,
   DruckauftragStatus,
   DruckauftragTyp,
+  DruckenServiceGetAllDruckauftraegeRequestParams,
   GetDruckauftraegeQueryType,
   SortOrder,
 } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/model/type-util';
-import {
-  DEFAULT_PAGE_SIZE,
-  INPUT_DELAY,
-  PAGE_SIZES,
-} from '@dv/shared/model/ui-constants';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
+import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import {
+  getSortAndPageInputs,
+  limitPageToNumberOfEntriesEffect,
+  makeEmptyStringPropertiesNull,
   paginateList,
   partiallyDebounceFormValueChangesSig,
   restrictNumberParam,
   sortList,
 } from '@dv/shared/util/table';
-import { getDiffFormat } from '@dv/shared/util/validator-date';
+import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-druckzentrum',
@@ -90,7 +85,9 @@ import { getDiffFormat } from '@dv/shared/util/validator-date';
     MatPaginatorModule,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
+    SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
+    SharedUiMaxLengthDirective,
     SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
@@ -117,8 +114,7 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   druckauftragTyp = input<DruckauftragTyp | undefined>(undefined);
   sortColumn = input<DruckauftraegeColumn | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
-  timestampErstelltVon = input<string | undefined>(undefined);
-  timestampErstelltBis = input<string | undefined>(undefined);
+
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
   });
@@ -134,45 +130,17 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   displayedColumns = Object.keys(DruckauftraegeColumn);
 
   filterForm = this.formBuilder.group({
-    batchName: [''],
-    bearbeiter: [''],
-    druckauftragTyp: [undefined as DruckauftragTyp | undefined],
-    druckauftragStatus: [undefined as string | undefined],
-  });
-
-  filterVonBisForm = this.formBuilder.group({
-    timestampErstelltVon: [<Date | undefined>undefined],
-    timestampErstelltBis: [<Date | undefined>undefined],
-  });
-
-  private timestampVonChangedSig = toSignal(
-    this.filterVonBisForm.controls.timestampErstelltVon.valueChanges,
-  );
-  private timestampBisChangedSig = toSignal(
-    this.filterVonBisForm.controls.timestampErstelltBis.valueChanges,
-  );
-  timestampErstelltRangeSig = computed(() => {
-    const start = this.timestampVonChangedSig();
-    const end = this.timestampBisChangedSig();
-
-    if (!start || !end) {
-      return '';
-    }
-    const difference = {
-      days: differenceInDays(end, start),
-      months: differenceInCalendarMonths(end, start),
-      years: differenceInCalendarYears(end, start),
-    };
-    return difference.days
-      ? [
-          `${getDiffFormat(start, difference)}`,
-          `${format(end, 'dd.MM.yy')}`,
-        ].join(' - ')
-      : format(start, 'dd.MM.yyyy');
+    batchName: [<string | undefined>undefined],
+    bearbeiter: [<string | undefined>undefined],
+    timestampErstellt: [<Date | undefined>undefined],
+    druckauftragTyp: [<DruckauftragTyp | undefined>undefined],
+    druckauftragStatus: [<DruckauftragStatus | undefined>undefined],
   });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
+  availableTypes = Object.values(DruckauftragTyp);
+  availableStatus = Object.values(DruckauftragStatus);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
   showViewSig = computed<GetDruckauftraegeQueryType>(() => {
@@ -181,6 +149,8 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   });
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
+
+  defaultFilter = GetDruckauftraegeQueryType.ALLE;
 
   quickFilterForm = this.formBuilder.group({
     query: [GetDruckauftraegeQueryType.ALLE],
@@ -199,6 +169,10 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
       icon: 'print_connect',
     },
     {
+      typ: 'ALLE_FEHLERHAFTE_GENERIERUNG',
+      icon: 'error',
+    },
+    {
       typ: 'ALLE_ARCHIVIERT',
       icon: 'archive',
     },
@@ -208,20 +182,6 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
     'druckauftragStatus',
     'druckauftragTyp',
   ]);
-  filterVonBisFormChangedSig = toSignal(
-    this.filterVonBisForm.valueChanges.pipe(
-      distinctUntilChanged(
-        (a, b) =>
-          // Only emit if both fields are defined or both are undefined
-          // otherwise the list will update on first range picker interaction
-          isDefined(b.timestampErstelltVon) ===
-            isDefined(b.timestampErstelltBis) && a === b,
-      ),
-      debounceTime(INPUT_DELAY),
-    ),
-  );
-
-  dataSource = new MatTableDataSource<Druckauftrag>([]);
 
   druckzentrumDataSourceSig = computed(() => {
     const druckauftraege =
@@ -251,32 +211,61 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   });
 
   constructor() {
-    // Handle the case where the page is higher than the total number of pages
-    effect(() => {
-      const { page, pageSize } = this.getInputs();
-      const totalEntries = this.totalEntriesSig();
+    limitPageToNumberOfEntriesEffect(
+      this,
+      this.totalEntriesSig,
+      this.router,
+      this.route,
+    );
 
-      if (page && pageSize && totalEntries && page * pageSize > totalEntries) {
-        this.router.navigate(['.'], {
-          queryParams: {
-            page: Math.ceil(totalEntries / pageSize) - 1,
-          },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-        });
-      }
+    // Handle normal filter form control changes
+    effect(() => {
+      this.filterFormChangedSig();
+      const formValue = this.filterForm.getRawValue();
+      const query = createQuery({
+        ...formValue,
+        timestampErstellt: formValue.timestampErstellt
+          ? toBackendLocalDate(formValue.timestampErstellt)
+          : undefined,
+      });
+
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
     });
 
-    // When the route param inputs change, load the druckzentrum data
+    // Handle the quick filter form control changes (show / getGesucheSBQueryType)
+    const quickFilterChanged = toSignal(
+      this.quickFilterForm.controls.query.valueChanges,
+    );
     effect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { page, pageSize } = this.getInputs();
+      const query = quickFilterChanged();
+      const defaultFilter = this.defaultFilter;
+      if (!query) {
+        return;
+      }
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: {
+          show: query === defaultFilter ? undefined : query,
+        },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    });
 
-      // TODO: Load druckzentrum data
-      // this.druckzentrumStore.getDruckzentrumItems$({
-      //   page: page ?? 0,
-      //   pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
-      // });
+    // When the route param inputs change, load the gesuche
+    effect(() => {
+      const { query, filter } = this.getInputs();
+
+      this.druckauftragStore.getAllDruckauftraege$({
+        getDruckauftraegeQueryType: query,
+        ...filter,
+        ...getSortAndPageInputs(this),
+      });
     });
   }
 
@@ -284,12 +273,24 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
    * Bundle all route param inputs into an object
    */
   private getInputs() {
-    const page = this.page();
-    const pageSize = this.pageSize();
+    const query = this.showViewSig();
+    const filter = {
+      batchName: this.batchName(),
+      bearbeiter: this.bearbeiter(),
+      timestampErstellt: this.timestampErstellt(),
+      druckauftragStatus: this.druckauftragStatus(),
+      druckauftragTyp: this.druckauftragTyp(),
+    };
 
     return {
-      page,
-      pageSize,
+      query,
+      filter,
     };
   }
 }
+
+const createQuery = <
+  T extends Partial<DruckenServiceGetAllDruckauftraegeRequestParams>,
+>(
+  query: T,
+) => query;

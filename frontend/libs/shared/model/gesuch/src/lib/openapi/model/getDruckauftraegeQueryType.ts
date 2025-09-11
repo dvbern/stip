@@ -10,11 +10,12 @@
  * Do not edit the class manually.
  */
 
-export type GetDruckauftraegeQueryType = 'ALLE' | 'ALLE_AKTIV' | 'ALLE_ARCHIVIERT';
+export type GetDruckauftraegeQueryType = 'ALLE' | 'ALLE_AKTIV' | 'ALLE_ARCHIVIERT' | 'ALLE_FEHLERHAFTE_GENERIERUNG';
 
 export const GetDruckauftraegeQueryType = {
     ALLE: 'ALLE' as GetDruckauftraegeQueryType,
     ALLE_AKTIV: 'ALLE_AKTIV' as GetDruckauftraegeQueryType,
-    ALLE_ARCHIVIERT: 'ALLE_ARCHIVIERT' as GetDruckauftraegeQueryType
+    ALLE_ARCHIVIERT: 'ALLE_ARCHIVIERT' as GetDruckauftraegeQueryType,
+    ALLE_FEHLERHAFTE_GENERIERUNG: 'ALLE_FEHLERHAFTE_GENERIERUNG' as GetDruckauftraegeQueryType
 };
 

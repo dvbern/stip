@@ -128,7 +128,6 @@ export * from './gesuchsperiodeWithDatenAllOf';
 export * from './gesuchstatus';
 export * from './getDelegierungSozQueryTypeAdmin';
 export * from './getDelegierungSozQueryTypeMitarbeiter';
-export * from './getDelegierungSozQueryType';
 export * from './getDruckauftraegeQueryType';
 export * from './getGesucheSBQueryType';
 export * from './gueltigkeitStatus';

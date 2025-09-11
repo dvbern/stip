@@ -1,10 +1,11 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   DruckenService,
+  DruckenServiceGetAllDruckauftraegeRequestParams,
   PaginatedDruckauftraege,
 } from '@dv/shared/model/gesuch';
 import {
@@ -12,9 +13,9 @@ import {
   RemoteData,
   cachedPending,
   fromCachedDataSig,
+  handleApiResponse,
   initial,
   isPending,
-  pending,
 } from '@dv/shared/util/remote-data';
 
 type DruckauftragState = {
@@ -45,25 +46,25 @@ export class DruckauftragStore extends signalStore(
     return this.druckauftrag.data();
   });
 
-  loadCachedDruckauftrag$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedPaginatedDruckauftraege: cachedPending(
-            state.cachedPaginatedDruckauftraege,
+  getAllDruckauftraege$ =
+    rxMethod<DruckenServiceGetAllDruckauftraegeRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            cachedPaginatedDruckauftraege: cachedPending(
+              state.cachedPaginatedDruckauftraege,
+            ),
+          }));
+        }),
+        switchMap((req) =>
+          this.druckService.getAllDruckauftraege$(req).pipe(
+            handleApiResponse((data) =>
+              patchState(this, {
+                cachedPaginatedDruckauftraege: data,
+              }),
+            ),
           ),
-        }));
-      }),
-    ),
-  );
-
-  loadDruckauftrag$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          druckauftrag: pending(),
-        }));
-      }),
-    ),
-  );
+        ),
+      ),
+    );
 }

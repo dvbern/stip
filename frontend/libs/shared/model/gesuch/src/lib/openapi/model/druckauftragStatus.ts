@@ -10,11 +10,12 @@
  * Do not edit the class manually.
  */
 
-export type DruckauftragStatus = 'DRUCKBEREIT' | 'IN_GENERIERUNG' | 'VERSANDBEREIT';
+export type DruckauftragStatus = 'IN_GENERIERUNG' | 'VERSANDBEREIT' | 'FEHLERHAFTE_GENERIERUNG' | 'ARCHIVIERT';
 
 export const DruckauftragStatus = {
-    DRUCKBEREIT: 'DRUCKBEREIT' as DruckauftragStatus,
     IN_GENERIERUNG: 'IN_GENERIERUNG' as DruckauftragStatus,
-    VERSANDBEREIT: 'VERSANDBEREIT' as DruckauftragStatus
+    VERSANDBEREIT: 'VERSANDBEREIT' as DruckauftragStatus,
+    FEHLERHAFTE_GENERIERUNG: 'FEHLERHAFTE_GENERIERUNG' as DruckauftragStatus,
+    ARCHIVIERT: 'ARCHIVIERT' as DruckauftragStatus
 };
 
