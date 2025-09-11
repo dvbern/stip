@@ -25,7 +25,9 @@ public enum Bildungskategorie {
     TERTIAERSTUFE_A,
     TERTIAERSTUFE_B,
     SEKUNDARSTUFE_I,
-    SEKUNDARSTUFE_II;
+    SEKUNDARSTUFE_II,
+    // todo: clarify with Dänu & remove hopefully
+    BRUECKENANGEBOT;
 
     public boolean isTertiaerstufe() {
         return TERTIAERSTUFEN.contains(this);

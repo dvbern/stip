@@ -9,20 +9,154 @@ Universität Neuenburg;Université de Neuchatel;50;;
 Universität St. Gallen;Universität St. Gallen;60;;
 Universität Zürich;Universität Zürich;70;;
 Università della Svizzera italiana;Università della Svizzera italiana;75;;
-Fernstudien Schweiz (FS-CH);Fernstudien Schweiz (FS-CH);77;;
+Universitäre Fernstudien Schweiz (FernUni);Formation universitaire à distance, CH (FernUni);77;;
 Institut Universitaire Kurt Bösch (IUKB);Institut Universitaire Kurt Bösch (IUKB);78;;
 ETH Lausanne;EPF Lausanne;80;;
 ETH Zürich;EPF Zurich;90;;
-Berner Fachhochschule;Haute école spécialisée bernoise;100;;
-Fachhochschule Westschweiz;Haute école spécialisée de Suisse occidentale;300;;
-Fachhochschule Nordwestschweiz;Fachhochschule Nordwestschweiz;400;;
-Fachhochschule Zentralschweiz (Hochschule Luzern);Fachhochschule Zentralschweiz (Hochschule Luzern);800;;
-Scuola Universitaria Professionale della Svizzera Italiana;Scuola Universitaria Professionale della Svizzera Italiana;900;;
+Berner Fachhochschule BFH;Haute école spécialisée bernoise;100;;
+Fachhochschule Westschweiz HES-SO;Haute école spécialisée de Suisse occidentale HES-SO;300;;
+Schule für Gestaltung und Hochschule für Kunst Edhéa;Edhéa - école de design et haute école d'art du VS;300;;
+Fachhochschule Nordwestschweiz FHNW;Fachhochschule Nordwestschweiz FHNW;400;;
+Fachhochschule Zentralschweiz (Hochschule Luzern HSLU);Fachhochschule Zentralschweiz (Hochschule Luzern HSLU);800;;
+Scuola Universitaria Professionale della Svizzera Italiana SUPSI;Scuola Universitaria Professionale della Svizzera Italiana SUPSI;900;;
 Ostschweizer Fachhochschule;Ostschweizer Fachhochschule;1020;;
-Fachhochschule Graubünden;Fachhochschule Graubünden;1050;;
-Zürcher Fachhochschule;Zürcher Fachhochschule;1100;;
+Fachhochschule Graubünden FHGR;Fachhochschule Graubünden;1050;;
+Zürcher Hochschule der Künste ZHdK;Zürcher Hochschule der Künste ZHdK;1100;;
+Zürcher Hochschule für angewandte Wissenschaften ZHAW;Zürcher Hochschule für angewandte Wissenschaften ZHAW;1100;;
 Kalaidos Fachhochschule;Kalaidos Fachhochschule;1250;;
-PH (nicht in FH integriert);PH (nicht in FH integriert);1500;;
+Pädagogische Hochschule Bern PH Bern;Pädagogische Hochschule Bern PH Bern;1500;;
+Eidgenössische Hochschule für Berufsbildung EHB;Eidgenössische Hochschule für Berufsbildung EHB;1500;;
+Haute école pédagogique des cantons de Berne, du Jura et de Neuchâtel HEP-BEJUNE;Haute école pédagogique des cantons de Berne, du Jura et de Neuchâtel HEP-BEJUNE;1500;;
+Haute école pédagogique du canton de Vaud HEP Vaud;Haute école pédagogique du canton de Vaud HEP Vaud;1500;;
+Pädagogische Hochschule Wallis HEP-VS;Haute école pédagogique du Valais PH-VS;1500;;
+Pädagogische Hochschule Freiburg HEP PH FR;Haute école pédagogique Fribourg HEP FR;20;;
+Interkantonale Hochschule für Heilpädagogik Zürich HfH;Interkantonale Hochschule für Heilpädagogik Zürich HfH;1500;;
+Pädagogische Hochschule Graubünden PHGR;Pädagogische Hochschule Graubünden PHGR;1500;;
+Pädagogisches Hochschulinstitut NMS Bern PH NMS;Pädagogisches Hochschulinstitut NMS Bern PH NMS;1500;;
+Pädagogische Hochschule Luzern PH Luzern;Pädagogische Hochschule Luzern PH Luzern;1500;;
+Pädagogische Hochschule Nordwestschweiz PH FHNW;Pädagogische Hochschule Nordwestschweiz PH FHNW;400;;
+Pädagogische Hochschule St. Gallen PHSG;Pädagogische Hochschule St. Gallen PHSG;1500;;
+Pädagogische Hochschule Schaffhausen PHSH;Pädagogische Hochschule Schaffhausen PHSH;1500;;
+Pädagogische Hochschule Schwyz PHSZ;Pädagogische Hochschule Schwyz PHSZ;1500;;
+Pädagogische Hochschule Thurgau PHTG;Pädagogische Hochschule Thurgau PHTG;1500;;
+Pädagogische Hochschule Zürich PH Zürich;Pädagogische Hochschule Zürich PH Zürich;1100;;
+Pädagogische Hochschule Zug PH Zug;Pädagogische Hochschule Zug PH Zug;1500;;
+Hochschule für Logopädie Ostschweiz hlo;Hochschule für Logopädie Ostschweiz hlo;1500;;
+SUPSI - Dipartimento formazione e apprendimento SUPSI-DFA;SUPSI - Dipartimento formazione e apprendimento SUPSI-DFA;1500;;
 GiBB Bern;GiBB Bern;;;CTBE0001
 Haarakademie;Haarakademie;;;CTBE0002
 Freies Gymnasium Zürich;Freies Gymnasium Zürich;;;CTBE0003
+La Cambre École Nat. Sup. des Arts Visuels;La Cambre École Nat. Sup. des Arts Visuels;;;3216
+Ankara Yildirim Beyazit University;Ankara Yildirim Beyazit University;;;3281
+Medizinische Universität - Sofia;Medizinische Universität - Sofia;;;3192
+Goethe-Universität Frankfurt am Main;Goethe-Universität Frankfurt am Main;;;3299
+The Open University;The Open University;;;3263
+Vysoka skola kreativni komunikace, s.r.o. Praha;Vysoka skola kreativni komunikace, s.r.o. Praha;;;3272
+Universität Wien ;Universität Wien ;;;2091
+Universitatea de Medicinã si Farmacie, Timisoara;Universitatea de Medicinã si Farmacie, Timisoara;;;3001
+Karlsruher Institut für Technologie KIT;Karlsruher Institut für Technologie KIT;;;2298
+Technische Universität Wien;Technische Universität Wien;;;3261
+Royal College of Art, London;Royal College of Art, London;;;3080
+Trinity Laban Conservatoire of Music and Dance;Trinity Laban Conservatoire of Music and Dance;;;3126
+Kolleg AAB Pristina;Kolleg AAB Pristina;;;3134
+Universität Kore Enna;Universität Kore Enna;;;3088
+Felician University of New Jersey;Felician University of New Jersey;;;3255
+JMC Academy ;JMC Academy ;;;3297
+ESDI Escola sup.de Disseny Universitat Ramon Llull;ESDI Escola sup.de Disseny Universitat Ramon Llull;;;3303
+Technische Universität Darmstadt;Technische Universität Darmstadt;;;2970
+Agogis;Agogis;;;3113
+AKAD College;AKAD College;;;2832
+ARPIH centre romand de formation sociale;ARPIH centre romand de formation sociale;;;2972
+BBZ Biel;BBZ Biel;;;2321
+BBZ Olten;BBZ Olten;;;3146
+Berner Bildungszentrum Pflege;Berner Bildungszentrum Pflege;;;2846
+Berner Maturitätsschule für Erwachsene BME;Berner Maturitätsschule für Erwachsene BME;;;205
+Berufsbildungszentrum IDM;Berufsbildungszentrum IDM;;;2935
+Berufsfachschule Langenthal;Berufsfachschule Langenthal;;;2700
+Berufsfachschule Oberwallis;Berufsfachschule Oberwallis;;;3129
+BFB Bildung Formation Biel ;BFB Bildung Formation Biel ;;;2840
+BFF Bern;BFF Bern;;;129
+BiCT Der Berufsbildner;BiCT Der Berufsbildner;;;2805
+Bildungszentrum Emme;Bildungszentrum Emme;;;2315
+Bénédict-Schule;Bénédict-Schule;;;3254
+bsd. Berufsfachschule des Detailhandels Bern;bsd. Berufsfachschule des Detailhandels Bern;;;3107
+bwd Bildungszentrum für Wirtschaft und Dienstleistung;bwd Bildungszentrum für Wirtschaft und Dienstleistung;;;824
+BWZ Lyss Berufs- und Weiterbildungszentrum ;BWZ Lyss Berufs- und Weiterbildungszentrum ;;;2986
+Campus Muristalden Bern;Campus Muristalden Bern;;;228
+Careum Bildungszentrum;Careum Bildungszentrum;;;2767
+ceff – Centre de formation professionnelle Berne francophone;ceff – Centre de formation professionnelle Berne francophone;;;2333
+CEJEF - Division commerciale;CEJEF - Division commerciale;;;3185
+CEJEF - Division santé-social-arts;CEJEF - Division santé-social-arts;;;3186
+CEJEF - Division technique;CEJEF - Division technique;;;3095
+Centre de Formation et de Placement;Centre de Formation et de Placement;;;3209
+CEPV Centre d'enseignement professionnel de Vevey ;CEPV Centre d'enseignement professionnel de Vevey ;;;3030
+CFP Arts, Genf;CFP Arts, Genf;;;2910
+CIFOM EAA École d'arts appliquées;CIFOM EAA École d'arts appliquées;;;3154
+École de la transition (EdT);École de la transition (EdT);;;3279
+École supérieure d'hygiénistes dentaires;École supérieure d'hygiénistes dentaires;;;3284
+Collège et Ecole de commerce (CEC) André-Chavanne;Collège et Ecole de commerce (CEC) André-Chavanne;;;3270
+CsBe - ICT Ausbildungszentrum / Computerschule Bern;CsBe - ICT Ausbildungszentrum / Computerschule Bern;;;3068
+CPLN Ecole Technique Neuchâtel;CPLN Ecole Technique Neuchâtel;;;
+CPNE Centre de formation prof. neuchâtelois;CPNE Centre de formation prof. neuchâtelois;;;
+CPNE-Centre de formation prof. neuchâtelois;CPNE-Centre de formation prof. neuchâtelois;;;
+CPNV - Centre professionel du Nord vaudois;CPNV - Centre professionel du Nord vaudois;;;
+CsBe - ICT Ausbildungszentrum Bern;CsBe - ICT Ausbildungszentrum Bern;;;
+Gymnasium Biel Seeland;Gymnasium Biel Seeland;;;210
+Didac Bern ;Didac Bern ;;;1924
+Ecole Prévôtoise Moutier;Ecole Prévôtoise Moutier;;;3074
+Ecole supérieur technique Mittelland;Ecole supérieur technique Mittelland;;;
+ESsanté - École supérieure de la santé;ESsanté - École supérieure de la santé;;;
+Fachmittelschule FMS Lerbermatt;Fachmittelschule FMS Lerbermatt;;;
+Fachmittelschule FMS Neufeld;Fachmittelschule FMS Neufeld;;;
+Fachmittelschule FMS Thun;Fachmittelschule FMS Thun;;;
+Fachmittelschule Oberaargau;Fachmittelschule Oberaargau;;;
+Feusi Bildungszentrum, Bern;Feusi Bildungszentrum, Bern;;;
+FMS Biel-Seeland;FMS Biel-Seeland;;;
+Freies Gymnasium Bern;Freies Gymnasium Bern;;;
+Gartenbauschule Hünibach;Gartenbauschule Hünibach;;;
+GIBB Bern;GIBB Bern;;;
+Gym. Muristalden, Bern;Gym. Muristalden, Bern;;;
+Gymnase de Bienne et du Jura bernois;Gymnase de Bienne et du Jura bernois;;;
+Gymnase pour adultes de Chamblandes;Gymnase pour adultes de Chamblandes;;;
+Gymnasium  Langenthal;Gymnasium  Langenthal;;;
+Gymnasium Biel-Seeland;Gymnasium Biel-Seeland;;;
+Gymnasium Burgdorf;Gymnasium Burgdorf;;;
+Gymnasium Hofwil, M'buchsee;Gymnasium Hofwil, M'buchsee;;;
+Gymnasium Interlaken;Gymnasium Interlaken;;;
+Gymnasium Kirchenfeld, Bern;Gymnasium Kirchenfeld, Bern;;;
+Gymnasium Lerbermatt;Gymnasium Lerbermatt;;;
+Gymnasium Neufeld, Bern;Gymnasium Neufeld, Bern;;;
+Gymnasium Oberaargau;Gymnasium Oberaargau;;;
+Gymnasium Seefeld, Thun;Gymnasium Seefeld, Thun;;;
+Gymnasium Thun;Gymnasium Thun;;;
+HF für Drogisten/Drogistinnen ESD;HF für Drogisten/Drogistinnen ESD;;;
+HF für Technik Mittelland AG (hftm);HF für Technik Mittelland AG (hftm);;;
+HF Gesundheit und Soziales HFGS;HF Gesundheit und Soziales HFGS;;;
+Höhere Fachschule Bereich Gesundheit Valais-Wallis;Höhere Fachschule Bereich Gesundheit Valais-Wallis;;;
+Höhere Fachschule Holz Biel;Höhere Fachschule Holz Biel;;;
+Hotelfachschule Thun;Hotelfachschule Thun;;;
+INFORAMA Rütti Zollikofen;INFORAMA Rütti Zollikofen;;;
+Invers, Schule für Gestaltung, Bern;Invers, Schule für Gestaltung, Bern;;;
+IST Höhere Fachschule für Tourismus Zürich;IST Höhere Fachschule für Tourismus Zürich;;;
+JUVESO;JUVESO;;;
+Kantonale Fachmittelschulen;Kantonale Fachmittelschulen;;;
+Kantonale Gartenbauschule Oeschberg;Kantonale Gartenbauschule Oeschberg;;;
+Kantonsschule Baden;Kantonsschule Baden;;;
+Lehrbetrieb;Lehrbetrieb;;;
+Lufthansa Aviation Training Switzerland AG;Lufthansa Aviation Training Switzerland AG;;;
+Medi, Zentrum für medizinische Bildung;Medi, Zentrum für medizinische Bildung;;;
+Minerva Schulen Bern;Minerva Schulen Bern;;;
+Neue Schule für Gestaltung Bern Campus Muristalden;Neue Schule für Gestaltung Bern Campus Muristalden;;;
+NMS Bern;NMS Bern;;;
+NOSS Berufsbildungszentrum;NOSS Berufsbildungszentrum;;;
+Passerelle;Passerelle;;;
+Passerelle pour l'espace Berne et Jura;Passerelle pour l'espace Berne et Jura;;;
+Schule für Gestaltung Bern und Biel;Schule für Gestaltung Bern und Biel;;;
+Schule Holzbildhauerei Brienz;Schule für Gestaltung Bern und Biel;;;
+Schweizerische Hotelfachschule Luzern SHL;Schweizerische Hotelfachschule Luzern SHL;;;
+Scuola specializzata superiore in cure infermieristiche (SSSCI);Scuola specializzata superiore in cure infermieristiche (SSSCI);;;
+STS Schweizerische Treuhänder Schule Bern;STS Schweizerische Treuhänder Schule Bern;;;
+Technische Fachschule Bern;Technische Fachschule Bern;;;
+Wirtschaftsmittelschule Neuenstadt;Wirtschaftsmittelschule Neuenstadt;;;
+Wirtschaftsmittelschule WMS Biel;Wirtschaftsmittelschule WMS Biel;;;
+WKS Bern;WKS Bern;;;

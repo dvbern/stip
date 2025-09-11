@@ -162,7 +162,7 @@ public class AusbildungSeeding extends Seeder {
         } else if (!ausbildungsstaetteLine[4].isEmpty()) {
             return AusbildungsstaetteNummerTyp.CT_NO;
         } else {
-            return null;
+            return AusbildungsstaetteNummerTyp.OHNE_NO;
         }
     }
 

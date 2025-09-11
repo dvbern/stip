@@ -1,5 +1,112 @@
 abschlussDe;ausbildungskategorie;ausbildungsstaetteDe
 Bachelor;UNIVERSITAET_ETH;Universität Bern
+Master;UNIVERSITAET_ETH;Universität Bern
+Bachelor;UNIVERSITAET_ETH;Universität Basel
+Master;UNIVERSITAET_ETH;Universität Basel
+Bachelor;UNIVERSITAET_ETH;Universität Freiburg
+Master;UNIVERSITAET_ETH;Universität Freiburg
+Bachelor;UNIVERSITAET_ETH;Universität Genf
+Master;UNIVERSITAET_ETH;Universität Genf
+Bachelor;UNIVERSITAET_ETH;Universität Lausanne
+Master;UNIVERSITAET_ETH;Universität Lausanne
+Bachelor;UNIVERSITAET_ETH;Universität Luzern
+Master;UNIVERSITAET_ETH;Universität Luzern
+Bachelor;UNIVERSITAET_ETH;Universität Neuenburg
+Master;UNIVERSITAET_ETH;Universität Neuenburg
+Bachelor;UNIVERSITAET_ETH;Universität St. Gallen
+Master;UNIVERSITAET_ETH;Universität St. Gallen
+Bachelor;UNIVERSITAET_ETH;Universität Zürich
+Master;UNIVERSITAET_ETH;Universität Zürich
+Bachelor;UNIVERSITAET_ETH;Università della Svizzera italiana
+Master;UNIVERSITAET_ETH;Università della Svizzera italiana
+Bachelor;UNIVERSITAET_ETH;Universitäre Fernstudien Schweiz (FernUni)
+Master;UNIVERSITAET_ETH;Universitäre Fernstudien Schweiz (FernUni)
+Bachelor;UNIVERSITAET_ETH;ETH Lausanne
+Master;UNIVERSITAET_ETH;ETH Lausanne
+Bachelor;UNIVERSITAET_ETH;ETH Zürich
+Master;UNIVERSITAET_ETH;ETH Zürich
+Bachelor;FACHHOCHSCHULE;Berner Fachhochschule
+Master;FACHHOCHSCHULE;Berner Fachhochschule
+Bachelor;FACHHOCHSCHULE;Zürcher Hochschule der Künste ZHdK
+Master;FACHHOCHSCHULE;Zürcher Hochschule der Künste ZHdK
+Bachelor;FACHHOCHSCHULE;Zürcher Hochschule für angewandte Wissenschaften ZHAW
+Master;FACHHOCHSCHULE;Zürcher Hochschule für angewandte Wissenschaften ZHAW
+Bachelor;FACHHOCHSCHULE;Fachhochschule Nordwestschweiz FHNW
+Master;FACHHOCHSCHULE;Fachhochschule Nordwestschweiz FHNW
+Bachelor;FACHHOCHSCHULE;Fachhochschule Zentralschweiz (Hochschule Luzern HSLU)
+Master;FACHHOCHSCHULE;Fachhochschule Zentralschweiz (Hochschule Luzern HSLU)
+Bachelor;FACHHOCHSCHULE;Scuola Universitaria Professionale della Svizzera Italiana SUPSI
+Master;FACHHOCHSCHULE;Scuola Universitaria Professionale della Svizzera Italiana SUPSI
+Bachelor;FACHHOCHSCHULE;Ostschweizer Fachhochschule
+Master;FACHHOCHSCHULE;Ostschweizer Fachhochschule
+Bachelor;FACHHOCHSCHULE;Fachhochschule Graubünden FHGR
+Master;FACHHOCHSCHULE;Fachhochschule Graubünden FHGR
+Bachelor;FACHHOCHSCHULE;Kalaidos Fachhochschule
+Master;FACHHOCHSCHULE;Kalaidos Fachhochschule
+Bachelor;FACHHOCHSCHULE;Fachhochschule Westschweiz HES-SO
+Master;FACHHOCHSCHULE;Fachhochschule Westschweiz HES-SO
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Interkantonale Hochschule für Heilpädagogik Zürich HfH
+Master;PAEDAGOGISCHE_HOCHSCHULE;Interkantonale Hochschule für Heilpädagogik Zürich HfH
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogisches Hochschulinstitut NMS Bern PH NMS
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogisches Hochschulinstitut NMS Bern PH NMS
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Bern PH Bern
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Bern PH Bern
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Haute école pédagogique des cantons de Berne, du Jura et de Neuchâtel HEP-BEJUNE
+Master;PAEDAGOGISCHE_HOCHSCHULE;Haute école pédagogique des cantons de Berne, du Jura et de Neuchâtel HEP-BEJUNE
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Haute école pédagogique du canton de Vaud HEP Vaud
+Master;PAEDAGOGISCHE_HOCHSCHULE;Haute école pédagogique du canton de Vaud HEP Vaud
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Wallis HEP-VS
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Wallis HEP-VS
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Freiburg HEP PH FR
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Freiburg HEP PH FR
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Graubünden PHGR
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Graubünden PHGR
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Luzern PH Luzern
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Luzern PH Luzern
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Nordwestschweiz PH FHNW
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Nordwestschweiz PH FHNW
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule St. Gallen PHSG
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule St. Gallen PHSG
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Schaffhausen PHSH
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Schaffhausen PHSH
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Schwyz PHSZ
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Schwyz PHSZ
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Thurgau PHTG
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Thurgau PHTG
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Zürich PH Zürich
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Zürich PH Zürich
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Zug PH Zug
+Master;PAEDAGOGISCHE_HOCHSCHULE;Pädagogische Hochschule Zug PH Zug
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;Hochschule für Logopädie Ostschweiz hlo
+Master;PAEDAGOGISCHE_HOCHSCHULE;Hochschule für Logopädie Ostschweiz hlo
+Bachelor;PAEDAGOGISCHE_HOCHSCHULE;SUPSI - Dipartimento formazione e apprendimento SUPSI-DFA
+Master;PAEDAGOGISCHE_HOCHSCHULE;SUPSI - Dipartimento formazione e apprendimento SUPSI-DFA
+Bachelor;FACHHOCHSCHULE;La Cambre École Nat. Sup. des Arts Visuels
+Master;UNIVERSITAET_ETH;Ankara Yildirim Beyazit University
+Bachelor;UNIVERSITAET_ETH;Medizinische Universität - Sofia
+Master;UNIVERSITAET_ETH;Medizinische Universität - Sofia
+Master;UNIVERSITAET_ETH;Goethe-Universität Frankfurt am Main
+Bachelor;UNIVERSITAET_ETH;The Open University
+Bachelor;UNIVERSITAET_ETH;Vysoka skola kreativni komunikace, s.r.o. Praha
+Bachelor;UNIVERSITAET_ETH;Universität Wien
+Master;UNIVERSITAET_ETH;Universität Wien
+Bachelor;UNIVERSITAET_ETH;Universitatea de Medicinã si Farmacie, Timisoara
+Bachelor;UNIVERSITAET_ETH;Karlsruher Institut für Technologie KIT
+Master;UNIVERSITAET_ETH;Karlsruher Institut für Technologie KIT
+Bachelor;UNIVERSITAET_ETH;Technische Universität Wien
+Master;UNIVERSITAET_ETH;Technische Universität Wien
+Bachelor;UNIVERSITAET_ETH;Royal College of Art, London
+Master;UNIVERSITAET_ETH;Royal College of Art, London
+Bachelor;FACHHOCHSCHULE;Trinity Laban Conservatoire of Music and Dance
+Bachelor;UNIVERSITAET_ETH;Kolleg AAB Pristina
+Bachelor;UNIVERSITAET_ETH;Universität Kore Enna
+Master;UNIVERSITAET_ETH;Universität Kore Enna
+Bachelor;UNIVERSITAET_ETH;Felician University of New Jersey
+Master;UNIVERSITAET_ETH;Felician University of New Jersey
+Bachelor;FACHHOCHSCHULE;JMC Academy
+Bachelor;FACHHOCHSCHULE;ESDI Escola sup.de Disseny Universitat Ramon Llull
+Bachelor;UNIVERSITAET_ETH;Technische Universität Darmstadt
+Master;UNIVERSITAET_ETH;Technische Universität Darmstadt
 Eidg. Fähigkeitszeugnis;BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE;GiBB Bern
 10. Schuljahr;BRUECKENANGEBOT;Haarakademie
 Gymnasiale Maturität;GYMNASIUM;Freies Gymnasium Zürich
@@ -7,3 +114,116 @@ Anschlussklasse für Mittelschule;BRUECKENANGEBOT;GiBB Bern
 Vorbereitungskurse für HF-Lehrgänge;BRUECKENANGEBOT;Scuola Universitaria Professionale della Svizzera Italiana
 Passerelle;BRUECKENANGEBOT;Berner Fachhochschule
 10. Schuljahr;BRUECKENANGEBOT;Haarakademie
+Diplom HF;HOEHERE_FACHSCHULE;Agogis
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;AKAD College
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;AKAD College
+Berufsmaturität 2;BERUFSFACHSCHULEN;AKAD College
+Diplom HF;HOEHERE_FACHSCHULE;ARPIH centre romand de formation sociale
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;BBZ Biel
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;BBZ Biel
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BBZ Biel
+Berufsmaturität 2;BERUFSFACHSCHULEN;BBZ Biel
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;BBZ Biel
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;BBZ Biel
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;BBZ Olten
+Berufsmaturität 2;BERUFSFACHSCHULEN;BBZ Olten
+Diplom HF;HOEHERE_FACHSCHULE;BBZ Olten
+Diplom HF;HOEHERE_FACHSCHULE;Berner Bildungszentrum Pflege
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Berner Maturitätsschule für Erwachsene BME
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Berner Maturitätsschule für Erwachsene BME
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Berufsbildungszentrum IDM
+Vorlehre;BRUECKENANGEBOT;Berufsbildungszentrum IDM
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;Berufsbildungszentrum IDM
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Berufsbildungszentrum IDM
+Berufsmaturität 2;BERUFSFACHSCHULEN;Berufsbildungszentrum IDM
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;Berufsbildungszentrum IDM
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;Berufsbildungszentrum IDM
+Vorlehre 25 Plus;BRUECKENANGEBOT;Berufsbildungszentrum IDM
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Berufsfachschule Langenthal
+Berufsmaturität 2;BERUFSFACHSCHULEN;Berufsfachschule Langenthal
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;Berufsfachschule Langenthal
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;Berufsfachschule Langenthal
+Berufsvorbereitendes Schuljahr;BERUFSFACHSCHULEN;Bildungszentrum Emme
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;Bildungszentrum Emme
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;Bildungszentrum Emme
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;Bildungszentrum Emme
+Berufsmaturität 2;BERUFSFACHSCHULEN;Berufsfachschule Oberwallis
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;BFB Bildung Formation Biel
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;BFB Bildung Formation Biel
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;BFB Bildung Formation Biel
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BFB Bildung Formation Biel
+Berufsmaturität 2;BERUFSFACHSCHULEN;BFB Bildung Formation Biel
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;BFB Bildung Formation Biel
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;BFF Bern
+Vorlehre 25 Plus;BERUFSFACHSCHULEN;BFF Bern
+Diplom HF;HOEHERE_FACHSCHULE;BFF Bern
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BFF Bern
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;BFF Bern
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;BFF Bern
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;BFF Bern
+Passerelle Fachhochschule (FH);BRUECKENANGEBOT;Berner Fachhochschule BFH
+Vorstudienpraktikum;BRUECKENANGEBOT;Berner Fachhochschule BFH
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;BiCT Der Berufsbildner
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BiCT Der Berufsbildner
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Bénédict-Schule
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;bsd. Berufsfachschule des Detailhandels Bern
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;bsd. Berufsfachschule des Detailhandels Bern
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;bwd Bildungszentrum für Wirtschaft und Dienstleistung
+Berufsmaturität 2;BERUFSFACHSCHULEN;bwd Bildungszentrum für Wirtschaft und Dienstleistung
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;bwd Bildungszentrum für Wirtschaft und Dienstleistung
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;bwd Bildungszentrum für Wirtschaft und Dienstleistung
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;BWZ Lyss Berufs- und Weiterbildungszentrum
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;BWZ Lyss Berufs- und Weiterbildungszentrum
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;BWZ Lyss Berufs- und Weiterbildungszentrum
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Campus Muristalden Bern
+Gymnasiale Maturität;GYMNASIUM;Campus Muristalden Bern
+Diplom HF;HOEHERE_FACHSCHULE;Careum Bildungszentrum
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;ceff – Centre de formation professionnelle Berne francophone
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;ceff – Centre de formation professionnelle Berne francophone
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;ceff – Centre de formation professionnelle Berne francophone
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;ceff – Centre de formation professionnelle Berne francophone
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;ceff – Centre de formation professionnelle Berne francophone
+Berufsmaturität 2;BERUFSFACHSCHULEN;ceff – Centre de formation professionnelle Berne francophone
+Diplom HF;HOEHERE_FACHSCHULE;ceff – Centre de formation professionnelle Berne francophone
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;ceff – Centre de formation professionnelle Berne francophone
+Berufsmaturität 2;BERUFSFACHSCHULEN;CEJEF - Division commerciale
+Diplom HF;HOEHERE_FACHSCHULE;CEJEF - Division commerciale
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;CEJEF - Division commerciale
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CEJEF - Division commerciale
+Fachmaturität;FACHMITTELSCHULE;CEJEF - Division santé-social-arts
+Berufsmaturität 2;BERUFSFACHSCHULEN;CEJEF - Division santé-social-arts
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;CEJEF - Division technique
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CEJEF - Division technique
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;CEJEF - Division technique
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;CEJEF - Division technique
+Berufsmaturität 2;BERUFSFACHSCHULEN;CEJEF - Division technique
+Diplom HF;HOEHERE_FACHSCHULE;CEJEF - Division technique
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Centre de Formation et de Placement
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Biel Seeland
+Fachmaturität;FACHMITTELSCHULE;Gymnasium Biel Seeland
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Didac Bern
+10. Schuljahr;BRUECKENANGEBOT;Didac Bern
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Didac Bern
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Schule für Gestaltung und Hochschule für Kunst Edhéa
+Berufsmaturität 2;BERUFSFACHSCHULEN;Schule für Gestaltung und Hochschule für Kunst Edhéa
+Bachelor;FACHHOCHSCHULE;Schule für Gestaltung und Hochschule für Kunst Edhéa
+Master;FACHHOCHSCHULE;Schule für Gestaltung und Hochschule für Kunst Edhéa
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Ecole Prévôtoise Moutier
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Ecole Prévôtoise Moutier
+Vorlehre;BRUECKENANGEBOT;CEPV Centre d'enseignement professionnel de Vevey
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CEPV Centre d'enseignement professionnel de Vevey
+Berufsmaturität 2;BERUFSFACHSCHULEN;CEPV Centre d'enseignement professionnel de Vevey
+Diplom HF;HOEHERE_FACHSCHULE;CEPV Centre d'enseignement professionnel de Vevey
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CFP Arts, Genf
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;CFP Arts, Genf
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;CFP Arts, Genf
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;CFP Arts, Genf
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CIFOM EAA École d'arts appliquées
+Berufsmaturität 2;BERUFSFACHSCHULEN;CIFOM EAA École d'arts appliquées
+Diplom HF;HOEHERE_FACHSCHULE;CIFOM EAA École d'arts appliquées
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;École de la transition (EdT)
+Diplom HF;HOEHERE_FACHSCHULE;École supérieure d'hygiénistes dentaires
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Collège et Ecole de commerce (CEC) André-Chavanne
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;CsBe - ICT Ausbildungszentrum / Computerschule Bern
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CsBe - ICT Ausbildungszentrum / Computerschule Bern
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;CsBe - ICT Ausbildungszentrum / Computerschule Bern
