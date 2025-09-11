@@ -113,6 +113,7 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
 
         final var auszahlung = delegierung.getDelegierterFall().getAuszahlung();
+        notificationService.createDelegierungAufgeloestNotification(delegierung);
 
         if (auszahlung.isAuszahlungAnSozialdienst()) {
             var zahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
@@ -129,7 +130,6 @@ public class DelegierenService {
         delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
         delegierungRepository.delete(delegierung);
 
-        notificationService.createDelegierungAufgeloestNotification(delegierung);
         mailService.sendStandardNotificationEmailForFall(
             delegierung.getPersoenlicheAngaben(),
             delegierung.getDelegierterFall()
