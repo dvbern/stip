@@ -15,6 +15,7 @@ import { map, startWith } from 'rxjs';
 
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
@@ -27,6 +28,7 @@ const ALL_TABS = ['verlauf', 'verwaltung'] as const;
     MatTabsModule,
     TranslocoPipe,
     SharedUiLoadingComponent,
+    SharedUiHasRolesDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos-beschwerde.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

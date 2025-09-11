@@ -2,26 +2,26 @@
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw:mb-8 tw:text-xl">
+  <h1 class="tw:!mb-8 tw:!text-xl">
     {{ 'sachbearbeitung-app.infos.beschwerde.infoDialog.title' | transloco }}
   </h1>
   <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
-    <dt class="tw:whitespace-nowrap tw:font-semibold">
+    <dt class="tw:whitespace-nowrap tw:!font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.datum' | transloco }}
     </dt>
     <dd class="tw:font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
 
-    <dt class="tw:whitespace-nowrap tw:font-semibold">
+    <dt class="tw:whitespace-nowrap tw:!font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.user' | transloco }}
     </dt>
     <dd class="tw:font-normal">{{ dialogData.userErstellt }}</dd>
 
-    <dt class="tw:whitespace-nowrap tw:font-semibold">
+    <dt class="tw:whitespace-nowrap tw:!font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.title' | transloco }}
     </dt>
     <dd class="tw:font-normal">
@@ -33,13 +33,13 @@
     </dd>
     @let document = dialogData.beschwerdeEntscheid?.dokumente?.[0];
     @if (document) {
-      <dt class="tw:whitespace-normal tw:font-semibold">
+      <dt class="tw:whitespace-normal tw:!font-semibold">
         {{ 'sachbearbeitung-app.infos.beschwerde.document' | transloco }}
       </dt>
       <dd class="tw:truncate">
         <button
           type="button"
-          class="btn btn-link tw:flex tw:max-w-full tw:p-0"
+          class="btn btn-link tw:flex tw:max-w-full tw:!p-0"
           [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.document' | transloco"
           [dvDownloadButton]="{
             type: 'dokument',
@@ -53,7 +53,7 @@
       </dd>
     }
 
-    <dt class="tw:whitespace-nowrap tw:font-semibold">
+    <dt class="tw:whitespace-nowrap tw:!font-semibold">
       {{ 'sachbearbeitung-app.infos.beschwerde.kommentar' | transloco }}
     </dt>
     <dd

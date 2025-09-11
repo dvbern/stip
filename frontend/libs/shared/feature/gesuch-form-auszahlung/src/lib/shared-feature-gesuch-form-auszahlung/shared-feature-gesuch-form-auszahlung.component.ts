@@ -69,7 +69,7 @@ export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
   });
 
   @HostBinding('class')
-  hostClass = 'tw-pt-6';
+  hostClass = 'tw:pt-6';
 
   constructor() {
     this.laenderStore.loadLaender$();

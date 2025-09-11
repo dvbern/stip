@@ -1,6 +1,26 @@
 @import 'tailwindcss' prefix(tw);
+@import './components/table.css';
 
-@config '../../../../../tailwind.config.js';
+@layer base {
+  * {
+    border-style: none;
+  }
+  ul {
+    list-style: initial;
+  }
+}
+
+/*
+  .testing-library-fix
+  ====================
+  is used to prevent an issue wiht testing-library.nwsapi, it thorws the following error if
+  a html element has a class that has a classname which contains an ":" as the first classname:
+
+  frontend/node_modules/nwsapi/src/nwsapi.js:1613:13
+  SyntaxError: 'div.tw,,,Acol-start-1 textarea[cols]' is not a valid selector
+
+  This is a workaround to prevent this error by adding a normal classname as first classname.
+*/
 
 @utility max-w-half {
   max-width: min(45vw, 547px);

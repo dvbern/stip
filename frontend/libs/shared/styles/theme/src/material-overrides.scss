@@ -230,14 +230,16 @@ $dv-custom-colors: (
       $contrast-color: mat.m2-get-color-from-palette($color, 500-contrast);
       background-color: $base-color;
       color: $contrast-color;
+      --mat-snack-bar-container-color: #{$base-color};
       --mat-chip-label-text-color: #{$contrast-color};
       --mat-snackbar-container-color: #{$base-color};
     }
     &.mat-#{$name}[disabled],
     & .mat-#{$name}[disabled] {
       $contrast-color: mat.m2-get-color-from-palette($color, 100-contrast);
-      background-color: mat.m2-get-color-from-palette($color, 100);
+      $background-color: mat.m2-get-color-from-palette($color, 100);
       color: $contrast-color;
+      --mat-snack-bar-container-color: #{$background-color};
       --mat-chip-disabled-label-text-color: #{$contrast-color};
     }
   }
@@ -257,7 +259,7 @@ $dv-all-colors: (
     .mat-#{$name} {
       $base-color: mat.m2-get-color-from-palette($color, 500);
       $mild-color: mat.m2-get-color-from-palette($color, 100);
-      --mat-snackbar-container-color: #{$base-color};
+      --mat-snack-bar-container-color: #{$base-color};
       --mat-progress-bar-active-indicator-color: #{$base-color};
       --mat-progress-bar-track-color: #{$mild-color};
     }

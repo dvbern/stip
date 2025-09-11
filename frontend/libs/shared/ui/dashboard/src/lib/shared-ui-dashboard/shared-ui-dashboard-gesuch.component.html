@@ -9,21 +9,21 @@
   </div>
   <div
     class="tw:grid tw:gap-4"
-    [ngClass]="{ 'tw:grid-cols-[1fr] tw:@lg:grid-cols-[1fr,auto,1fr]': gesuch.offeneAenderung }"
+    [ngClass]="{ 'tw:grid-cols-[1fr] tw:@lg:grid-cols-[1fr_auto_1fr]': gesuch.offeneAenderung }"
   >
     <div class="tw:flex tw:flex-col">
-      <dl class="tw:mb-10 tw:flex tw:flex-col" [class.tw-mb-0]="!gesuch.isActive">
+      <dl class="tw:flex tw:flex-col" [class.tw:!mb-0]="!gesuch.isActive" [class.tw:!mb-10]="gesuch.isActive">
         <dt class="tw:font-bold">
           {{ 'shared.dashboard.gesuch.title' | transloco: { yearRange: gesuch.yearRange } }}
         </dt>
-        <dd class="tw:mb-6">
+        <dd class="tw:!mb-6">
           {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
         </dd>
 
         @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
         @if (gesuch.isActive) {
           <dt class="tw:font-bold">{{ 'shared.dashboard.gesuch.status.title' | transloco }}</dt>
-          <dd class="tw:mb-6">
+          <dd class="tw:!mb-6">
             @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
               @if (count > 1) {
                 {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
@@ -160,7 +160,7 @@
     </div>
     @if (gesuch.offeneAenderung) {
       <!-- Vertical Line -->
-      <div class="tw:h-full tw:min-h-[3px] tw:w-full tw:min-w-[3px] tw:bg-[--dv-light-border-subtle]"></div>
+      <div class="tw:h-full tw:min-h-[3px] tw:w-full tw:min-w-[3px] tw:bg-(--dv-light-border-subtle)"></div>
       <div class="tw:flex tw:flex-col">
         @if (gesuch.offeneAenderung; as aenderung) {
           <div class="divider me-4"></div>

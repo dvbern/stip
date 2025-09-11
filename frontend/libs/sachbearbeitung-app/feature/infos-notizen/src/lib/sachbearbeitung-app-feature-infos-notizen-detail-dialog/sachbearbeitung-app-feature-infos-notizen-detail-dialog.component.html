@@ -1,4 +1,4 @@
-<h1 class="tw:mb-8 tw:text-xl">
+<h1 class="tw:!mb-8 tw:!text-xl">
   {{ 'sachbearbeitung-app.infos.notizen.notizTyp.' + dialogData.notizTyp | transloco }}
 </h1>
 
@@ -13,7 +13,7 @@
     @if (dialogData.notiz?.id) {
       <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
 
-      <hr class="tw:my-8" />
+      <hr class="tw:!my-8" />
     }
 
     <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
@@ -23,7 +23,7 @@
     @if (dialogData.notiz?.id) {
       <!-- betreff -->
       <div class="tw:flex tw:gap-2">
-        <div class="tw:font-semibold">{{ 'shared.form.notizen.betreff.label' | transloco }}:</div>
+        <div class="tw:!font-semibold">{{ 'shared.form.notizen.betreff.label' | transloco }}:</div>
         <div>{{ dialogData.notiz?.betreff }}</div>
       </div>
 
@@ -40,9 +40,9 @@
 
       @if (dialogData.notiz?.antwort) {
         <dl class="tw:grid tw:grid-cols-[max-content_1fr] tw:gap-x-4 tw:pl-0">
-          <dt class="tw:font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | transloco }}:</dt>
+          <dt class="tw:!font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | transloco }}:</dt>
           <dd class="tw:font-normal">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
-          <dt class="tw:font-semibold">{{ 'shared.form.notizen.userMutiert.label' | transloco }}:</dt>
+          <dt class="tw:!font-semibold">{{ 'shared.form.notizen.userMutiert.label' | transloco }}:</dt>
           <dd class="tw:font-normal">{{ dialogData.notiz?.userMutiert }}</dd>
         </dl>
 
@@ -130,13 +130,13 @@
   <ng-template #datumUserErstellt>
     <dl class="tw:grid tw:grid-cols-[min-content_1fr] tw:gap-x-4 tw:pl-0">
       <!-- gesuchNummer -->
-      <dt class="tw:font-semibold">{{ 'shared.form.notizen.gesuchNummer.label' | transloco }}:</dt>
+      <dt class="tw:!font-semibold">{{ 'shared.form.notizen.gesuchNummer.label' | transloco }}:</dt>
       <dd class="tw:font-normal">{{ dialogData.notiz?.gesuchNummer }}</dd>
       <!-- datumErstellt -->
-      <dt class="tw:font-semibold">{{ 'shared.form.notizen.datumErstellt.label' | transloco }}:</dt>
+      <dt class="tw:!font-semibold">{{ 'shared.form.notizen.datumErstellt.label' | transloco }}:</dt>
       <dd class="tw:font-normal">{{ dialogData.notiz?.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
       <!-- userErstellt -->
-      <dt class="tw:font-semibold">{{ 'shared.form.notizen.userErstellt.label' | transloco }}:</dt>
+      <dt class="tw:!font-semibold">{{ 'shared.form.notizen.userErstellt.label' | transloco }}:</dt>
       <dd class="tw:font-normal">{{ dialogData.notiz?.userErstellt }}</dd>
     </dl>
   </ng-template>

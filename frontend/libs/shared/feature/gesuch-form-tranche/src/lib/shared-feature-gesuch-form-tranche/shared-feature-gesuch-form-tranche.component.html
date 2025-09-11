@@ -3,7 +3,7 @@
 @let gesuchId = view.gesuchId;
 
 <ng-template dvHeaderSuffix>
-  <h2 data-testid="dynamic-tranche-step-title" class="tw:font-bold">
+  <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold">
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | transloco: { position: currentTrancheNumberSig() } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
@@ -60,10 +60,10 @@
     @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
       <button
         type="button"
-        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:p-3"
+        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
         (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
       >
-        <i class="material-symbols-rounded tw:text-3xl/none">calendar_month</i>
+        <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
       </button>
     }
   </div>
@@ -79,12 +79,12 @@
     @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
       <button
         type="button"
-        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:p-3"
+        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
         [attr.aria-label]="'shared.form.tranche.gesuchsperiode.change' | transloco"
         data-testid="form-tranche-gesuchsperiode-change-button"
         (click)="changeGesuchsperiode(tranche?.id)"
       >
-        <i class="material-symbols-rounded tw:text-3xl/none">format_indent_increase</i>
+        <i class="material-symbols-rounded tw:!text-3xl/none">format_indent_increase</i>
       </button>
     }
   </div>
@@ -101,12 +101,12 @@
     @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
       <button
         type="button"
-        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:p-3"
+        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
         [attr.aria-label]="'shared.form.tranche.aenderung.update-von-bis' | transloco"
         data-testid="form-tranche-aenderung-von-bis-update"
         (click)="updateAenderungVonBis(gesuch)"
       >
-        <i class="material-symbols-rounded tw:text-3xl/none">calendar_month</i>
+        <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
       </button>
     }
   </ng-template>

@@ -1,5 +1,5 @@
 <!-- Verfuegungen -->
-<h3 class="tw:mb-6">
+<h3 class="tw:!mb-6">
   {{ 'sachbearbeitung-app.infos.admin.verfuegung' | transloco }}
 </h3>
 
@@ -33,15 +33,15 @@
       >
         <button
           type="button"
-          class="btn btn-link tw:flex tw:max-w-full tw:p-0"
+          class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
           [attr.aria-label]="'sachbearbeitung-app.infos.admin.verfuegung.table.dokument' | transloco"
           [dvDownloadButton]="{
             type: 'verfuegung',
             id: verfuegung.id,
           }"
         >
-          <span class="tw:truncate tw:text-sm/none" [title]="verfuegung.filename">{{ verfuegung.filename }}</span>
-          <span class="material-symbols-rounded tw:-mt-0.5 tw:ml-1 tw:align-middle tw:text-lg/none">download</span>
+          <span class="tw:truncate tw:!text-sm/none" [title]="verfuegung.filename">{{ verfuegung.filename }}</span>
+          <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
         </button>
       </td>
     </ng-container>

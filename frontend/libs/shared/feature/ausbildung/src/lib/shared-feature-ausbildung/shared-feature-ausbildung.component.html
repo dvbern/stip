@@ -9,7 +9,7 @@
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
-    class="tw:mt-6 tw:grid tw:min-w-[425px] tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:min-w-[640px] tw:md:grid-cols-2"
+    class="testing-library-fix tw:mt-6 tw:grid tw:min-w-[425px] tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:min-w-[640px] tw:md:grid-cols-2"
     [class.tw:lg:grid-cols-3]="!fallIdSig()"
     (ngSubmit)="handleSave()"
   >
@@ -17,10 +17,10 @@
       {{ 'shared.form.ausbildung.place.title' | transloco }}
     </h3>
 
-    <div class="tw:flex tw:w-full tw:gap-2">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
-        <div class="tw:w-full">
+        <div class="testing-library-fix tw:w-full">
           <dv-shared-ui-select-search
             [formControl]="form.controls.ausbildungsstaetteId"
             [testIdSig]="'form-education-ausbildungsstaette'"
@@ -71,9 +71,9 @@
     ></div>
 
     <!-- GANG -->
-    <div class="tw:col-start-1 tw:flex tw:w-full tw:gap-2">
+    <div class="testing-library-fix tw:col-start-1 tw:flex tw:w-full tw:gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
-        <div class="tw:w-full">
+        <div class="testing-library-fix tw:w-full">
           <dv-shared-ui-select-search
             [formControl]="form.controls.ausbildungsgangId"
             [testIdSig]="'form-education-ausbildungsgang'"
@@ -113,7 +113,7 @@
     </div>
 
     <!-- FACHRICHTUNG -->
-    <div class="tw:flex tw:w-full tw:gap-2">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-2">
       @if (!hiddenFieldsSetSig().has(form.controls.fachrichtungBerufsbezeichnung) && zusatzfrageSig()) {
         <mat-form-field class="tw:w-full" dvSharedUiFormField>
           <mat-label>
@@ -169,7 +169,7 @@
     }
 
     <div
-      class="tw:col-start-1 tw:flex tw:gap-2"
+      class="testing-library-fix tw:col-start-1 tw:flex tw:gap-2"
       dvPlzOrtAutocomplete
       [autocompleteSig]="plzAutocomplete"
       [plzFormSig]="form.controls.ausbildungsortPlzOrt"
@@ -219,7 +219,9 @@
       'shared.form.ausbildung.isAusbildungAusland.label' | transloco
     }}</mat-checkbox>
 
-    <div class="tw:col-start-1 tw:flex tw:w-full tw:flex-col tw:gap-2 tw:md:col-span-2 tw:lg:col-span-3">
+    <div
+      class="testing-library-fix tw:col-start-1 tw:flex tw:w-full tw:flex-col tw:gap-2 tw:md:col-span-2 tw:lg:col-span-3"
+    >
       <!-- MANUELL -->
       <mat-checkbox
         formControlName="ausbildungNichtGefunden"
@@ -242,7 +244,7 @@
       </div>
     </div>
 
-    <h3 class="tw:mt-6 tw:md:col-span-2 tw:lg:col-span-3">
+    <h3 class="tw:!mt-6 tw:md:col-span-2 tw:lg:col-span-3">
       {{ 'shared.form.ausbildung.duration.title' | transloco }}
     </h3>
 

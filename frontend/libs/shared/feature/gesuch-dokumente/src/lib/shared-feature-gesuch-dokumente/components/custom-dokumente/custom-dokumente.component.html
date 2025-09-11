@@ -19,9 +19,9 @@
     <ng-container matColumnDef="expander">
       <th mat-header-cell *matHeaderCellDef class="tw:w-11"></th>
       <td class="tw:!px-0" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-        <button class="btn btn-link tw:box-content tw:h-7 tw:w-7" type="button">
+        <button class="btn btn-link tw:!box-content tw:size-7" type="button">
           <i
-            class="material-symbols-rounded tw:rounded-full tw:bg-[--dv-blue-bg] tw:align-middle tw:text-2xl/none tw:text-white"
+            class="material-symbols-rounded tw:rounded-full tw:bg-(--dv-blue-bg) tw:align-middle tw:text-2xl/none tw:text-white"
           >
             @if (expandedRowId === dokument.dokumentTyp.id) {
               expand_less
@@ -98,7 +98,7 @@
               [matTooltip]="'shared.dokumente.deleteCustomDokumentTyp.title' | transloco"
               (click)="deleteCustomDokumentTyp.emit(dokument); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw:text-xl tw:text-gray-500">delete</span>
+              <span class="material-symbols-rounded tw:!text-xl tw:text-gray-500">delete</span>
             </button>
           }
           <dv-shared-pattern-document-upload
@@ -133,7 +133,7 @@
               {{ 'shared.dokumente.table.noComment' | transloco }}
             </div>
           } @else {
-            <div class="tw:grid tw:grid-cols-[33px,1fr,1fr,3fr] tw:gap-4 tw:py-2">
+            <div class="tw:grid tw:grid-cols-[33px_1fr_1fr_3fr] tw:gap-4 tw:py-2">
               @for (kommentar of dokument.kommentare; track $index) {
                 <i class="material-symbols-rounded text-gray">person</i>
                 <span>{{ kommentar.user_erstellt }}</span>
@@ -159,7 +159,7 @@
             ? true
             : false
           : false,
-        'tw:!bg-dv-warning': !dokument?.gesuchDokument?.id,
+        'tw:!bg-(dv-yellow-bg-subtle)': !dokument?.gesuchDokument?.id,
       }"
       mat-row
       *matRowDef="let dokument; columns: displayedColumns"

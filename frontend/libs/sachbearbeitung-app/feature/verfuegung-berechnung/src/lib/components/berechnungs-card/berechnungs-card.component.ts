@@ -33,7 +33,7 @@ import { Berechnung } from '../../../models';
                   berechnung.typ +
                   '.title' | transloco
               }}</span>
-              <h3 class="mb-4 fs-4">
+              <h3 class="fs-4 mb-4">
                 @switch (berechnung.typ) {
                   @case ('persoenlich') {
                     {{ berechnung.name }}
@@ -80,7 +80,7 @@ import { Berechnung } from '../../../models';
                 {{ berechnung.totalVorTeilung | formatChfNegative }}
               </div>
             </div>
-            <div class="d-flex text-muted justify-content-between fs-5 tw-mb-2">
+            <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
               <div>
                 {{
                   'sachbearbeitung-app.verfuegung.berechnung.' +
@@ -122,7 +122,7 @@ import { Berechnung } from '../../../models';
             berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung
           ) {
             <div
-              class="mat-expansion-panel-header-title text-muted mb-0 me-0 grid justify-content-between fs-4 w-100"
+              class="mat-expansion-panel-header-title text-muted justify-content-between fs-4 me-0 mb-0 grid w-100"
             >
               {{
                 'sachbearbeitung-app.verfuegung.berechnung.' +

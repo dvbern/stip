@@ -27,14 +27,14 @@
       </div>
 
       <div class="tw:relative tw:my-12 tw:justify-between container">
-        <h1 class="tw:mb-8 tw:text-white">
+        <h1 class="tw:!mb-8 tw:!text-white">
           {{ 'sozialdienst-app.dashboard.welcome.title' | transloco: { name: benutzerNameSig() } }}
         </h1>
 
         @let dashboard = dashboardStore.dashboardViewSig();
         @if (dashboard) {
           @let fall = dashboard.fall;
-          <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr,1fr]">
+          <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]">
             <!-- main column -->
             <div class="tw:flex tw:flex-col tw:gap-8">
               @if (dashboard.activeAusbildungen.length > 0) {
@@ -76,7 +76,7 @@
 
               <!-- INFOS -->
               <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
-                <h3 class="tw:mb-4">Allgemeine Informationen</h3>
+                <h3 class="tw:!mb-4">Allgemeine Informationen</h3>
                 <p>
                   Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
                   Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der

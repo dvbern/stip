@@ -4,7 +4,7 @@
   </div>
 
   <div class="tw:relative tw:my-12 tw:justify-between container">
-    <h1 class="tw:mb-8 tw:text-white">
+    <h1 class="tw:!mb-8 tw:!text-white">
       {{ t('gesuch-app.dashboard.welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
@@ -12,7 +12,7 @@
     @if (dashboard) {
       @let fall = dashboard.fall;
       @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
-      <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr,1fr]">
+      <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]">
         <!-- main column -->
         <div class="tw:flex tw:flex-col tw:gap-8">
           @if (dashboard.activeAusbildungen.length > 0) {
@@ -39,7 +39,7 @@
             </button>
           } @else {
             <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
-              <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-2xl">
+              <h3 class="tw:!mb-3 tw:flex tw:items-center tw:gap-4 tw:!text-2xl">
                 <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
                   <i class="material-symbols-rounded tw:text-2xl">school</i>
                 </dv-shared-ui-icon-chip>
@@ -63,7 +63,7 @@
           @if (sozialdienste && sozialdienste.length > 0) {
             <!-- SOZIALDIENST DELEGIEREN -->
             <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
-              <h3 class="tw:mb-4 tw:flex tw:items-center">
+              <h3 class="tw:!mb-4 tw:flex tw:items-center">
                 <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
                   <i class="material-symbols-rounded fs-5">interpreter_mode</i>
                 </dv-shared-ui-icon-chip>
@@ -114,7 +114,7 @@
 
           <!-- INFOS -->
           <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
-            <h3 class="tw:mb-4">Allgemeine Informationen</h3>
+            <h3 class="tw:!mb-4">Allgemeine Informationen</h3>
             <p>
               Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
               Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der

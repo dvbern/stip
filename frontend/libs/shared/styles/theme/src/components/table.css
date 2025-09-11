@@ -5,7 +5,7 @@
   background-color: var(--dv-blue-bg);
 }
 
-.tw-dv-table .mat-mdc-table {
+.tw\:dv-table .mat-mdc-table {
   .btn-sm {
     line-height: 0;
   }
