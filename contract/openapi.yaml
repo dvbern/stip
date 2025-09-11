@@ -4502,8 +4502,9 @@ components:
     GetDruckauftraegeQueryType:
       enum:
         - ALLE
-        - ALLE_AKTIV
+        - ALLE_AKTIV # includes status: IN_GENERIERUNG, VERSANDBEREIT, FEHLERHAFTE_GENERIERUNG
         - ALLE_ARCHIVIERT
+        - ALLE_FEHLERHAFTE_GENERIERUNG
       type: string
     GetGesucheSBQueryType:
       enum:
@@ -6833,9 +6834,10 @@ components:
         - VERFUEGUNG
     DruckauftragStatus:
       enum:
-        - DRUCKBEREIT
         - IN_GENERIERUNG
         - VERSANDBEREIT
+        - FEHLERHAFTE_GENERIERUNG
+        - ARCHIVIERT
     GesuchTrancheTyp:
       enum:
         - AENDERUNG

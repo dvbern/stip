@@ -100,6 +100,7 @@ import { getDiffFormat } from '@dv/shared/util/validator-date';
   templateUrl: './sachbearbeitung-app-feature-druckzentrum.component.html',
   styleUrl: './sachbearbeitung-app-feature-druckzentrum.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DruckauftragStore],
 })
 export class SachbearbeitungAppFeatureDruckzentrumComponent {
   private router = inject(Router);
