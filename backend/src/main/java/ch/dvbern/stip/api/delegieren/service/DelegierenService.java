@@ -112,16 +112,8 @@ public class DelegierenService {
     public void delegierungAufloesen(final UUID delegierungId) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
 
-        notificationService.createDelegierungAufgeloestNotification(delegierung);
-        mailService.sendStandardNotificationEmailForFall(
-            delegierung.getPersoenlicheAngaben(),
-            delegierung.getDelegierterFall()
-        );
-
-        delegierung.getDelegierterFall().setDelegierung(null);
-        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
-
         final var auszahlung = delegierung.getDelegierterFall().getAuszahlung();
+
         if (auszahlung.isAuszahlungAnSozialdienst()) {
             var zahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
                 delegierung.getSozialdienst().getZahlungsverbindung()
@@ -133,7 +125,15 @@ public class DelegierenService {
             auszahlung.setAuszahlungAnSozialdienst(false);
         }
 
+        delegierung.getDelegierterFall().setDelegierung(null);
+        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
         delegierungRepository.delete(delegierung);
+
+        notificationService.createDelegierungAufgeloestNotification(delegierung);
+        mailService.sendStandardNotificationEmailForFall(
+            delegierung.getPersoenlicheAngaben(),
+            delegierung.getDelegierterFall()
+        );
     }
 
     public PaginatedSozDashboardDto getDelegierungSoz(
