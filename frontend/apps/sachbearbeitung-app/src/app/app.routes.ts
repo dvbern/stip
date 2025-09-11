@@ -57,6 +57,14 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'druckzentrum',
+        title: 'sachbearbeitung-app.druckzentrum.title',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/druckzentrum').then(
+            (m) => m.sachbearbeitungAppFeatureDruckzentrumRoutes,
+          ),
+      },
+      {
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,

@@ -1,0 +1,156 @@
+<dv-sachbearbeitung-app-pattern-overview-layout>
+  <div class="container">
+    <div
+      class="tw-mt-2 tw-grid tw-grid-cols-1 tw-gap-6 tw-pt-6 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-6"
+      [formGroup]="quickFilterForm"
+    >
+      @for (quickFilter of quickFilters; track quickFilter) {
+        <button
+          type="button"
+          (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
+          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+          [attr.data-testid]="'druckzentrum-quick-filter-' + quickFilter.typ"
+          [class.btn-danger]="radio.checked"
+          [class.btn-light]="!radio.checked"
+        >
+          <dv-shared-ui-icon-chip class="me-3 chip">
+            <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
+          </dv-shared-ui-icon-chip>
+          <div class="flex-grow-1 tw-text-start tw-leading-4">
+            <span class="fw-bold fs-7 mb-0">
+              {{ 'sachbearbeitung-app.druckzentrum.quick-filter.' + quickFilter.typ | transloco }}
+            </span>
+            <input
+              #radio
+              class="fs-7 cdk-visually-hidden"
+              type="radio"
+              name="query"
+              labelPosition="before"
+              formControlName="query"
+              [value]="quickFilter.typ"
+              [attr.aria-label]="'sachbearbeitung-app.druckzentrum.quick-filter.label.' + quickFilter.typ | transloco"
+            />
+          </div>
+        </button>
+      }
+    </div>
+    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="druckzentrum-title">
+      {{ 'sachbearbeitung-app.druckzentrum.title' | transloco }}
+    </h1>
+    <div class="tw-my-6">
+      <div class="tw-dv-table tw-relative">
+        <div [class.opacity-50]="loading()">
+          <table
+            mat-table
+            [dvSharedUiFocusableList]="items"
+            [dataSource]="druckzentrumDataSourceSig()"
+            data-testid="sachbearbeitung-app.druckzentrum.table"
+            tabindex="0"
+          >
+            <caption class="cdk-visually-hidden">
+              {{
+                'sachbearbeitung-app.druckzentrum.table.description' | transloco
+              }}
+            </caption>
+
+            <ng-container matColumnDef="batchname">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.druckzentrum.table.batchname' | transloco }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                class="tw-w-40 tw-whitespace-nowrap"
+                [dvTruncateTooltip]="item.batchname"
+              >
+                {{ item.batchname }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="auftraggeber">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.druckzentrum.table.auftraggeber' | transloco }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                class="tw-w-40 tw-whitespace-nowrap"
+                [dvTruncateTooltip]="item.auftraggeber"
+              >
+                {{ item.auftraggeber }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="auftragsdatum">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.druckzentrum.table.auftragsdatum' | transloco }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                {{ item.auftragsdatum | date: 'dd.MM.yyyy HH:mm' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.druckzentrum.table.status' | transloco }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                {{ item.status }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="typ">
+              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+                {{ 'sachbearbeitung-app.druckzentrum.table.typ' | transloco }}
+              </th>
+              <td
+                mat-cell
+                *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                class="tw-w-32 tw-whitespace-nowrap"
+              >
+                {{ item.typ }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              dvSharedUiFocusableListItem
+              mat-row
+              tabindex="-1"
+              *dvMatRowDef="let item; dataSource: druckzentrumDataSourceSig(); columns: displayedColumns"
+              class="highlightable"
+            ></tr>
+            <tr class="mat-mdc-row" *matNoDataRow>
+              <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                {{ 'shared.table.noData' | transloco }}
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator
+            showFirstLastButtons
+            [pageSizeOptions]="pageSizes"
+            [pageSize]="pageSize() ?? defaultPageSize"
+            [pageIndex]="page() ?? 0"
+            [length]="totalEntries()"
+            (page)="paginate($event)"
+          ></mat-paginator>
+        </div>
+        @if (loading()) {
+          <dv-shared-ui-loading
+            class="position-absolute top-50 start-50 translate-middle"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </div>
+    </div>
+  </div>
+</dv-sachbearbeitung-app-pattern-overview-layout>

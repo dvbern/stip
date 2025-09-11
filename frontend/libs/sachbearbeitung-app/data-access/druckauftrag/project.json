@@ -1,0 +1,10 @@
+{
+  "name": "sachbearbeitung-app-data-access-druckauftrag",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sachbearbeitung-app/data-access/druckauftrag/src",
+  "prefix": "dv",
+  "tags": ["type:data-access", "scope:sachbearbeitung-app"],
+  "projectType": "library",
+  "// targets": "to see all targets run: nx show project sachbearbeitung-app-data-access-druckauftrag --web",
+  "targets": {}
+}
