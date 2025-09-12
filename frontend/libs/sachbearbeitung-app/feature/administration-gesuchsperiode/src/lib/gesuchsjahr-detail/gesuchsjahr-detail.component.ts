@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -44,7 +43,6 @@ import { PublishComponent } from '../publish/publish.component';
 
 @Component({
   imports: [
-    CommonModule,
     MaskitoDirective,
     MatError,
     MatFormFieldModule,

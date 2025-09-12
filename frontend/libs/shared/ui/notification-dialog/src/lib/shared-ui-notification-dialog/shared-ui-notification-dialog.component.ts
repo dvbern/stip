@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -18,7 +17,6 @@ type NotificationDialogData = {
 @Component({
   selector: 'dv-shared-ui-notification-dialog',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiTooltipDateComponent,
     SharedUiDownloadButtonDirective,

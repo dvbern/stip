@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -46,7 +45,6 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslocoPipe,
     MatSelectModule,

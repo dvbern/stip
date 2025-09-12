@@ -4,5 +4,12 @@
   "sourceRoot": "libs/sachbearbeitung-app/util-fn/sachbearbeiter-helper/src",
   "projectType": "library",
   "tags": ["type:util-fn", "scope:sachbearbeitung-app"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/sachbearbeitung-app/util-fn/sachbearbeiter-helper/tsconfig.lib.json"
+      }
+    }
+  }
 }

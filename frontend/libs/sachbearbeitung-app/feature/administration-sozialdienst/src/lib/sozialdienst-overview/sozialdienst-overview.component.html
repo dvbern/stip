@@ -3,7 +3,7 @@
 } @else {
   @if (sozialDiensteListDataSourceSig(); as sozialdienstListSource) {
     <form [formGroup]="filterForm">
-      <div class="tw-dv-table" [class.opacity-50]="store.sozialdienste() | rdIsPending">
+      <div class="tw:dv-table" [class.opacity-50]="store.sozialdienste() | rdIsPending">
         <table mat-table [dataSource]="sozialdienstListSource" matSort>
           <caption class="cdk-visually-hidden">
             {{
@@ -38,7 +38,7 @@
             <td
               mat-cell
               *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource"
-              class="tw-whitespace-nowrap tw-max-w-half"
+              class="tw:whitespace-nowrap tw:max-w-half"
               [dvTruncateTooltip]="sozialdienst.name"
             >
               {{ sozialdienst.name }}
@@ -76,7 +76,7 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32">
               <label for="statusFilter">
                 {{ 'sachbearbeitung-app.admin.sozialdienst.status' | transloco }}
               </label>
@@ -111,7 +111,7 @@
                   class="btn btn-outline-primary btn-sm"
                   data-testid="sozialdienst-create"
                 >
-                  <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+                  <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
                 </a>
               </div>
             </th>
@@ -170,7 +170,7 @@
         </mat-paginator>
         @if (store.sozialdienste() | rdIsPending) {
           <dv-shared-ui-loading
-            class="position-absolute top-50 start-50 translate-middle"
+            class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

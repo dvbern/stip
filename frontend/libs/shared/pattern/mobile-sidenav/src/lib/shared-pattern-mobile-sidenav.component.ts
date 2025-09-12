@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,12 +22,7 @@ import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-select
 
 @Component({
   selector: 'dv-shared-pattern-mobile-sidenav',
-  imports: [
-    CommonModule,
-    MatSidenavModule,
-    TranslocoPipe,
-    SharedUiLanguageSelectorComponent,
-  ],
+  imports: [MatSidenavModule, TranslocoPipe, SharedUiLanguageSelectorComponent],
   templateUrl: './shared-pattern-mobile-sidenav.component.html',
   styleUrl: './shared-pattern-mobile-sidenav.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

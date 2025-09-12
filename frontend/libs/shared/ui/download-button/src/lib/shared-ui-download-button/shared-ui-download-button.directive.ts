@@ -1,5 +1,10 @@
-import { DOCUMENT } from '@angular/common';
-import { Directive, HostListener, inject, input } from '@angular/core';
+import {
+  DOCUMENT,
+  Directive,
+  HostListener,
+  inject,
+  input,
+} from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
 
 import {

@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.pdf.service.PdfUtils;
+import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
@@ -71,7 +71,7 @@ public class BerechnungsblattService {
     private static final int FONT_SIZE = 10;
     private static final int FONT_SIZE_SMALL = 8;
 
-    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(new Locale("de", "CH"));
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
 
     private static final PageSize PAGE_SIZE = PageSize.A4;
 

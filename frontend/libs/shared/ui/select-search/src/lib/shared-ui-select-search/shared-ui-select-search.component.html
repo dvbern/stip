@@ -1,4 +1,4 @@
-<mat-form-field dvSharedUiFormField class="clearable-select tw-w-full">
+<mat-form-field dvSharedUiFormField class="clearable-select tw:w-full">
   <mat-label>{{ labelKeySig() | transloco }}</mat-label>
 
   @if (form.controls.select.value && form.controls.select.enabled) {
@@ -25,7 +25,7 @@
         [placeholderLabel]="'shared.form.select.search' | transloco"
         [noEntriesFoundLabel]="'shared.form.select.nothingFound' | transloco"
       >
-        <span ngxMatSelectSearchClear class="material-symbols-rounded tw-flex">clear</span>
+        <span ngxMatSelectSearchClear class="material-symbols-rounded tw:flex">clear</span>
       </ngx-mat-select-search>
     </mat-option>
     @for (value of filteredValuesSig(); track value.id ?? $index) {

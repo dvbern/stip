@@ -136,6 +136,9 @@ public class FamilienbudgetCalculatorV1 {
             );
         }
 
+        result.setAnrechenbaresVermoegen(elternteil.getSteuerbaresVermoegen());
+        result.selbststaendigErwerbend(elternteil.isSelbststaendigErwerbend());
+
         final var summand = applyAndSum(summands, result);
         final var subtrahend =
             applyAndSum(Stream.concat(subtrahends.stream(), conditionalSubtrahends.stream()).toList(), result);

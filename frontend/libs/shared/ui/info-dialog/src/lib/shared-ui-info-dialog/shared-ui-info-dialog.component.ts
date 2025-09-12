@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -10,7 +9,7 @@ export interface InfoDialogData {
 
 @Component({
   selector: 'dv-shared-ui-info-dialog',
-  imports: [CommonModule, TranslocoPipe],
+  imports: [TranslocoPipe],
   templateUrl: './shared-ui-info-dialog.component.html',
   styleUrl: './shared-ui-info-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

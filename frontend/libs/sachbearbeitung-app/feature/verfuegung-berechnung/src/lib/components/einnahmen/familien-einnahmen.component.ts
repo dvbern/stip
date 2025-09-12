@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -13,7 +12,6 @@ import { FamilienBerechnung } from '../../../models';
 @Component({
   selector: 'dv-familien-einnahmen',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,

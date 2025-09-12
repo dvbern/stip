@@ -1,18 +1,18 @@
-<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-4">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-4">
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="title tw-mb-4 tw-flex tw-text-lg xl:tw-pr-5">
+  <h1 class="title tw:!mb-4 tw:flex tw:!text-lg tw:xl:pr-5">
     <span class="text-info material-symbols-rounded me-2">info</span>
     {{ dialogData.titleKey | transloco }}
   </h1>
   <p class="content" [innerHTML]="dialogData.messageKey | transloco"></p>
-  <button (click)="close()" type="button" class="btn btn-outline-primary tw-mt-auto tw-self-center">
+  <button (click)="close()" type="button" class="btn btn-outline-primary tw:mt-auto tw:self-center">
     {{ 'shared.close' | transloco }}
   </button>
 </section>

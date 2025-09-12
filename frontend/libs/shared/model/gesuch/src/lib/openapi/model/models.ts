@@ -135,6 +135,7 @@ export * from './land';
 export * from './lebenslaufItem';
 export * from './lebenslaufItemUpdate';
 export * from './nachfristAendernRequest';
+export * from './neskoError';
 export * from './neskoGetSteuerdatenRequest';
 export * from './niederlassungsstatus';
 export * from './notification';

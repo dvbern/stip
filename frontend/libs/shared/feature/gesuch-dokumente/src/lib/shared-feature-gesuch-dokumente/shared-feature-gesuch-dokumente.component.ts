@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -53,7 +52,6 @@ import { RequiredDokumenteComponent } from './components/required-dokumente/requ
 @Component({
   selector: 'dv-shared-feature-gesuch-dokumente',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatTableModule,
     RequiredDokumenteComponent,

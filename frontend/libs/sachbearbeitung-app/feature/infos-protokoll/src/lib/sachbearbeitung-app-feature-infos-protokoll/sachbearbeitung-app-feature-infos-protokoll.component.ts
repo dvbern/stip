@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,7 +24,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-protokoll',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatTableModule,
     MatSortModule,

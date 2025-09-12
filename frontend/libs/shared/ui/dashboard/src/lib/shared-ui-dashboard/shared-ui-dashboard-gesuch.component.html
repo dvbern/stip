@@ -1,29 +1,29 @@
 @let gesuch = gesuchSig();
 @let periode = gesuch.gesuchsperiode;
-<div class="tw-relative tw-@container">
-  <div class="tw-absolute tw-right-0 tw-top-0 tw-font-bold">
+<div class="tw:relative tw:@container">
+  <div class="tw:absolute tw:right-0 tw:top-0 tw:font-bold">
     {{
       (gesuch.isErstgesuch ? 'shared.dashboard.gesuch.order.erstgesuch' : 'shared.dashboard.gesuch.order.folgegesuch')
         | transloco
     }}
   </div>
   <div
-    class="tw-grid tw-gap-4"
-    [ngClass]="{ 'tw-grid-cols-[1fr] @lg:tw-grid-cols-[1fr,auto,1fr]': gesuch.offeneAenderung }"
+    class="tw:grid tw:gap-4"
+    [ngClass]="{ 'tw:grid-cols-[1fr] tw:@lg:grid-cols-[1fr_auto_1fr]': gesuch.offeneAenderung }"
   >
-    <div class="tw-flex tw-flex-col">
-      <dl class="tw-mb-10 tw-flex tw-flex-col" [class.tw-mb-0]="!gesuch.isActive">
-        <dt class="tw-font-bold">
+    <div class="tw:flex tw:flex-col">
+      <dl class="tw:flex tw:flex-col" [class.tw:!mb-0]="!gesuch.isActive" [class.tw:!mb-10]="gesuch.isActive">
+        <dt class="tw:font-bold">
           {{ 'shared.dashboard.gesuch.title' | transloco: { yearRange: gesuch.yearRange } }}
         </dt>
-        <dd class="tw-mb-6">
+        <dd class="tw:!mb-6">
           {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
         </dd>
 
         @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
         @if (gesuch.isActive) {
-          <dt class="tw-font-bold">{{ 'shared.dashboard.gesuch.status.title' | transloco }}</dt>
-          <dd class="tw-mb-6">
+          <dt class="tw:font-bold">{{ 'shared.dashboard.gesuch.status.title' | transloco }}</dt>
+          <dd class="tw:!mb-6">
             @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
               @if (count > 1) {
                 {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
@@ -37,7 +37,7 @@
 
           @if (!gesuch.einreichefristAbgelaufen) {
             @if (gesuch.reduzierterBeitrag) {
-              <span class="tw-font-bold">
+              <span class="tw:font-bold">
                 {{ 'shared.dashboard.periode.einreichefrist.reduziert' | transloco }}
               </span>
             }
@@ -63,7 +63,7 @@
                 "
               ></span>
             }
-            <dt class="tw-mt-6 tw-font-bold">
+            <dt class="tw:mt-6 tw:font-bold">
               {{ 'shared.dashboard.periode.einreichefrist.text' | transloco }}
             </dt>
             <dd>
@@ -73,13 +73,13 @@
               }}
             </dd>
           } @else {
-            <span class="tw-font-bold">
+            <span class="tw:font-bold">
               {{ 'shared.dashboard.periode.einreichefrist.abgelaufen.warning' | transloco }}
             </span>
-            <span class="tw-mt-6">{{ 'shared.dashboard.periode.einreichefrist.abgelaufen.text' | transloco }}</span>
+            <span class="tw:mt-6">{{ 'shared.dashboard.periode.einreichefrist.abgelaufen.text' | transloco }}</span>
           }
           @if (missingDocTrancheId && gesuch.nachfristDokumente) {
-            <dt class="tw-mt-6 tw-font-bold">
+            <dt class="tw:mt-6 tw:font-bold">
               {{ 'shared.dashboard.periode.nachfrist.text' | transloco }}
             </dt>
             <dd>
@@ -88,12 +88,12 @@
           }
         }
       </dl>
-      <div class="tw-flex-grow"></div>
+      <div class="tw:grow"></div>
       <div
-        class="tw-gap-3"
+        class="tw:gap-3"
         [ngClass]="{
-          'tw-flex tw-flex-col-reverse': gesuch.offeneAenderung,
-          'tw-grid tw-grid-cols-2 xl:tw-grid-cols-3': !gesuch.offeneAenderung,
+          'tw:flex tw:flex-col-reverse': gesuch.offeneAenderung,
+          'tw:grid tw:grid-cols-2 tw:xl:grid-cols-3': !gesuch.offeneAenderung,
         }"
       >
         @if (gesuch.id) {
@@ -160,12 +160,12 @@
     </div>
     @if (gesuch.offeneAenderung) {
       <!-- Vertical Line -->
-      <div class="tw-h-full tw-min-h-[3px] tw-w-full tw-min-w-[3px] tw-bg-[--dv-light-border-subtle]"></div>
-      <div class="tw-flex tw-flex-col">
+      <div class="tw:h-full tw:min-h-[3px] tw:w-full tw:min-w-[3px] tw:bg-(--dv-light-border-subtle)"></div>
+      <div class="tw:flex tw:flex-col">
         @if (gesuch.offeneAenderung; as aenderung) {
           <div class="divider me-4"></div>
           <dv-shared-ui-aenderungs-entry
-            class="tw-flex tw-flex-1 tw-flex-col"
+            class="tw:flex tw:flex-1 tw:flex-col"
             [gesuch]="gesuch"
             [tranche]="aenderung"
             (deleteAenderung)="deleteAenderung.emit($event)"

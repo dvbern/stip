@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +6,7 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-mandant-styles-dv',
-  imports: [CommonModule],
+  imports: [],
   template: '',
   styleUrl: './shared-ui-mandant-styles-dv.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

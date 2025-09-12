@@ -123,6 +123,22 @@ public class VerfuegungService {
     }
 
     @Transactional
+    public void createPdfForVerfuegungMitAnspruch(final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = pdfService.createVerfuegungMitAnspruchPdf(verfuegung);
+
+        final String objectId = DokumentUploadUtil.executeUploadDocument(
+            out.toByteArray(),
+            VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            VERFUEGUNG_DOKUMENT_PATH
+        );
+        verfuegung.setObjectId(objectId);
+        verfuegung.setFilename(VERFUEGUNG_DOKUMENT_NAME);
+        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+    }
+
+    @Transactional
     public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) throws IOException {
         final ByteArrayOutputStream verfuegungOut = pdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
         final String objectId = DokumentUploadUtil.executeUploadDocument(
@@ -147,8 +163,7 @@ public class VerfuegungService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return gesuch.getVerfuegungs()
             .stream()
-            .sorted(Comparator.comparing(Verfuegung::getTimestampErstellt).reversed())
-            .findFirst()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
             .orElseThrow();
     }
 

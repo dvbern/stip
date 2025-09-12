@@ -62,8 +62,8 @@
           }
         ],
         "styles": [
-          "apps/gesuch-app/src/styles.scss",
-          "libs/shared/styles/theme/src/tailwind.css"
+          "libs/shared/styles/theme/src/tailwind.css",
+          "apps/gesuch-app/src/styles.scss"
         ],
         "scripts": [],
         "stylePreprocessorOptions": {

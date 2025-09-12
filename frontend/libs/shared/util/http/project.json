@@ -5,5 +5,12 @@
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:util", "scope:shared"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/util/http/tsconfig.lib.json"
+      }
+    }
+  }
 }
