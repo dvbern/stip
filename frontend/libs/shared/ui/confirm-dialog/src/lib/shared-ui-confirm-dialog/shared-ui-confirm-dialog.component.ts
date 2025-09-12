@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -17,7 +16,7 @@ export interface ConfirmDialogData<T extends string> {
 
 @Component({
   selector: 'dv-shared-ui-confirm-dialog',
-  imports: [CommonModule, TranslocoPipe],
+  imports: [TranslocoPipe],
   templateUrl: './shared-ui-confirm-dialog.component.html',
   styleUrl: './shared-ui-confirm-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

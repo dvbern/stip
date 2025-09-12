@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -6,11 +5,7 @@ import { SachbearbeitungAppPatternBasicLayoutComponent } from '@dv/sachbearbeitu
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-unauthorized',
-  imports: [
-    CommonModule,
-    TranslocoPipe,
-    SachbearbeitungAppPatternBasicLayoutComponent,
-  ],
+  imports: [TranslocoPipe, SachbearbeitungAppPatternBasicLayoutComponent],
   templateUrl: './sachbearbeitung-app-feature-unauthorized.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

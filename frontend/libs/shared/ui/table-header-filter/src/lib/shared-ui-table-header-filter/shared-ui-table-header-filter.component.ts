@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +7,7 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-table-header-filter',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './shared-ui-table-header-filter.component.html',
   styleUrl: './shared-ui-table-header-filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

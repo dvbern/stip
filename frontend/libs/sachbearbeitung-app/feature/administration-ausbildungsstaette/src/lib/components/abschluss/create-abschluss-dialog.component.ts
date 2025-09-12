@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -26,7 +25,6 @@ const invalidBildungsrichtungen: Bildungsrichtung[] = ['OBLIGATORISCHE_SCHULE'];
 @Component({
   selector: 'dv-create-abschluss-dialog',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslocoPipe,
     MatFormFieldModule,

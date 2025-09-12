@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -29,7 +28,6 @@ export type EinreichedatumAendernDialogResult = EinreichedatumAendernRequest;
 @Component({
   selector: 'dv-shared-dialog-einreichedatum-aendern',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslocoPipe,
     MatFormFieldModule,

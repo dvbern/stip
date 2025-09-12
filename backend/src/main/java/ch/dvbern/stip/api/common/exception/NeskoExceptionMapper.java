@@ -15,20 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.pdf.service;
+package ch.dvbern.stip.api.common.exception;
 
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.AreaBreak;
-import com.itextpdf.layout.properties.AreaBreakType;
-import lombok.experimental.UtilityClass;
+import ch.dvbern.stip.generated.dto.NeskoErrorDto;
 
-@UtilityClass
-public class PdfUtils {
-    public void makePageNumberEven(Document document) {
-        if (document.getPdfDocument().getNumberOfPages() % 2 == 0) {
-            return;
+public final class NeskoExceptionMapper {
+    private NeskoExceptionMapper() {}
+
+    public static NeskoErrorDto toDto(NeskoException exception) {
+        NeskoErrorDto neskoErrorDto = new NeskoErrorDto();
+        if (exception == null) {
+            return neskoErrorDto;
         }
-        document.getPdfDocument().addNewPage();
-        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+        neskoErrorDto.setType(exception.getMessage());
+        neskoErrorDto.setNeskoError(exception.getNeskoError());
+        neskoErrorDto.setUserMessage(exception.getUserMessage());
+
+        return neskoErrorDto;
     }
 }

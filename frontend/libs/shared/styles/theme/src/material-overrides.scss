@@ -93,7 +93,7 @@ $gesuch-app-theme: map.deep-merge(
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float {
   align-self: flex-start;
   --mat-mdc-form-field-floating-label-scale: 1;
-  --mdc-outlined-text-field-outline-color: rgba(0, 0, 0, 0.09);
+  --mat-form-field-outlined-outline-color: rgba(0, 0, 0, 0.09);
   .mat-mdc-form-field-hint {
     font-size: 0.75rem;
   }
@@ -116,7 +116,7 @@ $gesuch-app-theme: map.deep-merge(
 // Used for readonly mat-form-fields, see dvSharedUiFormReadonly
 form.readonly,
 form .readonly {
-  --mdc-outlined-text-field-disabled-input-text-color: #{$darkgray};
+  --mat-form-field-outlined-disabled-input-text-color: #{$darkgray};
   --mat-select-disabled-trigger-text-color: #{$darkgray};
   .mat-mdc-radio-button {
     --mat-radio-disabled-label-color: #{$darkgray};
@@ -154,10 +154,10 @@ form .readonly {
   width: 100%;
 }
 .mat-mdc-radio-group.ng-invalid.ng-touched .mat-mdc-radio-button {
-  --mdc-radio-unselected-icon-color: #{mat.m2-get-color-from-palette(
+  --mat-radio-unselected-icon-color: #{mat.m2-get-color-from-palette(
       $gesuch-app-warn
     )};
-  --mdc-radio-unselected-focus-icon-color: #{mat.m2-get-color-from-palette(
+  --mat-radio-unselected-focus-icon-color: #{mat.m2-get-color-from-palette(
       $gesuch-app-warn
     )};
 }
@@ -180,7 +180,7 @@ form .readonly {
 
 fieldset {
   &.ng-touched.ng-invalid {
-    --mdc-checkbox-unselected-icon-color: #{mat.m2-get-color-from-palette(
+    --mat-checkbox-unselected-icon-color: #{mat.m2-get-color-from-palette(
         $gesuch-app-warn
       )};
   }
@@ -206,13 +206,13 @@ table tr.mat-mdc-row {
 }
 
 .mat-mdc-progress-bar {
-  --mdc-linear-progress-active-indicator-height: 2px;
-  --mdc-linear-progress-track-height: 2px;
+  --mat-progress-bar-active-indicator-height: 2px;
+  --mat-progress-bar-track-height: 2px;
 }
 
 .mat-mdc-snack-bar-container {
   --mat-mdc-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 $dv-custom-colors: (
@@ -230,15 +230,17 @@ $dv-custom-colors: (
       $contrast-color: mat.m2-get-color-from-palette($color, 500-contrast);
       background-color: $base-color;
       color: $contrast-color;
-      --mdc-chip-label-text-color: #{$contrast-color};
-      --mdc-snackbar-container-color: #{$base-color};
+      --mat-snack-bar-container-color: #{$base-color};
+      --mat-chip-label-text-color: #{$contrast-color};
+      --mat-snackbar-container-color: #{$base-color};
     }
     &.mat-#{$name}[disabled],
     & .mat-#{$name}[disabled] {
       $contrast-color: mat.m2-get-color-from-palette($color, 100-contrast);
-      background-color: mat.m2-get-color-from-palette($color, 100);
+      $background-color: mat.m2-get-color-from-palette($color, 100);
       color: $contrast-color;
-      --mdc-chip-disabled-label-text-color: #{$contrast-color};
+      --mat-snack-bar-container-color: #{$background-color};
+      --mat-chip-disabled-label-text-color: #{$contrast-color};
     }
   }
 }
@@ -257,9 +259,9 @@ $dv-all-colors: (
     .mat-#{$name} {
       $base-color: mat.m2-get-color-from-palette($color, 500);
       $mild-color: mat.m2-get-color-from-palette($color, 100);
-      --mdc-snackbar-container-color: #{$base-color};
-      --mdc-linear-progress-active-indicator-color: #{$base-color};
-      --mdc-linear-progress-track-color: #{$mild-color};
+      --mat-snack-bar-container-color: #{$base-color};
+      --mat-progress-bar-active-indicator-color: #{$base-color};
+      --mat-progress-bar-track-color: #{$mild-color};
     }
   }
   .header-menu-panel {
@@ -286,7 +288,7 @@ $dv-all-colors: (
     min-width: unset;
   }
   .mat-mdc-dialog-container {
-    --mdc-dialog-container-elevation: none;
+    --mat-dialog-container-elevation: none;
   }
   .mat-mdc-dialog-surface {
     box-shadow: none;
@@ -309,16 +311,16 @@ $dv-all-colors: (
 }
 
 .btn.active {
-  --mat-tab-header-active-focus-label-text-color: white;
-  --mat-tab-header-active-focus-indicator-color: transparent;
+  --mat-tab-active-focus-label-text-color: white;
+  --mat-tab-active-focus-indicator-color: transparent;
 
   &:not(:hover) {
     --mat-menu-item-label-text-color: white;
-    --mat-tab-header-active-label-text-color: white;
-    --mdc-tab-indicator-active-indicator-color: transparent;
+    --mat-tab-active-label-text-color: white;
+    --mat-tab-active-indicator-color: transparent;
   }
   &:hover {
-    --mat-tab-header-active-hover-label-text-color: white;
-    --mat-tab-header-active-hover-indicator-color: transparent;
+    --mat-tab-active-hover-label-text-color: white;
+    --mat-tab-active-hover-indicator-color: transparent;
   }
 }

@@ -3,7 +3,7 @@
 @let gesuchId = view.gesuchId;
 
 <ng-template dvHeaderSuffix>
-  <h2 data-testid="dynamic-tranche-step-title" class="tw-font-bold">
+  <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold">
     @if (tranche) {
       {{ 'shared.form.title.suffix.' + tranche.typ | transloco: { position: currentTrancheNumberSig() } }}
       {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
@@ -12,7 +12,7 @@
   </h2>
 </ng-template>
 
-<form [formGroup]="form" class="tw-dv-form-grid tw-pt-12" [dvSharedUiFormReadonly]="true">
+<form [formGroup]="form" class="tw:dv-form-grid tw:pt-12" [dvSharedUiFormReadonly]="true">
   <!-- Status -->
   <mat-form-field dvSharedUiFormField>
     <mat-label>
@@ -34,7 +34,7 @@
   </mat-form-field>
 
   <!-- Gesuchsnummer -->
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
     <mat-label>{{ 'shared.form.tranche.gesuchsnummer.label' | transloco }} </mat-label>
 
     <input readonly type="text" matInput formControlName="gesuchsnummer" data-testid="form-tranche-gesuchsnummer" />
@@ -48,8 +48,8 @@
   </mat-form-field>
 
   <!-- Einreichedatum -->
-  <div class="tw-col-start-1 tw-flex tw-gap-2">
-    <mat-form-field dvSharedUiFormField class="tw-grow">
+  <div class="tw:col-start-1 tw:flex tw:gap-2">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.tranche.einreichedatum.label' | transloco }}</mat-label>
       <input readonly type="text" matInput formControlName="einreichedatum" data-testid="form-tranche-einreichedatum" />
     </mat-form-field>
@@ -60,17 +60,17 @@
     @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
       <button
         type="button"
-        class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
+        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
         (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
       >
-        <i class="material-symbols-rounded tw-text-3xl/none">calendar_month</i>
+        <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
       </button>
     }
   </div>
 
   <!-- Gesuchsperiode -->
-  <div class="tw-col-start-1 tw-flex tw-gap-2">
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+  <div class="tw:col-start-1 tw:flex tw:gap-2">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
       <mat-label>{{ 'shared.form.tranche.gesuchsperiode.label' | transloco }} </mat-label>
 
       <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />
@@ -79,12 +79,12 @@
     @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
       <button
         type="button"
-        class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
+        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
         [attr.aria-label]="'shared.form.tranche.gesuchsperiode.change' | transloco"
         data-testid="form-tranche-gesuchsperiode-change-button"
         (click)="changeGesuchsperiode(tranche?.id)"
       >
-        <i class="material-symbols-rounded tw-text-3xl/none">format_indent_increase</i>
+        <i class="material-symbols-rounded tw:!text-3xl/none">format_indent_increase</i>
       </button>
     }
   </div>
@@ -101,19 +101,19 @@
     @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
       <button
         type="button"
-        class="btn btn-outline-primary tw-flex tw-h-[56px] tw-p-3"
+        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
         [attr.aria-label]="'shared.form.tranche.aenderung.update-von-bis' | transloco"
         data-testid="form-tranche-aenderung-von-bis-update"
         (click)="updateAenderungVonBis(gesuch)"
       >
-        <i class="material-symbols-rounded tw-text-3xl/none">calendar_month</i>
+        <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
       </button>
     }
   </ng-template>
 
   <!-- Von -->
-  <div class="tw-col-start-1 tw-flex tw-gap-2">
-    <mat-form-field dvSharedUiFormField class="tw-flex-grow">
+  <div class="tw:col-start-1 tw:flex tw:gap-2">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.tranche.von.label' | transloco }} </mat-label>
 
       <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
@@ -123,8 +123,8 @@
   </div>
 
   <!-- Bis -->
-  <div class="tw-flex tw-gap-2">
-    <mat-form-field dvSharedUiFormField class="tw-flex-grow">
+  <div class="tw:flex tw:gap-2">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.tranche.bis.label' | transloco }} </mat-label>
 
       <input readonly type="text" matInput formControlName="bis" data-testid="form-tranche-bis" />
@@ -134,7 +134,7 @@
   </div>
 
   <!-- Bemerkung -->
-  <mat-form-field dvSharedUiFormField class="md:tw-col-span-2">
+  <mat-form-field dvSharedUiFormField class="tw:md:col-span-2">
     <mat-label>{{ 'shared.form.tranche.bemerkung.label' | transloco }} </mat-label>
     <textarea
       readonly
@@ -147,21 +147,21 @@
   </mat-form-field>
 
   <!-- Zuständiger Sachbearbeiter -->
-  <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
     <mat-label>{{ 'shared.form.tranche.sachbearbeiter.label' | transloco }} </mat-label>
     <input readonly type="text" matInput formControlName="sachbearbeiter" data-testid="form-tranche-sachbearbeiter" />
   </mat-form-field>
 </form>
 
 <ng-container *dvIfSachbearbeiter>
-  <div class="tw-mt-8">
+  <div class="tw:mt-8">
     @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
     @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
     @let hasValidationErrors = !!einreichenStore.einreichenValidationResult().data?.validationErrors?.length;
     @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
       @if (abschlussPhase === 'NOT_READY' && specialValidationErrors.length === 0) {
         <div
-          class="alert alert-warning tw-mt-8 tw-flex tw-gap-2 xl:tw-max-w-3xl"
+          class="alert alert-warning tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
           role="alert"
           data-testid="alert-warning"
         >
@@ -171,7 +171,7 @@
       } @else if (abschlussPhase === 'NOT_READY') {
         @for (error of specialValidationErrors; track error) {
           <div
-            class="alert alert-danger tw-mt-8 tw-flex tw-gap-2 xl:tw-max-w-3xl"
+            class="alert alert-danger tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
             role="alert"
             data-testid="alert-danger"
           >
@@ -184,7 +184,7 @@
         }
       }
 
-      <div class="tw-mt-8 tw-flex tw-items-center tw-gap-8 xl:tw-max-w-3xl">
+      <div class="tw:mt-8 tw:flex tw:items-center tw:gap-8 tw:xl:max-w-3xl">
         <button
           class="btn btn-outline-primary flex-grow-1"
           data-testid="aenderung-reject"

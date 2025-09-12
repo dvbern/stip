@@ -4,5 +4,12 @@
   "sourceRoot": "libs/shared/model/eltern/src",
   "projectType": "library",
   "tags": ["type:model", "scope:shared"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/model/eltern/tsconfig.lib.json"
+      }
+    }
+  }
 }

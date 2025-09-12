@@ -3,5 +3,12 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/sozialdienst-app/assets/i18n/src",
   "tags": ["scope:sozialdienst-app", "type:assets"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/sozialdienst-app/assets/i18n/tsconfig.json"
+      }
+    }
+  }
 }

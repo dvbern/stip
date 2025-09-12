@@ -5,5 +5,12 @@
   "projectType": "library",
   "tags": ["type:model", "scope:sachbearbeitung-app"],
   "// targets": "to see all targets run: nx show project sachbearbeitung-app-model-verfuegung --web",
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/sachbearbeitung-app/model/verfuegung/tsconfig.lib.json"
+      }
+    }
+  }
 }

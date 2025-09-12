@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -25,7 +24,6 @@ import {
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-create-buchhaltungs-korrektur',
   imports: [
-    CommonModule,
     TranslocoPipe,
     ReactiveFormsModule,
     MaskitoDirective,

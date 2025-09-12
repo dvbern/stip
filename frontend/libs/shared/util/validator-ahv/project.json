@@ -4,5 +4,12 @@
   "sourceRoot": "libs/shared/util/validator-ahv/src",
   "projectType": "library",
   "tags": ["scope:shared", "type:util"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/util/validator-ahv/tsconfig.lib.json"
+      }
+    }
+  }
 }

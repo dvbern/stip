@@ -1,6 +1,6 @@
 <dv-shared-pattern-main-layout *transloco="let t">
-  <div class="container tw-relative tw-my-12 tw-justify-between">
-    <h1 class="tw-mb-8">
+  <div class="tw:relative tw:my-12 tw:justify-between container">
+    <h1 class="tw:!mb-8">
       {{ t('shared.auszahlung.title') }}
     </h1>
     <dv-shared-ui-auszahlung
@@ -15,28 +15,28 @@
   <div dvMobileNavContent></div>
 
   <!-- DESKTOP HEADER (LEFT) -->
-  <div dvHeaderDesktopLeft class="tw-flex tw-flex-grow tw-items-center tw-gap-4">
+  <div dvHeaderDesktopLeft class="tw:flex tw:grow tw:items-center tw:gap-4">
     <a
       [routerLink]="['/']"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="gesuch-step-nav-dashboard"
     >
-      <i class="material-symbols-rounded text-white me-2">dashboard</i>
+      <i class="material-symbols-rounded me-2 text-white">dashboard</i>
       <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
 
     @let fallId = fallIdSig();
     <a
       [routerLink]="['/auszahlung', fallId]"
-      class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none active"
+      class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
       data-testid="gesuch-step-nav-auszahlung"
       [class.disabled]="!fallId"
     >
-      <i class="material-symbols-rounded text-white me-2">account_balance_wallet</i>
+      <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
       <span>{{ t('shared.menu.auszahlung') }}</span>
     </a>
   </div>
 
   <!-- DESKTOP HEADER (RIGHT) -->
-  <div dvHeaderDesktopRight class="d-flex gap-4 align-items-center"></div>
+  <div dvHeaderDesktopRight class="d-flex align-items-center gap-4"></div>
 </dv-shared-pattern-main-layout>

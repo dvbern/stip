@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -47,7 +46,6 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
 
 @Component({
   imports: [
-    CommonModule,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
