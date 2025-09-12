@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -220,7 +221,7 @@ public class AusbildungSeeding extends Seeder {
                                 .findFirst();
 
                             if (abschlussOpt.isEmpty()) {
-                                LOG.warn(
+                                handleMissingOrMismatchingEntries(
                                     String.format(
                                         "Could not find Abschluss %s in seeded abschluesse",
                                         abschlussBezeichnungDe
@@ -229,7 +230,7 @@ public class AusbildungSeeding extends Seeder {
                                 return null;
                             }
                             if (ausbildungsstaetteOpt.isEmpty()) {
-                                LOG.warn(
+                                handleMissingOrMismatchingEntries(
                                     String.format(
                                         "Could not find Ausbildungsstaette %s in seeded Ausbildungsstaetten",
                                         ausbildungsstaetteNameDe
@@ -246,6 +247,15 @@ public class AusbildungSeeding extends Seeder {
                     .filter(Objects::nonNull)
                     .toList();
             }
+        }
+    }
+
+    private void handleMissingOrMismatchingEntries(String message) {
+        final var currentProfile = ConfigUtils.getProfiles().get(0);
+        if (currentProfile.equals("prod")) {
+            LOG.error(message);
+        } else {
+            throw new RuntimeException(message);
         }
     }
 }
