@@ -251,11 +251,11 @@ public class AusbildungSeeding extends Seeder {
     }
 
     private void handleMissingOrMismatchingEntries(String message) {
-        final var currentProfile = ConfigUtils.getProfiles().get(0);
-        if (currentProfile.equals("prod")) {
-            LOG.error(message);
-        } else {
+        final var currentProfile = ConfigUtils.getProfiles().getFirst();
+        if (currentProfile.equals("dev")) {
             throw new RuntimeException(message);
+        } else {
+            LOG.error(message);
         }
     }
 }
