@@ -97,7 +97,6 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
   templateUrl: './sachbearbeitung-app-feature-druckzentrum.component.html',
   styleUrl: './sachbearbeitung-app-feature-druckzentrum.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DruckauftragStore],
 })
 export class SachbearbeitungAppFeatureDruckzentrumComponent {
   private router = inject(Router);
@@ -202,7 +201,7 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
     });
   }
 
-  loading = computed(() => false);
+  // loading = computed(() => false);
   totalEntriesSig = computed(() => {
     return (
       this.druckauftragStore.cachedDruckauftragListViewSig().druckauftraege

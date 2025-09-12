@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { BuchhaltungStore } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
+import { DruckauftragStore } from '@dv/sachbearbeitung-app/data-access/druckauftrag';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
@@ -59,6 +60,7 @@ export const appRoutes: Route[] = [
       {
         path: 'druckzentrum',
         title: 'sachbearbeitung-app.druckzentrum.title',
+        providers: [DruckauftragStore],
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/druckzentrum').then(
             (m) => m.sachbearbeitungAppFeatureDruckzentrumRoutes,

@@ -18,14 +18,22 @@ import {
   isPending,
 } from '@dv/shared/util/remote-data';
 
+export interface DruckEntry {
+  versendet: boolean;
+  gesuch: string;
+  nachname: string;
+  vorname: string;
+  adressat: string;
+}
+
 type DruckauftragState = {
   cachedPaginatedDruckauftraege: CachedRemoteData<PaginatedDruckauftraege>;
-  druckauftrag: RemoteData<unknown>;
+  druckEntry: RemoteData<unknown>;
 };
 
 const initialState: DruckauftragState = {
   cachedPaginatedDruckauftraege: initial(),
-  druckauftrag: initial(),
+  druckEntry: initial(),
 };
 
 @Injectable()
@@ -42,8 +50,11 @@ export class DruckauftragStore extends signalStore(
     };
   });
 
-  druckauftragViewSig = computed(() => {
-    return this.druckauftrag.data();
+  druckEntryViewSig = computed(() => {
+    return {
+      druckEntry: this.druckEntry(),
+      loading: isPending(this.druckEntry()),
+    };
   });
 
   getAllDruckauftraege$ =

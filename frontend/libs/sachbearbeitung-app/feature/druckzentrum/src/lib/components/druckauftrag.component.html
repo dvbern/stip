@@ -1,0 +1,172 @@
+<dv-sachbearbeitung-app-pattern-overview-layout>
+  <div class="container">
+    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="druckauftrag-title">
+      {{ 'sachbearbeitung-app.druckauftrag.title' | transloco }}
+    </h1>
+
+    <div class="tw-my-6">
+      <div class="tw-dv-table tw-relative">
+        <div [class.opacity-50]="druckauftragStore.druckEntryViewSig().loading">
+          <!-- filter form (header filters) -->
+          <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+            <table
+              class="tw-w-full tw-table-fixed"
+              [dvSharedUiFocusableList]="items"
+              [dataSource]="druckauftragDataSourceSig()"
+              data-testid="sachbearbeitung-app.druckauftrag.table"
+              mat-table
+              matSort
+              tabindex="0"
+            >
+              <caption class="cdk-visually-hidden">
+                {{
+                  'sachbearbeitung-app.druckauftrag.table.description' | transloco
+                }}
+              </caption>
+
+              <!-- Versendet: filterable, filter is a dropdown, checkbox in cell  -->
+              <ng-container matColumnDef="Versendet">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
+                  <label for="versendet">{{ 'sachbearbeitung-app.druckauftrag.table.versendet' | transloco }}</label>
+                  <div class="tw-relative tw-flex">
+                    <mat-form-field class="tw-w-full">
+                      <mat-select
+                        id="versendet"
+                        formControlName="versendet"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                        [placeholder]="'sachbearbeitung-app.druckauftrag.table.versendet.filter.alle' | transloco"
+                      >
+                        <mat-option [value]="undefined">{{
+                          'sachbearbeitung-app.druckauftrag.table.versendet.filter.alle' | transloco
+                        }}</mat-option>
+                        <mat-option [value]="true">{{
+                          'sachbearbeitung-app.druckauftrag.table.versendet.filter.ja' | transloco
+                        }}</mat-option>
+                        <mat-option [value]="false">{{
+                          'sachbearbeitung-app.druckauftrag.table.versendet.filter.nein' | transloco
+                        }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
+                  class="tw-w-24 tw-whitespace-nowrap"
+                >
+                  <mat-checkbox [checked]="item.versendet" disabled></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Gesuch">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                  <label for="gesuch">{{ 'sachbearbeitung-app.druckauftrag.table.gesuch' | transloco }}</label>
+                  <div class="tw-relative tw-flex">
+                    <mat-form-field class="tw-w-full">
+                      <input
+                        id="gesuch"
+                        matInput
+                        formControlName="gesuch"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      (clear)="filterForm.controls.gesuch.reset()"
+                      [valueSig]="filterForm.controls.gesuch.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
+                  class="tw-w-32 tw-whitespace-nowrap"
+                  [dvTruncateTooltip]="item.gesuch"
+                >
+                  {{ item.gesuch }}
+                </td>
+              </ng-container>
+
+              <!-- Nachname: A non sortable, non searchable column -->
+              <ng-container matColumnDef="Nachname">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                  <div class="tw-flex">
+                    {{ 'sachbearbeitung-app.druckauftrag.table.nachname' | transloco }}
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
+                  class="tw-w-32 tw-whitespace-nowrap"
+                  [dvTruncateTooltip]="item.nachname"
+                >
+                  {{ item.nachname }}
+                </td>
+              </ng-container>
+
+              <!-- Vorname: A non sortable, non searchable column -->
+              <ng-container matColumnDef="Vorname">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                  {{ 'sachbearbeitung-app.druckauftrag.table.vorname' | transloco }}
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
+                  class="tw-w-32 tw-whitespace-nowrap"
+                  [dvTruncateTooltip]="item.vorname"
+                >
+                  {{ item.vorname }}
+                </td>
+              </ng-container>
+
+              <!-- Adressat: A non sortable, non searchable column -->
+              <ng-container matColumnDef="Adressat">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                  {{ 'sachbearbeitung-app.druckauftrag.table.adressat' | transloco }}
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
+                  class="tw-w-32 tw-whitespace-nowrap"
+                  [dvTruncateTooltip]="item.adressat"
+                >
+                  {{ item.adressat }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                dvSharedUiFocusableListItem
+                mat-row
+                tabindex="-1"
+                *dvMatRowDef="let item; dataSource: druckauftragDataSourceSig(); columns: displayedColumns"
+                class="highlightable"
+              ></tr>
+              <tr class="mat-mdc-row" *matNoDataRow>
+                <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                  {{ 'shared.table.noData' | transloco }}
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              showFirstLastButtons
+              [pageSizeOptions]="pageSizes"
+              [pageSize]="defaultPageSize"
+              [length]="druckauftragDataSourceSig().data.length"
+              showFirstLastButtons
+            ></mat-paginator>
+          </form>
+        </div>
+        @if (druckauftragStore.druckEntryViewSig().loading) {
+          <dv-shared-ui-loading
+            class="position-absolute top-50 start-50 translate-middle"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </div>
+    </div>
+  </div>
+</dv-sachbearbeitung-app-pattern-overview-layout>

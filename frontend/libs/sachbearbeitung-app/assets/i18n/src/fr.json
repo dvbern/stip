@@ -434,6 +434,17 @@
   "sachbearbeitung-app.druckzentrum.quick-filter.ALLE_ARCHIVIERT": "Ordres d'impression archivés",
   "sachbearbeitung-app.druckzentrum.quick-filter.ALLE_FEHLERHAFTE_GENERIERUNG": "Fehlerhafte ordres d'impression",
 
+  "sachbearbeitung-app.druckauftrag.title": "Ordre d'impression",
+  "sachbearbeitung-app.druckauftrag.table.description": "Aperçu de tous les ordres d'impression",
+  "sachbearbeitung-app.druckauftrag.table.versendet": "Envoyé",
+  "sachbearbeitung-app.druckauftrag.table.versendet.filter.alle": "Tous",
+  "sachbearbeitung-app.druckauftrag.table.versendet.filter.ja": "Envoyé",
+  "sachbearbeitung-app.druckauftrag.table.versendet.filter.nein": "Non envoyé",
+  "sachbearbeitung-app.druckauftrag.table.gesuch": "Demande",
+  "sachbearbeitung-app.druckauftrag.table.nachname": "Nom de famille",
+  "sachbearbeitung-app.druckauftrag.table.vorname": "Prénom",
+  "sachbearbeitung-app.druckauftrag.table.adressat": "Destinataire",
+
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}{{ type }} à la tranche {{ index }}",

@@ -23,21 +23,3 @@ export interface Druckauftrag {
 
 
 
-const test ={
-entries: [
-    {
-        id: '123',
-        batchName: 'Batch',
-        bearbeiter: 'Severin',
-        timestampErstellt: '2025-09-11T12:51:03.959Z',
-        druckauftragStatus: 'VERSANDBEREIT',
-        druckauftragTyp: 'VERFUEGUNG'
-    }
-    ],
-    page: 1,
-    pageSize: 1,
-    totalEntries: 1,
-}
-
-
-

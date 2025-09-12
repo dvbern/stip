@@ -266,7 +266,7 @@
             ></mat-paginator>
           </form>
         </div>
-        @if (loading()) {
+        @if (druckauftragStore.cachedDruckauftragListViewSig().loading) {
           <dv-shared-ui-loading
             class="position-absolute top-50 start-50 translate-middle"
             [type]="'compact'"

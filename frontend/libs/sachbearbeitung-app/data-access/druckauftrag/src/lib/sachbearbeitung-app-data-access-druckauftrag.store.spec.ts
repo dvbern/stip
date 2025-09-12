@@ -18,7 +18,7 @@ describe('DruckauftragStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.druckauftrag()).toEqual({
+    expect(store.cachedPaginatedDruckauftraege()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

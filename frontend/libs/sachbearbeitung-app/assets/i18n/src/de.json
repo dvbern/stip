@@ -434,6 +434,17 @@
   "sachbearbeitung-app.druckzentrum.quick-filter.ALLE_ARCHIVIERT": "Archivierte Druckaufträge",
   "sachbearbeitung-app.druckzentrum.quick-filter.ALLE_FEHLERHAFTE_GENERIERUNG": "Fehlerhafte Druckaufträge",
 
+  "sachbearbeitung-app.druckauftrag.title": "Druckauftrag",
+  "sachbearbeitung-app.druckauftrag.table.description": "Übersicht aller Dokumente in diesem Druckauftrag",
+  "sachbearbeitung-app.druckauftrag.table.versendet": "Versendet",
+  "sachbearbeitung-app.druckauftrag.table.versendet.filter.alle": "Alle",
+  "sachbearbeitung-app.druckauftrag.table.versendet.filter.ja": "versendet",
+  "sachbearbeitung-app.druckauftrag.table.versendet.filter.nein": "Nicht versendet",
+  "sachbearbeitung-app.druckauftrag.table.gesuch": "Gesuch",
+  "sachbearbeitung-app.druckauftrag.table.nachname": "Nachname",
+  "sachbearbeitung-app.druckauftrag.table.vorname": "Vorname",
+  "sachbearbeitung-app.druckauftrag.table.adressat": "Adressat",
+
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
