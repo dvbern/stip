@@ -35,5 +35,5 @@ export class SharedUiDashboardCompactAusbildungComponent {
   deleteAenderung = output<string>();
   aenderungMelden = output<AenderungMelden>();
 
-  @HostBinding('class') defaultClasses = 'tw-block';
+  @HostBinding('class') defaultClasses = 'tw:block';
 }

@@ -4,17 +4,17 @@
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
     <dv-shared-pattern-app-header (closeSidenav)="sidenav.close()" (openSidenav)="sidenav.open()">
-      <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+      <div dvHeaderDesktopLeft class="d-flex align-items-center gap-3">
         <a
           routerLink="/"
-          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
           data-testid="gesuch-step-nav-overview"
         >
-          <i class="material-symbols-rounded text-white me-2">list</i>
+          <i class="material-symbols-rounded me-2 text-white">list</i>
           <span>{{ 'sozialdienst-app.header.antraege' | transloco }}</span>
         </a>
-        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
-          <i class="material-symbols-rounded text-white me-2">assignment_ind</i>
+        <div class="active btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none">
+          <i class="material-symbols-rounded me-2 text-white">assignment_ind</i>
           <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
         </div>
       </div>
@@ -26,17 +26,17 @@
         <div class="gray-bg"></div>
       </div>
 
-      <div class="container tw-relative tw-my-12 tw-justify-between">
-        <h1 class="tw-mb-8 tw-text-white">
+      <div class="tw:relative tw:my-12 tw:justify-between container">
+        <h1 class="tw:!mb-8 tw:!text-white">
           {{ 'sozialdienst-app.dashboard.welcome.title' | transloco: { name: benutzerNameSig() } }}
         </h1>
 
         @let dashboard = dashboardStore.dashboardViewSig();
         @if (dashboard) {
           @let fall = dashboard.fall;
-          <div class="tw-grid tw-grid-cols-1 tw-gap-16 lg:tw-grid-cols-[2fr,1fr]">
+          <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]">
             <!-- main column -->
-            <div class="tw-flex tw-flex-col tw-gap-8">
+            <div class="tw:flex tw:flex-col tw:gap-8">
               @if (dashboard.activeAusbildungen.length > 0) {
                 @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
                   <dv-shared-ui-dashboard-ausbildung
@@ -52,7 +52,7 @@
                   data-testid="cockpit-create-ausbildung"
                   type="button"
                   (click)="createAusbildung(fall.id)"
-                  class="btn btn-danger d-flex align-items-center tw-w-max"
+                  class="btn btn-danger d-flex align-items-center tw:w-max"
                 >
                   <dv-shared-ui-icon-chip>
                     <i class="material-symbols-rounded">add</i>
@@ -68,22 +68,22 @@
             </div>
 
             <!-- side column -->
-            <div class="tw-flex tw-flex-col tw-gap-8 lg:tw-mb-8">
+            <div class="tw:flex tw:flex-col tw:gap-8 tw:lg:mb-8">
               <!-- NACHRICHTEN -->
-              <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
+              <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
                 <dv-shared-ui-notifications [notifications]="dashboard.notifications"></dv-shared-ui-notifications>
               </div>
 
               <!-- INFOS -->
-              <div class="tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-md">
-                <h3 class="tw-mb-4">Allgemeine Informationen</h3>
+              <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
+                <h3 class="tw:!mb-4">Allgemeine Informationen</h3>
                 <p>
                   Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
                   Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
                   Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
                   sind und weitere nützliche Grundlagen.
                 </p>
-                <a class="btn btn-outline-primary tw-mt-3 tw-w-full"> Stipendien und Darlehen </a>
+                <a class="btn btn-outline-primary tw:mt-3 tw:w-full"> Stipendien und Darlehen </a>
               </div>
             </div>
           </div>
@@ -95,10 +95,10 @@
       <div class="mobile-nav-content"></div>
 
       <!-- DESKTOP HEADER (LEFT) -->
-      <div class="header-desktop-left d-flex flex-grow-1 ms-3"></div>
+      <div class="header-desktop-left d-flex ms-3 flex-grow-1"></div>
 
       <!-- DESKTOP HEADER (RIGHT) -->
-      <div class="header-desktop-right d-flex gap-4 align-items-center"></div>
+      <div class="header-desktop-right d-flex align-items-center gap-4"></div>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

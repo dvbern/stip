@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,7 +49,6 @@ type AddresseFormGroup = FormGroup<{
 @Component({
   selector: 'dv-shared-ui-form-address',
   imports: [
-    CommonModule,
     TranslocoPipe,
     FormsModule,
     ReactiveFormsModule,

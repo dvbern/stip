@@ -1,8 +1,8 @@
 <div class="container mt-3">
   <p>{{ 'sachbearbeitung-app.admin.euEftaLaender.description' | transloco }}</p>
 
-  <div class="tw-dv-table">
-    <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+  <div class="tw:dv-table">
+    <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
       <table mat-table [dataSource]="countryDataSourceSig()" matSort>
         <caption class="cdk-visually-hidden">
           {{
@@ -12,16 +12,16 @@
 
         <!-- ISO3 Code -->
         <ng-container matColumnDef="iso3code">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
             <label class="pe-none" for="fallNummer">
               {{ 'sachbearbeitung-app.admin.euEftaLaender.iso3.label' | transloco }}
             </label>
-            <div class="tw-relative tw-flex">
+            <div class="tw:relative tw:flex">
               <mat-form-field>
                 <input
                   matInput
                   [dvMaxLength]="'small'"
-                  class="tw-w-full"
+                  class="tw:w-full"
                   formControlName="iso3code"
                   data-testid="eu-efta-laender-iso3"
                   (click)="$event.stopPropagation()"
@@ -29,7 +29,7 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                 (clear)="filterForm.controls.iso3code.reset()"
                 [valueSig]="filterForm.controls.iso3code.value"
               ></dv-shared-ui-clear-button>
@@ -40,16 +40,16 @@
 
         <!-- De Kurzform -->
         <ng-container matColumnDef="deKurzform">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-60 tw:whitespace-nowrap">
             <label class="pe-none" for="fallNummer">
               {{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | transloco }}
             </label>
-            <div class="tw-relative tw-flex">
+            <div class="tw:relative tw:flex">
               <mat-form-field>
                 <input
                   matInput
                   [dvMaxLength]="'small'"
-                  class="tw-w-full"
+                  class="tw:w-full"
                   formControlName="deKurzform"
                   data-testid="eu-efta-laender-deKurzform"
                   (click)="$event.stopPropagation()"
@@ -57,7 +57,7 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                 (clear)="filterForm.controls.deKurzform.reset()"
                 [valueSig]="filterForm.controls.deKurzform.value"
               ></dv-shared-ui-clear-button>
@@ -68,16 +68,16 @@
 
         <!-- Fr Kurzform -->
         <ng-container matColumnDef="frKurzform">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-60 tw-whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-60 tw:whitespace-nowrap">
             <label class="pe-none" for="fallNummer">
               {{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | transloco }}
             </label>
-            <div class="tw-relative tw-flex">
+            <div class="tw:relative tw:flex">
               <mat-form-field>
                 <input
                   matInput
                   [dvMaxLength]="'small'"
-                  class="tw-w-full"
+                  class="tw:w-full"
                   formControlName="frKurzform"
                   data-testid="eu-efta-laender-frKurzform"
                   (click)="$event.stopPropagation()"
@@ -85,7 +85,7 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                 (clear)="filterForm.controls.frKurzform.reset()"
                 [valueSig]="filterForm.controls.frKurzform.value"
               ></dv-shared-ui-clear-button>
@@ -96,14 +96,14 @@
 
         <!-- Eintrag Gueltig -->
         <ng-container matColumnDef="eintragGueltig">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="filtered tw-whitespace-nowrap">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="filtered tw:whitespace-nowrap">
             {{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.label' | transloco }}
-            <mat-form-field class="tw-w-full">
+            <mat-form-field class="tw:w-full">
               <mat-select
                 [aria-label]="'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.label' | transloco"
                 formControlName="eintragGueltig"
                 (click)="$event.stopPropagation()"
-                class="!tw-font-normal"
+                class="tw:!font-normal"
                 [placeholder]="'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.OFF' | transloco"
                 panelClass="table-select"
               >
@@ -126,14 +126,14 @@
 
         <!-- EU/Efta -->
         <ng-container matColumnDef="isEuEfta">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="filtered tw-w-44 tw-whitespace-nowrap">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="filtered tw:w-44 tw:whitespace-nowrap">
             {{ 'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.label' | transloco }}
-            <mat-form-field class="tw-w-full">
+            <mat-form-field class="tw:w-full">
               <mat-select
                 [aria-label]="'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.label' | transloco"
                 formControlName="isEuEfta"
                 (click)="$event.stopPropagation()"
-                class="!tw-font-normal"
+                class="tw:!font-normal"
                 [placeholder]="'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.OFF' | transloco"
                 panelClass="table-select"
               >
@@ -163,7 +163,7 @@
               [attr.aria-label]="'sachbearbeitung-app.admin.euEftaLaender.create' | transloco"
               (click)="openDialog()"
             >
-              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+              <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
             </button>
           </th>
           <td mat-cell *dvMatCellDef="let country; dataSource: countryDataSourceSig()">

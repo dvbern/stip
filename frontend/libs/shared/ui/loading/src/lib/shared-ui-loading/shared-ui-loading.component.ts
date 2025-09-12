@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,7 +9,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 @Component({
   standalone: true,
   selector: 'dv-shared-ui-loading',
-  imports: [CommonModule, TranslocoDirective],
+  imports: [TranslocoDirective],
   templateUrl: './shared-ui-loading.component.html',
   styleUrl: './shared-ui-loading.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

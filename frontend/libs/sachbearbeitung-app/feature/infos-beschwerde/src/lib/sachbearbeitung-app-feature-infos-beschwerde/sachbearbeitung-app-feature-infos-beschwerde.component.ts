@@ -1,7 +1,7 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   computed,
   effect,
   inject,
@@ -23,7 +23,6 @@ const ALL_TABS = ['verlauf', 'verwaltung'] as const;
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos-beschwerde',
   imports: [
-    CommonModule,
     RouterLink,
     RouterOutlet,
     MatTabsModule,

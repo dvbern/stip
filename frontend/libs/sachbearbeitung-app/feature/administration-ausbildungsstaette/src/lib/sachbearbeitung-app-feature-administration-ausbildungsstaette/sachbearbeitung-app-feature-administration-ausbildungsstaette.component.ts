@@ -1,7 +1,7 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   computed,
   inject,
 } from '@angular/core';
@@ -20,13 +20,7 @@ const ALL_TABS = [
 ] as const;
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-ausbildungsstaette',
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    RouterLink,
-    MatTabsModule,
-    TranslocoPipe,
-  ],
+  imports: [RouterOutlet, RouterLink, MatTabsModule, TranslocoPipe],
   templateUrl:
     './sachbearbeitung-app-feature-administration-ausbildungsstaette.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

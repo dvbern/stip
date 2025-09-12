@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -37,7 +36,6 @@ const MIN_EDUCATION_AGE = 16;
 @Component({
   selector: 'dv-shared-feature-gesuch-form-lebenslauf',
   imports: [
-    CommonModule,
     SharedFeatureGesuchFormLebenslaufEditorComponent,
     TranslocoPipe,
     TwoColumnTimelineComponent,

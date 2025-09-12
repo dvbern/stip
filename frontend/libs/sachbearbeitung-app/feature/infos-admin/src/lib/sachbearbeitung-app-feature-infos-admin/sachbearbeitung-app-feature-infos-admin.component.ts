@@ -1,7 +1,7 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   computed,
   inject,
 } from '@angular/core';
@@ -21,13 +21,7 @@ const ALL_TABS = [
   'ausbildung-abschliessen',
 ] as const;
 @Component({
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterOutlet,
-    TranslocoPipe,
-    MatTabsModule,
-  ],
+  imports: [RouterLink, RouterOutlet, TranslocoPipe, MatTabsModule],
   providers: [paginatorTranslationProvider()],
   templateUrl: './sachbearbeitung-app-feature-infos-admin.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

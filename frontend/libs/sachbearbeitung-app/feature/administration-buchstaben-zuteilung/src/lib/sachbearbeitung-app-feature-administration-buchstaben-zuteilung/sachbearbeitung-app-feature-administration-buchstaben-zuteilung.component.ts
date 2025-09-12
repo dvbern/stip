@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -48,7 +47,6 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
   selector:
     'dv-sachbearbeitung-app-feature-administration-buchstaben-zuteilung',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MaskitoDirective,
     MatFormFieldModule,

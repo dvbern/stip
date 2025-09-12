@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -25,7 +24,6 @@ export interface ReplaceSozialdienstAdminDialogResult {
 
 @Component({
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
