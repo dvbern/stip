@@ -116,7 +116,7 @@ public class DelegierenService {
         final var auszahlung = delegierung.getDelegierterFall().getAuszahlung();
         notificationService.createDelegierungAufgeloestNotification(delegierung);
 
-        if (auszahlung.isAuszahlungAnSozialdienst()) {
+        if (auszahlung.isAuszahlungAnSozialdienst() && delegierung.getSozialdienst().getZahlungsverbindung() != null) {
             var zahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
                 delegierung.getSozialdienst().getZahlungsverbindung()
             );
