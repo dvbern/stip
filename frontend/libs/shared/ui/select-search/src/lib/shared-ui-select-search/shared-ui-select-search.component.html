@@ -18,6 +18,7 @@
     [formControl]="form.controls.select"
     [attr.data-testid]="testIdSig()"
     [placeholder]="'shared.form.select.empty' | transloco"
+    [compareWith]="compareById"
   >
     <mat-option>
       <ngx-mat-select-search

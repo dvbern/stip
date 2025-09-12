@@ -36,7 +36,7 @@ import {
 
 import { Language } from '@dv/shared/model/language';
 import { LookupType } from '@dv/shared/model/select-search';
-import { capitalized } from '@dv/shared/model/type-util';
+import { capitalized, compareById } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -237,6 +237,8 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
 
     return displayValue(previousValue);
   });
+
+  compareById = compareById;
 
   // ControlValueAccessor methods - only deals with string IDs
   private onChange: (value: string | undefined) => void = () => {
