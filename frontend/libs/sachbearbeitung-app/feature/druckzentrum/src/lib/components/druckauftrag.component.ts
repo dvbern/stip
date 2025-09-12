@@ -6,6 +6,7 @@ import {
   ViewChildren,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -28,6 +29,7 @@ import {
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -71,6 +73,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
     TypeSafeMatRowDefDirective,
     SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiIconChipComponent,
+    SharedUiDownloadButtonDirective,
   ],
 })
 export class DruckauftragComponent {
@@ -78,6 +81,8 @@ export class DruckauftragComponent {
 
   druckauftragStore = inject(DruckauftragStore);
   formBuilder = inject(FormBuilder);
+
+  druckEntryId = input<string | undefined>(undefined);
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;

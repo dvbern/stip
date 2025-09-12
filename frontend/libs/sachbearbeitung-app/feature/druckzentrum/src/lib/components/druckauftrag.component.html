@@ -4,6 +4,40 @@
       {{ 'sachbearbeitung-app.druckauftrag.title' | transloco }}
     </h1>
 
+    <div class="tw-flex tw-items-center tw-justify-between">
+      <!-- Auftraggeber Details -->
+      <div>Auftraggeber:....</div>
+
+      <!-- download button -->
+      <div>
+        <button
+          type="button"
+          class="btn btn-link tw:flex tw:max-w-full tw:p-0"
+          [attr.aria-label]="'sachbearbeitung-app.infos.admin.verfuegung.table.dokument' | transloco"
+        >
+          <span class="tw:truncate tw:text-sm/none" [title]="">todo: filename</span>
+          <span class="material-symbols-rounded -tw:mt-0.5 tw:align-middle tw:text-lg/none tw-ml-1">download</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="tw:flex tw:items-center tw:justify-between">
+      <!-- Auftraggeber Details -->
+      <div>Auftraggeber:....</div>
+
+      <!-- download button -->
+      <div>
+        <button
+          type="button"
+          class="btn btn-link tw:flex tw:max-w-full tw:p-0"
+          [attr.aria-label]="'sachbearbeitung-app.infos.admin.verfuegung.table.dokument' | transloco"
+        >
+          <span class="tw:truncate tw:text-sm/none" [title]="">todo: filename</span>
+          <span class="material-symbols-rounded -tw:mt-0.5 tw:ml-1 tw:align-middle tw:text-lg/none">download</span>
+        </button>
+      </div>
+    </div>
+
     <div class="tw:my-6">
       <div class="tw:dv-table tw:relative">
         <div [class.opacity-50]="druckauftragStore.druckEntryViewSig().loading">
@@ -91,10 +125,8 @@
 
               <!-- Nachname: A non sortable, non searchable column -->
               <ng-container matColumnDef="Nachname">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
-                  <div class="tw:flex">
-                    {{ 'sachbearbeitung-app.druckauftrag.table.nachname' | transloco }}
-                  </div>
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
+                  {{ 'sachbearbeitung-app.druckauftrag.table.nachname' | transloco }}
                 </th>
                 <td
                   mat-cell
@@ -108,7 +140,7 @@
 
               <!-- Vorname: A non sortable, non searchable column -->
               <ng-container matColumnDef="Vorname">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
                   {{ 'sachbearbeitung-app.druckauftrag.table.vorname' | transloco }}
                 </th>
                 <td
@@ -123,7 +155,7 @@
 
               <!-- Adressat: A non sortable, non searchable column -->
               <ng-container matColumnDef="Adressat">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
                   {{ 'sachbearbeitung-app.druckauftrag.table.adressat' | transloco }}
                 </th>
                 <td
