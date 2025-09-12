@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +7,7 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-version-text',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './shared-ui-version-text.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

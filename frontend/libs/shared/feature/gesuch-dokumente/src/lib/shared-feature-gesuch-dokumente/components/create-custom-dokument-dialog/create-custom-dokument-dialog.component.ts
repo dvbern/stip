@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -24,7 +23,6 @@ export type CustomDokumentDialogResult = {
 @Component({
   selector: 'dv-create-custom-dokument-dialog',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,

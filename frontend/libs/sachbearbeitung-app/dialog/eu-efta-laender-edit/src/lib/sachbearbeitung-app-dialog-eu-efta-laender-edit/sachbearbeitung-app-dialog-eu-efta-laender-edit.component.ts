@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   FormsModule,
@@ -35,7 +34,6 @@ export type EuEftaLandEditData = {
   selector: 'dv-sachbearbeitung-app-dialog-eu-efta-laender-edit',
   standalone: true,
   imports: [
-    CommonModule,
     TranslocoPipe,
     FormsModule,
     MatError,

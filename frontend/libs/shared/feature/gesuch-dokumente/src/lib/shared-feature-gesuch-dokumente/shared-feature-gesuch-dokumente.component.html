@@ -3,13 +3,13 @@
 @let customDokumente = customDokumenteViewSig();
 
 <!-- unterschriftenblaetter -->
-<div class="tw-mt-6" *dvIfSachbearbeiter>
+<div class="tw:mt-6" *dvIfSachbearbeiter>
   @let additonalDokumente = additionalDokumenteViewSig();
   @if (additonalDokumente.showList) {
-    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente" class="tw-relative"></dv-additional-dokumente>
+    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente" class="tw:relative"></dv-additional-dokumente>
 
     @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
-      <div class="tw-relative tw-mt-6 tw-flex">
+      <div class="tw:relative tw:mt-6 tw:flex">
         <!-- button sendMissingDocuments -->
         <button
           type="button"
@@ -28,7 +28,7 @@
 <!-- gesuchDokumente -->
 @if (standardDokumente) {
   <dv-required-dokumente
-    class="tw-relative tw-mt-6"
+    class="tw:relative tw:mt-6"
     [dokumenteViewSig]="standardDokumente"
     (dokumentAblehnen)="dokumentAblehnen($event)"
     (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
@@ -40,7 +40,7 @@
 <!-- customDokumente -->
 @if (customDokumente.showList) {
   <dv-custom-dokumente
-    class="tw-relative tw-mt-6"
+    class="tw:relative tw:mt-6"
     [dokumenteViewSig]="customDokumente"
     [canCreateCustomDokumentTypSig]="canCreateCustomDokumentTypSig()"
     (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
@@ -51,7 +51,7 @@
   ></dv-custom-dokumente>
 }
 
-<div class="tw-mt-6 tw-flex" *dvIfSachbearbeiter>
+<div class="tw:mt-6 tw:flex" *dvIfSachbearbeiter>
   @if (canSBSendMissingDocumentsSig()) {
     <!-- button sendMissingDocuments -->
     <button

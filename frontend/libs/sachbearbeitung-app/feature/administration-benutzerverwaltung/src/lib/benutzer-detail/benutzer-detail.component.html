@@ -2,7 +2,7 @@
   [formGroup]="form"
   data-testid="form-benutzerverwaltung-form"
   novalidate
-  class="tw-dv-form-grid tw-mt-6"
+  class="tw:dv-form-grid tw:mt-6"
   (ngSubmit)="handleSubmit()"
 >
   @let controls = form.controls;
@@ -40,7 +40,7 @@
     </mat-form-field>
 
     <!-- Telefonnummer -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1">
       <mat-label>{{ 'shared.form.shared.phone.label' | transloco }}</mat-label>
       <input
         type="text"
@@ -79,7 +79,7 @@
     </mat-form-field>
 
     <!-- Funktion DE -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1">
       <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.funktionDe.label' | transloco }}</mat-label>
       <input
         type="text"
@@ -108,10 +108,10 @@
       </mat-error>
     </mat-form-field>
 
-    <h2 class="h4 tw-col-start-1 tw-pt-3">
+    <h2 class="h4 tw:col-start-1 tw:pt-3">
       {{ 'sachbearbeitung-app.admin.benutzerverwaltung.rollen.title' | transloco }}
     </h2>
-    <mat-selection-list [formControl]="controls.sachbearbeiterRollen" class="tw-col-start-1" [disableRipple]="true">
+    <mat-selection-list [formControl]="controls.sachbearbeiterRollen" class="tw:col-start-1" [disableRipple]="true">
       @for (role of availableRoles; track role) {
         <mat-list-option [value]="role" togglePosition="before">{{
           'shared.role.' + role | transloco
@@ -121,7 +121,7 @@
 
     @if (!form.disabled) {
       <dv-shared-ui-form-save
-        class="tw-col-start-1 tw-mt-4"
+        class="tw:col-start-1 tw:mt-4"
         [disabled]="form.invalid || form.pristine"
         [loading]="store.benutzer() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>

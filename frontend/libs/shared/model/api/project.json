@@ -4,5 +4,12 @@
   "sourceRoot": "libs/shared/model/api/src",
   "projectType": "library",
   "tags": ["type:model", "scope:shared"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/model/api/tsconfig.lib.json"
+      }
+    }
+  }
 }

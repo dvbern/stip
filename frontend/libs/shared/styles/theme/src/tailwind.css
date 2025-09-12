@@ -1,22 +1,39 @@
-@tailwind utilities;
-@tailwind components;
+@import 'tailwindcss' prefix(tw);
+@import './components/table.css';
 
-@layer utilities {
-  .max-w-half {
-    max-width: min(45vw, 547px);
+@layer base {
+  * {
+    border-style: none;
+  }
+  ul {
+    list-style: initial;
   }
 }
 
-@layer components {
-  .dv-table {
-    @apply tw-mt-6 tw-overflow-x-auto tw-rounded-xl tw-bg-white tw-pb-6 tw-shadow-sm;
-  }
+/*
+  .testing-library-fix
+  ====================
+  is used to prevent an issue wiht testing-library.nwsapi, it thorws the following error if
+  a html element has a class that has a classname which contains an ":" as the first classname:
 
-  .dv-form-grid {
-    @apply tw-grid tw-grid-cols-1 tw-gap-6 md:tw-grid-cols-2 lg:tw-grid-cols-3;
-  }
+  frontend/node_modules/nwsapi/src/nwsapi.js:1613:13
+  SyntaxError: 'div.tw,,,Acol-start-1 textarea[cols]' is not a valid selector
 
-  .dv-form-half {
-    @apply tw-flex tw-flex-col tw-gap-6 xl:tw-max-w-[50%];
-  }
+  This is a workaround to prevent this error by adding a normal classname as first classname.
+*/
+
+@utility max-w-half {
+  max-width: min(45vw, 547px);
+}
+
+@utility dv-table {
+  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm;
+}
+
+@utility dv-form-grid {
+  @apply tw:grid tw:grid-cols-1 tw:gap-6 tw:md:grid-cols-2 tw:lg:grid-cols-3;
+}
+
+@utility dv-form-half {
+  @apply tw:flex tw:flex-col tw:gap-6 tw:xl:max-w-[50%];
 }

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { VerfuegungOption } from '@dv/sachbearbeitung-app/model/verfuegung';
@@ -8,7 +7,6 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-verfuegung',
   imports: [
-    CommonModule,
     SachbearbeitungAppPatternVerfuegungLayoutComponent,
     SharedUiRouterOutletWrapperComponent,
   ],

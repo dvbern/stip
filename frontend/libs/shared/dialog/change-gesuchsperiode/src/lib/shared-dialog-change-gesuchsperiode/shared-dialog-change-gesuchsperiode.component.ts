@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -56,7 +55,6 @@ export type ChangeGesuchsperiodeDialogResult = {
 @Component({
   selector: 'dv-shared-dialog-change-gesuchsperiode',
   imports: [
-    CommonModule,
     TranslocoPipe,
     RouterLink,
     ReactiveFormsModule,

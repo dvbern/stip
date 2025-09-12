@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +19,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 @Component({
   selector: 'dv-shared-ui-notifications',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatPaginatorModule,
     SharedUiIconChipComponent,

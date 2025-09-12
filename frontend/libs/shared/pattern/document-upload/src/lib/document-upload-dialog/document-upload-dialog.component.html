@@ -1,12 +1,12 @@
-<div class="p-3 p-md-4" *dvTranslocoShared="let t">
+<div class="p-md-4 p-3" *dvTranslocoShared="let t">
   @let info = data.options.info;
-  <h4 class="d-flex align-content-center align-self-start title tw-mr-2">
-    <span class="p-1 me-2 text-info upload-icon material-symbols-rounded rounded-circle align-self-start">upload</span>
+  <h4 class="d-flex align-content-center align-self-start title tw:mr-2">
+    <span class="text-info upload-icon material-symbols-rounded rounded-circle align-self-start me-2 p-1">upload</span>
     <div [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"></div>
     <span class="flex-grow-1"></span>
     <button
       type="button"
-      class="dv-icon-button dv-icon-button-md position-absolute align-self-start top-0 end-0"
+      class="dv-icon-button dv-icon-button-md position-absolute align-self-start end-0 top-0"
       (click)="closeDialog()"
     >
       <span class="material-symbols-rounded align-middle">close</span>
@@ -15,21 +15,21 @@
 
   @if (info.description) {
     <div
-      class="tw-whitespace-pre-wrap tw-px-8"
+      class="tw:whitespace-pre-wrap tw:px-8"
       [innerHTML]="info.type === 'TEXT' ? info.description : t(info.description)"
     ></div>
   }
 
   @if (showUplaodSig()) {
     <dv-shared-ui-drop-file
-      class="p-3 bg-white d-flex align-items-center flex-column rounded-top-3 shadow border border-2 mt-4"
+      class="d-flex align-items-center flex-column rounded-top-3 mt-4 border border-2 bg-white p-3 shadow"
       [disabled]="data.store.isLoading()"
       [class.rounded-bottom-3]="!data.store.hasEntriesSig()"
       (filesDropped)="handleMultipleDocumentsAdded($event)"
     >
       <label class="upload" [class.disabled]="data.store.isLoading()">
         <div
-          class="text-center text-muted text-italic my-4 d-md-block d-none"
+          class="text-muted text-italic d-md-block d-none my-4 text-center"
           [innerHTML]="t('shared.file.dropZone')"
         ></div>
         <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
@@ -37,7 +37,7 @@
         </button>
         <input
           #fileInput
-          class="mb-2 cdk-visually-hidden"
+          class="cdk-visually-hidden mb-2"
           type="file"
           tabindex="-1"
           data-testid="file-input"
@@ -63,7 +63,7 @@
 </div>
 <div class="border-top border-2"></div>
 @if (uploadViewSig().isSachbearbeitungApp && uploadViewSig().dokumentModel.art === 'GESUCH_DOKUMENT') {
-  <div class="p-3 p-md-4">
+  <div class="p-md-4 p-3">
     <dv-shared-pattern-document-upload-approval
       [uploadViewSig]="uploadViewSig()"
     ></dv-shared-pattern-document-upload-approval>

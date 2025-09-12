@@ -47,7 +47,6 @@ import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -123,8 +122,8 @@ public class BerechnungService {
             throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
         }
 
-        final var actualDuration = wasEingereichtAfterDueDate(gesuch, gesuch.getEinreichedatum())
-            ? getActualDuration(gesuch, gesuch.getEinreichedatum())
+        final var actualDuration = DateUtil.wasEingereichtAfterDueDate(gesuch)
+            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
             : null;
 
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
@@ -352,25 +351,5 @@ public class BerechnungService {
         }
 
         return calculator.get().calculateStipendien(request);
-    }
-
-    boolean wasEingereichtAfterDueDate(final Gesuch gesuch, final LocalDate eingereicht) {
-        final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
-        return eingereicht.isAfter(einreichefrist);
-    }
-
-    int getActualDuration(final Gesuch gesuch, final LocalDate eingereicht) {
-        final var lastTranche = gesuch.getTranchenTranchen()
-            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
-            .orElseThrow(NotFoundException::new);
-
-        final var roundedEingereicht = DateUtil.roundToStartOrEnd(
-            eingereicht,
-            14,
-            true,
-            false
-        );
-
-        return DateUtil.getMonthsBetween(roundedEingereicht, lastTranche.getGueltigkeit().getGueltigBis());
     }
 }

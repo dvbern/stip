@@ -741,7 +741,7 @@
   "shared.auszahlung.create.success": "Die Auszahlung wurde erfolgreich erstellt.",
   "shared.auszahlung.update.success": "Die Auszahlung wurde erfolgreich bearbeitet.",
   "shared.form.auszahlung.goToAuszahlung.pre": "Die Auszahlungsdaten können im",
-  "shared.form.auszahlung.goToAuszahlung.linkText": "Auzahlunsgmenü",
+  "shared.form.auszahlung.goToAuszahlung.linkText": "Auszahlungsmenü",
   "shared.form.auszahlung.goToAuszahlung.post": " bearbeitet werden.",
   "shared.form.auszahlung.goToAuszahlung": "Auszahlung bearbeiten",
   "shared.form.auszahlung.anSozialidenst": "Auszahlung an Sozialdienst",
