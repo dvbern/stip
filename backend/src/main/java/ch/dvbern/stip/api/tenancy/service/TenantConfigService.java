@@ -31,6 +31,7 @@ public class TenantConfigService {
     public static final String WELCOME_MAIL_KC_QUERY_PARAMETER_PATH = "kstip.%s.welcome-mail.kc-query-parameter";
     public static final String WELCOME_MAIL_KC_EMAIL_SCOPE_PATH = "kstip.%s.welcome-mail.kc-scope";
     public static final String SOZIALDIENST_SEEDING = "kstip.%s.seeding.sozialdienste";
+    public static final String FRONTEND_URI = "kstip.%s.frontend-uri";
 
     private final TenantService tenantService;
 
@@ -75,5 +76,9 @@ public class TenantConfigService {
                 String.format(path, tenantService.getCurrentTenantIdentifier()),
                 String.class
             );
+    }
+
+    public String getFrontendURI() {
+        return forCurrentTenant(FRONTEND_URI);
     }
 }

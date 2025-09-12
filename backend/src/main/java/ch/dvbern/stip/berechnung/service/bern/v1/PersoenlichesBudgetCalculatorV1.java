@@ -76,6 +76,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setAnteilLebenshaltungskosten(
             calculateAnteilLebenshaltungskosten(List.of(familienbudget1, familienbudget2), antragssteller)
         );
+        result.setAnzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt());
 
         return result;
     }
@@ -104,6 +105,7 @@ public class PersoenlichesBudgetCalculatorV1 {
                 mapAndReturn(PersoenlichesBudgetresultatDto::setMedizinischeGrundversorgung, 0)
             );
         }
+        result.eigenerHaushalt(antragssteller.isEigenerHaushalt());
 
         int anzahlWochen = 0;
         if (!antragssteller.isEigenerHaushalt()) {
@@ -165,6 +167,8 @@ public class PersoenlichesBudgetCalculatorV1 {
                 2
             )
         );
+
+        result.setAnteilFamilienbudget(anteilFamilienbudget1 + anteilFamilienbudget2);
 
         final var wohnkostenAbhaengig = applyAndSum(haushaltToApply, result);
         final var verpflegung = applyAndSum(List.of(verpflegungApplier), result);
@@ -254,6 +258,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         );
 
         final var einnahmen = applyAndSum(toApply, result);
+        result.setSteuerbaresVermoegen(antragssteller.getVermoegen());
         result.setEinnahmenPersoenlichesBudget(einnahmen);
     }
 
