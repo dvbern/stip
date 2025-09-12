@@ -78,7 +78,7 @@ export class SharedPatternDocumentUploadComponent {
     { equal: (a, b) => a.dokument.dokumentTyp === b.dokument.dokumentTyp },
   );
 
-  @HostBinding('class') klass = 'tw-block tw-self-start tw-relative tw-h-14';
+  @HostBinding('class') klass = 'tw:block tw:self-start tw:relative tw:h-14';
 
   constructor() {
     // Load the gesuch step validity after the state of uploaded documents changes

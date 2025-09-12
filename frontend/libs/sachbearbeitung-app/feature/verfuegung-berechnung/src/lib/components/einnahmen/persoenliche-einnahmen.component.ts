@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -12,7 +11,6 @@ import { PersoenlicheBerechnung } from '../../../models';
 @Component({
   selector: 'dv-persoenliche-einnahmen',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
@@ -32,7 +30,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().nettoerwerbseinkommen | formatChfPositive }}
       </div>
     </div>
@@ -51,7 +49,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().eoLeistungen | formatChfPositive }}
       </div>
     </div>
@@ -62,7 +60,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().alimente | formatChfPositive }}
       </div>
     </div>
@@ -73,7 +71,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
       </div>
     </div>
@@ -84,7 +82,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().kinderUndAusbildungszulagen | formatChfPositive }}
       </div>
     </div>
@@ -95,7 +93,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
       </div>
     </div>
@@ -106,7 +104,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().beitraegeGemeindeInstitution | formatChfPositive }}
       </div>
     </div>
@@ -125,7 +123,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
       </div>
     </div>
@@ -136,7 +134,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().einkommenPartner | formatChfPositive }}
       </div>
     </div>
@@ -147,20 +145,20 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="mt-3 d-flex gap-2">
+    <div class="d-flex mt-3 gap-2">
       <div class="h4">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'
             | transloco
         }}
       </div>
-      <div class="h4 text-end flex-grow-1 text-nowrap">
+      <div class="h4 flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().total | formatChf }}
       </div>
     </div>

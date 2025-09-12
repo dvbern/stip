@@ -2,10 +2,10 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (gesuchsperiodenDatasourceSig(); as gesuchsperiodeSource) {
-    <h2 class="tw-my-6 tw-text-2xl">
+    <h2 class="tw:!my-6 tw:!text-2xl">
       {{ 'sachbearbeitung-app.admin.gesuchsperiode.title' | transloco }}
     </h2>
-    <div class="tw-dv-table">
+    <div class="tw:dv-table">
       <table
         mat-table
         [dataSource]="gesuchsperiodeSource"
@@ -69,7 +69,7 @@
               [routerLink]="['.', 'create']"
               class="btn btn-outline-primary btn-sm"
             >
-              <i class="material-symbols-rounded fs-4 tw-align-middle">add</i>
+              <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
             </a>
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">

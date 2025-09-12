@@ -9,18 +9,18 @@
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
-    class="tw-mt-6 tw-grid tw-min-w-[425px] tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-min-w-[640px] md:tw-grid-cols-2"
-    [class.lg:tw-grid-cols-3]="!fallIdSig()"
+    class="testing-library-fix tw:mt-6 tw:grid tw:min-w-[425px] tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:min-w-[640px] tw:md:grid-cols-2"
+    [class.tw:lg:grid-cols-3]="!fallIdSig()"
     (ngSubmit)="handleSave()"
   >
-    <h3 class="md:tw-col-span-2 lg:tw-col-span-3">
+    <h3 class="tw:md:col-span-2 tw:lg:col-span-3">
       {{ 'shared.form.ausbildung.place.title' | transloco }}
     </h3>
 
-    <div class="tw-flex tw-w-full tw-gap-2">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
-        <div class="tw-w-full">
+        <div class="testing-library-fix tw:w-full">
           <dv-shared-ui-select-search
             [formControl]="form.controls.ausbildungsstaetteId"
             [testIdSig]="'form-education-ausbildungsstaette'"
@@ -33,7 +33,7 @@
         </div>
       } @else {
         <!-- Alternative STAETTE -->
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>
             {{ 'shared.form.ausbildung.ausbildungsstaette.label' | transloco }}
           </mat-label>
@@ -67,13 +67,13 @@
       [dialogMessageKey]="'shared.form.ausbildung.ausbildungsstaette.info'"
       [forceDialogPosition]="!!fallIdSig()"
       #ausbildungsstaetteInfoDialog="dvSharedUiInfoDialog"
-      class="xl:tw-col-start-3"
+      class="tw:xl:col-start-3"
     ></div>
 
     <!-- GANG -->
-    <div class="tw-col-start-1 tw-flex tw-w-full tw-gap-2">
+    <div class="testing-library-fix tw:col-start-1 tw:flex tw:w-full tw:gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
-        <div class="tw-w-full">
+        <div class="testing-library-fix tw:w-full">
           <dv-shared-ui-select-search
             [formControl]="form.controls.ausbildungsgangId"
             [testIdSig]="'form-education-ausbildungsgang'"
@@ -85,7 +85,7 @@
           ></dv-shared-ui-select-search>
         </div>
       } @else {
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>
             {{ 'shared.form.ausbildung.ausbildungsgang.label' | transloco }}
           </mat-label>
@@ -113,9 +113,9 @@
     </div>
 
     <!-- FACHRICHTUNG -->
-    <div class="tw-flex tw-w-full tw-gap-2">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-2">
       @if (!hiddenFieldsSetSig().has(form.controls.fachrichtungBerufsbezeichnung) && zusatzfrageSig()) {
-        <mat-form-field class="tw-w-full" dvSharedUiFormField>
+        <mat-form-field class="tw:w-full" dvSharedUiFormField>
           <mat-label>
             {{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrageSig() | transloco }}
           </mat-label>
@@ -141,7 +141,7 @@
       }
     </div>
 
-    <div class="xl:tw-col-start-3">
+    <div class="tw:xl:col-start-3">
       <div
         dvSharedUiInfoDialog
         [dialogTitleKey]="'shared.form.ausbildung.ausbildungsgang.label'"
@@ -161,7 +161,7 @@
     <!-- besuchtBMS -->
     @if (showBesuchtBMS()) {
       <mat-checkbox
-        class="tw-col-span-2 tw-col-start-1 tw-mb-6"
+        class="tw:col-span-2 tw:col-start-1 tw:mb-6"
         formControlName="besuchtBMS"
         data-testid="form-education-besuchtBMS"
         >{{ 'shared.form.ausbildung.besuchtBMS.label' | transloco }}</mat-checkbox
@@ -169,14 +169,14 @@
     }
 
     <div
-      class="tw-col-start-1 tw-flex tw-gap-2"
+      class="testing-library-fix tw:col-start-1 tw:flex tw:gap-2"
       dvPlzOrtAutocomplete
       [autocompleteSig]="plzAutocomplete"
       [plzFormSig]="form.controls.ausbildungsortPlzOrt"
       (plzLookupValuesSig)="plzValues = $event"
     >
       <!-- PLZ -->
-      <mat-form-field dvSharedUiFormField class="tw-basis-auto">
+      <mat-form-field dvSharedUiFormField class="tw:basis-auto">
         <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
         <input
           type="text"
@@ -199,7 +199,7 @@
       </mat-form-field>
 
       <!-- Ort -->
-      <mat-form-field dvSharedUiFormField class="tw-basis-11/12">
+      <mat-form-field dvSharedUiFormField class="tw:basis-11/12">
         <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | transloco }} </mat-label>
         <input
           type="text"
@@ -219,7 +219,9 @@
       'shared.form.ausbildung.isAusbildungAusland.label' | transloco
     }}</mat-checkbox>
 
-    <div class="tw-col-start-1 tw-flex tw-w-full tw-flex-col tw-gap-2 md:tw-col-span-2 lg:tw-col-span-3">
+    <div
+      class="testing-library-fix tw:col-start-1 tw:flex tw:w-full tw:flex-col tw:gap-2 tw:md:col-span-2 tw:lg:col-span-3"
+    >
       <!-- MANUELL -->
       <mat-checkbox
         formControlName="ausbildungNichtGefunden"
@@ -242,7 +244,7 @@
       </div>
     </div>
 
-    <h3 class="tw-mt-6 md:tw-col-span-2 lg:tw-col-span-3">
+    <h3 class="tw:!mt-6 tw:md:col-span-2 tw:lg:col-span-3">
       {{ 'shared.form.ausbildung.duration.title' | transloco }}
     </h3>
 
@@ -330,7 +332,7 @@
     </mat-form-field>
 
     <!-- PENSUM -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-mt-9">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:mt-9">
       <mat-label>
         {{ 'shared.form.ausbildung.pensum.label' | transloco }}
       </mat-label>
@@ -353,7 +355,7 @@
     </mat-form-field>
 
     @if (isEditableSig()) {
-      <div class="md:tw-col-span-2 lg:tw-col-span-3">
+      <div class="tw:md:col-span-2 tw:lg:col-span-3">
         <button
           type="submit"
           class="btn btn-primary"

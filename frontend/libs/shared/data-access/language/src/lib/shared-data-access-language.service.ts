@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
+import { DOCUMENT, Injectable, inject } from '@angular/core';
 
 import { Language, SUPPORTED_LANGUAGES } from '@dv/shared/model/language';
 

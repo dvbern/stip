@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -12,7 +11,6 @@ import { PersoenlicheBerechnung } from '../../../models';
 @Component({
   selector: 'dv-persoenliche-kosten',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
@@ -32,7 +30,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().mehrkostenVerpflegung | formatChfPositive }}
       </div>
     </div>
@@ -51,7 +49,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().fahrkosten | formatChfPositive }}
       </div>
     </div>
@@ -62,7 +60,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().ausbildungskosten | formatChfPositive }}
       </div>
     </div>
@@ -81,7 +79,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().grundbedarfPersonen | formatChfPositive }}
       </div>
     </div>
@@ -100,7 +98,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().wohnkostenPersonen | formatChfPositive }}
       </div>
     </div>
@@ -119,7 +117,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{
           kostenSig().medizinischeGrundversorgungPersonen | formatChfPositive
         }}
@@ -140,7 +138,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().fahrkostenPartner | formatChfPositive }}
       </div>
     </div>
@@ -159,7 +157,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().verpflegungPartner | formatChfPositive }}
       </div>
     </div>
@@ -170,7 +168,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().betreuungskostenKinder | formatChfPositive }}
       </div>
     </div>
@@ -181,7 +179,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
       </div>
     </div>
@@ -192,7 +190,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().bundessteuern | formatChfPositive }}
       </div>
     </div>
@@ -211,20 +209,20 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().anteilLebenshaltungskosten | formatChfPositive }}
       </div>
     </div>
 
     <!-- Total -->
-    <div class="mt-3 d-flex gap-2">
+    <div class="d-flex mt-3 gap-2">
       <div class="h4">
         {{
           'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total'
             | transloco
         }}
       </div>
-      <div class="h4 text-end flex-grow-1 text-nowrap">
+      <div class="h4 flex-grow-1 text-end text-nowrap">
         {{ kostenSig().total | formatChf }}
       </div>
     </div>

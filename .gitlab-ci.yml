@@ -1,7 +1,6 @@
 stages: [test, build, e2e, mirror, deploy, review-e2e]
 
 variables:
-  ARGOCD_APP: stip
   ARGOCD_IMAGES: api,gesuch-app,sachbearbeitung-app
   STIP_OVERLAYS_DIR: manifests/stip/overlays
 
@@ -56,7 +55,7 @@ include:
       deployment-mode: 'manual'
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
-      argocd-app-name: '$ARGOCD_APP'
+      argocd-app-name: '$SCHULUNG_ARGOCD_APP'
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.3.0'
     inputs:
@@ -210,9 +209,9 @@ stop-e2e:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app set $APPLICATION --helm-set $JOB_ENABLE_PATH=true --insecure
-    - argocd app sync $APPLICATION --insecure
-    - argocd app wait $APPLICATION --insecure
+    - argocd app set $ARGOCD_APP --helm-set $JOB_ENABLE_PATH=true --insecure
+    - argocd app sync $ARGOCD_APP --insecure
+    - argocd app wait $ARGOCD_APP --insecure
 
 .db-clear:start:
   extends: .set-replica-one
@@ -223,8 +222,6 @@ stop-e2e:
 db-clear:dev:start:
   extends: .db-clear:start
   resource_group: 'argocd:dev'
-  variables:
-    APPLICATION: stip
   environment:
     name: dev
   rules:
@@ -233,8 +230,6 @@ db-clear:dev:start:
 db-clear:uat:start:
   resource_group: 'argocd:uat'
   extends: .db-clear:start
-  variables:
-    APPLICATION: stip
   environment:
     name: uat
   rules:
@@ -243,8 +238,6 @@ db-clear:uat:start:
 db-clear:schulung:start:
   resource_group: 'argocd:uat'
   extends: .db-clear:start
-  variables:
-    APPLICATION: schulung
   environment:
     name: schulung
   rules:
@@ -254,9 +247,9 @@ db-clear:schulung:start:
   extends: .install-argocd
   stage: deploy
   script:
-    - argocd app set $APPLICATION --helm-set $JOB_ENABLE_PATH=false --insecure
-    - argocd app sync $APPLICATION --insecure --prune
-    - argocd app wait $APPLICATION --insecure
+    - argocd app set $ARGOCD_APP --helm-set $JOB_ENABLE_PATH=false --insecure
+    - argocd app sync $ARGOCD_APP --insecure --prune
+    - argocd app wait $ARGOCD_APP --insecure
 
 .db-clear:stop:
   extends: .set-replica-zero
@@ -268,8 +261,6 @@ db-clear:schulung:start:
 db-clear:dev:stop:
   extends: .db-clear:stop
   resource_group: 'argocd:dev'
-  variables:
-    APPLICATION: stip
   environment:
     name: dev
   needs:
@@ -280,8 +271,6 @@ db-clear:dev:stop:
 db-clear:uat:stop:
   extends: .db-clear:stop
   resource_group: 'argocd:uat'
-  variables:
-    APPLICATION: stip
   environment:
     name: uat
   needs:
@@ -292,11 +281,9 @@ db-clear:uat:stop:
 db-clear:schulung:stop:
   extends: .db-clear:stop
   resource_group: 'argocd:uat'
-  variables:
-    APPLICATION: SCHULUNG
   environment:
     name: schulung
   needs:
-    - db-clear:uat:start
+    - db-clear:schulung:start
   rules:
     - if: $PIPELINE_TYPE == 'tag'

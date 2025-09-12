@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +23,6 @@ import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 @Component({
   selector: 'dv-additional-dokumente',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatTableModule,
     TypeSafeMatCellDefDirective,

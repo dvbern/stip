@@ -1,5 +1,4 @@
 import { A11yModule } from '@angular/cdk/a11y';
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -45,7 +44,6 @@ export interface BeschwerdeentscheidUploadDialogResult {
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-beschwaerde-entscheid',
   imports: [
-    CommonModule,
     TranslocoPipe,
     FormsModule,
     MatFormFieldModule,

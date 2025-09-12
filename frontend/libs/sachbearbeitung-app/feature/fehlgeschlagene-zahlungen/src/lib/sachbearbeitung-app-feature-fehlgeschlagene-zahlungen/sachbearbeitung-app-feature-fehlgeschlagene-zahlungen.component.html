@@ -1,10 +1,10 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
-    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="cockpit-title">
+    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">
       {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title' | transloco }}
     </h1>
-    <div class="tw-my-6">
-      <div class="tw-dv-table tw-relative">
+    <div class="tw:my-6">
+      <div class="tw:dv-table tw:relative">
         <div [class.opacity-50]="buchhaltungsStore.fehlgeschlageneZahlungenView().loading">
           <table
             mat-table
@@ -20,13 +20,13 @@
             </caption>
 
             <ng-container matColumnDef="fallNummer">
-              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-                class="tw-w-32 tw-whitespace-nowrap"
+                class="tw:w-32 tw:whitespace-nowrap"
               >
                 <a [routerLink]="['/infos/buchhaltung', fz.gesuchId]">
                   {{ fz.fallNummer }}
@@ -36,26 +36,26 @@
 
             <!-- Gesuch -->
             <ng-container matColumnDef="gesuchNummer">
-              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.gesuchNummer' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-                class="tw-w-32 tw-whitespace-nowrap"
+                class="tw:w-32 tw:whitespace-nowrap"
               >
                 {{ fz.gesuchNummer }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="nachname">
-              <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.nachname' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-                class="tw-whitespace-nowrap"
+                class="tw:whitespace-nowrap"
                 [dvTruncateTooltip]="fz.name"
               >
                 {{ fz.name }}
@@ -63,13 +63,13 @@
             </ng-container>
 
             <ng-container matColumnDef="vorname">
-              <th mat-header-cell *matHeaderCellDef class="tw-w-40 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-                class="tw-max-w-32 tw-whitespace-nowrap"
+                class="tw:max-w-32 tw:whitespace-nowrap"
                 [dvTruncateTooltip]="fz.vorname"
               >
                 {{ fz.vorname }}
@@ -78,13 +78,13 @@
 
             <!-- letzter Zahlungsversuch / timestamp -->
             <ng-container matColumnDef="lastTryDate">
-              <th mat-header-cell *matHeaderCellDef class="tw-w-32 tw-whitespace-nowrap">
+              <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
                 {{ 'sachbearbeitung-app.fehlgeschlagene-zahlungen.table.lastTryDate' | transloco }}
               </th>
               <td
                 mat-cell
                 *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-                class="tw-w-32 tw-whitespace-nowrap"
+                class="tw:w-32 tw:whitespace-nowrap"
               >
                 {{ fz.lastTryDate | date: 'dd.MM.yyyy HH:mm' }}
               </td>
@@ -100,7 +100,7 @@
               [routerLink]="['/infos/buchhaltung', fz.gesuchId]"
             ></tr>
             <tr class="mat-mdc-row" *matNoDataRow>
-              <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+              <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
                 {{ 'shared.table.noData' | transloco }}
               </td>
             </tr>
@@ -117,7 +117,7 @@
         </div>
         @if (buchhaltungsStore.fehlgeschlageneZahlungenView().loading) {
           <dv-shared-ui-loading
-            class="position-absolute top-50 start-50 translate-middle"
+            class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

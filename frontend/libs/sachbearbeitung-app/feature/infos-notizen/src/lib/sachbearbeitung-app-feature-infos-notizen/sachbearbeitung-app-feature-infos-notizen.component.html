@@ -1,9 +1,9 @@
 @if (notizStore.notizen() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  <div class="tw-dv-table">
+  <div class="tw:dv-table">
     <table
-      class="tw-w-full !tw-table-fixed"
+      class="tw:w-full tw:!table-fixed"
       mat-table
       matSort
       [dataSource]="notizSig()"
@@ -18,11 +18,11 @@
 
       <!-- notizTyp  -->
       <ng-container matColumnDef="notizTyp">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-14">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-14">
           {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | transloco }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:align-top">
+          <div class="tw:flex tw:h-[53px] tw:items-center">
             @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | transloco"
@@ -42,11 +42,11 @@
 
       <!-- Datum -->
       <ng-container matColumnDef="datum">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-28">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28">
           {{ 'sachbearbeitung-app.infos.notizen.table.datum' | transloco }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center tw-truncate">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:align-top">
+          <div class="tw:flex tw:h-[53px] tw:items-center tw:truncate">
             {{ notiz.timestampErstellt | date: 'dd.MM.yyyy' }}
           </div>
         </td>
@@ -54,12 +54,12 @@
 
       <!-- User -->
       <ng-container matColumnDef="user">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-36">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-36">
           {{ 'sachbearbeitung-app.infos.notizen.table.user' | transloco }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-whitespace-nowrap tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center">
-            <span class="tw-truncate" [dvTruncateTooltip]="notiz.userErstellt">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:whitespace-nowrap tw:align-top">
+          <div class="tw:flex tw:h-[53px] tw:items-center">
+            <span class="tw:truncate" [dvTruncateTooltip]="notiz.userErstellt">
               {{ notiz.userErstellt }}
             </span>
           </div>
@@ -68,12 +68,12 @@
 
       <!-- Betreff -->
       <ng-container matColumnDef="betreff">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw-w-auto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-auto">
           {{ 'sachbearbeitung-app.infos.notizen.table.betreff' | transloco }}
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-whitespace-nowrap tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center">
-            <span class="tw-truncate" [dvTruncateTooltip]="notiz.betreff">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:whitespace-nowrap tw:align-top">
+          <div class="tw:flex tw:h-[53px] tw:items-center">
+            <span class="tw:truncate" [dvTruncateTooltip]="notiz.betreff">
               {{ notiz.betreff | transloco }}
             </span>
           </div>
@@ -82,11 +82,11 @@
 
       <!-- Actions -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-32">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32">
           @if (permissionStore.rolesMapSig().V0_Sachbearbeiter) {
             <button
               type="button"
-              class="btn btn-outline-dark btn-sm p-2 d-inline-flex lh-1 align-items-center"
+              class="btn btn-outline-dark btn-sm d-inline-flex lh-1 align-items-center p-2"
               [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | transloco"
               [class.active]="aktionTrigger.menuOpen"
               #aktionTrigger="matMenuTrigger"
@@ -107,7 +107,7 @@
                 data-testid="notiz-create"
                 (click)="createNotiz('GESUCH_NOTIZ')"
               >
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex align-items-center gap-2">
                   <i class="material-symbols-rounded fs-4">notes</i>
                   <span>{{ 'sachbearbeitung-app.infos.notiz.erstellen' | transloco }}</span>
                 </div>
@@ -120,7 +120,7 @@
                 data-testid="jur-notiz-create"
                 (click)="createNotiz('JURISTISCHE_NOTIZ')"
               >
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex align-items-center gap-2">
                   <i class="material-symbols-rounded fs-4">gavel</i>
                   <span>{{ 'sachbearbeitung-app.infos.juristischeNotiz.erstellen' | transloco }}</span>
                 </div>
@@ -128,8 +128,8 @@
             </div>
           </mat-menu>
         </th>
-        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw-align-top">
-          <div class="tw-flex tw-h-[53px] tw-items-center tw-justify-end tw-gap-1">
+        <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:align-top">
+          <div class="tw:flex tw:h-[53px] tw:items-center tw:justify-end tw:gap-1">
             @if (notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.rolesMapSig().V0_Jurist && !notiz.antwort) {
               <button
                 type="button"

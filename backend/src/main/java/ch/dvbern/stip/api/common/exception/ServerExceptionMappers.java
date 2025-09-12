@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.exception;
 
+import ch.dvbern.stip.generated.dto.NeskoErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.ws.rs.BadRequestException;
 import org.jboss.resteasy.reactive.RestResponse;
@@ -37,6 +38,22 @@ public class ServerExceptionMappers {
         return RestResponse.status(
             RestResponse.Status.BAD_REQUEST,
             CustomValidationsExceptionMapper.toDto(validationsException)
+        );
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<NeskoErrorDto> mapException(NeskoNotFoundException e) {
+        return RestResponse.status(
+            RestResponse.Status.NOT_FOUND,
+            NeskoExceptionMapper.toDto(e)
+        );
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<NeskoErrorDto> mapException(NeskoInternalException e) {
+        return RestResponse.status(
+            RestResponse.Status.BAD_GATEWAY,
+            NeskoExceptionMapper.toDto(e)
         );
     }
 

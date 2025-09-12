@@ -6,7 +6,7 @@
     *dvHasRoles="['V0_Sachbearbeiter']"
     mat-tab-nav-bar
     [tabPanel]="tabPanel"
-    class="tw-mt-6 tw-w-fit"
+    class="tw:mt-6 tw:w-fit"
     [disablePagination]="true"
   >
     @for (tab of tabsSig(); track tab.name) {
@@ -15,7 +15,7 @@
       </a>
     }
   </nav>
-  <mat-tab-nav-panel #tabPanel class="tw-mt-6 tw-block">
+  <mat-tab-nav-panel #tabPanel class="tw:mt-6 tw:block">
     <router-outlet></router-outlet>
   </mat-tab-nav-panel>
 }

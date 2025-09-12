@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +14,6 @@ import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
 @Component({
   selector: 'dv-dokument-status-actions',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiIconBadgeComponent,
     SharedUiReplaceAppTypePipe,

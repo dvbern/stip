@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {
@@ -52,7 +51,7 @@ const createInfoData = {
 
 @Component({
   selector: 'dv-data-info-dialog',
-  imports: [CommonModule, TranslocoPipe, MatCheckboxModule],
+  imports: [TranslocoPipe, MatCheckboxModule],
   templateUrl: './data-info-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

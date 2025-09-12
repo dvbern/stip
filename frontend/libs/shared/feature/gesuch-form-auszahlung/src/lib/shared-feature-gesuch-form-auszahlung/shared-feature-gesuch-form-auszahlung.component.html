@@ -1,5 +1,5 @@
 @let fallId = gesuchsViewSig().gesuch?.fallId;
-<div *dvIfGesuchsteller class="tw-pl-3 tw-pt-6">
+<div *dvIfGesuchsteller class="tw:pl-3 tw:pt-6">
   {{ 'shared.form.auszahlung.goToAuszahlung.pre' | transloco }}
   <a
     [routerLink]="['/auszahlung', fallId]"
@@ -10,7 +10,7 @@
   >{{ 'shared.form.auszahlung.goToAuszahlung.post' | transloco }}
 </div>
 <dv-shared-ui-auszahlung
-  class="tw-mt-6 tw-block"
+  class="tw:mt-6 tw:block"
   [auszahlungViewSig]="auszahlungViewSig()"
   (saveTriggered)="handleSave($event)"
   (continueTriggered)="handleContinue()"

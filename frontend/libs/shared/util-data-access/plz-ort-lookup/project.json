@@ -5,5 +5,12 @@
   "prefix": "lib",
   "projectType": "library",
   "tags": ["type:util-data-access", "scope:shared"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/util-data-access/plz-ort-lookup/tsconfig.lib.json"
+      }
+    }
+  }
 }

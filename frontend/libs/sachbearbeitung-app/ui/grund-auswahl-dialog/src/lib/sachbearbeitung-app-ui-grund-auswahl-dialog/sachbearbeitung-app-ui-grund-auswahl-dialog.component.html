@@ -1,21 +1,21 @@
-<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-5">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-5">
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h5 tw-mb-5 tw-flex">
+  <h1 class="title h5 tw:!mb-5 tw:flex">
     {{ dialogData.titleKey | transloco }}
   </h1>
-  <p class="content tw-mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
+  <p class="content tw:mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
 
-  <form [formGroup]="form" class="tw-mt-5" novalidate>
-    <div class="tw-flex tw-w-full tw-flex-col tw-gap-4">
-      <mat-form-field dvSharedUiFormField [ngClass]="{ 'tw-w-4/5': showKantonFieldSig() }" class="tw-w-full">
+  <form [formGroup]="form" class="tw:mt-5" novalidate>
+    <div class="tw:flex tw:w-full tw:flex-col tw:gap-4">
+      <mat-form-field dvSharedUiFormField [ngClass]="{ 'tw:w-4/5': showKantonFieldSig() }" class="tw:w-full">
         <mat-select
           formControlName="grund"
           [placeholder]="'shared.form.select.empty' | transloco"
@@ -38,7 +38,7 @@
       </mat-form-field>
 
       @if (showVerfuegungUploadSig()) {
-        <mat-form-field class="tw-mt-3 tw-w-full" dvSharedUiFormField>
+        <mat-form-field class="tw:mt-3 tw:w-full" dvSharedUiFormField>
           <mat-label>
             {{ 'sachbearbeitung-app.verfuegung.negativ.dialog.comment' | transloco }}
             ({{ 'shared.form.optional.label' | transloco }})
@@ -58,11 +58,11 @@
         </mat-form-field>
 
         <dv-shared-ui-drop-file
-          class="tw-shado tw-flex tw-flex-col tw-items-center tw-rounded-lg tw-border-2 tw-bg-white tw-p-4"
+          class="tw:shado tw:flex tw:flex-col tw:items-center tw:rounded-lg tw:border-2 tw:bg-white tw:p-4"
         >
-          <label class="tw-flex tw-flex-col tw-items-center">
+          <label class="tw:flex tw:flex-col tw:items-center">
             <div
-              class="text-center text-muted text-italic my-4 d-md-block d-none"
+              class="text-muted text-italic d-md-block d-none my-4 text-center"
               [innerHTML]="'shared.file.dropZone' | transloco"
             ></div>
             <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
@@ -71,7 +71,7 @@
             <input
               #fileInput
               formControlName="fileUpload"
-              class="mb-2 cdk-visually-hidden"
+              class="cdk-visually-hidden mb-2"
               type="file"
               tabindex="-1"
               data-testid="file-input"
@@ -82,21 +82,21 @@
         </dv-shared-ui-drop-file>
         @let file = selectedFileSig();
         @if (file) {
-          <div class="tw-flex">
+          <div class="tw:flex">
             <div>
-              <span class="tw-truncate" [title]="file.name">{{ file.name }}</span>
+              <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
             </div>
             <button
               type="button"
-              class="dv-icon-button flex-shrink-0 tw-ml-2 tw-h-auto tw-w-auto tw-self-end"
+              class="dv-icon-button tw:ml-2 tw:h-auto tw:w-auto tw:self-end flex-shrink-0"
               [attr.aria-label]="'shared.form.delete' | transloco"
               (click)="resetSelectedFile()"
             >
-              <span class="material-symbols-rounded align-middle text-muted !tw-text-xl/none">delete</span>
+              <span class="material-symbols-rounded text-muted tw:!text-xl/none align-middle">delete</span>
             </button>
           </div>
         } @else {
-          <div class="group-errors tw-mb-[3px] tw-text-sm">
+          <div class="group-errors tw:mb-[3px] tw:text-sm">
             @if (form.touched && form.controls.fileUpload.touched && fileInput.files?.length === 0) {
               <mat-error>
                 {{ 'shared.form.error.required' | transloco }}
@@ -107,7 +107,7 @@
       }
 
       @if (showKantonFieldSig()) {
-        <mat-form-field dvSharedUiFormField class="tw-w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-select
             formControlName="kanton"
             [placeholder]="'shared.form.select.empty' | transloco"
@@ -126,11 +126,11 @@
       }
     </div>
 
-    <div class="tw-mt-5 tw-flex tw-justify-between">
+    <div class="tw:mt-5 tw:flex tw:justify-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw-ml-2" (click)="confirm()">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw:ml-2" (click)="confirm()">
         {{ dialogData.confirmKey | transloco }}
       </button>
     </div>

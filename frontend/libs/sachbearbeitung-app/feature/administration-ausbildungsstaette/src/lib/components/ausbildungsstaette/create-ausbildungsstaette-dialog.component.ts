@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -47,7 +46,6 @@ type CreateAbschlussData = {
 @Component({
   selector: 'dv-create-ausbildungsstaette-dialog',
   imports: [
-    CommonModule,
     MaskitoDirective,
     ReactiveFormsModule,
     TranslocoPipe,
