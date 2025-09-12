@@ -45,21 +45,7 @@ public class NotificationService {
 
     @Transactional
     public void createDelegierungAufgeloestNotification(final Delegierung delegierung) {
-        final var fall = delegierung.getDelegierterFall();
-        final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
-        final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
-
-        Notification notification = new Notification()
-            .setNotificationType(NotificationType.DELEGIERUNG_AUFGELOEST)
-            .setFall(fall);
-        setAbsender(absender, notification);
-
-        final String msg = Templates
-            .getDelegierungAufgeloest(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
-            .render();
-
-        notification.setNotificationText(msg);
-        notificationRepository.persistAndFlush(notification);
+        createDelegierungNotification(NotificationType.DELEGIERUNG_AUFGELOEST, delegierung);
     }
 
     @Transactional
@@ -88,6 +74,9 @@ public class NotificationService {
                 .render();
             case DELEGIERUNG_ABGELEHNT -> Templates
                 .getDelegierungAbgelehnt(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
+                .render();
+            case DELEGIERUNG_AUFGELOEST -> Templates
+                .getDelegierungAufgeloest(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
                 .render();
             default -> throw new IllegalStateException("Unexpected value: " + notificationType);
         };
