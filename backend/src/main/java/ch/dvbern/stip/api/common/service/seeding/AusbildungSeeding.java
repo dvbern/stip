@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
+import ch.dvbern.stip.api.common.exception.CancelInvocationException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
@@ -61,23 +62,27 @@ public class AusbildungSeeding extends Seeder {
     @Override
     protected void seed() {
         if (ausbildungsstaetteRepository.count() == 0) {
-            LOG.info("Seeding Abschluss, Ausbildungsstaette and Ausbildungsgang");
+            try {
+                LOG.info("Seeding Abschluss, Ausbildungsstaette and Ausbildungsgang");
 
-            final var abschluesse = getAbschluesseToSeed();
-            abschlussRepository.persist(abschluesse);
-            abschlussRepository.flush();
+                final var abschluesse = getAbschluesseToSeed();
+                abschlussRepository.persist(abschluesse);
+                abschlussRepository.flush();
 
-            final var ausbildungsstaetten = getAusbildungsstaettenToSeed();
-            ausbildungsstaetteRepository.persist(ausbildungsstaetten);
-            ausbildungsstaetteRepository.flush();
+                final var ausbildungsstaetten = getAusbildungsstaettenToSeed();
+                ausbildungsstaetteRepository.persist(ausbildungsstaetten);
+                ausbildungsstaetteRepository.flush();
 
-            final var ausbildunggaenge = getAusbildungsgaengeToSeed(
-                abschluesse,
-                ausbildungsstaetten
-            );
+                final var ausbildunggaenge = getAusbildungsgaengeToSeed(
+                    abschluesse,
+                    ausbildungsstaetten
+                );
 
-            ausbildungsgangRepository.persist(ausbildunggaenge);
-            ausbildungsgangRepository.flush();
+                ausbildungsgangRepository.persist(ausbildunggaenge);
+                ausbildungsgangRepository.flush();
+            } catch (Exception e) {
+                throw new CancelInvocationException(e);
+            }
         }
     }
 
