@@ -897,6 +897,8 @@
   "shared.ausbildungskategorie.BETRIEBE": "Betriebe",
   "shared.ausbildungskategorie.OBLIGATORISCHE_SCHULE": "Obligatorische Schule",
   "shared.ausbildungskategorie.BRUECKENANGEBOT": "Brückenangebot",
+  "shared.ausbildungskategorie.HOEHERE_FACHPRUEFUNG": "Höhere Fachprüfung",
+  "shared.ausbildungskategorie.BERUFSPRUEFUNG": "Berufsprüfung",
 
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",
