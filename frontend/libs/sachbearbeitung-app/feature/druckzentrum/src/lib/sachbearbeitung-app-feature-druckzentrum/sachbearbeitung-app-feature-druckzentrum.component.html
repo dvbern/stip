@@ -1,22 +1,22 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
     <div
-      class="tw-mt-2 tw-grid tw-grid-cols-1 tw-gap-6 tw-pt-6 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-6"
+      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
       [formGroup]="quickFilterForm"
     >
       @for (quickFilter of quickFilters; track quickFilter) {
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn !tw-flex tw-grow tw-items-center !tw-p-2 !tw-px-4 tw-shadow-md"
+          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
           [attr.data-testid]="'druckzentrum-quick-filter-' + quickFilter.typ"
           [class.btn-danger]="radio.checked"
           [class.btn-light]="!radio.checked"
         >
-          <dv-shared-ui-icon-chip class="me-3 chip">
+          <dv-shared-ui-icon-chip class="chip me-3">
             <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
           </dv-shared-ui-icon-chip>
-          <div class="flex-grow-1 tw-text-start tw-leading-4">
+          <div class="tw:text-start tw:leading-4 flex-grow-1">
             <span class="fw-bold fs-7 mb-0">
               {{ 'sachbearbeitung-app.druckzentrum.quick-filter.' + quickFilter.typ | transloco }}
             </span>
@@ -34,22 +34,22 @@
         </button>
       }
     </div>
-    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="druckzentrum-title">
+    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="druckzentrum-title">
       {{ 'sachbearbeitung-app.druckzentrum.title' | transloco }}
     </h1>
     <!-- link for development: go to detail view -->
-    <div class="tw-mb-6">
+    <div class="tw:mb-6">
       <a class="btn btn-primary" [routerLink]="['/druckzentrum', 'druckauftrag', '1']"
         >Go to detail view (for development)</a
       >
     </div>
-    <div class="tw-my-6">
-      <div class="tw-dv-table tw-relative">
+    <div class="tw:my-6">
+      <div class="tw:dv-table tw:relative">
         <div [class.opacity-50]="druckauftragStore.cachedDruckauftragListViewSig().loading">
           <!-- filter form (header filters) -->
-          <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+          <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
             <table
-              class="tw-w-full tw-table-fixed"
+              class="tw:w-full tw:table-fixed"
               [dvSharedUiFocusableList]="items"
               [dataSource]="druckzentrumDataSourceSig()"
               data-testid="sachbearbeitung-app.druckzentrum.table"
@@ -65,10 +65,10 @@
               </caption>
 
               <ng-container matColumnDef="BATCH_NAME">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   <label for="batchName">{{ 'sachbearbeitung-app.druckzentrum.table.batchname' | transloco }}</label>
-                  <div class="tw-relative tw-flex">
-                    <mat-form-field class="tw-w-full">
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
                       <input
                         id="batchName"
                         matInput
@@ -78,7 +78,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.batchName.reset()"
                       [valueSig]="filterForm.controls.batchName.value"
                     ></dv-shared-ui-clear-button>
@@ -87,7 +87,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.batchName"
                 >
                   {{ item.batchName }}
@@ -95,10 +95,10 @@
               </ng-container>
 
               <ng-container matColumnDef="BEARBEITER">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw-w-36 tw-whitespace-nowrap">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
                   <label for="bearbeiter">{{ 'sachbearbeitung-app.druckzentrum.table.bearbeiter' | transloco }}</label>
-                  <div class="tw-relative tw-flex">
-                    <mat-form-field class="tw-w-full">
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
                       <input
                         id="bearbeiter"
                         matInput
@@ -108,7 +108,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.bearbeiter.reset()"
                       [valueSig]="filterForm.controls.bearbeiter.value"
                     ></dv-shared-ui-clear-button>
@@ -117,7 +117,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.bearbeiter"
                 >
                   {{ item.bearbeiter }}
@@ -130,17 +130,17 @@
                   *matHeaderCellDef
                   mat-sort-header
                   [start]="'desc'"
-                  class="filtered tw-w-32 tw-whitespace-nowrap"
+                  class="filtered tw:w-32 tw:whitespace-nowrap"
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="timestampErstellt">{{
                     'sachbearbeitung-app.druckzentrum.table.timestampErstellt' | transloco
                   }}</label>
-                  <div class="tw-relative tw-flex">
+                  <div class="tw:relative tw:flex">
                     <mat-form-field>
                       <input
                         id="timestampErstellt"
-                        class="tw-w-full"
+                        class="tw:w-full"
                         matInput
                         [dvMaxLength]="'small'"
                         formControlName="timestampErstellt"
@@ -151,7 +151,7 @@
                       <button
                         matIconSuffix
                         type="button"
-                        class="btn btn-link text-muted !tw-p-1"
+                        class="btn btn-link text-muted tw:!p-1"
                         [attr.aria-label]="'shared.ui.open-date-picker'"
                         (click)="timestampErstelltDatepicker.open(); $event.stopPropagation()"
                       >
@@ -162,7 +162,7 @@
                       <mat-datepicker #timestampErstelltDatepicker></mat-datepicker>
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.timestampErstellt.reset()"
                       [valueSig]="filterForm.controls.timestampErstellt.value"
                     ></dv-shared-ui-clear-button>
@@ -171,21 +171,21 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
-                  class="tw-whitespace-nowrap"
+                  class="tw:whitespace-nowrap"
                 >
                   {{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="STATUS">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.druckzentrum.table.status' | transloco }}
                   <mat-form-field>
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.druckzentrum.table.status' | transloco"
                       formControlName="druckauftragStatus"
                       (click)="$event.stopPropagation()"
-                      class="!tw-font-normal"
+                      class="tw:!font-normal"
                       panelClass="table-select"
                       [placeholder]="'sachbearbeitung-app.druckzentrum.table.status.filter.alle' | transloco"
                     >
@@ -203,21 +203,21 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                 >
                   {{ 'sachbearbeitung-app.druckzentrum.table.status.filter.' + item.druckauftragStatus | transloco }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="TYP">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.druckzentrum.table.typ' | transloco }}
                   <mat-form-field>
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.druckzentrum.table.typ' | transloco"
                       formControlName="druckauftragTyp"
                       (click)="$event.stopPropagation()"
-                      class="!tw-font-normal"
+                      class="tw:!font-normal"
                       panelClass="table-select"
                       [placeholder]="'sachbearbeitung-app.druckzentrum.table.typ.filter.alle' | transloco"
                     >
@@ -235,7 +235,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                 >
                   {{ 'sachbearbeitung-app.druckzentrum.table.typ.filter.' + item.druckauftragTyp | transloco }}
                 </td>
@@ -250,7 +250,7 @@
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
-                <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
                   {{ 'shared.table.noData' | transloco }}
                 </td>
               </tr>
@@ -268,7 +268,7 @@
         </div>
         @if (druckauftragStore.cachedDruckauftragListViewSig().loading) {
           <dv-shared-ui-loading
-            class="position-absolute top-50 start-50 translate-middle"
+            class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

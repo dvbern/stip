@@ -1,16 +1,16 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
-    <h1 class="tw-mb-6 tw-mt-8 tw-text-2xl" data-testid="druckauftrag-title">
+    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="druckauftrag-title">
       {{ 'sachbearbeitung-app.druckauftrag.title' | transloco }}
     </h1>
 
-    <div class="tw-my-6">
-      <div class="tw-dv-table tw-relative">
+    <div class="tw:my-6">
+      <div class="tw:dv-table tw:relative">
         <div [class.opacity-50]="druckauftragStore.druckEntryViewSig().loading">
           <!-- filter form (header filters) -->
-          <form class="tw-relative tw-overflow-auto" [formGroup]="filterForm">
+          <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
             <table
-              class="tw-w-full tw-table-fixed"
+              class="tw:w-full tw:table-fixed"
               [dvSharedUiFocusableList]="items"
               [dataSource]="druckauftragDataSourceSig()"
               data-testid="sachbearbeitung-app.druckauftrag.table"
@@ -26,10 +26,10 @@
 
               <!-- Versendet: filterable, filter is a dropdown, checkbox in cell  -->
               <ng-container matColumnDef="Versendet">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-24 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-24 tw:whitespace-nowrap">
                   <label for="versendet">{{ 'sachbearbeitung-app.druckauftrag.table.versendet' | transloco }}</label>
-                  <div class="tw-relative tw-flex">
-                    <mat-form-field class="tw-w-full">
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
                       <mat-select
                         id="versendet"
                         formControlName="versendet"
@@ -53,17 +53,17 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
-                  class="tw-w-24 tw-whitespace-nowrap"
+                  class="tw:w-24 tw:whitespace-nowrap"
                 >
                   <mat-checkbox [checked]="item.versendet" disabled></mat-checkbox>
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="Gesuch">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   <label for="gesuch">{{ 'sachbearbeitung-app.druckauftrag.table.gesuch' | transloco }}</label>
-                  <div class="tw-relative tw-flex">
-                    <mat-form-field class="tw-w-full">
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
                       <input
                         id="gesuch"
                         matInput
@@ -73,7 +73,7 @@
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
-                      class="tw-absolute tw-right-[-26px] tw-flex tw-items-center"
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
                       (clear)="filterForm.controls.gesuch.reset()"
                       [valueSig]="filterForm.controls.gesuch.value"
                     ></dv-shared-ui-clear-button>
@@ -82,7 +82,7 @@
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.gesuch"
                 >
                   {{ item.gesuch }}
@@ -91,15 +91,15 @@
 
               <!-- Nachname: A non sortable, non searchable column -->
               <ng-container matColumnDef="Nachname">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
-                  <div class="tw-flex">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
+                  <div class="tw:flex">
                     {{ 'sachbearbeitung-app.druckauftrag.table.nachname' | transloco }}
                   </div>
                 </th>
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.nachname"
                 >
                   {{ item.nachname }}
@@ -108,13 +108,13 @@
 
               <!-- Vorname: A non sortable, non searchable column -->
               <ng-container matColumnDef="Vorname">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.druckauftrag.table.vorname' | transloco }}
                 </th>
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.vorname"
                 >
                   {{ item.vorname }}
@@ -123,13 +123,13 @@
 
               <!-- Adressat: A non sortable, non searchable column -->
               <ng-container matColumnDef="Adressat">
-                <th mat-header-cell *matHeaderCellDef class="filtered tw-w-32 tw-whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.druckauftrag.table.adressat' | transloco }}
                 </th>
                 <td
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
-                  class="tw-w-32 tw-whitespace-nowrap"
+                  class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.adressat"
                 >
                   {{ item.adressat }}
@@ -145,7 +145,7 @@
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
-                <td class="mat-mdc-cell tw-px-3" [colSpan]="displayedColumns.length">
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
                   {{ 'shared.table.noData' | transloco }}
                 </td>
               </tr>
@@ -162,7 +162,7 @@
         </div>
         @if (druckauftragStore.druckEntryViewSig().loading) {
           <dv-shared-ui-loading
-            class="position-absolute top-50 start-50 translate-middle"
+            class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }
