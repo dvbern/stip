@@ -66,7 +66,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToVersandbereit(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERSANDBEREIT);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT);
     }
 
     @Transactional
@@ -76,7 +76,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToVersendet(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERSENDET);
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
     }
 
     @Transactional

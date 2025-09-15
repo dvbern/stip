@@ -639,7 +639,7 @@ public class GesuchService {
         }
 
         if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(gesuch)) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(
                 gesuch,
@@ -651,7 +651,7 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToVersendet(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
     }
 
     @Transactional
@@ -770,7 +770,7 @@ public class GesuchService {
 
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
-            GesuchStatusChangeEvent.VERSANDBEREIT
+            GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT
         );
     }
 
