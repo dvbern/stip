@@ -27,8 +27,8 @@ import lombok.Getter;
 public enum Gesuchstatus {
     ABKLAERUNG_DURCH_RECHSTABTEILUNG,
     VERFUEGT,
-    VERSANDBEREIT,
-    VERSENDET,
+    VERFUEGUNG_VERSANDBEREIT,
+    VERFUEGUNG_VERSENDET,
     WARTEN_AUF_UNTERSCHRIFTENBLATT,
     IN_BEARBEITUNG_SB,
     IN_FREIGABE,
@@ -111,8 +111,8 @@ public enum Gesuchstatus {
         EnumSet.of(
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET
+            Gesuchstatus.VERFUEGUNG_VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_VERSENDET
         )
     );
 
@@ -120,8 +120,8 @@ public enum Gesuchstatus {
         EnumSet.of(
             Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.VERFUEGT,
-            Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET,
+            Gesuchstatus.VERFUEGUNG_VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_VERSENDET,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             Gesuchstatus.IN_FREIGABE,
             Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
@@ -160,7 +160,7 @@ public enum Gesuchstatus {
             IN_FREIGABE,
             VERFUEGT,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            VERSANDBEREIT
+            VERFUEGUNG_VERSANDBEREIT
         )
     );
 
@@ -171,9 +171,9 @@ public enum Gesuchstatus {
             JURISTISCHE_ABKLAERUNG,
             IN_FREIGABE,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            VERSANDBEREIT,
+            VERFUEGUNG_VERSANDBEREIT,
             VERFUEGT,
-            VERSENDET,
+            VERFUEGUNG_VERSENDET,
             STIPENDIENANSPRUCH,
             KEIN_STIPENDIENANSPRUCH
         )
@@ -183,8 +183,8 @@ public enum Gesuchstatus {
         EnumSet.of(
             IN_BEARBEITUNG_GS,
             FEHLENDE_DOKUMENTE,
-            VERSANDBEREIT,
-            VERSENDET,
+            VERFUEGUNG_VERSANDBEREIT,
+            VERFUEGUNG_VERSENDET,
             STIPENDIENANSPRUCH,
             KEIN_STIPENDIENANSPRUCH
         )

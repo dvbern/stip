@@ -32,8 +32,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersandbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusChangeEventTrigger;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -55,8 +55,8 @@ class GesuchStatusStateMachineTest {
     private KomplettEingereichtHandler komplettEingereichtHandlerSpy;
     private FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandlerSpy;
     private FehlendeDokumenteHandler fehlendeDokumenteHandlerSpy;
-    private VersandbereitHandler versandbereitHandlerSpy;
-    private VersendetHandler versendetHandlerSpy;
+    private VerfuegungVersandbereitHandler verfuegungVersandbereitHandlerSpy;
+    private VerfuegungVersendetHandler verfuegungVersendetHandlerSpy;
     private NegativeVerfuegungHandler negativeVerfuegungHandlerSpy;
     private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerSpy;
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
@@ -73,8 +73,8 @@ class GesuchStatusStateMachineTest {
         komplettEingereichtHandlerSpy = Mockito.mock(KomplettEingereichtHandler.class);
         fehlendeDokumenteEinreichenHandlerSpy = Mockito.mock(FehlendeDokumenteEinreichenHandler.class);
         fehlendeDokumenteHandlerSpy = Mockito.mock(FehlendeDokumenteHandler.class);
-        versandbereitHandlerSpy = Mockito.mock(VersandbereitHandler.class);
-        versendetHandlerSpy = Mockito.mock(VersendetHandler.class);
+        verfuegungVersandbereitHandlerSpy = Mockito.mock(VerfuegungVersandbereitHandler.class);
+        verfuegungVersendetHandlerSpy = Mockito.mock(VerfuegungVersendetHandler.class);
         negativeVerfuegungHandlerSpy = Mockito.mock(NegativeVerfuegungHandler.class);
         aenderungZurueckweisenHandlerSpy = Mockito.mock(AenderungZurueckweisenHandler.class);
         aenderungFehlendeDokumenteNichtEingereichtHandlerSpy =
@@ -89,8 +89,8 @@ class GesuchStatusStateMachineTest {
             komplettEingereichtHandlerSpy,
             fehlendeDokumenteEinreichenHandlerSpy,
             fehlendeDokumenteHandlerSpy,
-            versandbereitHandlerSpy,
-            versendetHandlerSpy,
+            verfuegungVersandbereitHandlerSpy,
+            verfuegungVersendetHandlerSpy,
             negativeVerfuegungHandlerSpy,
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -135,8 +135,8 @@ class GesuchStatusStateMachineTest {
             gesuchZurueckweisenHandlerSpy,
             fehlendeDokumenteEinreichenHandlerSpy,
             fehlendeDokumenteHandlerSpy,
-            versandbereitHandlerSpy,
-            versendetHandlerSpy,
+            verfuegungVersandbereitHandlerSpy,
+            verfuegungVersendetHandlerSpy,
             negativeVerfuegungHandlerSpy,
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,

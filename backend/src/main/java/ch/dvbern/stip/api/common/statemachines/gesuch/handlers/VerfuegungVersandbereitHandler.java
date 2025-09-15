@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class VersandbereitHandler implements GesuchStatusChangeHandler {
+public class VerfuegungVersandbereitHandler implements GesuchStatusChangeHandler {
     private final ConfigService configService;
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;

@@ -97,8 +97,8 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             Gesuchstatus.IN_FREIGABE,
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET,
+            Gesuchstatus.VERFUEGUNG_VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_VERSENDET,
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH
         );

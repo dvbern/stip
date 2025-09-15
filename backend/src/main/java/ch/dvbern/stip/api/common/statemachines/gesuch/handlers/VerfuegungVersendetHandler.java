@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @Slf4j
 @RequiredArgsConstructor
-public class VersendetHandler implements GesuchStatusChangeHandler {
+public class VerfuegungVersendetHandler implements GesuchStatusChangeHandler {
     private final NotificationService notificationService;
     private final MailService mailService;
 

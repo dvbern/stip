@@ -163,7 +163,7 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
         }
         // verify that the flag has been set to true & that gesuch is in correct state
         assertThat(gesuch.isVerfuegt(), is(true));
-        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.VERSANDBEREIT));
+        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.VERFUEGUNG_VERSANDBEREIT));
     }
 
 }

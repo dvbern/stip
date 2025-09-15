@@ -30,8 +30,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersandbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -53,8 +53,8 @@ public class GesuchStatusConfigProducer {
     private final KomplettEingereichtHandler komplettEingereichtHandler;
     private final FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandler;
     private final FehlendeDokumenteHandler fehlendeDokumenteHandler;
-    private final VersandbereitHandler versandbereitHandler;
-    private final VersendetHandler versendetHandler;
+    private final VerfuegungVersandbereitHandler verfuegungVersandbereitHandler;
+    private final VerfuegungVersendetHandler verfuegungVersendetHandler;
     private final NegativeVerfuegungHandler negativeVerfuegungHandler;
     private final AenderungZurueckweisenHandler aenderungZurueckweisenHandler;
     private final AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandler;
@@ -167,32 +167,32 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT);
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT);
 
-        config.configure(Gesuchstatus.VERSANDBEREIT)
-            .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET)
+        config.configure(Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.VERSANDBEREIT),
-                versandbereitHandler::handle
+                verfuegungVersandbereitHandler::handle
             );
 
-        config.configure(Gesuchstatus.VERSENDET)
+        config.configure(Gesuchstatus.VERFUEGUNG_VERSENDET)
             .permit(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.STIPENDIENANSPRUCH, Gesuchstatus.STIPENDIENANSPRUCH)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.VERSENDET),
-                versendetHandler::handle
+                verfuegungVersendetHandler::handle
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 negativeVerfuegungHandler::handle

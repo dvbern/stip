@@ -60,7 +60,7 @@ public class GesuchValidatorService {
         destinationValidationGroups.put(Gesuchstatus.VERFUEGT, SB_ABSCHLIESSEN_VALIDATION_GROUPS);
         destinationValidationGroups.put(Gesuchstatus.IN_FREIGABE, SB_ABSCHLIESSEN_VALIDATION_GROUPS);
         destinationValidationGroups.put(
-            Gesuchstatus.VERSENDET,
+            Gesuchstatus.VERFUEGUNG_VERSENDET,
             List.of(GesuchEinreichenValidationGroup.class, GesuchNachInBearbeitungSBValidationGroup.class)
         );
 
