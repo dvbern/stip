@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -46,7 +45,6 @@ type SozialdienstStatus = (typeof availableStatus)[number];
 
 @Component({
   imports: [
-    CommonModule,
     TranslocoPipe,
     ReactiveFormsModule,
     MatTableModule,

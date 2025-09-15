@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,7 +22,7 @@ type AllowedValues =
 
 @Component({
   selector: 'dv-shared-ui-clear-button',
-  imports: [CommonModule, SharedUiIconChipComponent, TranslocoPipe],
+  imports: [SharedUiIconChipComponent, TranslocoPipe],
   templateUrl: './shared-ui-clear-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

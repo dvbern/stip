@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -30,7 +29,6 @@ type EditAbschlussData = {
 @Component({
   selector: 'dv-edit-abschluss-dialog',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslocoPipe,
     MatFormFieldModule,

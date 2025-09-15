@@ -63,6 +63,7 @@ kstip:
       kc-path: '${STIP_WELCOME_MAIL_PATH}'
       kc-query-parameter: '${STIP_WELCOME_MAIL_QUERY_PARAMETER}'
       kc-scope: '${STIP_BERN_WELCOME_MAIL_SCOPE}'
+    frontend-uri: '${STIP_FRONTEND_URI:localhost:4200}'
   dv:
     welcome-mail:
       kc-url: '${STIP_OIDC_AUTH_SERVER_FRONTEND}'

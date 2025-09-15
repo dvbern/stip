@@ -4,28 +4,28 @@
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
     <dv-shared-pattern-app-header (openSidenav)="sidenav.open()">
-      <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
+      <div dvHeaderDesktopLeft class="d-flex align-items-center gap-3">
         <a
           routerLink="/cockpit"
-          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
           data-testid="gesuch-step-nav-overview"
         >
-          <i class="material-symbols-rounded text-white me-2">list</i>
+          <i class="material-symbols-rounded me-2 text-white">list</i>
           <span>{{ 'sachbearbeitung-app.header.antraege' | transloco }}</span>
         </a>
         <!-- Fehlgeschlagene Zahlungen -->
         <a
           routerLink="/fehlgeschlagene-zahlungen"
-          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
           data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
         >
-          <i class="material-symbols-rounded text-white me-2">error_outline</i>
+          <i class="material-symbols-rounded me-2 text-white">error_outline</i>
           <span>
             {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | transloco }}
           </span>
         </a>
-        <div class="active btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none">
-          <i class="material-symbols-rounded text-white me-2">settings</i>
+        <div class="active btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none">
+          <i class="material-symbols-rounded me-2 text-white">settings</i>
           <span>{{ 'sachbearbeitung-app.header.administration' | transloco }}</span>
         </div>
       </div>
@@ -38,7 +38,7 @@
           <a
             *dvHasRoles="option.allowedRoles"
             type="button"
-            class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+            class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100"
             [class.btn-light]="!isActive"
             [class.shadow-none]="!isActive"
             (click)="navClicked.emit({ value: true })"
@@ -62,10 +62,10 @@
         <div class="d-none d-lg-block border-end bg-white">
           <ng-container *ngTemplateOutlet="navigation"></ng-container>
         </div>
-        <div class="container mb-5 pt-lg-4 px-lg-4 tw-min-w-0">
+        <div class="pt-lg-4 px-lg-4 tw:min-w-0 container mb-5">
           <!-- step header (mobile) -->
           <div
-            class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none"
+            class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3"
           >
             <ng-container *ngTemplateOutlet="navigation"></ng-container>
           </div>
@@ -80,14 +80,14 @@
               } @else {
                 <a
                   [routerLink]="option.parentRoute"
-                  class="btn btn-link text-decoration-none fw-normal p-2 d-flex align-items-center shadow-none tw-mr-2 tw-border-none"
+                  class="btn btn-link text-decoration-none fw-normal d-flex align-items-center tw:mr-2 tw:border-none p-2 shadow-none"
                   data-testid="gesuch-step-nav-overview"
                 >
-                  <i class="material-symbols-rounded text-black me-2">arrow_back</i>
+                  <i class="material-symbols-rounded me-2 text-black">arrow_back</i>
                 </a>
               }
 
-              <h2 class="fw-bold m-0 d-flex" data-testid="step-title">
+              <h2 class="fw-bold d-flex m-0" data-testid="step-title">
                 {{ option.titleTranslationKey | transloco }}
                 <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
               </h2>

@@ -2,7 +2,7 @@
 @let document = documentViewSig();
 @if (document && upload) {
   <dv-shared-ui-icon-chip
-    class="me-2 mt-1 fs-5 reverse"
+    class="fs-5 reverse me-2 mt-1"
     [class.spin]="document.state === 'uploading'"
     [ngClass]="'bg-' + document.theme.type"
   >
@@ -10,14 +10,14 @@
       {{ document.theme.icon }}
     </i>
   </dv-shared-ui-icon-chip>
-  <div class="d-flex flex-column flex-grow-1 w-min-content tw-ml-1" *dvTranslocoShared="let t">
+  <div class="d-flex flex-column w-min-content tw:ml-1 flex-grow-1" *dvTranslocoShared="let t">
     <div class="d-flex flex-row">
       <span class="text-truncate filename fs-7" [title]="document.file.filename">{{ document.file.filename }}</span>
       <div class="flex-grow-1"></div>
       @if (document.state === 'uploading') {
         <button
           type="button"
-          class="dv-icon-button flex-shrink-0 cancel-icon ms-2"
+          class="dv-icon-button cancel-icon ms-2 flex-shrink-0"
           [attr.aria-label]="t('shared.cancel')"
           (click)="cancelUpload.emit({ dokumentId: document.file.id })"
         >
@@ -26,20 +26,20 @@
       } @else {
         <button
           type="button"
-          class="btn btn-link text-truncate filename fs-7 tw-flex tw-p-0 tw-no-underline"
+          class="btn btn-link text-truncate filename fs-7 tw:flex tw:!p-0 tw:!no-underline"
           data-testid="download-button"
           [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
         >
-          <span class="material-symbols-rounded align-middle text-muted">download</span>
+          <span class="material-symbols-rounded text-muted align-middle">download</span>
         </button>
         <button
           type="button"
-          class="dv-icon-button flex-shrink-0 delete-icon ms-2"
+          class="dv-icon-button delete-icon ms-2 flex-shrink-0"
           [attr.aria-label]="t('shared.form.delete')"
           [disabled]="!isDeletableSig() || loadingSig()"
           (click)="checkForRemove$.emit()"
         >
-          <span class="material-symbols-rounded align-middle text-muted">delete</span>
+          <span class="material-symbols-rounded text-muted align-middle">delete</span>
         </button>
       }
     </div>

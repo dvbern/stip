@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,7 +25,6 @@ import { maskitoPercent } from '@dv/shared/util/maskito-util';
 @Component({
   selector: 'dv-shared-ui-percentage-splitter',
   imports: [
-    CommonModule,
     MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,

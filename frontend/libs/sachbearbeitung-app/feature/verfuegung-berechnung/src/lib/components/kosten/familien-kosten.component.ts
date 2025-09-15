@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -12,7 +11,6 @@ import { FamilienBerechnung } from '../../../models';
 @Component({
   selector: 'dv-familien-kosten',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
@@ -32,7 +30,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().grundbedarf | formatChfPositive }}
       </div>
     </div>
@@ -43,7 +41,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().wohnkosten | formatChfPositive }}
       </div>
     </div>
@@ -54,7 +52,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().medizinischeGrundversorgung | formatChfPositive }}
       </div>
     </div>
@@ -73,7 +71,7 @@ import { FamilienBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap ps-5">
+      <div class="text-muted flex-grow-1 ps-5 text-end text-nowrap">
         {{ kostenSig().integrationszulage | formatChfPositive }}
       </div>
     </div>
@@ -84,7 +82,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
       </div>
     </div>
@@ -95,7 +93,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().bundessteuern | formatChfPositive }}
       </div>
     </div>
@@ -106,7 +104,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().fahrkosten | formatChfPositive }}
       </div>
     </div>
@@ -117,7 +115,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().fahrkostenPartner | formatChfPositive }}
       </div>
     </div>
@@ -128,7 +126,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().verpflegung | formatChfPositive }}
       </div>
     </div>
@@ -139,7 +137,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ kostenSig().verpflegungPartner | formatChfPositive }}
       </div>
     </div>
@@ -152,7 +150,7 @@ import { FamilienBerechnung } from '../../../models';
             | transloco
         }}
       </div>
-      <div class="text-end h4 flex-grow-1 text-nowrap">
+      <div class="h4 flex-grow-1 text-end text-nowrap">
         {{ kostenSig().total | formatChf }}
       </div>
     </div>

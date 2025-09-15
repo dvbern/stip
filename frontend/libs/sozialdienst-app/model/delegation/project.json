@@ -4,5 +4,12 @@
   "sourceRoot": "libs/sozialdienst-app/model/delegation/src",
   "projectType": "library",
   "tags": ["type:model", "scope:sozialdienst-app"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/sozialdienst-app/model/delegation/tsconfig.lib.json"
+      }
+    }
+  }
 }

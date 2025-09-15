@@ -27,7 +27,7 @@ export class SharedPatternMainLayoutComponent {
   closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
 
   @HostBinding('class')
-  hostClass = 'tw-flex tw-flex-col';
+  hostClass = 'tw:flex tw:flex-col';
 
   constructor() {
     effect(() => {

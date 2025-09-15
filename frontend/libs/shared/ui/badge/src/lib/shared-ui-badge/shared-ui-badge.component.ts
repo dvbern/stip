@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,7 +9,7 @@ import { SharedModelState } from '@dv/shared/model/state-colors';
 
 @Component({
   selector: 'dv-shared-ui-badge',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './shared-ui-badge.component.html',
   styleUrl: './shared-ui-badge.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -189,6 +189,7 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "verfuegt", nullable = false)
     private boolean verfuegt = false;
 
+    @OrderBy("timestampErstellt DESC")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<Verfuegung> verfuegungs = new ArrayList<>();
 

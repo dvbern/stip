@@ -1,5 +1,11 @@
-import { DOCUMENT } from '@angular/common';
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import {
+  DOCUMENT,
+  Injectable,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { isTenantKey } from '@dv/shared/model/config';
 import { TenantInfo } from '@dv/shared/model/gesuch';

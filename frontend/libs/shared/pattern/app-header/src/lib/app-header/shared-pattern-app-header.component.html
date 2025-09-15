@@ -10,32 +10,32 @@
 }
 
 <!-- HEADER -->
-<header class="top-0 border-bottom w-100 z-3" [class.shadow-sm]="isScroll && !compactHeader">
+<header class="border-bottom top-0 z-3 w-100" [class.shadow-sm]="isScroll && !compactHeader">
   <ng-template #logoOrBackLink>
     @if (backLink) {
       <a
-        class="first-entry btn btn-nav fw-normal shadow-none d-flex align-items-center align-self-center"
+        class="first-entry btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
         [routerLink]="backLink.path"
         data-testid="header-nav-backlink"
       >
-        <i class="text-white material-symbols-rounded fs-3 me-2">arrow_left_alt</i>
+        <i class="material-symbols-rounded fs-3 me-2 text-white">arrow_left_alt</i>
         <span>{{ backLink.text }}</span>
       </a>
     } @else {
       @if (logoSig(); as logo) {
         <a class="first-entry" routerLink="/">
-          <img [src]="logo.src" [alt]="'shared.logo.tenant' | transloco: logo" class="tw-h-[60px] tw-max-w-[135px]" />
+          <img [src]="logo.src" [alt]="'shared.logo.tenant' | transloco: logo" class="tw:h-[60px] tw:max-w-[135px]" />
         </a>
       }
     }
   </ng-template>
   <!-- Small screens Header -->
   <div class="container-md d-lg-none">
-    <div class="py-2 py-lg-4 d-flex gap-2 justify-content-between">
+    <div class="py-lg-4 d-flex justify-content-between gap-2 py-2">
       <ng-container *ngTemplateOutlet="logoOrBackLink"></ng-container>
 
       <!-- search and burgermenu -->
-      <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex align-items-center gap-2">
         <ng-content select="[dvHeaderMobileAddons]"></ng-content>
 
         <button
@@ -52,26 +52,26 @@
 
   <!-- Large screens Header -->
   <div class="d-none d-lg-block">
-    <div class="p-4 d-flex gap-2 justify-content-between">
+    <div class="d-flex justify-content-between gap-2 p-4">
       <ng-container *ngTemplateOutlet="logoOrBackLink"></ng-container>
 
       <!-- top left -->
-      <div class="d-flex flex-grow-1 ms-5">
+      <div class="d-flex ms-5 flex-grow-1">
         <ng-content select="[dvHeaderDesktopLeft]"></ng-content>
       </div>
 
       <!-- top right -->
-      <div class="d-flex flex-grow-1 ms-3 justify-content-end align-items-center">
+      <div class="d-flex justify-content-end align-items-center ms-3 flex-grow-1">
         <ng-content select="[dvHeaderDesktopRight]"></ng-content>
 
-        <div class="d-flex gap-4 align-items-center">
+        <div class="d-flex align-items-center gap-4">
           <button
             type="button"
-            class="btn btn-nav shadow-none fw-normal d-flex align-items-center pe-1"
+            class="btn btn-nav fw-normal d-flex align-items-center pe-1 shadow-none"
             data-testid="header-nav-user-menu"
             [matMenuTriggerFor]="profileMenu"
           >
-            <span class="text-nowrap text-truncate">{{ benutzerNameSig() }}</span>
+            <span class="text-truncate text-nowrap">{{ benutzerNameSig() }}</span>
             <i class="material-symbols-rounded ms-2">expand_more</i>
           </button>
 
@@ -80,7 +80,7 @@
             <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">Logout</button>
             <hr class="my-1" />
             <dv-shared-ui-language-selector
-              class="px-2 d-flex justify-content-center"
+              class="d-flex justify-content-center px-2"
               [language]="languageSig()"
               (languageChange)="handleLanguageChangeHeader($event)"
             />

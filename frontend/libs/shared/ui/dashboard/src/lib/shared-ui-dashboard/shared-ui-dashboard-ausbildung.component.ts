@@ -35,5 +35,5 @@ export class SharedUiDashboardAusbildungComponent {
   aenderungMelden = output<AenderungMelden>();
 
   @HostBinding('class') defaultClasses =
-    'tw-block tw-bg-white tw-p-6 tw-rounded-lg';
+    'tw:block tw:bg-white tw:p-6 tw:rounded-lg';
 }

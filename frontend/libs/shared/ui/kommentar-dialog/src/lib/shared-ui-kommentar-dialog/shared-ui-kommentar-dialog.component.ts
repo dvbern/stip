@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -41,7 +40,6 @@ export interface OptionalKommentarDialogResult {
 @Component({
   selector: 'dv-shared-ui-kommentar-dialog',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,

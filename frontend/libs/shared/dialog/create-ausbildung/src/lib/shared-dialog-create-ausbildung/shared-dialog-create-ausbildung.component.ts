@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -15,7 +14,7 @@ export type CreateAusbildungData = {
 
 @Component({
   selector: 'dv-shared-dialog-create-ausbildung',
-  imports: [CommonModule, TranslocoPipe, SharedFeatureAusbildungComponent],
+  imports: [TranslocoPipe, SharedFeatureAusbildungComponent],
   templateUrl: './shared-dialog-create-ausbildung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { AdminOption } from '@dv/shared/model/router';
@@ -8,7 +7,6 @@ import { SozialdienstAppPatternAdministrationLayoutComponent } from '@dv/soziald
 @Component({
   selector: 'dv-sozialdienst-app-feature-administration',
   imports: [
-    CommonModule,
     SharedUiRouterOutletWrapperComponent,
     SozialdienstAppPatternAdministrationLayoutComponent,
   ],
