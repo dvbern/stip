@@ -27,7 +27,7 @@ import lombok.Getter;
 public enum Gesuchstatus {
     ABKLAERUNG_DURCH_RECHSTABTEILUNG,
     VERFUEGT,
-    VERFUEGUNG_VERSANDBEREIT,
+    VERFUEGUNG_DRUCKBEREIT,
     VERFUEGUNG_VERSENDET,
     WARTEN_AUF_UNTERSCHRIFTENBLATT,
     IN_BEARBEITUNG_SB,
@@ -111,7 +111,7 @@ public enum Gesuchstatus {
         EnumSet.of(
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.VERFUEGUNG_VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
             Gesuchstatus.VERFUEGUNG_VERSENDET
         )
     );
@@ -120,7 +120,7 @@ public enum Gesuchstatus {
         EnumSet.of(
             Gesuchstatus.IN_BEARBEITUNG_SB,
             Gesuchstatus.VERFUEGT,
-            Gesuchstatus.VERFUEGUNG_VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
             Gesuchstatus.VERFUEGUNG_VERSENDET,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
             Gesuchstatus.IN_FREIGABE,
@@ -160,7 +160,7 @@ public enum Gesuchstatus {
             IN_FREIGABE,
             VERFUEGT,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            VERFUEGUNG_VERSANDBEREIT
+            VERFUEGUNG_DRUCKBEREIT
         )
     );
 
@@ -171,7 +171,7 @@ public enum Gesuchstatus {
             JURISTISCHE_ABKLAERUNG,
             IN_FREIGABE,
             WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            VERFUEGUNG_VERSANDBEREIT,
+            VERFUEGUNG_DRUCKBEREIT,
             VERFUEGT,
             VERFUEGUNG_VERSENDET,
             STIPENDIENANSPRUCH,
@@ -183,7 +183,7 @@ public enum Gesuchstatus {
         EnumSet.of(
             IN_BEARBEITUNG_GS,
             FEHLENDE_DOKUMENTE,
-            VERFUEGUNG_VERSANDBEREIT,
+            VERFUEGUNG_DRUCKBEREIT,
             VERFUEGUNG_VERSENDET,
             STIPENDIENANSPRUCH,
             KEIN_STIPENDIENANSPRUCH

@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersandbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -53,7 +53,7 @@ public class GesuchStatusConfigProducer {
     private final KomplettEingereichtHandler komplettEingereichtHandler;
     private final FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandler;
     private final FehlendeDokumenteHandler fehlendeDokumenteHandler;
-    private final VerfuegungVersandbereitHandler verfuegungVersandbereitHandler;
+    private final VerfuegungDruckbereitHandler verfuegungDruckbereitHandler;
     private final VerfuegungVersendetHandler verfuegungVersendetHandler;
     private final NegativeVerfuegungHandler negativeVerfuegungHandler;
     private final AenderungZurueckweisenHandler aenderungZurueckweisenHandler;
@@ -167,20 +167,20 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT);
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT);
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
-        config.configure(Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
+        config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.VERSANDBEREIT),
-                verfuegungVersandbereitHandler::handle
+                verfuegungDruckbereitHandler::handle
             );
 
         config.configure(Gesuchstatus.VERFUEGUNG_VERSENDET)
@@ -192,7 +192,7 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 negativeVerfuegungHandler::handle

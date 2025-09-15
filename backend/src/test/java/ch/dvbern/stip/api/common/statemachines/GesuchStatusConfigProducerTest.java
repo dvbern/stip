@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersandbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
@@ -49,7 +49,7 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(KomplettEingereichtHandler.class),
             Mockito.mock(FehlendeDokumenteEinreichenHandler.class),
             Mockito.mock(FehlendeDokumenteHandler.class),
-            Mockito.mock(VerfuegungVersandbereitHandler.class),
+            Mockito.mock(VerfuegungDruckbereitHandler.class),
             Mockito.mock(VerfuegungVersendetHandler.class),
             Mockito.mock(NegativeVerfuegungHandler.class),
             Mockito.mock(AenderungZurueckweisenHandler.class),
