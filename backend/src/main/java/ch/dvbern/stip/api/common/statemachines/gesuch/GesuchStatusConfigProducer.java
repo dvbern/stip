@@ -97,7 +97,6 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.ANSPRUCH_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(
                 GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
                 Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
@@ -109,14 +108,13 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
             .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
@@ -184,7 +182,6 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.IN_FREIGABE)
@@ -192,12 +189,9 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT) // todo
-                                                                                                           // remove
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
                 verfuegungDruckbereitHandler::handle
@@ -220,13 +214,11 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 negativeVerfuegungHandler::handle
-            )
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
-
+            );
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 
