@@ -17,7 +17,7 @@
                 <i class="icon material-symbols-rounded fs-4">{{ activeFilter.filter.icon }}</i>
               </dv-shared-ui-icon-chip>
               <div class="tw:text-start tw:leading-4">
-                <span class="tw:font-bold tw:text-sm tw:mb-0">
+                <span class="tw:font-semibold tw:text-sm tw:mb-0">
                   {{ 'sachbearbeitung-app.cockpit.quick-filter.' + activeFilter.filter.typ | transloco }}
                 </span>
                 <input
@@ -26,7 +26,6 @@
                   type="radio"
                   name="query"
                   labelPosition="before"
-                  formControlName="query"
                   [checked]="quickFilterForm.controls.query.value === activeFilter.filter.typ"
                   [value]="activeFilter.filter.typ"
                   [attr.aria-label]="
