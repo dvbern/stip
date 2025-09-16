@@ -83,6 +83,10 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         );
     }
 
+    public JPAQuery<Gesuch> getFindAlleMeineJurBearbeitungQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleJurBearbeitungQuery());
+    }
+
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
@@ -102,6 +106,24 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH
         );
+    }
+
+    public JPAQuery<Gesuch> getAlleWithDruckbareVerfuegung() {
+        // TODO KSTIP-2669: After 2663 is merged/ done, update this Status
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.IN_BEARBEITUNG_SB);
+    }
+
+    public JPAQuery<Gesuch> getAlleMeineWithDruckbareVerfuegung(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getAlleWithDruckbareVerfuegung());
+    }
+
+    public JPAQuery<Gesuch> getAlleWithDruckbarerDatenschutzbrief() {
+        // TODO KSTIP-2669: After 2663 is merged/ done, update this Status
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.IN_BEARBEITUNG_SB);
+    }
+
+    public JPAQuery<Gesuch> getAlleMeineWithDruckbarerDatenschutzbrief(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getAlleWithDruckbarerDatenschutzbrief());
     }
 
     private JPAQuery<Gesuch> addStatusFilter(
