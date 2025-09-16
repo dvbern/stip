@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { InfosOptions } from '@dv/sachbearbeitung-app/model/infos';
@@ -8,7 +7,6 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos',
   imports: [
-    CommonModule,
     SharedUiRouterOutletWrapperComponent,
     SachbearbeitungAppPatterninfosLayoutComponent,
   ],

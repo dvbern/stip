@@ -1,5 +1,5 @@
 <button
-  class="btn btn-outline-primary tw-h-full tw-text-xl"
+  class="btn btn-outline-primary tw:h-full tw:!text-xl"
   type="button"
   [attr.aria-label]="'shared.dokumente.upload' | transloco"
   [attr.data-testid]="'button-document-upload-' + optionsSig().dokument.dokumentTyp"
@@ -8,7 +8,7 @@
   <span class="material-symbols-rounded">upload</span>
 </button>
 @if (mainDocumentSig(); as dokument) {
-  <div class="fs-4 position-absolute indicator rounded-circle shadow pe-none bg-white">
+  <div class="fs-4 position-absolute indicator rounded-circle pe-none bg-white shadow">
     <dv-shared-ui-icon-chip
       class="reverse fs-3"
       [class.spin]="dokument.state === 'uploading'"

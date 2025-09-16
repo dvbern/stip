@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +10,7 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 @Component({
   selector: 'dv-shared-ui-form-save',
-  imports: [CommonModule, SharedUiLoadingComponent, TranslocoPipe],
+  imports: [SharedUiLoadingComponent, TranslocoPipe],
   templateUrl: './shared-ui-form-save.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,5 +20,5 @@ export class SharedUiFormSaveComponent {
   @Input() disabled = false;
   @Input() prefixIcon = false;
 
-  @HostBinding('class') class = 'tw-flex';
+  @HostBinding('class') class = 'tw:flex';
 }

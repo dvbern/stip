@@ -1,13 +1,13 @@
 @let ausbildung = ausbildungSig();
-<div class="tw-grid tw-grid-cols-[1fr,auto]">
+<div class="tw:grid tw:grid-cols-[1fr_auto]">
   <div>
-    <h2 class="tw-mb-3 tw-flex tw-items-center tw-gap-4 tw-text-2xl">
+    <h2 class="tw:!mb-3 tw:flex tw:items-center tw:gap-4 tw:!text-2xl">
       <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
-        <i class="material-symbols-rounded tw-text-2xl">school</i>
+        <i class="material-symbols-rounded tw:text-2xl">school</i>
       </dv-shared-ui-icon-chip>
       {{ 'shared.dashboard.ausbildung.title' | transloco: ausbildung }}
     </h2>
-    <p class="tw-mb-10 tw-ml-4">
+    <p class="tw:!mb-10 tw:ml-4">
       {{
         'shared.dashboard.ausbildung.description'
           | transloco
@@ -19,13 +19,13 @@
     </p>
   </div>
   @if (ausbildung.canDelete) {
-    <button type="button" class="btn btn-outline-primary tw-ml-3 tw-h-min" (click)="deleteAusbildung.emit(ausbildung)">
+    <button type="button" class="btn btn-outline-primary tw:ml-3 tw:h-min" (click)="deleteAusbildung.emit(ausbildung)">
       {{ 'shared.dashboard.ausbildung.delete' | transloco }}
     </button>
   }
 </div>
 
-<div class="tw-flex tw-flex-col tw-gap-6">
+<div class="tw:flex tw:flex-col tw:gap-6">
   @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
     <dv-shared-ui-dashboard-gesuch
       [gesuchSig]="gesuch"

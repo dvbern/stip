@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -43,7 +42,6 @@ import { ReplaceSozialdienstAdminDialogComponent } from '../replace-sozialdienst
 
 @Component({
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

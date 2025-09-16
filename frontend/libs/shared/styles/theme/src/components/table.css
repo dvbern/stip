@@ -5,7 +5,7 @@
   background-color: var(--dv-blue-bg);
 }
 
-.tw-dv-table .mat-mdc-table {
+.tw\:dv-table .mat-mdc-table {
   .btn-sm {
     line-height: 0;
   }
@@ -24,13 +24,13 @@
     border-bottom: solid 1px var(--mat-table-row-item-outline-color);
 
     .mat-mdc-header-cell {
-      @apply tw-pb-4 tw-pt-8;
+      @apply tw:pb-4 tw:pt-8;
 
       padding-left: var(--dv-table-header-spacing-horizontal, 16px);
       padding-right: var(--dv-table-header-spacing-horizontal, 16px);
 
       &.filtered {
-        @apply tw-pb-3;
+        @apply tw:pb-3;
 
         .mat-sort-header-container {
           align-items: start;
@@ -41,11 +41,11 @@
         }
 
         .mat-mdc-form-field {
-          @apply tw-pt-1;
+          @apply tw:pt-1;
         }
 
         .mat-sort-header-content {
-          @apply tw-flex tw-max-w-full tw-grow-0 tw-flex-col tw-items-start;
+          @apply tw:flex tw:max-w-full tw:grow-0 tw:flex-col tw:items-start;
         }
       }
 
@@ -121,8 +121,8 @@
     align-items: center;
     padding-left: 8px;
     padding-right: 8px;
-    border-bottom-right-radius: var(--mdc-shape-small, 4px);
-    border-bottom-left-radius: var(--mdc-shape-small, 4px);
+    border-bottom-right-radius: var(--mat-shape-small, 4px);
+    border-bottom-left-radius: var(--mat-shape-small, 4px);
   }
   .mat-mdc-form-field.mat-mdc-form-field-has-icon-suffix
     .mat-mdc-text-field-wrapper {

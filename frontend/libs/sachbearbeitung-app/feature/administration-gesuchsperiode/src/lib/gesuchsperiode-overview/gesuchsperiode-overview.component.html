@@ -1,4 +1,4 @@
-<nav mat-tab-nav-bar [tabPanel]="tabPanel" class="tw-mt-6 tw-w-fit" [disablePagination]="true">
+<nav mat-tab-nav-bar [tabPanel]="tabPanel" class="tw:mt-6 tw:w-fit" [disablePagination]="true">
   @for (tab of tabsSig(); track tab.name) {
     <a mat-tab-link [routerLink]="[tab.link]" [active]="tab.active" class="btn btn-nav" [class.active]="tab.active">
       {{ `sachbearbeitung-app.admin.${tab.name}.title` | transloco }}

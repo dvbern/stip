@@ -4,14 +4,14 @@
   <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
 <ng-container *dvTranslocoShared="let t">
-  <div class="tw-flex tw-items-center tw-justify-between">
+  <div class="tw:flex tw:items-center tw:justify-between">
     <h3>
       {{ t('shared.dokumente.table.title.requiredDocuments') }}
     </h3>
 
     @if (view.gesuchId && view.nachfrist) {
-      <div class="tw-flex tw-items-center tw-gap-3">
-        <dl class="tw-mt-6 tw-flex tw-gap-3">
+      <div class="tw:flex tw:items-center tw:gap-3">
+        <dl class="tw:!mt-6 tw:flex tw:gap-3">
           <dt>{{ t('shared.dokumente.nachfrist.label') }}</dt>
           <dd>{{ view.nachfrist | date: 'dd.MM.yyyy' }}</dd>
         </dl>
@@ -20,18 +20,18 @@
             *dvIfSachbearbeiter
             [disabled]="!canEditNachfristSig()"
             type="button"
-            class="btn btn-outline-primary btn-sm tw-flex tw-p-2"
+            class="btn btn-outline-primary btn-sm tw:!flex tw:!p-2"
             (click)="editNachfrist(view.gesuchId, view.nachfrist)"
             [matTooltip]="t('shared.dokumente.nachfrist.edit')"
           >
-            <i class="material-symbols-rounded tw-text-xl/none">calendar_month</i>
+            <i class="material-symbols-rounded tw:!text-xl/none">calendar_month</i>
           </button>
         }
       </div>
     }
   </div>
 
-  <div class="tw-dv-table">
+  <div class="tw:dv-table">
     <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
       <caption class="cdk-visually-hidden">
         {{
@@ -41,11 +41,11 @@
 
       <!-- expander -->
       <ng-container matColumnDef="expander">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-11"></th>
-        <td class="!tw-px-0" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-          <button class="btn btn-link tw-box-content tw-h-7 tw-w-7" type="button">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-11"></th>
+        <td class="tw:!px-0" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+          <button class="btn btn-link tw:!box-content tw:size-7" type="button">
             <i
-              class="material-symbols-rounded tw-rounded-full tw-bg-[--dv-blue-bg] tw-align-middle tw-text-2xl/none tw-text-white"
+              class="material-symbols-rounded tw:rounded-full tw:bg-(--dv-blue-bg) tw:align-middle tw:text-2xl/none tw:text-white"
             >
               @if (expandedRowId === dokument.dokumentTyp) {
                 expand_less
@@ -59,11 +59,11 @@
 
       <!-- required document -->
       <ng-container matColumnDef="documentName">
-        <th mat-header-cell *matHeaderCellDef class="tw-w-full tw-min-w-96">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-full tw:min-w-96">
           {{ t('shared.dokumente.table.documentName') }}
         </th>
-        <td mat-cell class="tw-w-full tw-min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-          <div class="tw-py-3" [innerHTML]="t(dokument.dokumentOptions.info.title)"></div>
+        <td mat-cell class="tw:w-full tw:min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+          <div class="tw:py-3" [innerHTML]="t(dokument.dokumentOptions.info.title)"></div>
         </td>
       </ng-container>
 
@@ -72,7 +72,7 @@
         <th mat-header-cell *matHeaderCellDef>
           {{ t('shared.dokumente.table.formStep') }}
         </th>
-        <td class="tw-text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <td class="tw:text-nowrap" mat-cell *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
           @if (dokument.formStep.routes; as routes) {
             <a [routerLink]="routes" (click)="$event.stopPropagation()">
               {{ t(dokument.formStep.translationKey) }}
@@ -99,10 +99,10 @@
       <!-- actions -->
       <ng-container matColumnDef="actions">
         <th [title]="t('shared.dokumente.table.actions')" mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell class="tw-w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-          <div class="tw-flex tw-justify-end">
+        <td mat-cell class="tw:w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+          <div class="tw:flex tw:justify-end">
             <dv-shared-pattern-document-upload
-              class="tw-max-h-11"
+              class="tw:max-h-11"
               (click)="$event.stopPropagation()"
               [optionsSig]="dokument.dokumentOptions"
             ></dv-shared-pattern-document-upload>
@@ -129,13 +129,13 @@
             "
           >
             @if (dokument.kommentarePending) {
-              <dv-shared-ui-loading class="tw-pb-2" type="icon"></dv-shared-ui-loading>
+              <dv-shared-ui-loading class="tw:pb-2" type="icon"></dv-shared-ui-loading>
             } @else if (dokument.kommentare.length === 0) {
-              <div class="text-muted tw-py-2 tw-text-center">
+              <div class="text-muted tw:py-2 tw:text-center">
                 {{ t('shared.dokumente.table.noComment') }}
               </div>
             } @else {
-              <div class="tw-grid tw-grid-cols-[33px,1fr,1fr,3fr] tw-gap-4 tw-py-2">
+              <div class="tw:grid tw:grid-cols-[33px_1fr_1fr_3fr] tw:gap-4 tw:py-2">
                 @for (kommentar of dokument.kommentare; track $index) {
                   <i class="material-symbols-rounded text-gray">person</i>
                   <span>{{ kommentar.user_erstellt }}</span>
@@ -159,7 +159,7 @@
           'expanded-row': dokument.gesuchDokument?.id
             ? dokument.gesuchDokument?.id === expandedRowId
             : dokument.dokumentTyp === expandedRowId,
-          '!tw-bg-dv-warning': !dokument?.gesuchDokument?.id,
+          'tw:!bg-(--dv-yellow-bg-subtle)': !dokument?.gesuchDokument?.id,
         }"
         mat-row
         *matRowDef="let dokument; columns: displayedColumns"

@@ -1,17 +1,17 @@
-<div class="p-3 p-md-4">
+<div class="p-md-4 p-3">
   <h4 class="d-flex align-items-center align-self-start title">
-    <span class="p-1 me-2 text-info upload-icon material-symbols-rounded rounded-circle align-self-start mt-1"
+    <span class="text-info upload-icon material-symbols-rounded rounded-circle align-self-start me-2 mt-1 p-1"
       >mail</span
     >
     {{ 'shared.nachricht.title' | transloco }}
     <span class="flex-grow-1"></span>
-    <button type="button" class="dv-icon-button ms-2 align-self-start close" (click)="close()">
+    <button type="button" class="dv-icon-button align-self-start close ms-2" (click)="close()">
       <span class="material-symbols-rounded align-middle">close</span>
     </button>
   </h4>
 
   @let notification = data.notification;
-  <dl class="d-flex flex-column mt-4 tw-mb-0">
+  <dl class="d-flex flex-column tw:mb-0 mt-4">
     <div class="d-flex gap-4">
       <div class="d-flex flex-column">
         <dt>{{ 'shared.nachrichten.sender' | transloco }}:</dt>
@@ -34,7 +34,7 @@
         @if (notification.notificationType === 'NEUE_VERFUEGUNG' && notification.contextId) {
           <button
             type="button"
-            class="btn btn-outline-primary tw-mt-11"
+            class="btn btn-outline-primary tw:mt-11"
             [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | transloco"
             [dvDownloadButton]="{
               type: 'verfuegung',

@@ -28,27 +28,21 @@
         }
         <br />
         @for (option of berechnungenSig(); track $index) {
-          <ng-container
-            *ngIf="{
-              active: route.isActive(option.route, false),
-            } as stepRoute"
+          <a
+            type="button"
+            class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
+            [attr.data-testid]="'option-nav-' + option.route"
+            [class.btn-light]="!option.active"
+            [class.shadow-none]="!option.active"
+            [routerLink]="option.fullRoute"
+            routerLinkActive="active"
+            (click)="navClicked$.emit()"
           >
-            <a
-              type="button"
-              class="btn btn-nav mb-3 w-100 d-flex justify-content-start align-items-center fw-normal"
-              [attr.data-testid]="'option-nav-' + option.route"
-              [class.btn-light]="!stepRoute.active"
-              [class.shadow-none]="!stepRoute.active"
-              [routerLink]="option.fullRoute"
-              routerLinkActive="active"
-              (click)="navClicked$.emit()"
-            >
-              <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
-              <span class="text-start">
-                {{ option.translationKey | transloco: option.translationOptions }}
-              </span>
-            </a>
-          </ng-container>
+            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+            <span class="text-start">
+              {{ option.translationKey | transloco: option.translationOptions }}
+            </span>
+          </a>
         }
       </div>
     </ng-template>

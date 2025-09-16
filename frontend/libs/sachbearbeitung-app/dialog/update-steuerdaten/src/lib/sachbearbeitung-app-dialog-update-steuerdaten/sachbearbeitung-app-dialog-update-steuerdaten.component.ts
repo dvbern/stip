@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -25,7 +24,6 @@ type UpdateSteuerdatenDialogResult = {
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-update-steuerdaten',
   imports: [
-    CommonModule,
     MaskitoDirective,
     MatInputModule,
     MatFormFieldModule,

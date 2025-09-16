@@ -30,5 +30,5 @@ export class SharedUiDashboardGesuchComponent {
   aenderungMelden = output<void>();
 
   @HostBinding('class') defaultClasses =
-    'tw-flex tw-w-full tw-flex-col tw-rounded-lg tw-px-6 tw-pt-4 tw-pb-6';
+    'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:px-6 tw:pt-4 tw:pb-6';
 }

@@ -1,6 +1,6 @@
 <button
   type="button"
-  class="dv-icon-button dv-icon-button-lg !tw-absolute tw-end-0 tw-top-0 tw-m-1"
+  class="dv-icon-button dv-icon-button-lg tw:!absolute tw:end-0 tw:top-0 tw:!m-1"
   [attr.aria-label]="'shared.cancel' | transloco"
   (click)="cancel()"
 >
@@ -9,17 +9,17 @@
 <form
   [formGroup]="form"
   data-testid="form-change-gesuchsperiode-dialog-form"
-  class="tw-block tw-max-w-[580px] tw-p-4"
+  class="tw:block tw:max-w-[580px] tw:p-4"
   (ngSubmit)="confirm()"
 >
-  <h3 class="tw-mb-6">
+  <h3 class="tw:!mb-6">
     {{ 'shared.dialog.change-gesuchsperiode.title' | transloco }}
   </h3>
-  <div class="tw-mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | transloco"></div>
+  <div class="tw:mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | transloco"></div>
 
-  <div class="tw-w-full">
+  <div class="tw:w-full">
     <!-- gesuchsperiode select -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.dialog.change-gesuchsperiode.gesuchsperiode.label' | transloco }}</mat-label>
       <mat-select formControlName="gesuchsperiodeId" data-testid="form-change-gesuchsperiode-dialog-gesuchsperiode">
         @for (gesuchsperiode of gesuchsperiodenViewSig(); track gesuchsperiode.id) {
@@ -51,7 +51,7 @@
     </dv-shared-ui-info-container>
   }
 
-  <div class="tw-mt-10 tw-flex tw-justify-between">
+  <div class="tw:mt-10 tw:flex tw:justify-between">
     <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
       {{ 'shared.cancel' | transloco }}
     </button>

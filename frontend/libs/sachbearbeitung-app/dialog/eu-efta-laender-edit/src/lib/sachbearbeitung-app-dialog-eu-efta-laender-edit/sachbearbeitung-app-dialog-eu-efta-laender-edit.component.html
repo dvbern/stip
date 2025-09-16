@@ -1,13 +1,13 @@
-<section class="tw-relative tw-flex tw-flex-col tw-rounded tw-p-12">
+<section class="tw:relative tw:flex tw:flex-col tw:rounded-sm tw:p-12">
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw-end-0 tw-top-0 tw-m-1"
+    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw-mb-8 tw-text-2xl">
+  <h1 class="tw:!mb-8 tw:!text-2xl">
     @if (dialogData.land) {
       {{ 'sachbearbeitung-app.admin.euEftaLaender.editdialog.title.edit' | transloco }}
     } @else {
@@ -17,11 +17,11 @@
   <form
     [formGroup]="form"
     data-testid="form-euEftaLaender-form"
-    class="tw-mt-6 tw-grid tw-grid-cols-1 tw-gap-x-6 tw-gap-y-4 tw-pt-4 md:tw-grid-cols-2"
+    class="tw:mt-6 tw:grid tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:grid-cols-2"
     novalidate
   >
     <!-- Ländercode BFS -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.label' | transloco }}*</mat-label>
       <input
         data-testid="form-euEftaLaender-laendercodeBfs"
@@ -39,7 +39,7 @@
     </mat-form-field>
 
     <!-- iso2code -->
-    <mat-form-field dvSharedUiFormField class="tw-col-start-1 tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso2code.label' | transloco }}</mat-label>
       <input
         data-testid="form-euEftaLaender-iso2code"
@@ -54,7 +54,7 @@
     </mat-form-field>
 
     <!-- iso3code -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.iso3code.label' | transloco }}</mat-label>
       <input
         data-testid="form-euEftaLaender-iso3code"
@@ -68,7 +68,7 @@
       </mat-error>
     </mat-form-field>
     <!-- De Kurzform -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | transloco }}*</mat-label>
       <input data-testid="form-euEftaLaender-deKurzform" matInput type="text" formControlName="deKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -76,7 +76,7 @@
       </mat-error>
     </mat-form-field>
     <!-- Fr Kurzform -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | transloco }}*</mat-label>
       <input data-testid="form-euEftaLaender-frKurzform" matInput type="text" formControlName="frKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -84,7 +84,7 @@
       </mat-error>
     </mat-form-field>
     <!-- It Kurzform -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.itKurzform.label' | transloco }}*</mat-label>
       <input data-testid="form-euEftaLaender-itKurzform" matInput type="text" formControlName="itKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -92,7 +92,7 @@
       </mat-error>
     </mat-form-field>
     <!-- Eng Kurzform -->
-    <mat-form-field dvSharedUiFormField class="tw-w-full">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.enKurzform.label' | transloco }}*</mat-label>
       <input data-testid="form-euEftaLaender-enKurzform" matInput type="text" formControlName="enKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -100,15 +100,15 @@
       </mat-error>
     </mat-form-field>
     <!-- Eintrag Gültig -->
-    <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="eintragGueltig">
+    <mat-checkbox dvSharedUiFormField class="tw:w-full" formControlName="eintragGueltig">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.label' | transloco }}</mat-label>
     </mat-checkbox>
     <!-- EU/Efta -->
-    <mat-checkbox dvSharedUiFormField class="tw-w-full" formControlName="isEuEfta">
+    <mat-checkbox dvSharedUiFormField class="tw:w-full" formControlName="isEuEfta">
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.euEfta.label' | transloco }}</mat-label>
     </mat-checkbox>
 
-    <div class="d-flex mt-4 justify-content-between tw-col-span-full">
+    <div class="d-flex justify-content-between tw:col-span-full mt-4">
       <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="close()">
         {{ 'shared.cancel' | transloco }}
       </button>

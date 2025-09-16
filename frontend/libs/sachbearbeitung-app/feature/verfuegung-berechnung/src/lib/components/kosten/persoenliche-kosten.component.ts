@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -12,7 +11,6 @@ import { PersoenlicheBerechnung } from '../../../models';
 @Component({
   selector: 'dv-persoenliche-kosten',
   imports: [
-    CommonModule,
     TranslocoPipe,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,

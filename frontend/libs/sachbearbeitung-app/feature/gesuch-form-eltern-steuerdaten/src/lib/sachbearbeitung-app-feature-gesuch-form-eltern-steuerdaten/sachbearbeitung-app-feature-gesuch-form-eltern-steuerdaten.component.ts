@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -51,7 +50,6 @@ import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdat
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form-eltern-steuerdaten',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MaskitoDirective,
     TranslocoPipe,
