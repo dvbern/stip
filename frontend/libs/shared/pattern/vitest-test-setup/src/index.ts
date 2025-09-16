@@ -139,6 +139,7 @@ export const TEST_AUSBILDUNGSSTAETTEN = {
         bezeichnungDe: 'Ausbildungsgang 1 DE',
         bezeichnungFr: 'Ausbildungsgang 1 FR',
         bildungskategorie: 'SEKUNDARSTUFE_I',
+        bildungsrichtung: 'BERUFLICHE_GRUNDBILDUNG',
         zusatzfrage: 'FACHRICHTUNG',
         aktiv: true,
       },

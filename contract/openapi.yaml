@@ -6097,6 +6097,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - bildungskategorie
+        - bildungsrichtung
         - aktiv
       properties:
         id:
@@ -6107,6 +6108,8 @@ components:
           type: string
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
+        bildungsrichtung:
+          $ref: "#/components/schemas/Bildungsrichtung"
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:

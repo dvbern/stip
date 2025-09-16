@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Bildungsrichtung } from './bildungsrichtung';
 import { Bildungskategorie } from './bildungskategorie';
 import { AbschlussZusatzfrage } from './abschlussZusatzfrage';
 
@@ -17,6 +18,7 @@ export interface AusbildungsgangData {
     bezeichnungDe: string;
     bezeichnungFr: string;
     bildungskategorie: Bildungskategorie;
+    bildungsrichtung: Bildungsrichtung;
     zusatzfrage?: AbschlussZusatzfrage;
     askForBerufsmaturitaet?: boolean;
     aktiv: boolean;
