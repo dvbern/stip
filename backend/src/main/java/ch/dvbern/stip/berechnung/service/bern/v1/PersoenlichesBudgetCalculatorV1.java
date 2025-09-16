@@ -19,8 +19,6 @@ package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.ListIterator;
 
 import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputPersoenlichesbudgetV1;
@@ -70,30 +68,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setEigenerHaushalt(antragssteller.isEigenerHaushalt());
         result.setPersoenlichesbudgetBerechnet(roundHalfUp(rawBudgetBerechnet));
 
-        result.setAnteilLebenshaltungskosten(
-            calculateAnteilLebenshaltungskosten(List.of(familienbudget1, familienbudget2), antragssteller)
-        );
-
         return result;
-    }
-
-    private static int calculateAnteilLebenshaltungskosten(
-        List<FamilienBudgetresultatDto> familienBudgetresultatList,
-        AntragsstellerV1 antragssteller
-    ) {
-        int anteilLebenshaltungskosten = 0;
-        int piaWohntInElternHaushalt = antragssteller.getPiaWohntInElternHaushalt();
-        ListIterator<FamilienBudgetresultatDto> iterator = familienBudgetresultatList.listIterator();
-        while (iterator.hasNext()) {
-            final FamilienBudgetresultatDto familienBudgetresultat = iterator.next();
-            final var budgetIdx = iterator.nextIndex();
-            final var familienBudget = familienBudgetresultat.getFamilienbudgetBerechnet();
-            if (familienBudget >= 0 || antragssteller.isEigenerHaushalt() || budgetIdx != piaWohntInElternHaushalt) {
-                continue;
-            }
-            anteilLebenshaltungskosten += familienBudget / familienBudgetresultat.getAnzahlPersonenImHaushalt();
-        }
-        return anteilLebenshaltungskosten;
     }
 
     private void calculateAndSetAusgaben(
@@ -112,9 +87,6 @@ public class PersoenlichesBudgetCalculatorV1 {
             wohnkosten = antragssteller.getWohnkosten();
             medizinischeGrundversorgung = antragssteller.getMedizinischeGrundversorgung();
         }
-        result.setGrundbedarf(grundbedarf);
-        result.setWohnkosten(wohnkosten);
-        result.setMedizinischeGrundversorgung(medizinischeGrundversorgung);
 
         var ausbildungskosten = antragssteller.getAusbildungskosten();
         if (antragssteller.isVerheiratetKonkubinat()) {
@@ -123,9 +95,8 @@ public class PersoenlichesBudgetCalculatorV1 {
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
         }
-        result.setAusbildungskosten(ausbildungskosten);
 
-        result.setSteuernKantonGemeinde(antragssteller.getSteuern());
+        final var steuernKantonGemeinde = antragssteller.getSteuern();
 
         var fahrkosten = antragssteller.getFahrkosten();
         if (antragssteller.isVerheiratetKonkubinat()) {
@@ -134,8 +105,8 @@ public class PersoenlichesBudgetCalculatorV1 {
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
         }
-        result.setFahrkosten(fahrkosten);
-        result.setFahrkostenPartner(antragssteller.getFahrkostenPartner());
+
+        final var fahrkostenPartner = antragssteller.getFahrkostenPartner();
 
         var verpflegung = 0;
         if (!antragssteller.isEigenerHaushalt()) {
@@ -148,13 +119,12 @@ public class PersoenlichesBudgetCalculatorV1 {
                     .multiply(BigDecimal.valueOf(stammdaten.getPreisProMahlzeit()))
             );
         }
-        result.setVerpflegung(verpflegung);
-        result.setVerpflegungPartner(antragssteller.getVerpflegungPartner());
 
-        result.setFremdbetreuung(antragssteller.getFremdbetreuung());
+        final var verpflegungPartner = antragssteller.getVerpflegungPartner();
+        final var fremdbetreuung = antragssteller.getFremdbetreuung();
 
-        final var anteilFamilienbudget1 = Math.abs(
-            calculateAnteilFamilienbudget(
+        final var anteilLebenshaltungskosten1 = Math.abs(
+            calculateAnteilLebenshaltungskosten(
                 antragssteller,
                 familienbudget1,
                 2,
@@ -162,34 +132,46 @@ public class PersoenlichesBudgetCalculatorV1 {
             )
         );
 
-        final var anteilFamilienbudget2 = Math.abs(
-            calculateAnteilFamilienbudget(
+        final var anteilLebenshaltungskosten2 = Math.abs(
+            calculateAnteilLebenshaltungskosten(
                 antragssteller,
                 familienbudget2,
                 1,
                 2
             )
         );
-
-        result.setAnteilFamilienbudget(anteilFamilienbudget1 + anteilFamilienbudget2);
+        final var anteilLebenshaltungskosten = anteilLebenshaltungskosten1 + anteilLebenshaltungskosten2;
 
         final var ausgaben =
-            result.getGrundbedarf()
-            + result.getWohnkosten()
-            + result.getMedizinischeGrundversorgung()
-            + result.getAusbildungskosten()
-            + result.getSteuernKantonGemeinde()
-            + result.getFahrkosten()
-            + result.getFahrkostenPartner()
-            + result.getVerpflegung()
-            + result.getVerpflegungPartner()
-            + result.getFremdbetreuung()
-            + result.getAnteilFamilienbudget();
+            grundbedarf
+            + wohnkosten
+            + medizinischeGrundversorgung
+            + ausbildungskosten
+            + steuernKantonGemeinde
+            + fahrkosten
+            + fahrkostenPartner
+            + verpflegung
+            + verpflegungPartner
+            + fremdbetreuung
+            + anteilLebenshaltungskosten;
+
+        // Set calculated values on dto
+        result.setGrundbedarf(grundbedarf);
+        result.setWohnkosten(wohnkosten);
+        result.setMedizinischeGrundversorgung(medizinischeGrundversorgung);
+        result.setAusbildungskosten(ausbildungskosten);
+        result.setSteuernKantonGemeinde(steuernKantonGemeinde);
+        result.setFahrkosten(fahrkosten);
+        result.setFahrkostenPartner(fahrkostenPartner);
+        result.setVerpflegung(verpflegung);
+        result.setVerpflegungPartner(verpflegungPartner);
+        result.setFremdbetreuung(fremdbetreuung);
+        result.setAnteilLebenshaltungskosten(anteilLebenshaltungskosten);
 
         result.setAusgabenPersoenlichesBudget(ausgaben);
     }
 
-    private Integer calculateAnteilFamilienbudget(
+    private Integer calculateAnteilLebenshaltungskosten(
         final AntragsstellerV1 antragssteller,
         final FamilienBudgetresultatDto familienbudget,
         final int wohntImHaushaltZero,
@@ -234,41 +216,53 @@ public class PersoenlichesBudgetCalculatorV1 {
         } else {
             einkommen = antragssteller.getEinkommen();
         }
+
+        final var einkommenPartner = antragssteller.getEinkommenPartner();
+
+        final var anrechenbaresVermoegen = roundHalfUp(
+            BigDecimal.valueOf(antragssteller.getVermoegen())
+                .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
+        );
+
+        final var alimente = antragssteller.getAlimente();
+        final var rente = antragssteller.getRente();
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
+        final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
+        final var leistungenEO = antragssteller.getLeistungenEO();
+        final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
+        final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
+        final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
+
+        final var einnahmen =
+            einkommen
+            + einkommenPartner
+            + anrechenbaresVermoegen
+            + alimente
+            + rente
+            + kinderAusbildungszulagen
+            + ergaenzungsleistungen
+            + leistungenEO
+            + gemeindeInstitutionen
+            + elternbeitrag1
+            + elternbeitrag2;
+
+        // Set calculated values on dto
         result.setEinkommen(einkommen);
         result.setEinkommenPartner(antragssteller.getEinkommenPartner());
         result.setSteuerbaresVermoegen(antragssteller.getVermoegen());
-        result.setAnrechenbaresVermoegen(
-            roundHalfUp(
-                BigDecimal.valueOf(antragssteller.getVermoegen())
-                    .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
-                    .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
-            )
-        );
+        result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
         result.setAlimente(antragssteller.getAlimente());
         result.setRente(antragssteller.getRente());
         result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen());
         result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
         result.setLeistungenEO(antragssteller.getLeistungenEO());
         result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());
-
-        final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
         result.setElternbeitrag1(elternbeitrag1);
-
-        final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
         result.setElternbeitrag2(elternbeitrag2);
 
-        final var einnahmen =
-            result.getEinkommen()
-            + result.getEinkommenPartner()
-            + result.getAnrechenbaresVermoegen()
-            + result.getAlimente()
-            + result.getRente()
-            + result.getKinderAusbildungszulagen()
-            + result.getErgaenzungsleistungen()
-            + result.getLeistungenEO()
-            + result.getGemeindeInstitutionen()
-            + result.getElternbeitrag1()
-            + result.getElternbeitrag2();
+        final var anteilFamilienBudget = elternbeitrag1 + elternbeitrag2;
+        result.setAnteilFamilienbudget(anteilFamilienBudget);
 
         result.setEinnahmenPersoenlichesBudget(einnahmen);
     }

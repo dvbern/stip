@@ -55,28 +55,40 @@ public class FamilienbudgetCalculatorV1 {
     }
 
     private void calculateAndSetAusgaben(final FamilienBudgetresultatDto result, final ElternteilV1 elternteil) {
-        result.setGrundbedarf(elternteil.getGrundbedarf());
-        result.setEffektiveWohnkosten(elternteil.getEffektiveWohnkosten());
-        result.setMedizinischeGrundversorgung(elternteil.getMedizinischeGrundversorgung());
-        result.setSteuernKantonGemeinde(elternteil.getSteuernStaat());
-        result.setSteuernBund(elternteil.getSteuernBund());
-        result.setIntegrationszulage(elternteil.getIntegrationszulage());
-        result.setFahrkostenPerson1(elternteil.getFahrkostenPerson1());
-        result.setFahrkostenPerson2(elternteil.getFahrkostenPerson2());
-        result.setEssenskostenPerson1(elternteil.getEssenskostenPerson1());
-        result.setEssenskostenPerson2(elternteil.getEssenskostenPerson2());
+        final var grundbedarf = elternteil.getGrundbedarf();
+        final var effektiveWohnkosten = elternteil.getEffektiveWohnkosten();
+        final var medizinischeGrundversorgung = elternteil.getMedizinischeGrundversorgung();
+        final var steuernStaat = elternteil.getSteuernStaat();
+        final var steuernBund = elternteil.getSteuernBund();
+        final var integrationszulage = elternteil.getIntegrationszulage();
+        final var fahrkostenPerson1 = elternteil.getFahrkostenPerson1();
+        final var fahrkostenPerson2 = elternteil.getFahrkostenPerson2();
+        final var essenskostenPerson1 = elternteil.getEssenskostenPerson1();
+        final var essenskostenPerson2 = elternteil.getEssenskostenPerson2();
 
         final var ausgaben =
-            result.getGrundbedarf()
-            + result.getEffektiveWohnkosten()
-            + result.getMedizinischeGrundversorgung()
-            + result.getSteuernKantonGemeinde()
-            + result.getSteuernBund()
-            + result.getIntegrationszulage()
-            + result.getFahrkostenPerson1()
-            + result.getFahrkostenPerson2()
-            + result.getEssenskostenPerson1()
-            + result.getEssenskostenPerson2();
+            grundbedarf
+            + effektiveWohnkosten
+            + medizinischeGrundversorgung
+            + steuernStaat
+            + steuernBund
+            + integrationszulage
+            + fahrkostenPerson1
+            + fahrkostenPerson2
+            + essenskostenPerson1
+            + essenskostenPerson2;
+
+        // Set calculated values on dto
+        result.setGrundbedarf(grundbedarf);
+        result.setEffektiveWohnkosten(effektiveWohnkosten);
+        result.setMedizinischeGrundversorgung(medizinischeGrundversorgung);
+        result.setSteuernKantonGemeinde(steuernStaat);
+        result.setSteuernBund(steuernBund);
+        result.setIntegrationszulage(integrationszulage);
+        result.setFahrkostenPerson1(fahrkostenPerson1);
+        result.setFahrkostenPerson2(fahrkostenPerson2);
+        result.setEssenskostenPerson1(essenskostenPerson1);
+        result.setEssenskostenPerson2(essenskostenPerson2);
 
         result.setAusgabenFamilienbudget(ausgaben);
     }
@@ -86,24 +98,72 @@ public class FamilienbudgetCalculatorV1 {
         final ElternteilV1 elternteil,
         final StammdatenV1 stammdaten
     ) {
+        final var ergaenzungsleistungen = elternteil.getErgaenzungsleistungen();
+        final var totalEinkuenfte = elternteil.getTotalEinkuenfte();
+        final var eigenmietwert = elternteil.getEigenmietwert();
+        final var alimente = elternteil.getAlimente();
+        final var steuerbaresVermoegen = elternteil.getSteuerbaresVermoegen();
+        final var saeule3a = getSaeule3a(elternteil, stammdaten);
+        final var saeule2 = getSaeule2(elternteil);
+        final var anrechenbaresVermoegen = getAnrechenbaresVermoegen(elternteil, stammdaten);
 
-        result.setErgaenzungsleistungen(elternteil.getErgaenzungsleistungen());
-        result.setTotalEinkuenfte(elternteil.getTotalEinkuenfte());
-        result.setEigenmietwert(elternteil.getEigenmietwert());
-        result.setAlimente(elternteil.getAlimente());
+        final var einnahmenBeforeVermoegen = max(
+            totalEinkuenfte
+            + ergaenzungsleistungen
+            - eigenmietwert
+            - alimente
+            - saeule3a
+            - saeule2
+            - stammdaten.getEinkommensfreibetrag(),
+            0
+        );
 
-        result.setSteuerbaresVermoegen(elternteil.getSteuerbaresVermoegen());
+        final var einnahmen = einnahmenBeforeVermoegen + anrechenbaresVermoegen;
 
+        // Set calculated values on dto
+        result.setErgaenzungsleistungen(ergaenzungsleistungen);
+        result.setTotalEinkuenfte(totalEinkuenfte);
+        result.setEigenmietwert(eigenmietwert);
+        result.setAlimente(alimente);
+        result.setSteuerbaresVermoegen(steuerbaresVermoegen);
+        result.setSaeule3a(saeule3a);
+        result.setSaeule2(saeule2);
+        result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
+        final var selbststaendigErwerbend = elternteil.isSelbststaendigErwerbend();
+        result.setSelbststaendigErwerbend(selbststaendigErwerbend);
+
+        result.setEinnahmenFamilienbudget(einnahmen);
+    }
+
+    private int getSaeule3a(
+        final ElternteilV1 elternteil,
+        final StammdatenV1 stammdaten
+    ) {
         var saeule3a = 0;
+        if (elternteil.isSelbststaendigErwerbend()) {
+            saeule3a = max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0);
+        }
+        return saeule3a;
+    }
+
+    private int getSaeule2(
+        final ElternteilV1 elternteil
+    ) {
         var saeule2 = 0;
+        if (elternteil.isSelbststaendigErwerbend()) {
+            saeule2 = elternteil.getEinzahlungSaeule2();
+        }
+        return saeule2;
+    }
+
+    private int getAnrechenbaresVermoegen(
+        final ElternteilV1 elternteil,
+        final StammdatenV1 stammdaten
+    ) {
         var anrechenbaresVermoegen = BigDecimal.valueOf(
             elternteil.getSteuerbaresVermoegen()
         );
-
         if (elternteil.isSelbststaendigErwerbend()) {
-            saeule3a = max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0);
-            saeule2 = elternteil.getEinzahlungSaeule2();
-
             // steuerbaresVermoegen - freibetragVermoegen
             anrechenbaresVermoegen =
                 BigDecimal.valueOf(
@@ -113,30 +173,11 @@ public class FamilienbudgetCalculatorV1 {
                     )
                 );
         }
-        result.setSelbststaendigErwerbend(elternteil.isSelbststaendigErwerbend());
-        result.setSaeule3a(saeule3a);
-        result.setSaeule2(saeule2);
-        result.setAnrechenbaresVermoegen(
-            roundHalfUp(
-                anrechenbaresVermoegen.setScale(2, RoundingMode.HALF_UP)
-                    .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
-                    .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
-            )
+        return roundHalfUp(
+            anrechenbaresVermoegen.setScale(2, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
         );
-
-        final var einnahmenBeforeVermoegen = max(
-            result.getTotalEinkuenfte()
-            + result.getErgaenzungsleistungen()
-            - result.getEigenmietwert()
-            - result.getAlimente()
-            - result.getSaeule3a()
-            - result.getSaeule2()
-            - stammdaten.getEinkommensfreibetrag(),
-            0
-        );
-
-        final var einnahmen = einnahmenBeforeVermoegen + result.getAnrechenbaresVermoegen();
-        result.setEinnahmenFamilienbudget(einnahmen);
     }
 
     private void calculateAndSetFamilienbudgetBerechnet(final FamilienBudgetresultatDto result) {
