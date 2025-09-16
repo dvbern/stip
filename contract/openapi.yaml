@@ -4508,11 +4508,16 @@ components:
       type: string
     GetGesucheSBQueryType:
       enum:
+        - ALLE_GESUCHE
+        - MEINE_GESUCHE
         - ALLE_BEARBEITBAR
-        - ALLE_BEARBEITBAR_MEINE
-        - ALLE_JURISTISCHE_ABKLAERUNG_MEINE
-        - ALLE_MEINE
-        - ALLE
+        - MEINE_BEARBEITBAR
+        - ALLE_JURISTISCHE_ABKLAERUNG
+        - MEINE_JURISTISCHE_ABKLAERUNG
+        - ALLE_DRUCKBAR_VERFUEGUNGEN
+        - MEINE_DRUCKBAR_VERFUEGUNGEN
+        - ALLE_DRUCKBAR_DATENSCHUTZBREIFE
+        - MEINE_DRUCKBAR_DATENSCHUTZBREIFE
       type: string
     GetDelegierungSozQueryTypeMitarbeiter:
       enum:

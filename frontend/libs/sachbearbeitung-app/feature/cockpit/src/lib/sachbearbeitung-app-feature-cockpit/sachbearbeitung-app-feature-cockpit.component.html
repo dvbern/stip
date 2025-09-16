@@ -1,37 +1,69 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
-    <div
-      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
-      [formGroup]="quickFilterForm"
-    >
-      @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
-        <button
-          type="button"
-          (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
-          [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
-          [class.btn-danger]="radio.checked"
-          [class.btn-light]="!radio.checked"
-        >
-          <dv-shared-ui-icon-chip class="chip me-3">
-            <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
-          </dv-shared-ui-icon-chip>
-          <div class="tw:text-start tw:leading-4 flex-grow-1">
-            <span class="fw-bold fs-7 mb-0">
-              {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | transloco }}
-            </span>
-            <input
-              #radio
-              class="fs-7 cdk-visually-hidden"
-              type="radio"
-              name="query"
-              labelPosition="before"
-              formControlName="query"
-              [value]="quickFilter.typ"
-              [attr.aria-label]="'sachbearbeitung-app.cockpit.quick-filter.label.' + quickFilter.typ | transloco"
-            />
-          </div>
-        </button>
+    <div class="tw:mt-10 tw:flex tw:gap-4 tw:justify-evenly" [formGroup]="quickFilterForm">
+      @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
+        @let activeFilter = { filter: quickFilterGroup[0] };
+
+        <div class="tw:flex tw:flex-0 tw:shadow-md tw:rounded-md" [ngClass]="{ 'tw:bg-red-400': radio.checked }">
+          <button
+            type="button"
+            (click)="quickFilterForm.controls.query.patchValue(activeFilter.filter.typ)"
+            class="tw:flex! tw:items-center tw:px-2 tw:py-1 tw:rounded-l-md!"
+            [attr.data-testid]="'cockpit-quick-filter-' + activeFilter.filter.typ"
+            [ngClass]="radio.checked ? 'tw:hover:bg-red-400 tw:text-white' : 'tw:hover:bg-gray-200'"
+          >
+            <div class="tw:flex tw:gap-2 tw:items-center">
+              <dv-shared-ui-icon-chip class="chip">
+                <i class="icon material-symbols-rounded fs-4">{{ activeFilter.filter.icon }}</i>
+              </dv-shared-ui-icon-chip>
+              <div class="tw:text-start tw:leading-4">
+                <span class="tw:font-bold tw:text-sm tw:mb-0">
+                  {{ 'sachbearbeitung-app.cockpit.quick-filter.' + activeFilter.filter.typ | transloco }}
+                </span>
+                <input
+                  #radio
+                  class="fs-7 cdk-visually-hidden"
+                  type="radio"
+                  name="query"
+                  labelPosition="before"
+                  formControlName="query"
+                  [checked]="quickFilterForm.controls.query.value === activeFilter.filter.typ"
+                  [value]="activeFilter.filter.typ"
+                  [attr.aria-label]="
+                    'sachbearbeitung-app.cockpit.quick-filter.label.' + activeFilter.filter.typ | transloco
+                  "
+                />
+              </div>
+            </div>
+          </button>
+          <!-- quick filter menu -->
+          <button
+            type="button"
+            class="tw:border-l tw:border-gray-300 tw:p-2 tw:flex tw:items-center tw:rounded-r-md!"
+            data-testid="gesuch-header-nav-tranche-auswahl"
+            [ngClass]="radio.checked ? 'tw:hover:bg-red-500 tw:text-white' : 'tw:hover:bg-gray-200'"
+            [matMenuTriggerFor]="gesuchMenu"
+          >
+            <i class="material-symbols-rounded">expand_more</i>
+          </button>
+
+          <mat-menu #gesuchMenu="matMenu" xPosition="before" class="header-menu-panel mt-2 rounded">
+            <div class="d-flex flex-column gap-2">
+              @for (filter of quickFilterGroup; track $index) {
+                <button
+                  mat-menu-item
+                  type="button"
+                  (click)="quickFilterForm.controls.query.patchValue(filter.typ); activeFilter.filter = filter"
+                  class="tw:rounded-md!"
+                  [attr.data-testid]="'sachbearbeitung-app.cockpit.quick-filter.' + filter.typ"
+                  [ngClass]="{ 'tw:bg-red-400! tw:text-white!': activeFilter.filter === filter }"
+                >
+                  {{ 'sachbearbeitung-app.cockpit.quick-filter.' + filter.typ | transloco }}
+                </button>
+              }
+            </div>
+          </mat-menu>
+        </div>
       }
     </div>
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">

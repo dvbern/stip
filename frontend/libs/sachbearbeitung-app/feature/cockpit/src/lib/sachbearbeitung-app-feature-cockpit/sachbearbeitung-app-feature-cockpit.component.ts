@@ -18,6 +18,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -91,8 +92,8 @@ import {
 } from '@dv/shared/util/validator-date';
 
 const DEFAULT_FILTER = {
-  jurist: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
-  other: 'ALLE_BEARBEITBAR_MEINE',
+  jurist: 'MEINE_JURISTISCHE_ABKLAERUNG',
+  other: 'MEINE_BEARBEITBAR',
 } satisfies Record<string, GesuchFilter>;
 
 const statusByTyp = {
@@ -139,6 +140,7 @@ type DashboardFormFields =
     MatRadioModule,
     ReactiveFormsModule,
     RouterModule,
+    MatMenuModule,
     MatPaginatorModule,
     SharedUiIconChipComponent,
     SharedUiFocusableListItemDirective,
@@ -234,32 +236,64 @@ export class SachbearbeitungAppFeatureCockpitComponent
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
 
-  quickFilters: {
-    typ: GesuchFilter;
-    icon: string;
-    roles: BenutzerRole[];
-  }[] = [
-    {
-      typ: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
-      icon: 'person',
-      roles: ['V0_Jurist'],
-    },
-    {
-      typ: 'ALLE_BEARBEITBAR_MEINE',
-      icon: 'person',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-    },
-    {
-      typ: 'ALLE_BEARBEITBAR',
-      icon: 'people',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-    },
-    {
-      typ: 'ALLE',
+  // Exhaustive quick filter configuration
+  private readonly quickFilterConfig = {
+    MEINE_GESUCHE: {
       icon: 'all_inclusive',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+      group: 'ALLE',
     },
-  ];
+    ALLE_GESUCHE: {
+      icon: 'person',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+      group: 'ALLE',
+    },
+    MEINE_BEARBEITBAR: {
+      icon: 'people',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'BEARBEITBAR',
+    },
+    ALLE_BEARBEITBAR: {
+      icon: 'person',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'BEARBEITBAR',
+    },
+    MEINE_JURISTISCHE_ABKLAERUNG: {
+      icon: 'gavel',
+      roles: ['V0_Jurist'],
+      group: 'JURISTISCHE_ABKLAERUNG',
+    },
+    ALLE_JURISTISCHE_ABKLAERUNG: {
+      icon: 'person',
+      roles: ['V0_Jurist'],
+      group: 'JURISTISCHE_ABKLAERUNG',
+    },
+    MEINE_DRUCKBAR_VERFUEGUNGEN: {
+      icon: 'print',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_VERFUEGUNGEN',
+    },
+    ALLE_DRUCKBAR_VERFUEGUNGEN: {
+      icon: 'print',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_VERFUEGUNGEN',
+    },
+    MEINE_DRUCKBAR_DATENSCHUTZBREIFE: {
+      icon: 'print',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_DATENSCHUTZBREIFE',
+    },
+    ALLE_DRUCKBAR_DATENSCHUTZBREIFE: {
+      icon: 'print',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_DATENSCHUTZBREIFE',
+    },
+  } satisfies Record<
+    GesuchFilter,
+    { icon: string; roles: BenutzerRole[]; group: string }
+  >;
+
+  // Signals and computed values for form changes and filtering
 
   private letzteAktivitaetFromChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetFrom.valueChanges,
@@ -267,13 +301,40 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
-  availableQuickFiltersSig = computed(() => {
-    const roles = this.permissionStore.rolesMapSig();
+  availableQuickFiltersSig = computed<
+    { typ: GesuchFilter; icon: string; roles: BenutzerRole[] }[][]
+  >(() => {
+    const activeRoles = this.permissionStore.rolesMapSig();
 
-    return this.quickFilters.filter((filter) =>
-      filter.roles.some((role) => roles?.[role]),
+    return (
+      Object.entries(this.quickFilterConfig)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([_, { roles }]) => roles.some((r) => activeRoles?.[r]))
+        .map(([typ, { icon, roles }]) => ({
+          typ: typ as GesuchFilter,
+          icon,
+          roles,
+        }))
+        .reduce(
+          (groups, filter) => {
+            const group = this.quickFilterConfig[filter.typ].group;
+            const existingGroup = groups.find(
+              (g) =>
+                g.length > 0 &&
+                this.quickFilterConfig[g[0].typ].group === group,
+            );
+            if (existingGroup) {
+              existingGroup.push(filter);
+            } else {
+              groups.push([filter]);
+            }
+            return groups;
+          },
+          [] as { typ: GesuchFilter; icon: string; roles: BenutzerRole[] }[][],
+        )
     );
   });
+
   letzteAktivitaetRangeSig = computed(() => {
     const start = this.letzteAktivitaetFromChangedSig();
     const end = this.letzteAktivitaetToChangedSig();
