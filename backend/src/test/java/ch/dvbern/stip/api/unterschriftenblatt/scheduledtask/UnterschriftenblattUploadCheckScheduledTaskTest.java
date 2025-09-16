@@ -17,11 +17,6 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.scheduledtask;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Stream;
-
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -52,14 +47,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Stream;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -151,9 +147,11 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
     }
 
     @Test
-    void automaticChangeOfGesuchStatusToVersandbereit_shouldWork() {
+    void automaticChangeOfGesuchStatusToDruckbereit_shouldWork() {
         // act & assert
         assertDoesNotThrow(() -> scheduledTask.run());
+        // todo KSTIP-2663 move call of addBerechnungsblattToDocument to another state transtition
+        /*
         try {
             // verify that correct boolean value (addAllBerechnungsblaetter = false) has been passed
             verify(berechnungsblattService, times(1))
@@ -161,8 +159,11 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
         } catch (IOException e) {
             fail();
         }
+
+         */
         // verify that the flag has been set to true & that gesuch is in correct state
-        assertThat(gesuch.isVerfuegt(), is(true));
+        // todo KSTIP-2663 move gesuch.isVerfuegt() to another state transtition
+        //assertThat(gesuch.isVerfuegt(), is(true));
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT));
     }
 

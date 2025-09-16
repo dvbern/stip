@@ -42,6 +42,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     public void handle(Gesuch gesuch) {
         gesuch.setVerfuegt(true);
 
+        // todo kstip-2663: move handler logic to job
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
             gesuch,
             configService.getCurrentDmnMajorVersion(),

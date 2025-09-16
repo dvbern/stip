@@ -86,9 +86,11 @@ public class GesuchApiSpec {
                 bearbeitungAbschliessen(),
                 canEinreichedatumAendern(),
                 changeGesuchStatusToBereitFuerBearbeitung(),
+                changeGesuchStatusToDatenschutzbriefAmGenerieren(),
                 changeGesuchStatusToInBearbeitung(),
                 changeGesuchStatusToNegativeVerfuegung(),
                 changeGesuchStatusToVerfuegt(),
+                changeGesuchStatusToVerfuegungAmGenerieren(),
                 changeGesuchStatusToVersandbereit(),
                 changeGesuchStatusToVersendet(),
                 createBeschwerdeEntscheid(),
@@ -137,6 +139,10 @@ public class GesuchApiSpec {
         return new ChangeGesuchStatusToBereitFuerBearbeitungOper(createReqSpec());
     }
 
+    public ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper changeGesuchStatusToDatenschutzbriefAmGenerieren() {
+        return new ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper(createReqSpec());
+    }
+
     public ChangeGesuchStatusToInBearbeitungOper changeGesuchStatusToInBearbeitung() {
         return new ChangeGesuchStatusToInBearbeitungOper(createReqSpec());
     }
@@ -147,6 +153,10 @@ public class GesuchApiSpec {
 
     public ChangeGesuchStatusToVerfuegtOper changeGesuchStatusToVerfuegt() {
         return new ChangeGesuchStatusToVerfuegtOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToVerfuegungAmGenerierenOper changeGesuchStatusToVerfuegungAmGenerieren() {
+        return new ChangeGesuchStatusToVerfuegungAmGenerierenOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToVersandbereitOper changeGesuchStatusToVersandbereit() {
@@ -528,6 +538,79 @@ public class GesuchApiSpec {
      * @see #gesuchTrancheIdPath  (required)
      * return GesuchWithChangesDtoSpec
      */
+    public static class ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/datenschutzbrief-generieren/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/datenschutzbrief-generieren/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/datenschutzbrief-generieren/{gesuchTrancheId}
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToDatenschutzbriefAmGenerierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchWithChangesDtoSpec
+     */
     public static class ChangeGesuchStatusToInBearbeitungOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
@@ -747,6 +830,79 @@ public class GesuchApiSpec {
          * @return operation
          */
         public ChangeGesuchStatusToVerfuegtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchWithChangesDtoSpec
+     */
+    public static class ChangeGesuchStatusToVerfuegungAmGenerierenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/verfuegung-generieren/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToVerfuegungAmGenerierenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/verfuegung-generieren/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/verfuegung-generieren/{gesuchTrancheId}
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToVerfuegungAmGenerierenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVerfuegungAmGenerierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToVerfuegungAmGenerierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

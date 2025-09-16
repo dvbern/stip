@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.gesuchstatus.type;
 
+import lombok.Getter;
+
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
-
-import lombok.Getter;
 
 @Getter
 public enum Gesuchstatus {
@@ -73,6 +73,12 @@ public enum Gesuchstatus {
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_EDIT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_SB
+        )
+    );
+
+    public static final Set<Gesuchstatus> SACHBEARBEITER_OR_JURIST_CAN_TRIGGER_DATENSCHUTZBRIEF_DRUCKBEREIT = Collections.unmodifiableSet(
+        EnumSet.of(
+            ANSPRUCH_PRUEFEN, ANSPRUCH_MANUELL_PRUEFEN,JURISTISCHE_ABKLAERUNG
         )
     );
 

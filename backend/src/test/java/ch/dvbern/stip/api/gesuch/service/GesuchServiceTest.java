@@ -17,20 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Stream;
-
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
@@ -126,6 +112,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
@@ -1842,7 +1842,7 @@ class GesuchServiceTest {
 
         when(decisionService.decide(any())).thenReturn(StipDeciderResult.GESUCH_VALID);
         when(decisionService.getGesuchStatusChangeEvent(any()))
-            .thenReturn(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+            .thenReturn(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
         gesuch.setEinreichedatum(LocalDate.now());
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 

@@ -59,6 +59,11 @@ public interface GesuchResource {
     GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @POST
+    @Path("/status/datenschutzbrief-generieren/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefAmGenerieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @POST
     @Path("/status/in-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToInBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
@@ -73,6 +78,11 @@ public interface GesuchResource {
     @Path("/status/verfuegt/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto changeGesuchStatusToVerfuegt(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @POST
+    @Path("/status/verfuegung-generieren/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto changeGesuchStatusToVerfuegungAmGenerieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Path("/status/unterschriftenblatt-erhalten/{gesuchTrancheId}")

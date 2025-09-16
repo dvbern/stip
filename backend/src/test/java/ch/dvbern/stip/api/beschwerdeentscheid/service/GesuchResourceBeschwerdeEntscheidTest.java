@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.service;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -54,6 +51,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import wiremock.org.eclipse.jetty.http.HttpStatus;
+
+import java.io.IOException;
+import java.util.UUID;
 
 import static ch.dvbern.stip.api.dokument.type.DokumentArt.BESCHWERDE_ENTSCHEID;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -124,12 +124,14 @@ class GesuchResourceBeschwerdeEntscheidTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+        gesuch = gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode()).extract().body().as(GesuchDtoSpec.class);
+        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.VERFUEGUNG_DRUCKBEREIT));
+
         gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

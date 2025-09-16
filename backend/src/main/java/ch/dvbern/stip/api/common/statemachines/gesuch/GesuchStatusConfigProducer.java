@@ -17,11 +17,10 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch;
 
-import java.util.EnumMap;
-
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -44,6 +43,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.EnumMap;
+
 @ApplicationScoped
 @RequiredArgsConstructor
 @Slf4j
@@ -61,6 +62,7 @@ public class GesuchStatusConfigProducer {
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
     private final StatusprotokollService statusprotokollService;
+    private final DatenschutzDruckbereitHandler datenschutzbriefDruckbereitHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -168,6 +170,7 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .onEntryFrom(triggers.get(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT), datenschutzbriefDruckbereitHandler::handle)
             .permit(
                 GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN,
                 Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN
@@ -192,11 +195,13 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
-            .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
-                verfuegungDruckbereitHandler::handle
-            )
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN);
+//            .onEntryFrom(
+//                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
+//                verfuegungDruckbereitHandler::handle
+//            )
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET) //todo kstip-2663: really required/intended?
+        ;
 
         config.configure(Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)

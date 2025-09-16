@@ -17,13 +17,11 @@
 
 package ch.dvbern.stip.api.common.statemachines;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -45,6 +43,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -62,6 +63,7 @@ class GesuchStatusStateMachineTest {
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
+    private DatenschutzDruckbereitHandler datenschutzDruckbereitHandlerMock;
     private StatusprotokollService statusprotokollService;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
@@ -82,6 +84,7 @@ class GesuchStatusStateMachineTest {
         stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
+        datenschutzDruckbereitHandlerMock = Mockito.mock(DatenschutzDruckbereitHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -96,7 +99,8 @@ class GesuchStatusStateMachineTest {
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
             stipendienAnspruchHandlerSpy,
             juristischeAbklaerungDurchPruefungHandlerSpy,
-            statusprotokollService
+            statusprotokollService,
+            datenschutzDruckbereitHandlerMock
         ).createStateMachineConfig();
     }
 

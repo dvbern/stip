@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -51,6 +48,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -133,7 +133,7 @@ class GesuchStatusprotokollTest {
             .body()
             .as(StatusprotokollEntryDtoSpec[].class);
 
-        assertThat(statusProtokoll.length, is(5));
+        assertThat(statusProtokoll.length, is(6));
         final var sorted = Arrays.stream(statusProtokoll)
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
@@ -141,7 +141,8 @@ class GesuchStatusprotokollTest {
         assertThat(sorted.get(1).getStatusTo(), equalTo(GesuchstatusDtoSpec.EINGEREICHT.toString()));
         assertThat(sorted.get(2).getStatusTo(), equalTo(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN.toString()));
         assertThat(sorted.get(3).getStatusTo(), equalTo(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG.toString()));
-        assertThat(sorted.get(4).getStatusTo(), equalTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB.toString()));
+        assertThat(sorted.get(4).getStatusTo(), equalTo(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT.toString()));
+        assertThat(sorted.get(5).getStatusTo(), equalTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB.toString()));
     }
 
     @Test
@@ -178,9 +179,9 @@ class GesuchStatusprotokollTest {
             .sorted(Comparator.comparing(StatusprotokollEntryDtoSpec::getTimestamp))
             .toList();
 
-        assertThat(statusprotokollEntryList.size(), is(6));
+        assertThat(statusprotokollEntryList.size(), is(7));
         assertThat(
-            statusprotokollEntryList.get(5).getKommentar(),
+            statusprotokollEntryList.get(6).getKommentar(),
             Matchers.equalTo(ZURUECKWEISEN_COMMENT)
         );
     }

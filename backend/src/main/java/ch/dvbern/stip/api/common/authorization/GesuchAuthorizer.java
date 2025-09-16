@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
-import java.util.Set;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
@@ -36,6 +33,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Set;
+import java.util.UUID;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -62,6 +62,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void sbCanCreateManuelleVerfuegung(final UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToVerfuegungAmGenerieren(UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
     }
 
     @Transactional
@@ -105,6 +110,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             )
         );
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToDatenschutzBriefAmGenerieren(final UUID gesuchId) {
+        assertGesuchIsInOneOfGesuchStatus(gesuchId, Set.of(Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT) );
     }
 
     @Transactional
@@ -314,4 +324,5 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             forbidden();
         }
     }
+
 }
