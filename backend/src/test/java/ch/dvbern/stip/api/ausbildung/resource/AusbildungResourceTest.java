@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.ausbildung.resource;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
@@ -48,8 +50,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
-
-import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -123,7 +123,9 @@ class AusbildungResourceTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode())
-            .extract().body().as(GesuchDto.class);
+            .extract()
+            .body()
+            .as(GesuchDto.class);
         // todo KSTIP-1663: why is this enum not a spec type?
         assertThat(foundGesuch.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
 

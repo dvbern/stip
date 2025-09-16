@@ -17,6 +17,14 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
@@ -77,14 +85,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.ADMIN_GESUCH_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIGABESTELLE_GESUCH_UPDATE;
@@ -147,7 +147,7 @@ public class GesuchResourceImpl implements GesuchResource {
             ausgewaehlterGrundDto
         );
         gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
-       // gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
+        // gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -204,7 +204,6 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchService.changeGesuchStatusToVerfuegungAmGenerieren(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
-
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -550,7 +549,10 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId); //todo kstip-2663: if source = JURISCHTISCHE_ABKLAERUNG, then only enable transition if datenschutzbrief has been sent
+        gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId); // todo kstip-2663: if source =
+                                                                                   // JURISCHTISCHE_ABKLAERUNG, then
+                                                                                   // only enable transition if
+                                                                                   // datenschutzbrief has been sent
 
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
@@ -564,7 +566,9 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefAmGenerieren(gesuchId);
         gesuchService.gesuchStatusToDatenschutzbriefAmGenerieren(gesuchId);
-        gesuchService.gesuchStatusToDatenschutzbriefVersandbereit(gesuchId);// todo kstip-2663: remove this method & change to next state when job completed successfully
+        gesuchService.gesuchStatusToDatenschutzbriefVersandbereit(gesuchId);// todo kstip-2663: remove this method &
+                                                                            // change to next state when job completed
+                                                                            // successfully
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 

@@ -17,6 +17,21 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
@@ -123,21 +138,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
@@ -625,7 +625,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToDatenschutzbriefAmGenerieren(final UUID gesuchId){
+    public void gesuchStatusToDatenschutzbriefAmGenerieren(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
@@ -635,7 +635,7 @@ public class GesuchService {
 
     // todo KSTIP-2663: Remove this method probably
     @Transactional
-    public void gesuchStatusToDatenschutzbriefVersandbereit(final UUID gesuchId){
+    public void gesuchStatusToDatenschutzbriefVersandbereit(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
@@ -668,7 +668,6 @@ public class GesuchService {
             );
         }
     }
-
 
     @Transactional
     public void changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchId) {

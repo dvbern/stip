@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch;
 
+import java.util.EnumMap;
+
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
@@ -42,8 +44,6 @@ import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.EnumMap;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -170,7 +170,10 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .onEntryFrom(triggers.get(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT), datenschutzbriefDruckbereitHandler::handle)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT),
+                datenschutzbriefDruckbereitHandler::handle
+            )
             .permit(
                 GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN,
                 Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN
@@ -195,12 +198,14 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
-//            .onEntryFrom(
-//                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
-//                verfuegungDruckbereitHandler::handle
-//            )
+            // .onEntryFrom(
+            // triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
+            // verfuegungDruckbereitHandler::handle
+            // )
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET) //todo kstip-2663: really required/intended?
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET) // todo kstip-2663:
+                                                                                                     // really
+                                                                                                     // required/intended?
         ;
 
         config.configure(Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)

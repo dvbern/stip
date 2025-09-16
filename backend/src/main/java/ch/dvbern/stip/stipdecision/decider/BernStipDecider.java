@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.stipdecision.decider;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -28,8 +30,6 @@ import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
 
 @Singleton
 @RequiredArgsConstructor

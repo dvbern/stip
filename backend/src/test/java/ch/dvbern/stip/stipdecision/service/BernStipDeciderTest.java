@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.stipdecision.service;
 
+import java.time.LocalDate;
+import java.util.Set;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
@@ -36,10 +40,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-
-import java.time.LocalDate;
-import java.util.Set;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
