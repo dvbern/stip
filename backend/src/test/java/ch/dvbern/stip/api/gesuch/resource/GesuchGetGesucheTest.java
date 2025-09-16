@@ -145,7 +145,7 @@ class GesuchGetGesucheTest {
     @TestAsSachbearbeiter
     @Order(5)
     void getMeineBearbeitbarenNoneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.MEINE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
@@ -173,7 +173,7 @@ class GesuchGetGesucheTest {
     @TestAsSachbearbeiter
     @Order(8)
     void getMeineBearbeitbarenOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR_MEINE);
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.MEINE_BEARBEITBAR);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
@@ -270,7 +270,7 @@ class GesuchGetGesucheTest {
     @TestAsJurist
     @Order(15)
     void getAlleJurisitischeAbklaerungOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JURISTISCHE_ABKLAERUNG_MEINE);
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.MEINE_JURISTISCHE_ABKLAERUNG);
         allAreNotInWrongStatus(
             found,
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,

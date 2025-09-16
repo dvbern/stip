@@ -30,7 +30,9 @@ public enum GetDruckauftraegeQueryTypeDtoSpec {
   
   ALLE_AKTIV("ALLE_AKTIV"),
   
-  ALLE_ARCHIVIERT("ALLE_ARCHIVIERT");
+  ALLE_ARCHIVIERT("ALLE_ARCHIVIERT"),
+  
+  ALLE_FEHLERHAFTE_GENERIERUNG("ALLE_FEHLERHAFTE_GENERIERUNG");
 
   private String value;
 

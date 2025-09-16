@@ -54,12 +54,14 @@ public class SbDashboardQueryBuilder {
     public JPAQuery<Gesuch> baseQuery(final GetGesucheSBQueryType queryType, final GesuchTrancheTyp trancheType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
 
+        // TODO KSTIP-2668: Fix these queries
         final var query = switch (queryType) {
-            case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
-            case ALLE_BEARBEITBAR_MEINE -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
-            case ALLE_JURISTISCHE_ABKLAERUNG_MEINE -> gesuchRepository.getFindAlleJurBearbeitungQuery();
-            case ALLE_MEINE -> gesuchRepository.getFindAlleMeineQuery(meId);
-            case ALLE -> gesuchRepository.getFindAlleQuery();
+            // case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
+            // case ALLE_BEARBEITBAR_MEINE -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
+            // case ALLE_JURISTISCHE_ABKLAERUNG_MEINE -> gesuchRepository.getFindAlleJurBearbeitungQuery();
+            // case ALLE_MEINE -> gesuchRepository.getFindAlleMeineQuery(meId);
+            // case ALLE -> gesuchRepository.getFindAlleQuery();
+            default -> (JPAQuery<Gesuch>) null;
         };
 
         final var trancheSub = new QGesuchTranche("sub2");

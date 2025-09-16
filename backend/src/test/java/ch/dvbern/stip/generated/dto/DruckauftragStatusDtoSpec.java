@@ -26,11 +26,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum DruckauftragStatusDtoSpec {
   
-  DRUCKBEREIT("DRUCKBEREIT"),
-  
   IN_GENERIERUNG("IN_GENERIERUNG"),
   
-  VERSANDBEREIT("VERSANDBEREIT");
+  VERSANDBEREIT("VERSANDBEREIT"),
+  
+  FEHLERHAFTE_GENERIERUNG("FEHLERHAFTE_GENERIERUNG"),
+  
+  ARCHIVIERT("ARCHIVIERT");
 
   private String value;
 

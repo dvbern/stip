@@ -86,11 +86,11 @@ public class DruckenApiSpec {
      * 
      *
      * @see #getDruckauftraegeQueryTypePath  (required)
-     * @see #druckauftragTypQuery  (required)
      * @see #batchNameQuery  (optional)
      * @see #bearbeiterQuery  (optional)
      * @see #timestampErstelltQuery  (optional)
      * @see #druckauftragStatusQuery  (optional)
+     * @see #druckauftragTypQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return PaginatedDruckauftraegeDtoSpec
@@ -188,7 +188,7 @@ public class DruckenApiSpec {
         public static final String DRUCKAUFTRAG_TYP_QUERY = "druckauftragTyp";
 
         /**
-         * @param druckauftragTyp (DruckauftragTypDtoSpec)  (required)
+         * @param druckauftragTyp (DruckauftragTypDtoSpec)  (optional)
          * @return operation
          */
         public GetAllDruckauftraegeOper druckauftragTypQuery(Object... druckauftragTyp) {

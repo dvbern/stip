@@ -27,5 +27,5 @@ public interface DruckenResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    PaginatedDruckauftraegeDto getAllDruckauftraege(@PathParam("getDruckauftraegeQueryType") GetDruckauftraegeQueryTypeDto getDruckauftraegeQueryType,@QueryParam("druckauftragTyp") @NotNull   DruckauftragTypDto druckauftragTyp,@QueryParam("batchName")   String batchName,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("timestampErstellt")   LocalDate timestampErstellt,@QueryParam("druckauftragStatus")   DruckauftragStatusDto druckauftragStatus,@QueryParam("sortColumn")   DruckauftraegeColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    PaginatedDruckauftraegeDto getAllDruckauftraege(@PathParam("getDruckauftraegeQueryType") GetDruckauftraegeQueryTypeDto getDruckauftraegeQueryType,@QueryParam("batchName")   String batchName,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("timestampErstellt")   LocalDate timestampErstellt,@QueryParam("druckauftragStatus")   DruckauftragStatusDto druckauftragStatus,@QueryParam("druckauftragTyp")   DruckauftragTypDto druckauftragTyp,@QueryParam("sortColumn")   DruckauftraegeColumnDto sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 }
