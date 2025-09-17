@@ -100,7 +100,7 @@ public class NeskoSteuerdatenMapper {
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
             if (Objects.nonNull(steuerdatenNesko.getFahrkosten())) {
                 if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getMann())) {
-                    fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
+                    fahrkostenPartner += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getMann());
                 }
                 if (Objects.nonNull(steuerdatenNesko.getFahrkosten().getFrau())) {
                     fahrkosten += getMaxOrZeroFromEffSatzType(steuerdatenNesko.getFahrkosten().getFrau());
@@ -109,7 +109,7 @@ public class NeskoSteuerdatenMapper {
 
             if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung())) {
                 if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann())) {
-                    verpflegung +=
+                    verpflegungPartner +=
                         getMaxOrZeroFromEffSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getMann());
                 }
                 if (Objects.nonNull(steuerdatenNesko.getKostenAuswaertigeVerpflegung().getFrau())) {
