@@ -625,6 +625,15 @@ public class GesuchService {
     }
 
     @Transactional
+    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(
+            gesuch,
+            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT
+        );
+    }
+
+    @Transactional
     public void gesuchStatusToDatenschutzbriefAmGenerieren(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         gesuchStatusService.triggerStateMachineEvent(

@@ -96,6 +96,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
+        // todo kstip-2663: assert datenschutzbriefe have been sent & gesuchstatus = DATENSCHUTZBRIEF_VERSANDBEREIT
+
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE) {
             assertBenutzerIsFreigabestelle();
@@ -200,6 +202,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void juristCanGesuchManuellPruefen(final UUID gesuchId) {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
+    }
+
+    public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereit(UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
 
     @Transactional
@@ -324,5 +330,4 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             forbidden();
         }
     }
-
 }
