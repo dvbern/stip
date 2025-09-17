@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -212,10 +213,18 @@ public class AusbildungSeeding extends Seeder {
                             final var abschlussBezeichnungDe = ausbildungsgangLine[0];
                             final var ausbildungskategorie = Ausbildungskategorie.valueOf(ausbildungsgangLine[1]);
                             final var ausbildungsstaetteNameDe = ausbildungsgangLine[2];
+                            final var bildungsrichtungOpt = Optional.ofNullable(ausbildungsgangLine[3]);
+                            final boolean isBildungsrichtungPresent =
+                                bildungsrichtungOpt.isPresent() && !bildungsrichtungOpt.get().isEmpty();
+                            final Bildungsrichtung optBildungsrichtungOfAusbildungsgang =
+                                isBildungsrichtungPresent ? Bildungsrichtung.valueOf(bildungsrichtungOpt.get()) : null;
                             final var abschlussOpt = abschluesse.stream()
                                 .filter(
                                     abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
                                     && abschluss1.getAusbildungskategorie() == ausbildungskategorie
+                                    && Objects.nonNull(optBildungsrichtungOfAusbildungsgang)
+                                        ? abschluss1.getBildungsrichtung().equals(optBildungsrichtungOfAusbildungsgang)
+                                        : true
                                 )
                                 .findFirst();
                             final var ausbildungsstaetteOpt = ausbildungsstaetten.stream()
