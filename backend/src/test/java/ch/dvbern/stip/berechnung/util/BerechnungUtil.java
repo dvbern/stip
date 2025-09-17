@@ -33,10 +33,10 @@ import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungsStammdatenV1Mapper;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.service.BerechnungTestcase;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltCalculator;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltService;
 import ch.dvbern.stip.berechnung.service.StipendienCalculator;
-import ch.dvbern.stip.berechnung.service.Testcase;
 import ch.dvbern.stip.berechnung.service.bern.v1.PersonenImHaushaltCalculatorV1;
 import ch.dvbern.stip.berechnung.service.bern.v1.StipendienCalculatorV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,7 +62,7 @@ public class BerechnungUtil {
         }
     }
 
-    public Testcase getTestcase(final int no) {
+    public BerechnungTestcase getTestcase(final int no) {
         try {
             final var resource =
                 BerechnungUtil.class.getClassLoader().getResource(String.format("testcase/testcase_%d.json", no));
@@ -73,7 +73,7 @@ public class BerechnungUtil {
                 .registerModule(new Jdk8Module())
                 .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
 
-            return mapper.readValue(inputs, Testcase.class);
+            return mapper.readValue(inputs, BerechnungTestcase.class);
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }

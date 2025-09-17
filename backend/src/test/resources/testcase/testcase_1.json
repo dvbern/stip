@@ -9,9 +9,6 @@
     "ausbildungBegin": "02.2025",
     "ausbildungEnd": "12.2027",
     "pensum": "TEILZEIT",
-    "id": "fc817a86-e038-49c7-971b-bb302174febc",
-    "fallId": "b4676039-e045-429a-8ab2-47a9560b315c",
-    "ausbildungsgangId": "0470b074-e8eb-40ae-a7b3-9fb279c8934d",
     "ausbildungsort": "Bern",
     "ausbildungsortPLZ": "3003"
   },
@@ -26,7 +23,6 @@
           "nachname": "Margreth",
           "vorname": "Daniel",
           "adresse": {
-            "id": "77a7cf06-1378-4566-9cb5-6d9a8b1face4",
             "coAdresse": null,
             "strasse": "Funkstrasse",
             "hausnummer": "120",
