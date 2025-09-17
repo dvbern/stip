@@ -112,7 +112,7 @@ Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN_UEBERBE
 Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Freies Gymnasium Zürich;
 Anschlussklasse für Mittelschule;BRUECKENANGEBOT;GiBB Bern;ALLGEMEINBILDENDE_SCHULE
 Vorbereitungskurse für HF-Lehrgänge;BRUECKENANGEBOT;Scuola Universitaria Professionale della Svizzera Italiana SUPSI;HOEHERE_BERUFSBILDUNG
-Passerelle Fachhochschule (FH);BRUECKENANGEBOT;Berner Fachhochschule BFH;HOEHERE_BERUFSBILDUNG
+Passerelle Fachhochschule (FH);BRUECKENANGEBOT;Berner Fachhochschule BFH;HOCHSCHULE
 Diplom HF;HOEHERE_FACHSCHULE;Agogis;
 Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;AKAD College;
 Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;AKAD College;HOCHSCHULE
@@ -225,3 +225,5 @@ Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Collège et Ecole de
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;CsBe - ICT Ausbildungszentrum / Computerschule Bern;BERUFLICHE_GRUNDBILDUNG
 Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CsBe - ICT Ausbildungszentrum / Computerschule Bern;
 Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;CsBe - ICT Ausbildungszentrum / Computerschule Bern;
+Test;BRUECKENANGEBOT;CFP Arts, Genf;BERUFLICHE_GRUNDBILDUNG
+Test;BRUECKENANGEBOT;CFP Arts, Genf;HOCHSCHULE
