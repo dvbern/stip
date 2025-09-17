@@ -216,17 +216,22 @@ public class AusbildungSeeding extends Seeder {
                             final var bildungsrichtungOpt = Optional.ofNullable(ausbildungsgangLine[3]);
                             final boolean isBildungsrichtungPresent =
                                 bildungsrichtungOpt.isPresent() && !bildungsrichtungOpt.get().isEmpty();
-                            final Bildungsrichtung optBildungsrichtungOfAusbildungsgang =
-                                isBildungsrichtungPresent ? Bildungsrichtung.valueOf(bildungsrichtungOpt.get()) : null;
-                            final var abschlussOpt = abschluesse.stream()
+                            var possibleMatchingAbschluesse = abschluesse.stream()
                                 .filter(
                                     abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
                                     && abschluss1.getAusbildungskategorie() == ausbildungskategorie
-                                    && Objects.nonNull(optBildungsrichtungOfAusbildungsgang)
-                                        ? abschluss1.getBildungsrichtung().equals(optBildungsrichtungOfAusbildungsgang)
-                                        : true
                                 )
-                                .findFirst();
+                                .toList();
+                            Optional<Abschluss> abschlussOpt = possibleMatchingAbschluesse.stream().findFirst();
+
+                            if (isBildungsrichtungPresent) {
+                                final Bildungsrichtung bildungsrichtung =
+                                    Bildungsrichtung.valueOf(bildungsrichtungOpt.get());
+                                abschlussOpt = possibleMatchingAbschluesse.stream()
+                                    .filter(abschluss1 -> abschluss1.getBildungsrichtung().equals(bildungsrichtung))
+                                    .findFirst();
+                            }
+
                             final var ausbildungsstaetteOpt = ausbildungsstaetten.stream()
                                 .filter(
                                     ausbildungsstaette1 -> ausbildungsstaette1.getNameDe()
