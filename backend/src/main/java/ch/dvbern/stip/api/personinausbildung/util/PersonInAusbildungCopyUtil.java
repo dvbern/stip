@@ -49,6 +49,7 @@ public class PersonInAusbildungCopyUtil {
         target.setZivilstand(source.getZivilstand());
         target.setSozialhilfebeitraege(source.isSozialhilfebeitraege());
         target.setVormundschaft(source.isVormundschaft());
+        target.setZustaendigeKESB(source.getZustaendigeKESB());
         target.setKorrespondenzSprache(source.getKorrespondenzSprache());
     }
 }
