@@ -27,6 +27,8 @@ import ch.dvbern.stip.api.ausbildung.repo.AbschlussRepository;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
@@ -38,6 +40,8 @@ import io.quarkus.security.ForbiddenException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ABSCHLUSS_BRUECKENANGEBOT_NOT_UNIQUE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -56,8 +60,28 @@ public class AbschlussService {
     @Transactional
     public AbschlussDto createAbschlussBrueckenangebot(final BrueckenangebotCreateDto brueckenangebotCreateDto) {
         final var brueckenangebot = abschlussMapper.createBrueckenangebot(brueckenangebotCreateDto);
+        validateAbschlussBrueckenangebotUniqueness(brueckenangebotCreateDto);
         abschlussRepository.persist(brueckenangebot);
         return abschlussMapper.toDto(brueckenangebot);
+    }
+
+    private void validateAbschlussBrueckenangebotUniqueness(final BrueckenangebotCreateDto brueckenangebotCreateDto) {
+        final var sameBrueckenangebotAbschlussExists =
+            abschlussRepository.sameBrueckenangebotAbschlussExists(
+                brueckenangebotCreateDto.getBezeichnungDe(),
+                brueckenangebotCreateDto.getBezeichnungFr(),
+                brueckenangebotCreateDto.getBildungsrichtung()
+            );
+
+        if (sameBrueckenangebotAbschlussExists) {
+            throw new CustomValidationsException(
+                "abschluss must be unique",
+                new CustomConstraintViolation(
+                    VALIDATION_ABSCHLUSS_BRUECKENANGEBOT_NOT_UNIQUE,
+                    "abschluss"
+                )
+            );
+        }
     }
 
     @Transactional

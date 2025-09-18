@@ -19,7 +19,9 @@ package ch.dvbern.stip.api.ausbildung.repo;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.QAbschluss;
+import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -30,4 +32,21 @@ public class AbschlussRepository implements BaseRepository<Abschluss> {
     private final EntityManager entityManager;
 
     private static final QAbschluss Q_ABSCHLUSS = QAbschluss.abschluss;
+
+    public boolean sameBrueckenangebotAbschlussExists(
+        final String bezeichnungDe,
+        final String bezeichnungFr,
+        final Bildungsrichtung bildungsrichtung
+    ) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_ABSCHLUSS)
+            .where(Q_ABSCHLUSS.bildungsrichtung.eq(bildungsrichtung))
+            .where(
+                Q_ABSCHLUSS.bezeichnungDe.equalsIgnoreCase(bezeichnungDe)
+                    .or(Q_ABSCHLUSS.bezeichnungFr.equalsIgnoreCase(bezeichnungFr))
+            )
+            .stream()
+            .findFirst()
+            .isPresent();
+    }
 }

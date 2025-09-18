@@ -223,6 +223,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.ausbildungsgang.notaktiv}";
     public static final String VALIDATION_SAP_DELIVERYS_LENGTH_VIOLATION =
         "{jakarta.validation.constraints.buchhaltung.sapDeliverys.length.violation}";
+    public static final String VALIDATION_ABSCHLUSS_BRUECKENANGEBOT_NOT_UNIQUE =
+        "{jakarta.validation.constraints.abschluss.notunique}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");
