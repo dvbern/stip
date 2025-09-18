@@ -104,9 +104,14 @@ export const permissionTableByAppType = {
   NICHT_BEITRAGSBERECHTIGT         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
   STIPENDIENANSPRUCH               : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   WARTEN_AUF_UNTERSCHRIFTENBLATT   : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  VERSANDBEREIT                    : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  DATENSCHUTZBRIEF_AM_GENERIEREN   : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  DATENSCHUTZBRIEF_DRUCKBEREIT     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  DATENSCHUTZBRIEF_VERSANDBEREIT   : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  VERFUEGUNG_AM_GENERIEREN         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  VERFUEGUNG_DRUCKBEREIT           : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  VERFUEGUNG_VERSANDBEREIT         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   VERFUEGT                         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  VERSENDET                        : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionCheck>>;
 
