@@ -198,10 +198,10 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
-            // .onEntryFrom(
-            // triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
-            // verfuegungDruckbereitHandler::handle
-            // )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
+                verfuegungDruckbereitHandler::handle
+            )
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET) // todo kstip-2663:
                                                                                                      // really
