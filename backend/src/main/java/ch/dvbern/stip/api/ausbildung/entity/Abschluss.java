@@ -50,8 +50,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "abschluss",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_abschluss_bezeichnung_ausbildungskategorie_bildungsrichtung",
-        columnNames = { "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
+        name = "UC_abschluss_mandant_bezeichnung_ausbildungskategorie_bildungsrichtung",
+        columnNames = { "mandant", "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
     ),
     indexes = @Index(name = "IX_abschluss_mandant", columnList = "mandant")
 )
