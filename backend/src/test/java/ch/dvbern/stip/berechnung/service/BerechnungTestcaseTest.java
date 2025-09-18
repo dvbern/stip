@@ -65,9 +65,6 @@ public class BerechnungTestcaseTest {
     @InjectMock
     LandService landService;
 
-    // private final GesuchResource gesuchResource;
-    // private final TenantService tenantService;
-
     @BeforeEach
     void setup() {
         Mockito.when(landService.requireLandById(Mockito.any())).thenReturn(new Land());
@@ -76,16 +73,10 @@ public class BerechnungTestcaseTest {
     @ParameterizedTest
     @CsvSource(
         {
-            "1, 0, 91450, 81264, 2547"
+            "1"
         }
     )
-    void testTestcases(
-        final int no,
-        final int berechnungsResult,
-        final int einnahmenPersoenlichesBudget,
-        final int ausgabenPersoenlichesBudget,
-        final int persoenlichesbudgetBerechnet
-    ) {
+    void testTestcases(final int no) {
         // Arrange
         final var testcase = BerechnungUtil.getTestcase(no);
 
@@ -125,19 +116,19 @@ public class BerechnungTestcaseTest {
         final var berechnungsresultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
         // Assert
-        assertThat(berechnungsresultat.getBerechnung().intValue(), is(berechnungsResult));
+        assertThat(berechnungsresultat.getBerechnung().intValue(), is(testcase.berechnungsResult));
         final var tranchenResultat = berechnungsresultat.getTranchenBerechnungsresultate().get(0);
         assertThat(
             tranchenResultat.getPersoenlichesBudgetresultat().getEinnahmenPersoenlichesBudget(),
-            is(einnahmenPersoenlichesBudget)
+            is(testcase.einnahmenPersoenlichesBudget)
         );
         assertThat(
             tranchenResultat.getPersoenlichesBudgetresultat().getAusgabenPersoenlichesBudget(),
-            is(ausgabenPersoenlichesBudget)
+            is(testcase.ausgabenPersoenlichesBudget)
         );
         assertThat(
             tranchenResultat.getPersoenlichesBudgetresultat().getPersoenlichesbudgetBerechnet(),
-            is(persoenlichesbudgetBerechnet)
+            is(testcase.persoenlichesbudgetBerechnet)
         );
     }
 }

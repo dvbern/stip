@@ -40,4 +40,12 @@ public class BerechnungTestcase {
     List<SteuerdatenDto> steuerdaten;
     @JsonProperty("gesuchperiode")
     GesuchsperiodeCreateDto gesuchperiode;
+    @JsonProperty("berechnungsResult")
+    int berechnungsResult;
+    @JsonProperty("einnahmenPersoenlichesBudget")
+    int einnahmenPersoenlichesBudget;
+    @JsonProperty("ausgabenPersoenlichesBudget")
+    int ausgabenPersoenlichesBudget;
+    @JsonProperty("persoenlichesbudgetBerechnet")
+    int persoenlichesbudgetBerechnet;
 }

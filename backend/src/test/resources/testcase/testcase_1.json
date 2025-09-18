@@ -280,5 +280,9 @@
     "fristNachreichenDokumente": 30,
     "stichtagVolljaehrigkeitMedizinischeGrundversorgung": "2025-12-31",
     "einreichfrist": null
-  }
+  },
+  "berechnungsResult": 0,
+  "einnahmenPersoenlichesBudget": 91450,
+  "ausgabenPersoenlichesBudget": 81264,
+  "persoenlichesbudgetBerechnet": 2547
 }
