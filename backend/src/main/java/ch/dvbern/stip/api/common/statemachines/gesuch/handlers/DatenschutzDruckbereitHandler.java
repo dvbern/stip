@@ -36,6 +36,7 @@ public class DatenschutzDruckbereitHandler implements GesuchStatusChangeHandler 
     @Transactional
     @Override
     public void handle(Gesuch gesuch) {
+        // todo KSTIP-2685: generate Datenschutzbriefe here
         // todo kstip-2663: add log/status message
         if (unterschriftenblattService.getUnterschriftenblaetterToUpload(gesuch).isEmpty()) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
