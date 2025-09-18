@@ -156,7 +156,11 @@ public class VerfuegungService {
     public List<VerfuegungDto> getVerfuegungenByGesuch(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        return gesuch.getVerfuegungs().stream().map(verfuegungMapper::toDto).toList();
+        return gesuch.getVerfuegungs()
+            .stream()
+            .filter(verfuegung -> verfuegung.getObjectId() != null)
+            .map(verfuegungMapper::toDto)
+            .toList();
     }
 
     public Verfuegung getLatestVerfuegung(final UUID gesuchId) {
