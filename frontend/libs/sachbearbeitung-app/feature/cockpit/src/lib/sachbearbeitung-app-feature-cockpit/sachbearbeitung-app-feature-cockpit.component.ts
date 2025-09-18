@@ -278,15 +278,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_VERFUEGUNGEN',
     },
-    MEINE_DRUCKBAR_DATENSCHUTZBREIFE: {
+    MEINE_DRUCKBAR_DATENSCHUTZBRIEFE: {
       icon: 'print',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_DATENSCHUTZBREIFE',
+      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     },
-    ALLE_DRUCKBAR_DATENSCHUTZBREIFE: {
+    ALLE_DRUCKBAR_DATENSCHUTZBRIEFE: {
       icon: 'print',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_DATENSCHUTZBREIFE',
+      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     },
   } satisfies Record<
     GesuchFilter,
