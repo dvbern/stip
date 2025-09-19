@@ -270,8 +270,7 @@ public class AusbildungSeeding extends Seeder {
     }
 
     private void handleMissingOrMismatchingEntries(String message) {
-        final var currentProfile = ConfigUtils.getProfiles().getFirst();
-        if (currentProfile.equals("dev")) {
+        if (ConfigUtils.getProfiles().stream().anyMatch(profile -> profile.equals("dev"))) {
             throw new RuntimeException(message);
         } else {
             LOG.error(message);
