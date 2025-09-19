@@ -55,7 +55,7 @@ include:
       deployment-mode: 'manual'
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
-      argocd-app-name: '$SCHULUNG_ARGOCD_APP'
+      argocd-app-name: '$ARGOCD_APP'
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.3.0'
     inputs:
