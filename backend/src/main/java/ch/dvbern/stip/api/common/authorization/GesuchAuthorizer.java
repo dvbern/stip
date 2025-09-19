@@ -96,8 +96,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
-        // todo kstip-2663: assert datenschutzbriefe have been sent & gesuchstatus = DATENSCHUTZBRIEF_VERSANDBEREIT
-
         final var gesuch = gesuchRepository.requireById(gesuchId);
         if (gesuch.getGesuchStatus() == Gesuchstatus.IN_FREIGABE) {
             assertBenutzerIsFreigabestelle();
@@ -106,8 +104,8 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertGesuchIsInOneOfGesuchStatus(
             gesuchId,
             Set.of(
-                Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
-                Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
+                Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
+                Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
                 Gesuchstatus.IN_FREIGABE
             )
         );
