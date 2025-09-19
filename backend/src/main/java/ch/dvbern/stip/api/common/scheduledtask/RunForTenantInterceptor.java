@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.scheduledtask;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import ch.dvbern.stip.api.common.exception.CancelInvocationException;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -47,6 +48,8 @@ public class RunForTenantInterceptor {
                 final var ignored2 = TenantService.setTenantId(annotation.value().getIdentifier());
             ) {
                 proceed.set(invocationContext.proceed());
+            } catch (CancelInvocationException e) {
+                throw e;
             } catch (Exception e) {
                 LOG.error(e.getMessage(), e);
             }

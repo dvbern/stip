@@ -93,11 +93,20 @@
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
           class="tw:w-32 tw:whitespace-nowrap"
           [dvTruncateTooltip]="
-            'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | transloco
+            ('shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | transloco) +
+            ' ' +
+            ('shared.bildungsrichtung.' + ausbildungsgang.abschluss.bildungsrichtung | transloco)
           "
         >
           @if (ausbildungsgang.abschluss.ausbildungskategorie) {
-            {{ 'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | transloco }}
+            <span>
+              {{ 'shared.ausbildungskategorie.' + ausbildungsgang.abschluss.ausbildungskategorie | transloco }}
+            </span>
+          }
+          @if (ausbildungsgang.abschluss.bildungsrichtung) {
+            <span>
+              {{ 'shared.bildungsrichtung.' + ausbildungsgang.abschluss.bildungsrichtung | transloco }}
+            </span>
           }
         </td>
       </ng-container>

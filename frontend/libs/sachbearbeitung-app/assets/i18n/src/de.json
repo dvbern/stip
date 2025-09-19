@@ -251,6 +251,7 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.message": "Der Abschluss \"{{ bezeichnungDe }}\" wird archiviert. Möchten Sie fortfahren?",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.success": "Der Abschluss wurde erfolgreich archiviert.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title": "Abschluss Info",
+  "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.bezeichnung.error.notUnique": "Dieser Abschluss existiert bereits.",
 
   "sachbearbeitung-app.admin.ausbildungsstaette.nameDe": "Ausbildungsstätte Deutsch",
   "sachbearbeitung-app.admin.ausbildungsstaette.nameFr": "Ausbildungsstätte Französisch",

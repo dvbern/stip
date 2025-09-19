@@ -45,7 +45,6 @@ import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { SharedUiPadTextPipeComponent } from '@dv/shared/ui/pad-text-pipe';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
@@ -94,7 +93,6 @@ type DisplayColumns =
     SharedUiClearButtonComponent,
     SharedUiLoadingComponent,
     SharedUiTruncateTooltipDirective,
-    SharedUiPadTextPipeComponent,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
     TranslatedPropertyPipe,

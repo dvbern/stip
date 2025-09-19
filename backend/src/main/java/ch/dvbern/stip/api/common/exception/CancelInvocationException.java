@@ -15,22 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.ausbildung.type;
+package ch.dvbern.stip.api.common.exception;
 
-public enum Ausbildungskategorie {
-    UNIVERSITAET_ETH,
-    PAEDAGOGISCHE_HOCHSCHULE,
-    FACHHOCHSCHULE,
-    HOEHERE_FACHSCHULE,
-    BERUFS_UND_HOEHERE_FACHSCHULE,
-    EIDGENOESSISCHE_HOCHSCHULE_FUER_BERUFSBILDUNG,
-    GYMNASIUM,
-    BERUFSFACHSCHULEN,
-    FACHMITTELSCHULE,
-    BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE,
-    BETRIEBE,
-    OBLIGATORISCHE_SCHULE,
-    BRUECKENANGEBOT,
-    HOEHERE_FACHPRUEFUNG,
-    BERUFSPRUEFUNG
+public class CancelInvocationException extends RuntimeException {
+    public CancelInvocationException(Throwable innerException) {
+        super(innerException);
+    }
 }

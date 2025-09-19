@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AbschlussZusatzfrageDtoSpec;
 import ch.dvbern.stip.generated.dto.BildungskategorieDtoSpec;
+import ch.dvbern.stip.generated.dto.BildungsrichtungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_BEZEICHNUNG_DE,
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_BEZEICHNUNG_FR,
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_BILDUNGSKATEGORIE,
+  AusbildungsgangDataDtoSpec.JSON_PROPERTY_BILDUNGSRICHTUNG,
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_ZUSATZFRAGE,
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_ASK_FOR_BERUFSMATURITAET,
   AusbildungsgangDataDtoSpec.JSON_PROPERTY_AKTIV
@@ -52,6 +54,9 @@ public class AusbildungsgangDataDtoSpec {
 
   public static final String JSON_PROPERTY_BILDUNGSKATEGORIE = "bildungskategorie";
   private BildungskategorieDtoSpec bildungskategorie;
+
+  public static final String JSON_PROPERTY_BILDUNGSRICHTUNG = "bildungsrichtung";
+  private BildungsrichtungDtoSpec bildungsrichtung;
 
   public static final String JSON_PROPERTY_ZUSATZFRAGE = "zusatzfrage";
   private AbschlussZusatzfrageDtoSpec zusatzfrage;
@@ -169,6 +174,32 @@ public class AusbildungsgangDataDtoSpec {
   }
 
 
+  public AusbildungsgangDataDtoSpec bildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+    
+    this.bildungsrichtung = bildungsrichtung;
+    return this;
+  }
+
+   /**
+   * Get bildungsrichtung
+   * @return bildungsrichtung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public BildungsrichtungDtoSpec getBildungsrichtung() {
+    return bildungsrichtung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BILDUNGSRICHTUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBildungsrichtung(BildungsrichtungDtoSpec bildungsrichtung) {
+    this.bildungsrichtung = bildungsrichtung;
+  }
+
+
   public AusbildungsgangDataDtoSpec zusatzfrage(AbschlussZusatzfrageDtoSpec zusatzfrage) {
     
     this.zusatzfrage = zusatzfrage;
@@ -259,6 +290,7 @@ public class AusbildungsgangDataDtoSpec {
         Objects.equals(this.bezeichnungDe, ausbildungsgangData.bezeichnungDe) &&
         Objects.equals(this.bezeichnungFr, ausbildungsgangData.bezeichnungFr) &&
         Objects.equals(this.bildungskategorie, ausbildungsgangData.bildungskategorie) &&
+        Objects.equals(this.bildungsrichtung, ausbildungsgangData.bildungsrichtung) &&
         Objects.equals(this.zusatzfrage, ausbildungsgangData.zusatzfrage) &&
         Objects.equals(this.askForBerufsmaturitaet, ausbildungsgangData.askForBerufsmaturitaet) &&
         Objects.equals(this.aktiv, ausbildungsgangData.aktiv);
@@ -266,7 +298,7 @@ public class AusbildungsgangDataDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, zusatzfrage, askForBerufsmaturitaet, aktiv);
+    return Objects.hash(id, bezeichnungDe, bezeichnungFr, bildungskategorie, bildungsrichtung, zusatzfrage, askForBerufsmaturitaet, aktiv);
   }
 
   @Override
@@ -277,6 +309,7 @@ public class AusbildungsgangDataDtoSpec {
     sb.append("    bezeichnungDe: ").append(toIndentedString(bezeichnungDe)).append("\n");
     sb.append("    bezeichnungFr: ").append(toIndentedString(bezeichnungFr)).append("\n");
     sb.append("    bildungskategorie: ").append(toIndentedString(bildungskategorie)).append("\n");
+    sb.append("    bildungsrichtung: ").append(toIndentedString(bildungsrichtung)).append("\n");
     sb.append("    zusatzfrage: ").append(toIndentedString(zusatzfrage)).append("\n");
     sb.append("    askForBerufsmaturitaet: ").append(toIndentedString(askForBerufsmaturitaet)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
