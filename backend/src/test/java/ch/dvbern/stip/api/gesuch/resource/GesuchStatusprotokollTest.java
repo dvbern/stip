@@ -106,6 +106,15 @@ class GesuchStatusprotokollTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -140,8 +149,8 @@ class GesuchStatusprotokollTest {
         assertThat(sorted.get(0).getStatusTo(), equalTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_GS.toString()));
         assertThat(sorted.get(1).getStatusTo(), equalTo(GesuchstatusDtoSpec.EINGEREICHT.toString()));
         assertThat(sorted.get(2).getStatusTo(), equalTo(GesuchstatusDtoSpec.ANSPRUCH_PRUEFEN.toString()));
-        assertThat(sorted.get(3).getStatusTo(), equalTo(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG.toString()));
-        assertThat(sorted.get(4).getStatusTo(), equalTo(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT.toString()));
+        assertThat(sorted.get(3).getStatusTo(), equalTo(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT.toString()));
+        assertThat(sorted.get(4).getStatusTo(), equalTo(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG.toString()));
         assertThat(sorted.get(5).getStatusTo(), equalTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB.toString()));
     }
 

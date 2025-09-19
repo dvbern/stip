@@ -34,9 +34,11 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -102,6 +104,15 @@ class GesuchZurueckweisenTest {
     @TestAsSachbearbeiter
     @Order(4)
     void trancheErstellen() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         TestUtil.executeAndAssertOk(
             gesuchApiSpec.changeGesuchStatusToInBearbeitung()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())

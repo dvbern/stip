@@ -149,8 +149,16 @@ class UnterschriftenblattResourceTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
 
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT));
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

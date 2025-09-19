@@ -123,6 +123,15 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsSachbearbeiter
     @Order(16)
     void gesuchStatusChangeToInBearbeitungSB() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

@@ -121,6 +121,16 @@ class BuchhaltungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
+        // Statusübergang vo DATENSCHUTZBRIEF_DRUCKBEREIT zu BEREIT_FUER_BEARBEITUNG manuell
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
