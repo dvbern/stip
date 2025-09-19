@@ -199,7 +199,7 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT),
+                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT),
                 verfuegungDruckbereitHandler::handle
             )
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
