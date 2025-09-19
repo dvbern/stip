@@ -557,26 +557,12 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
-    @Transactional
-    @Override
-    @RolesAllowed({ SB_GESUCH_UPDATE })
-    public GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefAmGenerieren(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefAmGenerieren(gesuchId);
-        gesuchService.gesuchStatusToDatenschutzbriefAmGenerieren(gesuchId);
-        gesuchService.gesuchStatusToDatenschutzbriefVersandbereit(gesuchId);// todo kstip-2663: remove this method &
-                                                                            // change to next state when job completed
-                                                                            // successfully
-        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
-    }
-
     @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     @Override
     public GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefDruckbereit(gesuchId);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(gesuchId);
         gesuchService.gesuchStatusToDatenschutzbriefDruckbereit(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }

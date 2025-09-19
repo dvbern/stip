@@ -204,6 +204,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.JURIST_CAN_EDIT);
     }
 
+    @Transactional
+    public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuch.getGesuchStatus() == Gesuchstatus.BEREIT_FUER_BEARBEITUNG) {
+            return;
+        }
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
+    }
+
     public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereit(UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
