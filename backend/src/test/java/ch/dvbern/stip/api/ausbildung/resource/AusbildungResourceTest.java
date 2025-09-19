@@ -113,7 +113,7 @@ class AusbildungResourceTest {
     @Order(3)
     void createAusbildung() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
         TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
         var foundGesuch = gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -124,18 +124,26 @@ class AusbildungResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        // todo KSTIP-1663: why is this enum not a spec type?
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.ANSPRUCH_MANUELL_PRUEFEN));
 
     }
-
-    // todo KSTIP-2663: change gesuchstatus to DATENSCHUTZBLATT_DRUCKBEREIT
 
     @Test
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
-        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        var foundGesuch = gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+
+        foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

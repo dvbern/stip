@@ -199,6 +199,28 @@ public class TestUtil {
         fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, getAuszahlungUpdateDtoSpec());
     }
 
+    public static void fillGesuchNoElterns(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
+        var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullNoElterns();
+        fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuch.getId())
+            .body(fullGesuch)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        for (final var dokTyp : DokumentTypDtoSpec.values()) {
+            final var file = TestUtil.getTestPng();
+            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
+        }
+    }
+
     public static void fillGesuch(
         final GesuchApiSpec gesuchApiSpec,
         final DokumentApiSpec dokumentApiSpec,

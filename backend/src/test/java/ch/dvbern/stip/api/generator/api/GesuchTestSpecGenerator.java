@@ -166,11 +166,33 @@ public class GesuchTestSpecGenerator {
         });
     }
 
+    private static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecFullNoElterns() {
+        return TestUtil.createUpdateDtoSpec(GesuchFormularUpdateDtoSpec::new, (model) -> {
+            model.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
+            model.getPersonInAusbildung().setZivilstand(ZivilstandDtoSpec.VERHEIRATET);
+            model.setLebenslaufItems(LebenslaufItemUpdateDtoSpecModel.lebenslaufItemUpdateDtoSpecs());
+            model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecNoElterns());
+
+            model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
+            model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
+            model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
+            model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
+        });
+    }
+
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecFull() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(gesuchFormularUpdateDtoSpecFull());
+        });
+    }
+
+    public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecFullNoElterns() {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
+            model.getGesuchTrancheToWorkWith().setGesuchFormular(gesuchFormularUpdateDtoSpecFullNoElterns());
         });
     }
 }

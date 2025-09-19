@@ -141,7 +141,17 @@ class UnterschriftenblattResourceTest {
     @TestAsSachbearbeiter
     @Order(7)
     void gesuchStatusChangeToInBearbeitungSB() {
-        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        var foundGesuch = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+
+        foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -150,7 +160,6 @@ class UnterschriftenblattResourceTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
 
