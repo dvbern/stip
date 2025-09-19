@@ -206,6 +206,15 @@
           >
             {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
           </button>
+        } @else {
+          <button
+            type="button"
+            data-testid="dialog-sozAdmin-delegierung-remove"
+            class="btn btn-danger"
+            (click)="removeDelegation()"
+          >
+            {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove' | transloco }}
+          </button>
         }
 
         <dv-shared-ui-form-save

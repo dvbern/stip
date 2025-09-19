@@ -127,6 +127,30 @@ export class DelegationStore extends signalStore(
     ),
   );
 
+  delegierungAufloesen$ = rxMethod<{
+    delegierungId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          delegierenState: cachedPending(state.delegierenState),
+        }));
+      }),
+      switchMap(({ delegierungId, onSuccess }) =>
+        this.delegierenService.delegierungAufloesen$({ delegierungId }).pipe(
+          handleApiResponse(
+            (response) =>
+              patchState(this, {
+                delegierenState: response,
+              }),
+            { onSuccess },
+          ),
+        ),
+      ),
+    ),
+  );
+
   loadPaginatedSozDashboard$ = rxMethod<LoadPaginatedDashboardByRoles>(
     pipe(
       tap(() => {

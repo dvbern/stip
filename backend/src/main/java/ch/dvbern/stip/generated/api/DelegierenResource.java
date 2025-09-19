@@ -35,6 +35,11 @@ public interface DelegierenResource {
     @Produces({ "text/plain" })
     void delegierungAblehnen(@PathParam("delegierungId") UUID delegierungId);
 
+    @DELETE
+    @Path("/delegierung/{delegierungId}/aufloesen")
+    @Produces({ "text/plain" })
+    void delegierungAufloesen(@PathParam("delegierungId") UUID delegierungId);
+
     @POST
     @Path("/delegieren/{fallId}/{sozialdienstId}")
     @Consumes({ "application/json" })
