@@ -59,11 +59,6 @@ public interface GesuchResource {
     GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @POST
-    @Path("/status/datenschutzbrief-generieren/{gesuchTrancheId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefAmGenerieren(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @POST
     @Path("/status/datenschutzbrief-druckbereit/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
