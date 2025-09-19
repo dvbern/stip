@@ -634,25 +634,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToDatenschutzbriefAmGenerieren(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(
-            gesuch,
-            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN
-        );
-    }
-
-    // todo KSTIP-2663: Remove this method probably
-    @Transactional
-    public void gesuchStatusToDatenschutzbriefVersandbereit(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(
-            gesuch,
-            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_VERSANDBEREIT
-        );
-    }
-
-    @Transactional
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);
