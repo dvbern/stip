@@ -11,6 +11,7 @@ import {
   effect,
   inject,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -60,6 +61,7 @@ import {
   PAGE_SIZES,
 } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
+import { SharedUiFilterMenuButtonComponent } from '@dv/shared/ui/filter-menu-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -123,6 +125,22 @@ type DashboardFormFields =
   | DashboardFormSimpleFields
   | DashboardFormStartEndFields;
 
+type QuickFilterGroup =
+  | 'GESUCHE'
+  | 'BEARBEITBAR'
+  | 'JURISTISCHE_ABKLAERUNG'
+  | 'DRUCKBAR_VERFUEGUNGEN'
+  | 'DRUCKBAR_DATENSCHUTZBRIEFE';
+
+type AvailableFilters = {
+  group: QuickFilterGroup;
+  filters: {
+    typ: GesuchFilter;
+    icon: string;
+    roles: BenutzerRole[];
+  }[];
+}[];
+
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
   imports: [
@@ -154,6 +172,7 @@ type DashboardFormFields =
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
     SachbearbeitungAppPatternOverviewLayoutComponent,
+    SharedUiFilterMenuButtonComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],
@@ -241,12 +260,12 @@ export class SachbearbeitungAppFeatureCockpitComponent
     MEINE_GESUCHE: {
       icon: 'all_inclusive',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
-      group: 'ALLE',
+      group: 'GESUCHE',
     },
     ALLE_GESUCHE: {
       icon: 'person',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
-      group: 'ALLE',
+      group: 'GESUCHE',
     },
     MEINE_BEARBEITBAR: {
       icon: 'people',
@@ -290,20 +309,17 @@ export class SachbearbeitungAppFeatureCockpitComponent
     },
   } satisfies Record<
     GesuchFilter,
-    { icon: string; roles: BenutzerRole[]; group: string }
+    { icon: string; roles: BenutzerRole[]; group: QuickFilterGroup }
   >;
 
   // Signals and computed values for form changes and filtering
-
   private letzteAktivitaetFromChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetFrom.valueChanges,
   );
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
-  availableQuickFiltersSig = computed<
-    { typ: GesuchFilter; icon: string; roles: BenutzerRole[] }[][]
-  >(() => {
+  availableQuickFiltersSig = computed<AvailableFilters>(() => {
     const activeRoles = this.permissionStore.rolesMapSig();
 
     return (
@@ -315,23 +331,18 @@ export class SachbearbeitungAppFeatureCockpitComponent
           icon,
           roles,
         }))
-        .reduce(
-          (groups, filter) => {
-            const group = this.quickFilterConfig[filter.typ].group;
-            const existingGroup = groups.find(
-              (g) =>
-                g.length > 0 &&
-                this.quickFilterConfig[g[0].typ].group === group,
-            );
-            if (existingGroup) {
-              existingGroup.push(filter);
-            } else {
-              groups.push([filter]);
-            }
-            return groups;
-          },
-          [] as { typ: GesuchFilter; icon: string; roles: BenutzerRole[] }[][],
-        )
+        .reduce((groups, filter) => {
+          const group = this.quickFilterConfig[filter.typ].group;
+
+          const existingGroup = groups.find((g) => g.group === group);
+          if (existingGroup) {
+            existingGroup.filters.push(filter);
+          } else {
+            groups.push({ group, filters: [filter] });
+          }
+
+          return groups;
+        }, [] as AvailableFilters)
     );
   });
 
@@ -473,13 +484,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
     );
     effect(() => {
       const query = quickFilterChanged();
-      const defaultFilter = this.defaultFilterSig();
+
       if (!query) {
         return;
       }
       this.router.navigate(['.'], {
         queryParams: {
-          show: query === defaultFilter ? undefined : query,
+          show: query,
         },
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -488,6 +499,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     // When the route param inputs change, load the gesuche
     effect(() => {
+      this.refreshQuickfilterSig();
       const { query, filter, startEndFilter } = this.getInputs();
 
       this.gesuchStore.loadGesuche$({
@@ -497,6 +509,17 @@ export class SachbearbeitungAppFeatureCockpitComponent
         ...getSortAndPageInputs(this),
       });
     });
+  }
+
+  refreshQuickfilterSig = signal<unknown>(null);
+
+  handleQuickFilterClick(filter: string) {
+    if (filter === this.quickFilterForm.controls.query.value) {
+      // Refresh the quick filter even if the same filter is selected again
+      this.refreshQuickfilterSig.set({});
+    } else {
+      this.quickFilterForm.controls.query.setValue(filter as GesuchFilter);
+    }
   }
 
   private getInputs() {
