@@ -206,7 +206,7 @@ class PersonenImHaushaltServiceTest {
             1,
             0,
             gesuchFormular,
-            ElternTyp.VATER
+            ElternTyp.MUTTER
         );
         final var ret = personenImHaushaltService.calculatePersonenImHaushalt(request);
         assertThat(ret.getNoBudgetsRequired(), equalTo(1));
@@ -220,8 +220,8 @@ class PersonenImHaushaltServiceTest {
     void testPersonenImHaushaltElternteilMutterUnbekanntVerstorben() {
         gesuchFormular.getPersonInAusbildung()
             .setWohnsitz(Wohnsitz.MUTTER_VATER)
-            .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
-            .setWohnsitzAnteilMutter(BigDecimal.valueOf(100));
+            .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
+            .setWohnsitzAnteilMutter(BigDecimal.valueOf(0));
         gesuchFormular.getFamiliensituation()
             .setElternVerheiratetZusammen(false)
             .setGerichtlicheAlimentenregelung(false)

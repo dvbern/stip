@@ -19,7 +19,17 @@ package ch.dvbern.stip.berechnung.service;
 
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 public interface PersonenImHaushaltCalculator {
+
+    @Getter
+    @RequiredArgsConstructor
+    class ElternImHaushalt {
+        private final int elternImHaushalt1;
+        private final int elternImHaushalt2;
+    }
+
     PersonenImHaushaltResult calculatePersonenImHaushalt(final CalculatorRequest request);
 }
