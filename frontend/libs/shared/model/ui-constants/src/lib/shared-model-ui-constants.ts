@@ -12,3 +12,5 @@ export const DEFAULT_PAGE_SIZE = 20;
 export const INPUT_DELAY = 600;
 
 export const BFSCODE_SCHWEIZ = '8100';
+
+export const MAX_EINKOMMEN = 9_999_999;
