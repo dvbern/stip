@@ -1,0 +1,288 @@
+{
+  "ausbildung": {
+    "isAusbildungAusland": false,
+    "besuchtBMS": false,
+    "fachrichtungBerufsbezeichnung": "Informatik",
+    "ausbildungNichtGefunden": false,
+    "alternativeAusbildungsgang": null,
+    "alternativeAusbildungsstaette": null,
+    "ausbildungBegin": "02.2025",
+    "ausbildungEnd": "12.2027",
+    "pensum": "TEILZEIT",
+    "ausbildungsort": "Bern",
+    "ausbildungsortPLZ": "3003"
+  },
+  "bildungskategorie": "TERTIAERSTUFE_B",
+  "bildungsrichtung": "HOCHSCHULE",
+  "gesuch": {
+    "gesuchTrancheToWorkWith": {
+      "gesuchFormular": {
+        "personInAusbildung": {
+          "sozialversicherungsnummer": "756.4950.7988.11",
+          "anrede": "HERR",
+          "nachname": "Margreth",
+          "vorname": "Daniel",
+          "adresse": {
+            "coAdresse": null,
+            "strasse": "Funkstrasse",
+            "hausnummer": "120",
+            "landId": "6dd70565-b8df-4dd6-9d1f-5c0b11612c4d",
+            "plz": "3084",
+            "ort": "Wabern"
+          },
+          "identischerZivilrechtlicherWohnsitz": true,
+          "email": "stip-dana-scully@mailbucket.dvbern.ch",
+          "telefonnummer": "0791231212",
+          "geburtsdatum": "2000-02-23",
+          "nationalitaetId": "6dd70565-b8df-4dd6-9d1f-5c0b11612c4d",
+          "niederlassungsstatus": null,
+          "vormundschaft": false,
+          "zivilstand": "VERHEIRATET",
+          "wohnsitz": "EIGENER_HAUSHALT",
+          "sozialhilfebeitraege": false,
+          "korrespondenzSprache": "DEUTSCH",
+          "zustaendigeKESB": null,
+          "identischerZivilrechtlicherWohnsitzOrt": null,
+          "identischerZivilrechtlicherWohnsitzPLZ": null,
+          "heimatort": "Liebefeld",
+          "heimatortPLZ": "3097"
+        },
+        "familiensituation": {
+          "elternVerheiratetZusammen": true,
+          "elternteilUnbekanntVerstorben": null,
+          "gerichtlicheAlimentenregelung": null,
+          "mutterUnbekanntVerstorben": null,
+          "mutterUnbekanntGrund": null,
+          "mutterWiederverheiratet": null,
+          "vaterUnbekanntVerstorben": null,
+          "vaterUnbekanntGrund": null,
+          "vaterWiederverheiratet": null,
+          "werZahltAlimente": null
+        },
+        "partner": {
+          "adresse": {
+            "landId": "6dd70565-b8df-4dd6-9d1f-5c0b11612c4d",
+            "strasse": "Kramgasse",
+            "plz": "3011",
+            "ort": "Bern",
+            "coAdresse": null,
+            "hausnummer": "4"
+          },
+          "vorname": "Fränzi",
+          "geburtsdatum": "1990-12-25",
+          "sozialversicherungsnummer": "756.8180.9200.59",
+          "nachname": "Schneider",
+          "ausbildungMitEinkommenOderErwerbstaetig": false,
+          "jahreseinkommen": null,
+          "fahrkosten": null,
+          "verpflegungskosten": null
+        },
+        "elterns": [
+          {
+            "vorname": "Patricia",
+            "adresse": {
+              "landId": "6dd70565-b8df-4dd6-9d1f-5c0b11612c4d",
+              "strasse": "Wankdorffeldstrasse",
+              "plz": "3011",
+              "ort": "Bern",
+              "coAdresse": null,
+              "hausnummer": "2"
+            },
+            "identischerZivilrechtlicherWohnsitz": true,
+            "telefonnummer": "0791111111",
+            "geburtsdatum": "1966-05-03",
+            "ausweisbFluechtling": false,
+            "elternTyp": "MUTTER",
+            "nachname": "Alvarez",
+            "sozialhilfebeitraege": false,
+            "identischerZivilrechtlicherWohnsitzOrt": null,
+            "identischerZivilrechtlicherWohnsitzPLZ": null,
+            "sozialversicherungsnummer": "756.1618.8208.08",
+            "ergaenzungsleistungen": 0,
+            "wohnkosten": 4690
+          },
+          {
+            "vorname": "Arnold",
+            "adresse": {
+              "landId": "6dd70565-b8df-4dd6-9d1f-5c0b11612c4d",
+              "strasse": "Bernstrasse",
+              "plz": "3006",
+              "ort": "Bern",
+              "coAdresse": null,
+              "hausnummer": "3"
+            },
+            "identischerZivilrechtlicherWohnsitz": true,
+            "telefonnummer": "0791111111",
+            "geburtsdatum": "1969-12-25",
+            "ausweisbFluechtling": false,
+            "elternTyp": "VATER",
+            "nachname": "Stalone",
+            "sozialhilfebeitraege": false,
+            "identischerZivilrechtlicherWohnsitzOrt": null,
+            "identischerZivilrechtlicherWohnsitzPLZ": null,
+            "sozialversicherungsnummer": "756.8927.6873.20",
+            "ergaenzungsleistungen": 0,
+            "wohnkosten": 4690
+          }
+        ],
+        "geschwisters": null,
+        "lebenslaufItems": [
+          {
+            "von": "1.2006",
+            "bis": "12.2024",
+            "wohnsitz": "BE",
+            "abschlussId": null,
+            "ausbildungAbgeschlossen": false,
+            "fachrichtungBerufsbezeichnung": null,
+            "taetigkeitsart": "ERWERBSTAETIGKEIT",
+            "taetigkeitsBeschreibung": "Nebenjob"
+          },
+          {
+            "von": "1.2025",
+            "bis": "1.2025",
+            "wohnsitz": "BE",
+            "abschlussId": null,
+            "ausbildungAbgeschlossen": false,
+            "fachrichtungBerufsbezeichnung": null,
+            "taetigkeitsart": "ERWERBSTAETIGKEIT",
+            "taetigkeitsBeschreibung": "Test"
+          }
+        ],
+        "kinds": [
+          {
+            "vorname": "Iris",
+            "geburtsdatum": "2014-08-25",
+            "ausbildungssituation": "KEINE",
+            "wohnsitzAnteilPia": 100,
+            "nachname": "Meyer",
+            "erhalteneAlimentebeitraege": null
+          },
+          {
+            "vorname": "Peter",
+            "geburtsdatum": "2019-08-25",
+            "ausbildungssituation": "VORSCHULPFLICHTIG",
+            "wohnsitzAnteilPia": 100,
+            "nachname": "Meyer",
+            "erhalteneAlimentebeitraege": null
+          }
+        ],
+        "einnahmenKosten": {
+          "nettoerwerbseinkommen": 70000,
+          "fahrkosten": 988,
+          "verdienstRealisiert": false,
+          "alimente": null,
+          "zulagen": 6000,
+          "renten": 0,
+          "eoLeistungen": 0,
+          "ergaenzungsleistungen": 0,
+          "beitraege": 0,
+          "ausbildungskosten": 3000,
+          "wohnkosten": 18876,
+          "wgWohnend": false,
+          "auswaertigeMittagessenProWoche": null,
+          "betreuungskostenKinder": 0,
+          "veranlagungsStatus": "Manuell",
+          "steuerjahr": 2024,
+          "vermoegen": 0,
+          "steuernKantonGemeinde": 7000
+        },
+        "steuererklaerung": [
+          {
+            "steuerdatenTyp": "FAMILIE",
+            "steuererklaerungInBern": true
+          }
+        ],
+        "darlehen": {
+          "willDarlehen": false,
+          "betragDarlehen": null,
+          "betragBezogenKanton": null,
+          "schulden": null,
+          "anzahlBetreibungen": null,
+          "grundNichtBerechtigt": null,
+          "grundAusbildungZwoelfJahre": null,
+          "grundHoheGebuehren": null,
+          "grundAnschaffungenFuerAusbildung": null,
+          "grundZweitausbildung": null
+        }
+      }
+    }
+  },
+  "steuerdaten": [
+    {
+      "steuerdatenTyp": "FAMILIE",
+      "steuernKantonGemeinde": 11707,
+      "steuernBund": 663,
+      "fahrkosten": 4620,
+      "verpflegung": 3200,
+      "totalEinkuenfte": 103011,
+      "eigenmietwert": 5440,
+      "isArbeitsverhaeltnisSelbstaendig": false,
+      "kinderalimente": 0,
+      "vermoegen": 73358,
+      "fahrkostenPartner": 1848,
+      "verpflegungPartner": 1280,
+      "steuerjahr": 2024,
+      "veranlagungsStatus": "Manuell",
+      "saeule3a": null,
+      "saeule2": null
+    }
+  ],
+  "gesuchperiode": {
+    "bezeichnungDe": "Frühling 2025",
+    "bezeichnungFr": "Printemps 2025",
+    "fiskaljahr": 2025,
+    "gesuchsjahrId": "23bb9578-db10-4981-9edd-c2d1eda37cbb",
+    "gesuchsperiodeStart": "2025-01-01",
+    "gesuchsperiodeStopp": "2025-12-31",
+    "aufschaltterminStart": "2025-01-15",
+    "einreichefristNormal": "2025-06-30",
+    "einreichefristReduziert": "2025-09-30",
+    "ausbKosten_SekII": 2000,
+    "ausbKosten_Tertiaer": 3000,
+    "freibetrag_vermoegen": 30000,
+    "freibetrag_erwerbseinkommen": 6000,
+    "einkommensfreibetrag": 6000,
+    "elternbeteiligungssatz": 50,
+    "vermogenSatzAngerechnet": 15,
+    "integrationszulage": 2400,
+    "limite_EkFreibetrag_Integrationszulage": 13200,
+    "stipLimite_Minimalstipendium": 500,
+    "person_1": 12072,
+    "personen_2": 18468,
+    "personen_3": 22452,
+    "personen_4": 25836,
+    "personen_5": 29220,
+    "personen_6": 31668,
+    "personen_7": 34116,
+    "proWeiterePerson": 2448,
+    "kinder_00_17": 1400,
+    "jugendliche_erwachsene_18_24": 4600,
+    "erwachsene_25_99": 5400,
+    "wohnkosten_fam_1pers": 13536,
+    "wohnkosten_fam_2pers": 16260,
+    "wohnkosten_fam_3pers": 16260,
+    "wohnkosten_fam_4pers": 19932,
+    "wohnkosten_fam_5pluspers": 25260,
+    "wohnkosten_persoenlich_1pers": 10009,
+    "wohnkosten_persoenlich_2pers": 13536,
+    "wohnkosten_persoenlich_3pers": 16260,
+    "wohnkosten_persoenlich_4pers": 19932,
+    "wohnkosten_persoenlich_5pluspers": 25260,
+    "preisProMahlzeit": 10,
+    "maxSaeule3a": 7056,
+    "anzahlWochenLehre": 47,
+    "anzahlWochenSchule": 38,
+    "vermoegensanteilInProzent": 15,
+    "reduzierungDesGrundbedarfs": 2838,
+    "limiteAlterAntragsstellerHalbierungElternbeitrag": 25,
+    "zweiterAuszahlungsterminMonat": 6,
+    "zweiterAuszahlungsterminTag": 1,
+    "fristNachreichenDokumente": 30,
+    "stichtagVolljaehrigkeitMedizinischeGrundversorgung": "2025-12-31",
+    "einreichfrist": null
+  },
+  "berechnungsResult": 0,
+  "einnahmenPersoenlichesBudget": 91450,
+  "ausgabenPersoenlichesBudget": 81264,
+  "persoenlichesbudgetBerechnet": 2547
+}

@@ -1,0 +1,1 @@
+Votre délégation au service social {sozialdienstName} a été supprimée. Cela signifie que vous êtes à nouveau responsable de la gestion de vos demandes de bourse. Veuillez modifier les données de paiement afin que les montants des bourses soient versés sur le bon compte.

@@ -2076,6 +2076,24 @@ paths:
         500:
           $ref: '#/components/responses/ServerError'
       operationId: delegierungAblehnen
+  /delegierung/{delegierungId}/aufloesen:
+    parameters:
+      - $ref: '#/components/parameters/delegierungId'
+    delete:
+      tags:
+        - Delegieren
+      responses:
+        204:
+          description: Die deleguerung wurde erfolgreich aufgeloest
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+      operationId: delegierungAufloesen
   /delegierung/{getDelegierungSozQueryType}/admin:
     get:
       tags:
@@ -5962,6 +5980,8 @@ components:
         - BETRIEBE
         - OBLIGATORISCHE_SCHULE
         - BRUECKENANGEBOT
+        - HOEHERE_FACHPRUEFUNG
+        - BERUFSPRUEFUNG
     Bildungskategorie:
       enum:
         - TERTIAERSTUFE_A
@@ -6169,6 +6189,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - bildungskategorie
+        - bildungsrichtung
         - aktiv
       properties:
         id:
@@ -6179,6 +6200,8 @@ components:
           type: string
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
+        bildungsrichtung:
+          $ref: "#/components/schemas/Bildungsrichtung"
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
@@ -6213,6 +6236,7 @@ components:
         - bezeichnungDe
         - bezeichnungFr
         - ausbildungskategorie
+        - bildungsrichtung
         - aktiv
       properties:
         id:
@@ -6223,6 +6247,8 @@ components:
           type: string
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
+        bildungsrichtung:
+          $ref: "#/components/schemas/Bildungsrichtung"
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:

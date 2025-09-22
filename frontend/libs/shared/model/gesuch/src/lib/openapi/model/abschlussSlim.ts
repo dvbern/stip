@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Ausbildungskategorie } from './ausbildungskategorie';
+import { Bildungsrichtung } from './bildungsrichtung';
 import { AbschlussZusatzfrage } from './abschlussZusatzfrage';
 
 export interface AbschlussSlim { 
@@ -17,6 +18,7 @@ export interface AbschlussSlim {
     bezeichnungDe: string;
     bezeichnungFr: string;
     ausbildungskategorie: Ausbildungskategorie;
+    bildungsrichtung: Bildungsrichtung;
     zusatzfrage?: AbschlussZusatzfrage;
     aktiv: boolean;
 }

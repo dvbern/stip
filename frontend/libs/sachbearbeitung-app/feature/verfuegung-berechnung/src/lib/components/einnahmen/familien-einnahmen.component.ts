@@ -24,7 +24,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().totalEinkuenfte | formatChfPositive }}
       </div>
     </div>
@@ -35,7 +35,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
       </div>
     </div>
@@ -46,7 +46,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().mietwert | formatChfNegative: true }}
       </div>
     </div>
@@ -57,7 +57,7 @@ import { FamilienBerechnung } from '../../../models';
         'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
           | transloco
       }}
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().kinderalimente | formatChfNegative: true }}
       </div>
     </div>
@@ -76,7 +76,7 @@ import { FamilienBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().sauele3 | formatChfNegative: true }}
       </div>
     </div>
@@ -95,7 +95,7 @@ import { FamilienBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().sauele2 | formatChfNegative: true }}
       </div>
     </div>
@@ -114,7 +114,7 @@ import { FamilienBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().einkommensfreibeitrag | formatChfNegative: true }}
       </div>
     </div>
@@ -133,7 +133,7 @@ import { FamilienBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted text-end flex-grow-1 text-nowrap">
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
       </div>
     </div>
@@ -146,7 +146,7 @@ import { FamilienBerechnung } from '../../../models';
             | transloco
         }}
       </div>
-      <div class="text-end h4 flex-grow-1 text-nowrap">
+      <div class="h4 flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().total | formatChf }}
       </div>
     </div>

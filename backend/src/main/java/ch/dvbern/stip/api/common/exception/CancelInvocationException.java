@@ -15,32 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.service.bern.v1;
+package ch.dvbern.stip.api.common.exception;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-import lombok.experimental.UtilityClass;
-
-@UtilityClass
-public class CalculatorUtilV1 {
-    public <T> Function<T, Integer> mapAndReturn(
-        final BiConsumer<T, Integer> setter,
-        final Integer value
-    ) {
-        return (result) -> {
-            setter.accept(result, value);
-            return value;
-        };
-    }
-
-    public <T> int applyAndSum(
-        final Stream<Function<T, Integer>> toApply,
-        final T result
-    ) {
-        return toApply.map(applier -> applier.apply(result))
-            .mapToInt(Integer::intValue)
-            .sum();
+public class CancelInvocationException extends RuntimeException {
+    public CancelInvocationException(Throwable innerException) {
+        super(innerException);
     }
 }

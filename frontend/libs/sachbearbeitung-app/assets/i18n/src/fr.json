@@ -252,6 +252,7 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.message": "Le diplôme \"{{ bezeichnungFr }}\" sera archivé. Voulez-vous continuer?",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.success": "Le diplôme a été archivé avec succès.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title": "Informations sur le diplôme",
+  "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.bezeichnung.error.notUnique": "Ce diplôme existe déjà.",
 
   "sachbearbeitung-app.admin.ausbildungsstaette.nameDe": "Centre de formation Allemand",
   "sachbearbeitung-app.admin.ausbildungsstaette.nameFr": "Centre de formation Français",

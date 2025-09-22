@@ -26,7 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { addYears } from 'date-fns';
 import { diff } from 'json-diff-ts';
@@ -138,6 +138,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
+  private transloco = inject(TranslocoService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchsView,
@@ -282,6 +283,14 @@ export class SharedFeatureAusbildungComponent implements OnInit {
               ausbildungsgang.id === ausbildung.ausbildungsgang?.id,
           )
           .map((ausbildungsgang) => {
+            // access is partially instant, so no optimization needed here
+            const bildungsrichtungDe = this.transloco.translate(
+              `shared.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
+            );
+            const bildungsrichtungFr = this.transloco.translate(
+              `shared.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
+            );
+
             return {
               ...ausbildungsgang,
               translatedName: getTranslatableProp(
@@ -294,8 +303,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
                 !ausbildungsgang.aktiv &&
                 ausbildungsgang.id !== currentAusbildungsgang?.id,
               disabled: !ausbildungsgang.aktiv,
-              displayValueDe: ausbildungsgang.bezeichnungDe,
-              displayValueFr: ausbildungsgang.bezeichnungFr,
+              displayValueDe: `${ausbildungsgang.bezeichnungDe} - ${bildungsrichtungDe}`,
+              displayValueFr: `${ausbildungsgang.bezeichnungFr} - ${bildungsrichtungFr}`,
             };
           }) ?? [];
       return sortListByText(ausbildungsgaenge, (item) => item.translatedName);

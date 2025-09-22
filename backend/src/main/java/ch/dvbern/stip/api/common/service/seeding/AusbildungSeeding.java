@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -34,9 +36,11 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
+import ch.dvbern.stip.api.common.exception.CancelInvocationException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
+import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -59,23 +63,27 @@ public class AusbildungSeeding extends Seeder {
     @Override
     protected void seed() {
         if (ausbildungsstaetteRepository.count() == 0) {
-            LOG.info("Seeding Abschluss, Ausbildungsstaette and Ausbildungsgang");
+            try {
+                LOG.info("Seeding Abschluss, Ausbildungsstaette and Ausbildungsgang");
 
-            final var abschluesse = getAbschluesseToSeed();
-            abschlussRepository.persist(abschluesse);
-            abschlussRepository.flush();
+                final var abschluesse = getAbschluesseToSeed();
+                abschlussRepository.persist(abschluesse);
+                abschlussRepository.flush();
 
-            final var ausbildungsstaetten = getAusbildungsstaettenToSeed();
-            ausbildungsstaetteRepository.persist(ausbildungsstaetten);
-            ausbildungsstaetteRepository.flush();
+                final var ausbildungsstaetten = getAusbildungsstaettenToSeed();
+                ausbildungsstaetteRepository.persist(ausbildungsstaetten);
+                ausbildungsstaetteRepository.flush();
 
-            final var ausbildunggaenge = getAusbildungsgaengeToSeed(
-                abschluesse,
-                ausbildungsstaetten
-            );
+                final var ausbildunggaenge = getAusbildungsgaengeToSeed(
+                    abschluesse,
+                    ausbildungsstaetten
+                );
 
-            ausbildungsgangRepository.persist(ausbildunggaenge);
-            ausbildungsgangRepository.flush();
+                ausbildungsgangRepository.persist(ausbildunggaenge);
+                ausbildungsgangRepository.flush();
+            } catch (Exception e) {
+                throw new CancelInvocationException(e);
+            }
         }
     }
 
@@ -162,7 +170,7 @@ public class AusbildungSeeding extends Seeder {
         } else if (!ausbildungsstaetteLine[4].isEmpty()) {
             return AusbildungsstaetteNummerTyp.CT_NO;
         } else {
-            return null;
+            return AusbildungsstaetteNummerTyp.OHNE_NO;
         }
     }
 
@@ -205,27 +213,67 @@ public class AusbildungSeeding extends Seeder {
                             final var abschlussBezeichnungDe = ausbildungsgangLine[0];
                             final var ausbildungskategorie = Ausbildungskategorie.valueOf(ausbildungsgangLine[1]);
                             final var ausbildungsstaetteNameDe = ausbildungsgangLine[2];
-                            final var abschluss = abschluesse.stream()
+                            final var bildungsrichtungOpt = Optional.ofNullable(ausbildungsgangLine[3]);
+                            final boolean isBildungsrichtungPresent =
+                                bildungsrichtungOpt.isPresent() && !bildungsrichtungOpt.get().isEmpty();
+                            var possibleMatchingAbschluesse = abschluesse.stream()
                                 .filter(
                                     abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
                                     && abschluss1.getAusbildungskategorie() == ausbildungskategorie
                                 )
-                                .findFirst()
-                                .get();
-                            final var ausbildungsstaette = ausbildungsstaetten.stream()
+                                .toList();
+                            Optional<Abschluss> abschlussOpt = possibleMatchingAbschluesse.stream().findFirst();
+
+                            if (isBildungsrichtungPresent) {
+                                final Bildungsrichtung bildungsrichtung =
+                                    Bildungsrichtung.valueOf(bildungsrichtungOpt.get());
+                                abschlussOpt = possibleMatchingAbschluesse.stream()
+                                    .filter(abschluss1 -> abschluss1.getBildungsrichtung().equals(bildungsrichtung))
+                                    .findFirst();
+                            }
+
+                            final var ausbildungsstaetteOpt = ausbildungsstaetten.stream()
                                 .filter(
                                     ausbildungsstaette1 -> ausbildungsstaette1.getNameDe()
                                         .equalsIgnoreCase(ausbildungsstaetteNameDe)
                                 )
-                                .findFirst()
-                                .get();
+                                .findFirst();
+
+                            if (abschlussOpt.isEmpty()) {
+                                handleMissingOrMismatchingEntries(
+                                    String.format(
+                                        "Could not find Abschluss %s in seeded abschluesse",
+                                        abschlussBezeichnungDe
+                                    )
+                                );
+                                return null;
+                            }
+                            if (ausbildungsstaetteOpt.isEmpty()) {
+                                handleMissingOrMismatchingEntries(
+                                    String.format(
+                                        "Could not find Ausbildungsstaette %s in seeded Ausbildungsstaetten",
+                                        ausbildungsstaetteNameDe
+                                    )
+                                );
+                                return null;
+                            }
+
                             return new Ausbildungsgang()
-                                .setAbschluss(abschluss)
-                                .setAusbildungsstaette(ausbildungsstaette);
+                                .setAbschluss(abschlussOpt.get())
+                                .setAusbildungsstaette(ausbildungsstaetteOpt.get());
                         }
                     )
+                    .filter(Objects::nonNull)
                     .toList();
             }
+        }
+    }
+
+    private void handleMissingOrMismatchingEntries(String message) {
+        if (ConfigUtils.getProfiles().stream().anyMatch(profile -> profile.equals("dev"))) {
+            throw new RuntimeException(message);
+        } else {
+            LOG.error(message);
         }
     }
 }
