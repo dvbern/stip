@@ -15,20 +15,20 @@ import { TranslocoPipe } from '@jsverse/transloco';
   templateUrl: './shared-ui-filter-menu-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiFilterMenuButtonComponent {
-  filters = input<{ typ: string; icon: string; roles: string[] }[]>([]);
-  activeFilter = input<string | undefined>('');
-  defaultFilter = input.required<string>();
-  filterChange = output<string>();
+export class SharedUiFilterMenuButtonComponent<T> {
+  filters = input.required<{ typ: T }[]>();
+  activeFilter = input.required<T | undefined>();
+  defaultFilter = input.required<T>();
+  filterChange = output<T>();
 
-  selectedFilter = computed(() => {
+  selectedFilterSig = computed(() => {
     return (
       this.filters().find((filter) => filter.typ === this.activeFilter())
-        ?.typ || this.defaultFilter()
+        ?.typ ?? this.defaultFilter()
     );
   });
 
-  isSelected = computed(() => {
+  isSelectedSig = computed(() => {
     return this.filters().some((filter) => filter.typ === this.activeFilter());
   });
 }

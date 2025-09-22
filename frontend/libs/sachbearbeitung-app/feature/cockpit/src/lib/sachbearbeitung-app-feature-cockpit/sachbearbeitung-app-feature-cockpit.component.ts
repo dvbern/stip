@@ -137,7 +137,6 @@ type AvailableFilters = {
   group: QuickFilterGroup;
   filters: {
     typ: GesuchFilter;
-    icon: string;
     roles: BenutzerRole[];
   }[];
 }[];
@@ -261,58 +260,48 @@ export class SachbearbeitungAppFeatureCockpitComponent
   // Exhaustive quick filter configuration
   private readonly quickFilterConfig = {
     MEINE_GESUCHE: {
-      icon: 'all_inclusive',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
       group: 'GESUCHE',
     },
     ALLE_GESUCHE: {
-      icon: 'person',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
       group: 'GESUCHE',
     },
     MEINE_BEARBEITBAR: {
-      icon: 'people',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'BEARBEITBAR',
     },
     ALLE_BEARBEITBAR: {
-      icon: 'person',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'BEARBEITBAR',
     },
     MEINE_JURISTISCHE_ABKLAERUNG: {
-      icon: 'gavel',
       roles: ['V0_Jurist'],
       group: 'JURISTISCHE_ABKLAERUNG',
     },
     ALLE_JURISTISCHE_ABKLAERUNG: {
-      icon: 'person',
       roles: ['V0_Jurist'],
       group: 'JURISTISCHE_ABKLAERUNG',
     },
     MEINE_DRUCKBAR_VERFUEGUNGEN: {
-      icon: 'print',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_VERFUEGUNGEN',
     },
     ALLE_DRUCKBAR_VERFUEGUNGEN: {
-      icon: 'print',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_VERFUEGUNGEN',
     },
     MEINE_DRUCKBAR_DATENSCHUTZBRIEFE: {
-      icon: 'print',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     },
     ALLE_DRUCKBAR_DATENSCHUTZBRIEFE: {
-      icon: 'print',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     },
   } satisfies Record<
     GesuchFilter,
-    { icon: string; roles: BenutzerRole[]; group: QuickFilterGroup }
+    { roles: BenutzerRole[]; group: QuickFilterGroup }
   >;
 
   // Signals and computed values for form changes and filtering
@@ -325,36 +314,32 @@ export class SachbearbeitungAppFeatureCockpitComponent
   availableQuickFiltersSig = computed<AvailableFilters>(() => {
     const activeRoles = this.permissionStore.rolesMapSig();
 
-    return (
-      Object.entries(this.quickFilterConfig)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .filter(([_, { roles }]) => roles.some((r) => activeRoles?.[r]))
-        .map(([typ, { icon, roles }]) => ({
-          typ: typ as GesuchFilter,
-          icon,
-          roles,
-        }))
-        .reduce((groups, filter) => {
-          const group = this.quickFilterConfig[filter.typ].group;
+    return Object.entries(this.quickFilterConfig)
+      .filter(([, { roles }]) => roles.some((r) => activeRoles?.[r]))
+      .map(([typ, { roles }]) => ({
+        typ: typ as GesuchFilter,
+        roles,
+      }))
+      .reduce((groups, filter) => {
+        const group = this.quickFilterConfig[filter.typ].group;
 
-          const existingGroup = groups.find((g) => g.group === group);
-          if (existingGroup) {
-            existingGroup.filters.push(filter);
-          } else {
-            groups.push({ group, filters: [filter] });
-          }
+        const existingGroup = groups.find((g) => g.group === group);
+        if (existingGroup) {
+          existingGroup.filters.push(filter);
+        } else {
+          groups.push({ group, filters: [filter] });
+        }
 
-          return groups;
-        }, [] as AvailableFilters)
-    );
+        return groups;
+      }, [] as AvailableFilters);
   });
 
-  handleQuickFilterClick(filter: string) {
+  handleQuickFilterClick(filter: GesuchFilter) {
     if (filter === this.quickFilterForm.controls.query.value) {
       // Refresh the quick filter even if the same filter is selected again
       this.refreshQuickfilterSig.set({});
     } else {
-      this.quickFilterForm.controls.query.setValue(filter as GesuchFilter);
+      this.quickFilterForm.controls.query.setValue(filter);
     }
   }
 
