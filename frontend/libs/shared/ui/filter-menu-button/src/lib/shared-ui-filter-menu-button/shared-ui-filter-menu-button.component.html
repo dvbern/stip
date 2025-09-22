@@ -1,11 +1,11 @@
-<div class="tw:flex tw:h-full tw:shadow-md tw:rounded-md" [ngClass]="{ 'tw:bg-red-400': isSelected() }">
+<div class="tw:flex tw:h-full tw:shadow-md tw:rounded-md" [ngClass]="{ 'tw:bg-dv-red': isSelected() }">
   @let selected = selectedFilter();
   <button
     type="button"
     (click)="filterChange.emit(selected)"
     class="tw:font-semibold tw:flex-1 tw:px-2 tw:py-1 tw:rounded-l-md! tw:flex tw:items-center tw:place-content-center"
     [attr.data-testid]="'sachbearbeitung-app.cockpit.quick-filter.' + selected"
-    [ngClass]="isSelected() ? 'tw:hover:bg-red-400 tw:text-white' : 'tw:hover:bg-gray-200'"
+    [ngClass]="isSelected() ? 'tw:hover:bg-dv-red-hover tw:text-white' : 'tw:hover:bg-gray-200'"
   >
     <div class="tw:text-left flex-0">
       {{ 'sachbearbeitung-app.cockpit.quick-filter.' + selected | transloco }}
@@ -16,7 +16,7 @@
     type="button"
     class="tw:border-l tw:border-gray-300 tw:p-2 tw:flex tw:items-center tw:rounded-r-md!"
     data-testid="sachbearbeitung-app.cockpit.quick-filter.menu"
-    [ngClass]="isSelected() ? 'tw:hover:bg-red-500 tw:text-white' : 'tw:hover:bg-gray-200'"
+    [ngClass]="isSelected() ? 'tw:hover:bg-dv-red-hover tw:text-white' : 'tw:hover:bg-gray-200'"
     [matMenuTriggerFor]="gesuchMenu"
   >
     <i class="material-symbols-rounded">expand_more</i>
@@ -31,7 +31,7 @@
           (click)="filterChange.emit(filter.typ)"
           class="tw:rounded-md!"
           [attr.data-testid]="'sachbearbeitung-app.cockpit.quick-filter.' + filter.typ"
-          [ngClass]="{ 'tw:bg-red-400! tw:text-white!': activeFilter() === filter.typ }"
+          [ngClass]="{ 'tw:bg-dv-red! tw:text-white!': activeFilter() === filter.typ }"
         >
           {{ 'sachbearbeitung-app.cockpit.quick-filter.' + filter.typ | transloco }}
         </button>

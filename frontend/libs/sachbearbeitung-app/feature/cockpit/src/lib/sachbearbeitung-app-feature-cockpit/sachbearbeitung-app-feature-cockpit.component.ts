@@ -6,6 +6,7 @@ import {
   InputSignal,
   OnInit,
   QueryList,
+  Signal,
   ViewChildren,
   computed,
   effect,
@@ -217,6 +218,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
   items?: QueryList<SharedUiFocusableListItemDirective>;
   displayedColumns = Object.keys(SbDashboardColumn);
 
+  refreshQuickfilterSig = signal<unknown>(null);
+
   private defaultFilterSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
 
@@ -346,6 +349,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
     );
   });
 
+  handleQuickFilterClick(filter: string) {
+    if (filter === this.quickFilterForm.controls.query.value) {
+      // Refresh the quick filter even if the same filter is selected again
+      this.refreshQuickfilterSig.set({});
+    } else {
+      this.quickFilterForm.controls.query.setValue(filter as GesuchFilter);
+    }
+  }
+
   letzteAktivitaetRangeSig = computed(() => {
     const start = this.letzteAktivitaetFromChangedSig();
     const end = this.letzteAktivitaetToChangedSig();
@@ -429,6 +441,31 @@ export class SachbearbeitungAppFeatureCockpitComponent
     return this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
   });
 
+  canStartMassendruckSig: Signal<boolean> = computed(() => {
+    const quickFilter = this.show();
+    const isQuickfilterDruck = quickFilter?.includes('DRUCKBAR');
+    this.filterFormChangedSig();
+
+    if (!isQuickfilterDruck) {
+      return false;
+    }
+
+    console.log(this.filterForm.getRawValue());
+
+    const hasEntries = (this.totalEntriesSig() ?? 0) > 0;
+    const hasFilters = Object.entries(this.filterForm.getRawValue())
+      .filter(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ([key, _]) => {
+          return key !== 'typ';
+        },
+      )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .some(([_, value]) => value);
+
+    return hasEntries && !hasFilters;
+  });
+
   constructor() {
     limitPageToNumberOfEntriesEffect(
       this,
@@ -509,17 +546,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
         ...getSortAndPageInputs(this),
       });
     });
-  }
-
-  refreshQuickfilterSig = signal<unknown>(null);
-
-  handleQuickFilterClick(filter: string) {
-    if (filter === this.quickFilterForm.controls.query.value) {
-      // Refresh the quick filter even if the same filter is selected again
-      this.refreshQuickfilterSig.set({});
-    } else {
-      this.quickFilterForm.controls.query.setValue(filter as GesuchFilter);
-    }
   }
 
   private getInputs() {

@@ -10,9 +10,30 @@
         ></dv-shared-ui-filter-menu-button>
       }
     </div>
-    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">
-      {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
-    </h1>
+
+    <div class="tw:flex tw:justify-between tw:mt-6! tw:mt-8!">
+      <h1 class="tw:text-2xl!" data-testid="cockpit-title">
+        {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
+      </h1>
+
+      <!-- button verfuegungen oder datenschutzbriefe genereiern -->
+      @if (canStartMassendruckSig()) {
+        <button type="button" class="btn btn-danger tw:font-semibold! tw:whitespace-nowrap">
+          @if (show()?.includes('VERFUEGUNGEN')) {
+            <span>{{
+              'sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN'
+                | transloco: { anzahl: totalEntriesSig() }
+            }}</span>
+          } @else {
+            <span>{{
+              'sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE'
+                | transloco: { anzahl: totalEntriesSig() }
+            }}</span>
+          }
+        </button>
+      }
+    </div>
+
     <div class="tw:my-6">
       <div class="tw:dv-table">
         <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
