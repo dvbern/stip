@@ -183,6 +183,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuch.ausbildung.notFound.message}";
     public static final String VALIDATION_DOCUMENTS_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
+    public static final String VALIDATION_DATENSCHUTZBRIEFS_INVALID =
+        "{jakarta.validation.constraints.datenschutzbrief.invalid.message}";
     public static final String VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.oneOfDocumentTypes.required.message}";
     public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
