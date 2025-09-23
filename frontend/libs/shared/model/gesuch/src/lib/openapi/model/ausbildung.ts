@@ -48,6 +48,7 @@ export interface Ausbildung {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    landId?: string;
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
     editable: boolean;

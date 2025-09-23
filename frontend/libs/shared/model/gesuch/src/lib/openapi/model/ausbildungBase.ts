@@ -46,6 +46,7 @@ export interface AusbildungBase {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    landId?: string;
 }
 
 

@@ -46,6 +46,7 @@ export interface AusbildungUpdate {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    landId?: string;
     ausbildungsgangId?: string;
 }
 
