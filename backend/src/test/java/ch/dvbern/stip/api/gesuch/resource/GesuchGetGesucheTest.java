@@ -66,7 +66,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -270,7 +269,7 @@ class GesuchGetGesucheTest {
     @TestAsJurist
     @Order(15)
     void getAlleJurisitischeAbklaerungOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.MEINE_JURISTISCHE_ABKLAERUNG);
+        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JURISTISCHE_ABKLAERUNG);
         allAreNotInWrongStatus(
             found,
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
@@ -278,7 +277,8 @@ class GesuchGetGesucheTest {
             GesuchstatusDtoSpec.IN_BEARBEITUNG_SB,
             GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG
         );
-        assertEquals(1, found.size());
+
+        assertThat(found.size(), is(1));
     }
 
     @Test

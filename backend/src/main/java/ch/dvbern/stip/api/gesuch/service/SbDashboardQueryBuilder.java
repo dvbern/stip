@@ -56,12 +56,16 @@ public class SbDashboardQueryBuilder {
 
         // TODO KSTIP-2668: Fix these queries
         final var query = switch (queryType) {
-            // case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
-            // case ALLE_BEARBEITBAR_MEINE -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
-            // case ALLE_JURISTISCHE_ABKLAERUNG_MEINE -> gesuchRepository.getFindAlleJurBearbeitungQuery();
-            // case ALLE_MEINE -> gesuchRepository.getFindAlleMeineQuery(meId);
-            // case ALLE -> gesuchRepository.getFindAlleQuery();
-            default -> (JPAQuery<Gesuch>) null;
+            case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
+            case MEINE_BEARBEITBAR -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
+            case ALLE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleJurBearbeitungQuery();
+            case MEINE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleMeineJurBearbeitungQuery(meId);
+            case MEINE_GESUCHE -> gesuchRepository.getFindAlleMeineQuery(meId);
+            case ALLE_GESUCHE -> gesuchRepository.getFindAlleQuery();
+            case ALLE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleWithDruckbareVerfuegung();
+            case MEINE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleMeineWithDruckbareVerfuegung(meId);
+            case ALLE_DRUCKBAR_DATENSCHUTZBRIEFE -> gesuchRepository.getAlleWithDruckbarerDatenschutzbrief();
+            case MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> gesuchRepository.getAlleMeineWithDruckbarerDatenschutzbrief(meId);
         };
 
         final var trancheSub = new QGesuchTranche("sub2");
