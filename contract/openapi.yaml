@@ -122,8 +122,66 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllDruckauftraege
-      summary: Get all Druckauftraege
+      operationId: getAllMassendruckJobs
+      summary: Get all Massendruck Jobs
+  /massendruck/{getGesucheSBQueryType}/create:
+    parameters:
+      - name: getGesucheSBQueryType
+        schema:
+          $ref: '#/components/schemas/GetGesucheSBQueryType'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJob'
+          description: The created Massendruck Job
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createMassendruckJobForQueryType
+      description: Create a Massendruck Job for the given query type
+  /massendruck/get/{massendruckJobId}:
+    parameters:
+      - name: massendruckJobId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJobDetail'
+          description: The created Massendruck Job
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createMassendruckJobForQueryType
+      description: Create a Massendruck Job for the given query type
   /gesuch:
     post:
       requestBody:
@@ -4338,7 +4396,7 @@ components:
         - bearbeiter
         - timestampErstellt
         - massendruckJobStatus
-        - druckauftragTyp
+        - massendruckJobTyp
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -4351,8 +4409,57 @@ components:
           format: date-time
         massendruckJobStatus:
           $ref: '#/components/schemas/MassendruckJobStatus'
-        druckauftragTyp:
+        massendruckJobTyp:
           $ref: '#/components/schemas/MassendruckJobTyp'
+    MassendruckJobDetail:
+      type: object
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/MassendruckJob'
+      properties:
+        datenschutzbriefMassendrucks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckDatenschutzbrief'
+        verfuegungMassendrucks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckVerfuegung'
+    MassendruckEntry:
+      type: object
+      required:
+        - id
+        - isVersendet
+        - nachname
+        - vorname
+        - gesuchNummer
+        - gesuchId
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        isVersendet:
+          type: boolean
+        nachname:
+          type: string
+        vorname:
+          type: string
+        gesuchNummer:
+          type: string
+        gesuchId:
+          $ref: "#/components/schemas/UUID"
+    MassendruckVerfuegung:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MassendruckEntry'
+    MassendruckDatenschutzbrief:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MassendruckEntry'
+      required:
+        - elternTyp
+      properties:
+        elternTyp:
+          $ref: "#/components/schemas/ElternTyp"
     WelcomeMail:
       type: object
       required:
@@ -7745,7 +7852,7 @@ components:
         type: string
     MassendruckJobTyp:
       in: query
-      name: druckauftragTyp
+      name: massendruckJobTyp
       schema:
         $ref: '#/components/schemas/MassendruckJobTyp'
     MassendruckJobStatus:
