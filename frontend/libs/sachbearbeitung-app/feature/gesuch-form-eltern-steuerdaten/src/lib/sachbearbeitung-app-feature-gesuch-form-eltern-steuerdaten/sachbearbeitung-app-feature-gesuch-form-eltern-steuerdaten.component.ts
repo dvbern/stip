@@ -31,6 +31,7 @@ import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { Steuerdaten, SteuerdatenTyp } from '@dv/shared/model/gesuch';
 import { ELTERN_STEUERDATEN_STEPS } from '@dv/shared/model/gesuch-form';
+import { MAX_EINKOMMEN } from '@dv/shared/model/ui-constants';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -44,7 +45,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
+import { maskitoMaxNumber, maskitoNumber } from '@dv/shared/util/maskito-util';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
@@ -83,6 +84,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   gotReenabled$ = new Subject<object>();
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   maskitoNumber = maskitoNumber;
+  maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
 
   form = this.formBuilder.group({
     totalEinkuenfte: [<string | null>null, [Validators.required]],
