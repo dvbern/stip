@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import ch.dvbern.stip.api.adresse.entity.NotStatelessConstraint;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.land.entity.Land;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -132,6 +134,15 @@ public class Ausbildung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "is_ausbildung_ausland")
     private Boolean isAusbildungAusland = false;
+
+    @Nullable
+    @ManyToOne(optional = true)
+    @JoinColumn(
+        name = "land_id",
+        foreignKey = @ForeignKey(name = "FK_ausbildung_land_id")
+    )
+    @NotStatelessConstraint
+    private Land land;
 
     @NotNull
     @Column(name = "status", nullable = false)
