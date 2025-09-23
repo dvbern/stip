@@ -182,6 +182,64 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createMassendruckJobForQueryType
       description: Create a Massendruck Job for the given query type
+  /massendruck/datenschutzbrief/versendet/{massendruckDatenschutzbriefId}:
+    parameters:
+      - name: massendruckDatenschutzbriefId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckDatenschutzbrief'
+          description: The updated Massendruck Datenschutzbrief
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: massendruckDatenschutzbriefVersenden
+      description: Send a Massendruck Datenschutzbrief
+  /massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}:
+    parameters:
+      - name: massendruckVerfuegungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckVerfuegung'
+          description: The updated Massendruck Datenschutzbrief
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: massendruckVerfuegungVersenden
+      description: Send a Massendruck Verfuegung
   /gesuch:
     post:
       requestBody:
