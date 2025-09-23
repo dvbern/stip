@@ -195,16 +195,6 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    public GesuchWithChangesDto changeGesuchStatusToVerfuegungAmGenerieren(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToVerfuegungAmGenerieren(gesuchId);
-
-        gesuchService.changeGesuchStatusToVerfuegungAmGenerieren(gesuchId);
-        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
-    }
-
-    @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public GesuchDto changeGesuchStatusToVersendet(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
