@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.massendruck.type;
 
-public enum DruckauftragStatus {
-    IN_PROGRESS, SUCCESS, FAILED
+public enum MassendruckJobSortColumn {
+    JOB_NUMBER,
+    USER_ERSTELLT,
+    TIMESTAMP_ERSTELLT,
+    STATUS,
+    TYP
 }

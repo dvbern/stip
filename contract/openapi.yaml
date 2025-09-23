@@ -84,24 +84,24 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAuszahlungForGesuch
       summary: Get Auszahlung
-  /drucken/{getDruckauftraegeQueryType}:
+  /massendruck/{getMassendruckJobs}:
     get:
       tags:
-        - Drucken
+        - Massendruck
       parameters:
-        - name: getDruckauftraegeQueryType
+        - name: getMassendruckJobs
           schema:
-            $ref: '#/components/schemas/GetDruckauftraegeQueryType'
+            $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
         - $ref: '#/components/parameters/batchName'
         - $ref: '#/components/parameters/bearbeiter'
         - $ref: '#/components/parameters/timestampErstellt'
-        - $ref: '#/components/parameters/DruckauftragStatus'
-        - $ref: '#/components/parameters/DruckauftragTyp'
+        - $ref: '#/components/parameters/MassendruckJobStatus'
+        - $ref: '#/components/parameters/MassendruckJobTyp'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/DruckauftraegeColumn'
+            $ref: '#/components/schemas/MassendruckJobSortColumn'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -110,7 +110,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedDruckauftraege'
+                $ref: '#/components/schemas/PaginatedMassendruckJob'
           description: Returns the PDF document for the given GesuchTrancheId and DokumentTyp
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -4330,28 +4330,29 @@ components:
           type: string
         stipDecision:
           $ref: '#/components/schemas/StipDecision'
-    Druckauftrag:
+    MassendruckJob:
       type: object
       required:
         - id
-        - batchName
+        - massendruckJobNumber
         - bearbeiter
         - timestampErstellt
-        - druckauftragStatus
+        - massendruckJobStatus
         - druckauftragTyp
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        batchName:
-          type: string
-        bearbeiter:
+        massendruckJobNumber:
+          type: integer
+        userErstellt:
           type: string
         timestampErstellt:
           type: string
-        druckauftragStatus:
-          $ref: '#/components/schemas/DruckauftragStatus'
+          format: date-time
+        massendruckJobStatus:
+          $ref: '#/components/schemas/MassendruckJobStatus'
         druckauftragTyp:
-          $ref: '#/components/schemas/DruckauftragTyp'
+          $ref: '#/components/schemas/MassendruckJobTyp'
     WelcomeMail:
       type: object
       required:
@@ -4517,7 +4518,7 @@ components:
         - GESUCH_ABGELEHNT
         - NEGATIVE_VERFUEGUNG
       type: string
-    GetDruckauftraegeQueryType:
+    GetMassendruckJobQueryType:
       enum:
         - ALLE
         - ALLE_AKTIV # includes status: IN_GENERIERUNG, VERSANDBEREIT, FEHLERHAFTE_GENERIERUNG
@@ -6872,16 +6873,16 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
-    DruckauftragTyp:
+    MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
         - VERFUEGUNG
-    DruckauftragStatus:
+    MassendruckJobStatus:
       enum:
-        - IN_GENERIERUNG
-        - VERSANDBEREIT
-        - FEHLERHAFTE_GENERIERUNG
-        - ARCHIVIERT
+        - IN_PROGRESS
+        - SUCCESS
+        - FAILED
+        - ARCHIVED
     GesuchTrancheTyp:
       enum:
         - AENDERUNG
@@ -7319,14 +7320,14 @@ components:
           type: integer
         totalEntries:
           type: integer
-    PaginatedDruckauftraege:
+    PaginatedMassendruckJob:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
       properties:
         entries:
           type: array
           items:
-            $ref: '#/components/schemas/Druckauftrag'
+            $ref: '#/components/schemas/MassendruckJob'
     PaginatedSbDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7382,11 +7383,11 @@ components:
         letzteAktivitaet:
           type: string
           format: date
-    DruckauftraegeColumn:
+    MassendruckJobSortColumn:
       enum:
-        - BATCH_NAME
-        - BEARBEITER
-        - ERSTELLT_AM
+        - JOB_NUMBER
+        - USER_ERSTELLT
+        - TIMESTAMP_ERSTELLT
         - STATUS
         - TYP
     SbDashboardColumn:
@@ -7742,16 +7743,16 @@ components:
       name: batchName
       schema:
         type: string
-    DruckauftragTyp:
+    MassendruckJobTyp:
       in: query
       name: druckauftragTyp
       schema:
-        $ref: '#/components/schemas/DruckauftragTyp'
-    DruckauftragStatus:
+        $ref: '#/components/schemas/MassendruckJobTyp'
+    MassendruckJobStatus:
       in: query
-      name: druckauftragStatus
+      name: massendruckJobStatus
       schema:
-        $ref: '#/components/schemas/DruckauftragStatus'
+        $ref: '#/components/schemas/MassendruckJobStatus'
     fallNummer:
       in: query
       name: fallNummer
@@ -7974,7 +7975,7 @@ security:
   - auth-dev-bern: []
 tags:
   - name: Ausbildungsstaette
-  - name: Drucken
+  - name: Massendruck
   - name: Auth
   - name: Configuration
   - name: Fall

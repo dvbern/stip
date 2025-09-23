@@ -21,12 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.massendruck.type.DruckauftragStatus;
 import ch.dvbern.stip.api.massendruck.type.DruckauftragTyp;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -48,7 +51,12 @@ public class MassendruckJob extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private DruckauftragStatus status;
+    private MassendruckJobStatus status;
+
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "massendruck_job_number", nullable = false)
+    private int massendruckJobNumber;
 
     @Transient
     public DruckauftragTyp getMassendruckTyp() {
