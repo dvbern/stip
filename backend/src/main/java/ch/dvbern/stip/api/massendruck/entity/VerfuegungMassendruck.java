@@ -45,7 +45,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class VerfuegungMassendruck extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "verfuegung_id", foreignKey = @ForeignKey(name = "FK_verfuegung_massendruck_verfuegung_id"))
-    private Verfuegung verfuegungs;
+    private Verfuegung verfuegung;
 
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

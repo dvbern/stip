@@ -1,7 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DruckauftragStatusDto;
-import ch.dvbern.stip.generated.dto.DruckauftragTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -26,8 +24,8 @@ public class DruckauftragDto  implements Serializable {
   private @Valid String batchName;
   private @Valid String bearbeiter;
   private @Valid String timestampErstellt;
-  private @Valid DruckauftragStatusDto druckauftragStatus;
-  private @Valid DruckauftragTypDto druckauftragTyp;
+  private @Valid ch.dvbern.stip.api.massendruck.type.DruckauftragStatus druckauftragStatus;
+  private @Valid ch.dvbern.stip.api.massendruck.type.DruckauftragTyp druckauftragTyp;
 
   /**
    **/
@@ -107,7 +105,7 @@ public class DruckauftragDto  implements Serializable {
 
   /**
    **/
-  public DruckauftragDto druckauftragStatus(DruckauftragStatusDto druckauftragStatus) {
+  public DruckauftragDto druckauftragStatus(ch.dvbern.stip.api.massendruck.type.DruckauftragStatus druckauftragStatus) {
     this.druckauftragStatus = druckauftragStatus;
     return this;
   }
@@ -115,18 +113,18 @@ public class DruckauftragDto  implements Serializable {
   
   @JsonProperty("druckauftragStatus")
   @NotNull
-  public DruckauftragStatusDto getDruckauftragStatus() {
+  public ch.dvbern.stip.api.massendruck.type.DruckauftragStatus getDruckauftragStatus() {
     return druckauftragStatus;
   }
 
   @JsonProperty("druckauftragStatus")
-  public void setDruckauftragStatus(DruckauftragStatusDto druckauftragStatus) {
+  public void setDruckauftragStatus(ch.dvbern.stip.api.massendruck.type.DruckauftragStatus druckauftragStatus) {
     this.druckauftragStatus = druckauftragStatus;
   }
 
   /**
    **/
-  public DruckauftragDto druckauftragTyp(DruckauftragTypDto druckauftragTyp) {
+  public DruckauftragDto druckauftragTyp(ch.dvbern.stip.api.massendruck.type.DruckauftragTyp druckauftragTyp) {
     this.druckauftragTyp = druckauftragTyp;
     return this;
   }
@@ -134,12 +132,12 @@ public class DruckauftragDto  implements Serializable {
   
   @JsonProperty("druckauftragTyp")
   @NotNull
-  public DruckauftragTypDto getDruckauftragTyp() {
+  public ch.dvbern.stip.api.massendruck.type.DruckauftragTyp getDruckauftragTyp() {
     return druckauftragTyp;
   }
 
   @JsonProperty("druckauftragTyp")
-  public void setDruckauftragTyp(DruckauftragTypDto druckauftragTyp) {
+  public void setDruckauftragTyp(ch.dvbern.stip.api.massendruck.type.DruckauftragTyp druckauftragTyp) {
     this.druckauftragTyp = druckauftragTyp;
   }
 
