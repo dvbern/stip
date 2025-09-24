@@ -22,17 +22,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets DruckauftragTyp
+ * Gets or Sets MassendruckJobSortColumn
  */
-public enum DruckauftragTypDtoSpec {
+public enum MassendruckJobSortColumnDtoSpec {
   
-  DATENSCHUTZBRIEF("DATENSCHUTZBRIEF"),
+  JOB_NUMBER("JOB_NUMBER"),
   
-  VERFUEGUNG("VERFUEGUNG");
+  USER_ERSTELLT("USER_ERSTELLT"),
+  
+  TIMESTAMP_ERSTELLT("TIMESTAMP_ERSTELLT"),
+  
+  STATUS("STATUS"),
+  
+  TYP("TYP");
 
   private String value;
 
-  DruckauftragTypDtoSpec(String value) {
+  MassendruckJobSortColumnDtoSpec(String value) {
     this.value = value;
   }
 
@@ -47,8 +53,8 @@ public enum DruckauftragTypDtoSpec {
   }
 
   @JsonCreator
-  public static DruckauftragTypDtoSpec fromValue(String value) {
-    for (DruckauftragTypDtoSpec b : DruckauftragTypDtoSpec.values()) {
+  public static MassendruckJobSortColumnDtoSpec fromValue(String value) {
+    for (MassendruckJobSortColumnDtoSpec b : MassendruckJobSortColumnDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

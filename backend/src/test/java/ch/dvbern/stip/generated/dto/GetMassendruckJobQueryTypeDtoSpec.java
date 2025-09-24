@@ -22,21 +22,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets DruckauftragStatus
+ * Gets or Sets GetMassendruckJobQueryType
  */
-public enum DruckauftragStatusDtoSpec {
+public enum GetMassendruckJobQueryTypeDtoSpec {
   
-  IN_GENERIERUNG("IN_GENERIERUNG"),
+  ALLE("ALLE"),
   
-  VERSANDBEREIT("VERSANDBEREIT"),
+  ALLE_AKTIV("ALLE_AKTIV"),
   
-  FEHLERHAFTE_GENERIERUNG("FEHLERHAFTE_GENERIERUNG"),
+  ALLE_ARCHIVIERT("ALLE_ARCHIVIERT"),
   
-  ARCHIVIERT("ARCHIVIERT");
+  ALLE_FEHLERHAFTE_GENERIERUNG("ALLE_FEHLERHAFTE_GENERIERUNG");
 
   private String value;
 
-  DruckauftragStatusDtoSpec(String value) {
+  GetMassendruckJobQueryTypeDtoSpec(String value) {
     this.value = value;
   }
 
@@ -51,8 +51,8 @@ public enum DruckauftragStatusDtoSpec {
   }
 
   @JsonCreator
-  public static DruckauftragStatusDtoSpec fromValue(String value) {
-    for (DruckauftragStatusDtoSpec b : DruckauftragStatusDtoSpec.values()) {
+  public static GetMassendruckJobQueryTypeDtoSpec fromValue(String value) {
+    for (GetMassendruckJobQueryTypeDtoSpec b : GetMassendruckJobQueryTypeDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

@@ -8,21 +8,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetDruckauftraegeQueryType
+ * Gets or Sets MassendruckJobStatus
  */
-public enum GetDruckauftraegeQueryTypeDto {
+public enum MassendruckJobStatusDto {
   
-  ALLE("ALLE"),
+  IN_PROGRESS("IN_PROGRESS"),
   
-  ALLE_AKTIV("ALLE_AKTIV"),
+  SUCCESS("SUCCESS"),
   
-  ALLE_ARCHIVIERT("ALLE_ARCHIVIERT"),
+  FAILED("FAILED"),
   
-  ALLE_FEHLERHAFTE_GENERIERUNG("ALLE_FEHLERHAFTE_GENERIERUNG");
+  ARCHIVED("ARCHIVED");
 
   private String value;
 
-  GetDruckauftraegeQueryTypeDto(String value) {
+  MassendruckJobStatusDto(String value) {
     this.value = value;
   }
 
@@ -30,8 +30,8 @@ public enum GetDruckauftraegeQueryTypeDto {
      * Convert a String into String, as specified in the
      * <a href="https://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html">See JAX RS 2.0 Specification, section 3.2, p. 12</a>
      */
-	public static GetDruckauftraegeQueryTypeDto fromString(String s) {
-      for (GetDruckauftraegeQueryTypeDto b : GetDruckauftraegeQueryTypeDto.values()) {
+	public static MassendruckJobStatusDto fromString(String s) {
+      for (MassendruckJobStatusDto b : MassendruckJobStatusDto.values()) {
         // using Objects.toString() to be safe if value type non-object type
         // because types like 'int' etc. will be auto-boxed
         if (java.util.Objects.toString(b.value).equals(s)) {
@@ -48,8 +48,8 @@ public enum GetDruckauftraegeQueryTypeDto {
   }
 
   @JsonCreator
-  public static GetDruckauftraegeQueryTypeDto fromValue(String value) {
-    for (GetDruckauftraegeQueryTypeDto b : GetDruckauftraegeQueryTypeDto.values()) {
+  public static MassendruckJobStatusDto fromValue(String value) {
+    for (MassendruckJobStatusDto b : MassendruckJobStatusDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

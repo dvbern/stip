@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.DruckauftragDtoSpec;
+import ch.dvbern.stip.generated.dto.MassendruckJobDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,19 +28,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * PaginatedDruckauftraegeDtoSpec
+ * PaginatedMassendruckJobDtoSpec
  */
 @JsonPropertyOrder({
-  PaginatedDruckauftraegeDtoSpec.JSON_PROPERTY_ENTRIES,
-  PaginatedDruckauftraegeDtoSpec.JSON_PROPERTY_PAGE,
-  PaginatedDruckauftraegeDtoSpec.JSON_PROPERTY_PAGE_SIZE,
-  PaginatedDruckauftraegeDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
+  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_ENTRIES,
+  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_PAGE,
+  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_PAGE_SIZE,
+  PaginatedMassendruckJobDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
 })
-@JsonTypeName("PaginatedDruckauftraege")
+@JsonTypeName("PaginatedMassendruckJob")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class PaginatedDruckauftraegeDtoSpec {
+public class PaginatedMassendruckJobDtoSpec {
   public static final String JSON_PROPERTY_ENTRIES = "entries";
-  private List<DruckauftragDtoSpec> entries;
+  private List<MassendruckJobDtoSpec> entries;
 
   public static final String JSON_PROPERTY_PAGE = "page";
   private Integer page;
@@ -51,16 +51,16 @@ public class PaginatedDruckauftraegeDtoSpec {
   public static final String JSON_PROPERTY_TOTAL_ENTRIES = "totalEntries";
   private Integer totalEntries;
 
-  public PaginatedDruckauftraegeDtoSpec() {
+  public PaginatedMassendruckJobDtoSpec() {
   }
 
-  public PaginatedDruckauftraegeDtoSpec entries(List<DruckauftragDtoSpec> entries) {
+  public PaginatedMassendruckJobDtoSpec entries(List<MassendruckJobDtoSpec> entries) {
     
     this.entries = entries;
     return this;
   }
 
-  public PaginatedDruckauftraegeDtoSpec addEntriesItem(DruckauftragDtoSpec entriesItem) {
+  public PaginatedMassendruckJobDtoSpec addEntriesItem(MassendruckJobDtoSpec entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -76,19 +76,19 @@ public class PaginatedDruckauftraegeDtoSpec {
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<DruckauftragDtoSpec> getEntries() {
+  public List<MassendruckJobDtoSpec> getEntries() {
     return entries;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntries(List<DruckauftragDtoSpec> entries) {
+  public void setEntries(List<MassendruckJobDtoSpec> entries) {
     this.entries = entries;
   }
 
 
-  public PaginatedDruckauftraegeDtoSpec page(Integer page) {
+  public PaginatedMassendruckJobDtoSpec page(Integer page) {
     
     this.page = page;
     return this;
@@ -114,7 +114,7 @@ public class PaginatedDruckauftraegeDtoSpec {
   }
 
 
-  public PaginatedDruckauftraegeDtoSpec pageSize(Integer pageSize) {
+  public PaginatedMassendruckJobDtoSpec pageSize(Integer pageSize) {
     
     this.pageSize = pageSize;
     return this;
@@ -140,7 +140,7 @@ public class PaginatedDruckauftraegeDtoSpec {
   }
 
 
-  public PaginatedDruckauftraegeDtoSpec totalEntries(Integer totalEntries) {
+  public PaginatedMassendruckJobDtoSpec totalEntries(Integer totalEntries) {
     
     this.totalEntries = totalEntries;
     return this;
@@ -173,11 +173,11 @@ public class PaginatedDruckauftraegeDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PaginatedDruckauftraegeDtoSpec paginatedDruckauftraege = (PaginatedDruckauftraegeDtoSpec) o;
-    return Objects.equals(this.entries, paginatedDruckauftraege.entries) &&
-        Objects.equals(this.page, paginatedDruckauftraege.page) &&
-        Objects.equals(this.pageSize, paginatedDruckauftraege.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedDruckauftraege.totalEntries);
+    PaginatedMassendruckJobDtoSpec paginatedMassendruckJob = (PaginatedMassendruckJobDtoSpec) o;
+    return Objects.equals(this.entries, paginatedMassendruckJob.entries) &&
+        Objects.equals(this.page, paginatedMassendruckJob.page) &&
+        Objects.equals(this.pageSize, paginatedMassendruckJob.pageSize) &&
+        Objects.equals(this.totalEntries, paginatedMassendruckJob.totalEntries);
   }
 
   @Override
@@ -188,7 +188,7 @@ public class PaginatedDruckauftraegeDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PaginatedDruckauftraegeDtoSpec {\n");
+    sb.append("class PaginatedMassendruckJobDtoSpec {\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
