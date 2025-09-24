@@ -94,8 +94,8 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/batchName'
-        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: '#/components/parameters/massendruckJobNumber'
+        - $ref: '#/components/parameters/userErstellt'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -153,14 +153,14 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createMassendruckJobForQueryType
       description: Create a Massendruck Job for the given query type
-  /massendruck/get/{massendruckJobId}:
+  /massendruck/detail/{massendruckJobId}:
     parameters:
       - name: massendruckJobId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-    post:
+    get:
       tags:
         - Massendruck
       responses:
@@ -180,7 +180,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createMassendruckJobForQueryType
+      operationId: getMassendruckJobDetail
       description: Create a Massendruck Job for the given query type
   /massendruck/datenschutzbrief/versendet/{massendruckDatenschutzbriefId}:
     parameters:
@@ -1370,7 +1370,7 @@ paths:
       operationId: createUnterschriftenblatt
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/unterschriftenblatt/{gesuchId}':
-     get:
+    get:
       tags:
         - Dokument
       parameters:
@@ -2157,7 +2157,7 @@ paths:
       - $ref: '#/components/parameters/sozialdienstId'
     post:
       tags:
-      - Delegieren
+        - Delegieren
       requestBody:
         required: true
         content:
@@ -2339,9 +2339,9 @@ paths:
       requestBody:
         required: true
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Land'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: Returns all countries and whether they're part of eu/efta or not
@@ -2369,9 +2369,9 @@ paths:
       requestBody:
         required: true
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Land'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: 'EU/EFTA Länder wurden erflogreich gesetzt'
@@ -2464,32 +2464,32 @@ paths:
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
-        parameters:
-          - name: gesuchTrancheId
-            schema:
-              $ref: '#/components/schemas/UUID'
-            in: path
-            required: true
-        get:
-          tags:
-            - Gesuch
-          responses:
-            '200':
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Gesuch'
-              description: OK
-            '401':
-              $ref: '#/components/responses/Unauthorized'
-            '403':
-              $ref: '#/components/responses/Forbidden'
-            '404':
-              $ref: '#/components/responses/NotFound'
-            '500':
-              $ref: '#/components/responses/ServerError'
-          operationId: getGesuchGS
-          summary: Returns the Gesuch with the given Id
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchGS
+      summary: Returns the Gesuch with the given Id
   '/gesuch/sb/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId
@@ -4477,7 +4477,7 @@ components:
       required:
         - id
         - massendruckJobNumber
-        - bearbeiter
+        - userErstellt
         - timestampErstellt
         - massendruckJobStatus
         - massendruckJobTyp
@@ -4520,7 +4520,7 @@ components:
         - gesuchId
       properties:
         id:
-          $ref: "#/components/schemas/UUID"
+          $ref: '#/components/schemas/UUID'
         isVersendet:
           type: boolean
         nachname:
@@ -4530,7 +4530,7 @@ components:
         gesuchNummer:
           type: string
         gesuchId:
-          $ref: "#/components/schemas/UUID"
+          $ref: '#/components/schemas/UUID'
     MassendruckVerfuegung:
       type: object
       allOf:
@@ -4543,7 +4543,7 @@ components:
         - elternTyp
       properties:
         elternTyp:
-          $ref: "#/components/schemas/ElternTyp"
+          $ref: '#/components/schemas/ElternTyp'
     WelcomeMail:
       type: object
       required:
@@ -5231,7 +5231,7 @@ components:
         kommentar:
           type: string
         fileUpload:
-          $ref: "#/components/schemas/FileUpload"
+          $ref: '#/components/schemas/FileUpload'
     Gesuch:
       required:
         - fallId
@@ -6398,7 +6398,7 @@ components:
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
         bildungsrichtung:
-          $ref: "#/components/schemas/Bildungsrichtung"
+          $ref: '#/components/schemas/Bildungsrichtung'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
@@ -6445,7 +6445,7 @@ components:
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
         bildungsrichtung:
-          $ref: "#/components/schemas/Bildungsrichtung"
+          $ref: '#/components/schemas/Bildungsrichtung'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:
@@ -7934,9 +7934,9 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
-    batchName:
+    massendruckJobNumber:
       in: query
-      name: batchName
+      name: massendruckJobNumber
       schema:
         type: string
     MassendruckJobTyp:
@@ -8009,6 +8009,11 @@ components:
     bearbeiter:
       in: query
       name: bearbeiter
+      schema:
+        type: string
+    userErstellt:
+      in: query
+      name: userErstellt
       schema:
         type: string
     timestampErstellt:

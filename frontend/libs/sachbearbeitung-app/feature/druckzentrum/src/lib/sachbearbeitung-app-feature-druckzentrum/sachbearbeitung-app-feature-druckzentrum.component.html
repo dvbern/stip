@@ -45,7 +45,7 @@
     </div>
     <div class="tw:my-6">
       <div class="tw:dv-table tw:relative">
-        <div [class.opacity-50]="druckauftragStore.cachedDruckauftragListViewSig().loading">
+        <div [class.opacity-50]="massendruckStore.paginatedMassendruckListViewSig().loading">
           <!-- filter form (header filters) -->
           <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
             <table
@@ -64,23 +64,25 @@
                 }}
               </caption>
 
-              <ng-container matColumnDef="BATCH_NAME">
+              <ng-container matColumnDef="JOB_NUMBER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                  <label for="batchName">{{ 'sachbearbeitung-app.druckzentrum.table.batchname' | transloco }}</label>
+                  <label for="massendruckJobNumber">{{
+                    'sachbearbeitung-app.druckzentrum.table.massendruckJobNumber' | transloco
+                  }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field class="tw:w-full">
                       <input
-                        id="batchName"
+                        id="massendruckJobNumber"
                         matInput
-                        formControlName="batchName"
+                        formControlName="massendruckJobNumber"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
                       class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
-                      (clear)="filterForm.controls.batchName.reset()"
-                      [valueSig]="filterForm.controls.batchName.value"
+                      (clear)="filterForm.controls.massendruckJobNumber.reset()"
+                      [valueSig]="filterForm.controls.massendruckJobNumber.value"
                     ></dv-shared-ui-clear-button>
                   </div>
                 </th>
@@ -88,29 +90,31 @@
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="item.batchName"
+                  [dvTruncateTooltip]="item.massendruckJobNumber.toString()"
                 >
-                  {{ item.batchName }}
+                  {{ item.massendruckJobNumber }}
                 </td>
               </ng-container>
 
-              <ng-container matColumnDef="BEARBEITER">
+              <ng-container matColumnDef="USER_ERSTELLT">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
-                  <label for="bearbeiter">{{ 'sachbearbeitung-app.druckzentrum.table.bearbeiter' | transloco }}</label>
+                  <label for="userErstellt">{{
+                    'sachbearbeitung-app.druckzentrum.table.userErstellt' | transloco
+                  }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field class="tw:w-full">
                       <input
-                        id="bearbeiter"
+                        id="userErstellt"
                         matInput
-                        formControlName="bearbeiter"
+                        formControlName="userErstellt"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
                       />
                     </mat-form-field>
                     <dv-shared-ui-clear-button
                       class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
-                      (clear)="filterForm.controls.bearbeiter.reset()"
-                      [valueSig]="filterForm.controls.bearbeiter.value"
+                      (clear)="filterForm.controls.userErstellt.reset()"
+                      [valueSig]="filterForm.controls.userErstellt.value"
                     ></dv-shared-ui-clear-button>
                   </div>
                 </th>
@@ -118,13 +122,13 @@
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="item.bearbeiter"
+                  [dvTruncateTooltip]="item.userErstellt"
                 >
-                  {{ item.bearbeiter }}
+                  {{ item.userErstellt }}
                 </td>
               </ng-container>
 
-              <ng-container matColumnDef="ERSTELLT_AM">
+              <ng-container matColumnDef="TIMESTAMP_ERSTELLT">
                 <th
                   mat-header-cell
                   *matHeaderCellDef
@@ -183,7 +187,7 @@
                   <mat-form-field>
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.druckzentrum.table.status' | transloco"
-                      formControlName="druckauftragStatus"
+                      formControlName="massendruckJobStatus"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
                       panelClass="table-select"
@@ -205,7 +209,7 @@
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
-                  {{ 'sachbearbeitung-app.druckzentrum.table.status.filter.' + item.druckauftragStatus | transloco }}
+                  {{ 'sachbearbeitung-app.druckzentrum.table.status.filter.' + item.massendruckJobStatus | transloco }}
                 </td>
               </ng-container>
 
@@ -215,7 +219,7 @@
                   <mat-form-field>
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.druckzentrum.table.typ' | transloco"
-                      formControlName="druckauftragTyp"
+                      formControlName="massendruckJobTyp"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
                       panelClass="table-select"
@@ -237,7 +241,7 @@
                   *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
-                  {{ 'sachbearbeitung-app.druckzentrum.table.typ.filter.' + item.druckauftragTyp | transloco }}
+                  {{ 'sachbearbeitung-app.druckzentrum.table.typ.filter.' + item.massendruckJobTyp | transloco }}
                 </td>
               </ng-container>
 
@@ -266,7 +270,7 @@
             ></mat-paginator>
           </form>
         </div>
-        @if (druckauftragStore.cachedDruckauftragListViewSig().loading) {
+        @if (massendruckStore.paginatedMassendruckListViewSig().loading) {
           <dv-shared-ui-loading
             class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"

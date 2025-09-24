@@ -1,16 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { DruckauftragStore } from './sachbearbeitung-app-data-access-druckauftrag.store';
+import { MassendruckStore } from './sachbearbeitung-app-data-access-massendruck.store';
 
-describe('DruckauftragStore', () => {
-  let store: DruckauftragStore;
+describe('MassendruckStore', () => {
+  let store: MassendruckStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DruckauftragStore, provideHttpClient()],
+      providers: [MassendruckStore, provideHttpClient()],
     });
-    store = TestBed.inject(DruckauftragStore);
+    store = TestBed.inject(MassendruckStore);
   });
 
   it('is initializable', () => {
@@ -18,7 +18,7 @@ describe('DruckauftragStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.cachedPaginatedDruckauftraege()).toEqual({
+    expect(store.paginatedMassendruckJobs()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

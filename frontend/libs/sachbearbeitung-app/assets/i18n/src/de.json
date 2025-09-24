@@ -418,8 +418,8 @@
 
   "sachbearbeitung-app.druckzentrum.title": "Druckaufträge",
   "sachbearbeitung-app.druckzentrum.table.description": "Übersicht aller Druckaufträge",
-  "sachbearbeitung-app.druckzentrum.table.batchname": "Batchname",
-  "sachbearbeitung-app.druckzentrum.table.bearbeiter": "Bearbeiter",
+  "sachbearbeitung-app.druckzentrum.table.massendruckJobNumber": "Batchnummer",
+  "sachbearbeitung-app.druckzentrum.table.userErstellt": "Bearbeiter",
   "sachbearbeitung-app.druckzentrum.table.timestampErstellt": "Auftragsdatum",
   "sachbearbeitung-app.druckzentrum.table.status": "Status",
   "sachbearbeitung-app.druckzentrum.table.status.filter.alle": "Alle",
