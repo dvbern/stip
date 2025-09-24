@@ -1,0 +1,167 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-2">
+    <createTable tableName="datenschutzbrief_massendruck">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="datenschutzbrief_massendruckPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="datenschutzbrief_id" type="UUID"/>
+      <column name="massendruck_job_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-3">
+    <createTable tableName="massendruck">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="massendruckPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="status" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-4">
+    <createTable tableName="verfuegung_massendruck">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="verfuegung_massendruckPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="is_versendet" type="BOOLEAN"/>
+      <column name="nachname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="vorname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="massendruck_job_id" type="UUID"/>
+      <column name="verfuegung_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-5">
+    <addColumn tableName="datenschutzbrief">
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-6">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="gesuch_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-7">
+    <addColumn tableName="datenschutzbrief">
+      <column name="nachname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-8">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="nachname" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-9">
+    <addColumn tableName="datenschutzbrief">
+      <column name="vorname" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-10">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="vorname" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-11">
+    <addUniqueConstraint columnNames="datenschutzbrief_id" constraintName="UC_DATENSCHUTZBRIEF_MASSENDRUCKDATENSCHUTZBRIEF_ID_COL" tableName="datenschutzbrief_massendruck"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-12">
+    <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-13">
+    <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-14">
+    <addUniqueConstraint columnNames="verfuegung_id" constraintName="UC_VERFUEGUNG_MASSENDRUCKVERFUEGUNG_ID_COL" tableName="verfuegung_massendruck"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-15">
+    <createIndex indexName="IX_datenschutzbrief_massendruck_mandant" tableName="datenschutzbrief_massendruck">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-16">
+    <createIndex indexName="IX_massendruck_mandant" tableName="massendruck">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-17">
+    <createIndex indexName="IX_nesko_access_mandant" tableName="nesko_access">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-18">
+    <createIndex indexName="IX_verfuegung_massendruck_mandant" tableName="verfuegung_massendruck">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-19">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="datenschutzbrief" constraintName="FK_datenschutzbrief_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-20">
+    <addForeignKeyConstraint baseColumnNames="datenschutzbrief_id" baseTableName="datenschutzbrief_massendruck" constraintName="FK_datenschutzbrief_massendruck_datenschutzbrief_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="datenschutzbrief" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-21">
+    <addForeignKeyConstraint baseColumnNames="massendruck_job_id" baseTableName="datenschutzbrief_massendruck" constraintName="FK_datenschutzbrief_massendruck_massendruck_job_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="massendruck" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-22">
+    <addForeignKeyConstraint baseColumnNames="massendruck_job_id" baseTableName="verfuegung_massendruck" constraintName="FK_verfuegung_massendruck_massendruck_job_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="massendruck" validate="true"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1758609401704-23">
+    <addForeignKeyConstraint baseColumnNames="verfuegung_id" baseTableName="verfuegung_massendruck" constraintName="FK_verfuegung_massendruck_verfuegung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="verfuegung" validate="true"/>
+  </changeSet>
+</databaseChangeLog>

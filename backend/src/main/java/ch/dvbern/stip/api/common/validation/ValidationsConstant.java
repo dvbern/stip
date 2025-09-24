@@ -183,6 +183,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuch.ausbildung.notFound.message}";
     public static final String VALIDATION_DOCUMENTS_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.invalidStatus.message}";
+    public static final String VALIDATION_DATENSCHUTZBRIEFS_INVALID =
+        "{jakarta.validation.constraints.datenschutzbrief.invalid.message}";
     public static final String VALIDATION_ONE_OF_DOCUMENT_TYPES_INVALID_STATUS =
         "{jakarta.validation.constraints.gesuchFormular.documents.oneOfDocumentTypes.required.message}";
     public static final String VALIDATION_TRANCHEN_INVALID_STATUS =
@@ -223,6 +225,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildung.ausbildungsgang.notaktiv}";
     public static final String VALIDATION_SAP_DELIVERYS_LENGTH_VIOLATION =
         "{jakarta.validation.constraints.buchhaltung.sapDeliverys.length.violation}";
+    public static final String VALIDATION_ABSCHLUSS_BRUECKENANGEBOT_NOT_UNIQUE =
+        "{jakarta.validation.constraints.abschluss.notunique}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

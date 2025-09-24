@@ -15,32 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.service.bern.v1;
+package ch.dvbern.stip.api.gesuch.entity;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-import lombok.experimental.UtilityClass;
+public class MaxTwoDatenschutzbriefePerGesuchConstraintValidator
+    implements ConstraintValidator<MaxTwoDatenschutzbriefePerGesuchConstraint, Gesuch> {
+    private static final int MAX_NUMBER_OF_DATENSCHUTZBREFS = 2;
 
-@UtilityClass
-public class CalculatorUtilV1 {
-    public <T> Function<T, Integer> mapAndReturn(
-        final BiConsumer<T, Integer> setter,
-        final Integer value
-    ) {
-        return (result) -> {
-            setter.accept(result, value);
-            return value;
-        };
-    }
-
-    public <T> int applyAndSum(
-        final Stream<Function<T, Integer>> toApply,
-        final T result
-    ) {
-        return toApply.map(applier -> applier.apply(result))
-            .mapToInt(Integer::intValue)
-            .sum();
+    @Override
+    public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
+        if (gesuch.getDatenschutzbriefs().isEmpty()) {
+            return true;
+        }
+        return gesuch.getDatenschutzbriefs().stream().count() <= MAX_NUMBER_OF_DATENSCHUTZBREFS;
     }
 }

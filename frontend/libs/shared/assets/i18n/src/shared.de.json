@@ -268,6 +268,7 @@
   "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
   "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Delegierung Angenommen",
   "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Delegierung Abgelehnt",
+  "shared.nachrichten.type.DELEGIERUNG_AUFGELOEST": "Delegierung aufgelöst",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
@@ -907,6 +908,8 @@
   "shared.ausbildungskategorie.BETRIEBE": "Betriebe",
   "shared.ausbildungskategorie.OBLIGATORISCHE_SCHULE": "Obligatorische Schule",
   "shared.ausbildungskategorie.BRUECKENANGEBOT": "Brückenangebot",
+  "shared.ausbildungskategorie.HOEHERE_FACHPRUEFUNG": "Höhere Fachprüfung",
+  "shared.ausbildungskategorie.BERUFSPRUEFUNG": "Berufsprüfung",
 
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",

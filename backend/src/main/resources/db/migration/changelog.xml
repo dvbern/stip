@@ -2,11 +2,10 @@
 <databaseChangeLog
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd"
 >
 
-  <include file="db/migration/baseline.xml"/>
+  <include file="db/migration/baseline.xml" />
   <!-- <editor-fold desc="v0.19" defaultstate="collapsed"> -->
   <include file="db/migration/0.19/0.19.0-KSTIP-923.xml" />
   <include file="db/migration/0.19/0.19.0-KSTIP-619.xml" />
@@ -117,7 +116,7 @@
   <!--  </editor-fold> -->
 
   <!-- <editor-fold desc="v0.39" defaultstate="collapsed"> -->
-    <include file="/db/migration/0.39/0.39.0-KSTIP-1750.xml" />
+  <include file="/db/migration/0.39/0.39.0-KSTIP-1750.xml" />
   <!--  </editor-fold> -->
 
   <!-- <editor-fold desc="v0.40" defaultstate="collapsed"> -->
@@ -204,6 +203,11 @@
   <!--  </editor-fold> -->
 
   <!-- <editor-fold desc="v0.53" defaultstate="collapsed" -->
+  <include file="/db/migration/0.53/0.53.0-KSTIP-2625.xml" />
   <include file="/db/migration/0.53/0.53.0-KSTIP-2294.xml" />
+  <!--  </editor-fold> -->
+
+  <!-- <editor-fold desc="v0.54" defaultstate="collapsed" -->
+  <include file="/db/migration/0.54/0.54.0-KSTIP-2294.xml" />
   <!--  </editor-fold> -->
 </databaseChangeLog>

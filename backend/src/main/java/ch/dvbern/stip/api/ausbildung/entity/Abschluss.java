@@ -35,6 +35,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -46,7 +47,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 
 @Audited
 @Entity
-@Table(name = "abschluss", indexes = @Index(name = "IX_abschluss_mandant", columnList = "mandant"))
+@Table(
+    name = "abschluss",
+    uniqueConstraints = @UniqueConstraint(
+        name = "UC_abschluss_mandant_bezeichnung_ausbildungskategorie_bildungsrichtung",
+        columnNames = { "mandant", "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
+    ),
+    indexes = @Index(name = "IX_abschluss_mandant", columnList = "mandant")
+)
 @Getter
 @Setter
 public class Abschluss extends AbstractMandantEntity {

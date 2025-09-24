@@ -1,20 +1,14 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DruckauftragStatusDto;
-import ch.dvbern.stip.generated.dto.DruckauftragTypDto;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
-import jakarta.validation.constraints.*;
-import jakarta.validation.Valid;
-
 import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @JsonTypeName("Druckauftrag")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -26,8 +20,8 @@ public class DruckauftragDto  implements Serializable {
   private @Valid String batchName;
   private @Valid String bearbeiter;
   private @Valid String timestampErstellt;
-  private @Valid DruckauftragStatusDto druckauftragStatus;
-  private @Valid DruckauftragTypDto druckauftragTyp;
+  private @Valid MassendruckJobStatus massendruckJobStatus;
+  private @Valid ch.dvbern.stip.api.massendruck.type.DruckauftragTyp druckauftragTyp;
 
   /**
    **/
@@ -36,7 +30,7 @@ public class DruckauftragDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("id")
   @NotNull
   public UUID getId() {
@@ -55,7 +49,7 @@ public class DruckauftragDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("batchName")
   @NotNull
   public String getBatchName() {
@@ -74,7 +68,7 @@ public class DruckauftragDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("bearbeiter")
   @NotNull
   public String getBearbeiter() {
@@ -93,7 +87,7 @@ public class DruckauftragDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("timestampErstellt")
   @NotNull
   public String getTimestampErstellt() {
@@ -107,39 +101,39 @@ public class DruckauftragDto  implements Serializable {
 
   /**
    **/
-  public DruckauftragDto druckauftragStatus(DruckauftragStatusDto druckauftragStatus) {
-    this.druckauftragStatus = druckauftragStatus;
+  public DruckauftragDto druckauftragStatus(MassendruckJobStatus massendruckJobStatus) {
+    this.massendruckJobStatus = massendruckJobStatus;
     return this;
   }
 
-  
+
   @JsonProperty("druckauftragStatus")
   @NotNull
-  public DruckauftragStatusDto getDruckauftragStatus() {
-    return druckauftragStatus;
+  public MassendruckJobStatus getMassendruckJobStatus() {
+    return massendruckJobStatus;
   }
 
   @JsonProperty("druckauftragStatus")
-  public void setDruckauftragStatus(DruckauftragStatusDto druckauftragStatus) {
-    this.druckauftragStatus = druckauftragStatus;
+  public void setMassendruckJobStatus(MassendruckJobStatus massendruckJobStatus) {
+    this.massendruckJobStatus = massendruckJobStatus;
   }
 
   /**
    **/
-  public DruckauftragDto druckauftragTyp(DruckauftragTypDto druckauftragTyp) {
+  public DruckauftragDto druckauftragTyp(ch.dvbern.stip.api.massendruck.type.DruckauftragTyp druckauftragTyp) {
     this.druckauftragTyp = druckauftragTyp;
     return this;
   }
 
-  
+
   @JsonProperty("druckauftragTyp")
   @NotNull
-  public DruckauftragTypDto getDruckauftragTyp() {
+  public ch.dvbern.stip.api.massendruck.type.DruckauftragTyp getDruckauftragTyp() {
     return druckauftragTyp;
   }
 
   @JsonProperty("druckauftragTyp")
-  public void setDruckauftragTyp(DruckauftragTypDto druckauftragTyp) {
+  public void setDruckauftragTyp(ch.dvbern.stip.api.massendruck.type.DruckauftragTyp druckauftragTyp) {
     this.druckauftragTyp = druckauftragTyp;
   }
 
@@ -157,25 +151,25 @@ public class DruckauftragDto  implements Serializable {
         Objects.equals(this.batchName, druckauftrag.batchName) &&
         Objects.equals(this.bearbeiter, druckauftrag.bearbeiter) &&
         Objects.equals(this.timestampErstellt, druckauftrag.timestampErstellt) &&
-        Objects.equals(this.druckauftragStatus, druckauftrag.druckauftragStatus) &&
+        Objects.equals(this.massendruckJobStatus, druckauftrag.massendruckJobStatus) &&
         Objects.equals(this.druckauftragTyp, druckauftrag.druckauftragTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, batchName, bearbeiter, timestampErstellt, druckauftragStatus, druckauftragTyp);
+    return Objects.hash(id, batchName, bearbeiter, timestampErstellt, massendruckJobStatus, druckauftragTyp);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DruckauftragDto {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    batchName: ").append(toIndentedString(batchName)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    druckauftragStatus: ").append(toIndentedString(druckauftragStatus)).append("\n");
+    sb.append("    druckauftragStatus: ").append(toIndentedString(massendruckJobStatus)).append("\n");
     sb.append("    druckauftragTyp: ").append(toIndentedString(druckauftragTyp)).append("\n");
     sb.append("}");
     return sb.toString();

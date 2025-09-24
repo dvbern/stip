@@ -1,7 +1,7 @@
 {
-  "name": "shared-ui-pad-text-pipe",
+  "name": "shared-ui-filter-menu-button",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/ui/pad-text-pipe/src",
+  "sourceRoot": "libs/shared/ui/filter-menu-button/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared"],
@@ -9,7 +9,7 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/ui/pad-text-pipe/tsconfig.lib.json"
+        "tsConfig": "libs/shared/ui/filter-menu-button/tsconfig.lib.json"
       }
     }
   }

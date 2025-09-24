@@ -19,10 +19,6 @@ package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputPersoenlichesbudgetV1;
@@ -61,22 +57,16 @@ public class PersoenlichesBudgetCalculatorV1 {
             stammdaten
         );
 
-        final var rawBerechnet =
+        var rawBudgetBerechnet =
             BigDecimal.valueOf(result.getEinnahmenPersoenlichesBudget() - result.getAusgabenPersoenlichesBudget());
         if (antragssteller.isVerheiratetKonkubinat() && antragssteller.isEigenerHaushalt()) {
-            result.setPersoenlichesbudgetBerechnet(
-                rawBerechnet
-                    .divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP)
-                    .intValue()
-            );
-        } else {
-            result.setPersoenlichesbudgetBerechnet(rawBerechnet.intValue());
+            rawBudgetBerechnet =
+                rawBudgetBerechnet
+                    .divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP);
         }
-
-        result.setAnteilLebenshaltungskosten(
-            calculateAnteilLebenshaltungskosten(List.of(familienbudget1, familienbudget2), antragssteller)
-        );
         result.setAnzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt());
+        result.setEigenerHaushalt(antragssteller.isEigenerHaushalt());
+        result.setPersoenlichesbudgetBerechnet(roundHalfUp(rawBudgetBerechnet));
 
         return result;
     }
@@ -88,70 +78,53 @@ public class PersoenlichesBudgetCalculatorV1 {
         final FamilienBudgetresultatDto familienbudget2,
         final StammdatenV1 stammdaten
     ) {
-        List<Function<PersoenlichesBudgetresultatDto, Integer>> haushaltToApply;
+        var grundbedarf = 0;
+        var wohnkosten = 0;
+        var medizinischeGrundversorgung = 0;
+
         if (antragssteller.isEigenerHaushalt()) {
-            haushaltToApply = List.of(
-                mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, antragssteller.getGrundbedarf()),
-                mapAndReturn(PersoenlichesBudgetresultatDto::setWohnkosten, antragssteller.getWohnkosten()),
-                mapAndReturn(
-                    PersoenlichesBudgetresultatDto::setMedizinischeGrundversorgung,
-                    antragssteller.getMedizinischeGrundversorgung()
-                )
-            );
-        } else {
-            haushaltToApply = List.of(
-                mapAndReturn(PersoenlichesBudgetresultatDto::setGrundbedarf, 0),
-                mapAndReturn(PersoenlichesBudgetresultatDto::setWohnkosten, 0),
-                mapAndReturn(PersoenlichesBudgetresultatDto::setMedizinischeGrundversorgung, 0)
-            );
-        }
-        result.eigenerHaushalt(antragssteller.isEigenerHaushalt());
-
-        int anzahlWochen = 0;
-        if (!antragssteller.isEigenerHaushalt()) {
-            if (antragssteller.isLehre()) {
-                anzahlWochen = stammdaten.getAnzahlWochenLehre();
-            } else {
-                anzahlWochen = stammdaten.getAnzahlWochenSchule();
-            }
+            grundbedarf = antragssteller.getGrundbedarf();
+            wohnkosten = antragssteller.getWohnkosten();
+            medizinischeGrundversorgung = antragssteller.getMedizinischeGrundversorgung();
         }
 
-        final Function<PersoenlichesBudgetresultatDto, Integer> verpflegungApplier = mapAndReturn(
-            PersoenlichesBudgetresultatDto::setVerpflegung,
-            antragssteller.getVerpflegung() * anzahlWochen * stammdaten.getPreisProMahlzeit()
-        );
-
-        List<Function<PersoenlichesBudgetresultatDto, Integer>> verheiratetKonkubinatToApply;
+        var ausbildungskosten = antragssteller.getAusbildungskosten();
         if (antragssteller.isVerheiratetKonkubinat()) {
-            verheiratetKonkubinatToApply = List.of(
-                mapAndReturn(
-                    PersoenlichesBudgetresultatDto::setAusbildungskosten,
-                    antragssteller.getAusbildungskosten() * antragssteller.getAnzahlPersonenImHaushalt()
-                ),
-                mapAndReturn(
-                    PersoenlichesBudgetresultatDto::setFahrkosten,
-                    antragssteller.getFahrkosten() * antragssteller.getAnzahlPersonenImHaushalt()
-                )
-            );
-        } else {
-            verheiratetKonkubinatToApply = List.of(
-                mapAndReturn(
-                    PersoenlichesBudgetresultatDto::setAusbildungskosten,
-                    antragssteller.getAusbildungskosten()
-                ),
-                mapAndReturn(PersoenlichesBudgetresultatDto::setFahrkosten, antragssteller.getFahrkosten())
+            ausbildungskosten = roundHalfUp(
+                BigDecimal.valueOf(ausbildungskosten)
+                    .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
         }
 
-        final var basicToApply = List.of(
-            mapAndReturn(PersoenlichesBudgetresultatDto::setSteuernKantonGemeinde, antragssteller.getSteuern()),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setVerpflegungPartner, antragssteller.getVerpflegungPartner()),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setFremdbetreuung, antragssteller.getFremdbetreuung()),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setFahrkostenPartner, antragssteller.getFahrkostenPartner())
-        );
+        final var steuernKantonGemeinde = antragssteller.getSteuern();
 
-        final var anteilFamilienbudget1 = Math.abs(
-            calculateAnteilFamilienbudget(
+        var fahrkosten = antragssteller.getFahrkosten();
+        if (antragssteller.isVerheiratetKonkubinat()) {
+            fahrkosten = roundHalfUp(
+                BigDecimal.valueOf(fahrkosten)
+                    .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
+            );
+        }
+
+        final var fahrkostenPartner = antragssteller.getFahrkostenPartner();
+
+        var verpflegung = 0;
+        if (!antragssteller.isEigenerHaushalt()) {
+            var anzahlWochen = antragssteller.isLehre()
+                ? stammdaten.getAnzahlWochenLehre()
+                : stammdaten.getAnzahlWochenSchule();
+            verpflegung = roundHalfUp(
+                BigDecimal.valueOf(antragssteller.getVerpflegung())
+                    .multiply(BigDecimal.valueOf(anzahlWochen))
+                    .multiply(BigDecimal.valueOf(stammdaten.getPreisProMahlzeit()))
+            );
+        }
+
+        final var verpflegungPartner = antragssteller.getVerpflegungPartner();
+        final var fremdbetreuung = antragssteller.getFremdbetreuung();
+
+        final var anteilLebenshaltungskosten1 = Math.abs(
+            calculateAnteilLebenshaltungskosten(
                 antragssteller,
                 familienbudget1,
                 2,
@@ -159,52 +132,72 @@ public class PersoenlichesBudgetCalculatorV1 {
             )
         );
 
-        final var anteilFamilienbudget2 = Math.abs(
-            calculateAnteilFamilienbudget(
+        final var anteilLebenshaltungskosten2 = Math.abs(
+            calculateAnteilLebenshaltungskosten(
                 antragssteller,
                 familienbudget2,
                 1,
                 2
             )
         );
+        final var anteilLebenshaltungskosten = anteilLebenshaltungskosten1 + anteilLebenshaltungskosten2;
 
-        result.setAnteilFamilienbudget(anteilFamilienbudget1 + anteilFamilienbudget2);
+        final var ausgaben =
+            grundbedarf
+            + wohnkosten
+            + medizinischeGrundversorgung
+            + ausbildungskosten
+            + steuernKantonGemeinde
+            + fahrkosten
+            + fahrkostenPartner
+            + verpflegung
+            + verpflegungPartner
+            + fremdbetreuung
+            + anteilLebenshaltungskosten;
 
-        final var wohnkostenAbhaengig = applyAndSum(haushaltToApply, result);
-        final var verpflegung = applyAndSum(List.of(verpflegungApplier), result);
-        final var verheiratetKonkubinatAbhaengig = applyAndSum(verheiratetKonkubinatToApply, result);
-        final var basic = applyAndSum(basicToApply, result);
+        // Set calculated values on dto
+        result.setGrundbedarf(grundbedarf);
+        result.setWohnkosten(wohnkosten);
+        result.setMedizinischeGrundversorgung(medizinischeGrundversorgung);
+        result.setAusbildungskosten(ausbildungskosten);
+        result.setSteuernKantonGemeinde(steuernKantonGemeinde);
+        result.setFahrkosten(fahrkosten);
+        result.setFahrkostenPartner(fahrkostenPartner);
+        result.setVerpflegung(verpflegung);
+        result.setVerpflegungPartner(verpflegungPartner);
+        result.setFremdbetreuung(fremdbetreuung);
+        result.setAnteilLebenshaltungskosten(anteilLebenshaltungskosten);
 
-        result.setAusgabenPersoenlichesBudget(
-            wohnkostenAbhaengig + verpflegung + verheiratetKonkubinatAbhaengig + basic + anteilFamilienbudget1
-            + anteilFamilienbudget2
-        );
+        result.setAusgabenPersoenlichesBudget(ausgaben);
     }
 
-    private Integer calculateAnteilFamilienbudget(
+    private Integer calculateAnteilLebenshaltungskosten(
         final AntragsstellerV1 antragssteller,
         final FamilienBudgetresultatDto familienbudget,
         final int wohntImHaushaltZero,
         final int wohntImHaushaltAnrechnen
     ) {
         if (familienbudget == null) {
-            return null;
+            return 0;
         }
 
-        if (familienbudget.getFamilienbudgetBerechnet() < 0) {
-            if (!antragssteller.isEigenerHaushalt()) {
-                if (antragssteller.getPiaWohntInElternHaushalt() == wohntImHaushaltZero) {
-                    return 0;
-                } else if (antragssteller.getPiaWohntInElternHaushalt() == wohntImHaushaltAnrechnen) {
-                    return roundHalfUp(
-                        BigDecimal.valueOf(familienbudget.getFamilienbudgetBerechnet())
-                            .divide(
-                                BigDecimal.valueOf(familienbudget.getAnzahlPersonenImHaushalt()),
-                                RoundingMode.HALF_UP
-                            )
-                    );
-                }
-            }
+        if (
+            (familienbudget.getFamilienbudgetBerechnet() >= 0)
+            || antragssteller.isEigenerHaushalt()
+            || (antragssteller.getPiaWohntInElternHaushalt() == wohntImHaushaltZero)
+        ) {
+            return 0;
+        }
+
+        if (antragssteller.getPiaWohntInElternHaushalt() == wohntImHaushaltAnrechnen) {
+            return roundHalfUp(
+                BigDecimal.valueOf(familienbudget.getFamilienbudgetBerechnet())
+                    .divide(
+                        BigDecimal.valueOf(familienbudget.getAnzahlPersonenImHaushalt()),
+                        RoundingMode.HALF_UP
+                    )
+                    .abs()
+            );
         }
 
         return 0;
@@ -217,9 +210,6 @@ public class PersoenlichesBudgetCalculatorV1 {
         final FamilienBudgetresultatDto familienbudget2,
         final StammdatenV1 stammdaten
     ) {
-        final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
-        final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
-
         final int einkommen;
         if (antragssteller.isTertiaerstufe()) {
             einkommen = max(antragssteller.getEinkommen() - stammdaten.getEinkommensfreibetrag(), 0);
@@ -227,38 +217,53 @@ public class PersoenlichesBudgetCalculatorV1 {
             einkommen = antragssteller.getEinkommen();
         }
 
-        final var toApply = List.of(
-            mapAndReturn(PersoenlichesBudgetresultatDto::setEinkommen, einkommen),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setEinkommenPartner, antragssteller.getEinkommenPartner()),
-            mapAndReturn(
-                PersoenlichesBudgetresultatDto::setAnrechenbaresVermoegen,
-                roundHalfUp(
-                    BigDecimal.valueOf(antragssteller.getVermoegen())
-                        .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
-                        .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
-                )
-            ),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setAlimente, antragssteller.getAlimente()),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setRente, antragssteller.getRente()),
-            mapAndReturn(
-                PersoenlichesBudgetresultatDto::setKinderAusbildungszulagen,
-                antragssteller.getKinderAusbildungszulagen()
-            ),
-            mapAndReturn(
-                PersoenlichesBudgetresultatDto::setErgaenzungsleistungen,
-                antragssteller.getErgaenzungsleistungen()
-            ),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setLeistungenEO, antragssteller.getLeistungenEO()),
-            mapAndReturn(
-                PersoenlichesBudgetresultatDto::setGemeindeInstitutionen,
-                antragssteller.getGemeindeInstitutionen()
-            ),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setElternbeitrag1, elternbeitrag1),
-            mapAndReturn(PersoenlichesBudgetresultatDto::setElternbeitrag2, elternbeitrag2)
+        final var einkommenPartner = antragssteller.getEinkommenPartner();
+
+        final var anrechenbaresVermoegen = roundHalfUp(
+            BigDecimal.valueOf(antragssteller.getVermoegen())
+                .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
         );
 
-        final var einnahmen = applyAndSum(toApply, result);
+        final var alimente = antragssteller.getAlimente();
+        final var rente = antragssteller.getRente();
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
+        final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
+        final var leistungenEO = antragssteller.getLeistungenEO();
+        final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
+        final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
+        final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
+
+        final var einnahmen =
+            einkommen
+            + einkommenPartner
+            + anrechenbaresVermoegen
+            + alimente
+            + rente
+            + kinderAusbildungszulagen
+            + ergaenzungsleistungen
+            + leistungenEO
+            + gemeindeInstitutionen
+            + elternbeitrag1
+            + elternbeitrag2;
+
+        // Set calculated values on dto
+        result.setEinkommen(einkommen);
+        result.setEinkommenPartner(antragssteller.getEinkommenPartner());
         result.setSteuerbaresVermoegen(antragssteller.getVermoegen());
+        result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
+        result.setAlimente(antragssteller.getAlimente());
+        result.setRente(antragssteller.getRente());
+        result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen());
+        result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
+        result.setLeistungenEO(antragssteller.getLeistungenEO());
+        result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());
+        result.setElternbeitrag1(elternbeitrag1);
+        result.setElternbeitrag2(elternbeitrag2);
+
+        final var anteilFamilienBudget = elternbeitrag1 + elternbeitrag2;
+        result.setAnteilFamilienbudget(anteilFamilienBudget);
+
         result.setEinnahmenPersoenlichesBudget(einnahmen);
     }
 
@@ -267,57 +272,19 @@ public class PersoenlichesBudgetCalculatorV1 {
         final FamilienBudgetresultatDto familienbudget
     ) {
         if (familienbudget == null) {
-            return null;
+            return 0;
+        }
+        if (familienbudget.getFamilienbudgetBerechnet() <= 0) {
+            return 0;
         }
 
-        if (familienbudget.getFamilienbudgetBerechnet() > 0) {
-            final var anzahlGeschwisterInAusbildung =
-                BigDecimal.valueOf(familienbudget.getAnzahlGeschwisterInAusbildung() + 1);
-            final var fractionalValue = BigDecimal.valueOf(familienbudget.getFamilienbudgetBerechnet())
-                .divide(anzahlGeschwisterInAusbildung, RoundingMode.HALF_UP);
-            if (antragssteller.isHalbierungElternbeitrag()) {
-                return fractionalValue.divide(BigDecimal.TWO, RoundingMode.HALF_UP).intValue();
-            } else {
-                return fractionalValue.intValue();
-            }
+        final var anzahlGeschwisterInAusbildung =
+            BigDecimal.valueOf(familienbudget.getAnzahlGeschwisterInAusbildung() + 1);
+        final var fractionalValue = BigDecimal.valueOf(familienbudget.getFamilienbudgetBerechnet())
+            .divide(anzahlGeschwisterInAusbildung, RoundingMode.HALF_UP);
+        if (antragssteller.isHalbierungElternbeitrag()) {
+            return fractionalValue.divide(BigDecimal.TWO, RoundingMode.HALF_UP).intValue();
         }
-
-        return 0;
-    }
-
-    private static int calculateAnteilLebenshaltungskosten(
-        List<FamilienBudgetresultatDto> familienBudgetresultatList,
-        AntragsstellerV1 antragssteller
-    ) {
-        int anteilLebenshaltungskosten = 0;
-        int piaWohntInElternHaushalt = antragssteller.getPiaWohntInElternHaushalt();
-        ListIterator<FamilienBudgetresultatDto> iterator = familienBudgetresultatList.listIterator();
-        while (iterator.hasNext()) {
-            final FamilienBudgetresultatDto familienBudgetresultat = iterator.next();
-            final var budgetIdx = iterator.nextIndex();
-            final var familienBudget = familienBudgetresultat.getFamilienbudgetBerechnet();
-            if (familienBudget >= 0 || antragssteller.isEigenerHaushalt() || budgetIdx != piaWohntInElternHaushalt) {
-                continue;
-            }
-            anteilLebenshaltungskosten += familienBudget / familienBudgetresultat.getAnzahlPersonenImHaushalt();
-        }
-        return anteilLebenshaltungskosten;
-    }
-
-    private Function<PersoenlichesBudgetresultatDto, Integer> mapAndReturn(
-        final BiConsumer<PersoenlichesBudgetresultatDto, Integer> getter,
-        final Integer value
-    ) {
-        return CalculatorUtilV1.mapAndReturn(getter, value);
-    }
-
-    private int applyAndSum(
-        final List<Function<PersoenlichesBudgetresultatDto, Integer>> toApply,
-        final PersoenlichesBudgetresultatDto result
-    ) {
-        return CalculatorUtilV1.applyAndSum(
-            toApply.stream(),
-            result
-        );
+        return fractionalValue.intValue();
     }
 }

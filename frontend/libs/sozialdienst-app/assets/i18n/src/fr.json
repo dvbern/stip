@@ -48,5 +48,7 @@
   "sozialdienst-app.delegierung-dialog.changeZuweisung.submit": "Modifier l'affectation",
   "sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges": "Veuillez enregistrer les modifications avant de fermer la boîte de dialogue.",
   "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject": "Rejeter la délégation",
-  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Voulez-vous vraiment rejeter la demande de délégation ?"
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject.message": "Voulez-vous vraiment rejeter la demande de délégation?",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove": "Supprimer la délégation",
+  "sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove.message": "Voulez-vous vraiment supprimer la délégation?"
 }

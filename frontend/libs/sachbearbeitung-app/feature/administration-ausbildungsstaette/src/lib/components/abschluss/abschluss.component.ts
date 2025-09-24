@@ -23,6 +23,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { AdministrationAusbildungsstaetteStore } from '@dv/sachbearbeitung-app/data-access/administration-ausbildungsstaette';
 import { StatusFilter } from '@dv/sachbearbeitung-app/model/ausbildungsstaette';
+import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { StatusType } from '@dv/shared/model/ausbildung';
 import {
   Abschluss,
@@ -108,6 +109,7 @@ export class AbschlussComponent
   private administrationAusbildungsstaetteStore = inject(
     AdministrationAusbildungsstaetteStore,
   );
+  private ausbildungsstaetteStore = inject(AusbildungsstaetteStore);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
@@ -199,6 +201,12 @@ export class AbschlussComponent
       });
     });
 
+    // reload slim as well
+    effect(() => {
+      this.reloadAbschluesseSig();
+      this.ausbildungsstaetteStore.loadAbschluesse$();
+    });
+
     // when the route param inputs change, load the data
     effect(() => {
       const { sortColumn, sortOrder, page, pageSize } =
@@ -248,7 +256,9 @@ export class AbschlussComponent
   }
 
   createAbschluss() {
-    CreateAbschlussDialogComponent.open(this.dialog)
+    CreateAbschlussDialogComponent.open(this.dialog, {
+      abschluesse: this.ausbildungsstaetteStore.abschluesse().data ?? [],
+    })
       .afterClosed()
       .subscribe((brueckenangebotCreate) => {
         if (brueckenangebotCreate) {

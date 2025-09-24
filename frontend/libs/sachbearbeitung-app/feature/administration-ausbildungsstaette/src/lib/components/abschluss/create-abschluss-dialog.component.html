@@ -40,6 +40,12 @@
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
         </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'notUniqueAbschluss'">
+          {{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.bezeichnung.error.notUnique'
+              | transloco
+          }}
+        </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>
@@ -48,6 +54,12 @@
         <input matInput [formControl]="form.controls.bezeichnungFr" />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'notUniqueAbschluss'">
+          {{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.bezeichnung.error.notUnique'
+              | transloco
+          }}
         </mat-error>
       </mat-form-field>
     </div>

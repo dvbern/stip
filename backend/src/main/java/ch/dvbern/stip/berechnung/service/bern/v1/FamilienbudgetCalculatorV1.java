@@ -19,10 +19,6 @@ package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputFamilienbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.ElternteilV1;
@@ -46,10 +42,12 @@ public class FamilienbudgetCalculatorV1 {
         final var result = new FamilienBudgetresultatDto();
         final var elternteil = input.getElternteil();
 
+        result.familienBudgetTyp(elternteil.getSteuerdatenTyp());
+
         calculateAndSetAusgaben(result, elternteil);
         calculateAndSetEinnahmen(result, elternteil, stammdaten);
         calculateAndSetFamilienbudgetBerechnet(result);
-        result.familienBudgetTyp(elternteil.getSteuerdatenTyp());
+
         result.setAnzahlGeschwisterInAusbildung(elternteil.getAnzahlGeschwisterInAusbildung());
         result.setAnzahlPersonenImHaushalt(elternteil.getAnzahlPersonenImHaushalt());
 
@@ -57,23 +55,41 @@ public class FamilienbudgetCalculatorV1 {
     }
 
     private void calculateAndSetAusgaben(final FamilienBudgetresultatDto result, final ElternteilV1 elternteil) {
-        final var toApply = List.of(
-            mapAndReturn(FamilienBudgetresultatDto::setGrundbedarf, elternteil.getGrundbedarf()),
-            mapAndReturn(FamilienBudgetresultatDto::setEffektiveWohnkosten, elternteil.getEffektiveWohnkosten()),
-            mapAndReturn(
-                FamilienBudgetresultatDto::setMedizinischeGrundversorgung,
-                elternteil.getMedizinischeGrundversorgung()
-            ),
-            mapAndReturn(FamilienBudgetresultatDto::setSteuernKantonGemeinde, elternteil.getSteuernStaat()),
-            mapAndReturn(FamilienBudgetresultatDto::setSteuernBund, elternteil.getSteuernBund()),
-            mapAndReturn(FamilienBudgetresultatDto::setIntegrationszulage, elternteil.getIntegrationszulage()),
-            mapAndReturn(FamilienBudgetresultatDto::setFahrkostenPerson1, elternteil.getFahrkostenPerson1()),
-            mapAndReturn(FamilienBudgetresultatDto::setFahrkostenPerson2, elternteil.getFahrkostenPerson2()),
-            mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson1, elternteil.getEssenskostenPerson1()),
-            mapAndReturn(FamilienBudgetresultatDto::setEssenskostenPerson2, elternteil.getEssenskostenPerson2())
-        );
+        final var grundbedarf = elternteil.getGrundbedarf();
+        final var effektiveWohnkosten = elternteil.getEffektiveWohnkosten();
+        final var medizinischeGrundversorgung = elternteil.getMedizinischeGrundversorgung();
+        final var steuernStaat = elternteil.getSteuernStaat();
+        final var steuernBund = elternteil.getSteuernBund();
+        final var integrationszulage = elternteil.getIntegrationszulage();
+        final var fahrkostenPerson1 = elternteil.getFahrkostenPerson1();
+        final var fahrkostenPerson2 = elternteil.getFahrkostenPerson2();
+        final var essenskostenPerson1 = elternteil.getEssenskostenPerson1();
+        final var essenskostenPerson2 = elternteil.getEssenskostenPerson2();
 
-        final var ausgaben = applyAndSum(toApply, result);
+        final var ausgaben =
+            grundbedarf
+            + effektiveWohnkosten
+            + medizinischeGrundversorgung
+            + steuernStaat
+            + steuernBund
+            + integrationszulage
+            + fahrkostenPerson1
+            + fahrkostenPerson2
+            + essenskostenPerson1
+            + essenskostenPerson2;
+
+        // Set calculated values on dto
+        result.setGrundbedarf(grundbedarf);
+        result.setEffektiveWohnkosten(effektiveWohnkosten);
+        result.setMedizinischeGrundversorgung(medizinischeGrundversorgung);
+        result.setSteuernKantonGemeinde(steuernStaat);
+        result.setSteuernBund(steuernBund);
+        result.setIntegrationszulage(integrationszulage);
+        result.setFahrkostenPerson1(fahrkostenPerson1);
+        result.setFahrkostenPerson2(fahrkostenPerson2);
+        result.setEssenskostenPerson1(essenskostenPerson1);
+        result.setEssenskostenPerson2(essenskostenPerson2);
+
         result.setAusgabenFamilienbudget(ausgaben);
     }
 
@@ -82,70 +98,86 @@ public class FamilienbudgetCalculatorV1 {
         final ElternteilV1 elternteil,
         final StammdatenV1 stammdaten
     ) {
-        final var summands = List.of(
-            mapAndReturn(FamilienBudgetresultatDto::setErgaenzungsleistungen, elternteil.getErgaenzungsleistungen()),
-            mapAndReturn(FamilienBudgetresultatDto::setTotalEinkuenfte, elternteil.getTotalEinkuenfte())
+        final var ergaenzungsleistungen = elternteil.getErgaenzungsleistungen();
+        final var totalEinkuenfte = elternteil.getTotalEinkuenfte();
+        final var eigenmietwert = elternteil.getEigenmietwert();
+        final var alimente = elternteil.getAlimente();
+        final var steuerbaresVermoegen = elternteil.getSteuerbaresVermoegen();
+        final var saeule3a = getSaeule3a(elternteil, stammdaten);
+        final var saeule2 = getSaeule2(elternteil);
+        final var anrechenbaresVermoegen = getAnrechenbaresVermoegen(elternteil, stammdaten);
+
+        final var einnahmenBeforeVermoegen = max(
+            totalEinkuenfte
+            + ergaenzungsleistungen
+            - eigenmietwert
+            - alimente
+            - saeule3a
+            - saeule2
+            - stammdaten.getEinkommensfreibetrag(),
+            0
         );
 
-        final var subtrahends = List.of(
-            mapAndReturn(FamilienBudgetresultatDto::setEigenmietwert, elternteil.getEigenmietwert()),
-            mapAndReturn(FamilienBudgetresultatDto::setAlimente, elternteil.getAlimente())
-        );
+        final var einnahmen = einnahmenBeforeVermoegen + anrechenbaresVermoegen;
 
-        final List<Function<FamilienBudgetresultatDto, Integer>> einkommenApplier;
-        final List<Function<FamilienBudgetresultatDto, Integer>> conditionalSubtrahends;
-        if (elternteil.isSelbststaendigErwerbend()) {
-            conditionalSubtrahends = List.of(
-                mapAndReturn(
-                    FamilienBudgetresultatDto::setSaeule3a,
-                    max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0)
-                ),
-                mapAndReturn(FamilienBudgetresultatDto::setSaeule2, elternteil.getEinzahlungSaeule2())
-            );
+        // Set calculated values on dto
+        result.setErgaenzungsleistungen(ergaenzungsleistungen);
+        result.setTotalEinkuenfte(totalEinkuenfte);
+        result.setEigenmietwert(eigenmietwert);
+        result.setAlimente(alimente);
+        result.setSteuerbaresVermoegen(steuerbaresVermoegen);
+        result.setSaeule3a(saeule3a);
+        result.setSaeule2(saeule2);
+        result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
+        final var selbststaendigErwerbend = elternteil.isSelbststaendigErwerbend();
+        result.setSelbststaendigErwerbend(selbststaendigErwerbend);
 
-            einkommenApplier = List.of(
-                mapAndReturn(
-                    FamilienBudgetresultatDto::setSteuerbaresVermoegen,
-                    roundHalfUp(
-                        BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent())
-                            .setScale(2, RoundingMode.HALF_UP)
-                            .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
-                            .multiply(
-                                BigDecimal.valueOf(
-                                    max(elternteil.getSteuerbaresVermoegen() - stammdaten.getFreibetragVermoegen(), 0)
-                                )
-                            )
-                    )
-                )
-            );
-        } else {
-            conditionalSubtrahends = List.of(
-                mapAndReturn(FamilienBudgetresultatDto::setSaeule3a, 0),
-                mapAndReturn(FamilienBudgetresultatDto::setSaeule2, 0)
-            );
-
-            einkommenApplier = List.of(
-                mapAndReturn(
-                    FamilienBudgetresultatDto::setSteuerbaresVermoegen,
-                    roundHalfUp(
-                        BigDecimal.valueOf(elternteil.getSteuerbaresVermoegen())
-                            .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
-                            .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
-                    )
-                )
-            );
-        }
-
-        result.setAnrechenbaresVermoegen(elternteil.getSteuerbaresVermoegen());
-        result.selbststaendigErwerbend(elternteil.isSelbststaendigErwerbend());
-
-        final var summand = applyAndSum(summands, result);
-        final var subtrahend =
-            applyAndSum(Stream.concat(subtrahends.stream(), conditionalSubtrahends.stream()).toList(), result);
-        final var einkommen = applyAndSum(einkommenApplier, result);
-
-        final var einnahmen = Math.max(summand - subtrahend - stammdaten.getEinkommensfreibetrag(), 0) + einkommen;
         result.setEinnahmenFamilienbudget(einnahmen);
+    }
+
+    private int getSaeule3a(
+        final ElternteilV1 elternteil,
+        final StammdatenV1 stammdaten
+    ) {
+        var saeule3a = 0;
+        if (elternteil.isSelbststaendigErwerbend()) {
+            saeule3a = max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0);
+        }
+        return saeule3a;
+    }
+
+    private int getSaeule2(
+        final ElternteilV1 elternteil
+    ) {
+        var saeule2 = 0;
+        if (elternteil.isSelbststaendigErwerbend()) {
+            saeule2 = elternteil.getEinzahlungSaeule2();
+        }
+        return saeule2;
+    }
+
+    private int getAnrechenbaresVermoegen(
+        final ElternteilV1 elternteil,
+        final StammdatenV1 stammdaten
+    ) {
+        var anrechenbaresVermoegen = BigDecimal.valueOf(
+            elternteil.getSteuerbaresVermoegen()
+        );
+        if (elternteil.isSelbststaendigErwerbend()) {
+            // steuerbaresVermoegen - freibetragVermoegen
+            anrechenbaresVermoegen =
+                BigDecimal.valueOf(
+                    max(
+                        elternteil.getSteuerbaresVermoegen() - stammdaten.getFreibetragVermoegen(),
+                        0
+                    )
+                );
+        }
+        return roundHalfUp(
+            anrechenbaresVermoegen.setScale(2, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
+        );
     }
 
     private void calculateAndSetFamilienbudgetBerechnet(final FamilienBudgetresultatDto result) {
@@ -154,23 +186,6 @@ public class FamilienbudgetCalculatorV1 {
                 BigDecimal.valueOf(result.getEinnahmenFamilienbudget())
                     .subtract(BigDecimal.valueOf(result.getAusgabenFamilienbudget()))
             )
-        );
-    }
-
-    private Function<FamilienBudgetresultatDto, Integer> mapAndReturn(
-        final BiConsumer<FamilienBudgetresultatDto, Integer> setter,
-        final int value
-    ) {
-        return CalculatorUtilV1.mapAndReturn(setter, value);
-    }
-
-    private int applyAndSum(
-        final List<Function<FamilienBudgetresultatDto, Integer>> toApply,
-        final FamilienBudgetresultatDto result
-    ) {
-        return CalculatorUtilV1.applyAndSum(
-            toApply.stream(),
-            result
         );
     }
 }

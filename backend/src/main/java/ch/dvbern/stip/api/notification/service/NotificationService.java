@@ -44,6 +44,11 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
+    public void createDelegierungAufgeloestNotification(final Delegierung delegierung) {
+        createDelegierungNotification(NotificationType.DELEGIERUNG_AUFGELOEST, delegierung);
+    }
+
+    @Transactional
     public void createDelegierungAbgelehntNotification(final Delegierung delegierung) {
         createDelegierungNotification(NotificationType.DELEGIERUNG_ABGELEHNT, delegierung);
     }
@@ -69,6 +74,9 @@ public class NotificationService {
                 .render();
             case DELEGIERUNG_ABGELEHNT -> Templates
                 .getDelegierungAbgelehnt(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
+                .render();
+            case DELEGIERUNG_AUFGELOEST -> Templates
+                .getDelegierungAufgeloest(persoenlicheAngaben.getSprache(), delegierung.getSozialdienst().getName())
                 .render();
             default -> throw new IllegalStateException("Unexpected value: " + notificationType);
         };
@@ -491,6 +499,20 @@ public class NotificationService {
                 return delegierungAngenommenFR(sozialdienstName);
             }
             return delegierungAngenommenDE(sozialdienstName);
+        }
+
+        public static native TemplateInstance delegierungAufgeloestDE(final String sozialdienstName);
+
+        public static native TemplateInstance delegierungAufgeloestFR(final String sozialdienstName);
+
+        public static TemplateInstance getDelegierungAufgeloest(
+            final Sprache korrespondenzSprache,
+            final String sozialdienstName
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return delegierungAufgeloestFR(sozialdienstName);
+            }
+            return delegierungAufgeloestDE(sozialdienstName);
         }
 
         public static native TemplateInstance nachfristDokumenteChangedDE(final String nachfristDokumente);

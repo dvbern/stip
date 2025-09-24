@@ -732,7 +732,10 @@
                     StatusprotokollEntryTyp=ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp,
                     GetDelegierungSozQueryTypeMitarbeiter=ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter,
                     GetDelegierungSozQueryTypeAdmin=ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin,
-                    AusbildungsstaetteNummerTyp=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp
+                    AusbildungsstaetteNummerTyp=ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp,
+                    DruckauftragTyp=ch.dvbern.stip.api.massendruck.type.DruckauftragTyp,
+                    DruckauftragStatus=ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus,
+                    MassendruckJobSortColumn=ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

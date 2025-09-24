@@ -3,6 +3,7 @@ import {
   Component,
   DoCheck,
   Input,
+  computed,
   inject,
   input,
   signal,
@@ -72,8 +73,19 @@ export class SharedUiFormAddressComponent implements DoCheck {
   languageSig = input.required<Language>();
   @Input() changes?: Partial<Adresse>;
   plzValues?: Plz[];
+  onlyIso2Laender = input<boolean>(false);
 
-  laenderSig = this.landLookupService.getCachedLandLookup();
+  laenderSig = computed(() => {
+    const isIso2Only = this.onlyIso2Laender();
+    const laender = this.landLookupService.getCachedLandLookup()();
+
+    if (isIso2Only) {
+      return laender.filter((land) => land.iso2code);
+    }
+
+    return laender;
+  });
+
   isValidLandEntry = this.landLookupService.isValidLandEntry;
   touchedSig = signal(false);
 
