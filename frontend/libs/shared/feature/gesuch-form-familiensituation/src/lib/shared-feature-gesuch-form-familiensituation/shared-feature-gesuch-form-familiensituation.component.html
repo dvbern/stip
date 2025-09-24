@@ -410,7 +410,10 @@
                       </button>
                     </div>
                   </div>
-                  @if (vaterUnbekanntDocumentSig(); as options) {
+                  @if (
+                    form.controls.mutterUnbekanntGrund.value !== 'FEHLENDE_ANERKENNUNG' && vaterUnbekanntDocumentSig();
+                    as options
+                  ) {
                     <dv-shared-pattern-document-upload
                       class="flex-shrink-1 mt-2"
                       [optionsSig]="options"
