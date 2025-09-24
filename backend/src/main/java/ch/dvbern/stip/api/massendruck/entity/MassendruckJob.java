@@ -28,8 +28,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -38,7 +36,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(
-    name = "massendruck",
+    name = "massendruck_job",
     indexes = { @Index(name = "IX_massendruck_mandant", columnList = "mandant")
     }
 )
@@ -54,8 +52,7 @@ public class MassendruckJob extends AbstractMandantEntity {
     private MassendruckJobStatus status;
 
     @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "massendruck_job_number", nullable = false)
+    @Column(name = "massendruck_job_number", nullable = false, updatable = false)
     private int massendruckJobNumber;
 
     @Transient
