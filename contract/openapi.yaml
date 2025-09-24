@@ -94,8 +94,8 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/batchName'
-        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: '#/components/parameters/massendruckJobNumber'
+        - $ref: '#/components/parameters/userErstellt'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
         - $ref: '#/components/parameters/MassendruckJobTyp'
@@ -4451,7 +4451,7 @@ components:
       required:
         - id
         - massendruckJobNumber
-        - bearbeiter
+        - userErstellt
         - timestampErstellt
         - massendruckJobStatus
         - massendruckJobTyp
@@ -7903,9 +7903,9 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
-    batchName:
+    massendruckJobNumber:
       in: query
-      name: batchName
+      name: massendruckJobNumber
       schema:
         type: string
     MassendruckJobTyp:
@@ -7975,9 +7975,9 @@ components:
       name: status
       schema:
         type: string
-    bearbeiter:
+    userErstellt:
       in: query
-      name: bearbeiter
+      name: userErstellt
       schema:
         type: string
     timestampErstellt:
