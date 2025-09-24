@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.datenschutzbrief.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,9 +57,9 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     private boolean isVersendet = false;
 
     @NotNull
-    @Column(name = "eltern_typ", nullable = false)
+    @Column(name = "datenschutzbrief_empfaenger", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ElternTyp elternTyp;
+    private DatenschutzbriefEmpfaenger datenschutzbriefEmpfaenger;
 
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

@@ -538,10 +538,7 @@ public class GesuchResourceImpl implements GesuchResource {
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId); // todo kstip-2663: if source =
-                                                                                   // JURISCHTISCHE_ABKLAERUNG, then
-                                                                                   // only enable transition if
-                                                                                   // datenschutzbrief has been sent
+        gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
 
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);

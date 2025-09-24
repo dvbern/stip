@@ -203,10 +203,7 @@ public class GesuchStatusConfigProducer {
                 verfuegungDruckbereitHandler::handle
             )
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET) // todo kstip-2663:
-                                                                                                     // really
-                                                                                                     // required/intended?
-        ;
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET);
 
         config.configure(Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
             .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
