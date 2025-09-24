@@ -7975,6 +7975,11 @@ components:
       name: status
       schema:
         type: string
+    bearbeiter:
+      in: query
+      name: bearbeiter
+      schema:
+        type: string
     userErstellt:
       in: query
       name: userErstellt
