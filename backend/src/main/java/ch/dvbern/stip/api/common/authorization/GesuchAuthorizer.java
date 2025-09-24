@@ -269,12 +269,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     public void assertCanPerformStatusChange(final UUID gesuchId, GesuchStatusChangeEvent gesuchStatusChangeEvent) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG) {
-            if (!gesuchService.haveAllDatenschutzbriefeBeenSent(gesuch)) {
-                forbidden();
-            }
-        }
-
         if (!gesuchStatusService.canFire(gesuch, gesuchStatusChangeEvent)) {
             forbidden();
         }

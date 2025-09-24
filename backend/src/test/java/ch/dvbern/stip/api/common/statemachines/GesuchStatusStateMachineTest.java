@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
@@ -64,6 +65,7 @@ class GesuchStatusStateMachineTest {
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
     private DatenschutzDruckbereitHandler datenschutzDruckbereitHandlerMock;
+    private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private StatusprotokollService statusprotokollService;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
@@ -85,6 +87,7 @@ class GesuchStatusStateMachineTest {
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
         datenschutzDruckbereitHandlerMock = Mockito.mock(DatenschutzDruckbereitHandler.class);
+        bereitFuerBearbeitungHandler = Mockito.mock(BereitFuerBearbeitungHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -100,7 +103,8 @@ class GesuchStatusStateMachineTest {
             stipendienAnspruchHandlerSpy,
             juristischeAbklaerungDurchPruefungHandlerSpy,
             statusprotokollService,
-            datenschutzDruckbereitHandlerMock
+            datenschutzDruckbereitHandlerMock,
+            bereitFuerBearbeitungHandler
         ).createStateMachineConfig();
     }
 

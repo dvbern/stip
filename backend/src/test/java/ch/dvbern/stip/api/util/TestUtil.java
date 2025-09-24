@@ -93,6 +93,7 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.restassured.response.ValidatableResponse;
@@ -228,7 +229,20 @@ public class TestUtil {
     ) {
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
         fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        fillGesuch(
+            gesuchApiSpec,
+            fullGesuch,
+            dokumentApiSpec,
+            gesuch
+        );
+    }
 
+    public static void fillGesuch(
+        final GesuchApiSpec gesuchApiSpec,
+        final GesuchUpdateDtoSpec fullGesuch,
+        final DokumentApiSpec dokumentApiSpec,
+        final GesuchDtoSpec gesuch
+    ) {
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)

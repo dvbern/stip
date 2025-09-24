@@ -23,7 +23,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -53,7 +52,7 @@ import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
-import ch.dvbern.stip.api.datenschutzbrief.service.RequiredDatenschutzbriefService;
+import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
@@ -100,7 +99,6 @@ import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -192,8 +190,7 @@ public class GesuchService {
     private final VerfuegungService verfuegungService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
-    private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
-    private final RequiredDatenschutzbriefService requiredDatenschutzbriefService;
+    private final DatenschutzbriefService datenschutzbriefService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -504,6 +501,7 @@ public class GesuchService {
         statusprotokollService.deleteAllByGesuchId(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
+        gesuch.getDatenschutzbriefs().clear();
 
         if (ausbildung.getGesuchs().isEmpty()) {
             ausbildungRepository.delete(ausbildung);
@@ -622,9 +620,20 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        final GesuchStatusChangeEvent changeEvent;
+        if (gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG) {
+            if (haveAllDatenschutzbriefeBeenSent(gesuch)) {
+                changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+            } else {
+                changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
+            }
+        } else {
+            changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        }
+
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
-            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            changeEvent,
             kommentar,
             false
         );
@@ -1321,24 +1330,6 @@ public class GesuchService {
     }
 
     public boolean haveAllDatenschutzbriefeBeenSent(final Gesuch gesuch) {
-        if (gesuch.getGesuchTranchen().size() != 1) {
-            return true;
-        }
-
-        final var trancheToUse = gesuch.getGesuchTranchen().getFirst();
-        final var requiredDatenschutzbriefe = new HashSet<>(
-            requiredDatenschutzbriefService
-                .getRequiredDatenschutzbriefEmpfaenger(trancheToUse.getGesuchFormular().getFamiliensituation())
-        );
-
-        final var existingDatenschutzbriefe = gesuch.getDatenschutzbriefs();
-
-        existingDatenschutzbriefe.stream()
-            .filter(Datenschutzbrief::isVersendet)
-            .forEach(
-                datenschutzbrief -> requiredDatenschutzbriefe.remove(datenschutzbrief.getDatenschutzbriefEmpfaenger())
-            );
-
-        return requiredDatenschutzbriefe.isEmpty();
+        return gesuch.getDatenschutzbriefs().stream().allMatch(Datenschutzbrief::isVersendet);
     }
 }

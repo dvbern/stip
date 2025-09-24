@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.generator.api;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.generator.api.model.gesuch.DarlehenDtoSpecModel;
@@ -37,6 +38,8 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
+
+import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 
 public class GesuchTestSpecGenerator {
     public static GesuchTrancheUpdateDtoSpec gesuchTrancheDtoSpec() {
@@ -194,5 +197,22 @@ public class GesuchTestSpecGenerator {
             model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
             model.getGesuchTrancheToWorkWith().setGesuchFormular(gesuchFormularUpdateDtoSpecFullNoElterns());
         });
+    }
+
+    public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecFullNichtAnspruchsberechtig(
+        final UUID gesuchTrancheToWorkWithId
+    ) {
+        final var dto = gesuchUpdateDtoSpecFull();
+        final var gesuchTranche = dto.getGesuchTrancheToWorkWith();
+        gesuchTranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(0);
+
+        final var birthday = LocalDate.now().minusYears(50);
+        gesuchTranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(birthday);
+
+        final var lebenslaufItem = gesuchTranche.getGesuchFormular().getLebenslaufItems().getFirst();
+        lebenslaufItem.setVon(birthday.plusYears(15).format(DATE_TIME_FORMATTER));
+
+        gesuchTranche.setId(gesuchTrancheToWorkWithId);
+        return dto;
     }
 }

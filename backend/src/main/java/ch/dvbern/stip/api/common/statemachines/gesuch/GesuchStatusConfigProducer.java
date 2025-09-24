@@ -22,6 +22,7 @@ import java.util.EnumMap;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
@@ -63,6 +64,7 @@ public class GesuchStatusConfigProducer {
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
     private final StatusprotokollService statusprotokollService;
     private final DatenschutzDruckbereitHandler datenschutzbriefDruckbereitHandler;
+    private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -125,6 +127,10 @@ public class GesuchStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
                 fehlendeDokumenteEinreichenHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG),
+                bereitFuerBearbeitungHandler::handle
             );
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)

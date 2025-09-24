@@ -18,17 +18,47 @@
 package ch.dvbern.stip.api.datenschutzbrief.service;
 
 import java.util.List;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
+import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
 import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
-public class RequiredDatenschutzbriefService {
+public class DatenschutzbriefService {
+    private final DatenschutzbriefRepository datenschutzbriefRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
+
+    @Transactional
+    public void createAllRequiredDatenschutzbriefeForGesuch(final Gesuch gesuch) {
+        if (gesuch.getGesuchTranchen().size() != 1) {
+            LOG.error("Trying to create Datenschutzbriefe for a Gesuch with more than 1 Tranche");
+            return;
+        }
+
+        final var trancheToUse = gesuch.getGesuchTranchen().getFirst();
+        final var requiredEmpfaenger =
+            getRequiredDatenschutzbriefEmpfaenger(trancheToUse.getGesuchFormular().getFamiliensituation());
+        for (final var empfaengerToCreate : requiredEmpfaenger) {
+            final var datenschutzbrief = new Datenschutzbrief()
+                .setVersendet(false)
+                .setDatenschutzbriefEmpfaenger(empfaengerToCreate)
+                .setGesuch(gesuch);
+
+            gesuch.getDatenschutzbriefs().add(datenschutzbrief);
+
+            datenschutzbriefRepository.persist(datenschutzbrief);
+        }
+    }
 
     public List<DatenschutzbriefEmpfaenger> getRequiredDatenschutzbriefEmpfaenger(
         final Familiensituation familiensituation
@@ -37,5 +67,9 @@ public class RequiredDatenschutzbriefService {
             .stream()
             .map(DatenschutzbriefEmpfaenger::fromSteuerdatenTyp)
             .toList();
+    }
+
+    public void deleteDatenschutzbriefe(final UUID gesuchId) {
+        datenschutzbriefRepository.deleteAllByGesuchId(gesuchId);
     }
 }
