@@ -573,6 +573,8 @@
   "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle": "Absence de reconnaissance de paternité",
   "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info": "Si le père est inconnu et que la reconnaissance de paternité fait défaut, vous devez nous faire parvenir une copie de votre acte de naissance..",
   "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung": "Absence de reconnaissance de la maternité",
+  "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.infoTitle": "Absence de reconnaissance de maternité",
+  "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.info": "Si la mère est inconnue et que la reconnaissance de maternité fait défaut, vous devez nous faire parvenir une copie de votre acte de naissance.",
   "shared.form.familiensituation.vater-wiederverheiratet.label": "Le père est-il remarié?",
   "shared.form.familiensituation.mutter-wiederverheiratet.label": "La mère est-elle remarié?",
   "shared.form.familiensituation.sorgerecht.label": "Droit de garde",

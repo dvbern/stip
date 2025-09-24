@@ -573,6 +573,8 @@
   "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle": "Fehlende Vaterschaftsanerkennung",
   "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info": "Wenn der Vater unbekannt ist und keine Vaterschaftsanerkennung vorliegt, senden Sie uns bitte eine Kopie der Geburtsurkunde.",
   "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung": "Fehlende Mutterschaftsanerkennung",
+  "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.infoTitle": "Fehlende Mutterschaftsanerkennung",
+  "shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.info": "Wenn die Mutter unbekannt ist und keine Mutterschaftsanerkennung vorliegt, senden Sie uns bitte eine Kopie der Geburtsurkunde.",
   "shared.form.familiensituation.vater-wiederverheiratet.label": "Ist der Vater wiederverheiratet?",
   "shared.form.familiensituation.mutter-wiederverheiratet.label": "Ist die Mutter wiederverheiratet?",
   "shared.form.familiensituation.sorgerecht.label": "Sorgerecht",
