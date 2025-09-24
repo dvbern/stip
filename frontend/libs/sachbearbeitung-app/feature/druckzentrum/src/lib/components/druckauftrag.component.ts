@@ -22,11 +22,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import {
-  DruckEntry,
-  DruckauftragStore,
-} from '@dv/sachbearbeitung-app/data-access/druckauftrag';
+import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
+import {
+  MassendruckDatenschutzbrief,
+  MassendruckVerfuegung,
+} from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
@@ -79,7 +80,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 export class DruckauftragComponent {
   displayedColumns = ['Versendet', 'Gesuch', 'Nachname', 'Vorname', 'Adressat'];
 
-  druckauftragStore = inject(DruckauftragStore);
+  massendruckStore = inject(MassendruckStore);
   formBuilder = inject(FormBuilder);
 
   druckEntryId = input<string | undefined>(undefined);
@@ -96,6 +97,8 @@ export class DruckauftragComponent {
   });
 
   druckauftragDataSourceSig = computed(() => {
-    return new MatTableDataSource<DruckEntry>([]);
+    return new MatTableDataSource<
+      MassendruckDatenschutzbrief | MassendruckVerfuegung
+    >([]);
   });
 }

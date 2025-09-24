@@ -18,6 +18,7 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isPending,
   isSuccess,
   mapCachedData,
   pending,
@@ -50,7 +51,7 @@ export class BuchhaltungStore extends signalStore(
   fehlgeschlageneZahlungenView = computed(() => {
     return {
       data: fromCachedDataSig(this.paginatedFailedAuszahlungBuchhaltung),
-      loading: this.paginatedFailedAuszahlungBuchhaltung().type === 'pending',
+      loading: isPending(this.paginatedFailedAuszahlungBuchhaltung()),
     };
   });
 

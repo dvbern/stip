@@ -30,14 +30,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { DruckauftragStore } from '@dv/sachbearbeitung-app/data-access/druckauftrag';
+import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import {
-  DruckauftraegeColumn,
-  DruckauftragStatus,
-  DruckauftragTyp,
-  DruckenServiceGetAllDruckauftraegeRequestParams,
-  GetDruckauftraegeQueryType,
+  GetMassendruckJobQueryType,
+  MassendruckJobSortColumn,
+  MassendruckJobStatus,
+  MassendruckJobTyp,
+  MassendruckServiceGetAllMassendruckJobsRequestParams,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
@@ -103,15 +103,15 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   private route = inject(ActivatedRoute);
   private formBuilder = inject(NonNullableFormBuilder);
 
-  druckauftragStore = inject(DruckauftragStore);
+  massendruckStore = inject(MassendruckStore);
 
-  show = input<GetDruckauftraegeQueryType | undefined>(undefined);
-  batchName = input<string | undefined>(undefined);
-  bearbeiter = input<string | undefined>(undefined);
+  show = input<GetMassendruckJobQueryType | undefined>(undefined);
+  massendruckJobNumber = input<string | undefined>(undefined);
+  userErstellt = input<string | undefined>(undefined);
   timestampErstellt = input<string | undefined>(undefined);
-  druckauftragStatus = input<DruckauftragStatus | undefined>(undefined);
-  druckauftragTyp = input<DruckauftragTyp | undefined>(undefined);
-  sortColumn = input<DruckauftraegeColumn | undefined>(undefined);
+  massendruckJobStatus = input<MassendruckJobStatus | undefined>(undefined);
+  massendruckJobTyp = input<MassendruckJobTyp | undefined>(undefined);
+  sortColumn = input<MassendruckJobSortColumn | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
 
   page = input(<number | undefined>undefined, {
@@ -126,37 +126,37 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = Object.keys(DruckauftraegeColumn);
+  displayedColumns = Object.keys(MassendruckJobSortColumn);
 
   filterForm = this.formBuilder.group({
-    batchName: [<string | undefined>undefined],
-    bearbeiter: [<string | undefined>undefined],
+    massendruckJobNumber: [<string | undefined>undefined],
+    userErstellt: [<string | undefined>undefined],
     timestampErstellt: [<Date | undefined>undefined],
-    druckauftragTyp: [<DruckauftragTyp | undefined>undefined],
-    druckauftragStatus: [<DruckauftragStatus | undefined>undefined],
+    massendruckJobTyp: [<MassendruckJobTyp | undefined>undefined],
+    massendruckJobStatus: [<MassendruckJobStatus | undefined>undefined],
   });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
-  availableTypes = Object.values(DruckauftragTyp);
-  availableStatus = Object.values(DruckauftragStatus);
+  availableTypes = Object.values(MassendruckJobTyp);
+  availableStatus = Object.values(MassendruckJobStatus);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
-  showViewSig = computed<GetDruckauftraegeQueryType>(() => {
+  showViewSig = computed<GetMassendruckJobQueryType>(() => {
     const show = this.show();
-    return show ?? GetDruckauftraegeQueryType.ALLE;
+    return show ?? GetMassendruckJobQueryType.ALLE;
   });
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
 
-  defaultFilter = GetDruckauftraegeQueryType.ALLE;
+  defaultFilter = GetMassendruckJobQueryType.ALLE;
 
   quickFilterForm = this.formBuilder.group({
-    query: [GetDruckauftraegeQueryType.ALLE],
+    query: [GetMassendruckJobQueryType.ALLE],
   });
 
   quickFilters: {
-    typ: GetDruckauftraegeQueryType;
+    typ: GetMassendruckJobQueryType;
     icon: string;
   }[] = [
     {
@@ -178,14 +178,15 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   ];
 
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
-    'druckauftragStatus',
-    'druckauftragTyp',
+    'massendruckJobStatus',
+    'massendruckJobTyp',
   ]);
 
   druckzentrumDataSourceSig = computed(() => {
     const druckauftraege =
-      this.druckauftragStore.cachedDruckauftragListViewSig().druckauftraege
-        ?.entries ?? [];
+      this.massendruckStore.paginatedMassendruckListViewSig()
+        ?.paginatedMassendruckJobs?.entries ?? [];
+
     const dataSource = new MatTableDataSource(druckauftraege);
     return dataSource;
   });
@@ -204,8 +205,8 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   // loading = computed(() => false);
   totalEntriesSig = computed(() => {
     return (
-      this.druckauftragStore.cachedDruckauftragListViewSig().druckauftraege
-        ?.totalEntries ?? 0
+      this.massendruckStore.paginatedMassendruckListViewSig()
+        ?.paginatedMassendruckJobs?.totalEntries ?? 0
     );
   });
 
@@ -260,8 +261,8 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
     effect(() => {
       const { query, filter } = this.getInputs();
 
-      this.druckauftragStore.getAllDruckauftraege$({
-        getDruckauftraegeQueryType: query,
+      this.massendruckStore.loadPaginatedMassendruckJobs$({
+        getMassendruckJobs: query,
         ...filter,
         ...getSortAndPageInputs(this),
       });
@@ -274,11 +275,11 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
   private getInputs() {
     const query = this.showViewSig();
     const filter = {
-      batchName: this.batchName(),
-      bearbeiter: this.bearbeiter(),
+      massendruckJobNumber: this.massendruckJobNumber(),
+      userErstellt: this.userErstellt(),
       timestampErstellt: this.timestampErstellt(),
-      druckauftragStatus: this.druckauftragStatus(),
-      druckauftragTyp: this.druckauftragTyp(),
+      massendruckJobStatus: this.massendruckJobStatus(),
+      massendruckJobTyp: this.massendruckJobTyp(),
     };
 
     return {
@@ -289,7 +290,7 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
 }
 
 const createQuery = <
-  T extends Partial<DruckenServiceGetAllDruckauftraegeRequestParams>,
+  T extends Partial<MassendruckServiceGetAllMassendruckJobsRequestParams>,
 >(
   query: T,
 ) => query;

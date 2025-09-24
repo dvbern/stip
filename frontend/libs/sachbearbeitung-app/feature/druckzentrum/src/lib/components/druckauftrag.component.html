@@ -40,7 +40,7 @@
 
     <div class="tw:my-6">
       <div class="tw:dv-table tw:relative">
-        <div [class.opacity-50]="druckauftragStore.druckEntryViewSig().loading">
+        <div [class.opacity-50]="massendruckStore.paginatedMassendruckListViewSig().loading">
           <!-- filter form (header filters) -->
           <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
             <table
@@ -89,7 +89,7 @@
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
                   class="tw:w-24 tw:whitespace-nowrap"
                 >
-                  <mat-checkbox [checked]="item.versendet" disabled></mat-checkbox>
+                  <mat-checkbox [checked]="item.isVersendet" disabled></mat-checkbox>
                 </td>
               </ng-container>
 
@@ -117,9 +117,9 @@
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="item.gesuch"
+                  [dvTruncateTooltip]="item.gesuchNummer"
                 >
-                  {{ item.gesuch }}
+                  {{ item.gesuchNummer }}
                 </td>
               </ng-container>
 
@@ -154,7 +154,7 @@
               </ng-container>
 
               <!-- Adressat: A non sortable, non searchable column -->
-              <ng-container matColumnDef="Adressat">
+              <!-- <ng-container matColumnDef="Adressat">
                 <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
                   {{ 'sachbearbeitung-app.druckauftrag.table.adressat' | transloco }}
                 </th>
@@ -162,11 +162,11 @@
                   mat-cell
                   *dvMatCellDef="let item; dataSource: druckauftragDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="item.adressat"
+                  [dvTruncateTooltip]="item.elternTyp ? item.elternTyp + ' - ' : ''"
                 >
-                  {{ item.adressat }}
+                  {{ item.elternTyp }}
                 </td>
-              </ng-container>
+              </ng-container> -->
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr
@@ -192,7 +192,7 @@
             ></mat-paginator>
           </form>
         </div>
-        @if (druckauftragStore.druckEntryViewSig().loading) {
+        @if (massendruckStore.massendruckViewSig().loading) {
           <dv-shared-ui-loading
             class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"
