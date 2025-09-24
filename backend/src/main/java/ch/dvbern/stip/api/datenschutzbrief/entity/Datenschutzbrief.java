@@ -20,10 +20,7 @@ package ch.dvbern.stip.api.datenschutzbrief.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-<<<<<<< HEAD
-=======
 import jakarta.persistence.CascadeType;
->>>>>>> 8b7424d80 (feat(KSTIP-2663): implement the creation and updating of Datenschutzbrief)
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,7 +62,6 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private DatenschutzbriefEmpfaenger datenschutzbriefEmpfaenger;
 
-<<<<<<< HEAD
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
@@ -77,15 +73,7 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     private String vorname;
 
     @NotNull
-    @JoinColumn(
-        name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_datenschutzbrief_gesuch_id"),
-        nullable = false
-    )
-    @ManyToOne(fetch = FetchType.LAZY)
-=======
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_datenschutzbrief_gesuch_id"))
->>>>>>> 8b7424d80 (feat(KSTIP-2663): implement the creation and updating of Datenschutzbrief)
     private Gesuch gesuch;
 }
