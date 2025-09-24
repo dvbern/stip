@@ -203,9 +203,6 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "pending_sap_action")
     private BuchhaltungType pendingSapAction;
 
-    @OneToMany(mappedBy = "gesuch", cascade = CascadeType.ALL)
-    private List<Datenschutzbrief> datenschutzbriefs = new ArrayList<>();
-
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()
             .filter(t -> t.getId().equals(id))
