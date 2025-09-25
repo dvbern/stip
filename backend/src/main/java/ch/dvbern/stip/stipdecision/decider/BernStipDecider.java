@@ -232,8 +232,10 @@ public class BernStipDecider extends BaseStipDecider {
             if (noElternInBern == noEltern) {
                 return StipDeciderResult.GESUCH_VALID;
             }
-
-            return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN;
+            if (noElternInBern == 0) {
+                return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN;
+            }
+            return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN;
         }
 
         private static boolean piaHasSchweizerBuergerrecht(final GesuchTranche gesuchTranche) {
