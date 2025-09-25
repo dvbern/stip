@@ -457,6 +457,32 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToBereitFuerBearbeitung
+  /gesuch/status/datenschutzbrief-druckbereit/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToDatenschutzbriefDruckbereit
   /gesuch/status/verfuegt/{gesuchTrancheId}:
     post:
       tags:
@@ -4664,8 +4690,10 @@ components:
       enum:
         - ABKLAERUNG_DURCH_RECHSTABTEILUNG
         - VERFUEGT
-        - VERSANDBEREIT
-        - VERSENDET
+        - VERFUEGUNG_DRUCKBEREIT
+        - VERFUEGUNG_AM_GENERIEREN
+        - VERFUEGUNG_VERSANDBEREIT
+        - VERFUEGUNG_VERSENDET
         - WARTEN_AUF_UNTERSCHRIFTENBLATT
         - IN_BEARBEITUNG_SB
         - IN_FREIGABE
@@ -4682,6 +4710,9 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
         - NEGATIVE_VERFUEGUNG
+        - DATENSCHUTZBRIEF_DRUCKBEREIT
+        - DATENSCHUTZBRIEF_AM_GENERIEREN
+        - DATENSCHUTZBRIEF_VERSANDBEREIT
       type: string
     GetMassendruckJobQueryType:
       enum:

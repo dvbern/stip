@@ -20,6 +20,7 @@
   "sachbearbeitung-app.header.status-uebergang.STATUS_PRUEFUNG_AUSLOESEN": "Manuelle Anspruchsprüfung",
   "sachbearbeitung-app.header.status-uebergang.VERFUEGT": "Verfügt",
   "sachbearbeitung-app.header.status-uebergang.VERSENDET": "Verfügung versendet",
+  "sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT": "Datenschutzbrief Druckbereit",
   "sachbearbeitung-app.header.status-uebergang.disabled-reason.DOKUMENTE_OFFEN": "Es sind noch nicht überprüfte Dokumente vorhanden.",
   "sachbearbeitung-app.header.status-uebergang.disabled-reason.VALIDIERUNG_FEHLER": "Das Gesuch enthält noch Fehler.",
   "sachbearbeitung-app.header.status-uebergang.disabled-reason.CANNOT_NEGATIV_VERFUEGEN": "Das Gesuch kann aktuell nicht negativ verfügt werden.",

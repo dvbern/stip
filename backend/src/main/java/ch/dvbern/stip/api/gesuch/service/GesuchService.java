@@ -51,6 +51,8 @@ import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
+import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
@@ -188,6 +190,7 @@ public class GesuchService {
     private final VerfuegungService verfuegungService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
+    private final DatenschutzbriefService datenschutzbriefService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -498,6 +501,7 @@ public class GesuchService {
         statusprotokollService.deleteAllByGesuchId(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
+        gesuch.getDatenschutzbriefs().clear();
 
         if (ausbildung.getGesuchs().isEmpty()) {
             ausbildungRepository.delete(ausbildung);
@@ -616,11 +620,31 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        final GesuchStatusChangeEvent changeEvent;
+        if (gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG) {
+            if (haveAllDatenschutzbriefeBeenSent(gesuch)) {
+                changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+            } else {
+                changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
+            }
+        } else {
+            changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        }
+
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
-            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            changeEvent,
             kommentar,
             false
+        );
+    }
+
+    @Transactional
+    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(
+            gesuch,
+            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT
         );
     }
 
@@ -628,6 +652,8 @@ public class GesuchService {
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);
+        // todo kstip-2663: move setting of verfuegt flag to a statuschangehandler again
+        gesuch.setVerfuegt(true);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
 
@@ -639,7 +665,7 @@ public class GesuchService {
         }
 
         if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(gesuch)) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSANDBEREIT);
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(
                 gesuch,
@@ -649,9 +675,22 @@ public class GesuchService {
     }
 
     @Transactional
+    public void changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
+    }
+
+    @Transactional
+    public void changeGesuchStatusToVerfuegungAmGenerieren(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        verfuegungService.createVerfuegung(gesuchId);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
+    }
+
+    @Transactional
     public void gesuchStatusToVersendet(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERSENDET);
+        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
     }
 
     @Transactional
@@ -770,7 +809,7 @@ public class GesuchService {
 
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
-            GesuchStatusChangeEvent.VERSANDBEREIT
+            GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT
         );
     }
 
@@ -1288,5 +1327,9 @@ public class GesuchService {
         gesuchRepository.persistAndFlush(gesuch);
 
         return gesuchMapperUtil.mapWithTranche(gesuch, gesuchTranche);
+    }
+
+    public boolean haveAllDatenschutzbriefeBeenSent(final Gesuch gesuch) {
+        return gesuch.getDatenschutzbriefs().stream().allMatch(Datenschutzbrief::isVersendet);
     }
 }

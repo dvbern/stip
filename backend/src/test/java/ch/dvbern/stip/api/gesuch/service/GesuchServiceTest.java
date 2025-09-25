@@ -1149,7 +1149,7 @@ class GesuchServiceTest {
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
-            Gesuchstatus.VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
@@ -1170,7 +1170,7 @@ class GesuchServiceTest {
     @TestAsSachbearbeiter
     @Test
     void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {
-        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGUNG_VERSENDET);
         gesuch.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
@@ -1185,7 +1185,7 @@ class GesuchServiceTest {
     @TestAsSachbearbeiter
     @Test
     void changeGesuchstatusFromVersendetToStipendienanspruch() {
-        final var gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSENDET);
+        final var gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGUNG_VERSENDET);
         gesuchOrig.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
         final var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
@@ -1243,11 +1243,11 @@ class GesuchServiceTest {
     @Test
     @Description("It should be possible to change Gesuchstatus from VERSANDBEREIT to VERSENDET")
     void changeGesuchstatus_from_Versandbereit_to_VersendetTest() {
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERSANDBEREIT);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVersendet(gesuch.getId()));
         assertEquals(
-            Gesuchstatus.VERSENDET,
+            Gesuchstatus.VERFUEGUNG_VERSENDET,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
@@ -1842,7 +1842,7 @@ class GesuchServiceTest {
 
         when(decisionService.decide(any())).thenReturn(StipDeciderResult.GESUCH_VALID);
         when(decisionService.getGesuchStatusChangeEvent(any()))
-            .thenReturn(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+            .thenReturn(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
         gesuch.setEinreichedatum(LocalDate.now());
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 

@@ -100,7 +100,8 @@ export type StatusUebergang =
   | 'VERFUEGT'
   | 'VERSENDET'
   | 'NEGATIVE_VERFUEGUNG_ERSTELLEN'
-  | 'STATUS_PRUEFUNG_AUSLOESEN';
+  | 'STATUS_PRUEFUNG_AUSLOESEN'
+  | 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT';
 
 /**
  * A map which contains the possible status transitions for specific gesuch statuses
@@ -110,8 +111,8 @@ export const StatusUebergaengeMap: Partial<
 > = {
   BEREIT_FUER_BEARBEITUNG: ['SET_TO_BEARBEITUNG'],
   ANSPRUCH_MANUELL_PRUEFEN: [
-    'BEREIT_FUER_BEARBEITUNG',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+    'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT',
   ],
   IN_BEARBEITUNG_SB: [
     'BEARBEITUNG_ABSCHLIESSEN',
@@ -119,15 +120,16 @@ export const StatusUebergaengeMap: Partial<
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
   NICHT_ANSPRUCHSBERECHTIGT: [
-    'BEREIT_FUER_BEARBEITUNG',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
+    'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT',
   ],
   ABKLAERUNG_DURCH_RECHSTABTEILUNG: [
     'ANSPRUCH_PRUEFEN',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
   IN_FREIGABE: ['VERFUEGT', 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'],
-  VERSANDBEREIT: ['VERSENDET'],
+  VERFUEGUNG_DRUCKBEREIT: ['VERSENDET'],
+  DATENSCHUTZBRIEF_DRUCKBEREIT: ['BEREIT_FUER_BEARBEITUNG'],
 };
 
 type StatusUebergangOption = {
@@ -239,6 +241,14 @@ export const StatusUebergaengeOptions: Record<
       icon: 'check_circle',
       titleKey: 'STATUS_PRUEFUNG_AUSLOESEN',
       typ: 'STATUS_PRUEFUNG_AUSLOESEN',
+      allowedFor: ['V0_Sachbearbeiter'],
+      disabledReason: undefined,
+    }) as const,
+  SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: () =>
+    ({
+      icon: 'description',
+      titleKey: 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT',
+      typ: 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,

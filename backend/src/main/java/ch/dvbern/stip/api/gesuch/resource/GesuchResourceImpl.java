@@ -146,7 +146,7 @@ public class GesuchResourceImpl implements GesuchResource {
             gesuchId,
             ausgewaehlterGrundDto
         );
-        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
+        gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -541,6 +541,16 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
 
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
+    }
+
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
+    @Override
+    public GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(gesuchId);
+        gesuchService.gesuchStatusToDatenschutzbriefDruckbereit(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 

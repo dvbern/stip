@@ -18,8 +18,9 @@
 package ch.dvbern.stip.api.datenschutzbrief.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -57,25 +58,22 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     private boolean isVersendet = false;
 
     @NotNull
-    @Column(name = "eltern_typ", nullable = false)
+    @Column(name = "datenschutzbrief_empfaenger", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ElternTyp elternTyp;
+    private DatenschutzbriefEmpfaenger datenschutzbriefEmpfaenger;
 
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String nachname;
+    private String nachname; // TODO KSTIP-2685: Check how to use this, on the fly or "cached" like now?
 
     @NotBlank(message = VALIDATION_VORNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String vorname;
+    private String vorname; // TODO KSTIP-2685: Check how to use this, on the fly or "cached" like now?
 
     @NotNull
-    @JoinColumn(
-        name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_datenschutzbrief_gesuch_id"),
-        nullable = false
-    )
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_datenschutzbrief_gesuch_id"))
     private Gesuch gesuch;
 }
