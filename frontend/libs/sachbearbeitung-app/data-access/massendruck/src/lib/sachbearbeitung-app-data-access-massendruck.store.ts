@@ -4,10 +4,16 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
+  MassendruckDatenschutzbrief,
+  MassendruckJob,
   MassendruckJobDetail,
   MassendruckService,
+  MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams,
   MassendruckServiceGetAllMassendruckJobsRequestParams,
   MassendruckServiceGetMassendruckJobDetailRequestParams,
+  MassendruckServiceMassendruckDatenschutzbriefVersendenRequestParams,
+  MassendruckServiceMassendruckVerfuegungVersendenRequestParams,
+  MassendruckVerfuegung,
   PaginatedMassendruckJob,
 } from '@dv/shared/model/gesuch';
 import {
@@ -22,13 +28,17 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type MassendruckState = {
+  createMassendruckJobForQueryTypeReq: RemoteData<MassendruckJob>;
   paginatedMassendruckJobs: CachedRemoteData<PaginatedMassendruckJob>;
   massendruckJobDetail: RemoteData<MassendruckJobDetail>;
+  versendenReq: RemoteData<MassendruckDatenschutzbrief | MassendruckVerfuegung>;
 };
 
 const initialState: MassendruckState = {
+  createMassendruckJobForQueryTypeReq: initial(),
   paginatedMassendruckJobs: initial(),
   massendruckJobDetail: initial(),
+  versendenReq: initial(),
 };
 
 @Injectable()
@@ -53,6 +63,28 @@ export class MassendruckStore extends signalStore(
       loading: isPending(this.massendruckJobDetail()),
     };
   });
+
+  createMassendruckJobForQueryType$ =
+    rxMethod<MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, () => ({
+            createMassendruckJobForQueryTypeReq: pending(),
+          }));
+        }),
+        switchMap((requestParams) =>
+          this.massendruckService
+            .createMassendruckJobForQueryType$(requestParams)
+            .pipe(
+              handleApiResponse((massendruckJob) =>
+                patchState(this, {
+                  createMassendruckJobForQueryTypeReq: massendruckJob,
+                }),
+              ),
+            ),
+        ),
+      ),
+    );
 
   loadPaginatedMassendruckJobs$ =
     rxMethod<MassendruckServiceGetAllMassendruckJobsRequestParams>(
@@ -90,6 +122,46 @@ export class MassendruckStore extends signalStore(
             .pipe(
               handleApiResponse((massendruckJobDetail) =>
                 patchState(this, { massendruckJobDetail }),
+              ),
+            ),
+        ),
+      ),
+    );
+
+  massendruckDatenschutzbriefVersenden$ =
+    rxMethod<MassendruckServiceMassendruckDatenschutzbriefVersendenRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, () => ({
+            versendenReq: pending(),
+          }));
+        }),
+        switchMap((requestParams) =>
+          this.massendruckService
+            .massendruckDatenschutzbriefVersenden$(requestParams)
+            .pipe(
+              handleApiResponse((datenschutzbrief) =>
+                patchState(this, { versendenReq: datenschutzbrief }),
+              ),
+            ),
+        ),
+      ),
+    );
+
+  massendruckVerfuegungVersenden$ =
+    rxMethod<MassendruckServiceMassendruckVerfuegungVersendenRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, () => ({
+            versendenReq: pending(),
+          }));
+        }),
+        switchMap((requestParams) =>
+          this.massendruckService
+            .massendruckVerfuegungVersenden$(requestParams)
+            .pipe(
+              handleApiResponse((verfuegung) =>
+                patchState(this, { versendenReq: verfuegung }),
               ),
             ),
         ),
