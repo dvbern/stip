@@ -25,7 +25,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import {
+  ElternTyp,
   MassendruckDatenschutzbrief,
+  MassendruckJobDetail,
   MassendruckVerfuegung,
 } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
@@ -43,6 +45,17 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+
+type TableItems = { adressat: ElternTyp | 'PIA' } & (
+  | MassendruckDatenschutzbrief
+  | MassendruckVerfuegung
+);
+
+// const isDatenschutzbrief = (
+//   item: TableItems,
+// ): item is MassendruckDatenschutzbrief => {
+//   return (item as MassendruckDatenschutzbrief).elternTyp !== undefined;
+// };
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-massendruck-detail',
@@ -83,7 +96,11 @@ export class MassendruckDetailComponent {
   massendruckStore = inject(MassendruckStore);
   formBuilder = inject(FormBuilder);
 
-  druckEntryId = input<string | undefined>(undefined);
+  id = input<string | undefined>(undefined);
+
+  constructor() {
+    console.log('MassendruckDetailComponent constructor', this.id());
+  }
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -96,9 +113,36 @@ export class MassendruckDetailComponent {
     gesuch: [''],
   });
 
-  druckauftragDataSourceSig = computed(() => {
-    return new MatTableDataSource<
-      MassendruckDatenschutzbrief | MassendruckVerfuegung
-    >([]);
+  massendruckDetailDataSourceSig = computed(() => {
+    const { massendruckJob } = this.massendruckStore.massendruckViewSig();
+
+    return this.genereateFilteredDataSource(massendruckJob);
   });
+
+  private genereateFilteredDataSource(
+    massendruckJobDetail: MassendruckJobDetail | undefined,
+  ) {
+    if (!massendruckJobDetail) {
+      return new MatTableDataSource<TableItems>([]);
+    }
+
+    let data: TableItems[] = [];
+
+    if (massendruckJobDetail.massendruckJobTyp === 'DATENSCHUTZBRIEF') {
+      data =
+        massendruckJobDetail.datenschutzbriefMassendrucks?.map((i) => {
+          return {
+            ...i,
+            adressat: i.elternTyp,
+          };
+        }) ?? [];
+    } else {
+      data =
+        massendruckJobDetail.verfuegungMassendrucks?.map((i) => {
+          return { ...i, adressat: 'PIA' };
+        }) ?? [];
+    }
+
+    return new MatTableDataSource<TableItems>(data);
+  }
 }

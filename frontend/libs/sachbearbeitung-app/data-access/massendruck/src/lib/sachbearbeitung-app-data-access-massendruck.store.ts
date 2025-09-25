@@ -4,7 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
-  MassendruckJob,
+  MassendruckJobDetail,
   MassendruckService,
   MassendruckServiceGetAllMassendruckJobsRequestParams,
   MassendruckServiceGetMassendruckJobDetailRequestParams,
@@ -23,12 +23,12 @@ import {
 
 type MassendruckState = {
   paginatedMassendruckJobs: CachedRemoteData<PaginatedMassendruckJob>;
-  massendruckJob: RemoteData<MassendruckJob>;
+  massendruckJobDetail: RemoteData<MassendruckJobDetail>;
 };
 
 const initialState: MassendruckState = {
   paginatedMassendruckJobs: initial(),
-  massendruckJob: initial(),
+  massendruckJobDetail: initial(),
 };
 
 @Injectable()
@@ -49,8 +49,8 @@ export class MassendruckStore extends signalStore(
 
   massendruckViewSig = computed(() => {
     return {
-      massendruckJob: this.massendruckJob(),
-      loading: isPending(this.massendruckJob()),
+      massendruckJob: fromCachedDataSig(this.massendruckJobDetail),
+      loading: isPending(this.massendruckJobDetail()),
     };
   });
 
@@ -81,15 +81,15 @@ export class MassendruckStore extends signalStore(
       pipe(
         tap(() => {
           patchState(this, () => ({
-            massendruckJob: pending(),
+            massendruckJobDetail: pending(),
           }));
         }),
         switchMap((requestParams) =>
           this.massendruckService
             .getMassendruckJobDetail$(requestParams)
             .pipe(
-              handleApiResponse((massendruckJob) =>
-                patchState(this, { massendruckJob }),
+              handleApiResponse((massendruckJobDetail) =>
+                patchState(this, { massendruckJobDetail }),
               ),
             ),
         ),
