@@ -12,21 +12,6 @@
             <column name="datenschutzbrief_empfaenger" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758707653970-4">
-        <addColumn tableName="datenschutzbrief">
-            <column name="gesuch_id" type="UUID">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
-    <changeSet author="? (generated)" id="1758707653970-5">
-        <addColumn tableName="datenschutzbrief_aud">
-            <column name="gesuch_id" type="UUID"/>
-        </addColumn>
-    </changeSet>
-    <changeSet author="? (generated)" id="1758707653970-9">
-        <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="datenschutzbrief" constraintName="FK_datenschutzbrief_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
-    </changeSet>
     <changeSet author="? (generated)" id="1758707653970-26">
         <dropColumn columnName="eltern_typ" tableName="datenschutzbrief"/>
     </changeSet>
