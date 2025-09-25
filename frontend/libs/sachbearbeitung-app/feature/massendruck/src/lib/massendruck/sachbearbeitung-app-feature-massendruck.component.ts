@@ -66,7 +66,7 @@ import {
 import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-druckzentrum',
+  selector: 'dv-sachbearbeitung-app-feature-massendruck',
   imports: [
     A11yModule,
     CommonModule,
@@ -94,11 +94,11 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiIconChipComponent,
   ],
-  templateUrl: './sachbearbeitung-app-feature-druckzentrum.component.html',
-  styleUrl: './sachbearbeitung-app-feature-druckzentrum.component.scss',
+  templateUrl: './sachbearbeitung-app-feature-massendruck.component.html',
+  styleUrl: './sachbearbeitung-app-feature-massendruck.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureDruckzentrumComponent {
+export class SachbearbeitungAppFeatureMassendruckComponent {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private formBuilder = inject(NonNullableFormBuilder);
@@ -182,7 +182,7 @@ export class SachbearbeitungAppFeatureDruckzentrumComponent {
     'massendruckJobTyp',
   ]);
 
-  druckzentrumDataSourceSig = computed(() => {
+  massendruckDataSourceSig = computed(() => {
     const druckauftraege =
       this.massendruckStore.paginatedMassendruckListViewSig()
         ?.paginatedMassendruckJobs?.entries ?? [];

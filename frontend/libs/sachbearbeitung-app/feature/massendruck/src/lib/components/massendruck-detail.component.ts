@@ -45,9 +45,9 @@ import {
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-druckzentrum-druckauftrag',
-  templateUrl: './druckauftrag.component.html',
-  styleUrls: ['./druckauftrag.component.scss'],
+  selector: 'dv-sachbearbeitung-app-feature-massendruck-detail',
+  templateUrl: './massendruck-detail.component.html',
+  styleUrls: ['./massendruck-detail.component.scss'],
   imports: [
     A11yModule,
     CommonModule,
@@ -77,7 +77,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
     SharedUiDownloadButtonDirective,
   ],
 })
-export class DruckauftragComponent {
+export class MassendruckDetailComponent {
   displayedColumns = ['Versendet', 'Gesuch', 'Nachname', 'Vorname', 'Adressat'];
 
   massendruckStore = inject(MassendruckStore);

@@ -9,7 +9,7 @@
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
           class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
-          [attr.data-testid]="'druckzentrum-quick-filter-' + quickFilter.typ"
+          [attr.data-testid]="'massendruck-quick-filter-' + quickFilter.typ"
           [class.btn-danger]="radio.checked"
           [class.btn-light]="!radio.checked"
         >
@@ -18,7 +18,7 @@
           </dv-shared-ui-icon-chip>
           <div class="tw:text-start tw:leading-4 flex-grow-1">
             <span class="fw-bold fs-7 mb-0">
-              {{ 'sachbearbeitung-app.druckzentrum.quick-filter.' + quickFilter.typ | transloco }}
+              {{ 'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco }}
             </span>
             <input
               #radio
@@ -28,18 +28,18 @@
               labelPosition="before"
               formControlName="query"
               [value]="quickFilter.typ"
-              [attr.aria-label]="'sachbearbeitung-app.druckzentrum.quick-filter.' + quickFilter.typ | transloco"
+              [attr.aria-label]="'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco"
             />
           </div>
         </button>
       }
     </div>
-    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="druckzentrum-title">
-      {{ 'sachbearbeitung-app.druckzentrum.title' | transloco }}
+    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-title">
+      {{ 'sachbearbeitung-app.massendruck.title' | transloco }}
     </h1>
     <!-- link for development: go to detail view -->
     <div class="tw:mb-6">
-      <a class="btn btn-primary" [routerLink]="['/druckzentrum', 'druckauftrag', '1']"
+      <a class="btn btn-primary" [routerLink]="['/massendruck', 'druckauftrag', '1']"
         >Go to detail view (for development)</a
       >
     </div>
@@ -51,8 +51,8 @@
             <table
               class="tw:w-full tw:table-fixed"
               [dvSharedUiFocusableList]="items"
-              [dataSource]="druckzentrumDataSourceSig()"
-              data-testid="sachbearbeitung-app.druckzentrum.table"
+              [dataSource]="massendruckDataSourceSig()"
+              data-testid="sachbearbeitung-app.massendruck.table"
               mat-table
               matSort
               (matSortChange)="sortList($event)"
@@ -60,14 +60,14 @@
             >
               <caption class="cdk-visually-hidden">
                 {{
-                  'sachbearbeitung-app.druckzentrum.table.description' | transloco
+                  'sachbearbeitung-app.massendruck.table.description' | transloco
                 }}
               </caption>
 
               <ng-container matColumnDef="JOB_NUMBER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   <label for="massendruckJobNumber">{{
-                    'sachbearbeitung-app.druckzentrum.table.massendruckJobNumber' | transloco
+                    'sachbearbeitung-app.massendruck.table.massendruckJobNumber' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field class="tw:w-full">
@@ -88,7 +88,7 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.massendruckJobNumber.toString()"
                 >
@@ -99,7 +99,7 @@
               <ng-container matColumnDef="USER_ERSTELLT">
                 <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
                   <label for="userErstellt">{{
-                    'sachbearbeitung-app.druckzentrum.table.userErstellt' | transloco
+                    'sachbearbeitung-app.massendruck.table.userErstellt' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field class="tw:w-full">
@@ -120,7 +120,7 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.userErstellt"
                 >
@@ -138,7 +138,7 @@
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="timestampErstellt">{{
-                    'sachbearbeitung-app.druckzentrum.table.timestampErstellt' | transloco
+                    'sachbearbeitung-app.massendruck.table.timestampErstellt' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -174,7 +174,7 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                   class="tw:whitespace-nowrap"
                 >
                   {{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
@@ -183,22 +183,22 @@
 
               <ng-container matColumnDef="STATUS">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                  {{ 'sachbearbeitung-app.druckzentrum.table.status' | transloco }}
+                  {{ 'sachbearbeitung-app.massendruck.table.status' | transloco }}
                   <mat-form-field>
                     <mat-select
-                      [aria-label]="'sachbearbeitung-app.druckzentrum.table.status' | transloco"
+                      [aria-label]="'sachbearbeitung-app.massendruck.table.status' | transloco"
                       formControlName="massendruckJobStatus"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
                       panelClass="table-select"
-                      [placeholder]="'sachbearbeitung-app.druckzentrum.table.status.filter.alle' | transloco"
+                      [placeholder]="'sachbearbeitung-app.massendruck.table.status.filter.alle' | transloco"
                     >
                       <mat-option [value]="null">{{
-                        'sachbearbeitung-app.druckzentrum.table.status.filter.alle' | transloco
+                        'sachbearbeitung-app.massendruck.table.status.filter.alle' | transloco
                       }}</mat-option>
                       @for (status of availableStatus; track status) {
                         <mat-option [value]="status">{{
-                          'sachbearbeitung-app.druckzentrum.table.status.filter.' + status | transloco
+                          'sachbearbeitung-app.massendruck.table.status.filter.' + status | transloco
                         }}</mat-option>
                       }
                     </mat-select>
@@ -206,31 +206,31 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
-                  {{ 'sachbearbeitung-app.druckzentrum.table.status.filter.' + item.massendruckJobStatus | transloco }}
+                  {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + item.massendruckJobStatus | transloco }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="TYP">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                  {{ 'sachbearbeitung-app.druckzentrum.table.typ' | transloco }}
+                  {{ 'sachbearbeitung-app.massendruck.table.typ' | transloco }}
                   <mat-form-field>
                     <mat-select
-                      [aria-label]="'sachbearbeitung-app.druckzentrum.table.typ' | transloco"
+                      [aria-label]="'sachbearbeitung-app.massendruck.table.typ' | transloco"
                       formControlName="massendruckJobTyp"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
                       panelClass="table-select"
-                      [placeholder]="'sachbearbeitung-app.druckzentrum.table.typ.filter.alle' | transloco"
+                      [placeholder]="'sachbearbeitung-app.massendruck.table.typ.filter.alle' | transloco"
                     >
                       <mat-option [value]="null">{{
-                        'sachbearbeitung-app.druckzentrum.table.typ.filter.alle' | transloco
+                        'sachbearbeitung-app.massendruck.table.typ.filter.alle' | transloco
                       }}</mat-option>
                       @for (typ of availableTypes; track typ) {
                         <mat-option [value]="typ">{{
-                          'sachbearbeitung-app.druckzentrum.table.typ.filter.' + typ | transloco
+                          'sachbearbeitung-app.massendruck.table.typ.filter.' + typ | transloco
                         }}</mat-option>
                       }
                     </mat-select>
@@ -238,10 +238,10 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let item; dataSource: druckzentrumDataSourceSig()"
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
-                  {{ 'sachbearbeitung-app.druckzentrum.table.typ.filter.' + item.massendruckJobTyp | transloco }}
+                  {{ 'sachbearbeitung-app.massendruck.table.typ.filter.' + item.massendruckJobTyp | transloco }}
                 </td>
               </ng-container>
 
@@ -250,7 +250,7 @@
                 dvSharedUiFocusableListItem
                 mat-row
                 tabindex="-1"
-                *dvMatRowDef="let item; dataSource: druckzentrumDataSourceSig(); columns: displayedColumns"
+                *dvMatRowDef="let item; dataSource: massendruckDataSourceSig(); columns: displayedColumns"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

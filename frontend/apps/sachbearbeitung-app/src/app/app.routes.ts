@@ -58,12 +58,12 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'druckzentrum',
-        title: 'sachbearbeitung-app.druckzentrum.title',
+        path: 'massendruck',
+        title: 'sachbearbeitung-app.massendruck.title',
         providers: [MassendruckStore],
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/druckzentrum').then(
-            (m) => m.sachbearbeitungAppFeatureDruckzentrumRoutes,
+          import('@dv/sachbearbeitung-app/feature/massendruck').then(
+            (m) => m.sachbearbeitungAppFeatureMassendruckRoutes,
           ),
       },
       {
