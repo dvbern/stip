@@ -30,6 +30,7 @@ public class GesuchInfoDto  implements Serializable {
   private @Valid Boolean beschwerdeHaengig;
   private @Valid Boolean canTriggerManuellPruefen;
   private @Valid Boolean canChangeGesuchsperiode;
+  private @Valid Boolean canDownloadDatenschutzbrief;
 
   /**
    **/
@@ -202,6 +203,25 @@ public class GesuchInfoDto  implements Serializable {
     this.canChangeGesuchsperiode = canChangeGesuchsperiode;
   }
 
+  /**
+   **/
+  public GesuchInfoDto canDownloadDatenschutzbrief(Boolean canDownloadDatenschutzbrief) {
+    this.canDownloadDatenschutzbrief = canDownloadDatenschutzbrief;
+    return this;
+  }
+
+  
+  @JsonProperty("canDownloadDatenschutzbrief")
+  @NotNull
+  public Boolean getCanDownloadDatenschutzbrief() {
+    return canDownloadDatenschutzbrief;
+  }
+
+  @JsonProperty("canDownloadDatenschutzbrief")
+  public void setCanDownloadDatenschutzbrief(Boolean canDownloadDatenschutzbrief) {
+    this.canDownloadDatenschutzbrief = canDownloadDatenschutzbrief;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -220,12 +240,13 @@ public class GesuchInfoDto  implements Serializable {
         Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
         Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
         Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen) &&
-        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode);
+        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode) &&
+        Objects.equals(this.canDownloadDatenschutzbrief, gesuchInfo.canDownloadDatenschutzbrief);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode, canDownloadDatenschutzbrief);
   }
 
   @Override
@@ -242,6 +263,7 @@ public class GesuchInfoDto  implements Serializable {
     sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
+    sb.append("    canDownloadDatenschutzbrief: ").append(toIndentedString(canDownloadDatenschutzbrief)).append("\n");
     sb.append("}");
     return sb.toString();
   }

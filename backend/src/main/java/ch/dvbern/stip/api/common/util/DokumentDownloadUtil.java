@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.io.ByteArrayOutputStream;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,16 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @UtilityClass
 public class DokumentDownloadUtil {
+    public RestMulti<ByteArrayOutputStream> getWrapedDokument(
+        final String fileName,
+        final Supplier<CompletionStage<ByteArrayOutputStream>> supplier
+    ) {
+        return RestMulti.fromUniResponse(
+            Uni.createFrom()
+                .completionStage(supplier.get()),
+            response -> Multi.createFrom().completionStage(supplier.get())
+        );
+    }
 
     public RestMulti<Buffer> getDokument(
         final S3AsyncClient s3,

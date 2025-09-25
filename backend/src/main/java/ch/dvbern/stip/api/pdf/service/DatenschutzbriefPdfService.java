@@ -24,11 +24,13 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 
-public class DatenschutzbriefService {
+@ApplicationScoped
+public class DatenschutzbriefPdfService {
     public ByteArrayOutputStream createDatenschutzbriefForElternteil(final Eltern elternteil) {
         final var out = new ByteArrayOutputStream();
 
