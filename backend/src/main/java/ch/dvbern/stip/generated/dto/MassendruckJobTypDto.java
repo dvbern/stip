@@ -8,23 +8,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets DruckauftraegeColumn
+ * Gets or Sets MassendruckJobTyp
  */
-public enum DruckauftraegeColumnDto {
+public enum MassendruckJobTypDto {
   
-  BATCH_NAME("BATCH_NAME"),
+  DATENSCHUTZBRIEF("DATENSCHUTZBRIEF"),
   
-  BEARBEITER("BEARBEITER"),
-  
-  ERSTELLT_AM("ERSTELLT_AM"),
-  
-  STATUS("STATUS"),
-  
-  TYP("TYP");
+  VERFUEGUNG("VERFUEGUNG");
 
   private String value;
 
-  DruckauftraegeColumnDto(String value) {
+  MassendruckJobTypDto(String value) {
     this.value = value;
   }
 
@@ -32,8 +26,8 @@ public enum DruckauftraegeColumnDto {
      * Convert a String into String, as specified in the
      * <a href="https://download.oracle.com/otndocs/jcp/jaxrs-2_0-fr-eval-spec/index.html">See JAX RS 2.0 Specification, section 3.2, p. 12</a>
      */
-	public static DruckauftraegeColumnDto fromString(String s) {
-      for (DruckauftraegeColumnDto b : DruckauftraegeColumnDto.values()) {
+	public static MassendruckJobTypDto fromString(String s) {
+      for (MassendruckJobTypDto b : MassendruckJobTypDto.values()) {
         // using Objects.toString() to be safe if value type non-object type
         // because types like 'int' etc. will be auto-boxed
         if (java.util.Objects.toString(b.value).equals(s)) {
@@ -50,8 +44,8 @@ public enum DruckauftraegeColumnDto {
   }
 
   @JsonCreator
-  public static DruckauftraegeColumnDto fromValue(String value) {
-    for (DruckauftraegeColumnDto b : DruckauftraegeColumnDto.values()) {
+  public static MassendruckJobTypDto fromValue(String value) {
+    for (MassendruckJobTypDto b : MassendruckJobTypDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

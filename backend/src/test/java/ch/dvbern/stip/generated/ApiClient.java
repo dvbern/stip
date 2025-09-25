@@ -60,9 +60,6 @@ public class ApiClient {
     public DokumentApiSpec dokument() {
         return DokumentApiSpec.dokument(config.reqSpecSupplier);
     }
-    public DruckenApiSpec drucken() {
-        return DruckenApiSpec.drucken(config.reqSpecSupplier);
-    }
     public FallApiSpec fall() {
         return FallApiSpec.fall(config.reqSpecSupplier);
     }
@@ -83,6 +80,9 @@ public class ApiClient {
     }
     public LandApiSpec land() {
         return LandApiSpec.land(config.reqSpecSupplier);
+    }
+    public MassendruckApiSpec massendruck() {
+        return MassendruckApiSpec.massendruck(config.reqSpecSupplier);
     }
     public NotificationApiSpec notification() {
         return NotificationApiSpec.notification(config.reqSpecSupplier);

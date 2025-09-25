@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DruckauftragDto;
+import ch.dvbern.stip.generated.dto.MassendruckJobDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,20 +17,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("PaginatedDruckauftraege")
+@JsonTypeName("PaginatedMassendruckJob")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class PaginatedDruckauftraegeDto  implements Serializable {
+public class PaginatedMassendruckJobDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
-  private @Valid List<DruckauftragDto> entries;
+  private @Valid List<MassendruckJobDto> entries;
 
   /**
    **/
-  public PaginatedDruckauftraegeDto page(Integer page) {
+  public PaginatedMassendruckJobDto page(Integer page) {
     this.page = page;
     return this;
   }
@@ -48,7 +48,7 @@ public class PaginatedDruckauftraegeDto  implements Serializable {
 
   /**
    **/
-  public PaginatedDruckauftraegeDto pageSize(Integer pageSize) {
+  public PaginatedMassendruckJobDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -66,7 +66,7 @@ public class PaginatedDruckauftraegeDto  implements Serializable {
 
   /**
    **/
-  public PaginatedDruckauftraegeDto totalEntries(Integer totalEntries) {
+  public PaginatedMassendruckJobDto totalEntries(Integer totalEntries) {
     this.totalEntries = totalEntries;
     return this;
   }
@@ -84,23 +84,23 @@ public class PaginatedDruckauftraegeDto  implements Serializable {
 
   /**
    **/
-  public PaginatedDruckauftraegeDto entries(List<DruckauftragDto> entries) {
+  public PaginatedMassendruckJobDto entries(List<MassendruckJobDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<DruckauftragDto> getEntries() {
+  public List<MassendruckJobDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<DruckauftragDto> entries) {
+  public void setEntries(List<MassendruckJobDto> entries) {
     this.entries = entries;
   }
 
-  public PaginatedDruckauftraegeDto addEntriesItem(DruckauftragDto entriesItem) {
+  public PaginatedMassendruckJobDto addEntriesItem(MassendruckJobDto entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -109,7 +109,7 @@ public class PaginatedDruckauftraegeDto  implements Serializable {
     return this;
   }
 
-  public PaginatedDruckauftraegeDto removeEntriesItem(DruckauftragDto entriesItem) {
+  public PaginatedMassendruckJobDto removeEntriesItem(MassendruckJobDto entriesItem) {
     if (entriesItem != null && this.entries != null) {
       this.entries.remove(entriesItem);
     }
@@ -125,11 +125,11 @@ public class PaginatedDruckauftraegeDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PaginatedDruckauftraegeDto paginatedDruckauftraege = (PaginatedDruckauftraegeDto) o;
-    return Objects.equals(this.page, paginatedDruckauftraege.page) &&
-        Objects.equals(this.pageSize, paginatedDruckauftraege.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedDruckauftraege.totalEntries) &&
-        Objects.equals(this.entries, paginatedDruckauftraege.entries);
+    PaginatedMassendruckJobDto paginatedMassendruckJob = (PaginatedMassendruckJobDto) o;
+    return Objects.equals(this.page, paginatedMassendruckJob.page) &&
+        Objects.equals(this.pageSize, paginatedMassendruckJob.pageSize) &&
+        Objects.equals(this.totalEntries, paginatedMassendruckJob.totalEntries) &&
+        Objects.equals(this.entries, paginatedMassendruckJob.entries);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class PaginatedDruckauftraegeDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PaginatedDruckauftraegeDto {\n");
+    sb.append("class PaginatedMassendruckJobDto {\n");
     
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
