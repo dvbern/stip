@@ -65,12 +65,12 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String nachname;
+    private String nachname; // TODO KSTIP-2685: Check how to use this, on the fly or "cached" like now?
 
     @NotBlank(message = VALIDATION_VORNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String vorname;
+    private String vorname; // TODO KSTIP-2685: Check how to use this, on the fly or "cached" like now?
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST })

@@ -18,11 +18,13 @@
 package ch.dvbern.stip.api.datenschutzbrief.service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
 import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
@@ -49,9 +51,13 @@ public class DatenschutzbriefService {
         final var requiredEmpfaenger =
             getRequiredDatenschutzbriefEmpfaenger(trancheToUse.getGesuchFormular().getFamiliensituation());
         for (final var empfaengerToCreate : requiredEmpfaenger) {
+            final var empfaenger =
+                getElternDatenschutzbriefEmpfaenger(trancheToUse.getGesuchFormular().getElterns(), empfaengerToCreate);
             final var datenschutzbrief = new Datenschutzbrief()
                 .setVersendet(false)
                 .setDatenschutzbriefEmpfaenger(empfaengerToCreate)
+                .setVorname(empfaenger.getVorname())
+                .setNachname(empfaenger.getNachname())
                 .setGesuch(gesuch);
 
             gesuch.getDatenschutzbriefs().add(datenschutzbrief);
@@ -60,7 +66,7 @@ public class DatenschutzbriefService {
         }
     }
 
-    public List<DatenschutzbriefEmpfaenger> getRequiredDatenschutzbriefEmpfaenger(
+    private List<DatenschutzbriefEmpfaenger> getRequiredDatenschutzbriefEmpfaenger(
         final Familiensituation familiensituation
     ) {
         return steuerdatenTabBerechnungsService.calculateTabs(familiensituation)
@@ -69,7 +75,13 @@ public class DatenschutzbriefService {
             .toList();
     }
 
-    public void deleteDatenschutzbriefe(final UUID gesuchId) {
-        datenschutzbriefRepository.deleteAllByGesuchId(gesuchId);
+    private Eltern getElternDatenschutzbriefEmpfaenger(Set<Eltern> eltern, DatenschutzbriefEmpfaenger empfaengerTyp) {
+        final var prioritizedEltern = switch (empfaengerTyp) {
+            case VATER -> eltern.stream().filter(e -> e.getElternTyp() == ElternTyp.VATER);
+            case MUTTER -> eltern.stream().filter(e -> e.getElternTyp() == ElternTyp.MUTTER);
+            default -> eltern.stream();
+        };
+
+        return prioritizedEltern.findFirst().orElseThrow(IllegalStateException::new);
     }
 }
