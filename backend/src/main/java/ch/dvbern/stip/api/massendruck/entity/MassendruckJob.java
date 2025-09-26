@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.massendruck.type.DruckauftragTyp;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,10 +56,10 @@ public class MassendruckJob extends AbstractMandantEntity {
     private int massendruckJobNumber;
 
     @Transient
-    public DruckauftragTyp getMassendruckTyp() {
+    public MassendruckJobTyp getMassendruckTyp() {
         if (!datenschutzbriefMassendrucks.isEmpty()) {
-            return DruckauftragTyp.DATENSCHUTZBRIEF;
+            return MassendruckJobTyp.DATENSCHUTZBRIEF;
         }
-        return DruckauftragTyp.VERFUEGUNG;
+        return MassendruckJobTyp.VERFUEGUNG;
     }
 }

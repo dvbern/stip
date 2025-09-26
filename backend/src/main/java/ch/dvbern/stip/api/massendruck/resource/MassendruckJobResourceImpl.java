@@ -24,14 +24,14 @@ import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import ch.dvbern.stip.generated.api.MassendruckResource;
-import ch.dvbern.stip.generated.dto.GetMassendruckJobQueryTypeDto;
 import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
-import ch.dvbern.stip.generated.dto.MassendruckJobStatusDto;
-import ch.dvbern.stip.generated.dto.MassendruckJobTypDto;
 import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -51,12 +51,14 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
 
     @Override
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
-        GetMassendruckJobQueryTypeDto getMassendruckJobs,
+        GetMassendruckJobQueryType getMassendruckJobs,
+        Integer page,
+        Integer pageSize,
         String massendruckJobNumber,
         String userErstellt,
         LocalDate timestampErstellt,
-        MassendruckJobStatusDto massendruckJobStatus,
-        MassendruckJobTypDto massendruckJobTyp,
+        MassendruckJobStatus massendruckJobStatus,
+        MassendruckJobTyp massendruckJobTyp,
         MassendruckJobSortColumn sortColumn,
         SortOrder sortOrder
     ) {

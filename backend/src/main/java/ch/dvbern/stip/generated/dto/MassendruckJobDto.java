@@ -1,7 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.MassendruckJobStatusDto;
-import ch.dvbern.stip.generated.dto.MassendruckJobTypDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -26,8 +24,8 @@ public class MassendruckJobDto  implements Serializable {
   private @Valid Integer massendruckJobNumber;
   private @Valid String userErstellt;
   private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid MassendruckJobStatusDto massendruckJobStatus;
-  private @Valid MassendruckJobTypDto massendruckJobTyp;
+  private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
+  private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp;
 
   /**
    **/
@@ -107,7 +105,7 @@ public class MassendruckJobDto  implements Serializable {
 
   /**
    **/
-  public MassendruckJobDto massendruckJobStatus(MassendruckJobStatusDto massendruckJobStatus) {
+  public MassendruckJobDto massendruckJobStatus(ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus) {
     this.massendruckJobStatus = massendruckJobStatus;
     return this;
   }
@@ -115,18 +113,18 @@ public class MassendruckJobDto  implements Serializable {
   
   @JsonProperty("massendruckJobStatus")
   @NotNull
-  public MassendruckJobStatusDto getMassendruckJobStatus() {
+  public ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus getMassendruckJobStatus() {
     return massendruckJobStatus;
   }
 
   @JsonProperty("massendruckJobStatus")
-  public void setMassendruckJobStatus(MassendruckJobStatusDto massendruckJobStatus) {
+  public void setMassendruckJobStatus(ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus) {
     this.massendruckJobStatus = massendruckJobStatus;
   }
 
   /**
    **/
-  public MassendruckJobDto massendruckJobTyp(MassendruckJobTypDto massendruckJobTyp) {
+  public MassendruckJobDto massendruckJobTyp(ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp) {
     this.massendruckJobTyp = massendruckJobTyp;
     return this;
   }
@@ -134,12 +132,12 @@ public class MassendruckJobDto  implements Serializable {
   
   @JsonProperty("massendruckJobTyp")
   @NotNull
-  public MassendruckJobTypDto getMassendruckJobTyp() {
+  public ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp getMassendruckJobTyp() {
     return massendruckJobTyp;
   }
 
   @JsonProperty("massendruckJobTyp")
-  public void setMassendruckJobTyp(MassendruckJobTypDto massendruckJobTyp) {
+  public void setMassendruckJobTyp(ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp) {
     this.massendruckJobTyp = massendruckJobTyp;
   }
 

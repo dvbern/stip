@@ -185,6 +185,8 @@ public class MassendruckApiSpec {
      * 
      *
      * @see #getMassendruckJobsPath  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
      * @see #massendruckJobNumberQuery  (optional)
      * @see #userErstelltQuery  (optional)
      * @see #timestampErstelltQuery  (optional)
@@ -314,6 +316,28 @@ public class MassendruckApiSpec {
          */
         public GetAllMassendruckJobsOper sortOrderQuery(Object... sortOrder) {
             reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetAllMassendruckJobsOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetAllMassendruckJobsOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
             return this;
         }
 
