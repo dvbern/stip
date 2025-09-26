@@ -31,7 +31,6 @@ import ch.dvbern.stip.generated.api.DatenschutzbriefResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
-import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -49,36 +48,20 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     @Blocking
     @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER })
     @Override
-    public RestMulti<Buffer> getDatenschutzbrief(String token) {
-        // final var dokumentId = DokumentDownloadUtil.getClaimId(
-        // jwtParser,
-        // token,
-        // configService.getSecret(),
-        // DokumentDownloadConstants.DOKUMENT_ID_CLAIM
-        // );
-        //
-        // return datenschutzbriefService.getDatenschutzbriefDokument(dokumentId);
-        var file = dummy(token);
-        return null;
-    }
-
-    private RestMulti<ByteArrayOutputStream> dummy(String token) {
-        final var dokumentId = DokumentDownloadUtil.getClaimId(
+    public RestMulti<ByteArrayOutputStream> getDatenschutzbrief(String token) {
+        final var elternId = DokumentDownloadUtil.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
 
-        return datenschutzbriefService.getDatenschutzbriefDokument(dokumentId);
+        return datenschutzbriefService.getDatenschutzbriefDokument(elternId);
     }
 
     @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER })
     @Override
     public FileDownloadTokenDto getDatenschutzbriefDownloadToken(UUID elternId) {
-        // todo: authorizer
-        // todo: use elternId to find eltern & correct dokument
-        // datenschutzAuthorizer.canDownloadDatenschutzbrief;
         return DokumentDownloadUtil.getFileDownloadToken(
             elternId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,

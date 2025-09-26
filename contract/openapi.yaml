@@ -2662,7 +2662,7 @@ paths:
           description: Datenschutzbrief File returned
       operationId: getDatenschutzbrief
       summary: get Datenschutzbrief
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream>
   '/datenschutzbrief/{elternId}/token':
     parameters:
       - name: elternId

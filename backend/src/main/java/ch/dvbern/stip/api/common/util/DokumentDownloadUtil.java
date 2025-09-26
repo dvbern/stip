@@ -37,6 +37,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -53,11 +54,24 @@ public class DokumentDownloadUtil {
         final String fileName,
         final Supplier<CompletionStage<ByteArrayOutputStream>> supplier
     ) {
+
         return RestMulti.fromUniResponse(
-            Uni.createFrom()
-                .completionStage(supplier.get()),
-            response -> Multi.createFrom().completionStage(supplier.get())
+            Uni.createFrom().completionStage(supplier.get()),
+            s -> Multi.createFrom().completionStage(supplier.get()),
+            s -> Map.of(
+                "Content-Disposition",
+                List.of("attachment;filename=" + fileName),
+                "Content-Type",
+                List.of("application/octet-stream")
+            ),
+            s -> Response.Status.OK.getStatusCode()
         );
+
+        // return RestMulti.fromUniResponse(
+        // Uni.createFrom()
+        // .completionStage(supplier.get()),
+        // response -> Multi.createFrom().completionStage(supplier.get())
+        // );
     }
 
     public RestMulti<Buffer> getDokument(
