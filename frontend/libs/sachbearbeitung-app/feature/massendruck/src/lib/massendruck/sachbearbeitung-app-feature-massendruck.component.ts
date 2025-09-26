@@ -29,6 +29,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { MaskitoDirective } from '@maskito/angular';
 
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
@@ -54,6 +55,7 @@ import {
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { maskitoNumber } from '@dv/shared/util/maskito-util';
 import {
   getSortAndPageInputs,
   limitPageToNumberOfEntriesEffect,
@@ -93,6 +95,7 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     TypeSafeMatRowDefDirective,
     SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiIconChipComponent,
+    MaskitoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-massendruck.component.html',
   styleUrl: './sachbearbeitung-app-feature-massendruck.component.scss',
@@ -103,10 +106,12 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
   private route = inject(ActivatedRoute);
   private formBuilder = inject(NonNullableFormBuilder);
 
+  maskitoNumber = maskitoNumber;
+
   massendruckStore = inject(MassendruckStore);
 
   show = input<GetMassendruckJobQueryType | undefined>(undefined);
-  massendruckJobNumber = input<string | undefined>(undefined);
+  massendruckJobNumber = input<number | undefined>(undefined);
   userErstellt = input<string | undefined>(undefined);
   timestampErstellt = input<string | undefined>(undefined);
   massendruckJobStatus = input<MassendruckJobStatus | undefined>(undefined);
@@ -129,7 +134,7 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
   displayedColumns = Object.keys(MassendruckJobSortColumn);
 
   filterForm = this.formBuilder.group({
-    massendruckJobNumber: [<string | undefined>undefined],
+    massendruckJobNumber: [<number | undefined>undefined],
     userErstellt: [<string | undefined>undefined],
     timestampErstellt: [<Date | undefined>undefined],
     massendruckJobTyp: [<MassendruckJobTyp | undefined>undefined],
@@ -227,6 +232,8 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
         timestampErstellt: formValue.timestampErstellt
           ? toBackendLocalDate(formValue.timestampErstellt)
           : undefined,
+        page: 0,
+        pageSize: 10,
       });
 
       this.router.navigate(['.'], {
