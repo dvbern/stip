@@ -620,15 +620,11 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final GesuchStatusChangeEvent changeEvent;
-        if (gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG) {
-            if (haveAllDatenschutzbriefeBeenSent(gesuch)) {
-                changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
-            } else {
-                changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
-            }
-        } else {
-            changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        if (
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG && !haveAllDatenschutzbriefeBeenSent(gesuch)
+        ) {
+            changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
         gesuchStatusService.triggerStateMachineEventWithComment(
