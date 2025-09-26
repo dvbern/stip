@@ -245,7 +245,7 @@ public class MassendruckApiSpec {
         public static final String MASSENDRUCK_JOB_NUMBER_QUERY = "massendruckJobNumber";
 
         /**
-         * @param massendruckJobNumber (String)  (optional)
+         * @param massendruckJobNumber (Integer)  (optional)
          * @return operation
          */
         public GetAllMassendruckJobsOper massendruckJobNumberQuery(Object... massendruckJobNumber) {

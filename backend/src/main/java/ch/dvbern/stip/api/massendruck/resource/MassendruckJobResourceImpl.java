@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.massendruck.service.MassendruckJobService;
 import ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
@@ -42,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class MassendruckJobResourceImpl implements MassendruckResource {
     private final MassendruckJobAuthorizer authorizer;
+    private final MassendruckJobService massendruckJobService;
 
     @Override
     public MassendruckJobDto createMassendruckJobForQueryType(GetGesucheSBQueryType getGesucheSBQueryType) {
@@ -54,7 +56,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         GetMassendruckJobQueryType getMassendruckJobs,
         Integer page,
         Integer pageSize,
-        String massendruckJobNumber,
+        Integer massendruckJobNumber,
         String userErstellt,
         LocalDate timestampErstellt,
         MassendruckJobStatus massendruckJobStatus,
@@ -63,7 +65,18 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         SortOrder sortOrder
     ) {
         authorizer.permitAll();
-        return null;
+        return massendruckJobService.getAllMassendruckJobs(
+            getMassendruckJobs,
+            page,
+            pageSize,
+            massendruckJobNumber,
+            userErstellt,
+            timestampErstellt,
+            massendruckJobStatus,
+            massendruckJobTyp,
+            sortColumn,
+            sortOrder
+        );
     }
 
     @Override
