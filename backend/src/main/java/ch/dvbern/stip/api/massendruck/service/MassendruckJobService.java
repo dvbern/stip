@@ -34,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MassendruckJobService {
     private final MassendruckJobQueryBuilder massendruckJobQueryBuilder;
+    private final MassendruckJobMapper massendruckJobMapper;
     private final ConfigService configService;
 
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
@@ -79,6 +80,10 @@ public class MassendruckJobService {
             massendruckJobQueryBuilder.massendruckJobType(baseQuery, massendruckJobTyp);
         }
 
+        // Creating the count query must happen before ordering,
+        // otherwise the ordered column must appear in a GROUP BY clause or be used in an aggregate function
+        final var countQuery = massendruckJobQueryBuilder.getCountQuery(baseQuery);
+
         if (sortColumn != null && sortOrder != null) {
             massendruckJobQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
         } else {
@@ -87,6 +92,16 @@ public class MassendruckJobService {
 
         massendruckJobQueryBuilder.paginate(baseQuery, page, pageSize);
 
-        return null;
+        // This needs to be 2 statements, as streaming over the result and mapping directly throws a JDBC Exception
+        // Likely because 'getMassendruckTyp' can reach back out to the DB
+        final var entities = baseQuery.stream().toList();
+        final var results = entities.stream().map(massendruckJobMapper::toDto).toList();
+
+        return new PaginatedMassendruckJobDto(
+            page,
+            results.size(),
+            Math.toIntExact(countQuery.fetchOne()),
+            results
+        );
     }
 }

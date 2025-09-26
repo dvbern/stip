@@ -35,6 +35,7 @@ import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
 import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
+import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -52,6 +53,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     }
 
     @Override
+    @PermitAll
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
         GetMassendruckJobQueryType getMassendruckJobs,
         Integer page,

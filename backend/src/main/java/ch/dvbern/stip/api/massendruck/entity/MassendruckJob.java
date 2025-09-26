@@ -33,6 +33,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -40,6 +42,8 @@ import jakarta.validation.constraints.NotNull;
     indexes = { @Index(name = "IX_massendruck_mandant", columnList = "mandant")
     }
 )
+@Getter
+@Setter
 public class MassendruckJob extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "massendruckJob")
     private List<DatenschutzbriefMassendruck> datenschutzbriefMassendrucks = new ArrayList<>();
@@ -49,6 +53,7 @@ public class MassendruckJob extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    // TODO KSTIP-2294: Add a column annotation to this (shouldn't require a new migration)
     private MassendruckJobStatus status;
 
     @NotNull

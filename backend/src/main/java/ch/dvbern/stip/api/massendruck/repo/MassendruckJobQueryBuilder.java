@@ -111,6 +111,10 @@ public class MassendruckJobQueryBuilder {
         query.orderBy(orderSpecifier);
     }
 
+    public JPAQuery<Long> getCountQuery(final JPAQuery<MassendruckJob> query) {
+        return query.clone().select(massendruckJob.count());
+    }
+
     public void defaultOrder(final JPAQuery<MassendruckJob> query) {
         query.orderBy(massendruckJob.timestampErstellt.desc());
     }
