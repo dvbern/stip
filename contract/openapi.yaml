@@ -7940,7 +7940,7 @@ components:
       in: query
       name: massendruckJobNumber
       schema:
-        type: string
+        type: integer
     MassendruckJobTyp:
       in: query
       name: massendruckJobTyp
