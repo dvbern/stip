@@ -81,7 +81,7 @@ public class GesuchValidatorService {
             Stream.of(Default.class),
             Stream.concat(
                 destinationValidationGroups.getOrDefault(transition.getDestination(), List.of()).stream(),
-                originValidationGroups.getOrDefault(transition.getDestination(), List.of()).stream()
+                originValidationGroups.getOrDefault(toValidate.getGesuchStatus(), List.of()).stream()
             )
         ).toList();
         ValidatorUtil.validate(validator, toValidate, validationGroups);
