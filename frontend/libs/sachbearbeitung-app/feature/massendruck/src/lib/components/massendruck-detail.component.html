@@ -92,7 +92,11 @@
                   *dvMatCellDef="let item; dataSource: massendruckDetailDataSourceSig()"
                   class="tw:w-24 tw:whitespace-nowrap"
                 >
-                  <mat-checkbox [checked]="item.isVersendet" disabled></mat-checkbox>
+                  <mat-checkbox
+                    [checked]="item.isVersendet"
+                    [disabled]="item.isVersendet || massendruckStore.versendenReqViewSig().loading"
+                    (click)="$event.stopPropagation(); setMasendruckJobVersendet(item)"
+                  ></mat-checkbox>
                 </td>
               </ng-container>
 

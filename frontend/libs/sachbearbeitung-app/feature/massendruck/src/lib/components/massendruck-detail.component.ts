@@ -5,6 +5,7 @@ import {
   QueryList,
   ViewChildren,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
@@ -46,16 +47,10 @@ import {
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
-type TableItems = { adressat: ElternTyp | 'PIA' } & (
+type TableItem = { adressat: ElternTyp | 'PIA' } & (
   | MassendruckDatenschutzbrief
   | MassendruckVerfuegung
 );
-
-// const isDatenschutzbrief = (
-//   item: TableItems,
-// ): item is MassendruckDatenschutzbrief => {
-//   return (item as MassendruckDatenschutzbrief).elternTyp !== undefined;
-// };
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-massendruck-detail',
@@ -99,7 +94,30 @@ export class MassendruckDetailComponent {
   id = input<string | undefined>(undefined);
 
   constructor() {
-    console.log('MassendruckDetailComponent constructor', this.id());
+    effect(() => {
+      const id = this.id();
+      if (id) {
+        this.massendruckStore.loadMassendruckJob$({ massendruckJobId: id });
+      }
+    });
+  }
+
+  setMasendruckJobVersendet(item: TableItem) {
+    if (item.isVersendet) {
+      return;
+    }
+
+    if ('elternTyp' in item) {
+      // Datenschutzbrief
+      this.massendruckStore.massendruckDatenschutzbriefVersenden$({
+        massendruckDatenschutzbriefId: item.id,
+      });
+    } else {
+      // Verfügung
+      this.massendruckStore.massendruckVerfuegungVersenden$({
+        massendruckVerfuegungId: item.id,
+      });
+    }
   }
 
   pageSizes = PAGE_SIZES;
@@ -123,10 +141,10 @@ export class MassendruckDetailComponent {
     massendruckJobDetail: MassendruckJobDetail | undefined,
   ) {
     if (!massendruckJobDetail) {
-      return new MatTableDataSource<TableItems>([]);
+      return new MatTableDataSource<TableItem>([]);
     }
 
-    let data: TableItems[] = [];
+    let data: TableItem[] = [];
 
     if (massendruckJobDetail.massendruckJobTyp === 'DATENSCHUTZBRIEF') {
       data =
@@ -143,6 +161,6 @@ export class MassendruckDetailComponent {
         }) ?? [];
     }
 
-    return new MatTableDataSource<TableItems>(data);
+    return new MatTableDataSource<TableItem>(data);
   }
 }

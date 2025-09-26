@@ -40,6 +40,7 @@ import {
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -190,6 +191,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
+  massendruckStore = inject(MassendruckStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   show = input<GesuchFilter | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
@@ -426,7 +428,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
     return this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
   });
 
-  canStartMassendruckSig: Signal<boolean> = computed(() => {
+  canCreateMassendruckSig: Signal<boolean> = computed(() => {
     const quickFilter = this.show();
     const isQuickfilterDruck = quickFilter?.includes('DRUCKBAR');
     this.filterFormChangedSig();
@@ -434,8 +436,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
     if (!isQuickfilterDruck) {
       return false;
     }
-
-    console.log(this.filterForm.getRawValue());
 
     const hasEntries = (this.totalEntriesSig() ?? 0) > 0;
     const hasFilters = Object.entries(this.filterForm.getRawValue())
@@ -450,6 +450,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     return hasEntries && !hasFilters;
   });
+
+  createMassendruckJobForQueryType$() {
+    this.massendruckStore.createMassendruckJobForQueryType$({
+      req: { getGesucheSBQueryType: this.showViewSig() },
+      onSuccess: () => {
+        this.router.navigate(['/massendruck']);
+      },
+    });
+  }
 
   constructor() {
     limitPageToNumberOfEntriesEffect(

@@ -23,7 +23,9 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isFailure,
   isPending,
+  mapData,
   pending,
 } from '@dv/shared/util/remote-data';
 
@@ -64,27 +66,41 @@ export class MassendruckStore extends signalStore(
     };
   });
 
-  createMassendruckJobForQueryType$ =
-    rxMethod<MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, () => ({
-            createMassendruckJobForQueryTypeReq: pending(),
-          }));
-        }),
-        switchMap((requestParams) =>
-          this.massendruckService
-            .createMassendruckJobForQueryType$(requestParams)
-            .pipe(
-              handleApiResponse((massendruckJob) =>
-                patchState(this, {
-                  createMassendruckJobForQueryTypeReq: massendruckJob,
-                }),
-              ),
-            ),
+  versendenReqViewSig = computed(() => {
+    return {
+      loading: isPending(this.versendenReq()),
+    };
+  });
+
+  createMassendruckLoadingSig = computed(() => {
+    return isPending(this.createMassendruckJobForQueryTypeReq());
+  });
+
+  createMassendruckJobForQueryType$ = rxMethod<{
+    req: MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          createMassendruckJobForQueryTypeReq: pending(),
+        }));
+      }),
+      switchMap(({ req, onSuccess }) =>
+        this.massendruckService.createMassendruckJobForQueryType$(req).pipe(
+          handleApiResponse(
+            (massendruckJob) =>
+              patchState(this, {
+                createMassendruckJobForQueryTypeReq: massendruckJob,
+              }),
+            {
+              onSuccess,
+            },
+          ),
         ),
       ),
-    );
+    ),
+  );
 
   loadPaginatedMassendruckJobs$ =
     rxMethod<MassendruckServiceGetAllMassendruckJobsRequestParams>(
@@ -140,8 +156,36 @@ export class MassendruckStore extends signalStore(
           this.massendruckService
             .massendruckDatenschutzbriefVersenden$(requestParams)
             .pipe(
-              handleApiResponse((datenschutzbrief) =>
-                patchState(this, { versendenReq: datenschutzbrief }),
+              handleApiResponse((datenschutzbriefResult) =>
+                patchState(this, (state) => ({
+                  versendenReq: datenschutzbriefResult,
+                  massendruckJobDetail: mapData(
+                    state.massendruckJobDetail,
+                    (detail) => {
+                      if (
+                        !detail.datenschutzbriefMassendrucks ||
+                        isFailure(datenschutzbriefResult)
+                      ) {
+                        return detail;
+                      }
+
+                      return {
+                        ...detail,
+                        datenschutzbriefMassendrucks:
+                          detail.datenschutzbriefMassendrucks.map((b) => {
+                            if (b.id === datenschutzbriefResult.data.id) {
+                              return {
+                                ...b,
+                                ...datenschutzbriefResult.data,
+                              };
+                            }
+
+                            return b;
+                          }),
+                      };
+                    },
+                  ),
+                })),
               ),
             ),
         ),
@@ -161,7 +205,35 @@ export class MassendruckStore extends signalStore(
             .massendruckVerfuegungVersenden$(requestParams)
             .pipe(
               handleApiResponse((verfuegung) =>
-                patchState(this, { versendenReq: verfuegung }),
+                patchState(this, (state) => ({
+                  versendenReq: verfuegung,
+                  massendruckJobDetail: mapData(
+                    state.massendruckJobDetail,
+                    (detail) => {
+                      if (
+                        !detail.verfuegungMassendrucks ||
+                        isFailure(verfuegung)
+                      ) {
+                        return detail;
+                      }
+
+                      return {
+                        ...detail,
+                        verfuegungMassendrucks:
+                          detail.verfuegungMassendrucks.map((v) => {
+                            if (v.id === verfuegung.data.id) {
+                              return {
+                                ...v,
+                                ...verfuegung.data,
+                              };
+                            }
+
+                            return v;
+                          }),
+                      };
+                    },
+                  ),
+                })),
               ),
             ),
         ),

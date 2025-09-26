@@ -17,12 +17,12 @@
             <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
           </dv-shared-ui-icon-chip>
           <div class="tw:text-start tw:leading-4 flex-grow-1">
-            <span class="fw-bold fs-7 mb-0">
+            <span class="tw:font-semibold tw:mb-0">
               {{ 'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco }}
             </span>
             <input
               #radio
-              class="fs-7 cdk-visually-hidden"
+              class="cdk-visually-hidden"
               type="radio"
               name="query"
               labelPosition="before"
@@ -39,7 +39,7 @@
     </h1>
     <!-- link for development: go to detail view -->
     <div class="tw:mb-6">
-      <a class="btn btn-primary" [routerLink]="['/massendruck', 'druckauftrag', '1']"
+      <a class="btn btn-primary" [routerLink]="['/massendruck', 'druckauftrag', 'some-id-123']"
         >Go to detail view (for development)</a
       >
     </div>
