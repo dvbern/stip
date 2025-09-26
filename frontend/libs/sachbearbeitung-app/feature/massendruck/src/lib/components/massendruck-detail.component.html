@@ -2,41 +2,56 @@
   @let massendruck = massendruckStore.massendruckViewSig().massendruckJob;
 
   <div class="container">
-    <!-- todo: loading und titel! i a better way -->
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
-      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}
+      @if (massendruck) {
+        <span>
+          {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.' + massendruck?.massendruckJobTyp | transloco }}
+        </span>
+        <span> &nbsp;{{ massendruck?.massendruckJobNumber }} </span>
+      }
+      <span>
+        {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.VERFUEGUNG' | transloco }}
+      </span>
     </h1>
 
-    <div class="tw:flex tw:items-center tw:justify-between">
-      <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
-        <!-- userErstellt -->
-        <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.userErstellt' | transloco }}</dt>
-        <dd class="tw:text-sm/none">{{ massendruck?.userErstellt }}</dd>
+    <div class="tw:flex tw:items-center tw:min-h-24 tw:justify-between tw:relative">
+      @if (massendruck) {
+        <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
+          <!-- userErstellt -->
+          <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.userErstellt' | transloco }}</dt>
+          <dd class="tw:text-sm/none">{{ massendruck?.userErstellt }}</dd>
 
-        <!-- Datum -->
-        <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.timestampErstellt' | transloco }}</dt>
-        <dd>{{ massendruck?.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+          <!-- Datum -->
+          <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.timestampErstellt' | transloco }}</dt>
+          <dd>{{ massendruck?.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
 
-        <!-- status -->
-        <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.status' | transloco }}</dt>
-        <dd>
-          {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + massendruck?.massendruckJobStatus | transloco }}
-        </dd>
-      </dl>
+          <!-- status -->
+          <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.status' | transloco }}</dt>
+          <dd>
+            {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + massendruck?.massendruckJobStatus | transloco }}
+          </dd>
+        </dl>
 
-      <!-- download button -->
-      <div>
-        <button
-          type="button"
-          class="btn btn-link tw:p-0"
-          [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
-        >
-          <div class="material-symbols-rounded tw:text-4xl!">download</div>
-          <div class="">
-            {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
-          </div>
-        </button>
-      </div>
+        <!-- todo: implement api call when available download button -->
+        <div>
+          <button
+            type="button"
+            class="btn btn-link tw:p-0"
+            [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
+          >
+            <div class="material-symbols-rounded tw:text-4xl!">download</div>
+            <div class="">
+              {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
+            </div>
+          </button>
+        </div>
+      }
+      @if (massendruckStore.massendruckViewSig().loading) {
+        <dv-shared-ui-loading
+          class="position-absolute translate-middle start-50 top-50"
+          [type]="'compact'"
+        ></dv-shared-ui-loading>
+      }
     </div>
 
     <div class="tw:my-6">

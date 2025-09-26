@@ -17,7 +17,6 @@
       </h1>
 
       <!-- button verfuegungen oder datenschutzbriefe genereiern -->
-      <!-- todo: could be with loading spinner -->
       @if (canCreateMassendruckSig()) {
         <button
           [disabled]="massendruckStore.createMassendruckLoadingSig()"

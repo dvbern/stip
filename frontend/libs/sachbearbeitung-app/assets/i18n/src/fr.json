@@ -439,6 +439,8 @@
   "sachbearbeitung-app.massendruck-detail.title": "Ordre d'impression",
   "sachbearbeitung-app.massendruck-detail.userErstellt": "Opérateur:",
   "sachbearbeitung-app.massendruck-detail.timestampErstellt": "Date de commande:",
+  "sachbearbeitung-app.massendruck-detail.massendruckJobTyp.DATENSCHUTZBRIEF": "Lettre de protection des données",
+  "sachbearbeitung-app.massendruck-detail.massendruckJobTyp.VERFUEGUNG": "Décision",
   "sachbearbeitung-app.massendruck-detail.status": "Statut:",
   "sachbearbeitung-app.massendruck-detail.dokument-download": "Télécharger tous les documents",
   "sachbearbeitung-app.massendruck-detail.table.description": "Aperçu de tous les ordres d'impression",

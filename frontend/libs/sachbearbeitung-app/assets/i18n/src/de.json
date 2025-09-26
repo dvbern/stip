@@ -439,6 +439,8 @@
   "sachbearbeitung-app.massendruck-detail.title": "Druckauftrag",
   "sachbearbeitung-app.massendruck-detail.userErstellt": "Bearbeiter:",
   "sachbearbeitung-app.massendruck-detail.timestampErstellt": "Auftragsdatum:",
+  "sachbearbeitung-app.massendruck-detail.massendruckJobTyp.DATENSCHUTZBRIEF": "Datenschutzbrief",
+  "sachbearbeitung-app.massendruck-detail.massendruckJobTyp.VERFUEGUNG": "Verfügung",
   "sachbearbeitung-app.massendruck-detail.status": "Status:",
   "sachbearbeitung-app.massendruck-detail.dokument-download": "Alle Dokumente herunterladen",
   "sachbearbeitung-app.massendruck-detail.table.description": "Übersicht aller Dokumente in diesem Druckauftrag",
