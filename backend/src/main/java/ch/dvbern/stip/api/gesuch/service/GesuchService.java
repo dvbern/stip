@@ -1165,6 +1165,8 @@ public class GesuchService {
             .findFirst()
             .orElseGet(gesuch::getLatestGesuchTranche);
 
+        datenschutzbriefService.deleteDatenschutzbriefeOfGesuch(gesuch.getId());
+
         resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
 
         final var allOtherTranchen = gesuch

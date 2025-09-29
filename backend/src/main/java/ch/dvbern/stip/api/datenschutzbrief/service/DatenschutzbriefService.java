@@ -51,6 +51,7 @@ public class DatenschutzbriefService {
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final ElternService elternService;
 
+    @Transactional
     public RestMulti<ByteArrayOutputStream> getDatenschutzbriefDokument(final UUID elternId) {
         final var elternTeil = elternService.getElternTeilById(elternId);
         final var filename = String.format("datenschutzbrief_%s", elternTeil.getElternTyp().toString());
@@ -60,6 +61,11 @@ public class DatenschutzbriefService {
         final Supplier<CompletionStage<ByteArrayOutputStream>> stageSupplier =
             () -> generateDokumentFuture;
         return DokumentDownloadUtil.getWrapedDokument(filename, stageSupplier);
+    }
+
+    @Transactional
+    public void deleteDatenschutzbriefeOfGesuch(final UUID gesuchId) {
+        datenschutzbriefRepository.deleteAllByGesuchId(gesuchId);
     }
 
     @Transactional

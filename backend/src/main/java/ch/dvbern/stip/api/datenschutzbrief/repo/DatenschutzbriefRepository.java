@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.datenschutzbrief.entity.QDatenschutzbrief;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class DatenschutzbriefRepository implements BaseRepository<Datenschutzbrief> {
     private final EntityManager entityManager;
 
+    @Transactional
     public void deleteAllByGesuchId(final UUID gesuchId) {
         final var datenschuzbrief = QDatenschutzbrief.datenschutzbrief;
 
