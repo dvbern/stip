@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchtranche.util;
+package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-class GesuchTrancheCopyUtilTest {
+class GesuchTrancheCopyServiceTest {
     @ParameterizedTest
     @ArgumentsSource(ClampStartEndTestArgumentsProvider.class)
     void clampStartEndTest(
@@ -43,7 +43,8 @@ class GesuchTrancheCopyUtilTest {
     ) {
         final var range = new DateRange(start, end);
 
-        final var clampedRange = GesuchTrancheCopyUtil.clampStartStop(gesuchsperiodeStart, gesuchsperiodeStopp, range);
+        final var clampedRange =
+            GesuchTrancheCopyService.clampStartStop(gesuchsperiodeStart, gesuchsperiodeStopp, range);
 
         assertThat(clampedRange.getGueltigAb(), is(expectedStart));
         assertThat(clampedRange.getGueltigBis(), is(expectedEnd));

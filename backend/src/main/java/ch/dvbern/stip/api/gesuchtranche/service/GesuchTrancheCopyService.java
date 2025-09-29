@@ -15,79 +15,37 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchtranche.util;
+package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
+import ch.dvbern.stip.api.common.service.EntityCopyMapper;
+import ch.dvbern.stip.api.common.service.EntityOverrideMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.darlehen.util.DarlehenCopyUtil;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
-import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenCopyUtil;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
-import ch.dvbern.stip.api.familiensituation.util.FamiliensituationCopyUtil;
-import ch.dvbern.stip.api.geschwister.util.GeschwisterCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.kind.util.KindCopyUtil;
-import ch.dvbern.stip.api.lebenslauf.util.LebenslaufItemCopyUtil;
-import ch.dvbern.stip.api.partner.util.PartnerCopyUtil;
-import ch.dvbern.stip.api.personinausbildung.util.PersonInAusbildungCopyUtil;
-import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenCopyUtil;
-import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungCopyUtil;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import lombok.Getter;
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_TRANCHE_DATERANGE_TOO_SHORT;
 
-@UtilityClass
+@ApplicationScoped
+@RequiredArgsConstructor
 // TODO KSTIP-1236: Once proper test data generation is in place, test copying
-public class GesuchTrancheCopyUtil {
-    private static DateRange validateAndCreateDateRange(
-        final LocalDate startDate,
-        final LocalDate endDate,
-        final Gesuch gesuch
-    ) {
-        var minStartDate = gesuch
-            .getGesuchTranchen()
-            .stream()
-            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()))
-            .orElseThrow(NotFoundException::new)
-            .getGueltigkeit()
-            .getGueltigAb();
-
-        if (startDate.isBefore(minStartDate)) {
-            throw new BadRequestException("Start date must be inside gesuch date range");
-        }
-
-        var maxEndDate = gesuch
-            .getGesuchTranchen()
-            .stream()
-            .max(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis()))
-            .orElseThrow(
-                NotFoundException::new
-            )
-            .getGueltigkeit()
-            .getGueltigBis();
-
-        if (endDate != null && endDate.isAfter(maxEndDate)) {
-            throw new BadRequestException("End date must be inside gesuch date range");
-        }
-
-        return new DateRange(minStartDate, maxEndDate);
-    }
+public class GesuchTrancheCopyService {
+    private final EntityCopyMapper entityCopyMapper;
+    private final EntityOverrideMapper entityOverrideMapper;
 
     public static DateRange validateAndCreateClampedDateRange(final DateRange gueltigkeit, final Gesuch gesuch) {
         final var maxRange =
@@ -170,17 +128,14 @@ public class GesuchTrancheCopyUtil {
         return newTranche;
     }
 
-    public GesuchTranche createCopy(final GesuchTranche source) {
-        final var copy = new GesuchTranche();
-
-        copy.setGueltigkeit(source.getGueltigkeit());
-        copy.setGesuchFormular(source.getGesuchFormular());
-        copy.setStatus(source.getStatus());
-        copy.setComment(source.getComment());
-        copy.setGesuchDokuments(source.getGesuchDokuments());
-        copy.setTyp(source.getTyp());
-
+    public GesuchFormular copyGesuchFormular(final GesuchFormular original) {
+        final var copy = new GesuchFormular();
+        entityCopyMapper.copyFromTo(original, copy);
         return copy;
+    }
+
+    public void overrideGesuchFormular(final GesuchFormular target, final GesuchFormular source) {
+        entityOverrideMapper.overrideFromTo(source, target);
     }
 
     /**
@@ -210,13 +165,47 @@ public class GesuchTrancheCopyUtil {
         final var newTranche = new GesuchTranche();
         newTranche.setGueltigkeit(createDateRange);
         newTranche.setComment(comment);
-        newTranche.setGesuchFormular(copy(original.getGesuchFormular()));
+        newTranche.setGesuchFormular(copyGesuchFormular(original.getGesuchFormular()));
         newTranche.getGesuchFormular().setTranche(newTranche);
         newTranche.setGesuch(original.getGesuch());
         return newTranche;
     }
 
-    DateRange clampStartStop(
+    private static DateRange validateAndCreateDateRange(
+        final LocalDate startDate,
+        final LocalDate endDate,
+        final Gesuch gesuch
+    ) {
+        var minStartDate = gesuch
+            .getGesuchTranchen()
+            .stream()
+            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()))
+            .orElseThrow(NotFoundException::new)
+            .getGueltigkeit()
+            .getGueltigAb();
+
+        if (startDate.isBefore(minStartDate)) {
+            throw new BadRequestException("Start date must be inside gesuch date range");
+        }
+
+        var maxEndDate = gesuch
+            .getGesuchTranchen()
+            .stream()
+            .max(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigBis()))
+            .orElseThrow(
+                NotFoundException::new
+            )
+            .getGueltigkeit()
+            .getGueltigBis();
+
+        if (endDate != null && endDate.isAfter(maxEndDate)) {
+            throw new BadRequestException("End date must be inside gesuch date range");
+        }
+
+        return new DateRange(minStartDate, maxEndDate);
+    }
+
+    static DateRange clampStartStop(
         final LocalDate startDateBoundary,
         final LocalDate endDateBoundary,
         final DateRange createDateRange
@@ -249,89 +238,5 @@ public class GesuchTrancheCopyUtil {
         );
 
         return new DateRange(startDate, roundedEndDate);
-    }
-
-    public GesuchFormular copy(final GesuchFormular other) {
-        final var copy = new GesuchFormular();
-
-        // PiA und PiA Adresse
-        copy.setPersonInAusbildung(
-            PersonInAusbildungCopyUtil.createCopyIgnoreReferences(other.getPersonInAusbildung())
-        );
-        final var piaAdresseCopy = AdresseCopyUtil.createCopy(other.getPersonInAusbildung().getAdresse());
-        copy.getPersonInAusbildung().setAdresse(piaAdresseCopy);
-
-        // Familiensituation
-        copy.setFamiliensituation(FamiliensituationCopyUtil.createCopy(other.getFamiliensituation()));
-
-        // Partner und Partner Adresse
-        copy.setPartner(PartnerCopyUtil.createCopyIgnoreReferences(other.getPartner()));
-        if (copy.getPartner() != null) {
-            copy.getPartner().setAdresse(AdresseCopyUtil.createCopy(other.getPartner().getAdresse()));
-        }
-
-        // Eltern
-        copy.setElterns(ElternCopyUtil.createCopyOfSetWithoutReferences(other.getElterns()));
-
-        final var elternAdressen = new ElternAdressen();
-        for (final var eltern : copy.getElterns()) {
-            final var adresseCopy = AdresseCopyUtil.createCopy(eltern.getAdresse());
-            elternAdressen.setForTyp(eltern.getElternTyp(), adresseCopy);
-
-            eltern.setAdresse(adresseCopy);
-        }
-
-        // Einnahmen Kosten
-        copy.setEinnahmenKosten(EinnahmenKostenCopyUtil.createCopy(other.getEinnahmenKosten()));
-
-        // Lebenslauf
-        copy.setLebenslaufItems(LebenslaufItemCopyUtil.createCopyOfSet(other.getLebenslaufItems()));
-
-        // Geschwister
-        copy.setGeschwisters(GeschwisterCopyUtil.createCopyOfSet(other.getGeschwisters()));
-
-        // Kinds
-        copy.setKinds(KindCopyUtil.createCopySet(other.getKinds()));
-
-        // Steuererklaerung
-        copy.setSteuererklaerung(SteuererklaerungCopyUtil.createCopySet(other.getSteuererklaerung()));
-
-        // Steuerdaten
-        copy.setSteuerdaten(SteuerdatenCopyUtil.createCopySet(other.getSteuerdaten()));
-
-        // Darlehen
-        copy.setDarlehen(DarlehenCopyUtil.createCopy(other.getDarlehen()));
-
-        return copy;
-    }
-
-    @Getter
-    public class ElternAdressen {
-        private Adresse mutterAdresse;
-        private Adresse vaterAdresse;
-
-        public static ElternAdressen fromGesuchFormular(final GesuchFormular gesuchFormular) {
-            final var elternAdressen = new ElternAdressen();
-            for (final var eltern : gesuchFormular.getElterns()) {
-                elternAdressen.setForTyp(eltern.getElternTyp(), eltern.getAdresse());
-            }
-
-            return elternAdressen;
-        }
-
-        public void setForTyp(final ElternTyp typ, final Adresse adresse) {
-            if (typ == ElternTyp.VATER) {
-                vaterAdresse = adresse;
-            } else if (typ == ElternTyp.MUTTER) {
-                mutterAdresse = adresse;
-            }
-        }
-
-        public Adresse getForTyp(final ElternTyp typ) {
-            return switch (typ) {
-                case VATER -> vaterAdresse;
-                case MUTTER -> mutterAdresse;
-            };
-        }
     }
 }

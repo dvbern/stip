@@ -59,7 +59,6 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.kind.service.KindMapper;
@@ -125,6 +124,7 @@ public class GesuchTrancheService {
     private final GesuchMapperUtil gesuchMapperUtil;
     private final BenutzerService benutzerService;
     private final StatusprotokollService statusprotokollService;
+    private final GesuchTrancheCopyService gesuchTrancheCopyService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -360,7 +360,7 @@ public class GesuchTrancheService {
         final var trancheToCopy = gesuch.getEingereichteGesuchTrancheValidOnDate(aenderungsantragCreateDto.getStart())
             .orElseThrow(NotFoundException::new);
 
-        final var newTranche = GesuchTrancheCopyUtil
+        final var newTranche = gesuchTrancheCopyService
             .createAenderungstranche(trancheToCopy, aenderungsantragCreateDto);
         gesuch.getGesuchTranchen().add(newTranche);
 
@@ -387,7 +387,7 @@ public class GesuchTrancheService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var trancheToCopy = gesuch.getEingereichteGesuchTrancheValidOnDate(createDto.getStart())
             .orElseThrow(NotFoundException::new);
-        final var newTranche = GesuchTrancheCopyUtil.createNewTranche(
+        final var newTranche = gesuchTrancheCopyService.createNewTranche(
             trancheToCopy,
             new DateRange(createDto.getStart(), createDto.getEnd()),
             createDto.getComment()
@@ -409,7 +409,7 @@ public class GesuchTrancheService {
         final GesuchTranche aenderung
     ) {
         final var gesuch = aenderung.getGesuch();
-        final var newTranche = GesuchTrancheCopyUtil.createNewTranche(aenderung);
+        final var newTranche = gesuchTrancheCopyService.createNewTranche(aenderung);
         gesuch.getGesuchTranchen().add(newTranche);
         gesuchRepository.persistAndFlush(gesuch);
 
@@ -668,7 +668,7 @@ public class GesuchTrancheService {
         var rawGueltigkeit =
             new DateRange(patchAenderungsInfoRequestDto.getStart(), patchAenderungsInfoRequestDto.getEnd());
         var gueltigkeit =
-            GesuchTrancheCopyUtil.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
+            gesuchTrancheCopyService.validateAndCreateClampedDateRange(rawGueltigkeit, aenderungsTranche.getGesuch());
 
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());
