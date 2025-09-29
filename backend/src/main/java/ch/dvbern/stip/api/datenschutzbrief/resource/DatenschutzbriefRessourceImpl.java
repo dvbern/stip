@@ -24,14 +24,14 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.generated.api.DatenschutzbriefResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -44,9 +44,10 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final BenutzerService benutzerService;
     private final ConfigService configService;
     private final JWTParser jwtParser;
+    private final DatenschutzbriefAuthorizer authorizer;
 
     @Blocking
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER })
+    @PermitAll
     @Override
     public RestMulti<ByteArrayOutputStream> getDatenschutzbrief(String token) {
         final var elternId = DokumentDownloadUtil.getClaimId(
@@ -59,9 +60,10 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
         return datenschutzbriefService.getDatenschutzbriefDokument(elternId);
     }
 
-    @RolesAllowed({ OidcConstants.ROLE_SACHBEARBEITER })
+    @PermitAll
     @Override
     public FileDownloadTokenDto getDatenschutzbriefDownloadToken(UUID elternId) {
+        authorizer.canGetDokumentDownloadToken(elternId);
         return DokumentDownloadUtil.getFileDownloadToken(
             elternId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,

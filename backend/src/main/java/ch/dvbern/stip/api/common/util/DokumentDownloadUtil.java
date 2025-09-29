@@ -52,26 +52,15 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 public class DokumentDownloadUtil {
     public RestMulti<ByteArrayOutputStream> getWrapedDokument(
         final String fileName,
-        final Supplier<CompletionStage<ByteArrayOutputStream>> supplier
+        final Supplier<CompletionStage<ByteArrayOutputStream>> generateDocumentTask
     ) {
 
         return RestMulti.fromUniResponse(
-            Uni.createFrom().completionStage(supplier.get()),
-            s -> Multi.createFrom().completionStage(supplier.get()),
-            s -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + fileName),
-                "Content-Type",
-                List.of("application/octet-stream")
-            ),
+            Uni.createFrom().completionStage(generateDocumentTask.get()),
+            s -> Multi.createFrom().completionStage(generateDocumentTask.get()),
+            s -> getRequiredHeaders(fileName),
             s -> Response.Status.OK.getStatusCode()
         );
-
-        // return RestMulti.fromUniResponse(
-        // Uni.createFrom()
-        // .completionStage(supplier.get()),
-        // response -> Multi.createFrom().completionStage(supplier.get())
-        // );
     }
 
     public RestMulti<Buffer> getDokument(
@@ -99,12 +88,16 @@ public class DokumentDownloadUtil {
                     byteBuffer.get(result);
                     return Buffer.buffer(result);
                 }),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + fileName),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
+            response -> getRequiredHeaders(fileName)
+        );
+    }
+
+    private Map getRequiredHeaders(final String fileName) {
+        return Map.of(
+            "Content-Disposition",
+            List.of("attachment;filename=" + fileName),
+            "Content-Type",
+            List.of("application/octet-stream")
         );
     }
 

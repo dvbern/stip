@@ -5418,7 +5418,6 @@ components:
         - beschwerdeHaengig
         - canTriggerManuellPruefen
         - canChangeGesuchsperiode
-        - canDownloadDatenschutzbrief
       type: object
       properties:
         id:
@@ -5438,8 +5437,6 @@ components:
         canTriggerManuellPruefen:
           type: boolean
         canChangeGesuchsperiode:
-          type: boolean
-        canDownloadDatenschutzbrief:
           type: boolean
     FallDashboardItem:
       required:

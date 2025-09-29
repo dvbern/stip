@@ -108,15 +108,6 @@ class DatenschutzbriefRessourceImplTest {
             .as(FileDownloadTokenDtoSpec.class)
             .getToken();
 
-        final var datenschutzbrief = datenschutzbriefApiSpec.getDatenschutzbrief()
-            .tokenQuery(token)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-        // todo: check content somehow
-        // .extract()
-        // .body()
-        // .as(ByteArrayOutputStream.class);
+        TestUtil.executeAndAssertOk(datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token));
     }
 }

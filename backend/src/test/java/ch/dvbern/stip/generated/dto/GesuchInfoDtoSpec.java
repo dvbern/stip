@@ -38,8 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG,
   GesuchInfoDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG,
   GesuchInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_DOWNLOAD_DATENSCHUTZBRIEF
+  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE
 })
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -70,9 +69,6 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE = "canChangeGesuchsperiode";
   private Boolean canChangeGesuchsperiode;
-
-  public static final String JSON_PROPERTY_CAN_DOWNLOAD_DATENSCHUTZBRIEF = "canDownloadDatenschutzbrief";
-  private Boolean canDownloadDatenschutzbrief;
 
   public GesuchInfoDtoSpec() {
   }
@@ -310,32 +306,6 @@ public class GesuchInfoDtoSpec {
     this.canChangeGesuchsperiode = canChangeGesuchsperiode;
   }
 
-
-  public GesuchInfoDtoSpec canDownloadDatenschutzbrief(Boolean canDownloadDatenschutzbrief) {
-    
-    this.canDownloadDatenschutzbrief = canDownloadDatenschutzbrief;
-    return this;
-  }
-
-   /**
-   * Get canDownloadDatenschutzbrief
-   * @return canDownloadDatenschutzbrief
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_DOWNLOAD_DATENSCHUTZBRIEF)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getCanDownloadDatenschutzbrief() {
-    return canDownloadDatenschutzbrief;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_CAN_DOWNLOAD_DATENSCHUTZBRIEF)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanDownloadDatenschutzbrief(Boolean canDownloadDatenschutzbrief) {
-    this.canDownloadDatenschutzbrief = canDownloadDatenschutzbrief;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -353,13 +323,12 @@ public class GesuchInfoDtoSpec {
         Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
         Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
         Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen) &&
-        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode) &&
-        Objects.equals(this.canDownloadDatenschutzbrief, gesuchInfo.canDownloadDatenschutzbrief);
+        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode, canDownloadDatenschutzbrief);
+    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode);
   }
 
   @Override
@@ -375,7 +344,6 @@ public class GesuchInfoDtoSpec {
     sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
-    sb.append("    canDownloadDatenschutzbrief: ").append(toIndentedString(canDownloadDatenschutzbrief)).append("\n");
     sb.append("}");
     return sb.toString();
   }
