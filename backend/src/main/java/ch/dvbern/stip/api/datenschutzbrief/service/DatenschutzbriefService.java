@@ -30,7 +30,7 @@ import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
 import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
-import ch.dvbern.stip.api.eltern.repo.ElternRepository;
+import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -49,10 +49,10 @@ public class DatenschutzbriefService {
     private final DatenschutzbriefPdfService datenschutzbriefPdfService;
     private final DatenschutzbriefRepository datenschutzbriefRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
-    private final ElternRepository elternRepository;
+    private final ElternService elternService;
 
     public RestMulti<ByteArrayOutputStream> getDatenschutzbriefDokument(final UUID elternId) {
-        final var elternTeil = elternRepository.requireById(elternId);
+        final var elternTeil = elternService.getElternTeilById(elternId);
         final var filename = String.format("datenschutzbrief_%s", elternTeil.getElternTyp().toString());
 
         final CompletableFuture<ByteArrayOutputStream> generateDokumentFuture = CompletableFuture

@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
+import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -109,5 +111,13 @@ class DatenschutzbriefRessourceImplTest {
             .getToken();
 
         TestUtil.executeAndAssertOk(datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token));
+    }
+
+    @Test
+    @TestAsSuperUser
+    @StepwiseExtension.AlwaysRun
+    @Order(99)
+    void deleteGesuch() {
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }

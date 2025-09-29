@@ -15,29 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.datenschutzbrief.auth;
+package ch.dvbern.stip.api.eltern.service;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.authorization.Authorizer;
-import ch.dvbern.stip.api.common.authorization.BaseAuthorizer;
-import ch.dvbern.stip.api.eltern.service.ElternService;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.repo.ElternRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-@Authorizer
-public class DatenschutzbriefAuthorizer extends BaseAuthorizer {
-    private final ElternService elternService;
-    private final BenutzerService benutzerService;
+public class ElternService {
+    private final ElternRepository elternRepository;
 
-    public void canGetDokumentDownloadToken(final UUID elternteilId) {
-        if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
-            return;
-        }
-        elternService.getElternTeilById(elternteilId);
-        forbidden();
+    public Eltern getElternTeilById(final UUID elternId) {
+        return elternRepository.requireById(elternId);
     }
 }
