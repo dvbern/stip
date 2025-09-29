@@ -56,7 +56,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -93,7 +92,6 @@ public class Gesuch extends AbstractMandantEntity {
     private Ausbildung ausbildung;
 
     @Nullable
-    @Future
     @Column(name = "nachfrist_dokumente")
     private LocalDate nachfristDokumente;
 
