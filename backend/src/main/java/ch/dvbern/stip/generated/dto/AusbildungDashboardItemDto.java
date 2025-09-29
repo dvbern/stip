@@ -41,6 +41,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid String ausbildungsortPLZ;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
+  private @Valid UUID landId;
   private @Valid AusbildungsgangDto ausbildungsgang;
   private @Valid List<GesuchDashboardItemDto> gesuchs;
 
@@ -329,6 +330,24 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public AusbildungDashboardItemDto landId(UUID landId) {
+    this.landId = landId;
+    return this;
+  }
+
+  
+  @JsonProperty("landId")
+  public UUID getLandId() {
+    return landId;
+  }
+
+  @JsonProperty("landId")
+  public void setLandId(UUID landId) {
+    this.landId = landId;
+  }
+
+  /**
+   **/
   public AusbildungDashboardItemDto ausbildungsgang(AusbildungsgangDto ausbildungsgang) {
     this.ausbildungsgang = ausbildungsgang;
     return this;
@@ -404,13 +423,14 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.ausbildungsortPLZ, ausbildungDashboardItem.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungDashboardItem.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
+        Objects.equals(this.landId, ausbildungDashboardItem.landId) &&
         Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
         Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, ausbildungsgang, gesuchs);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, gesuchs);
   }
 
   @Override
@@ -433,6 +453,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
+    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("}");

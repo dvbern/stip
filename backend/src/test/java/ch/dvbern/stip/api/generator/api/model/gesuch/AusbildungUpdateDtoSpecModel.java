@@ -44,6 +44,7 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
             model.setIsAusbildungAusland(false);
             model.setAusbildungsort("Bern");
+            model.setAusbildungsortPLZ("3011");
         });
     }
 
@@ -64,6 +65,7 @@ public final class AusbildungUpdateDtoSpecModel {
             model.setPensum(TestUtil.getRandomElementFromArray(AusbildungsPensumDtoSpec.values()));
             model.setIsAusbildungAusland(false);
             model.setAusbildungsort("Bern");
+            model.setAusbildungsortPLZ("3011");
         });
     }
 }

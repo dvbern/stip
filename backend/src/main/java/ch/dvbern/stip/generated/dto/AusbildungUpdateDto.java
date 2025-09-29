@@ -34,6 +34,7 @@ public class AusbildungUpdateDto  implements Serializable {
   private @Valid String ausbildungsortPLZ;
   private @Valid String ausbildungsort;
   private @Valid Boolean isAusbildungAusland;
+  private @Valid UUID landId;
   private @Valid UUID ausbildungsgangId;
 
   /**
@@ -283,6 +284,24 @@ public class AusbildungUpdateDto  implements Serializable {
 
   /**
    **/
+  public AusbildungUpdateDto landId(UUID landId) {
+    this.landId = landId;
+    return this;
+  }
+
+  
+  @JsonProperty("landId")
+  public UUID getLandId() {
+    return landId;
+  }
+
+  @JsonProperty("landId")
+  public void setLandId(UUID landId) {
+    this.landId = landId;
+  }
+
+  /**
+   **/
   public AusbildungUpdateDto ausbildungsgangId(UUID ausbildungsgangId) {
     this.ausbildungsgangId = ausbildungsgangId;
     return this;
@@ -322,12 +341,13 @@ public class AusbildungUpdateDto  implements Serializable {
         Objects.equals(this.ausbildungsortPLZ, ausbildungUpdate.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungUpdate.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildungUpdate.isAusbildungAusland) &&
+        Objects.equals(this.landId, ausbildungUpdate.landId) &&
         Objects.equals(this.ausbildungsgangId, ausbildungUpdate.ausbildungsgangId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, ausbildungsgangId);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgangId);
   }
 
   @Override
@@ -348,6 +368,7 @@ public class AusbildungUpdateDto  implements Serializable {
     sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
+    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    ausbildungsgangId: ").append(toIndentedString(ausbildungsgangId)).append("\n");
     sb.append("}");
     return sb.toString();

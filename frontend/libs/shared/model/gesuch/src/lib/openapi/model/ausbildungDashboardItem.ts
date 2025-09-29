@@ -49,6 +49,7 @@ export interface AusbildungDashboardItem {
      */
     ausbildungsort?: string;
     isAusbildungAusland?: boolean;
+    landId?: string;
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
     editable: boolean;

@@ -17,28 +17,84 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import org.junit.jupiter.api.Test;
+import java.util.stream.Stream;
+
+import ch.dvbern.stip.api.land.entity.Land;
+import lombok.Getter;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 class AusbildungsortRequiredIfSwissConstraintValidatorTest {
-    @Test
-    void test() {
-        final var ausbildung = new Ausbildung()
-            .setIsAusbildungAusland(true);
+    @Getter
+    private static class TestParameter {
+        private final Ausbildung ausbildung = new Ausbildung();
+        private final Boolean expected;
 
-        final var validator = new AusbildungsortRequiredIfSwissConstraintValidator();
+        TestParameter(boolean isAusland, String ort, String plz, boolean hasLand, boolean expected) {
+            ausbildung.setAusbildungsort(ort);
+            ausbildung.setAusbildungsortPLZ(plz);
+            ausbildung.setLand(hasLand ? new Land() : null);
+            ausbildung.setIsAusbildungAusland(isAusland);
+            this.expected = expected;
+        }
 
-        assertThat("Ausbildung im Ausland ohne Ort", validator.isValid(ausbildung, null), is(true));
+        public String toString() {
+            return String.format(
+                "Ausbildung %s %s %s",
+                getExpectedText(),
+                getTypeText(),
+                getSetValuesText()
+            );
+        }
 
-        ausbildung.setAusbildungsort("Bern");
-        assertThat("Ausbildung im Ausland mit Ort", validator.isValid(ausbildung, null), is(false));
+        private String getTypeText() {
+            return ausbildung.getIsAusbildungAusland() ? "im Ausland" : "in der Schweiz";
+        }
 
-        ausbildung.setIsAusbildungAusland(false);
-        assertThat("Ausbildung in CH mit Ort", validator.isValid(ausbildung, null), is(true));
+        private String getSetValuesText() {
+            final var ortPlzText =
+                ausbildung.getAusbildungsort() == null || ausbildung.getAusbildungsortPLZ() == null ? "ohne Ort / PLZ"
+                    : "mit Ort / PLZ";
+            final var landText = ausbildung.getLand() == null ? "ohne Land" : "mit Land";
+            return String.format("%s und %s", ortPlzText, landText);
+        }
 
-        ausbildung.setAusbildungsort(null);
-        assertThat("Ausbildung in CH ohne Ort", validator.isValid(ausbildung, null), is(false));
+        private String getExpectedText() {
+            return expected ? "ist gültig" : "ist ungültig";
+        }
+    }
+
+    private static class RequiredFieldsIfAusbildungIsAusland implements ArgumentsProvider {
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            return Stream.of(
+                // With Ort / PLZ
+                Arguments.of(new TestParameter(false, "Bern", "3011", false, true)),
+                Arguments.of(new TestParameter(true, "Bern", "3011", false, false)),
+                // With Land
+                Arguments.of(new TestParameter(false, null, null, true, false)),
+                Arguments.of(new TestParameter(true, null, null, true, true)),
+                // Both Values set
+                Arguments.of(new TestParameter(true, "Bern", "3011", true, false)),
+                Arguments.of(new TestParameter(false, "Bern", "3011", true, false))
+            );
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(RequiredFieldsIfAusbildungIsAusland.class)
+    void testValidCombinations(TestParameter parameter) {
+        final var validator = new ch.dvbern.stip.api.ausbildung.entity.RequiredFieldsIfAusbildungIsAusland();
+
+        assertThat(
+            parameter.toString(),
+            validator.isValid(parameter.getAusbildung(), null),
+            is(parameter.getExpected())
+        );
     }
 }

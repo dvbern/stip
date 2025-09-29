@@ -227,7 +227,7 @@ describe(SharedFeatureAusbildungComponent.name, () => {
     });
 
     it('should disable ausbildungsort if isAusbildungAusland is checked', async () => {
-      const { getByTestId, detectChanges } = await setup();
+      const { getByTestId, queryByTestId, detectChanges } = await setup();
 
       detectChanges();
 
@@ -237,7 +237,9 @@ describe(SharedFeatureAusbildungComponent.name, () => {
 
       detectChanges();
 
-      expect(getByTestId('form-education-ausbildungs-ort')).toBeDisabled();
+      expect(
+        queryByTestId('form-education-ausbildungs-ort'),
+      ).not.toBeInTheDocument();
     });
   });
 });

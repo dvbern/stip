@@ -42,7 +42,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungUpdateDtoSpec.JSON_PROPERTY_ALTERNATIVE_AUSBILDUNGSGANG,
   AusbildungUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT_P_L_Z,
   AusbildungUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSORT,
-  AusbildungUpdateDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND
+  AusbildungUpdateDtoSpec.JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND,
+  AusbildungUpdateDtoSpec.JSON_PROPERTY_LAND_ID
 })
 @JsonTypeName("AusbildungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -88,6 +89,9 @@ public class AusbildungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_IS_AUSBILDUNG_AUSLAND = "isAusbildungAusland";
   private Boolean isAusbildungAusland;
+
+  public static final String JSON_PROPERTY_LAND_ID = "landId";
+  private UUID landId;
 
   public AusbildungUpdateDtoSpec() {
   }
@@ -455,6 +459,32 @@ public class AusbildungUpdateDtoSpec {
     this.isAusbildungAusland = isAusbildungAusland;
   }
 
+
+  public AusbildungUpdateDtoSpec landId(UUID landId) {
+    
+    this.landId = landId;
+    return this;
+  }
+
+   /**
+   * Get landId
+   * @return landId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LAND_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getLandId() {
+    return landId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LAND_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLandId(UUID landId) {
+    this.landId = landId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -477,12 +507,13 @@ public class AusbildungUpdateDtoSpec {
         Objects.equals(this.alternativeAusbildungsgang, ausbildungUpdate.alternativeAusbildungsgang) &&
         Objects.equals(this.ausbildungsortPLZ, ausbildungUpdate.ausbildungsortPLZ) &&
         Objects.equals(this.ausbildungsort, ausbildungUpdate.ausbildungsort) &&
-        Objects.equals(this.isAusbildungAusland, ausbildungUpdate.isAusbildungAusland);
+        Objects.equals(this.isAusbildungAusland, ausbildungUpdate.isAusbildungAusland) &&
+        Objects.equals(this.landId, ausbildungUpdate.landId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildungsgangId, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland);
+    return Objects.hash(ausbildungsgangId, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
   }
 
   @Override
@@ -503,6 +534,7 @@ public class AusbildungUpdateDtoSpec {
     sb.append("    ausbildungsortPLZ: ").append(toIndentedString(ausbildungsortPLZ)).append("\n");
     sb.append("    ausbildungsort: ").append(toIndentedString(ausbildungsort)).append("\n");
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
+    sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
