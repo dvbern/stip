@@ -566,10 +566,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
     effect(() => {
       const isWritable = this.isEditableSig();
+
       this.formUtils.setDisabledState(
         this.form.controls.fachrichtungBerufsbezeichnung,
         !isWritable ||
-          (!ausbildungNichtGefundenSig() && !this.currentAusbildungsgangSig()),
+          !ausbildungNichtGefundenSig() ||
+          !this.currentAusbildungsgangSig(),
         isWritable,
       );
     });
