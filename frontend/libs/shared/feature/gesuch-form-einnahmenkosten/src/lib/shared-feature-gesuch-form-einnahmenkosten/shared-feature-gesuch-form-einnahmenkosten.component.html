@@ -29,7 +29,7 @@
                 data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
                 matInput
                 type="text"
-                [maskito]="maskitoNumber"
+                [maskito]="maskitoMaxNumber"
               />
               <mat-hint *dvZuvorHint="view.formChanges?.nettoerwerbseinkommen"></mat-hint>
               <mat-hint>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.info') }}</mat-hint>
@@ -222,9 +222,7 @@
 
         <div class="row g-4">
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{
-            t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`)
-            }}</mat-label>
+            <mat-label>{{ t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`) }}</mat-label>
             <input
               formControlName="ausbildungskosten"
               data-testid="form-einnahmen-kosten-ausbildungskosten"
@@ -236,13 +234,17 @@
             @if (ausbildungsStufe && istAusbildungskostenMoreThanLimitSig()) {
               <mat-hint class="mat-caution">
                 {{
-                t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, { max: formStateSig().ausbildungsKostenLimit })
+                  t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, {
+                    max: formStateSig().ausbildungsKostenLimit,
+                  })
                 }}
               </mat-hint>
             } @else {
               <mat-hint>
                 {{
-                t(`shared.form.einnahmenkosten.ausbildungskosten.info.${ausbildungsStufe}`, { max: formStateSig().ausbildungsKostenLimit })
+                  t(`shared.form.einnahmenkosten.ausbildungskosten.info.${ausbildungsStufe}`, {
+                    max: formStateSig().ausbildungsKostenLimit,
+                  })
                 }}</mat-hint
               >
             }

@@ -36,6 +36,7 @@ import {
   PERSON,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
+import { MAX_EINKOMMEN } from '@dv/shared/model/ui-constants';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -61,6 +62,7 @@ import {
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
+  maskitoMaxNumber,
   maskitoNumber,
   toFormatedNumber,
 } from '@dv/shared/util/maskito-util';
@@ -175,6 +177,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   });
 
   maskitoNumber = maskitoNumber;
+  maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
   hiddenFieldsSetSig = signal(new Set());
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);

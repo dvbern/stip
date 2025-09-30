@@ -168,50 +168,65 @@
       >
     }
 
-    <div
-      class="testing-library-fix tw:col-start-1 tw:flex tw:gap-2"
-      dvPlzOrtAutocomplete
-      [autocompleteSig]="plzAutocomplete"
-      [plzFormSig]="form.controls.ausbildungsortPlzOrt"
-      (plzLookupValuesSig)="plzValues = $event"
-    >
-      <!-- PLZ -->
-      <mat-form-field dvSharedUiFormField class="tw:basis-auto">
-        <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
-        <input
-          type="text"
-          matInput
-          [dvMaxLength]="'small'"
-          [formControl]="form.controls.ausbildungsortPlzOrt.controls.plz"
-          [matAutocomplete]="plzAutocomplete"
-          data-testid="form-education-ausbildungs-plz"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.requiredShort' | transloco }}
-        </mat-error>
-        <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
-          @for (lookup of plzValues; track $index) {
-            <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
-              {{ lookup.plz }} {{ lookup.ort }}
-            </mat-option>
-          }
-        </mat-autocomplete>
-      </mat-form-field>
+    <div class="testing-library-fix tw:col-start-1">
+      @if (form.controls.isAusbildungAusland.value) {
+        <!-- Land -->
+        <dv-shared-ui-select-search
+          formControlName="landId"
+          [testIdSig]="'form-education-land'"
+          [labelKeySig]="'shared.form.shared.address.country.label'"
+          [valuesSig]="laenderSig()"
+          [languageSig]="languageSig()"
+          [panelWidthSig]="'auto'"
+          [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
+        ></dv-shared-ui-select-search>
+      } @else {
+        <div
+          class="tw:flex tw:gap-2"
+          dvPlzOrtAutocomplete
+          [autocompleteSig]="plzAutocomplete"
+          [plzFormSig]="form.controls.ausbildungsortPlzOrt"
+          (plzLookupValuesSig)="plzValues = $event"
+        >
+          <!-- PLZ -->
+          <mat-form-field dvSharedUiFormField class="tw:max-w-26">
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
+            <input
+              type="text"
+              matInput
+              [dvMaxLength]="'small'"
+              [formControl]="form.controls.ausbildungsortPlzOrt.controls.plz"
+              [matAutocomplete]="plzAutocomplete"
+              data-testid="form-education-ausbildungs-plz"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.requiredShort' | transloco }}
+            </mat-error>
+            <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+              @for (lookup of plzValues; track $index) {
+                <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+                  {{ lookup.plz }} {{ lookup.ort }}
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
 
-      <!-- Ort -->
-      <mat-form-field dvSharedUiFormField class="tw:basis-11/12">
-        <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | transloco }} </mat-label>
-        <input
-          type="text"
-          matInput
-          dvMaxLength
-          [formControl]="form.controls.ausbildungsortPlzOrt.controls.ort"
-          data-testid="form-education-ausbildungs-ort"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </mat-form-field>
+          <!-- Ort -->
+          <mat-form-field dvSharedUiFormField class="tw:basis-11/12">
+            <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | transloco }} </mat-label>
+            <input
+              type="text"
+              matInput
+              dvMaxLength
+              [formControl]="form.controls.ausbildungsortPlzOrt.controls.ort"
+              data-testid="form-education-ausbildungs-ort"
+            />
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      }
     </div>
 
     <!-- isAusbildungAusland -->

@@ -36,6 +36,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
+import { MAX_EINKOMMEN } from '@dv/shared/model/ui-constants';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -56,6 +57,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
+  maskitoMaxNumber,
   maskitoNumber,
 } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
@@ -112,6 +114,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
 
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly maskitoNumber = maskitoNumber;
+  readonly maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);

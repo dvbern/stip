@@ -9,10 +9,11 @@ import { Land } from '@dv/shared/model/gesuch';
 export class LandLookupService {
   private landStore = inject(LandStore);
 
+  constructor() {
+    this.landStore.loadLaender$();
+  }
+
   getCachedLandLookup() {
-    if (this.landStore.laender().type === 'initial') {
-      this.landStore.loadLaender$();
-    }
     return this.landStore.autocompleteLandListViewSig;
   }
 

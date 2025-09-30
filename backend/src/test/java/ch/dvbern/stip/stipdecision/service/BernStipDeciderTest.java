@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -209,9 +210,14 @@ class BernStipDeciderTest {
 
     @Test
     void testStipendienrechtlicherWohnsitzKantonSchweizerElternlos() {
+        plzService = Mockito.mock(PlzService.class);
+        Mockito.when(plzService.isInBern(ArgumentMatchers.any(String.class))).thenReturn(true);
+        decider = new BernStipDecider(plzService);
+
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
         final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
         pia.setNationalitaet(LandGenerator.initSwitzerland());
+
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
@@ -219,10 +225,10 @@ class BernStipDeciderTest {
 
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision)
-            .isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN);
+            .isEqualTo(StipDeciderResult.GESUCH_VALID);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
-        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Test
@@ -421,5 +427,62 @@ class BernStipDeciderTest {
 
         var event = decider.getGesuchStatusChangeEvent(decision);
         assertThat(event).isEqualTo(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT);
+    }
+
+    @Test
+    void testHeimatortNichtImKantonBern() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        final var pia = gesuch.getNewestGesuchTranche().get().getGesuchFormular().getPersonInAusbildung();
+        pia.setNationalitaet(LandGenerator.initSwitzerland());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .setElterns(Set.of());
+
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setHeimatortPLZ("8032")
+            .setHeimatort("Zürich");
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision)
+            .isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN);
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT);
+    }
+
+    @Test
+    void testZustaendigeKESBNichtImKantonBern() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setVormundschaft(true)
+            .setZustaendigeKESB(ZustaendigeKESB.KESB_ANDERER_KANTON);
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision)
+            .isEqualTo(StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN);
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN);
+    }
+
+    @Test
+    void testZustaendigeKESBImKantonBern() {
+        final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .setVormundschaft(true)
+            .setZustaendigeKESB(ZustaendigeKESB.KESB_BERN);
+        var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
+        assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
+
+        var event = decider.getGesuchStatusChangeEvent(decision);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 }
