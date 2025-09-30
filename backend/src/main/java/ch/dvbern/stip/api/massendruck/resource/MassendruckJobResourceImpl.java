@@ -24,59 +24,100 @@ import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.massendruck.service.MassendruckJobService;
+import ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import ch.dvbern.stip.generated.api.MassendruckResource;
-import ch.dvbern.stip.generated.dto.GetMassendruckJobQueryTypeDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
-import ch.dvbern.stip.generated.dto.MassendruckJobStatusDto;
-import ch.dvbern.stip.generated.dto.MassendruckJobTypDto;
 import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
+import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.RestMulti;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
 public class MassendruckJobResourceImpl implements MassendruckResource {
     private final MassendruckJobAuthorizer authorizer;
+    private final MassendruckJobService massendruckJobService;
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDto createMassendruckJobForQueryType(GetGesucheSBQueryType getGesucheSBQueryType) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_READ })
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
-        GetMassendruckJobQueryTypeDto getMassendruckJobs,
-        String massendruckJobNumber,
+        GetMassendruckJobQueryType getMassendruckJobs,
+        Integer page,
+        Integer pageSize,
+        Integer massendruckJobNumber,
         String userErstellt,
         LocalDate timestampErstellt,
-        MassendruckJobStatusDto massendruckJobStatus,
-        MassendruckJobTypDto massendruckJobTyp,
+        MassendruckJobStatus massendruckJobStatus,
+        MassendruckJobTyp massendruckJobTyp,
         MassendruckJobSortColumn sortColumn,
         SortOrder sortOrder
     ) {
+        authorizer.permitAll();
+        return massendruckJobService.getAllMassendruckJobs(
+            getMassendruckJobs,
+            page,
+            pageSize,
+            massendruckJobNumber,
+            userErstellt,
+            timestampErstellt,
+            massendruckJobStatus,
+            massendruckJobTyp,
+            sortColumn,
+            sortOrder
+        );
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ })
+    public FileDownloadTokenDto getMassendruckDownloadToken(UUID massendruckId) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_READ })
+    public RestMulti<Buffer> downloadMassendruckDocument(String token) {
+        authorizer.permitAll();
+        return null;
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ })
     public MassendruckJobDetailDto getMassendruckJobDetail(UUID massendruckJobId) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckDatenschutzbriefDto massendruckDatenschutzbriefVersenden(UUID massendruckDatenschutzbriefId) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckVerfuegungDto massendruckVerfuegungVersenden(UUID massendruckVerfuegungId) {
         authorizer.permitAll();
         return null;

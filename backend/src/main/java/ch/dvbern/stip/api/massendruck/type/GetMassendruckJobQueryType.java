@@ -15,19 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.ausbildung.entity;
+package ch.dvbern.stip.api.massendruck.type;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
-public class AusbildungsortRequiredIfSwissConstraintValidator
-    implements ConstraintValidator<AusbildungsortRequiredIfSwissConstraint, Ausbildung> {
-    @Override
-    public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
-        if (Boolean.TRUE.equals(ausbildung.getIsAusbildungAusland())) {
-            return ausbildung.getAusbildungsort() == null;
-        } else {
-            return ausbildung.getAusbildungsort() != null;
-        }
-    }
+public enum GetMassendruckJobQueryType {
+    ALLE,
+    ALLE_AKTIV,
+    ALLE_ARCHIVIERT,
+    ALLE_FEHLERHAFTE_GENERIERUNG
 }

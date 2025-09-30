@@ -1820,6 +1820,7 @@ class GesuchServiceTest {
         QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
 
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
+        gesuch.setNachfristDokumente(LocalDate.now().minusDays(1));
         when(
             gesuchHistoryRepository
                 .getLatestWhereStatusChangedTo(any(), ArgumentMatchers.eq(Gesuchstatus.FEHLENDE_DOKUMENTE))

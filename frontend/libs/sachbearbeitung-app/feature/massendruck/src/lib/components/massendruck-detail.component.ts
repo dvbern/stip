@@ -5,6 +5,7 @@ import {
   QueryList,
   ViewChildren,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
@@ -25,7 +26,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import {
+  ElternTyp,
   MassendruckDatenschutzbrief,
+  MassendruckJobDetail,
   MassendruckVerfuegung,
 } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
@@ -44,10 +47,15 @@ import {
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
+type TableItem = { adressat: ElternTyp | 'PIA' } & (
+  | MassendruckDatenschutzbrief
+  | MassendruckVerfuegung
+);
+
 @Component({
-  selector: 'dv-sachbearbeitung-app-feature-druckzentrum-druckauftrag',
-  templateUrl: './druckauftrag.component.html',
-  styleUrls: ['./druckauftrag.component.scss'],
+  selector: 'dv-sachbearbeitung-app-feature-massendruck-detail',
+  templateUrl: './massendruck-detail.component.html',
+  styleUrls: ['./massendruck-detail.component.scss'],
   imports: [
     A11yModule,
     CommonModule,
@@ -77,13 +85,41 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
     SharedUiDownloadButtonDirective,
   ],
 })
-export class DruckauftragComponent {
+export class MassendruckDetailComponent {
   displayedColumns = ['Versendet', 'Gesuch', 'Nachname', 'Vorname', 'Adressat'];
 
   massendruckStore = inject(MassendruckStore);
   formBuilder = inject(FormBuilder);
 
-  druckEntryId = input<string | undefined>(undefined);
+  id = input<string | undefined>(undefined);
+
+  constructor() {
+    effect(() => {
+      const id = this.id();
+      if (id) {
+        this.massendruckStore.loadMassendruckJob$({ massendruckJobId: id });
+      }
+    });
+  }
+
+  // todo: check failure handling when backend is ready
+  setMasendruckJobVersendet(item: TableItem) {
+    if (item.isVersendet) {
+      return;
+    }
+
+    if ('elternTyp' in item) {
+      // Datenschutzbrief
+      this.massendruckStore.massendruckDatenschutzbriefVersenden$({
+        massendruckDatenschutzbriefId: item.id,
+      });
+    } else {
+      // Verfügung
+      this.massendruckStore.massendruckVerfuegungVersenden$({
+        massendruckVerfuegungId: item.id,
+      });
+    }
+  }
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -96,9 +132,36 @@ export class DruckauftragComponent {
     gesuch: [''],
   });
 
-  druckauftragDataSourceSig = computed(() => {
-    return new MatTableDataSource<
-      MassendruckDatenschutzbrief | MassendruckVerfuegung
-    >([]);
+  massendruckDetailDataSourceSig = computed(() => {
+    const { massendruckJob } = this.massendruckStore.massendruckViewSig();
+
+    return this.genereateFilteredDataSource(massendruckJob);
   });
+
+  private genereateFilteredDataSource(
+    massendruckJobDetail: MassendruckJobDetail | undefined,
+  ) {
+    if (!massendruckJobDetail) {
+      return new MatTableDataSource<TableItem>([]);
+    }
+
+    let data: TableItem[] = [];
+
+    if (massendruckJobDetail.massendruckJobTyp === 'DATENSCHUTZBRIEF') {
+      data =
+        massendruckJobDetail.datenschutzbriefMassendrucks?.map((i) => {
+          return {
+            ...i,
+            adressat: i.elternTyp,
+          };
+        }) ?? [];
+    } else {
+      data =
+        massendruckJobDetail.verfuegungMassendrucks?.map((i) => {
+          return { ...i, adressat: 'PIA' };
+        }) ?? [];
+    }
+
+    return new MatTableDataSource<TableItem>(data);
+  }
 }

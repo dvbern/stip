@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.massendruck.type.DruckauftragTyp;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +33,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -40,6 +42,9 @@ import jakarta.validation.constraints.NotNull;
     indexes = { @Index(name = "IX_massendruck_mandant", columnList = "mandant")
     }
 )
+@Getter
+@Setter
+@DatenschutzbriefOrVerfuegungSetConstraint
 public class MassendruckJob extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "massendruckJob")
     private List<DatenschutzbriefMassendruck> datenschutzbriefMassendrucks = new ArrayList<>();
@@ -49,6 +54,7 @@ public class MassendruckJob extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    // TODO KSTIP-2294: Add a column annotation to this (shouldn't require a new migration)
     private MassendruckJobStatus status;
 
     @NotNull
@@ -56,10 +62,10 @@ public class MassendruckJob extends AbstractMandantEntity {
     private int massendruckJobNumber;
 
     @Transient
-    public DruckauftragTyp getMassendruckTyp() {
+    public MassendruckJobTyp getMassendruckTyp() {
         if (!datenschutzbriefMassendrucks.isEmpty()) {
-            return DruckauftragTyp.DATENSCHUTZBRIEF;
+            return MassendruckJobTyp.DATENSCHUTZBRIEF;
         }
-        return DruckauftragTyp.VERFUEGUNG;
+        return MassendruckJobTyp.VERFUEGUNG;
     }
 }

@@ -30,6 +30,8 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.service.MonthYearToBeginOfMonth;
 import ch.dvbern.stip.api.common.service.MonthYearToEndOfMonth;
 import ch.dvbern.stip.api.fall.service.FallMapper;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
 import jakarta.inject.Inject;
@@ -47,6 +49,8 @@ import org.mapstruct.Named;
 public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpdateDto, Ausbildung> {
     @Inject
     AusbildungAuthorizer ausbildungAuthorizer;
+    @Inject
+    LandService landService;
 
     @Inject
     AusbildungsgangService ausbildungsgangService;
@@ -62,6 +66,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
     )
     @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(source = "land.id", target = "landId")
     public abstract AusbildungDto toDto(Ausbildung ausbildung);
 
     @AfterMapping
@@ -82,6 +87,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
     )
     @Mapping(source = "fallId", target = "fall.id")
+    @Mapping(source = "landId", target = "land", qualifiedByName = "mapLand")
     public abstract Ausbildung toEntity(AusbildungDto ausbildungDto);
 
     @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang.id")
@@ -96,6 +102,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
     )
     @Mapping(source = "fallId", target = "fall.id")
+    @Mapping(source = "landId", target = "land", qualifiedByName = "mapLand")
     public abstract Ausbildung toNewEntity(AusbildungUpdateDto ausbildungDto);
 
     @Mapping(source = "ausbildungsgangId", target = "ausbildungsgang", qualifiedByName = "mapAusbildungsgang")
@@ -110,6 +117,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         qualifiedBy = { DateMapper.class, MonthYearToEndOfMonth.class }
     )
     @Mapping(source = "fallId", target = "fall.id")
+    @Mapping(source = "landId", target = "land", qualifiedByName = "mapLand")
     public abstract Ausbildung partialUpdate(AusbildungUpdateDto ausbildungDto, @MappingTarget Ausbildung ausbildung);
 
     @Named("mapAusbildungsgang")
@@ -148,6 +156,15 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         );
     }
 
+    @Named("mapLand")
+    protected Land mapLand(UUID landId) {
+        if (landId == null) {
+            return null;
+        }
+
+        return landService.requireLandById(landId);
+    }
+
     @Override
     @BeforeMapping
     protected void resetDependentDataBeforeUpdate(
@@ -158,8 +175,13 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
             () -> AusbildungDiffUtil.hasIsAusbildungAuslandChanged(targetFormular, newFormular),
             "Clear Ausbildungsort because IsAusbildungAusland has changed",
             () -> {
-                if (newFormular != null && Boolean.TRUE.equals(newFormular.getIsAusbildungAusland())) {
-                    newFormular.setAusbildungsort(null);
+                if (newFormular != null) {
+                    if (Boolean.TRUE.equals(newFormular.getIsAusbildungAusland())) {
+                        newFormular.setAusbildungsortPLZ(null);
+                        newFormular.setAusbildungsort(null);
+                    } else {
+                        newFormular.setLandId(null);
+                    }
                 }
             }
         );

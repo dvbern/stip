@@ -13,6 +13,8 @@
 
 package ch.dvbern.stip.generated.api;
 
+import java.io.File;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.GetMassendruckJobQueryTypeDtoSpec;
 import java.time.LocalDate;
@@ -70,7 +72,9 @@ public class MassendruckApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createMassendruckJobForQueryType(),
+                downloadMassendruckDocument(),
                 getAllMassendruckJobs(),
+                getMassendruckDownloadToken(),
                 getMassendruckJobDetail(),
                 massendruckDatenschutzbriefVersenden(),
                 massendruckVerfuegungVersenden()
@@ -81,8 +85,16 @@ public class MassendruckApiSpec {
         return new CreateMassendruckJobForQueryTypeOper(createReqSpec());
     }
 
+    public DownloadMassendruckDocumentOper downloadMassendruckDocument() {
+        return new DownloadMassendruckDocumentOper(createReqSpec());
+    }
+
     public GetAllMassendruckJobsOper getAllMassendruckJobs() {
         return new GetAllMassendruckJobsOper(createReqSpec());
+    }
+
+    public GetMassendruckDownloadTokenOper getMassendruckDownloadToken() {
+        return new GetMassendruckDownloadTokenOper(createReqSpec());
     }
 
     public GetMassendruckJobDetailOper getMassendruckJobDetail() {
@@ -181,10 +193,85 @@ public class MassendruckApiSpec {
         }
     }
     /**
+     * 
+     * 
+     *
+     * @see #tokenQuery  (required)
+     * return File
+     */
+    public static class DownloadMassendruckDocumentOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/massendruck/download";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DownloadMassendruckDocumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/octet-stream");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /massendruck/download
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /massendruck/download
+         * @param handler handler
+         * @return File
+         */
+        public File executeAs(Function<Response, Response> handler) {
+            TypeRef<File> type = new TypeRef<File>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String TOKEN_QUERY = "token";
+
+        /**
+         * @param token (String)  (required)
+         * @return operation
+         */
+        public DownloadMassendruckDocumentOper tokenQuery(Object... token) {
+            reqSpec.addQueryParam(TOKEN_QUERY, token);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DownloadMassendruckDocumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DownloadMassendruckDocumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Get all Massendruck Jobs
      * 
      *
      * @see #getMassendruckJobsPath  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
      * @see #massendruckJobNumberQuery  (optional)
      * @see #userErstelltQuery  (optional)
      * @see #timestampErstelltQuery  (optional)
@@ -243,7 +330,7 @@ public class MassendruckApiSpec {
         public static final String MASSENDRUCK_JOB_NUMBER_QUERY = "massendruckJobNumber";
 
         /**
-         * @param massendruckJobNumber (String)  (optional)
+         * @param massendruckJobNumber (Integer)  (optional)
          * @return operation
          */
         public GetAllMassendruckJobsOper massendruckJobNumberQuery(Object... massendruckJobNumber) {
@@ -317,6 +404,28 @@ public class MassendruckApiSpec {
             return this;
         }
 
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetAllMassendruckJobsOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetAllMassendruckJobsOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
         /**
          * Customize request specification
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
@@ -333,6 +442,79 @@ public class MassendruckApiSpec {
          * @return operation
          */
         public GetAllMassendruckJobsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * get Token to downlaod Verfuegung
+     * 
+     *
+     * @see #massendruckIdPath  (required)
+     * return FileDownloadTokenDtoSpec
+     */
+    public static class GetMassendruckDownloadTokenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/massendruck/{massendruckId}/token";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetMassendruckDownloadTokenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /massendruck/{massendruckId}/token
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /massendruck/{massendruckId}/token
+         * @param handler handler
+         * @return FileDownloadTokenDtoSpec
+         */
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String MASSENDRUCK_ID_PATH = "massendruckId";
+
+        /**
+         * @param massendruckId (UUID)  (required)
+         * @return operation
+         */
+        public GetMassendruckDownloadTokenOper massendruckIdPath(Object massendruckId) {
+            reqSpec.addPathParam(MASSENDRUCK_ID_PATH, massendruckId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetMassendruckDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetMassendruckDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

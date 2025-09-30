@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.massendruck.type;
 
-public enum DruckauftragTyp {
+public enum MassendruckJobTyp {
     DATENSCHUTZBRIEF,
     VERFUEGUNG
 }

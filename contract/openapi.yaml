@@ -105,6 +105,8 @@ paths:
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
       responses:
         '200':
           content:
@@ -240,6 +242,56 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: massendruckVerfuegungVersenden
       description: Send a Massendruck Verfuegung
+  /massendruck/{massendruckId}/token:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
+      operationId: getMassendruckDownloadToken
+      summary: get Token to downlaod Verfuegung
+  /massendruck/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadMassendruckDocument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   /gesuch:
     post:
       requestBody:
@@ -6167,6 +6219,9 @@ components:
           type: string
         isAusbildungAusland:
           type: boolean
+        landId:
+          description: Required if isAusbildungAusland = true
+          $ref: '#/components/schemas/UUID'
     Ausbildung:
       required:
         - status
@@ -7993,7 +8048,7 @@ components:
       in: query
       name: massendruckJobNumber
       schema:
-        type: string
+        type: integer
     MassendruckJobTyp:
       in: query
       name: massendruckJobTyp

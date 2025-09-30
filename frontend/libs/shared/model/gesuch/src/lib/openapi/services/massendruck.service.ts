@@ -41,13 +41,15 @@ export interface MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams
 
 export interface MassendruckServiceGetAllMassendruckJobsRequestParams {
     getMassendruckJobs: GetMassendruckJobQueryType;
-    massendruckJobNumber?: string;
+    massendruckJobNumber?: number;
     userErstellt?: string;
     timestampErstellt?: string;
     massendruckJobStatus?: MassendruckJobStatus;
     massendruckJobTyp?: MassendruckJobTyp;
     sortColumn?: MassendruckJobSortColumn;
     sortOrder?: SortOrder;
+    page: number;
+    pageSize: number;
 }
 
 export interface MassendruckServiceGetMassendruckJobDetailRequestParams {
@@ -220,6 +222,14 @@ export class MassendruckService {
         const massendruckJobTyp = requestParameters.massendruckJobTyp;
         const sortColumn = requestParameters.sortColumn;
         const sortOrder = requestParameters.sortOrder;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllMassendruckJobs$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllMassendruckJobs$.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (massendruckJobNumber !== undefined && massendruckJobNumber !== null) {
@@ -249,6 +259,14 @@ export class MassendruckService {
         if (sortOrder !== undefined && sortOrder !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>sortOrder, 'sortOrder');
+        }
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'page');
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>pageSize, 'pageSize');
         }
 
         let localVarHeaders = this.defaultHeaders;

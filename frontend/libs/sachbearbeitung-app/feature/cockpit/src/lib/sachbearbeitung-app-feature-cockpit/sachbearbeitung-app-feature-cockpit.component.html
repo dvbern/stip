@@ -17,8 +17,13 @@
       </h1>
 
       <!-- button verfuegungen oder datenschutzbriefe genereiern -->
-      @if (canStartMassendruckSig()) {
-        <button type="button" class="btn btn-danger tw:font-semibold! tw:whitespace-nowrap">
+      @if (canCreateMassendruckSig()) {
+        <button
+          [disabled]="massendruckStore.createMassendruckLoadingSig()"
+          type="button"
+          class="btn btn-danger tw:font-semibold! tw:whitespace-nowrap"
+          (click)="createMassendruckJobForQueryType$()"
+        >
           @if (show()?.includes('VERFUEGUNGEN')) {
             <span>{{
               'sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN'

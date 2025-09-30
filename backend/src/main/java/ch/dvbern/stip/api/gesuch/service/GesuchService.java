@@ -131,6 +131,7 @@ import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.BadRequestException;
@@ -142,6 +143,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_NACHFRIST_NOT_FUTURE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
 @RequestScoped
@@ -620,15 +622,11 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final GesuchStatusChangeEvent changeEvent;
-        if (gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG) {
-            if (haveAllDatenschutzbriefeBeenSent(gesuch)) {
-                changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
-            } else {
-                changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
-            }
-        } else {
-            changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        if (
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG && !haveAllDatenschutzbriefeBeenSent(gesuch)
+        ) {
+            changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
         gesuchStatusService.triggerStateMachineEventWithComment(
@@ -833,6 +831,15 @@ public class GesuchService {
 
     @Transactional
     public void updateNachfristDokumente(final UUID gesuchId, LocalDate nachfristDokumente) {
+        if (nachfristDokumente.isBefore(LocalDate.now())) {
+            throw new CustomValidationsException(
+                "Nachfrist muss in der Zukunft liegen",
+                new CustomConstraintViolation(
+                    VALIDATION_DOCUMENTS_NACHFRIST_NOT_FUTURE,
+                    "nachfristDokumente"
+                )
+            );
+        }
         var gesuch = gesuchRepository.requireById(gesuchId);
         gesuch.setNachfristDokumente(nachfristDokumente);
         notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
@@ -970,12 +977,12 @@ public class GesuchService {
         return notiz;
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void checkForFehlendeDokumenteOnAllGesuche() {
         final var gesuchsToCheck = gesuchRepository.getAllFehlendeDokumente();
         final var toUpdate = gesuchsToCheck
             .stream()
-            .filter(gesuch -> gesuch.getNachfristDokumente().isAfter(LocalDate.now()))
+            .filter(gesuch -> gesuch.getNachfristDokumente().isBefore(LocalDate.now()))
             .toList();
         final var toUpdateEingereicht = toUpdate.stream().filter(gesuch -> !gesuch.isVerfuegt()).toList();
         final var toUpdateVerfuegt = toUpdate.stream().filter(Gesuch::isVerfuegt).toList();
@@ -1014,18 +1021,18 @@ public class GesuchService {
         }
     }
 
-    @Transactional
+    @Transactional(TxType.REQUIRES_NEW)
     public void checkForFehlendeDokumenteOnAllAenderungen() {
         final var gesuchTranchenToCheck = gesuchTrancheRepository.getAllFehlendeDokumente();
 
         final var toUpdate = gesuchTranchenToCheck
             .stream()
-            .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isAfter(LocalDate.now()))
+            .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isBefore(LocalDate.now()))
             .toList();
         if (!toUpdate.isEmpty()) {
             gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
-                GesuchTrancheStatusChangeEvent.UEBERPRUEFEN
+                GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS
             );
         }
     }

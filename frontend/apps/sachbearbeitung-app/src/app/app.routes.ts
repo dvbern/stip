@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 
 import { BuchhaltungStore } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
-import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
@@ -58,12 +57,11 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'druckzentrum',
-        title: 'sachbearbeitung-app.druckzentrum.title',
-        providers: [MassendruckStore],
+        path: 'massendruck',
+        title: 'sachbearbeitung-app.massendruck.title',
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/druckzentrum').then(
-            (m) => m.sachbearbeitungAppFeatureDruckzentrumRoutes,
+          import('@dv/sachbearbeitung-app/feature/massendruck').then(
+            (m) => m.sachbearbeitungAppFeatureMassendruckRoutes,
           ),
       },
       {
