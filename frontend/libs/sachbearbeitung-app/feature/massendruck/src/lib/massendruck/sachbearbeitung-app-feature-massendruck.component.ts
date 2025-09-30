@@ -233,7 +233,7 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
           ? toBackendLocalDate(formValue.timestampErstellt)
           : undefined,
         page: 0,
-        pageSize: 10,
+        pageSize: this.defaultPageSize,
       });
 
       this.router.navigate(['.'], {
