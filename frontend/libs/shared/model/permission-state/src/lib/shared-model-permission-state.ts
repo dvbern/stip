@@ -92,7 +92,7 @@ type PermissionCheck = ReturnType<typeof perm>;
 export const permissionTableByAppType = {
   IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF    ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
   EINGEREICHT                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U  J', ['sb']) },
+  ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
   BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
   IN_BEARBEITUNG_SB                : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('WD UANJ', ['sb']) },
   IN_FREIGABE                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
