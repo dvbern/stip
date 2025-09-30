@@ -34,7 +34,6 @@ public class DatenschutzDruckbereitHandler implements GesuchStatusChangeHandler 
     @Transactional
     @Override
     public void handle(Gesuch gesuch) {
-        // todo KSTIP-2685: generate Datenschutzbriefe here
         // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
         if (gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
