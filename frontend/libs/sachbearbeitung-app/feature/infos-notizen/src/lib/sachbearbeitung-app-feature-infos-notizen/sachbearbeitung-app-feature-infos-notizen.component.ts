@@ -88,7 +88,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
     const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
     const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
-      return {};
+      return false;
     }
     const permissions = getGesuchPermissions(
       { gesuchStatus },
