@@ -22,6 +22,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import jakarta.annotation.Nullable;
@@ -81,5 +82,17 @@ public class MassendruckJob extends AbstractMandantEntity {
             return MassendruckJobTyp.DATENSCHUTZBRIEF;
         }
         return MassendruckJobTyp.VERFUEGUNG;
+    }
+
+    @Transient
+    public List<Gesuch> getAttachedGesuche() {
+        return switch (getMassendruckTyp()) {
+            case DATENSCHUTZBRIEF -> getDatenschutzbriefMassendrucks().stream()
+                .map(datenschutzbrief -> datenschutzbrief.getDatenschutzbrief().getGesuch())
+                .toList();
+            case VERFUEGUNG -> getVerfuegungMassendrucks().stream()
+                .map(verfuegung -> verfuegung.getVerfuegung().getGesuch())
+                .toList();
+        };
     }
 }

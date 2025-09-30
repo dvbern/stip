@@ -46,7 +46,10 @@ public class MassendruckJobDocumentWorker {
     }
 
     void tearDown(@Observes ShutdownEvent shutdown) {
-        LOG.info("MassendruckJobDocumentWorker shut down {}", shutdown.isStandardShutdown());
+        LOG.info(
+            "MassendruckJobDocumentWorker shut down {}",
+            shutdown.isStandardShutdown() ? "normally" : "abnormally"
+        );
         executor.close();
     }
 

@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.massendruck.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -150,10 +151,12 @@ public class MassendruckJobService {
             default -> throw new BadRequestException();
         }
 
-        massendruckJobRepository.persist(massendruckJob);
-        massendruckJobDocumentWorker.combineDocuments(massendruckJob.getId(), tenantIdentifier);
-
+        massendruckJobRepository.persistAndFlush(massendruckJob);
         return massendruckJobMapper.toDto(massendruckJob);
+    }
+
+    public void combineDocument(final UUID massendruckJobId) {
+        massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
     }
 
     private void createAndSetDatenschutzbriefMassendruck(
