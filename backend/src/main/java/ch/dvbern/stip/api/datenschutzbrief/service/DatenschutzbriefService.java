@@ -58,7 +58,11 @@ public class DatenschutzbriefService {
 
     public RestMulti<ByteArrayOutputStream> getDatenschutzbriefDokument(final UUID trancheId, final UUID elternId) {
         final var elternTeil = elternService.getElternTeilById(elternId);
-        final var filename = String.format("datenschutzbrief_%s", elternTeil.getElternTyp().toString());
+        final var filenameTitle = switch (elternTeil.getElternTyp()) {
+            case MUTTER -> "Datenschutzbrief Mutter";
+            case VATER -> "Datenschutzbrief Vater";
+        };
+        final var filename = String.format("datenschutzbrief_%s%s", filenameTitle, ".pdf");
 
         final CompletableFuture<ByteArrayOutputStream> generateDokumentFuture = CompletableFuture
             .supplyAsync(() -> datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil));
