@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -38,12 +39,15 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.utils.PdfMerger;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.RestMulti;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Slf4j
@@ -53,7 +57,8 @@ public class MassendruckJobPdfService {
     public static final String MASSENDRUCK_DOKUMENT_PATH = "massendruck/";
 
     private final MassendruckJobRepository massendruckJobRepository;
-    private final S3AsyncClient s3;
+    private final S3AsyncClient s3async;
+    private final S3Client s3client;
     private final ConfigService configService;
     private final GesuchStatusService gesuchStatusService;
 
@@ -103,22 +108,23 @@ public class MassendruckJobPdfService {
         LOG.info("Finished merging PDFs, creating Dokument and uploading to S3");
 
         // Set the Document for MassendruckJob
-        final var objectId = String.format("%s/%s.pdf", MASSENDRUCK_DOKUMENT_PATH, massendruckJob.getId());
+        // Set the objectId to MassendruckJob ID for easy document downloading
+        final var objectId = String.format("%s.pdf", massendruckJob.getId());
         final var fileName = String.format("massendruck_%s.pdf", massendruckJob.getMassendruckJobNumber());
 
         final var dokument = new Dokument()
             .setFilename(fileName)
             .setFilepath(fileName)
-            .setFilesize("")
+            .setFilesize(Integer.toString(out.size()))
             .setObjectId(objectId);
 
         massendruckJob.setMergedPdf(dokument);
 
         // Upload the merged PDF to S3
-        final var future = s3.putObject(
+        final var future = s3async.putObject(
             PutObjectRequest.builder()
                 .bucket(configService.getBucketName())
-                .key(objectId)
+                .key(MASSENDRUCK_DOKUMENT_PATH + objectId)
                 .contentType("application/pdf")
                 .build(),
             AsyncRequestBody.fromBytes(out.toByteArray())
@@ -127,6 +133,8 @@ public class MassendruckJobPdfService {
         LOG.info("Uploading document to S3");
         Uni.createFrom()
             .completionStage(future)
+            .onItem()
+            .invoke(response -> LOG.info("S3 upload completed, uploaded size: {}", response.size()))
             .await()
             .indefinitely();
 
@@ -140,6 +148,19 @@ public class MassendruckJobPdfService {
         LOG.info("Finished uploading document to S3, bulk triggering state change");
         gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
         massendruckJob.setStatus(MassendruckJobStatus.SUCCESS);
+    }
+
+    public RestMulti<Buffer> downloadMassendruckPdf(final UUID massendruckJobId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
+        final var dokument = massendruckJob.getMergedPdf();
+
+        return DokumentDownloadUtil.getDokument(
+            s3async,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            MASSENDRUCK_DOKUMENT_PATH,
+            dokument.getFilename()
+        );
     }
 
     private List<PdfDocument> generateAllDatenschutzbriefDocuments(
