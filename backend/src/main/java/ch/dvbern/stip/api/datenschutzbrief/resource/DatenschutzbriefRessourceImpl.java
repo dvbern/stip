@@ -63,7 +63,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     @PermitAll
     @Override
     public FileDownloadTokenDto getDatenschutzbriefDownloadToken(UUID elternId) {
-        authorizer.canGetDokumentDownloadToken(elternId);
+        authorizer.canGetDokumentDownloadToken();
         return DokumentDownloadUtil.getFileDownloadToken(
             elternId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,

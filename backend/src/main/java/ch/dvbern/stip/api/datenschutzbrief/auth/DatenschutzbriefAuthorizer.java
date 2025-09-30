@@ -17,12 +17,9 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.auth;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.Authorizer;
 import ch.dvbern.stip.api.common.authorization.BaseAuthorizer;
-import ch.dvbern.stip.api.eltern.service.ElternService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -30,14 +27,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class DatenschutzbriefAuthorizer extends BaseAuthorizer {
-    private final ElternService elternService;
     private final BenutzerService benutzerService;
 
-    public void canGetDokumentDownloadToken(final UUID elternteilId) {
+    public void canGetDokumentDownloadToken() {
         if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
             return;
         }
-        elternService.getElternTeilById(elternteilId);
         forbidden();
     }
 }
