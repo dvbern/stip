@@ -1188,7 +1188,7 @@ paths:
       operationId: createUnterschriftenblatt
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/unterschriftenblatt/{gesuchId}':
-     get:
+    get:
       tags:
         - Dokument
       parameters:
@@ -1975,7 +1975,7 @@ paths:
       - $ref: '#/components/parameters/sozialdienstId'
     post:
       tags:
-      - Delegieren
+        - Delegieren
       requestBody:
         required: true
         content:
@@ -2157,9 +2157,9 @@ paths:
       requestBody:
         required: true
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Land'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: Returns all countries and whether they're part of eu/efta or not
@@ -2187,9 +2187,9 @@ paths:
       requestBody:
         required: true
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Land'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: 'EU/EFTA Länder wurden erflogreich gesetzt'
@@ -2282,32 +2282,32 @@ paths:
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
-        parameters:
-          - name: gesuchTrancheId
-            schema:
-              $ref: '#/components/schemas/UUID'
-            in: path
-            required: true
-        get:
-          tags:
-            - Gesuch
-          responses:
-            '200':
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Gesuch'
-              description: OK
-            '401':
-              $ref: '#/components/responses/Unauthorized'
-            '403':
-              $ref: '#/components/responses/Forbidden'
-            '404':
-              $ref: '#/components/responses/NotFound'
-            '500':
-              $ref: '#/components/responses/ServerError'
-          operationId: getGesuchGS
-          summary: Returns the Gesuch with the given Id
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchGS
+      summary: Returns the Gesuch with the given Id
   '/gesuch/sb/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId
@@ -4382,7 +4382,10 @@ components:
         - KINDER_ALIMENTENVERORDUNG
         - PARTNER_AUSBILDUNG_LOHNABRECHNUNG
         - PARTNER_BELEG_OV_ABONNEMENT
-        - EK_BELEG_ALIMENTE
+        - EK_BELEG_UNTERHALTSBEITRAEGE
+        - EK_BELEG_EINNAHMEN_BGSA
+        - EK_BELEG_TAGGELDER_AHV_IV
+        - EK_BELEG_ANDERE_EINNAHMEN
         - EK_BELEG_KINDERZULAGEN
         - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
         - EK_BELEG_BEZAHLTE_RENTEN
@@ -4960,7 +4963,7 @@ components:
         kommentar:
           type: string
         fileUpload:
-          $ref: "#/components/schemas/FileUpload"
+          $ref: '#/components/schemas/FileUpload'
     Gesuch:
       required:
         - fallId
@@ -5706,8 +5709,21 @@ components:
       properties:
         nettoerwerbseinkommen:
           type: integer
+        arbeitspensumProzent:
+          description: Required nur wenn nettoerwerbseinkommen > 0
+          type: integer
+        #todo: rename to unterhaltsbeitraege
         alimente:
-          description: Required nur wenn mind. ein Elternteil Alimente zahlt
+          description: Wird immer angezeigt, ist aber optional
+          type: integer
+        einnahmenBGSA:
+          description: Mit Dokument wenn > 0
+          type: integer
+        taggelderAHVIV:
+          description: Mit Dokument wenn > 0
+          type: integer
+        andereEinnahmen:
+          description: Mit Dokument wenn > 0
           type: integer
         zulagen:
           description: Required nur wenn mind. ein Kind gibt
@@ -5730,8 +5746,6 @@ components:
           type: integer
         wgWohnend:
           description: Required nur wenn Person eigener Haushalt hat
-          type: boolean
-        verdienstRealisiert:
           type: boolean
         auswaertigeMittagessenProWoche:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
@@ -6130,7 +6144,7 @@ components:
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
         bildungsrichtung:
-          $ref: "#/components/schemas/Bildungsrichtung"
+          $ref: '#/components/schemas/Bildungsrichtung'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
@@ -6177,7 +6191,7 @@ components:
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
         bildungsrichtung:
-          $ref: "#/components/schemas/Bildungsrichtung"
+          $ref: '#/components/schemas/Bildungsrichtung'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:
