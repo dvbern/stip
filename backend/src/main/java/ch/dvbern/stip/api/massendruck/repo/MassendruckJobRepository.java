@@ -15,28 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.massendruck.repo;
 
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Authorizer
-public class MassendruckJobAuthorizer extends BaseAuthorizer {
-    public void canCreateMassendruckJob(final GetGesucheSBQueryType getGesucheSBQueryType) {
-        final var isAllowed = switch (getGesucheSBQueryType) {
-            case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN, ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> true;
-            default -> false;
-        };
-
-        if (!isAllowed) {
-            forbidden();
-        }
-    }
-
-    public void permitAll() {
-        super.permitAll();
-    }
+public class MassendruckJobRepository implements BaseRepository<MassendruckJob> {
 }

@@ -55,8 +55,8 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDto createMassendruckJobForQueryType(GetGesucheSBQueryType getGesucheSBQueryType) {
-        authorizer.permitAll();
-        return null;
+        authorizer.canCreateMassendruckJob(getGesucheSBQueryType);
+        return massendruckJobService.createMassendruckJobForQueryType(getGesucheSBQueryType);
     }
 
     @Override

@@ -29,8 +29,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_NACHNAME_NOTBLANK_MESSAGE;
@@ -42,6 +43,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
         @Index(name = "IX_verfuegung_massendruck_mandant", columnList = "mandant")
     }
 )
+@Getter
+@Setter
 public class VerfuegungMassendruck extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "verfuegung_id", foreignKey = @ForeignKey(name = "FK_verfuegung_massendruck_verfuegung_id"))
@@ -57,14 +60,9 @@ public class VerfuegungMassendruck extends AbstractMandantEntity {
     @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
-    @NotNull
-    @Column(name = "is_versendet")
-    private boolean isVersendet = false;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(
         name = "massendruck_job_id", foreignKey = @ForeignKey(name = "FK_verfuegung_massendruck_massendruck_job_id")
     )
     private MassendruckJob massendruckJob;
-
 }

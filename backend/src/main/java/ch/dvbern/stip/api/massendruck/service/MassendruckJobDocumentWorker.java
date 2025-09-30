@@ -15,28 +15,34 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.massendruck.service;
 
-import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.Startup;
+import io.vertx.core.Vertx;
+import io.vertx.core.WorkerExecutor;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-@Authorizer
-public class MassendruckJobAuthorizer extends BaseAuthorizer {
-    public void canCreateMassendruckJob(final GetGesucheSBQueryType getGesucheSBQueryType) {
-        final var isAllowed = switch (getGesucheSBQueryType) {
-            case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN, ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> true;
-            default -> false;
-        };
+@Startup
+@Slf4j
+public class MassendruckJobDocumentWorker {
+    private final WorkerExecutor executor;
 
-        if (!isAllowed) {
-            forbidden();
-        }
+    @Inject
+    public MassendruckJobDocumentWorker(final Vertx vertx) {
+        executor = vertx.createSharedWorkerExecutor("MassendruckJobDocumentWorker");
     }
 
-    public void permitAll() {
-        super.permitAll();
+    void tearDown(@Observes ShutdownEvent shutdown) {
+        LOG.info("MassendruckJobDocumentWorker shut down {}", shutdown.isStandardShutdown());
+        executor.close();
+    }
+
+    public void combineDocuments() {
+
     }
 }
