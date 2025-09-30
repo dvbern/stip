@@ -44,6 +44,7 @@ import lombok.Setter;
 )
 @Getter
 @Setter
+@DatenschutzbriefOrVerfuegungSetConstraint
 public class MassendruckJob extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "massendruckJob")
     private List<DatenschutzbriefMassendruck> datenschutzbriefMassendrucks = new ArrayList<>();

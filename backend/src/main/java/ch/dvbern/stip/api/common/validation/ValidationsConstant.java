@@ -227,6 +227,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.buchhaltung.sapDeliverys.length.violation}";
     public static final String VALIDATION_ABSCHLUSS_BRUECKENANGEBOT_NOT_UNIQUE =
         "{jakarta.validation.constraints.abschluss.notunique}";
+    public static final String VALIDATOIN_MASSENDRUCK_DATENSCHUTZBRIEF_OR_VERFUEGUNG =
+        "{jakarta.validation.constraints.massendruck.datenschutzbriefOrVerfuegung}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");
