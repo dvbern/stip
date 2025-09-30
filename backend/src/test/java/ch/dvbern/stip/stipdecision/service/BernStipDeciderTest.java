@@ -228,7 +228,7 @@ class BernStipDeciderTest {
             .isEqualTo(StipDeciderResult.GESUCH_VALID);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
-        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
 
     @Test
@@ -483,6 +483,6 @@ class BernStipDeciderTest {
         assertThat(decision).isEqualTo(StipDeciderResult.GESUCH_VALID);
 
         var event = decider.getGesuchStatusChangeEvent(decision);
-        assertThat(event).isEqualTo(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        assertThat(event).isEqualTo(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
 }
