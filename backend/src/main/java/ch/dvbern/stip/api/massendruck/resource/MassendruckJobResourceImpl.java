@@ -30,14 +30,20 @@ import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import ch.dvbern.stip.generated.api.MassendruckResource;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
 import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
-import jakarta.annotation.security.PermitAll;
+import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.RestMulti;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -47,13 +53,14 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     private final MassendruckJobService massendruckJobService;
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDto createMassendruckJobForQueryType(GetGesucheSBQueryType getGesucheSBQueryType) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
-    @PermitAll
+    @RolesAllowed({ SB_GESUCH_READ })
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
         GetMassendruckJobQueryType getMassendruckJobs,
         Integer page,
@@ -82,18 +89,35 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_READ })
+    public FileDownloadTokenDto getMassendruckDownloadToken(UUID massendruckId) {
+        authorizer.permitAll();
+        return null;
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ })
+    public RestMulti<Buffer> downloadMassendruckDocument(String token) {
+        authorizer.permitAll();
+        return null;
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ })
     public MassendruckJobDetailDto getMassendruckJobDetail(UUID massendruckJobId) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckDatenschutzbriefDto massendruckDatenschutzbriefVersenden(UUID massendruckDatenschutzbriefId) {
         authorizer.permitAll();
         return null;
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckVerfuegungDto massendruckVerfuegungVersenden(UUID massendruckVerfuegungId) {
         authorizer.permitAll();
         return null;

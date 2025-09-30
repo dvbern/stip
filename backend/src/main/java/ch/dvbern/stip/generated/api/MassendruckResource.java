@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
+import java.io.File;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
@@ -32,9 +34,19 @@ public interface MassendruckResource {
     MassendruckJobDto createMassendruckJobForQueryType(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
 
     @GET
+    @Path("/download")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadMassendruckDocument(@QueryParam("token") @NotNull   String token);
+
+    @GET
     @Path("/{getMassendruckJobs}")
     @Produces({ "application/json", "text/plain" })
     PaginatedMassendruckJobDto getAllMassendruckJobs(@PathParam("getMassendruckJobs") ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType getMassendruckJobs,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("massendruckJobNumber")   Integer massendruckJobNumber,@QueryParam("userErstellt")   String userErstellt,@QueryParam("timestampErstellt")   LocalDate timestampErstellt,@QueryParam("massendruckJobStatus")   ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus,@QueryParam("massendruckJobTyp")   ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp massendruckJobTyp,@QueryParam("sortColumn")   ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+
+    @GET
+    @Path("/{massendruckId}/token")
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getMassendruckDownloadToken(@PathParam("massendruckId") UUID massendruckId);
 
     @GET
     @Path("/detail/{massendruckJobId}")
