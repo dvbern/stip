@@ -110,7 +110,9 @@ class DatenschutzbriefRessourceImplTest {
             .as(FileDownloadTokenDtoSpec.class)
             .getToken();
 
-        TestUtil.executeAndAssertOk(datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token));
+        TestUtil.executeAndAssertOk(
+            datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token).trancheIdPath(gesuchTrancheId)
+        );
     }
 
     @Test

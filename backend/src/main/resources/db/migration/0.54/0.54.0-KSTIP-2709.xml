@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1759158433877-2">
+    <createTable tableName="datenschutzbrief_download">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="datenschutzbrief_downloadPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="fallnr" type="VARCHAR(20)"/>
+      <column name="gesuch_nr" type="VARCHAR(255)"/>
+      <column name="svnr" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1759158433877-3">
+    <createIndex indexName="IX_datenschutzbrief_download_mandant" tableName="datenschutzbrief_download">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

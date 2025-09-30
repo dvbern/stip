@@ -49,7 +49,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     @Blocking
     @PermitAll
     @Override
-    public RestMulti<ByteArrayOutputStream> getDatenschutzbrief(String token) {
+    public RestMulti<ByteArrayOutputStream> getDatenschutzbrief(final String token, final UUID trancheId) {
         final var elternId = DokumentDownloadUtil.getClaimId(
             jwtParser,
             token,
@@ -57,7 +57,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
 
-        return datenschutzbriefService.getDatenschutzbriefDokument(elternId);
+        return datenschutzbriefService.getDatenschutzbriefDokument(trancheId, elternId);
     }
 
     @PermitAll

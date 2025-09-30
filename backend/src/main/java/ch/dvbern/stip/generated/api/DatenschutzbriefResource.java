@@ -23,9 +23,9 @@ import jakarta.validation.Valid;
 public interface DatenschutzbriefResource {
 
     @GET
-    @Path("/download")
+    @Path("/{trancheId}/download")
     @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream> getDatenschutzbrief(@QueryParam("token") @NotNull   String token);
+    org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream> getDatenschutzbrief(@QueryParam("token") @NotNull   String token,@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{elternId}/token")

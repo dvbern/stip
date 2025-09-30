@@ -87,12 +87,13 @@ public class DatenschutzbriefApiSpec {
      * 
      *
      * @see #tokenQuery  (required)
+     * @see #trancheIdPath  (optional)
      * return File
      */
     public static class GetDatenschutzbriefOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/datenschutzbrief/download";
+        public static final String REQ_URI = "/datenschutzbrief/{trancheId}/download";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -104,7 +105,7 @@ public class DatenschutzbriefApiSpec {
         }
 
         /**
-         * GET /datenschutzbrief/download
+         * GET /datenschutzbrief/{trancheId}/download
          * @param handler handler
          * @param <T> type
          * @return type
@@ -115,13 +116,24 @@ public class DatenschutzbriefApiSpec {
         }
 
         /**
-         * GET /datenschutzbrief/download
+         * GET /datenschutzbrief/{trancheId}/download
          * @param handler handler
          * @return File
          */
         public File executeAs(Function<Response, Response> handler) {
             TypeRef<File> type = new TypeRef<File>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String TRANCHE_ID_PATH = "trancheId";
+
+        /**
+         * @param trancheId (UUID)  (optional)
+         * @return operation
+         */
+        public GetDatenschutzbriefOper trancheIdPath(Object trancheId) {
+            reqSpec.addPathParam(TRANCHE_ID_PATH, trancheId);
+            return this;
         }
 
         public static final String TOKEN_QUERY = "token";

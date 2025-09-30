@@ -2642,8 +2642,12 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateSteuerdaten
       summary: Updates the Steuerdaten of the given gesuchTrancheId
-  '/datenschutzbrief/download':
+  '/datenschutzbrief/{trancheId}/download':
     parameters:
+      - name: trancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
       - name: token
         schema:
           type: string

@@ -27,6 +27,8 @@ import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
+import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefDownload;
+import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefDownloadLogRepository;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
 import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -34,6 +36,7 @@ import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import jakarta.enterprise.context.RequestScoped;
@@ -50,9 +53,10 @@ public class DatenschutzbriefService {
     private final DatenschutzbriefRepository datenschutzbriefRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final ElternService elternService;
+    private final DatenschutzbriefDownloadLogRepository datenschutzbriefDownloadLogRepository;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
 
-    @Transactional
-    public RestMulti<ByteArrayOutputStream> getDatenschutzbriefDokument(final UUID elternId) {
+    public RestMulti<ByteArrayOutputStream> getDatenschutzbriefDokument(final UUID trancheId, final UUID elternId) {
         final var elternTeil = elternService.getElternTeilById(elternId);
         final var filename = String.format("datenschutzbrief_%s", elternTeil.getElternTyp().toString());
 
@@ -60,7 +64,19 @@ public class DatenschutzbriefService {
             .supplyAsync(() -> datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil));
         final Supplier<CompletionStage<ByteArrayOutputStream>> stageSupplier =
             () -> generateDokumentFuture;
+        logDatenschutzbriefDownload(trancheId, elternId);
         return DokumentDownloadUtil.getWrapedDokument(filename, stageSupplier);
+    }
+
+    @Transactional
+    public void logDatenschutzbriefDownload(final UUID trancheId, final UUID elternId) {
+        final var eltern = elternService.getElternTeilById(elternId);
+        final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
+        final var fallNr = gesuchTranche.getGesuch().getAusbildung().getFall().getFallNummer();
+        final var gesuchId = gesuchTranche.getGesuch().getId().toString();
+        final var svNr = eltern.getSozialversicherungsnummer();
+        final var datenschutzbriefDownloadLog = new DatenschutzbriefDownload(fallNr, gesuchId, svNr);
+        datenschutzbriefDownloadLogRepository.persistAndFlush(datenschutzbriefDownloadLog);
     }
 
     @Transactional
