@@ -133,10 +133,9 @@ public class MassendruckJobService {
             .stream()
             .toList();
 
+        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
         final var massendruckJob = new MassendruckJob()
-            .setMassendruckJobNumber(
-                massendruckJobSeqRepository.getNextValue(tenantService.getCurrentTenantIdentifier())
-            )
+            .setMassendruckJobNumber(massendruckJobSeqRepository.getNextValue(tenantIdentifier))
             .setStatus(MassendruckJobStatus.IN_PROGRESS);
 
         switch (getGesucheSBQueryType) {
@@ -152,6 +151,8 @@ public class MassendruckJobService {
         }
 
         massendruckJobRepository.persist(massendruckJob);
+        massendruckJobDocumentWorker.combineDocuments(massendruckJob.getId(), tenantIdentifier);
+
         return massendruckJobMapper.toDto(massendruckJob);
     }
 

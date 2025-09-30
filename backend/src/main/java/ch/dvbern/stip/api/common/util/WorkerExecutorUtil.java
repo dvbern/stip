@@ -17,10 +17,6 @@
 
 package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import io.quarkus.arc.Arc;
-import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.vertx.core.WorkerExecutor;
 import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
@@ -32,28 +28,24 @@ public class WorkerExecutorUtil {
         final WorkerExecutor executor,
         final String tenantId,
         final Runnable body,
-        final @Nullable Runnable tail,
+        final @Nullable Runnable onExceptionInTransaction,
+        final @Nullable Runnable tailNoTransaction,
         final @Nullable Logger log
     ) {
         executor.executeBlocking(() -> {
             try {
-                QuarkusTransaction.requiringNew().run(() -> {
-                    try (
-                        final var ignored1 = DataTenantResolver.setTenantId(tenantId);
-                        final var ignored2 = TenantService.setTenantId(tenantId);
-                    ) {
-                        Arc.container().requestContext().activate();
-                        body.run();
-                        Arc.container().requestContext().deactivate();
-                    }
-                });
+                QuarkusTransactionUtil.runForTenantInNewTransaction(tenantId, body);
             } catch (Exception ex) {
                 if (log != null) {
                     log.error(ex.toString(), ex);
                 }
+
+                if (onExceptionInTransaction != null) {
+                    QuarkusTransactionUtil.runForTenantInNewTransaction(tenantId, onExceptionInTransaction);
+                }
             } finally {
-                if (tail != null) {
-                    tail.run();
+                if (tailNoTransaction != null) {
+                    tailNoTransaction.run();
                 }
             }
 

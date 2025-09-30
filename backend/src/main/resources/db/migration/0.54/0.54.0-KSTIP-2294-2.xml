@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="? (generated)" id="1759233871982-2">
+        <addColumn tableName="massendruck_job">
+            <column name="merged_pdf_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="? (generated)" id="1759233871982-3">
+        <addUniqueConstraint columnNames="merged_pdf_id" constraintName="UC_MASSENDRUCK_JOBMERGED_PDF_ID_COL" tableName="massendruck_job"/>
+    </changeSet>
+    <changeSet author="? (generated)" id="1759233871982-5">
+        <addForeignKeyConstraint baseColumnNames="merged_pdf_id" baseTableName="massendruck_job" constraintName="FK_massendruck_job_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dokument" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

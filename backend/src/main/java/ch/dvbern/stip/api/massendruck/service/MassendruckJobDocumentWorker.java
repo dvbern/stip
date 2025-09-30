@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.massendruck.service;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.util.WorkerExecutorUtil;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.Startup;
 import io.vertx.core.Vertx;
@@ -31,10 +34,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MassendruckJobDocumentWorker {
     private final WorkerExecutor executor;
+    private final MassendruckJobPdfService massendruckJobPdfService;
 
     @Inject
-    public MassendruckJobDocumentWorker(final Vertx vertx) {
+    public MassendruckJobDocumentWorker(
+    final Vertx vertx,
+    final MassendruckJobPdfService massendruckJobPdfService
+    ) {
         executor = vertx.createSharedWorkerExecutor("MassendruckJobDocumentWorker");
+        this.massendruckJobPdfService = massendruckJobPdfService;
     }
 
     void tearDown(@Observes ShutdownEvent shutdown) {
@@ -42,7 +50,14 @@ public class MassendruckJobDocumentWorker {
         executor.close();
     }
 
-    public void combineDocuments() {
-
+    public void combineDocuments(final UUID massendruckJobId, final String tenantId) {
+        WorkerExecutorUtil.executeBlockingWithTransaction(
+            executor,
+            tenantId,
+            () -> massendruckJobPdfService.downloadCombineAndSaveForJob(massendruckJobId),
+            () -> massendruckJobPdfService.setFailedStatusOnJob(massendruckJobId),
+            null,
+            LOG
+        );
     }
 }

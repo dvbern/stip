@@ -71,6 +71,6 @@ public class SachbearbeiterZuordnungStammdatenWorker {
     }
 
     private void run(final String tenantId, final Runnable body, final @Nullable Runnable tail) {
-        WorkerExecutorUtil.executeBlockingWithTransaction(executor, tenantId, body, tail, LOG);
+        WorkerExecutorUtil.executeBlockingWithTransaction(executor, tenantId, body, null, tail, LOG);
     }
 }
