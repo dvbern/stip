@@ -92,7 +92,7 @@ public class DokumentDownloadUtil {
         );
     }
 
-    private Map getRequiredHeaders(final String fileName) {
+    private Map<String, List<String>> getRequiredHeaders(final String fileName) {
         return Map.of(
             "Content-Disposition",
             List.of("attachment;filename=" + fileName),
