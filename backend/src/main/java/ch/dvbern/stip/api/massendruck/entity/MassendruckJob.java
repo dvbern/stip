@@ -60,7 +60,7 @@ public class MassendruckJob extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    // TODO KSTIP-2294: Add a column annotation to this (shouldn't require a new migration)
+    @Column(name = "status")
     private MassendruckJobStatus status;
 
     @NotNull
