@@ -17,7 +17,11 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class MassendruckJobAuthorizer extends BaseAuthorizer {
+    private final MassendruckJobRepository massendruckJobRepository;
+
     public void canCreateMassendruckJob(final GetGesucheSBQueryType getGesucheSBQueryType) {
         final var isAllowed = switch (getGesucheSBQueryType) {
             case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN, ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> true;
@@ -32,6 +38,13 @@ public class MassendruckJobAuthorizer extends BaseAuthorizer {
         };
 
         if (!isAllowed) {
+            forbidden();
+        }
+    }
+
+    public void canDeleteMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
+        if (massendruckJob.getStatus() != MassendruckJobStatus.FAILED) {
             forbidden();
         }
     }

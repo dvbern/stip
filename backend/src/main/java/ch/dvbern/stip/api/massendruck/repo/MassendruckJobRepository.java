@@ -17,10 +17,40 @@
 
 package ch.dvbern.stip.api.massendruck.repo;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
+import ch.dvbern.stip.api.massendruck.entity.QDatenschutzbriefMassendruck;
+import ch.dvbern.stip.api.massendruck.entity.QMassendruckJob;
+import ch.dvbern.stip.api.massendruck.entity.QVerfuegungMassendruck;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class MassendruckJobRepository implements BaseRepository<MassendruckJob> {
+    private final EntityManager entityManager;
+
+    public void deleteMassendruckJobById(final UUID massendruckId) {
+        final var datenschutzbriefMassendruck = QDatenschutzbriefMassendruck.datenschutzbriefMassendruck;
+        new JPAQueryFactory(entityManager)
+            .delete(datenschutzbriefMassendruck)
+            .where(datenschutzbriefMassendruck.massendruckJob.id.eq(massendruckId))
+            .execute();
+
+        final var verfuegungMassendruck = QVerfuegungMassendruck.verfuegungMassendruck;
+        new JPAQueryFactory(entityManager)
+            .delete(verfuegungMassendruck)
+            .where(verfuegungMassendruck.massendruckJob.id.eq(massendruckId))
+            .execute();
+
+        final var massendruckJob = QMassendruckJob.massendruckJob;
+        new JPAQueryFactory(entityManager)
+            .delete(massendruckJob)
+            .where(massendruckJob.id.eq(massendruckId))
+            .execute();
+    }
 }

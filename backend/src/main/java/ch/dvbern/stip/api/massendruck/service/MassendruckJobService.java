@@ -201,4 +201,9 @@ public class MassendruckJobService {
 
         massendruckJob.setVerfuegungMassendrucks(toPersist);
     }
+
+    @Transactional
+    public void deleteMassendruckJob(final UUID massendruckId) {
+        massendruckJobRepository.deleteMassendruckJobById(massendruckId);
+    }
 }
