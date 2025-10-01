@@ -162,6 +162,14 @@ public class MassendruckJobService {
 
     @Transactional
     public void deleteMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.findById(massendruckId);
+        final var gesuche = massendruckJob.getAttachedGesuche();
+        final var changeEvent = switch (massendruckJob.getMassendruckTyp()) {
+            case VERFUEGUNG -> GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT;
+            case DATENSCHUTZBRIEF -> GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
+        };
+
+        gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
         massendruckJobRepository.deleteMassendruckJobById(massendruckId);
     }
 
