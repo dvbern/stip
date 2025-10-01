@@ -49,7 +49,6 @@ import org.jboss.resteasy.reactive.RestMulti;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -61,7 +60,6 @@ public class MassendruckJobPdfService {
 
     private final MassendruckJobRepository massendruckJobRepository;
     private final S3AsyncClient s3async;
-    private final S3Client s3client;
     private final ConfigService configService;
     private final GesuchStatusService gesuchStatusService;
 
