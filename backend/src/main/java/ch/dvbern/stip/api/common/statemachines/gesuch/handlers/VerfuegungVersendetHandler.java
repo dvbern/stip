@@ -36,6 +36,8 @@ public class VerfuegungVersendetHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
+        gesuch.getVerfuegungs().forEach(verfuegung -> verfuegung.setVersendet(true));
+
         final var latestVerfuegung =
             gesuch.getVerfuegungs().stream().max(Comparator.comparing(Verfuegung::getTimestampErstellt));
 
