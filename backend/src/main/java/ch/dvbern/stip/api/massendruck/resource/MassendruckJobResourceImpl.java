@@ -44,6 +44,7 @@ import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -115,9 +116,8 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
 
     @Blocking
     @Override
-    @RolesAllowed({ SB_GESUCH_READ })
+    @PermitAll
     public RestMulti<Buffer> downloadMassendruckDocument(String token) {
-        authorizer.permitAll();
         final var massendruckJobId = DokumentDownloadUtil.getClaimId(
             jwtParser,
             token,
