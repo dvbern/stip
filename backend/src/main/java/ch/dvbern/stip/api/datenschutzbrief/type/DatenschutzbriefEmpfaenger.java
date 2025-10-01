@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.datenschutzbrief.type;
 
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 
+// TODO KSTIP-2294: Replace with Eltern in all usages
 public enum DatenschutzbriefEmpfaenger {
     VATER,
     MUTTER,
