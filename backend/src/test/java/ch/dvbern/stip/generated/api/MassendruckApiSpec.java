@@ -747,7 +747,7 @@ public class MassendruckApiSpec {
     public static class MassendruckVerfuegungVersendenOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}";
+        public static final String REQ_URI = "/massendruck/verfuegung/versendet/{massendruckVerfuegungId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -759,7 +759,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}
+         * POST /massendruck/verfuegung/versendet/{massendruckVerfuegungId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -770,7 +770,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}
+         * POST /massendruck/verfuegung/versendet/{massendruckVerfuegungId}
          * @param handler handler
          * @return MassendruckVerfuegungDtoSpec
          */

@@ -32,16 +32,20 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
 import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
 import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
+import ch.dvbern.stip.api.massendruck.repo.DatenschutzbriefMassendruckRepository;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobQueryBuilder;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobSeqRepository;
+import ch.dvbern.stip.api.massendruck.repo.VerfuegungMassendruckRepository;
 import ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
+import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -58,6 +62,10 @@ public class MassendruckJobService {
     private final MassendruckJobSeqRepository massendruckJobSeqRepository;
     private final MassendruckJobRepository massendruckJobRepository;
     private final GesuchStatusService gesuchStatusService;
+    private final DatenschutzbriefMassendruckRepository datenschutzbriefMassendruckRepository;
+    private final DatenschutzbriefMassendruckMapper datenschutzbriefMassendruckMapper;
+    private final VerfuegungMassendruckRepository verfuegungMassendruckRepository;
+    private final VerfuegungMassendruckMapper verfuegungMassendruckMapper;
     private final TenantService tenantService;
     private final ConfigService configService;
 
@@ -226,5 +234,54 @@ public class MassendruckJobService {
     public MassendruckJobDetailDto getMassendruckJobDetail(final UUID massendruckJobId) {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
         return massendruckJobMapper.toDetailDto(massendruckJob);
+    }
+
+    @Transactional
+    public MassendruckDatenschutzbriefDto datenschutzbriefMassendruckVersenden(
+        final UUID massendruckDatenschutzbriefId
+    ) {
+        final var massendruckDatenschutzbrief =
+            datenschutzbriefMassendruckRepository.requireById(massendruckDatenschutzbriefId);
+        massendruckDatenschutzbrief.getDatenschutzbrief().setVersendet(true);
+
+        checkAndDoStateTransitionIfAllSent(massendruckDatenschutzbrief.getMassendruckJob());
+
+        return datenschutzbriefMassendruckMapper.toDto(massendruckDatenschutzbrief);
+    }
+
+    @Transactional
+    public MassendruckVerfuegungDto verfuegungMassendruckVersenden(final UUID massendruckVerfuegungId) {
+        final var massendruckVerfuegung = verfuegungMassendruckRepository.requireById(massendruckVerfuegungId);
+        massendruckVerfuegung.getVerfuegung().setVersendet(true);
+
+        checkAndDoStateTransitionIfAllSent(massendruckVerfuegung.getMassendruckJob());
+
+        return verfuegungMassendruckMapper.toDto(massendruckVerfuegung);
+    }
+
+    private void checkAndDoStateTransitionIfAllSent(final MassendruckJob massendruckJob) {
+        final var jobTyp = massendruckJob.getMassendruckTyp();
+        final var allSent = switch (jobTyp) {
+            case VERFUEGUNG -> massendruckJob.getVerfuegungMassendrucks()
+                .stream()
+                .allMatch(verfuegungMassendruck -> verfuegungMassendruck.getVerfuegung().isVersendet());
+            case DATENSCHUTZBRIEF -> massendruckJob.getDatenschutzbriefMassendrucks()
+                .stream()
+                .allMatch(
+                    datenschutzbriefMassendruck -> datenschutzbriefMassendruck.getDatenschutzbrief().isVersendet()
+                );
+        };
+
+        if (!allSent) {
+            return;
+        }
+
+        final var gesuche = massendruckJob.getAttachedGesuche();
+        final var changeEvent = switch (jobTyp) {
+            case VERFUEGUNG -> GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET;
+            case DATENSCHUTZBRIEF -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        };
+
+        gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
     }
 }

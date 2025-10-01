@@ -64,7 +64,7 @@ public interface MassendruckResource {
     MassendruckDatenschutzbriefDto massendruckDatenschutzbriefVersenden(@PathParam("massendruckDatenschutzbriefId") UUID massendruckDatenschutzbriefId);
 
     @POST
-    @Path("/datenschutzbrief/versendet/{massendruckVerfuegungId}")
+    @Path("/verfuegung/versendet/{massendruckVerfuegungId}")
     @Produces({ "application/json", "text/plain" })
     MassendruckVerfuegungDto massendruckVerfuegungVersenden(@PathParam("massendruckVerfuegungId") UUID massendruckVerfuegungId);
 

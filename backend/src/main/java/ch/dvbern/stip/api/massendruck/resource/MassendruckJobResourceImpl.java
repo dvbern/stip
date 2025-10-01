@@ -138,15 +138,15 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckDatenschutzbriefDto massendruckDatenschutzbriefVersenden(UUID massendruckDatenschutzbriefId) {
-        authorizer.permitAll();
-        return null;
+        authorizer.canDatenschutzbriefVersenden(massendruckDatenschutzbriefId);
+        return massendruckJobService.datenschutzbriefMassendruckVersenden(massendruckDatenschutzbriefId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckVerfuegungDto massendruckVerfuegungVersenden(UUID massendruckVerfuegungId) {
-        authorizer.permitAll();
-        return null;
+        authorizer.canVerfuegungMassendruckVersenden(massendruckVerfuegungId);
+        return massendruckJobService.verfuegungMassendruckVersenden(massendruckVerfuegungId);
     }
 
     @Override
