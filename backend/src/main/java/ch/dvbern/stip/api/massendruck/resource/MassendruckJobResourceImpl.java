@@ -148,4 +148,17 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
         authorizer.permitAll();
         return null;
     }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
+    public void deleteMassendruckJob(UUID massendruckId) {
+        authorizer.permitAll();
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE })
+    public MassendruckJobDetailDto retryMassendruckJob(UUID massendruckId) {
+        authorizer.permitAll();
+        return null;
+    }
 }
