@@ -21,12 +21,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NotizStore } from '@dv/sachbearbeitung-app/data-access/notiz';
+import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   GesuchNotiz,
   GesuchNotizCreate,
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
+import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -66,6 +69,8 @@ import { SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent } from '../s
 export class SachbearbeitungAppFeatureInfosNotizenComponent {
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
+  private gesuchInfoStore = inject(GesuchInfoStore);
+  private config = inject(SharedModelCompileTimeConfig);
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
@@ -78,6 +83,21 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   gesuchIdSig = input.required<string>({ alias: 'id' });
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
+
+  canCreateJurNotizSig = computed(() => {
+    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
+    const rolesMap = this.permissionStore.rolesMapSig();
+    if (!gesuchStatus) {
+      return false;
+    }
+    const permissions = getGesuchPermissions(
+      { gesuchStatus },
+      this.config.appType,
+      rolesMap,
+    );
+
+    return permissions.permissions.canCreateJurNotiz;
+  });
 
   notizSig = computed(() => {
     const notiz = this.notizStore.notizenListViewSig();
@@ -118,6 +138,11 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
 
           this.notizStore.createNotiz$({
             gesuchNotizCreate,
+            onSuccess: () => {
+              if (gesuchNotizCreate.notizTyp === 'JURISTISCHE_NOTIZ') {
+                this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+              }
+            },
           });
         }
       });

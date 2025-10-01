@@ -116,6 +116,7 @@
               <button
                 mat-menu-item
                 type="button"
+                [disabled]="!canCreateJurNotizSig()"
                 class="btn fw-normal px-2 shadow-none"
                 data-testid="jur-notiz-create"
                 (click)="createNotiz('JURISTISCHE_NOTIZ')"

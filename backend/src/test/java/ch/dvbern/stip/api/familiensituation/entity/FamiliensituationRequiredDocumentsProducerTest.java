@@ -59,6 +59,30 @@ class FamiliensituationRequiredDocumentsProducerTest {
     }
 
     @Test
+    void requiresIfElternteilUngekannt() {
+
+        formular.setFamiliensituation(
+            new Familiensituation()
+                .setVaterUnbekanntGrund(ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG)
+        );
+
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getRequiredDocuments(formular),
+            DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN
+        );
+
+        formular.setFamiliensituation(
+            new Familiensituation()
+                .setMutterUnbekanntGrund(ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG)
+        );
+
+        RequiredDocsUtil.requiresOneAndType(
+            producer.getRequiredDocuments(formular),
+            DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN
+        );
+    }
+
+    @Test
     void requiresIfAlimentenregelung() {
         formular.setFamiliensituation(
             new Familiensituation()

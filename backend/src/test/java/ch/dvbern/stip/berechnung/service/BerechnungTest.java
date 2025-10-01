@@ -145,7 +145,7 @@ class BerechnungTest {
                                 )
                         )
                 )
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
@@ -208,7 +208,7 @@ class BerechnungTest {
                                 .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -373,7 +373,7 @@ class BerechnungTest {
                                 .setBildungsrichtung(Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG)
                         )
                 )
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -473,7 +473,7 @@ class BerechnungTest {
                                 .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -587,7 +587,7 @@ class BerechnungTest {
                                 .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -733,7 +733,7 @@ class BerechnungTest {
                                 .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
                         )
                 )
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
@@ -877,7 +877,7 @@ class BerechnungTest {
                         )
                 )
                 .setPensum(AusbildungsPensum.TEILZEIT)
-                .setAusbildungBegin(LocalDate.now().plusMonths(3))
+                .setAusbildungBegin(LocalDate.now().withMonth(9))
         );
 
         final var gesuchTranche = gesuch.getNewestGesuchTranche().get();
