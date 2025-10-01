@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,12 +45,21 @@ public class MassendruckJobAuthorizer extends BaseAuthorizer {
 
     public void canDeleteMassendruckJob(final UUID massendruckId) {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
-        if (massendruckJob.getStatus() != MassendruckJobStatus.FAILED) {
-            forbidden();
-        }
+        assertNotFailed(massendruckJob);
+    }
+
+    public void canRetryMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
+        assertNotFailed(massendruckJob);
     }
 
     public void permitAll() {
         super.permitAll();
+    }
+
+    private void assertNotFailed(final MassendruckJob massendruckJob) {
+        if (massendruckJob.getStatus() != MassendruckJobStatus.FAILED) {
+            forbidden();
+        }
     }
 }

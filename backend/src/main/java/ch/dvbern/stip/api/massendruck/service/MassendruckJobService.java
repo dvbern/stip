@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -159,6 +160,18 @@ public class MassendruckJobService {
         massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
     }
 
+    @Transactional
+    public void deleteMassendruckJob(final UUID massendruckId) {
+        massendruckJobRepository.deleteMassendruckJobById(massendruckId);
+    }
+
+    @Transactional
+    public MassendruckJobDetailDto retryMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
+        massendruckJob.setStatus(MassendruckJobStatus.IN_PROGRESS);
+        return massendruckJobMapper.toDetailDto(massendruckJob);
+    }
+
     private void createAndSetDatenschutzbriefMassendruck(
         final MassendruckJob massendruckJob,
         final List<Gesuch> gesuche
@@ -200,10 +213,5 @@ public class MassendruckJobService {
         gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
 
         massendruckJob.setVerfuegungMassendrucks(toPersist);
-    }
-
-    @Transactional
-    public void deleteMassendruckJob(final UUID massendruckId) {
-        massendruckJobRepository.deleteMassendruckJobById(massendruckId);
     }
 }

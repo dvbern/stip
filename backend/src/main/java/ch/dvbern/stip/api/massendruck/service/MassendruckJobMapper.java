@@ -17,15 +17,63 @@
 
 package ch.dvbern.stip.api.massendruck.service;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
 import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
+import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
+import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
+import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
 import ch.dvbern.stip.generated.dto.MassendruckJobDto;
+import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
 public interface MassendruckJobMapper {
     @Mapping(source = "status", target = "massendruckJobStatus")
     @Mapping(source = "massendruckTyp", target = "massendruckJobTyp")
     MassendruckJobDto toDto(MassendruckJob massendruckJob);
+
+    @Mapping(source = "status", target = "massendruckJobStatus")
+    @Mapping(source = "massendruckTyp", target = "massendruckJobTyp")
+    @Mapping(
+        source = "datenschutzbriefMassendrucks",
+        target = "datenschutzbriefMassendrucks",
+        qualifiedByName = "toMassendruckDatenschutzbriefDto"
+    )
+    @Mapping(
+        source = "verfuegungMassendrucks",
+        target = "verfuegungMassendrucks",
+        qualifiedByName = "toMassendruckVerfuegungDto"
+    )
+    MassendruckJobDetailDto toDetailDto(MassendruckJob massendruckJob);
+
+    @Named("toMassendruckDatenschutzbriefDto")
+    default MassendruckDatenschutzbriefDto toMassendruckDatenschutzbriefDto(
+        final DatenschutzbriefMassendruck datenschutzbriefMassendruck
+    ) {
+        return new MassendruckDatenschutzbriefDto()
+            .id(datenschutzbriefMassendruck.getId())
+            .vorname("TEST")
+            .nachname("TEST")
+            .elternTyp(ElternTyp.VATER)
+            .isVersendet(false)
+            .gesuchNummer("TEST")
+            .gesuchId(UUID.randomUUID());
+    }
+
+    @Named("toMassendruckVerfuegungDto")
+    default MassendruckVerfuegungDto toMassendruckVerfuegungDto(final VerfuegungMassendruck verfuegungMassendruck) {
+        return new MassendruckVerfuegungDto()
+            .id(verfuegungMassendruck.getId())
+            .vorname(verfuegungMassendruck.getVorname())
+            .nachname(verfuegungMassendruck.getNachname())
+            .isVersendet(verfuegungMassendruck.getVerfuegung().isVersendet())
+            .gesuchNummer(verfuegungMassendruck.getVerfuegung().getGesuch().getGesuchNummer())
+            .gesuchId(verfuegungMassendruck.getVerfuegung().getGesuch().getId());
+    }
 }
