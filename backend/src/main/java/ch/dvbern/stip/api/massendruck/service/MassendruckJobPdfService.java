@@ -185,11 +185,11 @@ public class MassendruckJobPdfService {
     private List<PdfDocument> getAllVerfuegungen(final List<VerfuegungMassendruck> verfuegungMassendrucks) {
         return verfuegungMassendrucks.stream()
             .map(verfuegungMassendruck -> {
-                final var verfuegungObjectId = verfuegungMassendruck.getVerfuegung().getObjectId();
+                final var verfuegung = verfuegungMassendruck.getVerfuegung();
                 final var bytes = s3async.getObject(
                     GetObjectRequest.builder()
                         .bucket(configService.getBucketName())
-                        .key(verfuegungObjectId)
+                        .key(verfuegung.getFilepath() + verfuegung.getObjectId())
                         .build(),
                     AsyncResponseTransformer.toBytes()
                 );
