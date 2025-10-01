@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
@@ -36,4 +37,16 @@ public abstract class EinnahmenKostenMapper {
     );
 
     public abstract EinnahmenKostenUpdateDto toUpdateDto(EinnahmenKosten einnahmenKosten);
+
+    @BeforeMapping
+    protected void resetDependentDataBeforeUpdate(
+        EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
+        @MappingTarget EinnahmenKosten einnahmenKosten
+    ) {
+        if (einnahmenKostenUpdateDto.getWgWohnend()) {
+            einnahmenKostenUpdateDto.setAlternativeWohnformWohnend(null);
+        } else {
+            einnahmenKostenUpdateDto.setWgAnzahlPersonen(null);
+        }
+    }
 }
