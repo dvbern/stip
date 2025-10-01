@@ -222,4 +222,9 @@ public class MassendruckJobService {
 
         massendruckJob.setVerfuegungMassendrucks(toPersist);
     }
+
+    public MassendruckJobDetailDto getMassendruckJobDetail(final UUID massendruckJobId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
+        return massendruckJobMapper.toDetailDto(massendruckJob);
+    }
 }

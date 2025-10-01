@@ -17,10 +17,7 @@
 
 package ch.dvbern.stip.api.massendruck.service;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
 import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
 import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
@@ -56,24 +53,30 @@ public interface MassendruckJobMapper {
     default MassendruckDatenschutzbriefDto toMassendruckDatenschutzbriefDto(
         final DatenschutzbriefMassendruck datenschutzbriefMassendruck
     ) {
+        final var datenschutzbrief = datenschutzbriefMassendruck.getDatenschutzbrief();
+        final var gesuch = datenschutzbrief.getGesuch();
+
         return new MassendruckDatenschutzbriefDto()
             .id(datenschutzbriefMassendruck.getId())
-            .vorname("TEST")
-            .nachname("TEST")
-            .elternTyp(ElternTyp.VATER)
-            .isVersendet(false)
-            .gesuchNummer("TEST")
-            .gesuchId(UUID.randomUUID());
+            .vorname(datenschutzbrief.getVorname())
+            .nachname(datenschutzbrief.getNachname())
+            .elternTyp(datenschutzbrief.getDatenschutzbriefEmpfaenger())
+            .isVersendet(datenschutzbrief.isVersendet())
+            .gesuchNummer(gesuch.getGesuchNummer())
+            .gesuchId(gesuch.getId());
     }
 
     @Named("toMassendruckVerfuegungDto")
     default MassendruckVerfuegungDto toMassendruckVerfuegungDto(final VerfuegungMassendruck verfuegungMassendruck) {
+        final var verfuegung = verfuegungMassendruck.getVerfuegung();
+        final var gesuch = verfuegung.getGesuch();
+
         return new MassendruckVerfuegungDto()
             .id(verfuegungMassendruck.getId())
             .vorname(verfuegungMassendruck.getVorname())
             .nachname(verfuegungMassendruck.getNachname())
-            .isVersendet(verfuegungMassendruck.getVerfuegung().isVersendet())
-            .gesuchNummer(verfuegungMassendruck.getVerfuegung().getGesuch().getGesuchNummer())
-            .gesuchId(verfuegungMassendruck.getVerfuegung().getGesuch().getId());
+            .isVersendet(verfuegung.isVersendet())
+            .gesuchNummer(gesuch.getGesuchNummer())
+            .gesuchId(gesuch.getId());
     }
 }

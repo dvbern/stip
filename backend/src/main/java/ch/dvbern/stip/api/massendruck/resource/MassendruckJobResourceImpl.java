@@ -132,7 +132,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @RolesAllowed({ SB_GESUCH_READ })
     public MassendruckJobDetailDto getMassendruckJobDetail(UUID massendruckJobId) {
         authorizer.permitAll();
-        return null;
+        return massendruckJobService.getMassendruckJobDetail(massendruckJobId);
     }
 
     @Override
