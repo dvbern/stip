@@ -58,6 +58,14 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
 
+    @Nullable
+    @Column(name = "wg_anzahl_personen")
+    private Integer wgAnzahlPersonen = 0;
+
+    @Nullable
+    @Column(name = "alternative_wohnform_wohnend")
+    private Boolean alternativeWohnformWohnend;
+
     @NotNull
     @Column(name = "verdienst_realisiert", nullable = false)
     private Boolean verdienstRealisiert;
