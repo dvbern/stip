@@ -160,7 +160,6 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @RolesAllowed({ SB_GESUCH_UPDATE })
     public MassendruckJobDetailDto retryMassendruckJob(UUID massendruckId) {
         authorizer.canRetryMassendruckJob(massendruckId);
-        // TODO KSTIP-2294: Check if this would work on a new one as well
         final var massendruckJobDetail = massendruckJobService.retryMassendruckJob(massendruckId);
         massendruckJobService.combineDocument(massendruckId);
         return massendruckJobDetail;
