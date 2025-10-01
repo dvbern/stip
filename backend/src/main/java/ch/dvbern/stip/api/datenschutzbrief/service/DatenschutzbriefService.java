@@ -65,7 +65,7 @@ public class DatenschutzbriefService {
         final var filename = String.format("Datenschutzbrief %s.pdf", filenameTitle);
 
         final CompletableFuture<ByteArrayOutputStream> generateDokumentFuture = CompletableFuture
-            .supplyAsync(() -> datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil));
+            .supplyAsync(() -> datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil, trancheId));
         final Supplier<CompletionStage<ByteArrayOutputStream>> stageSupplier =
             () -> generateDokumentFuture;
         logDatenschutzbriefDownload(trancheId, elternId);
