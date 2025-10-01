@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.service.SbDashboardQueryBuilder;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -66,6 +67,7 @@ public class MassendruckJobService {
     private final DatenschutzbriefMassendruckMapper datenschutzbriefMassendruckMapper;
     private final VerfuegungMassendruckRepository verfuegungMassendruckRepository;
     private final VerfuegungMassendruckMapper verfuegungMassendruckMapper;
+    private final GesuchService gesuchService;
     private final TenantService tenantService;
     private final ConfigService configService;
 
@@ -277,11 +279,10 @@ public class MassendruckJobService {
         }
 
         final var gesuche = massendruckJob.getAttachedGesuche();
-        final var changeEvent = switch (jobTyp) {
-            case VERFUEGUNG -> GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET;
-            case DATENSCHUTZBRIEF -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
-        };
-
-        gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
+        switch (jobTyp) {
+            case VERFUEGUNG -> gesuchService.bulkChangeToVersendentAndAnspruchOrKeinAnspruch(gesuche);
+            case DATENSCHUTZBRIEF -> gesuchStatusService
+                .bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 }
