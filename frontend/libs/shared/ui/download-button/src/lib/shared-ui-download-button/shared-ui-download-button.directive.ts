@@ -8,6 +8,7 @@ import {
 import { firstValueFrom, map } from 'rxjs';
 
 import {
+  DatenschutzbriefService,
   DokumentArt,
   DokumentService,
   GesuchService,
@@ -16,6 +17,11 @@ import {
 import { assertUnreachable } from '@dv/shared/model/type-util';
 
 type DownloadOptions =
+  | {
+      type: 'datenschutzbrief';
+      id: string;
+      gesuchTrancheId: string;
+    }
   | {
       type: 'berechnungsblatt';
       id: string;
@@ -36,6 +42,7 @@ type DownloadOptions =
 })
 export class SharedUiDownloadButtonDirective {
   optionsSig = input.required<DownloadOptions>({ alias: 'dvDownloadButton' });
+  private datenschutzbriefService = inject(DatenschutzbriefService);
   private dokumentService = inject(DokumentService);
   private gesuchService = inject(GesuchService);
   private verfuegungService = inject(VerfuegungService);
@@ -46,6 +53,7 @@ export class SharedUiDownloadButtonDirective {
     firstValueFrom(
       getDownloadObservable$(
         this.optionsSig(),
+        this.datenschutzbriefService,
         this.dokumentService,
         this.gesuchService,
         this.verfuegungService,
@@ -56,8 +64,11 @@ export class SharedUiDownloadButtonDirective {
   }
 }
 
-const getVerfuegungsDownloadPath = (token: string) => {
-  return `/api/v1/verfuegung/download?token=${token}`;
+const getDatenschutzbriefDownloadPath = (
+  token: string,
+  gesuchTrancheId: string,
+) => {
+  return `/api/v1/datenschutzbrief/${gesuchTrancheId}/download?token=${token}`;
 };
 
 const getDocumentDownloadPath = (token: string, dokumentArt: DokumentArt) => {
@@ -68,14 +79,33 @@ const getBerechnungsblattDownloadPath = (token: string) => {
   return `/api/v1/gesuch/berechnungsblatt?token=${token}`;
 };
 
+const getVerfuegungsDownloadPath = (token: string) => {
+  return `/api/v1/verfuegung/download?token=${token}`;
+};
+
 const getDownloadObservable$ = (
   downloadOptions: DownloadOptions,
+  datenschutzbriefService: DatenschutzbriefService,
   dokumentService: DokumentService,
   gesuchService: GesuchService,
   verfuegungService: VerfuegungService,
 ) => {
   const { type, id } = downloadOptions;
   switch (type) {
+    case 'datenschutzbrief': {
+      return datenschutzbriefService
+        .getDatenschutzbriefDownloadToken$({
+          elternId: id,
+        })
+        .pipe(
+          map(({ token }) =>
+            getDatenschutzbriefDownloadPath(
+              token,
+              downloadOptions.gesuchTrancheId,
+            ),
+          ),
+        );
+    }
     case 'berechnungsblatt': {
       return gesuchService
         .getBerechnungsblattDownloadToken$({

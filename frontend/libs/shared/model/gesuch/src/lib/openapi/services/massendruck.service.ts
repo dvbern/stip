@@ -18,6 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { FileDownloadToken } from '../model/fileDownloadToken';
 import { GetGesucheSBQueryType } from '../model/getGesucheSBQueryType';
 import { GetMassendruckJobQueryType } from '../model/getMassendruckJobQueryType';
 import { MassendruckDatenschutzbrief } from '../model/massendruckDatenschutzbrief';
@@ -39,6 +40,10 @@ export interface MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams
     getGesucheSBQueryType: GetGesucheSBQueryType;
 }
 
+export interface MassendruckServiceDownloadMassendruckDocumentRequestParams {
+    token: string;
+}
+
 export interface MassendruckServiceGetAllMassendruckJobsRequestParams {
     getMassendruckJobs: GetMassendruckJobQueryType;
     massendruckJobNumber?: number;
@@ -50,6 +55,10 @@ export interface MassendruckServiceGetAllMassendruckJobsRequestParams {
     sortOrder?: SortOrder;
     page: number;
     pageSize: number;
+}
+
+export interface MassendruckServiceGetMassendruckDownloadTokenRequestParams {
+    massendruckId: string;
 }
 
 export interface MassendruckServiceGetMassendruckJobDetailRequestParams {
@@ -202,6 +211,73 @@ export class MassendruckService {
     }
 
     /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public downloadMassendruckDocument$(requestParameters: MassendruckServiceDownloadMassendruckDocumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<Blob>;
+     public downloadMassendruckDocument$(requestParameters: MassendruckServiceDownloadMassendruckDocumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpResponse<Blob>>;
+     public downloadMassendruckDocument$(requestParameters: MassendruckServiceDownloadMassendruckDocumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpEvent<Blob>>;
+     public downloadMassendruckDocument$(requestParameters: MassendruckServiceDownloadMassendruckDocumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<any> {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadMassendruckDocument$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>token, 'token');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/octet-stream'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        const localVarPath = `/massendruck/download`;
+        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get all Massendruck Jobs
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -319,6 +395,79 @@ export class MassendruckService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * get Token to downlaod Verfuegung
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getMassendruckDownloadToken$(requestParameters: MassendruckServiceGetMassendruckDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getMassendruckDownloadToken$(requestParameters: MassendruckServiceGetMassendruckDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getMassendruckDownloadToken$(requestParameters: MassendruckServiceGetMassendruckDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getMassendruckDownloadToken$(requestParameters: MassendruckServiceGetMassendruckDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const massendruckId = requestParameters.massendruckId;
+        if (massendruckId === null || massendruckId === undefined) {
+            throw new Error('Required parameter massendruckId was null or undefined when calling getMassendruckDownloadToken$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/massendruck/${this.configuration.encodeParam({name: "massendruckId", value: massendruckId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
