@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -46,8 +47,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Slf4j
@@ -184,7 +187,21 @@ public class MassendruckJobPdfService {
     private List<PdfDocument> getAllVerfuegungen(final List<VerfuegungMassendruck> verfuegungMassendrucks) {
         return verfuegungMassendrucks.stream()
             .map(verfuegungMassendruck -> {
-                return (PdfDocument) null; // TODO KSTIP-2294
+                final var verfuegungObjectId = verfuegungMassendruck.getVerfuegung().getObjectId();
+                final var bytes = s3async.getObject(
+                    GetObjectRequest.builder()
+                        .bucket(configService.getBucketName())
+                        .key(verfuegungObjectId)
+                        .build(),
+                    AsyncResponseTransformer.toBytes()
+                );
+
+                try {
+                    final var input = bytes.get().asInputStream();
+                    return new PdfDocument(new PdfReader(input));
+                } catch (InterruptedException | ExecutionException | IOException e) {
+                    throw new RuntimeException(e);
+                }
             })
             .toList();
     }
