@@ -135,24 +135,16 @@ public class AntragsstellerV1 {
                 }
             }
 
-            if (Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())) {
-                builder.grundbedarf(
-                    BerechnungRequestV1.getGrundbedarf(
-                        gesuchsperiode,
-                        anzahlPersonenImHaushalt,
-                        true
-                    )
-                );
-            } else if (Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend())) {
+            final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
+            final var isAlternativeWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend());
+            builder.grundbedarf(
+                BerechnungRequestV1.getGrundbedarf(
+                    gesuchsperiode,
+                    isAlternativeWgWohnend ? 1 : anzahlPersonenImHaushalt,
+                    isWgWohnend || isAlternativeWgWohnend
+                )
+            );
 
-                builder.grundbedarf(
-                    BerechnungRequestV1.getGrundbedarf(
-                        gesuchsperiode,
-                        1,
-                        true
-                    )
-                );
-            }
         } else {
             builder.grundbedarf(0);
         }
