@@ -44,6 +44,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -52,6 +53,7 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
@@ -95,6 +97,7 @@ const MEDIUM_AGE_ADULT = 40;
     MatAutocompleteModule,
     MatCheckboxModule,
     MatRadioModule,
+    SharedUiDownloadButtonDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiFormAddressComponent,
@@ -106,6 +109,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedPatternDocumentUploadComponent,
     SharedUiMaxLengthDirective,
     SharedUiInfoDialogDirective,
+    SharedUiIfSachbearbeiterDirective,
     SharedUiPlzOrtAutocompleteDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',

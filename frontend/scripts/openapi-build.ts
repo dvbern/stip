@@ -35,6 +35,7 @@ const generatedApis = [
   'Bildungskategorie',
   'Buchhaltung',
   'Configuration',
+  'Datenschutzbrief',
   'Delegieren',
   'Dokument',
   'Drucken',

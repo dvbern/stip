@@ -43,17 +43,17 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @AllArgsConstructor
 public class DatenschutzbriefDownload extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "fallNr", length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "fall_nummer", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    private String fallNr;
+    private String fallNummer;
 
     @NotNull
-    @Column(name = "gesuch_nr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String gesuchNr;
+    @Column(name = "gesuch_nummer", length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String gesuchNummer;
 
     @NotNull
-    @Column(name = "svnr", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    private String svNr;
+    private String sozialversicherungsnummer;
 }

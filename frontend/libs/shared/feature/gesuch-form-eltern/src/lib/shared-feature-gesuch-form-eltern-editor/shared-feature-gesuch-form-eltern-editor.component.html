@@ -1,6 +1,33 @@
 @let elternteil = elternteilSig();
 <h3 class="mt-4">
-  {{ 'shared.form.eltern.' + (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') + '.title' | transloco }}
+  <div class="row g-4 my-2">
+    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
+      {{
+        'shared.form.eltern.' + (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') + '.title' | transloco
+      }}
+    </div>
+
+    @if (
+      elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().trancheId;
+      as gesuchTrancheId
+    ) {
+      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2 tw:justify-end" *dvIfSachbearbeiter>
+        <button
+          type="button"
+          class="btn btn-link tw:!flex tw:max-w-full tw:!p-0 tw:no-underline! tw:items-center tw:!text-lg/none"
+          [attr.aria-label]="'shared.dokumente.table.download' | transloco"
+          [dvDownloadButton]="{
+            type: 'datenschutzbrief',
+            id: elternteil.id,
+            gesuchTrancheId,
+          }"
+        >
+          <span class="material-symbols-rounded tw:mt-0.5 tw:align-middle tw:!text-xl/none tw:mr-1">download</span>
+          {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
+        </button>
+      </div>
+    }
+  </div>
 </h3>
 
 <form

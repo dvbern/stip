@@ -21,9 +21,9 @@
       <column name="mandant" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="fallnr" type="VARCHAR(20)"/>
-      <column name="gesuch_nr" type="VARCHAR(255)"/>
-      <column name="svnr" type="VARCHAR(255)"/>
+      <column name="fall_nummer" type="VARCHAR(20)"/>
+      <column name="gesuch_nummer" type="VARCHAR(20)"/>
+      <column name="sozialversicherungsnummer" type="VARCHAR(255)"/>
     </createTable>
   </changeSet>
   <changeSet author="anna-lea.fuhrer (generated)" id="1759158433877-3">
