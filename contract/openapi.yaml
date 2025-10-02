@@ -5728,11 +5728,11 @@ components:
           type: integer
         wohnkosten:
           type: integer
-        wgAnzahlPersonen:
-          type: integer
         wgWohnend:
           description: Required nur wenn Person eigener Haushalt hat
           type: boolean
+        wgAnzahlPersonen:
+          type: integer
         alternativeWohnformWohnend:
           type: boolean
         verdienstRealisiert:
