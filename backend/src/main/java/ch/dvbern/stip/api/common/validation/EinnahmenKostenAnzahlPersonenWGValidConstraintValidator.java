@@ -30,6 +30,6 @@ public class EinnahmenKostenAnzahlPersonenWGValidConstraintValidator
         if (Objects.isNull(einnahmenKosten.getWgWohnend()) || !einnahmenKosten.getWgWohnend()) {
             return true;
         }
-        return Objects.nonNull(einnahmenKosten.getWgAnzahlPersonen()) && einnahmenKosten.getWgAnzahlPersonen() > 1;
+        return Objects.nonNull(einnahmenKosten.getWgAnzahlPersonen()) && einnahmenKosten.getWgAnzahlPersonen() > 0;
     }
 }

@@ -455,6 +455,45 @@ class BerechnungTest {
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
         assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
+
+        // Arrange
+        gesuch.getGesuchsperiode()
+            .setAnzahlWochenLehre(47)
+            .setAnzahlWochenSchule(38)
+            .setReduzierungDesGrundbedarfs(2754);
+        gesuchFormular.getEinnahmenKosten().setWgWohnend(true);
+        gesuchFormular.getEinnahmenKosten().setWgAnzahlPersonen(2);
+
+        // Act
+        final var berechnungsresultatDtoWG2Pers = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        // Assert
+        assertThat(berechnungsresultatDtoWG2Pers.getTranchenBerechnungsresultate().size(), is(1));
+        assertThat(berechnungsresultatDtoWG2Pers.getBerechnung(), is(equalTo(3915)));
+
+        // Arrange
+        gesuchFormular.getEinnahmenKosten().setWgWohnend(false);
+        gesuchFormular.getEinnahmenKosten().setWgAnzahlPersonen(null);
+        gesuchFormular.getEinnahmenKosten().setAlternativeWohnformWohnend(true);
+
+        // Act
+        final var berechnungsresultatDtoAlternativeWohnform =
+            berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        // Assert
+        assertThat(berechnungsresultatDtoAlternativeWohnform.getTranchenBerechnungsresultate().size(), is(1));
+        assertThat(berechnungsresultatDtoAlternativeWohnform.getBerechnung(), is(equalTo(3915)));
+
+        // Arrange
+        gesuchFormular.getEinnahmenKosten().setWgWohnend(true);
+        gesuchFormular.getEinnahmenKosten().setWgAnzahlPersonen(1);
+        gesuchFormular.getEinnahmenKosten().setAlternativeWohnformWohnend(false);
+        // Act
+        final var berechnungsresultatDtoWgWohnend1Pers =
+            berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        // Assert
+        assertThat(
+            berechnungsresultatDtoWgWohnend1Pers.getBerechnung(),
+            is(equalTo(berechnungsresultatDtoAlternativeWohnform.getBerechnung()))
+        );
     }
 
     @Test

@@ -232,7 +232,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
                 .of(
                     true, // Wg wohnend
                     1, // Anzahl personen
-                    Status.BAD_REQUEST.getStatusCode() // expected
+                    Status.NO_CONTENT.getStatusCode() // expected
                 ),
             Arguments
                 .of(
