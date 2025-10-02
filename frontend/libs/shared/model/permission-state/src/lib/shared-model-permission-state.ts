@@ -16,6 +16,7 @@ const Permissions = {
   U: { index: 3, name: 'uploadUnterschriftenblatt' },
   A: { index: 4, name: 'approve' },
   N: { index: 5, name: 'negativVerfuegen' },
+  J: { index: 6, name: 'createJurNotiz' },
 } as const;
 type Permissions = typeof Permissions;
 type PermissionFlag = keyof typeof Permissions;
@@ -29,7 +30,8 @@ type P<T extends PermissionFlag> = T | ' ';
  * * `F` - Freigeben
  * * `U` - Unterschriftenblatt hochladen
  */
-type PermissionFlags = `${P<'W'>}${P<'D'>}${P<'F'>}${P<'U'>}${P<'A'>}${P<'N'>}`;
+type PermissionFlags =
+  `${P<'W'>}${P<'D'>}${P<'F'>}${P<'U'>}${P<'A'>}${P<'N'>}${P<'J'>}`;
 
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
@@ -77,7 +79,7 @@ const perm = (flags: PermissionFlags, roles: ShortRole[]) => {
   return (rolesMap: RolesMap): PermissionFlags =>
     roles.some((shortRole) => !!rolesMap[shortRoleMap[shortRole]])
       ? flags
-      : '      ';
+      : '       ';
 };
 type PermissionCheck = ReturnType<typeof perm>;
 
@@ -88,31 +90,31 @@ type PermissionCheck = ReturnType<typeof perm>;
  */
 // prettier-ignore
 export const permissionTableByAppType = {
-  IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF   ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  EINGEREICHT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('WD UAN', ['sb']) },
-  IN_FREIGABE                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('W  U N', ['ju']) },
-  ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U N', ['sb']) },
-  FEHLENDE_DOKUMENTE               : { [GS_APP]: perm(' DF   ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  GESUCH_ABGELEHNT                 : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  JURISTISCHE_ABKLAERUNG           : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  KEIN_STIPENDIENANSPRUCH          : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  NICHT_ANSPRUCHSBERECHTIGT        : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U N', ['sb']) },
-  NICHT_BEITRAGSBERECHTIGT         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  STIPENDIENANSPRUCH               : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  WARTEN_AUF_UNTERSCHRIFTENBLATT   : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  DATENSCHUTZBRIEF_AM_GENERIEREN   : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  DATENSCHUTZBRIEF_DRUCKBEREIT     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  DATENSCHUTZBRIEF_VERSANDBEREIT   : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  VERFUEGUNG_AM_GENERIEREN         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  VERFUEGUNG_DRUCKBEREIT           : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  VERFUEGUNG_VERSANDBEREIT         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  VERFUEGT                         : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
-  NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('   U  ', ['sb']) },
+  IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF    ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  EINGEREICHT                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('WD UANJ', ['sb']) },
+  IN_FREIGABE                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('W  U N ', ['ju']) },
+  ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['sb']) },
+  FEHLENDE_DOKUMENTE               : { [GS_APP]: perm(' DF    ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  GESUCH_ABGELEHNT                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  JURISTISCHE_ABKLAERUNG           : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  KEIN_STIPENDIENANSPRUCH          : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  NICHT_ANSPRUCHSBERECHTIGT        : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['sb']) },
+  NICHT_BEITRAGSBERECHTIGT         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  STIPENDIENANSPRUCH               : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  WARTEN_AUF_UNTERSCHRIFTENBLATT   : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  DATENSCHUTZBRIEF_AM_GENERIEREN   : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  DATENSCHUTZBRIEF_DRUCKBEREIT     : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  DATENSCHUTZBRIEF_VERSANDBEREIT   : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_AM_GENERIEREN         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_DRUCKBEREIT           : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_VERSANDBEREIT         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGT                         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
 } as const satisfies Record<Gesuchstatus, Record<AppType, PermissionCheck>>;
 
 /**
@@ -122,12 +124,12 @@ export const permissionTableByAppType = {
  */
 // prettier-ignore
 export const trancheReadWritestatusByAppType = {
-  IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF   ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  UEBERPRUEFEN:       { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('WD  A ', ['sb']) },
-  FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D    ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  AKZEPTIERT:         { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  ABGELEHNT:          { [GS_APP]: perm('WD    ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  MANUELLE_AENDERUNG: { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF    ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  UEBERPRUEFEN:       { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('WD  A  ', ['sb']) },
+  FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D     ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  AKZEPTIERT:         { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  ABGELEHNT:          { [GS_APP]: perm('WD     ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  MANUELLE_AENDERUNG: { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
 } as const satisfies Record<
   GesuchTrancheStatus,
   Record<AppType, PermissionCheck>

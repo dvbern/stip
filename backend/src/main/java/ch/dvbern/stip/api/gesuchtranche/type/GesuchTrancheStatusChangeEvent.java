@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchtranche.type;
 public enum GesuchTrancheStatusChangeEvent {
     IN_BEARBEITUNG_GS,
     UEBERPRUEFEN,
+    FEHLENDE_DOKUMENTE_EINREICHEN,
     MANUELLE_AENDERUNG,
     AKZEPTIERT,
     ABLEHNEN,
