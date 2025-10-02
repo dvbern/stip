@@ -27,7 +27,7 @@ public class EinnahmenKostenAnzahlPersonenWGValidConstraintValidator
     implements ConstraintValidator<EinnahmenKostenAnzahlPersonenWGValidConstraint, EinnahmenKosten> {
     @Override
     public boolean isValid(EinnahmenKosten einnahmenKosten, ConstraintValidatorContext context) {
-        if (!einnahmenKosten.getWgWohnend()) {
+        if (Objects.isNull(einnahmenKosten.getWgWohnend()) || !einnahmenKosten.getWgWohnend()) {
             return true;
         }
         return Objects.nonNull(einnahmenKosten.getWgAnzahlPersonen()) && einnahmenKosten.getWgAnzahlPersonen() > 1;

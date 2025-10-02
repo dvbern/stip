@@ -33,6 +33,8 @@ public class EinnahmenKostenCopyUtil {
         target.setFahrkosten(source.getFahrkosten());
         target.setWohnkosten(source.getWohnkosten());
         target.setWgWohnend(source.getWgWohnend());
+        target.setWgAnzahlPersonen(source.getWgAnzahlPersonen());
+        target.setAlternativeWohnformWohnend(source.getAlternativeWohnformWohnend());
         target.setVerdienstRealisiert(source.getVerdienstRealisiert());
         target.setAlimente(source.getAlimente());
         target.setZulagen(source.getZulagen());
