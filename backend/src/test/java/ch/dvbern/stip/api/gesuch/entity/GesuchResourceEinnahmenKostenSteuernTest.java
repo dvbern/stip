@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
@@ -38,6 +39,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -138,62 +142,28 @@ class GesuchResourceEinnahmenKostenSteuernTest {
         );
     }
 
-    @Test
     @TestAsGesuchsteller
+    @ParameterizedTest
+    @MethodSource("anzahlPersonenWgArguments")
     @Order(4)
-    void testUpdateGesuchEinnahmenKostenWgWohnend() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+    void testUpdateGesuchEinnahmenKostenWgWohnend(Boolean wgWohnend, Integer anzahlPersonen, int expected) {
+        final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        final var einnahmenKostenDto = gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten();
+        einnahmenKostenDto
+            .setWgAnzahlPersonen(anzahlPersonen);
+        einnahmenKostenDto
+            .setWgWohnend(wgWohnend);
 
-        // when wgWohnend = true, the minimum amount of people must be > 1 (and not null)
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setWgWohnend(true);
-
-        // WgAnzahlPersonen must not be null
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
-        // WgAnzahlPersonen must be at least 2
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setWgAnzahlPersonen(0);
-        gesuchApiSpec.updateGesuch()
-            .gesuchIdPath(gesuchId)
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setWgAnzahlPersonen(1);
-        gesuchApiSpec.updateGesuch()
-            .gesuchIdPath(gesuchId)
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
-        // WgAnzahlPersonen : valid minimum value of 2
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setWgAnzahlPersonen(2);
-        gesuchApiSpec.updateGesuch()
-            .gesuchIdPath(gesuchId)
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(expected);
 
         gesuch = gesuchApiSpec.getGesuchGS()
             .gesuchTrancheIdPath(trancheId)
@@ -242,5 +212,34 @@ class GesuchResourceEinnahmenKostenSteuernTest {
     @Order(99)
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
+    }
+
+    static Stream<Arguments> anzahlPersonenWgArguments() {
+        return Stream.of(
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    null, // Anzahl personen
+                    Status.BAD_REQUEST.getStatusCode() // expected
+                ),
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    0, // Anzahl personen
+                    Status.BAD_REQUEST.getStatusCode() // expected
+                ),
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    1, // Anzahl personen
+                    Status.BAD_REQUEST.getStatusCode() // expected
+                ),
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    2, // Anzahl personen
+                    Status.NO_CONTENT.getStatusCode() // expected
+                )
+        );
     }
 }
