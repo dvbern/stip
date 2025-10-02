@@ -686,12 +686,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToVersendet(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
-    }
-
-    @Transactional
     public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -1340,5 +1334,30 @@ public class GesuchService {
 
     public boolean haveAllDatenschutzbriefeBeenSent(final Gesuch gesuch) {
         return gesuch.getDatenschutzbriefs().stream().allMatch(Datenschutzbrief::isVersendet);
+    }
+
+    @Transactional
+    public void changeToVersendentAndAnspruchOrKeinAnspruch(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        bulkChangeToVersendentAndAnspruchOrKeinAnspruch(List.of(gesuch));
+    }
+
+    @Transactional
+    public void bulkChangeToVersendentAndAnspruchOrKeinAnspruch(final List<Gesuch> gesuche) {
+        gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
+
+        final var anspruch = new ArrayList<Gesuch>();
+        final var keinAnspruch = new ArrayList<Gesuch>();
+        for (final var gesuch : gesuche) {
+            final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
+            if (latestVerfuegung.isNegativeVerfuegung()) {
+                keinAnspruch.add(gesuch);
+            } else {
+                anspruch.add(gesuch);
+            }
+        }
+
+        gesuchStatusService.bulkTriggerStateMachineEvent(anspruch, GesuchStatusChangeEvent.STIPENDIENANSPRUCH);
+        gesuchStatusService.bulkTriggerStateMachineEvent(keinAnspruch, GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH);
     }
 }

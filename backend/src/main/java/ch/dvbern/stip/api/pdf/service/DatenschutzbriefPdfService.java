@@ -31,9 +31,9 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 
 @ApplicationScoped
 public class DatenschutzbriefPdfService {
-
     public ByteArrayOutputStream createDatenschutzbriefForElternteil(final Eltern elternTeil) {
         final var out = new ByteArrayOutputStream();
+
         try (
             final var writer = new PdfWriter(out);
             final var pdfDocument = new PdfDocument(writer);
@@ -46,5 +46,4 @@ public class DatenschutzbriefPdfService {
 
         return out;
     }
-
 }

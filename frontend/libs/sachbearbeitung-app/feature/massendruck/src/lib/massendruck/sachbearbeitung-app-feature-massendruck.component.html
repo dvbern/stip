@@ -37,12 +37,6 @@
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-title">
       {{ 'sachbearbeitung-app.massendruck.title' | transloco }}
     </h1>
-    <!-- link for development: go to detail view -->
-    <div class="tw:mb-6">
-      <a class="btn btn-primary" [routerLink]="['/massendruck', 'druckauftrag', 'some-id-123']"
-        >Go to detail view (for development)</a
-      >
-    </div>
     <div class="tw:my-6">
       <div class="tw:dv-table tw:relative">
         <div [class.opacity-50]="massendruckStore.paginatedMassendruckListViewSig().loading">
@@ -252,6 +246,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let item; dataSource: massendruckDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/massendruck', 'druckauftrag', item.id]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

@@ -21,15 +21,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
@@ -54,12 +60,21 @@ public class MassendruckJob extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    // TODO KSTIP-2294: Add a column annotation to this (shouldn't require a new migration)
+    @Column(name = "status")
     private MassendruckJobStatus status;
 
     @NotNull
     @Column(name = "massendruck_job_number", nullable = false, updatable = false)
     private int massendruckJobNumber;
+
+    @Nullable
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(
+        name = "merged_pdf_id",
+        foreignKey = @ForeignKey(name = "FK_massendruck_job_dokument_id"),
+        nullable = true
+    )
+    private Dokument mergedPdf;
 
     @Transient
     public MassendruckJobTyp getMassendruckTyp() {
@@ -67,5 +82,17 @@ public class MassendruckJob extends AbstractMandantEntity {
             return MassendruckJobTyp.DATENSCHUTZBRIEF;
         }
         return MassendruckJobTyp.VERFUEGUNG;
+    }
+
+    @Transient
+    public List<Gesuch> getAttachedGesuche() {
+        return switch (getMassendruckTyp()) {
+            case DATENSCHUTZBRIEF -> getDatenschutzbriefMassendrucks().stream()
+                .map(datenschutzbrief -> datenschutzbrief.getDatenschutzbrief().getGesuch())
+                .toList();
+            case VERFUEGUNG -> getVerfuegungMassendrucks().stream()
+                .map(verfuegung -> verfuegung.getVerfuegung().getGesuch())
+                .toList();
+        };
     }
 }

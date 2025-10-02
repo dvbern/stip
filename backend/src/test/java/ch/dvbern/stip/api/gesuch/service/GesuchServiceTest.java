@@ -1241,19 +1241,6 @@ class GesuchServiceTest {
 
     @TestAsSachbearbeiter
     @Test
-    @Description("It should be possible to change Gesuchstatus from VERSANDBEREIT to VERSENDET")
-    void changeGesuchstatus_from_Versandbereit_to_VersendetTest() {
-        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        assertDoesNotThrow(() -> gesuchService.gesuchStatusToVersendet(gesuch.getId()));
-        assertEquals(
-            Gesuchstatus.VERFUEGUNG_VERSENDET,
-            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
-        );
-    }
-
-    @TestAsSachbearbeiter
-    @Test
     @Description("GS should receive an email and a notifcation if documents are missing")
     void documentsMissingSentMessagesTest() {
         // arrange

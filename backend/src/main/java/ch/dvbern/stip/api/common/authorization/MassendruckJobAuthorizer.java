@@ -17,6 +17,14 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
+import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
+import ch.dvbern.stip.api.massendruck.repo.DatenschutzbriefMassendruckRepository;
+import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
+import ch.dvbern.stip.api.massendruck.repo.VerfuegungMassendruckRepository;
+import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +32,53 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class MassendruckJobAuthorizer extends BaseAuthorizer {
+    private final MassendruckJobRepository massendruckJobRepository;
+    private final DatenschutzbriefMassendruckRepository datenschutzbriefMassendruckRepository;
+    private final VerfuegungMassendruckRepository verfuegungMassendruckRepository;
+
+    public void canCreateMassendruckJob(final GetGesucheSBQueryType getGesucheSBQueryType) {
+        final var isAllowed = switch (getGesucheSBQueryType) {
+            case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN, ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> true;
+            default -> false;
+        };
+
+        if (!isAllowed) {
+            forbidden();
+        }
+    }
+
+    public void canDeleteMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
+        assertNotFailed(massendruckJob);
+    }
+
+    public void canRetryMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
+        assertNotFailed(massendruckJob);
+    }
+
     public void permitAll() {
         super.permitAll();
+    }
+
+    private void assertNotFailed(final MassendruckJob massendruckJob) {
+        if (massendruckJob.getStatus() != MassendruckJobStatus.FAILED) {
+            forbidden();
+        }
+    }
+
+    public void canDatenschutzbriefVersenden(final UUID massendruckDatenschutzbriefId) {
+        final var massendruckDatenschutzbrief =
+            datenschutzbriefMassendruckRepository.requireById(massendruckDatenschutzbriefId);
+        if (massendruckDatenschutzbrief.getDatenschutzbrief().isVersendet()) {
+            forbidden();
+        }
+    }
+
+    public void canVerfuegungMassendruckVersenden(final UUID massendruckVerfuegungId) {
+        final var massendruckDatenschutzbrief = verfuegungMassendruckRepository.requireById(massendruckVerfuegungId);
+        if (massendruckDatenschutzbrief.getVerfuegung().isVersendet()) {
+            forbidden();
+        }
     }
 }

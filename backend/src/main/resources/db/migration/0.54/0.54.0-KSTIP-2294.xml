@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="? (generated)" id="1758714259370-2">
+    <changeSet author="Juri Furer" id="1758714259370-2">
         <createTable tableName="datenschutzbrief_massendruck">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="datenschutzbrief_massendruckPK"/>
@@ -25,7 +25,7 @@
             <column name="massendruck_job_id" type="UUID"/>
         </createTable>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-3">
+    <changeSet author="Juri Furer" id="1758714259370-3">
         <createTable tableName="massendruck_job">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="massendruck_jobPK"/>
@@ -52,7 +52,7 @@
             <column name="status" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-4">
+    <changeSet author="Juri Furer" id="1758714259370-4">
         <createTable tableName="verfuegung_massendruck">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="verfuegung_massendruckPK"/>
@@ -84,82 +84,95 @@
             <column name="verfuegung_id" type="UUID"/>
         </createTable>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-5">
+    <changeSet author="Juri Furer" id="1758714259370-5">
         <addColumn tableName="datenschutzbrief">
             <column name="gesuch_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-6">
+    <changeSet author="Juri Furer" id="1758714259370-6">
         <addColumn tableName="datenschutzbrief_aud">
             <column name="gesuch_id" type="UUID"/>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-7">
+    <changeSet author="Juri Furer" id="1758714259370-7">
         <addColumn tableName="datenschutzbrief">
             <column name="nachname" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-8">
+    <changeSet author="Juri Furer" id="1758714259370-8">
         <addColumn tableName="datenschutzbrief_aud">
             <column name="nachname" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-9">
+    <changeSet author="Juri Furer" id="1758714259370-9">
         <addColumn tableName="datenschutzbrief">
             <column name="vorname" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-10">
+    <changeSet author="Juri Furer" id="1758714259370-10">
         <addColumn tableName="datenschutzbrief_aud">
             <column name="vorname" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-11">
+    <changeSet author="Juri Furer" id="1758714259370-11">
         <addUniqueConstraint columnNames="datenschutzbrief_id" constraintName="UC_DATENSCHUTZBRIEF_MASSENDRUCKDATENSCHUTZBRIEF_ID_COL" tableName="datenschutzbrief_massendruck"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-12">
+    <changeSet author="Juri Furer" id="1758714259370-12">
         <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-13">
+    <changeSet author="Juri Furer" id="1758714259370-13">
         <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-14">
+    <changeSet author="Juri Furer" id="1758714259370-14">
         <addUniqueConstraint columnNames="verfuegung_id" constraintName="UC_VERFUEGUNG_MASSENDRUCKVERFUEGUNG_ID_COL" tableName="verfuegung_massendruck"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-15">
+    <changeSet author="Juri Furer" id="1758714259370-15">
         <createIndex indexName="IX_datenschutzbrief_massendruck_mandant" tableName="datenschutzbrief_massendruck">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-16">
+    <changeSet author="Juri Furer" id="1758714259370-16">
         <createIndex indexName="IX_massendruck_mandant" tableName="massendruck_job">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-18">
+    <changeSet author="Juri Furer" id="1758714259370-18">
         <createIndex indexName="IX_verfuegung_massendruck_mandant" tableName="verfuegung_massendruck">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-19">
+    <changeSet author="Juri Furer" id="1758714259370-19">
         <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="datenschutzbrief" constraintName="FK_datenschutzbrief_gesuch_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-20">
+    <changeSet author="Juri Furer" id="1758714259370-20">
         <addForeignKeyConstraint baseColumnNames="datenschutzbrief_id" baseTableName="datenschutzbrief_massendruck" constraintName="FK_datenschutzbrief_massendruck_datenschutzbrief_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="datenschutzbrief" validate="true"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-21">
+    <changeSet author="Juri Furer" id="1758714259370-21">
         <addForeignKeyConstraint baseColumnNames="massendruck_job_id" baseTableName="datenschutzbrief_massendruck" constraintName="FK_datenschutzbrief_massendruck_massendruck_job_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="massendruck_job" validate="true"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-22">
+    <changeSet author="Juri Furer" id="1758714259370-22">
         <addForeignKeyConstraint baseColumnNames="massendruck_job_id" baseTableName="verfuegung_massendruck" constraintName="FK_verfuegung_massendruck_massendruck_job_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="massendruck_job" validate="true"/>
     </changeSet>
-    <changeSet author="? (generated)" id="1758714259370-23">
+    <changeSet author="Juri Furer" id="1758714259370-23">
         <addForeignKeyConstraint baseColumnNames="verfuegung_id" baseTableName="verfuegung_massendruck" constraintName="FK_verfuegung_massendruck_verfuegung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="verfuegung" validate="true"/>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1759230392918-2">
+        <addColumn tableName="verfuegung">
+            <column name="is_versendet" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1759230392918-3">
+        <addColumn tableName="verfuegung_aud">
+            <column name="is_versendet" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1759230392918-21">
+        <dropColumn columnName="is_versendet" tableName="verfuegung_massendruck"/>
     </changeSet>
 </databaseChangeLog>

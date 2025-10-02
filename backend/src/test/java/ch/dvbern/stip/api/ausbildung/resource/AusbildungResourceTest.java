@@ -115,7 +115,7 @@ class AusbildungResourceTest {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
         TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
-        gesuchApiSpec.gesuchEinreichenGs()
+        var foundGesuch = gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -124,6 +124,8 @@ class AusbildungResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.NICHT_ANSPRUCHSBERECHTIGT));
+
     }
 
     @Test

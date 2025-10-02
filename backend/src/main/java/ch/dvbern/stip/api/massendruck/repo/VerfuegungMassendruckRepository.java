@@ -15,20 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.datenschutzbrief.type;
+package ch.dvbern.stip.api.massendruck.repo;
 
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
-public enum DatenschutzbriefEmpfaenger {
-    VATER,
-    MUTTER,
-    FAMILIE;
-
-    public static DatenschutzbriefEmpfaenger fromSteuerdatenTyp(final SteuerdatenTyp steuerdatenTyp) {
-        return switch (steuerdatenTyp) {
-            case VATER -> VATER;
-            case MUTTER -> MUTTER;
-            case FAMILIE -> FAMILIE;
-        };
-    }
+@ApplicationScoped
+@RequiredArgsConstructor
+public class VerfuegungMassendruckRepository implements BaseRepository<VerfuegungMassendruck> {
 }
