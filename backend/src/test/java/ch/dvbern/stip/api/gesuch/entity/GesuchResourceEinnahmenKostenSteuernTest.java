@@ -116,10 +116,6 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .getEinnahmenKosten()
             .setNettoerwerbseinkommen(10);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setAlternativeWohnformWohnend(false);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         gesuchApiSpec.updateGesuch()
@@ -220,14 +216,6 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .getEinnahmenKosten()
             .setWgWohnend(false);
 
-        // when wgWohnend = false, alternativeWohnformWohnend must be set
-        gesuchApiSpec.updateGesuch()
-            .gesuchIdPath(gesuchId)
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.BAD_REQUEST.getStatusCode());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
