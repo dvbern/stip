@@ -64,7 +64,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "wg_anzahl_personen")
-    private Integer wgAnzahlPersonen = 0;
+    private Integer wgAnzahlPersonen;
 
     @Nullable
     @Column(name = "alternative_wohnform_wohnend")
