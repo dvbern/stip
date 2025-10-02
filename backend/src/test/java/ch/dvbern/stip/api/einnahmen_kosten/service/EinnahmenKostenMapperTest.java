@@ -39,7 +39,7 @@ class EinnahmenKostenMapperTest {
     }
 
     @Test
-    void resetDependentDataBeforeUpdate() {
+    void resetAlternativeWohnformWohnendBeforeUpdate() {
         /* reset alternativeWohnformWohnend to default */
         // arrange
         einnahmenKosten.setWgWohnend(false);
@@ -52,7 +52,10 @@ class EinnahmenKostenMapperTest {
 
         // assert
         assertThat(einnahmenKosten.getAlternativeWohnformWohnend(), is(nullValue()));
+    }
 
+    @Test
+    void resetWgWohnendBeforeUpdate() {
         /* reset wgWohnend & coresponding to default */
         // arrange
         einnahmenKosten.setWgWohnend(true);
@@ -66,6 +69,5 @@ class EinnahmenKostenMapperTest {
         // assert
         assertThat(einnahmenKosten.getWgWohnend(), is(false));
         assertThat(einnahmenKosten.getWgAnzahlPersonen(), is(nullValue()));
-
     }
 }
