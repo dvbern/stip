@@ -17,12 +17,6 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -40,6 +34,12 @@ import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Builder
@@ -135,13 +135,24 @@ public class AntragsstellerV1 {
                 }
             }
 
-            builder.grundbedarf(
-                BerechnungRequestV1.getGrundbedarf(
-                    gesuchsperiode,
-                    anzahlPersonenImHaushalt,
-                    Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())
-                )
-            );
+            if(Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())){
+                builder.grundbedarf(
+                    BerechnungRequestV1.getGrundbedarf(
+                        gesuchsperiode,
+                        anzahlPersonenImHaushalt,
+                        true
+                    )
+                );
+            }else if(Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend())){
+
+                    builder.grundbedarf(
+                        BerechnungRequestV1.getGrundbedarf(
+                            gesuchsperiode,
+                            1,
+                            true
+                        )
+                    );
+            }
         } else {
             builder.grundbedarf(0);
         }
