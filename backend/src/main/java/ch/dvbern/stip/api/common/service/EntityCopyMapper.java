@@ -39,14 +39,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public abstract class EntityCopyMapper {
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "mandant", ignore = true)
-    @Mapping(target = "timestampErstellt", ignore = true)
-    @Mapping(target = "timestampMutiert", ignore = true)
-    @Mapping(target = "version", ignore = true)
-    public @interface IgnoreStandardFields {
-    }
-
     @Mapping(target = "tranche", ignore = true)
     @IgnoreStandardFields
     public abstract void copyFromTo(GesuchFormular source, @MappingTarget GesuchFormular target);

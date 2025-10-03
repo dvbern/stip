@@ -43,79 +43,71 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public abstract class EntityOverrideMapper {
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "mandant", ignore = true)
-    @Mapping(target = "timestampErstellt", ignore = true)
-    @Mapping(target = "timestampMutiert", ignore = true)
-    @Mapping(target = "version", ignore = true)
-    public @interface IgnoreStandardFields {
-    }
-
     @Mapping(target = "tranche", ignore = true)
     @IgnoreStandardFields
     public abstract void overrideFromTo(GesuchFormular source, @MappingTarget GesuchFormular target);
 
-    @EntityCopyMapper.IgnoreStandardFields
-    public abstract void copyFromTo(Adresse source, @MappingTarget Adresse target);
-
-    @EntityCopyMapper.IgnoreStandardFields
-    public abstract void copyFromTo(PersonInAusbildung source, @MappingTarget PersonInAusbildung target);
-
-    @EntityCopyMapper.IgnoreStandardFields
-    public abstract void copyFromTo(Familiensituation source, @MappingTarget Familiensituation target);
-
-    @EntityCopyMapper.IgnoreStandardFields
-    public abstract void copyFromTo(Partner source, @MappingTarget Partner target);
-
-    @EntityCopyMapper.IgnoreStandardFields
-    public abstract void copyFromTo(EinnahmenKosten source, @MappingTarget EinnahmenKosten target);
-
-    @EntityCopyMapper.IgnoreStandardFields
-    public abstract void copyFromTo(Darlehen source, @MappingTarget Darlehen target);
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(Adresse source, @MappingTarget Adresse target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(Eltern source, @MappingTarget Eltern target);
+    public abstract void overrideFromTo(PersonInAusbildung source, @MappingTarget PersonInAusbildung target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(LebenslaufItem source, @MappingTarget LebenslaufItem target);
+    public abstract void overrideFromTo(Familiensituation source, @MappingTarget Familiensituation target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(Geschwister source, @MappingTarget Geschwister target);
+    public abstract void overrideFromTo(Partner source, @MappingTarget Partner target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(Kind source, @MappingTarget Kind target);
+    public abstract void overrideFromTo(EinnahmenKosten source, @MappingTarget EinnahmenKosten target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(Steuerdaten source, @MappingTarget Steuerdaten target);
+    public abstract void overrideFromTo(Darlehen source, @MappingTarget Darlehen target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(Steuererklaerung source, @MappingTarget Steuererklaerung target);
+    public abstract void overrideFromTo(Eltern source, @MappingTarget Eltern target);
+
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(LebenslaufItem source, @MappingTarget LebenslaufItem target);
+
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(Geschwister source, @MappingTarget Geschwister target);
+
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(Kind source, @MappingTarget Kind target);
+
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(Steuerdaten source, @MappingTarget Steuerdaten target);
+
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(Steuererklaerung source, @MappingTarget Steuererklaerung target);
 
     public void overrideFromToEltern(Set<Eltern> source, @MappingTarget Set<Eltern> target) {
-        overrideSetIdentifier(source, target, Eltern::new, this::copyFromTo, Eltern::getElternTyp);
+        overrideSetIdentifier(source, target, Eltern::new, this::overrideFromTo, Eltern::getElternTyp);
     }
 
     public void overrideFromToLebenslaufItem(Set<LebenslaufItem> source, @MappingTarget Set<LebenslaufItem> target) {
-        overrideSetById(source, target, LebenslaufItem::new, this::copyFromTo);
+        overrideSetById(source, target, LebenslaufItem::new, this::overrideFromTo);
     }
 
     public void overrideFromToGeschwister(Set<Geschwister> source, @MappingTarget Set<Geschwister> target) {
-        overrideSetById(source, target, Geschwister::new, this::copyFromTo);
+        overrideSetById(source, target, Geschwister::new, this::overrideFromTo);
     }
 
     public void overrideFromToKind(Set<Kind> source, @MappingTarget Set<Kind> target) {
-        overrideSetById(source, target, Kind::new, this::copyFromTo);
+        overrideSetById(source, target, Kind::new, this::overrideFromTo);
     }
 
     public void overrideFromToSteuerdaten(Set<Steuerdaten> source, @MappingTarget Set<Steuerdaten> target) {
-        overrideSetById(source, target, Steuerdaten::new, this::copyFromTo);
+        overrideSetById(source, target, Steuerdaten::new, this::overrideFromTo);
     }
 
     public void overrideFromToSteuererklaerung(
         Set<Steuererklaerung> source,
         @MappingTarget Set<Steuererklaerung> target
     ) {
-        overrideSetById(source, target, Steuererklaerung::new, this::copyFromTo);
+        overrideSetById(source, target, Steuererklaerung::new, this::overrideFromTo);
     }
 
     /**
@@ -130,10 +122,10 @@ public abstract class EntityOverrideMapper {
      * @param <T>
      */
     private <T extends AbstractEntity> void overrideSetById(
-        Set<T> source,
-        Set<T> target,
-        Supplier<T> create,
-        BiConsumer<T, T> overrideMethod
+        final Set<T> source,
+        final Set<T> target,
+        final Supplier<T> create,
+        final BiConsumer<T, T> overrideMethod
     ) {
         overrideSetIdentifier(source, target, create, overrideMethod, AbstractEntity::getId);
     }
@@ -151,11 +143,11 @@ public abstract class EntityOverrideMapper {
      * @param <R> The type of the return value from the identifier function
      */
     private <T extends AbstractEntity, R> void overrideSetIdentifier(
-        Set<T> source,
-        Set<T> target,
-        Supplier<T> create,
-        BiConsumer<T, T> overrideMethod,
-        Function<T, R> identifier
+        final Set<T> source,
+        final Set<T> target,
+        final Supplier<T> create,
+        final BiConsumer<T, T> overrideMethod,
+        final Function<T, R> identifier
     ) {
         final var sourceMap = source.stream().collect(Collectors.toMap(identifier, Function.identity()));
         final var targetMap = target.stream().collect(Collectors.toMap(identifier, Function.identity()));
