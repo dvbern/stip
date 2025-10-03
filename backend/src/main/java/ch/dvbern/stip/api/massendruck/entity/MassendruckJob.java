@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.massendruck.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -89,6 +90,8 @@ public class MassendruckJob extends AbstractMandantEntity {
         return switch (getMassendruckTyp()) {
             case DATENSCHUTZBRIEF -> getDatenschutzbriefMassendrucks().stream()
                 .map(datenschutzbrief -> datenschutzbrief.getDatenschutzbrief().getGesuch())
+                .collect(Collectors.toSet())
+                .stream()
                 .toList();
             case VERFUEGUNG -> getVerfuegungMassendrucks().stream()
                 .map(verfuegung -> verfuegung.getVerfuegung().getGesuch())

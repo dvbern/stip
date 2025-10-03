@@ -3,15 +3,10 @@
 
   <div class="container">
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
+      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}&nbsp;{{ massendruck?.massendruckJobNumber }}
       @if (massendruck) {
-        <span>
-          {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.' + massendruck?.massendruckJobTyp | transloco }}
-        </span>
-        <span> &nbsp;{{ massendruck?.massendruckJobNumber }} </span>
+        - {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.' + massendruck?.massendruckJobTyp | transloco }}
       }
-      <span>
-        {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.VERFUEGUNG' | transloco }}
-      </span>
     </h1>
 
     <div class="tw:flex tw:items-center tw:min-h-24 tw:justify-between tw:relative">
@@ -19,7 +14,7 @@
         <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
           <!-- userErstellt -->
           <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.userErstellt' | transloco }}</dt>
-          <dd class="tw:text-sm/none">{{ massendruck?.userErstellt }}</dd>
+          <dd>{{ massendruck?.userErstellt }}</dd>
 
           <!-- Datum -->
           <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.timestampErstellt' | transloco }}</dt>
@@ -31,20 +26,38 @@
             {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + massendruck?.massendruckJobStatus | transloco }}
           </dd>
         </dl>
-
-        <!-- todo: implement api call when available download button -->
-        <div>
-          <button
-            type="button"
-            class="btn btn-link tw:p-0"
-            [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
-          >
-            <div class="material-symbols-rounded tw:text-4xl!">download</div>
-            <div class="">
-              {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
-            </div>
-          </button>
-        </div>
+        @if (massendruck?.id) {
+          @switch (massendruck.massendruckJobStatus) {
+            @case ('SUCCESS') {
+              <button
+                type="button"
+                class="btn btn-link tw:p-0"
+                [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
+                [dvDownloadButton]="{
+                  type: 'massendruck',
+                  id: massendruck.id,
+                }"
+              >
+                <div class="material-symbols-rounded tw:text-4xl!">download</div>
+                <div>
+                  {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
+                </div>
+              </button>
+            }
+            @case ('FAILED') {
+              <div class="tw:flex tw:gap-4">
+                <button type="button" class="btn btn-danger" (click)="cancelMassendruckJob(massendruck)">
+                  <div class="material-symbols-rounded tw:text-xl! tw:mr-1 tw:align-middle">cancel</div>
+                  {{ 'sachbearbeitung-app.massendruck-detail.cancel' | transloco }}
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click)="retryMassendruckJob(massendruck)">
+                  <div class="material-symbols-rounded tw:text-xl! tw:mr-1 tw:align-middle">restart_alt</div>
+                  {{ 'sachbearbeitung-app.massendruck-detail.retry' | transloco }}
+                </button>
+              </div>
+            }
+          }
+        }
       }
       @if (massendruckStore.massendruckViewSig().loading) {
         <dv-shared-ui-loading
@@ -61,7 +74,7 @@
           <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
             <table
               class="tw:w-full tw:table-fixed"
-              [dvSharedUiFocusableList]="items"
+              [dvSharedUiFocusableList]="itemsSig()"
               [dataSource]="massendruckDetailDataSourceSig()"
               data-testid="sachbearbeitung-app.massendruck-detail.table"
               mat-table
@@ -89,7 +102,7 @@
                         (keydown)="$event.stopPropagation()"
                         [placeholder]="'sachbearbeitung-app.massendruck-detail.table.versendet.filter.alle' | transloco"
                       >
-                        <mat-option [value]="undefined">{{
+                        <mat-option [value]="null">{{
                           'sachbearbeitung-app.massendruck-detail.table.versendet.filter.alle' | transloco
                         }}</mat-option>
                         <mat-option [value]="true">{{
@@ -141,7 +154,12 @@
                   class="tw:w-32 tw:whitespace-nowrap"
                   [dvTruncateTooltip]="item.gesuchNummer"
                 >
-                  {{ item.gesuchNummer }}
+                  <a
+                    [routerLink]="['/gesuch/eltern', item.gesuchId, 'tranche', item.gesuchTrancheId]"
+                    (click)="$event.stopPropagation()"
+                  >
+                    {{ item.gesuchNummer }}
+                  </a>
                 </td>
               </ng-container>
 
@@ -195,6 +213,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let item; dataSource: massendruckDetailDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/gesuch/eltern', item.gesuchId, 'tranche', item.gesuchTrancheId]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

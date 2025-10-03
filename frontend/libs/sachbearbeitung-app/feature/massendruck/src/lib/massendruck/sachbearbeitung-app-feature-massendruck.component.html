@@ -209,9 +209,9 @@
               </ng-container>
 
               <ng-container matColumnDef="TYP">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.massendruck.table.typ' | transloco }}
-                  <mat-form-field>
+                  <mat-form-field class="tw:flex! tw:w-max">
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.massendruck.table.typ' | transloco"
                       formControlName="massendruckJobTyp"

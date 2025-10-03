@@ -30,8 +30,8 @@ import org.jboss.resteasy.spi.InternalServerErrorException;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 
 @ApplicationScoped
-public class DatenschutzbriefService {
-    public ByteArrayOutputStream createDatenschutzbriefForElternteil(final Eltern elternteil) {
+public class DatenschutzbriefPdfService {
+    public ByteArrayOutputStream createDatenschutzbriefForElternteil(final Eltern elternTeil) {
         final var out = new ByteArrayOutputStream();
 
         try (

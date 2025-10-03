@@ -34,6 +34,7 @@ public interface VerfuegungMassendruckMapper {
             .nachname(verfuegungMassendruck.getNachname())
             .isVersendet(verfuegung.isVersendet())
             .gesuchNummer(gesuch.getGesuchNummer())
-            .gesuchId(gesuch.getId());
+            .gesuchId(gesuch.getId())
+            .gesuchTrancheId(gesuch.getLatestGesuchTranche().getId());
     }
 }

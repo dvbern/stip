@@ -2748,6 +2748,61 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateSteuerdaten
       summary: Updates the Steuerdaten of the given gesuchTrancheId
+  '/datenschutzbrief/{trancheId}/download':
+    parameters:
+      - name: trancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Datenschutzbrief File returned
+      operationId: getDatenschutzbrief
+      summary: get Datenschutzbrief
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream>
+  '/datenschutzbrief/{elternId}/token':
+    parameters:
+      - name: elternId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: Datenschutzbrief File Download Token returned
+      operationId: getDatenschutzbriefDownloadToken
+      summary: get Token to downlaod Verfuegung
   '/verfuegung/download':
     parameters:
       - name: token
@@ -4624,6 +4679,7 @@ components:
         - vorname
         - gesuchNummer
         - gesuchId
+        - gesuchTrancheId
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -4636,6 +4692,8 @@ components:
         gesuchNummer:
           type: string
         gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
     MassendruckVerfuegung:
       type: object
@@ -7694,7 +7752,6 @@ components:
         - USER_ERSTELLT
         - TIMESTAMP_ERSTELLT
         - STATUS
-        - TYP
     SbDashboardColumn:
       enum:
         - FALLNUMMER

@@ -33,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   MassendruckVerfuegungDtoSpec.JSON_PROPERTY_NACHNAME,
   MassendruckVerfuegungDtoSpec.JSON_PROPERTY_VORNAME,
   MassendruckVerfuegungDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
-  MassendruckVerfuegungDtoSpec.JSON_PROPERTY_GESUCH_ID
+  MassendruckVerfuegungDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  MassendruckVerfuegungDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID
 })
 @JsonTypeName("MassendruckVerfuegung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -55,6 +56,9 @@ public class MassendruckVerfuegungDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
   private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  private UUID gesuchTrancheId;
 
   public MassendruckVerfuegungDtoSpec() {
   }
@@ -214,6 +218,32 @@ public class MassendruckVerfuegungDtoSpec {
     this.gesuchId = gesuchId;
   }
 
+
+  public MassendruckVerfuegungDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+    
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+   /**
+   * Get gesuchTrancheId
+   * @return gesuchTrancheId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -228,12 +258,13 @@ public class MassendruckVerfuegungDtoSpec {
         Objects.equals(this.nachname, massendruckVerfuegung.nachname) &&
         Objects.equals(this.vorname, massendruckVerfuegung.vorname) &&
         Objects.equals(this.gesuchNummer, massendruckVerfuegung.gesuchNummer) &&
-        Objects.equals(this.gesuchId, massendruckVerfuegung.gesuchId);
+        Objects.equals(this.gesuchId, massendruckVerfuegung.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, massendruckVerfuegung.gesuchTrancheId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId);
+    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId, gesuchTrancheId);
   }
 
   @Override
@@ -246,6 +277,7 @@ public class MassendruckVerfuegungDtoSpec {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -34,7 +34,7 @@ import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
 import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
-import ch.dvbern.stip.api.pdf.service.DatenschutzbriefService;
+import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -64,7 +64,7 @@ public class MassendruckJobPdfService {
     private final GesuchStatusService gesuchStatusService;
 
     // TODO KSTIP-2294: Replace this with an impl on the service once 2709 is merged
-    private final DatenschutzbriefService datenschutzbriefPdfService;
+    private final DatenschutzbriefPdfService datenschutzbriefPdfService;
 
     @Transactional
     public void setFailedStatusOnJob(final UUID massendruckJobId) {

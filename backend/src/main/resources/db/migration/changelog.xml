@@ -210,6 +210,7 @@
   <!-- <editor-fold desc="v0.54" defaultstate="collapsed" -->
   <include file="/db/migration/0.54/0.54.0-KSTIP-2294.xml" />
   <include file="/db/migration/0.54/0.54.0-KSTIP-2663.xml" />
+  <include file="/db/migration/0.54/0.54.0-KSTIP-2709.xml" />
   <include file="/db/migration/0.54/0.54.0-KSTIP-2690.xml" />
   <include file="/db/migration/0.54/0.54.0-KSTIP-2294-2.xml" />
   <!--  </editor-fold> -->

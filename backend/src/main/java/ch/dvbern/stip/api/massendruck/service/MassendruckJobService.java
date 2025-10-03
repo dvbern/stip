@@ -284,5 +284,6 @@ public class MassendruckJobService {
             case DATENSCHUTZBRIEF -> gesuchStatusService
                 .bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         }
+        massendruckJob.setStatus(MassendruckJobStatus.ARCHIVED);
     }
 }

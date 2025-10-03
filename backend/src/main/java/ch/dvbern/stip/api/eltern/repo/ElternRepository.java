@@ -15,28 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.eltern.repo;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
-import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
-public class DatenschutzDruckbereitHandler implements GesuchStatusChangeHandler {
-    private final GesuchStatusService gesuchStatusService;
-
-    @Transactional
-    @Override
-    public void handle(Gesuch gesuch) {
-        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
-        if (gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
-        }
-    }
+public class ElternRepository implements BaseRepository<Eltern> {
 }

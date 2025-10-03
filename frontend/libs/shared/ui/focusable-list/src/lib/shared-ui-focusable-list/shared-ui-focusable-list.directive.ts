@@ -15,7 +15,9 @@ import { SharedUiFocusableListItemDirective } from '../shared-ui-focusable-list-
 })
 export class SharedUiFocusableListDirective {
   dvSharedUiFocusableListSig = input.required<
-    QueryList<SharedUiFocusableListItemDirective> | undefined
+    | QueryList<SharedUiFocusableListItemDirective>
+    | readonly SharedUiFocusableListItemDirective[]
+    | undefined
   >({ alias: 'dvSharedUiFocusableList' });
   private keyManager?: ActiveDescendantKeyManager<SharedUiFocusableListItemDirective>;
 

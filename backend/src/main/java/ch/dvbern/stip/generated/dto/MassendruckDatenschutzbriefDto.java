@@ -26,6 +26,7 @@ public class MassendruckDatenschutzbriefDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String gesuchNummer;
   private @Valid UUID gesuchId;
+  private @Valid UUID gesuchTrancheId;
   private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
 
   /**
@@ -144,6 +145,25 @@ public class MassendruckDatenschutzbriefDto  implements Serializable {
 
   /**
    **/
+  public MassendruckDatenschutzbriefDto gesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchTrancheId")
+  @NotNull
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+  @JsonProperty("gesuchTrancheId")
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
+  /**
+   **/
   public MassendruckDatenschutzbriefDto elternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
     this.elternTyp = elternTyp;
     return this;
@@ -177,12 +197,13 @@ public class MassendruckDatenschutzbriefDto  implements Serializable {
         Objects.equals(this.vorname, massendruckDatenschutzbrief.vorname) &&
         Objects.equals(this.gesuchNummer, massendruckDatenschutzbrief.gesuchNummer) &&
         Objects.equals(this.gesuchId, massendruckDatenschutzbrief.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, massendruckDatenschutzbrief.gesuchTrancheId) &&
         Objects.equals(this.elternTyp, massendruckDatenschutzbrief.elternTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId, elternTyp);
+    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId, gesuchTrancheId, elternTyp);
   }
 
   @Override
@@ -196,6 +217,7 @@ public class MassendruckDatenschutzbriefDto  implements Serializable {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    elternTyp: ").append(toIndentedString(elternTyp)).append("\n");
     sb.append("}");
     return sb.toString();

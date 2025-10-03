@@ -17,29 +17,10 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.repo;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
-import ch.dvbern.stip.api.datenschutzbrief.entity.QDatenschutzbrief;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefDownload;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-public class DatenschutzbriefRepository implements BaseRepository<Datenschutzbrief> {
-    private final EntityManager entityManager;
-
-    @Transactional
-    public void deleteAllByGesuchId(final UUID gesuchId) {
-        final var datenschuzbrief = QDatenschutzbrief.datenschutzbrief;
-
-        new JPAQueryFactory(entityManager)
-            .delete(datenschuzbrief)
-            .where(datenschuzbrief.gesuch.id.eq(gesuchId))
-            .execute();
-    }
+public class DatenschutzbriefDownloadLogRepository implements BaseRepository<DatenschutzbriefDownload> {
 }
