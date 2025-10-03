@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.admindokumente.service.AdminDokumenteService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
@@ -49,6 +50,7 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
@@ -68,7 +70,6 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
-import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Multi;
@@ -120,6 +121,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final StatusprotokollService statusprotokollService;
+    private final AdminDokumenteService adminDokumenteService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -146,7 +148,7 @@ public class GesuchResourceImpl implements GesuchResource {
             gesuchId,
             ausgewaehlterGrundDto
         );
-        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
+        gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -201,13 +203,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToVersendet(gesuchId);
 
-        gesuchService.gesuchStatusToVersendet(gesuchId);
-        final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuchId);
-        if (latestVerfuegung.isNegativeVerfuegung()) {
-            gesuchService.gesuchStatusToKeinStipendienanspruch(gesuchId);
-        } else {
-            gesuchService.gesuchStatusToStipendienanspruch(gesuchId);
-        }
+        gesuchService.changeToVersendentAndAnspruchOrKeinAnspruch(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
@@ -279,9 +275,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public List<VerfuegungDto> getAllVerfuegungen(UUID gesuchId) {
+    public AdminDokumenteDto getAdminDokumente(UUID gesuchId) {
         gesuchAuthorizer.sbCanRead();
-        return verfuegungService.getVerfuegungenByGesuch(gesuchId);
+        return adminDokumenteService.getAdminDokumente(gesuchId);
     }
 
     @Override
@@ -541,6 +537,16 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
 
         gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
+    }
+
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
+    @Override
+    public GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(gesuchId);
+        gesuchService.gesuchStatusToDatenschutzbriefDruckbereit(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 

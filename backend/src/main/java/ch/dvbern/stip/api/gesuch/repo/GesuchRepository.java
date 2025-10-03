@@ -83,6 +83,10 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         );
     }
 
+    public JPAQuery<Gesuch> getFindAlleMeineJurBearbeitungQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleJurBearbeitungQuery());
+    }
+
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
@@ -97,11 +101,27 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             Gesuchstatus.IN_FREIGABE,
             Gesuchstatus.VERFUEGT,
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.VERSANDBEREIT,
-            Gesuchstatus.VERSENDET,
+            Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
+            Gesuchstatus.VERFUEGUNG_VERSENDET,
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
             Gesuchstatus.STIPENDIENANSPRUCH
         );
+    }
+
+    public JPAQuery<Gesuch> getAlleWithDruckbareVerfuegung() {
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
+    }
+
+    public JPAQuery<Gesuch> getAlleMeineWithDruckbareVerfuegung(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getAlleWithDruckbareVerfuegung());
+    }
+
+    public JPAQuery<Gesuch> getAlleWithDruckbarerDatenschutzbrief() {
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
+    }
+
+    public JPAQuery<Gesuch> getAlleMeineWithDruckbarerDatenschutzbrief(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getAlleWithDruckbarerDatenschutzbrief());
     }
 
     private JPAQuery<Gesuch> addStatusFilter(

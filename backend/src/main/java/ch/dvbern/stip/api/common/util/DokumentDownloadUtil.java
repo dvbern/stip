@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.io.ByteArrayOutputStream;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -48,6 +50,18 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @UtilityClass
 public class DokumentDownloadUtil {
+    public RestMulti<ByteArrayOutputStream> getWrapedDokument(
+        final String fileName,
+        final Supplier<CompletionStage<ByteArrayOutputStream>> generateDocumentTask
+    ) {
+
+        return RestMulti.fromUniResponse(
+            Uni.createFrom().completionStage(generateDocumentTask.get()),
+            s -> Multi.createFrom().completionStage(generateDocumentTask.get()),
+            s -> getRequiredHeaders(fileName),
+            s -> Response.Status.OK.getStatusCode()
+        );
+    }
 
     public RestMulti<Buffer> getDokument(
         final S3AsyncClient s3,
@@ -74,12 +88,16 @@ public class DokumentDownloadUtil {
                     byteBuffer.get(result);
                     return Buffer.buffer(result);
                 }),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + fileName),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
+            response -> getRequiredHeaders(fileName)
+        );
+    }
+
+    private Map<String, List<String>> getRequiredHeaders(final String fileName) {
+        return Map.of(
+            "Content-Disposition",
+            List.of("attachment;filename=" + fileName),
+            "Content-Type",
+            List.of("application/octet-stream")
         );
     }
 

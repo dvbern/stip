@@ -129,7 +129,7 @@
           "url": "http://localhost:4202",
           "webRoot": "${workspaceFolder}/frontend",
           "cwd": "${workspaceFolder}/frontend"
-        },
+        }
       ]
     },
     "editor.formatOnSave": true,
@@ -146,14 +146,10 @@
     "yaml.maxItemsComputed": 10000,
     "testing.automaticallyOpenTestResults": "neverOpen",
     "angular.forceStrictTemplates": true,
-    "git.blame.statusBarItem.enabled": false,
+    "git.blame.statusBarItem.enabled": true,
     "editor.suggest.preview": true,
     "eslint.useFlatConfig": true,
     "eslint.workingDirectories": ["frontend/"],
-    "eslint.validate": [
-      "typescript",
-      "json",
-      "javascript"
-    ]
+    "eslint.validate": ["typescript", "json", "javascript"]
   }
 }

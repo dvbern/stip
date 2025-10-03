@@ -6,11 +6,13 @@ import {
   InputSignal,
   OnInit,
   QueryList,
+  Signal,
   ViewChildren,
   computed,
   effect,
   inject,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -18,6 +20,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,6 +40,7 @@ import {
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -49,7 +53,6 @@ import {
   Gesuchstatus,
   SbDashboardColumn,
   SbDashboardGesuch,
-  SharedModelGesuch,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
@@ -60,6 +63,7 @@ import {
   PAGE_SIZES,
 } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
+import { SharedUiFilterMenuButtonComponent } from '@dv/shared/ui/filter-menu-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -92,8 +96,8 @@ import {
 } from '@dv/shared/util/validator-date';
 
 const DEFAULT_FILTER = {
-  jurist: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
-  other: 'ALLE_BEARBEITBAR_MEINE',
+  jurist: 'MEINE_JURISTISCHE_ABKLAERUNG',
+  other: 'MEINE_BEARBEITBAR',
 } satisfies Record<string, GesuchFilter>;
 
 const statusByTyp = {
@@ -123,6 +127,21 @@ type DashboardFormFields =
   | DashboardFormSimpleFields
   | DashboardFormStartEndFields;
 
+type QuickFilterGroup =
+  | 'GESUCHE'
+  | 'BEARBEITBAR'
+  | 'JURISTISCHE_ABKLAERUNG'
+  | 'DRUCKBAR_VERFUEGUNGEN'
+  | 'DRUCKBAR_DATENSCHUTZBRIEFE';
+
+type AvailableFilters = {
+  group: QuickFilterGroup;
+  filters: {
+    typ: GesuchFilter;
+    roles: BenutzerRole[];
+  }[];
+}[];
+
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
   imports: [
@@ -140,6 +159,7 @@ type DashboardFormFields =
     MatRadioModule,
     ReactiveFormsModule,
     RouterModule,
+    MatMenuModule,
     MatPaginatorModule,
     SharedUiIconChipComponent,
     SharedUiFocusableListItemDirective,
@@ -153,6 +173,7 @@ type DashboardFormFields =
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
     SachbearbeitungAppPatternOverviewLayoutComponent,
+    SharedUiFilterMenuButtonComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],
@@ -170,6 +191,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
+  massendruckStore = inject(MassendruckStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   show = input<GesuchFilter | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
@@ -196,6 +218,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
   displayedColumns = Object.keys(SbDashboardColumn);
+
+  refreshQuickfilterSig = signal<unknown>(null);
 
   private defaultFilterSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
@@ -234,48 +258,93 @@ export class SachbearbeitungAppFeatureCockpitComponent
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
-  dataSoruce = new MatTableDataSource<SharedModelGesuch>([]);
 
-  quickFilters: {
-    typ: GesuchFilter;
-    icon: string;
-    roles: BenutzerRole[];
-  }[] = [
-    {
-      typ: 'ALLE_JURISTISCHE_ABKLAERUNG_MEINE',
-      icon: 'person',
-      roles: ['V0_Jurist'],
-    },
-    {
-      typ: 'ALLE_BEARBEITBAR_MEINE',
-      icon: 'person',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-    },
-    {
-      typ: 'ALLE_BEARBEITBAR',
-      icon: 'people',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-    },
-    {
-      typ: 'ALLE',
-      icon: 'all_inclusive',
+  // Exhaustive quick filter configuration
+  private readonly quickFilterConfig = {
+    MEINE_GESUCHE: {
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+      group: 'GESUCHE',
     },
-  ];
+    ALLE_GESUCHE: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+      group: 'GESUCHE',
+    },
+    MEINE_BEARBEITBAR: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'BEARBEITBAR',
+    },
+    ALLE_BEARBEITBAR: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'BEARBEITBAR',
+    },
+    MEINE_JURISTISCHE_ABKLAERUNG: {
+      roles: ['V0_Jurist'],
+      group: 'JURISTISCHE_ABKLAERUNG',
+    },
+    ALLE_JURISTISCHE_ABKLAERUNG: {
+      roles: ['V0_Jurist'],
+      group: 'JURISTISCHE_ABKLAERUNG',
+    },
+    MEINE_DRUCKBAR_VERFUEGUNGEN: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_VERFUEGUNGEN',
+    },
+    ALLE_DRUCKBAR_VERFUEGUNGEN: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_VERFUEGUNGEN',
+    },
+    MEINE_DRUCKBAR_DATENSCHUTZBRIEFE: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
+    },
+    ALLE_DRUCKBAR_DATENSCHUTZBRIEFE: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
+    },
+  } satisfies Record<
+    GesuchFilter,
+    { roles: BenutzerRole[]; group: QuickFilterGroup }
+  >;
 
+  // Signals and computed values for form changes and filtering
   private letzteAktivitaetFromChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetFrom.valueChanges,
   );
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
-  availableQuickFiltersSig = computed(() => {
-    const roles = this.permissionStore.rolesMapSig();
+  availableQuickFiltersSig = computed<AvailableFilters>(() => {
+    const activeRoles = this.permissionStore.rolesMapSig();
 
-    return this.quickFilters.filter((filter) =>
-      filter.roles.some((role) => roles?.[role]),
-    );
+    return Object.entries(this.quickFilterConfig)
+      .filter(([, { roles }]) => roles.some((r) => activeRoles?.[r]))
+      .map(([typ, { roles }]) => ({
+        typ: typ as GesuchFilter,
+        roles,
+      }))
+      .reduce((groups, filter) => {
+        const group = this.quickFilterConfig[filter.typ].group;
+
+        const existingGroup = groups.find((g) => g.group === group);
+        if (existingGroup) {
+          existingGroup.filters.push(filter);
+        } else {
+          groups.push({ group, filters: [filter] });
+        }
+
+        return groups;
+      }, [] as AvailableFilters);
   });
+
+  handleQuickFilterClick(filter: GesuchFilter) {
+    if (filter === this.quickFilterForm.controls.query.value) {
+      // Refresh the quick filter even if the same filter is selected again
+      this.refreshQuickfilterSig.set({});
+    } else {
+      this.quickFilterForm.controls.query.setValue(filter);
+    }
+  }
+
   letzteAktivitaetRangeSig = computed(() => {
     const start = this.letzteAktivitaetFromChangedSig();
     const end = this.letzteAktivitaetToChangedSig();
@@ -359,6 +428,38 @@ export class SachbearbeitungAppFeatureCockpitComponent
     return this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
   });
 
+  canCreateMassendruckSig: Signal<boolean> = computed(() => {
+    const quickFilter = this.show();
+    const isQuickfilterDruck = quickFilter?.includes('DRUCKBAR');
+    this.filterFormChangedSig();
+
+    if (!isQuickfilterDruck) {
+      return false;
+    }
+
+    const hasEntries = (this.totalEntriesSig() ?? 0) > 0;
+    const hasFilters = Object.entries(this.filterForm.getRawValue())
+      .filter(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ([key, _]) => {
+          return key !== 'typ';
+        },
+      )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .some(([_, value]) => value);
+
+    return hasEntries && !hasFilters;
+  });
+
+  createMassendruckJobForQueryType$() {
+    this.massendruckStore.createMassendruckJobForQueryType$({
+      req: { getGesucheSBQueryType: this.showViewSig() },
+      onSuccess: () => {
+        this.router.navigate(['/massendruck']);
+      },
+    });
+  }
+
   constructor() {
     limitPageToNumberOfEntriesEffect(
       this,
@@ -414,13 +515,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
     );
     effect(() => {
       const query = quickFilterChanged();
-      const defaultFilter = this.defaultFilterSig();
+
       if (!query) {
         return;
       }
       this.router.navigate(['.'], {
         queryParams: {
-          show: query === defaultFilter ? undefined : query,
+          show: query,
         },
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -429,6 +530,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     // When the route param inputs change, load the gesuche
     effect(() => {
+      this.refreshQuickfilterSig();
       const { query, filter, startEndFilter } = this.getInputs();
 
       this.gesuchStore.loadGesuche$({
