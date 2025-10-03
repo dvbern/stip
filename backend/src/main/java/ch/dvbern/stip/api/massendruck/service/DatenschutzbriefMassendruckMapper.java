@@ -37,6 +37,7 @@ public interface DatenschutzbriefMassendruckMapper {
             .elternTyp(datenschutzbrief.getDatenschutzbriefEmpfaenger())
             .isVersendet(datenschutzbrief.isVersendet())
             .gesuchNummer(gesuch.getGesuchNummer())
-            .gesuchId(gesuch.getId());
+            .gesuchId(gesuch.getId())
+            .gesuchTrancheId(gesuch.getLatestGesuchTranche().getId());
     }
 }

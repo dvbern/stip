@@ -22,5 +22,4 @@ public enum MassendruckJobSortColumn {
     USER_ERSTELLT,
     TIMESTAMP_ERSTELLT,
     STATUS,
-    TYP
 }

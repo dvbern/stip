@@ -54,6 +54,9 @@ public class ApiClient {
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
     }
+    public DatenschutzbriefApiSpec datenschutzbrief() {
+        return DatenschutzbriefApiSpec.datenschutzbrief(config.reqSpecSupplier);
+    }
     public DelegierenApiSpec delegieren() {
         return DelegierenApiSpec.delegieren(config.reqSpecSupplier);
     }
