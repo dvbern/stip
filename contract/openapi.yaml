@@ -3024,7 +3024,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AdminDokument'
+                $ref: '#/components/schemas/AdminDokumente'
           description: Returns a List of all Verfuegungen for a Gesuch
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -3034,8 +3034,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllVerfuegungen
-      summary: All Verfuegungen for a gesuch
+      operationId: getAdminDokumente
+      summary: All dokument information required for the Admin tab in Info of Gesuch
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -8020,13 +8020,15 @@ components:
           type: string
         bezeichnungFr:
           type: string
-    AdminDokument:
+    AdminDokumente:
       type: object
       required:
         - verfuegungen
       properties:
         verfuegungen:
-          $ref: '#/components/schemas/Verfuegung'
+          type: array
+          items:
+            $ref: '#/components/schemas/Verfuegung'
         datenschutzbriefMassendruckJobId:
           $ref: '#/components/schemas/UUID'
   responses:
