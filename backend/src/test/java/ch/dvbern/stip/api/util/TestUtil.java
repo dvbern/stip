@@ -611,6 +611,7 @@ public class TestUtil {
                     .setOrt("asd")
             )
             .setHeimatort("Bern")
+            .setHeimatortPLZ("3006")
             .setAnrede(Anrede.HERR)
             .setTelefonnummer("0987654321")
             .setEmail("asd@asd.ch")

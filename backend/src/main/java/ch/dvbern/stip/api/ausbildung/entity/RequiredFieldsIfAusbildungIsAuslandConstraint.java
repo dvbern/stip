@@ -17,17 +17,25 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class AusbildungsortRequiredIfSwissConstraintValidator
-    implements ConstraintValidator<AusbildungsortRequiredIfSwissConstraint, Ausbildung> {
-    @Override
-    public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {
-        if (Boolean.TRUE.equals(ausbildung.getIsAusbildungAusland())) {
-            return ausbildung.getAusbildungsort() == null;
-        } else {
-            return ausbildung.getAusbildungsort() != null;
-        }
-    }
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = RequiredFieldsIfAusbildungIsAusland.class)
+@Documented
+public @interface RequiredFieldsIfAusbildungIsAuslandConstraint {
+    String message() default VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE;
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

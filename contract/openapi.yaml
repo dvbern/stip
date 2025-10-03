@@ -5841,6 +5841,9 @@ components:
           type: string
         isAusbildungAusland:
           type: boolean
+        landId:
+          description: Required if isAusbildungAusland = true
+          $ref: '#/components/schemas/UUID'
     Ausbildung:
       required:
         - status

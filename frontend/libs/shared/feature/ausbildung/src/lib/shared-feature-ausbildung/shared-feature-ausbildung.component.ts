@@ -84,6 +84,7 @@ import {
   onMonthYearInputBlur,
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
+import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 const AusbildungRangeControls = ['ausbildungBegin', 'ausbildungEnd'] as const;
 type AusbildungRangeControls = (typeof AusbildungRangeControls)[number];
@@ -138,6 +139,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private einreichenStore = inject(EinreichenStore);
+  private landLookupService = inject(LandLookupService);
   private transloco = inject(TranslocoService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private gesuchViewSig = this.store.selectSignal(
@@ -161,6 +163,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ort: [<string | undefined>undefined, [Validators.required]],
     }),
     isAusbildungAusland: [false, []],
+    landId: [<string | undefined>undefined, [Validators.required]],
     ausbildungsstaetteId: [
       <string | undefined>undefined,
       [Validators.required],
@@ -209,6 +212,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   );
 
   plzValues?: Plz[];
+  laenderSig = this.landLookupService.getCachedLandLookup();
   isEditableSig = computed(() => {
     const { type } = this.usageTypeSig();
     const {
@@ -505,18 +509,26 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       if (isAusbildungAusland) {
         this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
         this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
+      } else {
+        this.form.controls.landId.reset();
       }
 
       this.formUtils.setDisabledState(
         this.form.controls.ausbildungsortPlzOrt.controls.plz,
         !this.isEditableSig() || isAusbildungAusland,
-        false,
+        this.isEditableSig(),
       );
 
       this.formUtils.setDisabledState(
         this.form.controls.ausbildungsortPlzOrt.controls.ort,
         !this.isEditableSig() || isAusbildungAusland,
-        false,
+        this.isEditableSig(),
+      );
+
+      this.formUtils.setDisabledState(
+        this.form.controls.landId,
+        !this.isEditableSig() || !isAusbildungAusland,
+        this.isEditableSig(),
       );
     });
 
@@ -554,10 +566,12 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
     effect(() => {
       const isWritable = this.isEditableSig();
+
       this.formUtils.setDisabledState(
         this.form.controls.fachrichtungBerufsbezeichnung,
         !isWritable ||
-          (!ausbildungNichtGefundenSig() && !this.currentAusbildungsgangSig()),
+          !ausbildungNichtGefundenSig() ||
+          !this.currentAusbildungsgangSig(),
         isWritable,
       );
     });

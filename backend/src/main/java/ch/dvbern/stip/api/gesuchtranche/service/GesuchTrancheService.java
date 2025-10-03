@@ -641,7 +641,7 @@ public class GesuchTrancheService {
     public GesuchDto aenderungFehlendeDokumenteEinreichen(final UUID aenderungId) {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService
-            .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
+            .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN);
         return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
     }
 

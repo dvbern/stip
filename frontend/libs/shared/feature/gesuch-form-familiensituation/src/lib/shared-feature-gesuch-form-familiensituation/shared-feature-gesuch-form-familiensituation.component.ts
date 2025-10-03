@@ -225,10 +225,20 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   mutterUnbekanntDocumentSig = this.createUploadOptionsSig(() => {
     const mutterUnbekanntGrund = this.mutterUnbekanntGrundSig();
 
-    return mutterUnbekanntGrund ===
+    if (
+      mutterUnbekanntGrund ===
       ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT
-      ? DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
-      : null;
+    ) {
+      return DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER;
+    }
+
+    if (
+      mutterUnbekanntGrund === ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG
+    ) {
+      return DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN;
+    }
+
+    return null;
   });
 
   ngOnInit(): void {

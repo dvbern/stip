@@ -277,14 +277,24 @@
                           | transloco
                       }}</mat-radio-button
                     >
-                    <mat-radio-button
-                      [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                      [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
-                      >{{
-                        'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
-                          | transloco
-                      }}</mat-radio-button
-                    >
+                    <div class="d-flex align-items-center gap-2">
+                      <mat-radio-button
+                        [attr.data-testid]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                        [value]="ELTERN_UNBEKANNTHEITS_GRUND.FEHLENDE_ANERKENNUNG"
+                        >{{
+                          'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung'
+                            | transloco
+                        }}</mat-radio-button
+                      >
+                      <button
+                        type="button"
+                        (click)="fehlendeMutterschaftsAnerkennungDialog.toggle()"
+                        class="dv-icon-button dv-icon-button-md text-info"
+                        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+                      >
+                        <span class="material-symbols-rounded"> info </span>
+                      </button>
+                    </div>
                   </div>
                   @if (mutterUnbekanntDocumentSig(); as options) {
                     <dv-shared-pattern-document-upload
@@ -299,6 +309,17 @@
                   </mat-error>
                 </div>
               </mat-radio-group>
+              <div
+                dvSharedUiInfoDialog
+                [dialogTitleKey]="
+                  'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.infoTitle'
+                "
+                [dialogMessageKey]="
+                  'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.info'
+                "
+                #fehlendeMutterschaftsAnerkennungDialog="dvSharedUiInfoDialog"
+                class="col-12 col-xl-6"
+              ></div>
             </div>
           }
           @if (
@@ -381,7 +402,7 @@
                       >
                       <button
                         type="button"
-                        (click)="fehlendeAnerkennungDialog.toggle()"
+                        (click)="fehlendeVaterschaftsAnerkennungDialog.toggle()"
                         class="dv-icon-button dv-icon-button-md text-info"
                         [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
                       >
@@ -389,7 +410,10 @@
                       </button>
                     </div>
                   </div>
-                  @if (vaterUnbekanntDocumentSig(); as options) {
+                  @if (
+                    form.controls.mutterUnbekanntGrund.value !== 'FEHLENDE_ANERKENNUNG' && vaterUnbekanntDocumentSig();
+                    as options
+                  ) {
                     <dv-shared-pattern-document-upload
                       class="flex-shrink-1 mt-2"
                       [optionsSig]="options"
@@ -410,7 +434,7 @@
                 [dialogMessageKey]="
                   'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info'
                 "
-                #fehlendeAnerkennungDialog="dvSharedUiInfoDialog"
+                #fehlendeVaterschaftsAnerkennungDialog="dvSharedUiInfoDialog"
                 class="col-12 col-xl-6"
               ></div>
             </div>

@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -71,10 +72,8 @@ public class BernStipDecider extends BaseStipDecider {
             case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
-            // case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN ->
-            // GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
+            case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_FINANZIELL_UNABHAENGIG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
-            case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_ELTERN_NICHT_BERN -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
             case ANSPRUCH_MANUELL_PRUEFEN_ZWEITAUSBILDUNG -> GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN;
@@ -203,14 +202,17 @@ public class BernStipDecider extends BaseStipDecider {
                 }
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
-            if (piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche)) {
-                return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN;
+            if (
+                piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche)
+                && !heimatortImKantonBern(gesuchTranche, plzService)
+            ) {
+                return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN;
             }
             return StipDeciderResult.ANSPRUCH_UNKLAR;
         }
 
         private static StipDeciderResult evaluateStep3(final GesuchTranche gesuchTranche, final PlzService plzService) {
-            if (piaBevormundet(gesuchTranche)) {
+            if (piaBevormundet(gesuchTranche) && !zuestaendigeKESBImKantonBern(gesuchTranche)) {
                 return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN;
             }
             return evaluateElternWohnsitz(gesuchTranche, plzService);
@@ -314,6 +316,16 @@ public class BernStipDecider extends BaseStipDecider {
                 .getElterns()
                 .stream()
                 .noneMatch(eltern -> eltern.getAdresse().getLand().is(WellKnownLand.CHE));
+        }
+
+        private static boolean heimatortImKantonBern(final GesuchTranche gesuchTranche, final PlzService plzService) {
+            return plzService.isInBern(gesuchTranche.getGesuchFormular().getPersonInAusbildung().getHeimatortPLZ());
+        }
+
+        private static boolean zuestaendigeKESBImKantonBern(final GesuchTranche gesuchTranche) {
+            return gesuchTranche.getGesuchFormular()
+                .getPersonInAusbildung()
+                .getZustaendigeKESB() == ZustaendigeKESB.KESB_BERN;
         }
 
         private static boolean piaKantonMandantZugewiesen(final GesuchTranche gesuchTranche) {

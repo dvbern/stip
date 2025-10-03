@@ -41,7 +41,9 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchStatusService {
@@ -80,8 +82,8 @@ public class GesuchStatusService {
         for (final Gesuch gesuch : gesuche) {
             try {
                 triggerStateMachineEvent(gesuch, event);
-            } catch (ValidationsException ignored) {
-                // ignored
+            } catch (ValidationsException validationsError) {
+                LOG.error("ValidationException during bulkTriggerStateMachineEvent", validationsError);
             }
         }
     }
