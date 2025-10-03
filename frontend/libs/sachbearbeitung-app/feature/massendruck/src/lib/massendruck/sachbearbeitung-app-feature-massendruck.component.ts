@@ -131,7 +131,7 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = Object.keys(MassendruckJobSortColumn);
+  displayedColumns = [...Object.keys(MassendruckJobSortColumn), 'TYP'];
 
   filterForm = this.formBuilder.group({
     massendruckJobNumber: [<number | undefined>undefined],

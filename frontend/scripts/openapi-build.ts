@@ -47,6 +47,7 @@ const generatedApis = [
   'GesuchTranche',
   'Land',
   'Mail',
+  'Massendruck',
   'Notification',
   'Plz',
   'Sozialdienst',

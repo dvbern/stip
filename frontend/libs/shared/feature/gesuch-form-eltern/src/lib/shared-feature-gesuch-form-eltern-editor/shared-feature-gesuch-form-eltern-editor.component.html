@@ -11,10 +11,10 @@
       elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().trancheId;
       as gesuchTrancheId
     ) {
-      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2 tw:justify-end" *dvIfSachbearbeiter>
+      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2 tw:md:justify-end tw:relative" *dvIfSachbearbeiter>
         <button
           type="button"
-          class="btn btn-link tw:!flex tw:max-w-full tw:!p-0 tw:no-underline! tw:items-center tw:!text-lg/none"
+          class="btn btn-link tw:p-0 tw:lg:absolute tw:top-0 tw:right-0"
           [attr.aria-label]="'shared.dokumente.table.download' | transloco"
           [dvDownloadButton]="{
             type: 'datenschutzbrief',
@@ -22,8 +22,10 @@
             gesuchTrancheId,
           }"
         >
-          <span class="material-symbols-rounded tw:mt-0.5 tw:align-middle tw:!text-xl/none tw:mr-1">download</span>
-          {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
+          <div class="material-symbols-rounded tw:text-4xl!">download</div>
+          <div>
+            {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
+          </div>
         </button>
       </div>
     }
