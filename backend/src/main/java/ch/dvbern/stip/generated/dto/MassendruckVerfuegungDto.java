@@ -26,6 +26,7 @@ public class MassendruckVerfuegungDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String gesuchNummer;
   private @Valid UUID gesuchId;
+  private @Valid UUID gesuchTrancheId;
 
   /**
    **/
@@ -141,6 +142,25 @@ public class MassendruckVerfuegungDto  implements Serializable {
     this.gesuchId = gesuchId;
   }
 
+  /**
+   **/
+  public MassendruckVerfuegungDto gesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchTrancheId")
+  @NotNull
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+  @JsonProperty("gesuchTrancheId")
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -156,12 +176,13 @@ public class MassendruckVerfuegungDto  implements Serializable {
         Objects.equals(this.nachname, massendruckVerfuegung.nachname) &&
         Objects.equals(this.vorname, massendruckVerfuegung.vorname) &&
         Objects.equals(this.gesuchNummer, massendruckVerfuegung.gesuchNummer) &&
-        Objects.equals(this.gesuchId, massendruckVerfuegung.gesuchId);
+        Objects.equals(this.gesuchId, massendruckVerfuegung.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, massendruckVerfuegung.gesuchTrancheId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId);
+    return Objects.hash(id, isVersendet, nachname, vorname, gesuchNummer, gesuchId, gesuchTrancheId);
   }
 
   @Override
@@ -175,6 +196,7 @@ public class MassendruckVerfuegungDto  implements Serializable {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

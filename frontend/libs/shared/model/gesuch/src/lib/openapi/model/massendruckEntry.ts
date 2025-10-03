@@ -17,5 +17,6 @@ export interface MassendruckEntry {
     vorname: string;
     gesuchNummer: string;
     gesuchId: string;
+    gesuchTrancheId: string;
 }
 

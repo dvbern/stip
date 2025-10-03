@@ -37,12 +37,6 @@
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-title">
       {{ 'sachbearbeitung-app.massendruck.title' | transloco }}
     </h1>
-    <!-- link for development: go to detail view -->
-    <div class="tw:mb-6">
-      <a class="btn btn-primary" [routerLink]="['/massendruck', 'druckauftrag', 'some-id-123']"
-        >Go to detail view (for development)</a
-      >
-    </div>
     <div class="tw:my-6">
       <div class="tw:dv-table tw:relative">
         <div [class.opacity-50]="massendruckStore.paginatedMassendruckListViewSig().loading">
@@ -215,9 +209,9 @@
               </ng-container>
 
               <ng-container matColumnDef="TYP">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
                   {{ 'sachbearbeitung-app.massendruck.table.typ' | transloco }}
-                  <mat-form-field>
+                  <mat-form-field class="tw:flex! tw:w-max">
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.massendruck.table.typ' | transloco"
                       formControlName="massendruckJobTyp"
@@ -252,6 +246,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let item; dataSource: massendruckDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/massendruck', 'druckauftrag', item.id]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

@@ -46,6 +46,7 @@ class AuthorizerAnnotationTest {
             "ch.dvbern.stip.api.gesuch.resource.GesuchResourceImpl.getBerechnungsBlattForGesuch",
             "ch.dvbern.stip.api.verfuegung.resource.VerfuegungResourceImpl.getVerfuegung",
             "ch.dvbern.stip.api.config.resource.ConfigResourceImpl.getDeploymentConfig",
+            "ch.dvbern.stip.api.massendruck.resource.MassendruckJobResourceImpl.downloadMassendruckDocument",
             "ch.dvbern.stip.api.datenschutzbrief.resource.DatenschutzbriefRessourceImpl.getDatenschutzbrief"
         )
     );

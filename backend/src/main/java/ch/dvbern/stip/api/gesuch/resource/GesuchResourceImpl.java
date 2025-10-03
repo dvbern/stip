@@ -201,13 +201,7 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToVersendet(gesuchId);
 
-        gesuchService.gesuchStatusToVersendet(gesuchId);
-        final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuchId);
-        if (latestVerfuegung.isNegativeVerfuegung()) {
-            gesuchService.gesuchStatusToKeinStipendienanspruch(gesuchId);
-        } else {
-            gesuchService.gesuchStatusToStipendienanspruch(gesuchId);
-        }
+        gesuchService.changeToVersendentAndAnspruchOrKeinAnspruch(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 

@@ -27,6 +27,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(
@@ -34,6 +36,8 @@ import jakarta.persistence.Table;
         @Index(name = "IX_datenschutzbrief_massendruck_mandant", columnList = "mandant")
     }
 )
+@Getter
+@Setter
 public class DatenschutzbriefMassendruck extends AbstractMandantEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(

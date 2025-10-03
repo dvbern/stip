@@ -18,16 +18,39 @@
 package ch.dvbern.stip.api.massendruck.service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.service.SbDashboardQueryBuilder;
+import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
+import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
+import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
+import ch.dvbern.stip.api.massendruck.repo.DatenschutzbriefMassendruckRepository;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobQueryBuilder;
+import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
+import ch.dvbern.stip.api.massendruck.repo.MassendruckJobSeqRepository;
+import ch.dvbern.stip.api.massendruck.repo.VerfuegungMassendruckRepository;
 import ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.generated.dto.MassendruckDatenschutzbriefDto;
+import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
+import ch.dvbern.stip.generated.dto.MassendruckJobDto;
+import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import ch.dvbern.stip.generated.dto.PaginatedMassendruckJobDto;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -35,6 +58,17 @@ import lombok.RequiredArgsConstructor;
 public class MassendruckJobService {
     private final MassendruckJobQueryBuilder massendruckJobQueryBuilder;
     private final MassendruckJobMapper massendruckJobMapper;
+    private final MassendruckJobDocumentWorker massendruckJobDocumentWorker;
+    private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
+    private final MassendruckJobSeqRepository massendruckJobSeqRepository;
+    private final MassendruckJobRepository massendruckJobRepository;
+    private final GesuchStatusService gesuchStatusService;
+    private final DatenschutzbriefMassendruckRepository datenschutzbriefMassendruckRepository;
+    private final DatenschutzbriefMassendruckMapper datenschutzbriefMassendruckMapper;
+    private final VerfuegungMassendruckRepository verfuegungMassendruckRepository;
+    private final VerfuegungMassendruckMapper verfuegungMassendruckMapper;
+    private final GesuchService gesuchService;
+    private final TenantService tenantService;
     private final ConfigService configService;
 
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
@@ -103,5 +137,153 @@ public class MassendruckJobService {
             Math.toIntExact(countQuery.fetchOne()),
             results
         );
+    }
+
+    @Transactional
+    public MassendruckJobDto createMassendruckJobForQueryType(final GetGesucheSBQueryType getGesucheSBQueryType) {
+        final var gesuche = sbDashboardQueryBuilder.baseQuery(getGesucheSBQueryType, GesuchTrancheTyp.TRANCHE)
+            .stream()
+            .toList();
+
+        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
+        final var massendruckJob = new MassendruckJob()
+            .setMassendruckJobNumber(massendruckJobSeqRepository.getNextValue(tenantIdentifier))
+            .setStatus(MassendruckJobStatus.IN_PROGRESS);
+
+        switch (getGesucheSBQueryType) {
+            case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN -> createAndSetVerfuegungMassendruck(
+                massendruckJob,
+                gesuche
+            );
+            case ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> createAndSetDatenschutzbriefMassendruck(
+                massendruckJob,
+                gesuche
+            );
+            default -> throw new BadRequestException();
+        }
+
+        massendruckJobRepository.persistAndFlush(massendruckJob);
+        return massendruckJobMapper.toDto(massendruckJob);
+    }
+
+    public void combineDocument(final UUID massendruckJobId) {
+        massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
+    }
+
+    @Transactional
+    public void deleteMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.findById(massendruckId);
+        final var gesuche = massendruckJob.getAttachedGesuche();
+        final var changeEvent = switch (massendruckJob.getMassendruckTyp()) {
+            case VERFUEGUNG -> GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT;
+            case DATENSCHUTZBRIEF -> GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
+        };
+
+        gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, changeEvent);
+        massendruckJobRepository.deleteMassendruckJobById(massendruckId);
+    }
+
+    @Transactional
+    public MassendruckJobDetailDto retryMassendruckJob(final UUID massendruckId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckId);
+        massendruckJob.setStatus(MassendruckJobStatus.IN_PROGRESS);
+        return massendruckJobMapper.toDetailDto(massendruckJob);
+    }
+
+    private void createAndSetDatenschutzbriefMassendruck(
+        final MassendruckJob massendruckJob,
+        final List<Gesuch> gesuche
+    ) {
+        final var toPersist = gesuche.stream()
+            .flatMap(gesuch -> gesuch.getDatenschutzbriefs().stream())
+            .map(
+                datenschutzbrief -> new DatenschutzbriefMassendruck()
+                    .setDatenschutzbrief(datenschutzbrief)
+                    .setMassendruckJob(massendruckJob)
+            )
+            .toList();
+
+        gesuchStatusService
+            .bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN);
+
+        massendruckJob.setDatenschutzbriefMassendrucks(toPersist);
+    }
+
+    private void createAndSetVerfuegungMassendruck(
+        final MassendruckJob massendruckJob,
+        final List<Gesuch> gesuche
+    ) {
+        final var toPersist = gesuche.stream()
+            .flatMap(
+                gesuch -> gesuch.getVerfuegungs()
+                    .stream()
+                    .filter(verfuegung -> !verfuegung.isVersendet())
+            )
+            .map(
+                verfuegung -> new VerfuegungMassendruck()
+                    .setVerfuegung(verfuegung)
+                    .setVorname("Foo")
+                    .setNachname("Bar")
+                    .setMassendruckJob(massendruckJob)
+            )
+            .toList();
+
+        gesuchStatusService.bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
+
+        massendruckJob.setVerfuegungMassendrucks(toPersist);
+    }
+
+    public MassendruckJobDetailDto getMassendruckJobDetail(final UUID massendruckJobId) {
+        final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
+        return massendruckJobMapper.toDetailDto(massendruckJob);
+    }
+
+    @Transactional
+    public MassendruckDatenschutzbriefDto datenschutzbriefMassendruckVersenden(
+        final UUID massendruckDatenschutzbriefId
+    ) {
+        final var massendruckDatenschutzbrief =
+            datenschutzbriefMassendruckRepository.requireById(massendruckDatenschutzbriefId);
+        massendruckDatenschutzbrief.getDatenschutzbrief().setVersendet(true);
+
+        checkAndDoStateTransitionIfAllSent(massendruckDatenschutzbrief.getMassendruckJob());
+
+        return datenschutzbriefMassendruckMapper.toDto(massendruckDatenschutzbrief);
+    }
+
+    @Transactional
+    public MassendruckVerfuegungDto verfuegungMassendruckVersenden(final UUID massendruckVerfuegungId) {
+        final var massendruckVerfuegung = verfuegungMassendruckRepository.requireById(massendruckVerfuegungId);
+        massendruckVerfuegung.getVerfuegung().setVersendet(true);
+
+        checkAndDoStateTransitionIfAllSent(massendruckVerfuegung.getMassendruckJob());
+
+        return verfuegungMassendruckMapper.toDto(massendruckVerfuegung);
+    }
+
+    private void checkAndDoStateTransitionIfAllSent(final MassendruckJob massendruckJob) {
+        final var jobTyp = massendruckJob.getMassendruckTyp();
+        final var allSent = switch (jobTyp) {
+            case VERFUEGUNG -> massendruckJob.getVerfuegungMassendrucks()
+                .stream()
+                .allMatch(verfuegungMassendruck -> verfuegungMassendruck.getVerfuegung().isVersendet());
+            case DATENSCHUTZBRIEF -> massendruckJob.getDatenschutzbriefMassendrucks()
+                .stream()
+                .allMatch(
+                    datenschutzbriefMassendruck -> datenschutzbriefMassendruck.getDatenschutzbrief().isVersendet()
+                );
+        };
+
+        if (!allSent) {
+            return;
+        }
+
+        final var gesuche = massendruckJob.getAttachedGesuche();
+        switch (jobTyp) {
+            case VERFUEGUNG -> gesuchService.bulkChangeToVersendentAndAnspruchOrKeinAnspruch(gesuche);
+            case DATENSCHUTZBRIEF -> gesuchStatusService
+                .bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
+        massendruckJob.setStatus(MassendruckJobStatus.ARCHIVED);
     }
 }

@@ -15,11 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.massendruck.type;
+package ch.dvbern.stip.api.massendruck.repo;
 
-public enum MassendruckJobSortColumn {
-    JOB_NUMBER,
-    USER_ERSTELLT,
-    TIMESTAMP_ERSTELLT,
-    STATUS,
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+
+@ApplicationScoped
+@RequiredArgsConstructor
+public class DatenschutzbriefMassendruckRepository implements BaseRepository<DatenschutzbriefMassendruck> {
 }

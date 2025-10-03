@@ -18,22 +18,23 @@
 package ch.dvbern.stip.api.massendruck.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
-import ch.dvbern.stip.generated.dto.MassendruckJobDetailDto;
-import ch.dvbern.stip.generated.dto.MassendruckJobDto;
+import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
+import ch.dvbern.stip.generated.dto.MassendruckVerfuegungDto;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(
-    config = MappingConfig.class,
-    uses = { DatenschutzbriefMassendruckMapper.class, VerfuegungMassendruckMapper.class }
-)
-public interface MassendruckJobMapper {
-    @Mapping(source = "status", target = "massendruckJobStatus")
-    @Mapping(source = "massendruckTyp", target = "massendruckJobTyp")
-    MassendruckJobDto toDto(MassendruckJob massendruckJob);
+@Mapper(config = MappingConfig.class)
+public interface VerfuegungMassendruckMapper {
+    default MassendruckVerfuegungDto toDto(final VerfuegungMassendruck verfuegungMassendruck) {
+        final var verfuegung = verfuegungMassendruck.getVerfuegung();
+        final var gesuch = verfuegung.getGesuch();
 
-    @Mapping(source = "status", target = "massendruckJobStatus")
-    @Mapping(source = "massendruckTyp", target = "massendruckJobTyp")
-    MassendruckJobDetailDto toDetailDto(MassendruckJob massendruckJob);
+        return new MassendruckVerfuegungDto()
+            .id(verfuegungMassendruck.getId())
+            .vorname(verfuegungMassendruck.getVorname())
+            .nachname(verfuegungMassendruck.getNachname())
+            .isVersendet(verfuegung.isVersendet())
+            .gesuchNummer(gesuch.getGesuchNummer())
+            .gesuchId(gesuch.getId())
+            .gesuchTrancheId(gesuch.getLatestGesuchTranche().getId());
+    }
 }

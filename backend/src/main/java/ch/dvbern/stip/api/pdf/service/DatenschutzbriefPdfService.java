@@ -55,7 +55,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DatenschutzbriefPdfService {
-
     private final GesuchTrancheService gesuchTrancheService;
 
     private PdfFont pdfFont = null;
@@ -125,5 +124,4 @@ public class DatenschutzbriefPdfService {
 
         return out;
     }
-
 }

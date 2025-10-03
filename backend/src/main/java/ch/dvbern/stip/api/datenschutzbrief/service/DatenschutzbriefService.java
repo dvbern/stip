@@ -20,11 +20,11 @@ package ch.dvbern.stip.api.datenschutzbrief.service;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
@@ -34,8 +34,6 @@ import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefDownload;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefDownloadLogRepository;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
-import ch.dvbern.stip.api.datenschutzbrief.type.DatenschutzbriefEmpfaenger;
-import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -110,8 +108,9 @@ public class DatenschutzbriefService {
         final var requiredEmpfaenger =
             getRequiredDatenschutzbriefEmpfaenger(trancheToUse.getGesuchFormular().getFamiliensituation());
         for (final var empfaengerToCreate : requiredEmpfaenger) {
-            final var empfaenger =
-                getElternDatenschutzbriefEmpfaenger(trancheToUse.getGesuchFormular().getElterns(), empfaengerToCreate);
+            final var empfaenger = trancheToUse.getGesuchFormular()
+                .getElternteilOfTyp(empfaengerToCreate)
+                .orElseThrow(IllegalStateException::new);
             final var datenschutzbrief = new Datenschutzbrief()
                 .setVersendet(false)
                 .setDatenschutzbriefEmpfaenger(empfaengerToCreate)
@@ -125,22 +124,16 @@ public class DatenschutzbriefService {
         }
     }
 
-    private List<DatenschutzbriefEmpfaenger> getRequiredDatenschutzbriefEmpfaenger(
+    private List<ElternTyp> getRequiredDatenschutzbriefEmpfaenger(
         final Familiensituation familiensituation
     ) {
         return steuerdatenTabBerechnungsService.calculateTabs(familiensituation)
             .stream()
-            .map(DatenschutzbriefEmpfaenger::fromSteuerdatenTyp)
+            .flatMap(steuerdatenTyp -> switch (steuerdatenTyp) {
+                case MUTTER -> Stream.of(ElternTyp.MUTTER);
+                case VATER -> Stream.of(ElternTyp.VATER);
+                case FAMILIE -> Stream.of(ElternTyp.MUTTER, ElternTyp.VATER);
+            })
             .toList();
-    }
-
-    private Eltern getElternDatenschutzbriefEmpfaenger(Set<Eltern> eltern, DatenschutzbriefEmpfaenger empfaengerTyp) {
-        final var prioritizedEltern = switch (empfaengerTyp) {
-            case VATER -> eltern.stream().filter(e -> e.getElternTyp() == ElternTyp.VATER);
-            case MUTTER -> eltern.stream().filter(e -> e.getElternTyp() == ElternTyp.MUTTER);
-            default -> eltern.stream();
-        };
-
-        return prioritizedEltern.findFirst().orElseThrow(IllegalStateException::new);
     }
 }

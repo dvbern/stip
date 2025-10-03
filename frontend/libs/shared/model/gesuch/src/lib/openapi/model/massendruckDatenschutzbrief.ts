@@ -18,6 +18,7 @@ export interface MassendruckDatenschutzbrief {
     vorname: string;
     gesuchNummer: string;
     gesuchId: string;
+    gesuchTrancheId: string;
     elternTyp: ElternTyp;
 }
 

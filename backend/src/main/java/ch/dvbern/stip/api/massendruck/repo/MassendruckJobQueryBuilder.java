@@ -100,7 +100,6 @@ public class MassendruckJobQueryBuilder {
             case USER_ERSTELLT -> massendruckJob.userErstellt;
             case TIMESTAMP_ERSTELLT -> massendruckJob.timestampErstellt;
             case STATUS -> massendruckJob.status;
-            case TYP -> massendruckJob.status; // TODO KSTIP-2294 actually implement this
         };
 
         final var orderSpecifier = switch (sortOrder) {

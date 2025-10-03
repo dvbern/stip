@@ -12,6 +12,7 @@ import {
   DokumentArt,
   DokumentService,
   GesuchService,
+  MassendruckService,
   VerfuegungService,
 } from '@dv/shared/model/gesuch';
 import { assertUnreachable } from '@dv/shared/model/type-util';
@@ -34,6 +35,10 @@ type DownloadOptions =
       type: 'dokument';
       id: string;
       dokumentArt: DokumentArt;
+    }
+  | {
+      type: 'massendruck';
+      id: string;
     };
 
 @Directive({
@@ -46,6 +51,7 @@ export class SharedUiDownloadButtonDirective {
   private dokumentService = inject(DokumentService);
   private gesuchService = inject(GesuchService);
   private verfuegungService = inject(VerfuegungService);
+  private massendruckService = inject(MassendruckService);
   private dcmnt = inject(DOCUMENT, { optional: true });
 
   @HostListener('click')
@@ -57,6 +63,7 @@ export class SharedUiDownloadButtonDirective {
         this.dokumentService,
         this.gesuchService,
         this.verfuegungService,
+        this.massendruckService,
       ),
     ).then((href) => {
       this.dcmnt?.defaultView?.open(href, '_blank');
@@ -64,31 +71,13 @@ export class SharedUiDownloadButtonDirective {
   }
 }
 
-const getDatenschutzbriefDownloadPath = (
-  token: string,
-  gesuchTrancheId: string,
-) => {
-  return `/api/v1/datenschutzbrief/${gesuchTrancheId}/download?token=${token}`;
-};
-
-const getDocumentDownloadPath = (token: string, dokumentArt: DokumentArt) => {
-  return `/api/v1/dokument/${dokumentArt}/download?token=${token}`;
-};
-
-const getBerechnungsblattDownloadPath = (token: string) => {
-  return `/api/v1/gesuch/berechnungsblatt?token=${token}`;
-};
-
-const getVerfuegungsDownloadPath = (token: string) => {
-  return `/api/v1/verfuegung/download?token=${token}`;
-};
-
 const getDownloadObservable$ = (
   downloadOptions: DownloadOptions,
   datenschutzbriefService: DatenschutzbriefService,
   dokumentService: DokumentService,
   gesuchService: GesuchService,
   verfuegungService: VerfuegungService,
+  massendruckService: MassendruckService,
 ) => {
   const { type, id } = downloadOptions;
   switch (type) {
@@ -98,11 +87,9 @@ const getDownloadObservable$ = (
           elternId: id,
         })
         .pipe(
-          map(({ token }) =>
-            getDatenschutzbriefDownloadPath(
-              token,
-              downloadOptions.gesuchTrancheId,
-            ),
+          map(
+            ({ token }) =>
+              `/api/v1/datenschutzbrief/${downloadOptions.gesuchTrancheId}/download?token=${token}`,
           ),
         );
     }
@@ -111,7 +98,9 @@ const getDownloadObservable$ = (
         .getBerechnungsblattDownloadToken$({
           gesuchId: id,
         })
-        .pipe(map(({ token }) => getBerechnungsblattDownloadPath(token)));
+        .pipe(
+          map(({ token }) => `/api/v1/gesuch/berechnungsblatt?token=${token}`),
+        );
     }
     case 'dokument': {
       return dokumentService
@@ -119,8 +108,9 @@ const getDownloadObservable$ = (
           dokumentId: id,
         })
         .pipe(
-          map(({ token }) =>
-            getDocumentDownloadPath(token, downloadOptions.dokumentArt),
+          map(
+            ({ token }) =>
+              `/api/v1/dokument/${downloadOptions.dokumentArt}/download?token=${token}`,
           ),
         );
     }
@@ -129,7 +119,16 @@ const getDownloadObservable$ = (
         .getVerfuegungsDownloadToken$({
           verfuegungsId: id,
         })
-        .pipe(map(({ token }) => getVerfuegungsDownloadPath(token)));
+        .pipe(map(({ token }) => `/api/v1/verfuegung/download?token=${token}`));
+    }
+    case 'massendruck': {
+      return massendruckService
+        .getMassendruckDownloadToken$({
+          massendruckId: id,
+        })
+        .pipe(
+          map(({ token }) => `/api/v1/massendruck/download?token=${token}`),
+        );
     }
     default: {
       assertUnreachable(type);

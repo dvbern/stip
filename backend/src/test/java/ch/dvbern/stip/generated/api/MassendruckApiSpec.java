@@ -72,17 +72,23 @@ public class MassendruckApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createMassendruckJobForQueryType(),
+                deleteMassendruckJob(),
                 downloadMassendruckDocument(),
                 getAllMassendruckJobs(),
                 getMassendruckDownloadToken(),
                 getMassendruckJobDetail(),
                 massendruckDatenschutzbriefVersenden(),
-                massendruckVerfuegungVersenden()
+                massendruckVerfuegungVersenden(),
+                retryMassendruckJob()
         );
     }
 
     public CreateMassendruckJobForQueryTypeOper createMassendruckJobForQueryType() {
         return new CreateMassendruckJobForQueryTypeOper(createReqSpec());
+    }
+
+    public DeleteMassendruckJobOper deleteMassendruckJob() {
+        return new DeleteMassendruckJobOper(createReqSpec());
     }
 
     public DownloadMassendruckDocumentOper downloadMassendruckDocument() {
@@ -107,6 +113,10 @@ public class MassendruckApiSpec {
 
     public MassendruckVerfuegungVersendenOper massendruckVerfuegungVersenden() {
         return new MassendruckVerfuegungVersendenOper(createReqSpec());
+    }
+
+    public RetryMassendruckJobOper retryMassendruckJob() {
+        return new RetryMassendruckJobOper(createReqSpec());
     }
 
     /**
@@ -188,6 +198,68 @@ public class MassendruckApiSpec {
          * @return operation
          */
         public CreateMassendruckJobForQueryTypeOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Delete failed Massendruck Job
+     * 
+     *
+     * @see #massendruckIdPath  (required)
+     */
+    public static class DeleteMassendruckJobOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/massendruck/{massendruckId}/delete";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteMassendruckJobOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /massendruck/{massendruckId}/delete
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String MASSENDRUCK_ID_PATH = "massendruckId";
+
+        /**
+         * @param massendruckId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteMassendruckJobOper massendruckIdPath(Object massendruckId) {
+            reqSpec.addPathParam(MASSENDRUCK_ID_PATH, massendruckId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteMassendruckJobOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteMassendruckJobOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -675,7 +747,7 @@ public class MassendruckApiSpec {
     public static class MassendruckVerfuegungVersendenOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}";
+        public static final String REQ_URI = "/massendruck/verfuegung/versendet/{massendruckVerfuegungId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -687,7 +759,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}
+         * POST /massendruck/verfuegung/versendet/{massendruckVerfuegungId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -698,7 +770,7 @@ public class MassendruckApiSpec {
         }
 
         /**
-         * POST /massendruck/datenschutzbrief/versendet/{massendruckVerfuegungId}
+         * POST /massendruck/verfuegung/versendet/{massendruckVerfuegungId}
          * @param handler handler
          * @return MassendruckVerfuegungDtoSpec
          */
@@ -734,6 +806,79 @@ public class MassendruckApiSpec {
          * @return operation
          */
         public MassendruckVerfuegungVersendenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Delete failed Massendruck Job
+     * 
+     *
+     * @see #massendruckIdPath  (required)
+     * return MassendruckJobDetailDtoSpec
+     */
+    public static class RetryMassendruckJobOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/massendruck/{massendruckId}/retry";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public RetryMassendruckJobOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /massendruck/{massendruckId}/retry
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /massendruck/{massendruckId}/retry
+         * @param handler handler
+         * @return MassendruckJobDetailDtoSpec
+         */
+        public MassendruckJobDetailDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<MassendruckJobDetailDtoSpec> type = new TypeRef<MassendruckJobDetailDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String MASSENDRUCK_ID_PATH = "massendruckId";
+
+        /**
+         * @param massendruckId (UUID)  (required)
+         * @return operation
+         */
+        public RetryMassendruckJobOper massendruckIdPath(Object massendruckId) {
+            reqSpec.addPathParam(MASSENDRUCK_ID_PATH, massendruckId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public RetryMassendruckJobOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public RetryMassendruckJobOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

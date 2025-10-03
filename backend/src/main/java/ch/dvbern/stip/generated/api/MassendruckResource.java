@@ -33,6 +33,11 @@ public interface MassendruckResource {
     @Produces({ "application/json", "text/plain" })
     MassendruckJobDto createMassendruckJobForQueryType(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
 
+    @POST
+    @Path("/{massendruckId}/delete")
+    @Produces({ "application/json", "text/plain" })
+    void deleteMassendruckJob(@PathParam("massendruckId") UUID massendruckId);
+
     @GET
     @Path("/download")
     @Produces({ "application/octet-stream" })
@@ -59,7 +64,12 @@ public interface MassendruckResource {
     MassendruckDatenschutzbriefDto massendruckDatenschutzbriefVersenden(@PathParam("massendruckDatenschutzbriefId") UUID massendruckDatenschutzbriefId);
 
     @POST
-    @Path("/datenschutzbrief/versendet/{massendruckVerfuegungId}")
+    @Path("/verfuegung/versendet/{massendruckVerfuegungId}")
     @Produces({ "application/json", "text/plain" })
     MassendruckVerfuegungDto massendruckVerfuegungVersenden(@PathParam("massendruckVerfuegungId") UUID massendruckVerfuegungId);
+
+    @POST
+    @Path("/{massendruckId}/retry")
+    @Produces({ "application/json", "text/plain" })
+    MassendruckJobDetailDto retryMassendruckJob(@PathParam("massendruckId") UUID massendruckId);
 }
