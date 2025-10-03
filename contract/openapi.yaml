@@ -94,7 +94,6 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/massendruckJobNumber'
         - $ref: '#/components/parameters/userErstellt'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
@@ -4637,7 +4636,6 @@ components:
       type: object
       required:
         - id
-        - massendruckJobNumber
         - userErstellt
         - timestampErstellt
         - massendruckJobStatus
@@ -4645,8 +4643,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        massendruckJobNumber:
-          type: integer
         userErstellt:
           type: string
         timestampErstellt:
@@ -7748,7 +7744,6 @@ components:
           format: date
     MassendruckJobSortColumn:
       enum:
-        - JOB_NUMBER
         - USER_ERSTELLT
         - TIMESTAMP_ERSTELLT
         - STATUS
@@ -8100,11 +8095,6 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
-    massendruckJobNumber:
-      in: query
-      name: massendruckJobNumber
-      schema:
-        type: integer
     MassendruckJobTyp:
       in: query
       name: massendruckJobTyp
