@@ -3009,7 +3009,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchManuellPruefenJur
       summary: Das Gesuch manuell pruefen als Jurist
-  '/gesuch/{gesuchId}/verfuegungen':
+  '/gesuch/{gesuchId}/adminDokumente':
     parameters:
       - name: gesuchId
         schema:
@@ -3024,9 +3024,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Verfuegung'
+                $ref: '#/components/schemas/AdminDokument'
           description: Returns a List of all Verfuegungen for a Gesuch
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -8022,6 +8020,15 @@ components:
           type: string
         bezeichnungFr:
           type: string
+    AdminDokument:
+      type: object
+      required:
+        - verfuegungen
+      properties:
+        verfuegungen:
+          $ref: '#/components/schemas/Verfuegung'
+        datenschutzbriefMassendruckJobId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
