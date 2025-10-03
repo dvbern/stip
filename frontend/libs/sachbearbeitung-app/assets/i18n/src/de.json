@@ -587,9 +587,13 @@
   "sachbearbeitung-app.infos.notiz.delete.text": "Wollen Sie die Notiz wirklich löschen?",
 
   "sachbearbeitung-app.infos.admin": "Admin",
+  "sachbearbeitung-app.infos.admin-dokumente": "Gesuchsdokumente",
   "sachbearbeitung-app.infos.admin.table.timestamp": "Datum",
   "sachbearbeitung-app.infos.admin.table.user": "Benutzer",
   "sachbearbeitung-app.infos.admin.table.kommentar": "Kommentar",
+  "sachbearbeitung-app.infos.admin.datenschutzbrief": "Datenschutzbriefe",
+  "sachbearbeitung-app.infos.admin.datenschutzbrief.info": "Der dazugehörige Datenschutzbrief Massendruck:",
+  "sachbearbeitung-app.infos.admin.datenschutzbrief.link": "Link zum Massendruck",
   "sachbearbeitung-app.infos.admin.verfuegung": "Verschickte Verfügungen",
   "sachbearbeitung-app.infos.admin.verfuegung.table.verfuegung": "Verfügung als PDF",
   "sachbearbeitung-app.infos.admin.verfuegung.table.dokument": "Dokument",

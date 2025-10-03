@@ -3,7 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { GesuchService, Verfuegung } from '@dv/shared/model/gesuch';
+import { AdminDokumente, GesuchService } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -13,39 +13,39 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type InfosAdminState = {
-  verfuegungen: CachedRemoteData<Verfuegung[]>;
+  adminDokumente: CachedRemoteData<AdminDokumente>;
 };
 
 const initialState: InfosAdminState = {
-  verfuegungen: initial(),
+  adminDokumente: initial(),
 };
 
 @Injectable()
-export class InfosAdminStore extends signalStore(
+export class InfosGesuchsdokumenteStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
   private gesuchService = inject(GesuchService);
 
-  verfuegungenViewSig = computed(() => {
-    return fromCachedDataSig(this.verfuegungen);
+  adminDokumenteViewSig = computed(() => {
+    return fromCachedDataSig(this.adminDokumente);
   });
 
-  loadVerfuegungen$ = rxMethod<{ gesuchId: string }>(
+  loadAdminDokumente$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          verfuegungen: cachedPending(state.verfuegungen),
+          adminDokumente: cachedPending(state.adminDokumente),
         }));
       }),
       switchMap(({ gesuchId }) =>
         this.gesuchService
-          .getAllVerfuegungen$({
+          .getAdminDokumente$({
             gesuchId,
           })
           .pipe(
-            handleApiResponse((verfuegungen) =>
-              patchState(this, { verfuegungen }),
+            handleApiResponse((adminDokumente) =>
+              patchState(this, { adminDokumente }),
             ),
           ),
       ),

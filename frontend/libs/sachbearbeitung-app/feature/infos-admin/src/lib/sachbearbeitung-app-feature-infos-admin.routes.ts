@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 
-import { InfosAdminStore } from '@dv/sachbearbeitung-app/data-access/infos-admin';
 import { INFO_ADMIN_ROUTE } from '@dv/sachbearbeitung-app/model/infos';
 
 import { SachbearbeitungAppFeatureInfosAdminComponent } from './sachbearbeitung-app-feature-infos-admin/sachbearbeitung-app-feature-infos-admin.component';
@@ -10,16 +9,9 @@ export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
     path: ':id',
     pathMatch: 'prefix',
     data: { option: INFO_ADMIN_ROUTE },
-    providers: [InfosAdminStore],
+    providers: [],
     component: SachbearbeitungAppFeatureInfosAdminComponent,
     children: [
-      {
-        path: 'verfuegung',
-        loadComponent: () =>
-          import('./components/verfuegung.component').then(
-            (m) => m.VerfuegungComponent,
-          ),
-      },
       {
         path: 'ausbildung-abbrechen',
         loadComponent: () =>
@@ -44,7 +36,7 @@ export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'verfuegung',
+        redirectTo: 'ausbildung-abschliessen',
       },
     ],
   },

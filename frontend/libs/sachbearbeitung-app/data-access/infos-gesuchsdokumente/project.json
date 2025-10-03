@@ -1,7 +1,7 @@
 {
-  "name": "sachbearbeitung-app-data-access-infos-admin",
+  "name": "sachbearbeitung-app-data-access-infos-gesuchsdokumente",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/sachbearbeitung-app/data-access/infos-admin/src",
+  "sourceRoot": "libs/sachbearbeitung-app/data-access/infos-gesuchsdokumente/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:data-access", "scope:sachbearbeitung-app"],
@@ -9,7 +9,7 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/sachbearbeitung-app/data-access/infos-admin/tsconfig.lib.json"
+        "tsConfig": "libs/sachbearbeitung-app/data-access/infos-gesuchsdokumente/tsconfig.lib.json"
       }
     }
   }

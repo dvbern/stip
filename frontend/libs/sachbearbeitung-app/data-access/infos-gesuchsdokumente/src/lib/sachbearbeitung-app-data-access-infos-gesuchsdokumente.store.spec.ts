@@ -1,16 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { InfosAdminStore } from './sachbearbeitung-app-data-access-infos-admin.store';
+import { InfosGesuchsdokumenteStore } from './sachbearbeitung-app-data-access-infos-gesuchsdokumente.store';
 
-describe('InfosAdminStore', () => {
-  let store: InfosAdminStore;
+describe('InfosGesuchsdokumenteStore', () => {
+  let store: InfosGesuchsdokumenteStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [InfosAdminStore, provideHttpClient()],
+      providers: [InfosGesuchsdokumenteStore, provideHttpClient()],
     });
-    store = TestBed.inject(InfosAdminStore);
+    store = TestBed.inject(InfosGesuchsdokumenteStore);
   });
 
   it('is initializable', () => {
@@ -18,7 +18,7 @@ describe('InfosAdminStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.verfuegungen()).toEqual({
+    expect(store.adminDokumente()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,
