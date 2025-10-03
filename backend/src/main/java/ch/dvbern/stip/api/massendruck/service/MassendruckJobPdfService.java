@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
@@ -169,8 +168,16 @@ public class MassendruckJobPdfService {
     ) {
         return datenschutzbriefMassendrucks.stream()
             .map(datenschutzbriefMassendruck -> {
+                final var tranche =
+                    datenschutzbriefMassendruck.getDatenschutzbrief().getGesuch().getLatestGesuchTranche();
+                final var elternteil = tranche.getGesuchFormular()
+                    .getElternteilOfTyp(
+                        datenschutzbriefMassendruck.getDatenschutzbrief().getDatenschutzbriefEmpfaenger()
+                    )
+                    .orElseThrow(IllegalStateException::new);
                 try (
-                    final var out = datenschutzbriefPdfService.createDatenschutzbriefForElternteil(new Eltern());
+                    final var out =
+                        datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternteil, tranche.getId());
                 ) {
                     final var in = new ByteArrayInputStream(out.toByteArray());
                     final var reader = new PdfReader(in);
