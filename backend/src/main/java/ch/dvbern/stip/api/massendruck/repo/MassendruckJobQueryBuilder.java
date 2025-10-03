@@ -43,7 +43,7 @@ public class MassendruckJobQueryBuilder {
     }
 
     public JPAQuery<MassendruckJob> getAlleAktivQuery() {
-        return addStatusFilter(getAllQuery(), MassendruckJobStatus.IN_PROGRESS);
+        return addStatusFilter(getAllQuery(), MassendruckJobStatus.SUCCESS);
     }
 
     public JPAQuery<MassendruckJob> getAlleArchiviertQuery() {
