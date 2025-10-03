@@ -36,7 +36,6 @@ import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
 import ch.dvbern.stip.api.massendruck.repo.DatenschutzbriefMassendruckRepository;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobQueryBuilder;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
-import ch.dvbern.stip.api.massendruck.repo.MassendruckJobSeqRepository;
 import ch.dvbern.stip.api.massendruck.repo.VerfuegungMassendruckRepository;
 import ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn;
@@ -60,7 +59,6 @@ public class MassendruckJobService {
     private final MassendruckJobMapper massendruckJobMapper;
     private final MassendruckJobDocumentWorker massendruckJobDocumentWorker;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
-    private final MassendruckJobSeqRepository massendruckJobSeqRepository;
     private final MassendruckJobRepository massendruckJobRepository;
     private final GesuchStatusService gesuchStatusService;
     private final DatenschutzbriefMassendruckRepository datenschutzbriefMassendruckRepository;
@@ -75,7 +73,6 @@ public class MassendruckJobService {
         final GetMassendruckJobQueryType queryTyp,
         final int page,
         final int pageSize,
-        final Integer massendruckJobNumber,
         final String userErstellt,
         final LocalDate timestampErstellt,
         final MassendruckJobStatus massendruckJobStatus,
@@ -93,10 +90,6 @@ public class MassendruckJobService {
             case ALLE_ARCHIVIERT -> massendruckJobQueryBuilder.getAlleArchiviertQuery();
             case ALLE_FEHLERHAFTE_GENERIERUNG -> massendruckJobQueryBuilder.getAlleFehlerhaftGenerierung();
         };
-
-        if (massendruckJobNumber != null) {
-            massendruckJobQueryBuilder.massendruckJobNumber(baseQuery, massendruckJobNumber);
-        }
 
         if (userErstellt != null) {
             massendruckJobQueryBuilder.userErstellt(baseQuery, userErstellt);
@@ -145,10 +138,7 @@ public class MassendruckJobService {
             .stream()
             .toList();
 
-        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
-        final var massendruckJob = new MassendruckJob()
-            .setMassendruckJobNumber(massendruckJobSeqRepository.getNextValue(tenantIdentifier))
-            .setStatus(MassendruckJobStatus.IN_PROGRESS);
+        final var massendruckJob = new MassendruckJob().setStatus(MassendruckJobStatus.IN_PROGRESS);
 
         switch (getGesucheSBQueryType) {
             case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN -> createAndSetVerfuegungMassendruck(

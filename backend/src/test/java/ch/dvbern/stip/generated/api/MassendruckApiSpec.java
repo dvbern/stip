@@ -344,7 +344,6 @@ public class MassendruckApiSpec {
      * @see #getMassendruckJobsPath  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
-     * @see #massendruckJobNumberQuery  (optional)
      * @see #userErstelltQuery  (optional)
      * @see #timestampErstelltQuery  (optional)
      * @see #massendruckJobStatusQuery  (optional)
@@ -396,17 +395,6 @@ public class MassendruckApiSpec {
          */
         public GetAllMassendruckJobsOper getMassendruckJobsPath(Object getMassendruckJobs) {
             reqSpec.addPathParam(GET_MASSENDRUCK_JOBS_PATH, getMassendruckJobs);
-            return this;
-        }
-
-        public static final String MASSENDRUCK_JOB_NUMBER_QUERY = "massendruckJobNumber";
-
-        /**
-         * @param massendruckJobNumber (Integer)  (optional)
-         * @return operation
-         */
-        public GetAllMassendruckJobsOper massendruckJobNumberQuery(Object... massendruckJobNumber) {
-            reqSpec.addQueryParam(MASSENDRUCK_JOB_NUMBER_QUERY, massendruckJobNumber);
             return this;
         }
 

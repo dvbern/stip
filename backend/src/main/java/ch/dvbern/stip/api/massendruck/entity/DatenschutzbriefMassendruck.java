@@ -29,7 +29,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
+@Audited
 @Entity
 @Table(
     name = "datenschutzbrief_massendruck", indexes = {

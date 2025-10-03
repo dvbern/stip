@@ -62,10 +62,6 @@ public class MassendruckJobQueryBuilder {
         return query.where(massendruckJob.status.eq(status));
     }
 
-    public void massendruckJobNumber(final JPAQuery<MassendruckJob> query, final int massendruckJobNumber) {
-        query.where(massendruckJob.massendruckJobNumber.eq(massendruckJobNumber));
-    }
-
     public void userErstellt(final JPAQuery<MassendruckJob> query, final String userErstellt) {
         query.where(massendruckJob.userErstellt.containsIgnoreCase(userErstellt));
     }
@@ -96,7 +92,6 @@ public class MassendruckJobQueryBuilder {
         final SortOrder sortOrder
     ) {
         final var fieldSpecified = switch (column) {
-            case JOB_NUMBER -> massendruckJob.massendruckJobNumber;
             case USER_ERSTELLT -> massendruckJob.userErstellt;
             case TIMESTAMP_ERSTELLT -> massendruckJob.timestampErstellt;
             case STATUS -> massendruckJob.status;

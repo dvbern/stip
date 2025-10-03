@@ -42,7 +42,9 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
+@Audited
 @Entity
 @Table(
     name = "massendruck_job",
@@ -63,10 +65,6 @@ public class MassendruckJob extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private MassendruckJobStatus status;
-
-    @NotNull
-    @Column(name = "massendruck_job_number", nullable = false, updatable = false)
-    private int massendruckJobNumber;
 
     @Nullable
     @OneToOne(optional = true, cascade = CascadeType.ALL)

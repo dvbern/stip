@@ -38,7 +38,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_DATENSCHUTZBRIEF_MASSENDRUCKS,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_VERFUEGUNG_MASSENDRUCKS,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_ID,
-  MassendruckJobDetailDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   MassendruckJobDetailDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_STATUS,
@@ -55,9 +54,6 @@ public class MassendruckJobDetailDtoSpec {
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
-
-  public static final String JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER = "massendruckJobNumber";
-  private Integer massendruckJobNumber;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
   private String userErstellt;
@@ -165,32 +161,6 @@ public class MassendruckJobDetailDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
-  }
-
-
-  public MassendruckJobDetailDtoSpec massendruckJobNumber(Integer massendruckJobNumber) {
-    
-    this.massendruckJobNumber = massendruckJobNumber;
-    return this;
-  }
-
-   /**
-   * Get massendruckJobNumber
-   * @return massendruckJobNumber
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getMassendruckJobNumber() {
-    return massendruckJobNumber;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMassendruckJobNumber(Integer massendruckJobNumber) {
-    this.massendruckJobNumber = massendruckJobNumber;
   }
 
 
@@ -309,7 +279,6 @@ public class MassendruckJobDetailDtoSpec {
     return Objects.equals(this.datenschutzbriefMassendrucks, massendruckJobDetail.datenschutzbriefMassendrucks) &&
         Objects.equals(this.verfuegungMassendrucks, massendruckJobDetail.verfuegungMassendrucks) &&
         Objects.equals(this.id, massendruckJobDetail.id) &&
-        Objects.equals(this.massendruckJobNumber, massendruckJobDetail.massendruckJobNumber) &&
         Objects.equals(this.userErstellt, massendruckJobDetail.userErstellt) &&
         Objects.equals(this.timestampErstellt, massendruckJobDetail.timestampErstellt) &&
         Objects.equals(this.massendruckJobStatus, massendruckJobDetail.massendruckJobStatus) &&
@@ -318,7 +287,7 @@ public class MassendruckJobDetailDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(datenschutzbriefMassendrucks, verfuegungMassendrucks, id, massendruckJobNumber, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
+    return Objects.hash(datenschutzbriefMassendrucks, verfuegungMassendrucks, id, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
   }
 
   @Override
@@ -328,7 +297,6 @@ public class MassendruckJobDetailDtoSpec {
     sb.append("    datenschutzbriefMassendrucks: ").append(toIndentedString(datenschutzbriefMassendrucks)).append("\n");
     sb.append("    verfuegungMassendrucks: ").append(toIndentedString(verfuegungMassendrucks)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    massendruckJobNumber: ").append(toIndentedString(massendruckJobNumber)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    massendruckJobStatus: ").append(toIndentedString(massendruckJobStatus)).append("\n");

@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.massendruck.type;
 
 public enum MassendruckJobSortColumn {
-    JOB_NUMBER,
     USER_ERSTELLT,
     TIMESTAMP_ERSTELLT,
     STATUS,
