@@ -145,15 +145,15 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
   paginatorSig = viewChild.required(MatPaginator);
   showViewSig = computed<GetMassendruckJobQueryType>(() => {
     const show = this.show();
-    return show ?? GetMassendruckJobQueryType.ALLE;
+    return show ?? GetMassendruckJobQueryType.ALLE_AKTIV;
   });
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
 
-  defaultFilter = GetMassendruckJobQueryType.ALLE;
+  defaultFilter = GetMassendruckJobQueryType.ALLE_AKTIV;
 
   quickFilterForm = this.formBuilder.group({
-    query: [GetMassendruckJobQueryType.ALLE],
+    query: [GetMassendruckJobQueryType.ALLE_AKTIV],
   });
 
   quickFilters: {
@@ -161,12 +161,12 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
     icon: string;
   }[] = [
     {
-      typ: 'ALLE',
-      icon: 'print',
-    },
-    {
       typ: 'ALLE_AKTIV',
       icon: 'print_connect',
+    },
+    {
+      typ: 'ALLE',
+      icon: 'print',
     },
     {
       typ: 'ALLE_FEHLERHAFTE_GENERIERUNG',

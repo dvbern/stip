@@ -7744,8 +7744,8 @@ components:
           format: date
     MassendruckJobSortColumn:
       enum:
-        - USER_ERSTELLT
         - TIMESTAMP_ERSTELLT
+        - USER_ERSTELLT
         - STATUS
     SbDashboardColumn:
       enum:
