@@ -4679,6 +4679,7 @@ components:
         - vorname
         - gesuchNummer
         - gesuchId
+        - gesuchTrancheId
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -4691,6 +4692,8 @@ components:
         gesuchNummer:
           type: string
         gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
     MassendruckVerfuegung:
       type: object
@@ -7749,7 +7752,6 @@ components:
         - USER_ERSTELLT
         - TIMESTAMP_ERSTELLT
         - STATUS
-        - TYP
     SbDashboardColumn:
       enum:
         - FALLNUMMER
