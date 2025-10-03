@@ -10,10 +10,9 @@
  * Do not edit the class manually.
  */
 
-export type MassendruckJobSortColumn = 'JOB_NUMBER' | 'USER_ERSTELLT' | 'TIMESTAMP_ERSTELLT' | 'STATUS';
+export type MassendruckJobSortColumn = 'USER_ERSTELLT' | 'TIMESTAMP_ERSTELLT' | 'STATUS';
 
 export const MassendruckJobSortColumn = {
-    JOB_NUMBER: 'JOB_NUMBER' as MassendruckJobSortColumn,
     USER_ERSTELLT: 'USER_ERSTELLT' as MassendruckJobSortColumn,
     TIMESTAMP_ERSTELLT: 'TIMESTAMP_ERSTELLT' as MassendruckJobSortColumn,
     STATUS: 'STATUS' as MassendruckJobSortColumn

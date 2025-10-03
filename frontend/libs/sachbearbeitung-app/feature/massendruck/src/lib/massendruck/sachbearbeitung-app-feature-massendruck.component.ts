@@ -29,7 +29,6 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { MaskitoDirective } from '@maskito/angular';
 
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
@@ -95,7 +94,6 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     TypeSafeMatRowDefDirective,
     SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiIconChipComponent,
-    MaskitoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-massendruck.component.html',
   styleUrl: './sachbearbeitung-app-feature-massendruck.component.scss',
@@ -111,7 +109,6 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
   massendruckStore = inject(MassendruckStore);
 
   show = input<GetMassendruckJobQueryType | undefined>(undefined);
-  massendruckJobNumber = input<number | undefined>(undefined);
   userErstellt = input<string | undefined>(undefined);
   timestampErstellt = input<string | undefined>(undefined);
   massendruckJobStatus = input<MassendruckJobStatus | undefined>(undefined);
@@ -134,7 +131,6 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
   displayedColumns = [...Object.keys(MassendruckJobSortColumn), 'TYP'];
 
   filterForm = this.formBuilder.group({
-    massendruckJobNumber: [<number | undefined>undefined],
     userErstellt: [<string | undefined>undefined],
     timestampErstellt: [<Date | undefined>undefined],
     massendruckJobTyp: [<MassendruckJobTyp | undefined>undefined],
@@ -282,7 +278,6 @@ export class SachbearbeitungAppFeatureMassendruckComponent {
   private getInputs() {
     const query = this.showViewSig();
     const filter = {
-      massendruckJobNumber: this.massendruckJobNumber(),
       userErstellt: this.userErstellt(),
       timestampErstellt: this.timestampErstellt(),
       massendruckJobStatus: this.massendruckJobStatus(),

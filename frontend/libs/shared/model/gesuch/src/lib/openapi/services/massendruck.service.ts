@@ -50,7 +50,6 @@ export interface MassendruckServiceDownloadMassendruckDocumentRequestParams {
 
 export interface MassendruckServiceGetAllMassendruckJobsRequestParams {
     getMassendruckJobs: GetMassendruckJobQueryType;
-    massendruckJobNumber?: number;
     userErstellt?: string;
     timestampErstellt?: string;
     massendruckJobStatus?: MassendruckJobStatus;
@@ -372,7 +371,6 @@ export class MassendruckService {
         if (getMassendruckJobs === null || getMassendruckJobs === undefined) {
             throw new Error('Required parameter getMassendruckJobs was null or undefined when calling getAllMassendruckJobs$.');
         }
-        const massendruckJobNumber = requestParameters.massendruckJobNumber;
         const userErstellt = requestParameters.userErstellt;
         const timestampErstellt = requestParameters.timestampErstellt;
         const massendruckJobStatus = requestParameters.massendruckJobStatus;
@@ -389,10 +387,6 @@ export class MassendruckService {
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (massendruckJobNumber !== undefined && massendruckJobNumber !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>massendruckJobNumber, 'massendruckJobNumber');
-        }
         if (userErstellt !== undefined && userErstellt !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>userErstellt, 'userErstellt');

@@ -3,7 +3,7 @@
 
   <div class="container">
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
-      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}&nbsp;{{ massendruck?.massendruckJobNumber }}
+      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}
       @if (massendruck) {
         - {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.' + massendruck?.massendruckJobTyp | transloco }}
       }

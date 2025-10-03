@@ -418,7 +418,6 @@
 
   "sachbearbeitung-app.massendruck.title": "Druckaufträge",
   "sachbearbeitung-app.massendruck.table.description": "Übersicht aller Druckaufträge",
-  "sachbearbeitung-app.massendruck.table.massendruckJobNumber": "Batchnummer",
   "sachbearbeitung-app.massendruck.table.userErstellt": "Bearbeiter",
   "sachbearbeitung-app.massendruck.table.timestampErstellt": "Auftragsdatum",
   "sachbearbeitung-app.massendruck.table.status": "Status",

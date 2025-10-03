@@ -14,7 +14,6 @@ import { MassendruckJobStatus } from './massendruckJobStatus';
 
 export interface MassendruckJob { 
     id: string;
-    massendruckJobNumber: number;
     userErstellt: string;
     timestampErstellt: string;
     massendruckJobStatus: MassendruckJobStatus;

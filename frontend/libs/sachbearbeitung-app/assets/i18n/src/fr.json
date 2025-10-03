@@ -418,7 +418,6 @@
 
   "sachbearbeitung-app.massendruck.title": "Commandes d'impression",
   "sachbearbeitung-app.massendruck.table.description": "Aperçu de tous les ordres d'impression",
-  "sachbearbeitung-app.massendruck.table.massendruckJobNumber": "Nom du lot",
   "sachbearbeitung-app.massendruck.table.userErstellt": "Opérateur",
   "sachbearbeitung-app.massendruck.table.timestampErstellt": "Date de commande",
   "sachbearbeitung-app.massendruck.table.status": "Statut",
