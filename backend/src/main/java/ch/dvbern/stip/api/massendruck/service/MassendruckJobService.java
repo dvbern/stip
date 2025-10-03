@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.massendruck.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -275,5 +276,9 @@ public class MassendruckJobService {
                 .bulkTriggerStateMachineEvent(gesuche, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
         }
         massendruckJob.setStatus(MassendruckJobStatus.ARCHIVED);
+    }
+
+    public Optional<MassendruckJob> getDatenschutzMassendruckJobForGesuchId(final UUID gesuchId) {
+        return massendruckJobRepository.getDatenschutzMassendruckJobForGesuchId(gesuchId);
     }
 }
