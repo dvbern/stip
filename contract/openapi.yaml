@@ -7364,6 +7364,7 @@ components:
         - maxSaeule3a
         - einkommensfreibetrag
         - freibetragErwerbseinkommen
+        - abzugslimite
         - freibetragVermoegen
         - vermoegensanteilInProzent
         - anzahlWochenLehre
@@ -7376,6 +7377,8 @@ components:
         maxSaeule3a:
           type: integer
         einkommensfreibetrag:
+          type: integer
+        abzugslimite:
           type: integer
         freibetragErwerbseinkommen:
           type: integer

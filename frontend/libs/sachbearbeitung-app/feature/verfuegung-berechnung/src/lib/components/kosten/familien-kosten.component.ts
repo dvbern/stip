@@ -67,7 +67,7 @@ import { FamilienBerechnung } from '../../../models';
         <div class="text-muted fs-7">
           {{
             'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info'
-              | transloco
+              | transloco: kostenSig()
           }}
         </div>
       </div>

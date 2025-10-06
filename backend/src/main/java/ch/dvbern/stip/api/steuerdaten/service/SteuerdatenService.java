@@ -96,14 +96,14 @@ public class SteuerdatenService {
         }
 
         final Optional<Eltern> elternToUse = switch (steuerdatenTyp) {
-            case FAMILIE -> gesuchFormular.getElterns().stream().findFirst();
+            // If Familie, use Vater for lookup, see KSTIP-2734
+            case FAMILIE, VATER -> gesuchFormular.getElterns()
+                .stream()
+                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
+                .findFirst();
             case MUTTER -> gesuchFormular.getElterns()
                 .stream()
                 .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
-                .findFirst();
-            case VATER -> gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
                 .findFirst();
         };
 
