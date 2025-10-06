@@ -15,25 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.common.service;
 
 import java.util.HashSet;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.eltern.util.ElternCopyUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
-class OverrideUtilTest {
+class EntityOverrideMapperTest {
+    private final EntityOverrideMapper entityOverrideMapper = Mappers.getMapper(EntityOverrideMapper.class);
+
     @Test
     void resetValueOnEntry() {
         // Arrange
@@ -53,7 +54,7 @@ class OverrideUtilTest {
         targetEltern.add(targetVater);
 
         // Act
-        OverrideUtil.doOverrideOfSet(targetEltern, sourceEltern, ElternCopyUtil::copyValues, this::ifAbsent);
+        entityOverrideMapper.overrideFromToEltern(sourceEltern, targetEltern);
 
         // Assert
         assertThat(targetMutter.getWohnkosten(), is(100));
@@ -76,7 +77,7 @@ class OverrideUtilTest {
         targetEltern.add(targetMutter);
 
         // Act
-        OverrideUtil.doOverrideOfSet(targetEltern, sourceEltern, ElternCopyUtil::copyValues, this::ifAbsent);
+        entityOverrideMapper.overrideFromToEltern(sourceEltern, targetEltern);
 
         // Assert
         assertThat(targetEltern.size(), is(2));
@@ -104,7 +105,7 @@ class OverrideUtilTest {
         targetEltern.add(targetVater);
 
         // Act
-        OverrideUtil.doOverrideOfSet(targetEltern, sourceEltern, ElternCopyUtil::copyValues, this::ifAbsent);
+        entityOverrideMapper.overrideFromToEltern(sourceEltern, targetEltern);
 
         // Assert
         assertThat(targetEltern.size(), is(1));
@@ -118,14 +119,5 @@ class OverrideUtilTest {
             (Eltern) new Eltern().setElternTyp(elternTyp).setAdresse(new Adresse()).setId(id),
             (Eltern) new Eltern().setElternTyp(elternTyp).setAdresse(new Adresse()).setId(id)
         );
-    }
-
-    private Eltern ifAbsent(final Eltern source) {
-        final var newTarget = new Eltern().setAdresse(new Adresse());
-
-        ElternCopyUtil.copyValues(source, newTarget);
-        AdresseCopyUtil.copyValues(source.getAdresse(), newTarget.getAdresse());
-
-        return newTarget;
     }
 }

@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +45,7 @@ public class GesuchTrancheTruncateService {
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final GesuchDokumentService gesuchDokumentService;
     private final DokumentRepository dokumentRepository;
+    private final GesuchTrancheCopyService gesuchTrancheCopyService;
 
     void truncateExistingTranchen(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var newTrancheRange = TrancheRange.from(newTranche);
@@ -151,7 +151,7 @@ public class GesuchTrancheTruncateService {
             existingTranche.getGueltigkeit().getGueltigBis()
         );
 
-        final var newNewTranche = GesuchTrancheCopyUtil.createNewTranche(
+        final var newNewTranche = gesuchTrancheCopyService.createNewTranche(
             existingTranche,
             copyGueltigkeit,
             existingTranche.getComment()

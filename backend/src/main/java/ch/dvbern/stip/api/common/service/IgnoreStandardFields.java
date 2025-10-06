@@ -15,25 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.adresse.util;
+package ch.dvbern.stip.api.common.service;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
-import lombok.experimental.UtilityClass;
+import org.mapstruct.Mapping;
 
-@UtilityClass
-public class AdresseCopyUtil {
-    public Adresse createCopy(final Adresse other) {
-        final var copy = new Adresse();
-        copyValues(other, copy);
-        return copy;
-    }
-
-    public void copyValues(final Adresse source, final Adresse target) {
-        target.setLand(source.getLand());
-        target.setCoAdresse(source.getCoAdresse());
-        target.setStrasse(source.getStrasse());
-        target.setHausnummer(source.getHausnummer());
-        target.setPlz(source.getPlz());
-        target.setOrt(source.getOrt());
-    }
+@Mapping(target = "id", ignore = true)
+@Mapping(target = "mandant", ignore = true)
+@Mapping(target = "timestampErstellt", ignore = true)
+@Mapping(target = "timestampMutiert", ignore = true)
+@Mapping(target = "version", ignore = true)
+public @interface IgnoreStandardFields {
 }

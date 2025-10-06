@@ -15,15 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.common.service;
 
 import java.util.List;
 
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheCopyService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil;
 import ch.dvbern.stip.api.util.TestUtil;
 import com.savoirtech.json.JsonComparatorBuilder;
 import io.quarkus.test.junit.QuarkusMock;
@@ -46,12 +47,15 @@ import static org.hamcrest.Matchers.oneOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-class CopyUtilTest {
+class GesuchTrancheCopyServiceTest {
     @Inject
     Validator validator;
 
     @Inject
     GesuchTrancheMapper gesuchTrancheMapper;
+
+    @Inject
+    GesuchTrancheCopyService gesuchTrancheCopyService;
 
     @BeforeAll
     static void setUp() {
@@ -87,7 +91,8 @@ class CopyUtilTest {
         tranche.setTyp(null);
 
         var trancheDto = gesuchTrancheMapper.toDto(tranche);
-        var trancheCopy = GesuchTrancheCopyUtil.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
+        var trancheCopy =
+            gesuchTrancheCopyService.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
         var copyDto = gesuchTrancheMapper.toDto(trancheCopy);
 
         final var expected = "{\"templateJson\":" + new ObjectMapper().writeValueAsString(trancheDto) + '}';
