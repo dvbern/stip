@@ -94,28 +94,27 @@ public class NeskoSteuerdatenMapper {
         steuerdaten.setVeranlagungsStatus(getSteuerdatenResponse.getSteuerdaten().getStatusVeranlagung().value());
 
         // If the requested NESKO Steuerdatentyp is MUTTER, then we reverse the Partner and main value assignment
-        var geschlechter = steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER ?
-            Pair.of(GeschlechtType.FRAU, GeschlechtType.MANN) :
-            Pair.of(GeschlechtType.MANN, GeschlechtType.FRAU);
+        var geschlechter =
+            steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER ? Pair.of(GeschlechtType.FRAU, GeschlechtType.MANN)
+                : Pair.of(GeschlechtType.MANN, GeschlechtType.FRAU);
+
         int fahrkosten = valueFromSatzType(steuerdatenNesko.getFahrkosten(), geschlechter.getLeft());
-        int fahrkostenPartner = valueFromSatzType(steuerdatenNesko.getFahrkosten(), geschlechter.getRight());
-        int verpflegung = valueFromSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung(), geschlechter.getLeft());
-        int verpflegungPartner = valueFromSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung(), geschlechter.getRight());
         steuerdaten.setFahrkosten(fahrkosten);
+
+        int fahrkostenPartner = valueFromSatzType(steuerdatenNesko.getFahrkosten(), geschlechter.getRight());
         steuerdaten.setFahrkostenPartner(fahrkostenPartner);
+
+        int verpflegung = valueFromSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung(), geschlechter.getLeft());
         steuerdaten.setVerpflegung(verpflegung);
+
+        int verpflegungPartner =
+            valueFromSatzType(steuerdatenNesko.getKostenAuswaertigeVerpflegung(), geschlechter.getRight());
         steuerdaten.setVerpflegungPartner(verpflegungPartner);
 
         return steuerdaten;
     }
 
     private Integer getMaxOrZeroFromEffSatzType(EffSatzType effSatzType) {
-        var effektiv = Objects.requireNonNullElse(effSatzType.getEffektiv(), BigDecimal.ZERO);
-        var satzbestimmend = Objects.requireNonNullElse(effSatzType.getSatzbestimmend(), BigDecimal.ZERO);
-        return effektiv.max(satzbestimmend).intValue();
-    }
-
-    private Integer getAbsoluteMaxOrZeroFromEffSatzType(EffSatzType effSatzType) {
         var effektiv = Objects.requireNonNullElse(effSatzType.getEffektiv(), BigDecimal.ZERO).abs();
         var satzbestimmend = Objects.requireNonNullElse(effSatzType.getSatzbestimmend(), BigDecimal.ZERO).abs();
         return effektiv.max(satzbestimmend).intValue();
@@ -133,6 +132,6 @@ public class NeskoSteuerdatenMapper {
             return 0;
         }
 
-        return getAbsoluteMaxOrZeroFromEffSatzType(value);
+        return getMaxOrZeroFromEffSatzType(value);
     }
 }
