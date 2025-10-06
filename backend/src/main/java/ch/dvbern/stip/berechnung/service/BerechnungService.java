@@ -244,7 +244,9 @@ public class BerechnungService {
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
                         gesuchTranche.getGesuchFormular().getPersonInAusbildung().getFullName(),
-                        stipendienCalculated.getStipendien(),
+                        Math.min(0, stipendienCalculated.getStipendien()), // KSTIP-2548: positive
+                                                                           // Zwischenbeiträge/Teilrechnungen auf 0
+                                                                           // setzen
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         gesuchTranche.getId(),
@@ -288,7 +290,7 @@ public class BerechnungService {
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
                         gesuchTranche.getGesuchFormular().getPersonInAusbildung().getFullName(),
-                        berechnung,
+                        Math.min(0, berechnung), // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         gesuchTranche.getId(),
