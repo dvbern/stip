@@ -43,7 +43,7 @@ import org.mockito.Mockito;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.BEREIT_FUER_BEARBEITUNG;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.IN_BEARBEITUNG_GS;
 import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.IN_BEARBEITUNG_SB;
-import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.VERSENDET;
+import static ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus.VERFUEGUNG_VERSENDET;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -105,7 +105,7 @@ class GesuchDokumentAuthorizerTest {
                     OidcConstants.ROLE_SACHBEARBEITER,
                     GesuchTrancheTyp.AENDERUNG,
                     // setup to not throw (succeed)
-                    VERSENDET,
+                    VERFUEGUNG_VERSENDET,
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.UEBERPRUEFEN
                 ),
@@ -127,7 +127,7 @@ class GesuchDokumentAuthorizerTest {
                     OidcConstants.ROLE_ADMIN,
                     GesuchTrancheTyp.AENDERUNG,
                     // setup to not throw (succeed)
-                    VERSENDET,
+                    VERFUEGUNG_VERSENDET,
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.UEBERPRUEFEN
                 )
@@ -150,7 +150,7 @@ class GesuchDokumentAuthorizerTest {
                     OidcConstants.ROLE_GESUCHSTELLER,
                     GesuchTrancheTyp.AENDERUNG,
                     // setup to not throw (succeed)
-                    VERSENDET,
+                    VERFUEGUNG_VERSENDET,
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.IN_BEARBEITUNG_GS
                 ),
@@ -168,7 +168,7 @@ class GesuchDokumentAuthorizerTest {
                     OidcConstants.ROLE_SOZIALDIENST_MITARBEITER,
                     GesuchTrancheTyp.AENDERUNG,
                     // setup to not throw (succeed)
-                    VERSENDET,
+                    VERFUEGUNG_VERSENDET,
                     // Tranchestatus (if AENDERUNG)
                     GesuchTrancheStatus.FEHLENDE_DOKUMENTE
                 )

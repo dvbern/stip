@@ -154,7 +154,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
         gesuch = new Gesuch();
         gesuch.setGesuchTranchen(new ArrayList<>());
-        gesuch.setGesuchStatus(Gesuchstatus.VERSENDET);
+        gesuch.setGesuchStatus(Gesuchstatus.VERFUEGUNG_VERSENDET);
         var gesuchTranche = new GesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG)
             .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
             .setGesuch(gesuch);
@@ -178,7 +178,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         currentBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER));
         gesuch = new Gesuch();
         gesuch.setGesuchTranchen(new ArrayList<>());
-        gesuch.setGesuchStatus(Gesuchstatus.VERSENDET);
+        gesuch.setGesuchStatus(Gesuchstatus.VERFUEGUNG_VERSENDET);
         var gesuchTranche = new GesuchTranche().setTyp(GesuchTrancheTyp.AENDERUNG)
             .setStatus(GesuchTrancheStatus.UEBERPRUEFEN)
             .setGesuch(gesuch);

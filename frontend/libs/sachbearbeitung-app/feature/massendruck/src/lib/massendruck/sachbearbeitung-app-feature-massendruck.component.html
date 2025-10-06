@@ -1,0 +1,245 @@
+<dv-sachbearbeitung-app-pattern-overview-layout>
+  <div class="container">
+    <div
+      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
+      [formGroup]="quickFilterForm"
+    >
+      @for (quickFilter of quickFilters; track quickFilter) {
+        <button
+          type="button"
+          (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
+          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
+          [attr.data-testid]="'massendruck-quick-filter-' + quickFilter.typ"
+          [class.btn-danger]="radio.checked"
+          [class.btn-light]="!radio.checked"
+        >
+          <dv-shared-ui-icon-chip class="chip me-3">
+            <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
+          </dv-shared-ui-icon-chip>
+          <div class="tw:text-start tw:leading-4 flex-grow-1">
+            <span class="tw:font-semibold tw:mb-0">
+              {{ 'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco }}
+            </span>
+            <input
+              #radio
+              class="cdk-visually-hidden"
+              type="radio"
+              name="query"
+              labelPosition="before"
+              formControlName="query"
+              [value]="quickFilter.typ"
+              [attr.aria-label]="'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco"
+            />
+          </div>
+        </button>
+      }
+    </div>
+    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-title">
+      {{ 'sachbearbeitung-app.massendruck.title' | transloco }}
+    </h1>
+    <div class="tw:my-6">
+      <div class="tw:dv-table tw:relative">
+        <div [class.opacity-50]="massendruckStore.paginatedMassendruckListViewSig().loading">
+          <!-- filter form (header filters) -->
+          <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
+            <table
+              class="tw:w-full tw:table-fixed"
+              [dvSharedUiFocusableList]="items"
+              [dataSource]="massendruckDataSourceSig()"
+              data-testid="sachbearbeitung-app.massendruck.table"
+              mat-table
+              matSort
+              (matSortChange)="sortList($event)"
+              tabindex="0"
+            >
+              <caption class="cdk-visually-hidden">
+                {{
+                  'sachbearbeitung-app.massendruck.table.description' | transloco
+                }}
+              </caption>
+
+              <ng-container matColumnDef="TIMESTAMP_ERSTELLT">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  [start]="'desc'"
+                  class="filtered tw:w-32 tw:whitespace-nowrap"
+                  example="01.01.2000"
+                >
+                  <label class="pe-none" for="timestampErstellt">{{
+                    'sachbearbeitung-app.massendruck.table.timestampErstellt' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="timestampErstellt"
+                        class="tw:w-full"
+                        matInput
+                        [dvMaxLength]="'small'"
+                        formControlName="timestampErstellt"
+                        [matDatepicker]="timestampErstelltDatepicker"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                      <button
+                        matIconSuffix
+                        type="button"
+                        class="btn btn-link text-muted tw:!p-1"
+                        [attr.aria-label]="'shared.ui.open-date-picker'"
+                        (click)="timestampErstelltDatepicker.open(); $event.stopPropagation()"
+                      >
+                        <dv-shared-ui-icon-chip class="fs-8">
+                          <i class="icon material-symbols-rounded fs-5">event</i>
+                        </dv-shared-ui-icon-chip>
+                      </button>
+                      <mat-datepicker #timestampErstelltDatepicker></mat-datepicker>
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.timestampErstellt.reset()"
+                      [valueSig]="filterForm.controls.timestampErstellt.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                >
+                  {{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="USER_ERSTELLT">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
+                  <label for="userErstellt">{{
+                    'sachbearbeitung-app.massendruck.table.userErstellt' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
+                      <input
+                        id="userErstellt"
+                        matInput
+                        formControlName="userErstellt"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.userErstellt.reset()"
+                      [valueSig]="filterForm.controls.userErstellt.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="item.userErstellt"
+                >
+                  {{ item.userErstellt }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="STATUS">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+                  {{ 'sachbearbeitung-app.massendruck.table.status' | transloco }}
+                  <mat-form-field>
+                    <mat-select
+                      [aria-label]="'sachbearbeitung-app.massendruck.table.status' | transloco"
+                      formControlName="massendruckJobStatus"
+                      (click)="$event.stopPropagation()"
+                      class="tw:!font-normal"
+                      panelClass="table-select"
+                      [placeholder]="'sachbearbeitung-app.massendruck.table.status.filter.alle' | transloco"
+                    >
+                      <mat-option [value]="null">{{
+                        'sachbearbeitung-app.massendruck.table.status.filter.alle' | transloco
+                      }}</mat-option>
+                      @for (status of availableStatus; track status) {
+                        <mat-option [value]="status">{{
+                          'sachbearbeitung-app.massendruck.table.status.filter.' + status | transloco
+                        }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                >
+                  {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + item.massendruckJobStatus | transloco }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="TYP">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
+                  {{ 'sachbearbeitung-app.massendruck.table.typ' | transloco }}
+                  <mat-form-field class="tw:flex! tw:w-max">
+                    <mat-select
+                      [aria-label]="'sachbearbeitung-app.massendruck.table.typ' | transloco"
+                      formControlName="massendruckJobTyp"
+                      (click)="$event.stopPropagation()"
+                      class="tw:!font-normal"
+                      panelClass="table-select"
+                      [placeholder]="'sachbearbeitung-app.massendruck.table.typ.filter.alle' | transloco"
+                    >
+                      <mat-option [value]="null">{{
+                        'sachbearbeitung-app.massendruck.table.typ.filter.alle' | transloco
+                      }}</mat-option>
+                      @for (typ of availableTypes; track typ) {
+                        <mat-option [value]="typ">{{
+                          'sachbearbeitung-app.massendruck.table.typ.filter.' + typ | transloco
+                        }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                >
+                  {{ 'sachbearbeitung-app.massendruck.table.typ.filter.' + item.massendruckJobTyp | transloco }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                dvSharedUiFocusableListItem
+                mat-row
+                tabindex="-1"
+                *dvMatRowDef="let item; dataSource: massendruckDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/massendruck', 'druckauftrag', item.id]"
+                class="highlightable"
+              ></tr>
+              <tr class="mat-mdc-row" *matNoDataRow>
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+                  {{ 'shared.table.noData' | transloco }}
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              showFirstLastButtons
+              [pageSizeOptions]="pageSizes"
+              [pageSize]="pageSize() ?? defaultPageSize"
+              [pageIndex]="page() ?? 0"
+              [length]="totalEntriesSig()"
+              (page)="paginate($event)"
+            ></mat-paginator>
+          </form>
+        </div>
+        @if (massendruckStore.paginatedMassendruckListViewSig().loading) {
+          <dv-shared-ui-loading
+            class="position-absolute translate-middle start-50 top-50"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </div>
+    </div>
+  </div>
+</dv-sachbearbeitung-app-pattern-overview-layout>

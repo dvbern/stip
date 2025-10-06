@@ -113,21 +113,37 @@ class AusbildungResourceTest {
     @Order(3)
     void createAusbildung() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
         TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
-        gesuchApiSpec.gesuchEinreichenGs()
+        var foundGesuch = gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.NICHT_ANSPRUCHSBERECHTIGT));
+
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
-        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        var foundGesuch = gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+
+        foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

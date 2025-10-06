@@ -164,6 +164,15 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
     @TestAsSachbearbeiter
     @Order(6)
     void gesuchStatusChangeToInBearbeitungSB() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -201,7 +210,7 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
             .as(GesuchWithChangesDtoSpec.class);
         assertThat(
             gesuchWithChangesDto.getGesuchStatus().getValue(),
-            is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG.getValue())
+            is(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT.getValue())
         );
     }
 
@@ -209,6 +218,15 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
     @TestAsSachbearbeiter
     @Order(8)
     void updateGesuchWithResultOfKeinAnspruch() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         gesuchWithChanges = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

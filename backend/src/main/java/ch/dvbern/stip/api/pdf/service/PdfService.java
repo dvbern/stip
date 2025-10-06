@@ -54,7 +54,6 @@ import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -81,13 +80,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_PATH;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
+
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
 public class PdfService {
-
-    private static final String FONT_PATH = "/fonts/arial.ttf";
-    private static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
     private static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
     private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
 
@@ -99,7 +99,6 @@ public class PdfService {
     private static final float FONT_SIZE_BIG = 10.5f;
     private static final float FONT_SIZE_MEDIUM = 8.5f;
     private static final float FONT_SIZE_SMALL = 6.5f;
-    private static final PageSize PAGE_SIZE = PageSize.A4;
 
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final BerechnungsblattService berechnungsblattService;

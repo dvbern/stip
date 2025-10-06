@@ -66,7 +66,7 @@ public class BernStipDecider extends BaseStipDecider {
     @Override
     public GesuchStatusChangeEvent getGesuchStatusChangeEvent(StipDeciderResult decision) {
         return switch (decision) {
-            case GESUCH_VALID -> GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+            case GESUCH_VALID -> GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
             case NEGATIVVERFUEGUNG_NICHTEINTRETENSVERFUEGUNG -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;
             case NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_WOHNSITZ_PIA_NICHT_BERN -> GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT;

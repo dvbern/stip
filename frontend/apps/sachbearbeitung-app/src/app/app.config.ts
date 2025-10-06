@@ -5,6 +5,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { ChangeGesuchsperiodeStore } from '@dv/shared/data-access/change-gesuchsperiode';
 import {
   sharedDataAccessGesuchEffects,
@@ -28,5 +29,6 @@ export const appConfig: ApplicationConfig = {
     GesuchStore,
     GesuchInfoStore,
     ChangeGesuchsperiodeStore,
+    MassendruckStore,
   ],
 };

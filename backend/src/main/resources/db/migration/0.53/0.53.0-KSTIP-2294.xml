@@ -1,0 +1,59 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="Juri Furer" id="1758028564344-2">
+        <createTable tableName="datenschutzbrief">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="datenschutzbriefPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="eltern_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_versendet" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1758028564344-3">
+        <createTable tableName="datenschutzbrief_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="eltern_typ" type="VARCHAR(255)"/>
+            <column name="is_versendet" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1758028564344-4">
+        <addPrimaryKey columnNames="rev, id" constraintName="datenschutzbrief_audPK" tableName="datenschutzbrief_aud"/>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1758028564344-7">
+        <createIndex indexName="IX_datenschutzbrief_mandant" tableName="datenschutzbrief">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Juri Furer" id="1758028564344-9">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="datenschutzbrief_aud" constraintName="FKo84fhitpx1re38hg6kq8ulce1" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -84,14 +84,18 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @TestAsGesuchsteller
     @Order(1)
     void setupCreateGesuch() {
+        // gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(2)
     void setupFillGesuch() {
-        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
+        // TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
+        // TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test
@@ -110,6 +114,12 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Order(4)
     @Test
     void setupGesuchVerfuegen() {
+        gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -124,12 +134,17 @@ class GesuchResourceBeschwerdeEntscheidTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+        gesuch = gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.VERFUEGUNG_DRUCKBEREIT));
+
         gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

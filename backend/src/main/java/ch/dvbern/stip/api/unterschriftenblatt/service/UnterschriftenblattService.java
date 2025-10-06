@@ -167,7 +167,7 @@ public class UnterschriftenblattService {
         if (!toUpdate.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
-                GesuchStatusChangeEvent.VERSANDBEREIT
+                GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT
             );
         }
     }

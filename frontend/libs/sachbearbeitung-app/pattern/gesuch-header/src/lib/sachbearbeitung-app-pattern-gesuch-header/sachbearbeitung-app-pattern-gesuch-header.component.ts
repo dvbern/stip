@@ -255,6 +255,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'STATUS_PRUEFUNG_AUSLOESEN':
+      case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
       case 'VERFUEGT':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;

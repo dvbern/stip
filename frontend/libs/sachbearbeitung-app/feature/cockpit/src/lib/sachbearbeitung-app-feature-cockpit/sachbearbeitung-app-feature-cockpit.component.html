@@ -1,42 +1,44 @@
 <dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
-    <div
-      class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
-      [formGroup]="quickFilterForm"
-    >
-      @for (quickFilter of availableQuickFiltersSig(); track quickFilter) {
+    <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
+      @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
+        <dv-shared-ui-filter-menu-button
+          [activeFilter]="show()"
+          [defaultFilter]="quickFilterGroup.filters[0].typ"
+          (filterChange)="handleQuickFilterClick($event)"
+          [filters]="quickFilterGroup.filters"
+        ></dv-shared-ui-filter-menu-button>
+      }
+    </div>
+
+    <div class="tw:flex tw:justify-between tw:mt-6! tw:mt-8!">
+      <h1 class="tw:text-2xl!" data-testid="cockpit-title">
+        {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
+      </h1>
+
+      <!-- button verfuegungen oder datenschutzbriefe genereiern -->
+      @if (canCreateMassendruckSig()) {
         <button
+          [disabled]="massendruckStore.createMassendruckLoadingSig()"
           type="button"
-          (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
-          [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
-          [class.btn-danger]="radio.checked"
-          [class.btn-light]="!radio.checked"
+          class="btn btn-danger tw:font-semibold! tw:whitespace-nowrap"
+          (click)="createMassendruckJobForQueryType$()"
         >
-          <dv-shared-ui-icon-chip class="chip me-3">
-            <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
-          </dv-shared-ui-icon-chip>
-          <div class="tw:text-start tw:leading-4 flex-grow-1">
-            <span class="fw-bold fs-7 mb-0">
-              {{ 'sachbearbeitung-app.cockpit.quick-filter.' + quickFilter.typ | transloco }}
-            </span>
-            <input
-              #radio
-              class="fs-7 cdk-visually-hidden"
-              type="radio"
-              name="query"
-              labelPosition="before"
-              formControlName="query"
-              [value]="quickFilter.typ"
-              [attr.aria-label]="'sachbearbeitung-app.cockpit.quick-filter.label.' + quickFilter.typ | transloco"
-            />
-          </div>
+          @if (show()?.includes('VERFUEGUNGEN')) {
+            <span>{{
+              'sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN'
+                | transloco: { anzahl: totalEntriesSig() }
+            }}</span>
+          } @else {
+            <span>{{
+              'sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE'
+                | transloco: { anzahl: totalEntriesSig() }
+            }}</span>
+          }
         </button>
       }
     </div>
-    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">
-      {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
-    </h1>
+
     <div class="tw:my-6">
       <div class="tw:dv-table">
         <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">

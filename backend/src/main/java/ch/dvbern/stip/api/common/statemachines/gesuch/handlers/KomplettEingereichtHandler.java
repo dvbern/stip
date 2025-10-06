@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
     private final MailService mailService;
     private final NotificationService notificationService;
+    private final DatenschutzbriefService datenschutzbriefService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -43,6 +45,9 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
+
+        // Create all Datenschutzbriefe required
+        datenschutzbriefService.createAllRequiredDatenschutzbriefeForGesuch(gesuch);
 
         // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
         final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();

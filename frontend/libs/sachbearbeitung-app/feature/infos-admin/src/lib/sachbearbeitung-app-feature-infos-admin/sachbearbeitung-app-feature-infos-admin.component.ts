@@ -15,7 +15,6 @@ import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 const ALL_TABS = [
-  'verfuegung',
   'ausbildung-abbrechen',
   'ausbildung-unterbrechen',
   'ausbildung-abschliessen',
