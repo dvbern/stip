@@ -92,6 +92,11 @@ export class SteuerdatenStore extends signalStore(
     steuerjahr: number;
   }>(
     pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedSteuerdaten: cachedPending(state.cachedSteuerdaten),
+        }));
+      }),
       switchMap(({ gesuchTrancheId, steuerjahr, steuerdatenTyp }) =>
         this.steuerdatenService
           .updateSteuerdatenFromNesko$(

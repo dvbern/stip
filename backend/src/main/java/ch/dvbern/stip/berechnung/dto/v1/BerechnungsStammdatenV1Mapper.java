@@ -33,6 +33,7 @@ public class BerechnungsStammdatenV1Mapper implements BerechnungsStammdatenMappe
         return new BerechnungsStammdatenDto()
             .maxSaeule3a(berechnungsRequest.getStammdaten().getMaxSaeule3a())
             .einkommensfreibetrag(berechnungsRequest.getStammdaten().getEinkommensfreibetrag())
+            .abzugslimite(berechnungsRequest.getStammdaten().getAbzugslimite())
             .freibetragErwerbseinkommen(berechnungsRequest.getStammdaten().getFreibetragErwerbseinkommen())
             .freibetragVermoegen(berechnungsRequest.getStammdaten().getFreibetragVermoegen())
             .vermoegensanteilInProzent(berechnungsRequest.getStammdaten().getVermoegensanteilInProzent())

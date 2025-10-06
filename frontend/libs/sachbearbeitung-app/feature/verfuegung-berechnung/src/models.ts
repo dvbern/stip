@@ -74,6 +74,7 @@ export type FamilienBerechnung = {
   };
   kosten: {
     total: number;
+    abzugslimite: number;
     anzahlPersonen: number;
     grundbedarf: number;
     wohnkosten: number;

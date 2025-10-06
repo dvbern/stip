@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BerechnungsStammdatenDto  implements Serializable {
   private @Valid Integer maxSaeule3a;
   private @Valid Integer einkommensfreibetrag;
+  private @Valid Integer abzugslimite;
   private @Valid Integer freibetragErwerbseinkommen;
   private @Valid Integer freibetragVermoegen;
   private @Valid Integer vermoegensanteilInProzent;
@@ -68,6 +69,25 @@ public class BerechnungsStammdatenDto  implements Serializable {
   @JsonProperty("einkommensfreibetrag")
   public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
+  }
+
+  /**
+   **/
+  public BerechnungsStammdatenDto abzugslimite(Integer abzugslimite) {
+    this.abzugslimite = abzugslimite;
+    return this;
+  }
+
+  
+  @JsonProperty("abzugslimite")
+  @NotNull
+  public Integer getAbzugslimite() {
+    return abzugslimite;
+  }
+
+  @JsonProperty("abzugslimite")
+  public void setAbzugslimite(Integer abzugslimite) {
+    this.abzugslimite = abzugslimite;
   }
 
   /**
@@ -234,6 +254,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     BerechnungsStammdatenDto berechnungsStammdaten = (BerechnungsStammdatenDto) o;
     return Objects.equals(this.maxSaeule3a, berechnungsStammdaten.maxSaeule3a) &&
         Objects.equals(this.einkommensfreibetrag, berechnungsStammdaten.einkommensfreibetrag) &&
+        Objects.equals(this.abzugslimite, berechnungsStammdaten.abzugslimite) &&
         Objects.equals(this.freibetragErwerbseinkommen, berechnungsStammdaten.freibetragErwerbseinkommen) &&
         Objects.equals(this.freibetragVermoegen, berechnungsStammdaten.freibetragVermoegen) &&
         Objects.equals(this.vermoegensanteilInProzent, berechnungsStammdaten.vermoegensanteilInProzent) &&
@@ -246,7 +267,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(maxSaeule3a, einkommensfreibetrag, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag);
+    return Objects.hash(maxSaeule3a, einkommensfreibetrag, abzugslimite, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag);
   }
 
   @Override
@@ -256,6 +277,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
+    sb.append("    abzugslimite: ").append(toIndentedString(abzugslimite)).append("\n");
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    freibetragVermoegen: ").append(toIndentedString(freibetragVermoegen)).append("\n");
     sb.append("    vermoegensanteilInProzent: ").append(toIndentedString(vermoegensanteilInProzent)).append("\n");

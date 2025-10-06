@@ -622,7 +622,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten": "Wohnkosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung": "Medizinische Grundversorgung",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage": "Integrationszulage pro in Ausbildung stehendes Kind",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info": "Integrationszulage und Einkommensfreibetrag dürfen pro Haushalt CHF 12000 nicht übersteigen",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info": "Integrationszulage und Einkommensfreibetrag dürfen pro Haushalt CHF {{ abzugslimite }} nicht übersteigen",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern": "Kantons- und Gemeindesteuern",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern": "Bundessteuern",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten": "Fahrkosten",
