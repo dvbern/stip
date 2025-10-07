@@ -529,7 +529,7 @@ public class GesuchService {
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        final var gesuchTranchen = gesuch.getGesuchTranchen();
+        final var gesuchTranchen = gesuch.getTranchenTranchen().toList();
         StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
 
         for (GesuchTranche tranche : gesuchTranchen) {
