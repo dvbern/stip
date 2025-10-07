@@ -18,8 +18,10 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
+import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +39,19 @@ public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusCh
     @Override
     @Transactional
     public void handle(Gesuch gesuch) {
-        final var gesuchTranche = gesuch.getLatestGesuchTranche();
-        final var stipDeciderResult = stipDecisionService.decide(gesuchTranche);
+        final var gesuchTranchen = gesuch.getGesuchTranchen();
+        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
+
+        for (GesuchTranche tranche : gesuchTranchen) {
+            final var trancheDecision = stipDecisionService.decide(tranche);
+            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
+                finalDecision = trancheDecision;
+                break;
+            }
+        }
         final var stipDecisionText = stipDecisionService.getTextForDecision(
-            stipDeciderResult,
-            gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+            finalDecision,
+            gesuchTranchen.getLast().getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
         );
 
         gesuchNotizService.createJuristischeNotiz(gesuch, JURISTISCHE_NOTIZ_BETREFF, stipDecisionText);

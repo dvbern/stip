@@ -528,26 +528,31 @@ public class GesuchService {
     @Transactional
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuch.getGesuchTranchen().size() != 1) {
-            throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
-        }
 
-        final var gesuchTranche = gesuch.getLatestGesuchTranche();
-        final var decision = stipDecisionService.decide(gesuchTranche);
-        final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
+        final var gesuchTranchen = gesuch.getGesuchTranchen();
+        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
+
+        for (GesuchTranche tranche : gesuchTranchen) {
+            final var trancheDecision = stipDecisionService.decide(tranche);
+            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
+                finalDecision = trancheDecision;
+                break;
+            }
+        }
+        final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(finalDecision);
         KommentarDto kommentarDto = null;
-        if (decision != StipDeciderResult.GESUCH_VALID) {
+        if (finalDecision != StipDeciderResult.GESUCH_VALID) {
             kommentarDto = new KommentarDto();
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
-                    decision,
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                    finalDecision,
+                    gesuchTranchen.getLast().getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
                 )
             );
         }
 
         gesuchStatusService.triggerStateMachineEventWithComment(
-            gesuchTranche.getGesuch(),
+            gesuch,
             gesuchStatusChangeEvent,
             kommentarDto,
             false
