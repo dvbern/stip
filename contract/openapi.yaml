@@ -7647,6 +7647,8 @@ components:
           type: string
         text:
           type: string
+        pendenz:
+          type: boolean
     GesuchNotiz:
       required:
         - userErstellt
