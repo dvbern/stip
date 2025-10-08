@@ -83,7 +83,7 @@ class GesuchAuthorizerUpdateAenderungTest {
     void setUp() {
         // gesuch in status verfuegt
         gesuch = TestUtil.getFullGesuch();
-        gesuch.setGesuchStatus(Gesuchstatus.VERSENDET);
+        gesuch.setGesuchStatus(Gesuchstatus.VERFUEGUNG_VERSENDET);
         gesuch.getAusbildung().setFall(new Fall());
 
         // gs created an aenderung

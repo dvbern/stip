@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.adresse.util.AdresseCopyUtil;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
@@ -34,6 +33,7 @@ import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.util.JwtUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -43,7 +43,6 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
-import ch.dvbern.stip.api.zahlungsverbindung.util.ZahlungsverbindungCopyUtil;
 import ch.dvbern.stip.generated.dto.BuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.BuchhaltungSaldokorrekturDto;
@@ -62,6 +61,7 @@ public class BuchhaltungService {
     private final FallRepository fallRepository;
     private final FallMapper fallMapper;
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
+    private final EntityCopyMapper entityCopyMapper;
 
     private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
         return buchhaltungList
@@ -177,12 +177,8 @@ public class BuchhaltungService {
             .setFall(gesuch.getAusbildung().getFall());
 
         if (Objects.nonNull(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung())) {
-            final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+            final var newZahlungsverbindung = entityCopyMapper.createCopy(
                 gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
-            );
-            newZahlungsverbindung.setAdresse(
-                AdresseCopyUtil
-                    .createCopy(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().getAdresse())
             );
             zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
             buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);
@@ -217,11 +213,8 @@ public class BuchhaltungService {
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
-        final var newZahlungsverbindung = ZahlungsverbindungCopyUtil.createCopyIgnoreReferences(
+        final var newZahlungsverbindung = entityCopyMapper.createCopy(
             gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
-        );
-        newZahlungsverbindung.setAdresse(
-            AdresseCopyUtil.createCopy(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().getAdresse())
         );
         zahlungsverbindungRepository.persistAndFlush(newZahlungsverbindung);
         buchhaltungEntry.setZahlungsverbindung(newZahlungsverbindung);

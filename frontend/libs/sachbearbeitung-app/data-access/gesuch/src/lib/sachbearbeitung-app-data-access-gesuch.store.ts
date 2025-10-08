@@ -201,6 +201,16 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
+    SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: rxMethod<{ gesuchTrancheId: string }>(
+      pipe(
+        this.handleStatusChange(({ gesuchTrancheId }) =>
+          this.gesuchService.changeGesuchStatusToDatenschutzbriefDruckbereit$({
+            gesuchTrancheId,
+          }),
+        ),
+      ),
+    ),
+
     ZURUECKWEISEN: rxMethod<{
       gesuchTrancheId: string;
       text: string;

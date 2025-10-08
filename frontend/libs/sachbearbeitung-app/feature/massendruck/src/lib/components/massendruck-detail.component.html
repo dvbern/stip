@@ -1,0 +1,251 @@
+<dv-sachbearbeitung-app-pattern-overview-layout>
+  @let massendruck = massendruckStore.massendruckViewSig().massendruckJob;
+
+  <div class="container">
+    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
+      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}
+      @if (massendruck) {
+        - {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.' + massendruck?.massendruckJobTyp | transloco }}
+      }
+    </h1>
+
+    <div class="tw:flex tw:items-center tw:min-h-24 tw:justify-between tw:relative">
+      @if (massendruck) {
+        <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
+          <!-- userErstellt -->
+          <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.userErstellt' | transloco }}</dt>
+          <dd>{{ massendruck?.userErstellt }}</dd>
+
+          <!-- Datum -->
+          <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.timestampErstellt' | transloco }}</dt>
+          <dd>{{ massendruck?.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+
+          <!-- status -->
+          <dt class="tw:font-medium">{{ 'sachbearbeitung-app.massendruck-detail.status' | transloco }}</dt>
+          <dd>
+            {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + massendruck?.massendruckJobStatus | transloco }}
+          </dd>
+        </dl>
+        @if (massendruck?.id) {
+          <ng-template #downloadDocument>
+            <button
+              type="button"
+              class="btn btn-link tw:p-0"
+              [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
+              [dvDownloadButton]="{
+                type: 'massendruck',
+                id: massendruck.id,
+              }"
+            >
+              <div class="material-symbols-rounded tw:text-4xl!">download</div>
+              <div>
+                {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
+              </div>
+            </button>
+          </ng-template>
+
+          @switch (massendruck.massendruckJobStatus) {
+            @case ('SUCCESS') {
+              <ng-container *ngTemplateOutlet="downloadDocument"></ng-container>
+            }
+            @case ('ARCHIVED') {
+              <ng-container *ngTemplateOutlet="downloadDocument"></ng-container>
+            }
+            @case ('FAILED') {
+              <div class="tw:flex tw:gap-4">
+                <button type="button" class="btn btn-danger" (click)="cancelMassendruckJob(massendruck)">
+                  <div class="material-symbols-rounded tw:text-xl! tw:mr-1 tw:align-middle">cancel</div>
+                  {{ 'sachbearbeitung-app.massendruck-detail.cancel' | transloco }}
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click)="retryMassendruckJob(massendruck)">
+                  <div class="material-symbols-rounded tw:text-xl! tw:mr-1 tw:align-middle">restart_alt</div>
+                  {{ 'sachbearbeitung-app.massendruck-detail.retry' | transloco }}
+                </button>
+              </div>
+            }
+          }
+        }
+      }
+      @if (massendruckStore.massendruckViewSig().loading) {
+        <dv-shared-ui-loading
+          class="position-absolute translate-middle start-50 top-50"
+          [type]="'compact'"
+        ></dv-shared-ui-loading>
+      }
+    </div>
+
+    <div class="tw:my-6">
+      <div class="tw:dv-table tw:relative">
+        <div [class.opacity-50]="massendruckStore.massendruckViewSig().loading">
+          <!-- filter form (header filters) -->
+          <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
+            <table
+              class="tw:w-full tw:table-fixed"
+              [dvSharedUiFocusableList]="itemsSig()"
+              [dataSource]="massendruckDetailDataSourceSig()"
+              data-testid="sachbearbeitung-app.massendruck-detail.table"
+              mat-table
+              matSort
+              tabindex="0"
+            >
+              <caption class="cdk-visually-hidden">
+                {{
+                  'sachbearbeitung-app.massendruck-detail.table.description' | transloco
+                }}
+              </caption>
+
+              <!-- Versendet: filterable, filter is a dropdown, checkbox in cell  -->
+              <ng-container matColumnDef="Versendet">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-24 tw:whitespace-nowrap">
+                  <label for="versendet">{{
+                    'sachbearbeitung-app.massendruck-detail.table.versendet' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
+                      <mat-select
+                        id="versendet"
+                        formControlName="versendet"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                        [placeholder]="'sachbearbeitung-app.massendruck-detail.table.versendet.filter.alle' | transloco"
+                      >
+                        <mat-option [value]="null">{{
+                          'sachbearbeitung-app.massendruck-detail.table.versendet.filter.alle' | transloco
+                        }}</mat-option>
+                        <mat-option [value]="true">{{
+                          'sachbearbeitung-app.massendruck-detail.table.versendet.filter.ja' | transloco
+                        }}</mat-option>
+                        <mat-option [value]="false">{{
+                          'sachbearbeitung-app.massendruck-detail.table.versendet.filter.nein' | transloco
+                        }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDetailDataSourceSig()"
+                  class="tw:w-24 tw:whitespace-nowrap"
+                >
+                  <mat-checkbox
+                    [checked]="item.isVersendet"
+                    [disabled]="item.isVersendet || massendruckStore.versendenReqViewSig().loading"
+                    (click)="$event.stopPropagation(); setMasendruckJobVersendet(item)"
+                  ></mat-checkbox>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Gesuch">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+                  <label for="gesuch">{{ 'sachbearbeitung-app.massendruck-detail.table.gesuch' | transloco }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
+                      <input
+                        id="gesuch"
+                        matInput
+                        formControlName="gesuch"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.gesuch.reset()"
+                      [valueSig]="filterForm.controls.gesuch.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDetailDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="item.gesuchNummer"
+                >
+                  <a
+                    [routerLink]="['/gesuch/eltern', item.gesuchId, 'tranche', item.gesuchTrancheId]"
+                    (click)="$event.stopPropagation()"
+                  >
+                    {{ item.gesuchNummer }}
+                  </a>
+                </td>
+              </ng-container>
+
+              <!-- Nachname: A non sortable, non searchable column -->
+              <ng-container matColumnDef="Nachname">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
+                  {{ 'sachbearbeitung-app.massendruck-detail.table.nachname' | transloco }}
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDetailDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="item.nachname"
+                >
+                  {{ item.nachname }}
+                </td>
+              </ng-container>
+
+              <!-- Vorname: A non sortable, non searchable column -->
+              <ng-container matColumnDef="Vorname">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
+                  {{ 'sachbearbeitung-app.massendruck-detail.table.vorname' | transloco }}
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDetailDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="item.vorname"
+                >
+                  {{ item.vorname }}
+                </td>
+              </ng-container>
+
+              <!-- Adressat: A non sortable, non searchable column -->
+              <ng-container matColumnDef="Adressat">
+                <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap tw:align-top">
+                  {{ 'sachbearbeitung-app.massendruck-detail.table.adressat' | transloco }}
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDetailDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                >
+                  {{ 'sachbearbeitung-app.massendruck-detail.table.adressat.' + item.adressat | transloco }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                dvSharedUiFocusableListItem
+                mat-row
+                tabindex="-1"
+                *dvMatRowDef="let item; dataSource: massendruckDetailDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/gesuch/eltern', item.gesuchId, 'tranche', item.gesuchTrancheId]"
+                class="highlightable"
+              ></tr>
+              <tr class="mat-mdc-row" *matNoDataRow>
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+                  {{ 'shared.table.noData' | transloco }}
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              showFirstLastButtons
+              [pageSizeOptions]="pageSizes"
+              [pageSize]="defaultPageSize"
+              [length]="massendruckDetailDataSourceSig().data.length"
+              showFirstLastButtons
+            ></mat-paginator>
+          </form>
+        </div>
+        @if (massendruckStore.massendruckViewSig().loading) {
+          <dv-shared-ui-loading
+            class="position-absolute translate-middle start-50 top-50"
+            [type]="'compact'"
+          ></dv-shared-ui-loading>
+        }
+      </div>
+    </div>
+  </div>
+</dv-sachbearbeitung-app-pattern-overview-layout>

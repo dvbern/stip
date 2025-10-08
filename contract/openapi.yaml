@@ -84,6 +84,267 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAuszahlungForGesuch
       summary: Get Auszahlung
+  /massendruck/{getMassendruckJobs}:
+    get:
+      tags:
+        - Massendruck
+      parameters:
+        - name: getMassendruckJobs
+          schema:
+            $ref: '#/components/schemas/GetMassendruckJobQueryType'
+          in: path
+          required: true
+        - $ref: '#/components/parameters/userErstellt'
+        - $ref: '#/components/parameters/timestampErstellt'
+        - $ref: '#/components/parameters/MassendruckJobStatus'
+        - $ref: '#/components/parameters/MassendruckJobTyp'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/MassendruckJobSortColumn'
+          in: query
+          required: false
+        - $ref: '#/components/parameters/sortOrder'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMassendruckJob'
+          description: Returns the PDF document for the given GesuchTrancheId and DokumentTyp
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllMassendruckJobs
+      summary: Get all Massendruck Jobs
+  /massendruck/{getGesucheSBQueryType}/create:
+    parameters:
+      - name: getGesucheSBQueryType
+        schema:
+          $ref: '#/components/schemas/GetGesucheSBQueryType'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJob'
+          description: The created Massendruck Job
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createMassendruckJobForQueryType
+      description: Create a Massendruck Job for the given query type
+  /massendruck/detail/{massendruckJobId}:
+    parameters:
+      - name: massendruckJobId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJobDetail'
+          description: The created Massendruck Job
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getMassendruckJobDetail
+      description: Create a Massendruck Job for the given query type
+  /massendruck/datenschutzbrief/versendet/{massendruckDatenschutzbriefId}:
+    parameters:
+      - name: massendruckDatenschutzbriefId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckDatenschutzbrief'
+          description: The updated Massendruck Datenschutzbrief
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: massendruckDatenschutzbriefVersenden
+      description: Send a Massendruck Datenschutzbrief
+  /massendruck/verfuegung/versendet/{massendruckVerfuegungId}:
+    parameters:
+      - name: massendruckVerfuegungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckVerfuegung'
+          description: The updated Massendruck Datenschutzbrief
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: massendruckVerfuegungVersenden
+      description: Send a Massendruck Verfuegung
+  /massendruck/{massendruckId}/token:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
+      operationId: getMassendruckDownloadToken
+      summary: get Token to downlaod Verfuegung
+  /massendruck/{massendruckId}/delete:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '204':
+          description: Massendruck Job deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteMassendruckJob
+      summary: Delete failed Massendruck Job
+  /massendruck/{massendruckId}/retry:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJobDetail'
+          description: The retried Massendruck Job
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: retryMassendruckJob
+      summary: Delete failed Massendruck Job
+  /massendruck/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadMassendruckDocument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   /gesuch:
     post:
       requestBody:
@@ -301,6 +562,32 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToBereitFuerBearbeitung
+  /gesuch/status/datenschutzbrief-druckbereit/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToDatenschutzbriefDruckbereit
   /gesuch/status/verfuegt/{gesuchTrancheId}:
     post:
       tags:
@@ -1188,7 +1475,7 @@ paths:
       operationId: createUnterschriftenblatt
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   '/unterschriftenblatt/{gesuchId}':
-     get:
+    get:
       tags:
         - Dokument
       parameters:
@@ -1975,7 +2262,7 @@ paths:
       - $ref: '#/components/parameters/sozialdienstId'
     post:
       tags:
-      - Delegieren
+        - Delegieren
       requestBody:
         required: true
         content:
@@ -2157,9 +2444,9 @@ paths:
       requestBody:
         required: true
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Land'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: Returns all countries and whether they're part of eu/efta or not
@@ -2187,9 +2474,9 @@ paths:
       requestBody:
         required: true
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Land'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Land'
       responses:
         '200':
           description: 'EU/EFTA Länder wurden erflogreich gesetzt'
@@ -2282,32 +2569,32 @@ paths:
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
-        parameters:
-          - name: gesuchTrancheId
-            schema:
-              $ref: '#/components/schemas/UUID'
-            in: path
-            required: true
-        get:
-          tags:
-            - Gesuch
-          responses:
-            '200':
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Gesuch'
-              description: OK
-            '401':
-              $ref: '#/components/responses/Unauthorized'
-            '403':
-              $ref: '#/components/responses/Forbidden'
-            '404':
-              $ref: '#/components/responses/NotFound'
-            '500':
-              $ref: '#/components/responses/ServerError'
-          operationId: getGesuchGS
-          summary: Returns the Gesuch with the given Id
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchGS
+      summary: Returns the Gesuch with the given Id
   '/gesuch/sb/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId
@@ -2460,6 +2747,61 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: updateSteuerdaten
       summary: Updates the Steuerdaten of the given gesuchTrancheId
+  '/datenschutzbrief/{trancheId}/download':
+    parameters:
+      - name: trancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Datenschutzbrief File returned
+      operationId: getDatenschutzbrief
+      summary: get Datenschutzbrief
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream>
+  '/datenschutzbrief/{elternId}/token':
+    parameters:
+      - name: elternId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: Datenschutzbrief File Download Token returned
+      operationId: getDatenschutzbriefDownloadToken
+      summary: get Token to downlaod Verfuegung
   '/verfuegung/download':
     parameters:
       - name: token
@@ -2667,7 +3009,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchManuellPruefenJur
       summary: Das Gesuch manuell pruefen als Jurist
-  '/gesuch/{gesuchId}/verfuegungen':
+  '/gesuch/{gesuchId}/adminDokumente':
     parameters:
       - name: gesuchId
         schema:
@@ -2682,9 +3024,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Verfuegung'
+                $ref: '#/components/schemas/AdminDokumente'
           description: Returns a List of all Verfuegungen for a Gesuch
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -2694,8 +3034,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllVerfuegungen
-      summary: All Verfuegungen for a gesuch
+      operationId: getAdminDokumente
+      summary: All dokument information required for the Admin tab in Info of Gesuch
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -4290,6 +4630,78 @@ components:
           type: string
         stipDecision:
           $ref: '#/components/schemas/StipDecision'
+    MassendruckJob:
+      type: object
+      required:
+        - id
+        - userErstellt
+        - timestampErstellt
+        - massendruckJobStatus
+        - massendruckJobTyp
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        userErstellt:
+          type: string
+        timestampErstellt:
+          type: string
+          format: date-time
+        massendruckJobStatus:
+          $ref: '#/components/schemas/MassendruckJobStatus'
+        massendruckJobTyp:
+          $ref: '#/components/schemas/MassendruckJobTyp'
+    MassendruckJobDetail:
+      type: object
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/MassendruckJob'
+      properties:
+        datenschutzbriefMassendrucks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckDatenschutzbrief'
+        verfuegungMassendrucks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckVerfuegung'
+    MassendruckEntry:
+      type: object
+      required:
+        - id
+        - isVersendet
+        - nachname
+        - vorname
+        - gesuchNummer
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        isVersendet:
+          type: boolean
+        nachname:
+          type: string
+        vorname:
+          type: string
+        gesuchNummer:
+          type: string
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
+    MassendruckVerfuegung:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MassendruckEntry'
+    MassendruckDatenschutzbrief:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MassendruckEntry'
+      required:
+        - elternTyp
+      properties:
+        elternTyp:
+          $ref: '#/components/schemas/ElternTyp'
     WelcomeMail:
       type: object
       required:
@@ -4436,8 +4848,10 @@ components:
       enum:
         - ABKLAERUNG_DURCH_RECHSTABTEILUNG
         - VERFUEGT
-        - VERSANDBEREIT
-        - VERSENDET
+        - VERFUEGUNG_DRUCKBEREIT
+        - VERFUEGUNG_AM_GENERIEREN
+        - VERFUEGUNG_VERSANDBEREIT
+        - VERFUEGUNG_VERSENDET
         - WARTEN_AUF_UNTERSCHRIFTENBLATT
         - IN_BEARBEITUNG_SB
         - IN_FREIGABE
@@ -4454,14 +4868,29 @@ components:
         - STIPENDIENANSPRUCH
         - GESUCH_ABGELEHNT
         - NEGATIVE_VERFUEGUNG
+        - DATENSCHUTZBRIEF_DRUCKBEREIT
+        - DATENSCHUTZBRIEF_AM_GENERIEREN
+        - DATENSCHUTZBRIEF_VERSANDBEREIT
+      type: string
+    GetMassendruckJobQueryType:
+      enum:
+        - ALLE
+        - ALLE_AKTIV # includes status: IN_GENERIERUNG, VERSANDBEREIT, FEHLERHAFTE_GENERIERUNG
+        - ALLE_ARCHIVIERT
+        - ALLE_FEHLERHAFTE_GENERIERUNG
       type: string
     GetGesucheSBQueryType:
       enum:
+        - ALLE_GESUCHE
+        - MEINE_GESUCHE
         - ALLE_BEARBEITBAR
-        - ALLE_BEARBEITBAR_MEINE
-        - ALLE_JURISTISCHE_ABKLAERUNG_MEINE
-        - ALLE_MEINE
-        - ALLE
+        - MEINE_BEARBEITBAR
+        - ALLE_JURISTISCHE_ABKLAERUNG
+        - MEINE_JURISTISCHE_ABKLAERUNG
+        - ALLE_DRUCKBAR_VERFUEGUNGEN
+        - MEINE_DRUCKBAR_VERFUEGUNGEN
+        - ALLE_DRUCKBAR_DATENSCHUTZBRIEFE
+        - MEINE_DRUCKBAR_DATENSCHUTZBRIEFE
       type: string
     GetDelegierungSozQueryTypeMitarbeiter:
       enum:
@@ -4960,7 +5389,7 @@ components:
         kommentar:
           type: string
         fileUpload:
-          $ref: "#/components/schemas/FileUpload"
+          $ref: '#/components/schemas/FileUpload'
     Gesuch:
       required:
         - fallId
@@ -6134,7 +6563,7 @@ components:
         bildungskategorie:
           $ref: '#/components/schemas/Bildungskategorie'
         bildungsrichtung:
-          $ref: "#/components/schemas/Bildungsrichtung"
+          $ref: '#/components/schemas/Bildungsrichtung'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
@@ -6181,7 +6610,7 @@ components:
         ausbildungskategorie:
           $ref: '#/components/schemas/Ausbildungskategorie'
         bildungsrichtung:
-          $ref: "#/components/schemas/Bildungsrichtung"
+          $ref: '#/components/schemas/Bildungsrichtung'
         zusatzfrage:
           $ref: '#/components/schemas/AbschlussZusatzfrage'
         aktiv:
@@ -6805,6 +7234,16 @@ components:
           type: string
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
+    MassendruckJobTyp:
+      enum:
+        - DATENSCHUTZBRIEF
+        - VERFUEGUNG
+    MassendruckJobStatus:
+      enum:
+        - IN_PROGRESS
+        - SUCCESS
+        - FAILED
+        - ARCHIVED
     GesuchTrancheTyp:
       enum:
         - AENDERUNG
@@ -6929,6 +7368,7 @@ components:
         - maxSaeule3a
         - einkommensfreibetrag
         - freibetragErwerbseinkommen
+        - abzugslimite
         - freibetragVermoegen
         - vermoegensanteilInProzent
         - anzahlWochenLehre
@@ -6941,6 +7381,8 @@ components:
         maxSaeule3a:
           type: integer
         einkommensfreibetrag:
+          type: integer
+        abzugslimite:
           type: integer
         freibetragErwerbseinkommen:
           type: integer
@@ -7242,6 +7684,14 @@ components:
           type: integer
         totalEntries:
           type: integer
+    PaginatedMassendruckJob:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckJob'
     PaginatedSbDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7297,6 +7747,11 @@ components:
         letzteAktivitaet:
           type: string
           format: date
+    MassendruckJobSortColumn:
+      enum:
+        - TIMESTAMP_ERSTELLT
+        - USER_ERSTELLT
+        - STATUS
     SbDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7572,6 +8027,17 @@ components:
           type: string
         bezeichnungFr:
           type: string
+    AdminDokumente:
+      type: object
+      required:
+        - verfuegungen
+      properties:
+        verfuegungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Verfuegung'
+        datenschutzbriefMassendruckJobId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
@@ -7645,6 +8111,16 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
+    MassendruckJobTyp:
+      in: query
+      name: massendruckJobTyp
+      schema:
+        $ref: '#/components/schemas/MassendruckJobTyp'
+    MassendruckJobStatus:
+      in: query
+      name: massendruckJobStatus
+      schema:
+        $ref: '#/components/schemas/MassendruckJobStatus'
     fallNummer:
       in: query
       name: fallNummer
@@ -7707,6 +8183,17 @@ components:
       name: bearbeiter
       schema:
         type: string
+    userErstellt:
+      in: query
+      name: userErstellt
+      schema:
+        type: string
+    timestampErstellt:
+      in: query
+      name: timestampErstellt
+      schema:
+        type: string
+        format: date
     letzteAktivitaetFrom:
       in: query
       name: letzteAktivitaetFrom
@@ -7861,6 +8348,7 @@ security:
   - auth-dev-bern: []
 tags:
   - name: Ausbildungsstaette
+  - name: Massendruck
   - name: Auth
   - name: Configuration
   - name: Fall

@@ -35,8 +35,10 @@ const generatedApis = [
   'Bildungskategorie',
   'Buchhaltung',
   'Configuration',
+  'Datenschutzbrief',
   'Delegieren',
   'Dokument',
+  'Drucken',
   'Fall',
   'Gesuch',
   'GesuchNotiz',
@@ -45,6 +47,7 @@ const generatedApis = [
   'GesuchTranche',
   'Land',
   'Mail',
+  'Massendruck',
   'Notification',
   'Plz',
   'Sozialdienst',
@@ -55,6 +58,7 @@ const generatedApis = [
   'StipDecision',
   'Tenant',
   'Verfuegung',
+  'Massendruck',
 ];
 
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');

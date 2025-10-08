@@ -19,11 +19,8 @@ package ch.dvbern.stip.api.benutzer.service;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.common.util.WorkerExecutorUtil;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
-import io.quarkus.arc.Arc;
-import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.Startup;
 import io.vertx.core.Vertx;
@@ -74,26 +71,6 @@ public class SachbearbeiterZuordnungStammdatenWorker {
     }
 
     private void run(final String tenantId, final Runnable body, final @Nullable Runnable tail) {
-        executor.executeBlocking(() -> {
-            try {
-                QuarkusTransaction.requiringNew().run(() -> {
-                    try (
-                        final var ignored1 = DataTenantResolver.setTenantId(tenantId);
-                        final var ignored2 = TenantService.setTenantId(tenantId)
-                    ) {
-                        Arc.container().requestContext().activate();
-                        body.run();
-                    }
-                });
-            } catch (Exception e) {
-                LOG.error(e.toString(), e);
-            } finally {
-                if (tail != null) {
-                    tail.run();
-                }
-            }
-
-            return null;
-        });
+        WorkerExecutorUtil.executeBlockingWithTransaction(executor, tenantId, body, null, tail, LOG);
     }
 }

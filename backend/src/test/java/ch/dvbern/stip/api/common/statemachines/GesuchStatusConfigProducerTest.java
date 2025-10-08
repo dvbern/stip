@@ -20,6 +20,8 @@ package ch.dvbern.stip.api.common.statemachines;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -28,8 +30,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import org.junit.jupiter.api.Test;
@@ -49,14 +51,16 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(KomplettEingereichtHandler.class),
             Mockito.mock(FehlendeDokumenteEinreichenHandler.class),
             Mockito.mock(FehlendeDokumenteHandler.class),
-            Mockito.mock(VersandbereitHandler.class),
-            Mockito.mock(VersendetHandler.class),
+            Mockito.mock(VerfuegungDruckbereitHandler.class),
+            Mockito.mock(VerfuegungVersendetHandler.class),
             Mockito.mock(NegativeVerfuegungHandler.class),
             Mockito.mock(AenderungZurueckweisenHandler.class),
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class),
             Mockito.mock(StipendienAnspruchHandler.class),
             Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class),
-            Mockito.mock(StatusprotokollService.class)
+            Mockito.mock(StatusprotokollService.class),
+            Mockito.mock(DatenschutzDruckbereitHandler.class),
+            Mockito.mock(BereitFuerBearbeitungHandler.class)
         )
             .createStateMachineConfig();
 

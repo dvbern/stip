@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.adresse.service.AdresseMapperImpl;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
+import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
@@ -72,6 +73,7 @@ class DelegierenResourceImplTest {
     private SozialdienstBenutzerService sozialdienstBenutzerService;
     private NotificationService notificationService;
     private MailService mailService;
+    private EntityCopyMapper entityCopyMapper;
 
     @BeforeEach
     void setup() {
@@ -85,6 +87,7 @@ class DelegierenResourceImplTest {
         adresseMapper = Mockito.mock(AdresseMapperImpl.class);
         notificationService = Mockito.mock(NotificationService.class);
         mailService = Mockito.mock(MailService.class);
+        entityCopyMapper = Mockito.mock(EntityCopyMapper.class);
 
         PersoenlicheAngabenMapper persoenlicheAngabenMapper = new PersoenlicheAngabenMapperImpl(adresseMapper);
         DelegierenAuthorizer delegierenAuthorizer = new DelegierenAuthorizer(
@@ -94,7 +97,7 @@ class DelegierenResourceImplTest {
         DelegierenService delegierenService = new DelegierenService(
             delegierungRepository, fallRepository, sozialdienstRepository, sozialdienstService,
             sozialdienstBenutzerRepository, persoenlicheAngabenMapper, null, null,
-            null, notificationService, mailService
+            null, notificationService, mailService, entityCopyMapper
         );
         delegierenApi = new DelegierenResourceImpl(delegierenAuthorizer, delegierenService);
     }

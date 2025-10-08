@@ -31,6 +31,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     VERSENDET: vitest.fn(),
     ZURUECKWEISEN: vitest.fn(),
     STATUS_PRUEFUNG_AUSLOESEN: vitest.fn(),
+    SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: vitest.fn(),
   } satisfies Record<StatusUebergang, unknown>;
 
   beforeEach(async () => {
