@@ -5241,17 +5241,10 @@ components:
           type: string
         nachname:
           type: string
-        ausbildungMitEinkommenOderErwerbstaetig:
+        inAusbildung:
           type: boolean
-        jahreseinkommen:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: integer
-        fahrkosten:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: integer
-        verpflegungskosten:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: integer
+        ausbildungspensum:
+          $ref: '#/components/schemas/AusbildungsPensum'
     KindUpdate:
       title: Root Type for Geschwister
       required:
@@ -5277,7 +5270,15 @@ components:
           type: integer
         nachname:
           type: string
-        erhalteneAlimentebeitraege:
+        unterhaltsbeitraege:
+          type: integer
+        kinderUndAusbildungszulagen:
+          type: integer
+        renten:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        andereEinnahmen:
           type: integer
     FallAuszahlung:
       type: object
@@ -5802,11 +5803,6 @@ components:
           $ref: '#/components/schemas/ElternTyp'
         nachname:
           type: string
-        ergaenzungsleistungen:
-          description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
-            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
-          type: integer
         sozialhilfebeitraege:
           type: boolean
         wohnkosten:
@@ -6133,7 +6129,6 @@ components:
       required:
         - nettoerwerbseinkommen
         - fahrkosten
-        - verdienstRealisiert
       type: object
       properties:
         nettoerwerbseinkommen:
@@ -6141,8 +6136,7 @@ components:
         arbeitspensumProzent:
           description: Required nur wenn nettoerwerbseinkommen > 0
           type: integer
-        #todo: rename to unterhaltsbeitraege
-        alimente:
+        unterhaltsbeitraege:
           description: Wird immer angezeigt, ist aber optional
           type: integer
         einnahmenBGSA:
@@ -6178,6 +6172,8 @@ components:
           type: boolean
         auswaertigeMittagessenProWoche:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
+          type: integer
+        verplegungskosten:
           type: integer
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
@@ -7028,6 +7024,14 @@ components:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
+        ergaenzungsleistungen:
+          type: integer
+        unterhaltsbeitraege:
+          type: integer
+        renten:
+          type: integer
+        bgsa:
+          type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
       required:
@@ -7038,7 +7042,6 @@ components:
         - totalEinkuenfte
         - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
-        - kinderalimente
         - vermoegen
         - steuerdatenTyp
       type: object
@@ -7072,8 +7075,6 @@ components:
         saeule3a:
           type: integer
         saeule2:
-          type: integer
-        kinderalimente:
           type: integer
         vermoegen:
           type: integer
