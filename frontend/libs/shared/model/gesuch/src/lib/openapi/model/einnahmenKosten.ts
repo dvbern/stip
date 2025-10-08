@@ -37,6 +37,8 @@ export interface EinnahmenKosten {
      * Required nur wenn Person eigener Haushalt hat
      */
     wgWohnend?: boolean;
+    wgAnzahlPersonen?: number;
+    alternativeWohnformWohnend?: boolean;
     verdienstRealisiert: boolean;
     /**
      * Required nur wenn die Person keinen eigenen Haushalt führt
