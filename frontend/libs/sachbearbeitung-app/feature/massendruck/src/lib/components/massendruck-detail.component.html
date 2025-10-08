@@ -3,7 +3,7 @@
 
   <div class="container">
     <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
-      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}&nbsp;{{ massendruck?.massendruckJobNumber }}
+      {{ 'sachbearbeitung-app.massendruck-detail.title' | transloco }}
       @if (massendruck) {
         - {{ 'sachbearbeitung-app.massendruck-detail.massendruckJobTyp.' + massendruck?.massendruckJobTyp | transloco }}
       }
@@ -27,22 +27,29 @@
           </dd>
         </dl>
         @if (massendruck?.id) {
+          <ng-template #downloadDocument>
+            <button
+              type="button"
+              class="btn btn-link tw:p-0"
+              [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
+              [dvDownloadButton]="{
+                type: 'massendruck',
+                id: massendruck.id,
+              }"
+            >
+              <div class="material-symbols-rounded tw:text-4xl!">download</div>
+              <div>
+                {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
+              </div>
+            </button>
+          </ng-template>
+
           @switch (massendruck.massendruckJobStatus) {
             @case ('SUCCESS') {
-              <button
-                type="button"
-                class="btn btn-link tw:p-0"
-                [attr.aria-label]="'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco"
-                [dvDownloadButton]="{
-                  type: 'massendruck',
-                  id: massendruck.id,
-                }"
-              >
-                <div class="material-symbols-rounded tw:text-4xl!">download</div>
-                <div>
-                  {{ 'sachbearbeitung-app.massendruck-detail.dokument-download' | transloco }}
-                </div>
-              </button>
+              <ng-container *ngTemplateOutlet="downloadDocument"></ng-container>
+            }
+            @case ('ARCHIVED') {
+              <ng-container *ngTemplateOutlet="downloadDocument"></ng-container>
             }
             @case ('FAILED') {
               <div class="tw:flex tw:gap-4">

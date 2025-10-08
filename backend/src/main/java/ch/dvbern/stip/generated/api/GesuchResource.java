@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
@@ -23,7 +24,6 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.generated.dto.VerfuegungDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -155,14 +155,14 @@ public interface GesuchResource {
     GesuchZurueckweisenResponseDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
+    @Path("/{gesuchId}/adminDokumente")
+    @Produces({ "application/json", "text/plain" })
+    AdminDokumenteDto getAdminDokumente(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/{gesuchId}/verfuegungen")
-    @Produces({ "application/json", "text/plain" })
-    List<VerfuegungDto> getAllVerfuegungen(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/berechnung")

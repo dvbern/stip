@@ -2,6 +2,7 @@ export * from './abschluss';
 export * from './abschlussSlim';
 export * from './abschlussSortColumn';
 export * from './abschlussZusatzfrage';
+export * from './adminDokumente';
 export * from './adresse';
 export * from './anrede';
 export * from './ausbildung';

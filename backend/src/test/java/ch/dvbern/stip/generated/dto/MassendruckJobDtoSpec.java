@@ -31,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   MassendruckJobDtoSpec.JSON_PROPERTY_ID,
-  MassendruckJobDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER,
   MassendruckJobDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   MassendruckJobDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
   MassendruckJobDtoSpec.JSON_PROPERTY_MASSENDRUCK_JOB_STATUS,
@@ -42,9 +41,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class MassendruckJobDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
-
-  public static final String JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER = "massendruckJobNumber";
-  private Integer massendruckJobNumber;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
   private String userErstellt;
@@ -84,32 +80,6 @@ public class MassendruckJobDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
-  }
-
-
-  public MassendruckJobDtoSpec massendruckJobNumber(Integer massendruckJobNumber) {
-    
-    this.massendruckJobNumber = massendruckJobNumber;
-    return this;
-  }
-
-   /**
-   * Get massendruckJobNumber
-   * @return massendruckJobNumber
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getMassendruckJobNumber() {
-    return massendruckJobNumber;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MASSENDRUCK_JOB_NUMBER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMassendruckJobNumber(Integer massendruckJobNumber) {
-    this.massendruckJobNumber = massendruckJobNumber;
   }
 
 
@@ -226,7 +196,6 @@ public class MassendruckJobDtoSpec {
     }
     MassendruckJobDtoSpec massendruckJob = (MassendruckJobDtoSpec) o;
     return Objects.equals(this.id, massendruckJob.id) &&
-        Objects.equals(this.massendruckJobNumber, massendruckJob.massendruckJobNumber) &&
         Objects.equals(this.userErstellt, massendruckJob.userErstellt) &&
         Objects.equals(this.timestampErstellt, massendruckJob.timestampErstellt) &&
         Objects.equals(this.massendruckJobStatus, massendruckJob.massendruckJobStatus) &&
@@ -235,7 +204,7 @@ public class MassendruckJobDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, massendruckJobNumber, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
+    return Objects.hash(id, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
   }
 
   @Override
@@ -243,7 +212,6 @@ public class MassendruckJobDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class MassendruckJobDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    massendruckJobNumber: ").append(toIndentedString(massendruckJobNumber)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    massendruckJobStatus: ").append(toIndentedString(massendruckJobStatus)).append("\n");

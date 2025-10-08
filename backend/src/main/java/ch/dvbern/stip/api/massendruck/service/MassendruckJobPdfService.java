@@ -110,7 +110,7 @@ public class MassendruckJobPdfService {
         // Set the Document for MassendruckJob
         // Set the objectId to MassendruckJob ID for easy document downloading
         final var objectId = String.format("%s.pdf", massendruckJob.getId());
-        final var fileName = String.format("massendruck_%s.pdf", massendruckJob.getMassendruckJobNumber());
+        final var fileName = String.format("massendruck_%s.pdf", massendruckJob.getMassendruckTyp());
 
         final var dokument = new Dokument()
             .setFilename(fileName)

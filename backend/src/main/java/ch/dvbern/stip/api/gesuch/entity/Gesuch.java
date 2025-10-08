@@ -75,7 +75,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     }
 )
 @OnlyOneTrancheInBearbeitungConstraint
-@MaxTwoDatenschutzbriefePerGesuchConstraint
 @Audited
 @Entity
 @Table(

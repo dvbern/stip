@@ -1,5 +1,6 @@
 @let view = viewSig();
 @let gesuchTrancheId = view.gesuch?.gesuchTrancheToWorkWith?.id;
+
 @if (view.loading) {
   <dv-shared-ui-loading data-testid="form-eltern-steuerdaten-loading"></dv-shared-ui-loading>
 } @else {
@@ -305,4 +306,8 @@
       }
     </dv-shared-ui-step-form-buttons>
   </form>
+}
+
+@if (areSteuerdatenLoadingSig()) {
+  <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }

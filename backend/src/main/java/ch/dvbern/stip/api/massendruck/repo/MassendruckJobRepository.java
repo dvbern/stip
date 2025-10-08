@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.massendruck.repo;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
@@ -52,5 +53,15 @@ public class MassendruckJobRepository implements BaseRepository<MassendruckJob> 
             .delete(massendruckJob)
             .where(massendruckJob.id.eq(massendruckId))
             .execute();
+    }
+
+    public Optional<MassendruckJob> getDatenschutzMassendruckJobForGesuchId(final UUID gesuchId) {
+        final var massendruckJob = QMassendruckJob.massendruckJob;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(massendruckJob)
+            .where(massendruckJob.datenschutzbriefMassendrucks.any().datenschutzbrief.gesuch.id.eq(gesuchId))
+            .stream()
+            .findFirst();
     }
 }

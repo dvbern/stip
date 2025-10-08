@@ -37,6 +37,8 @@ import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -44,7 +46,11 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@QuarkusTest
 class GesuchTrancheServiceTruncateTest {
+    @Inject
+    GesuchTrancheCopyService gesuchTrancheCopyService;
+
     @Test
     void oneExistingTruncated() {
         // Arrange
@@ -340,7 +346,8 @@ class GesuchTrancheServiceTruncateTest {
             mockTrancheRepo,
             mockGesuchDokumentKommentarService,
             mockGesuchDokumentService,
-            mockDokumentRepository
+            mockDokumentRepository,
+            gesuchTrancheCopyService
         );
     }
 

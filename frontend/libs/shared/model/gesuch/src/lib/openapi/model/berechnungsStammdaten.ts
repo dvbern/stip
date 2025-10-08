@@ -16,6 +16,7 @@
 export interface BerechnungsStammdaten { 
     maxSaeule3a: number;
     einkommensfreibetrag: number;
+    abzugslimite: number;
     freibetragErwerbseinkommen: number;
     freibetragVermoegen: number;
     vermoegensanteilInProzent: number;

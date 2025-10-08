@@ -26,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class MassendruckJobDetailDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid Integer massendruckJobNumber;
   private @Valid String userErstellt;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
@@ -51,25 +50,6 @@ public class MassendruckJobDetailDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public MassendruckJobDetailDto massendruckJobNumber(Integer massendruckJobNumber) {
-    this.massendruckJobNumber = massendruckJobNumber;
-    return this;
-  }
-
-  
-  @JsonProperty("massendruckJobNumber")
-  @NotNull
-  public Integer getMassendruckJobNumber() {
-    return massendruckJobNumber;
-  }
-
-  @JsonProperty("massendruckJobNumber")
-  public void setMassendruckJobNumber(Integer massendruckJobNumber) {
-    this.massendruckJobNumber = massendruckJobNumber;
   }
 
   /**
@@ -227,7 +207,6 @@ public class MassendruckJobDetailDto  implements Serializable {
     }
     MassendruckJobDetailDto massendruckJobDetail = (MassendruckJobDetailDto) o;
     return Objects.equals(this.id, massendruckJobDetail.id) &&
-        Objects.equals(this.massendruckJobNumber, massendruckJobDetail.massendruckJobNumber) &&
         Objects.equals(this.userErstellt, massendruckJobDetail.userErstellt) &&
         Objects.equals(this.timestampErstellt, massendruckJobDetail.timestampErstellt) &&
         Objects.equals(this.massendruckJobStatus, massendruckJobDetail.massendruckJobStatus) &&
@@ -238,7 +217,7 @@ public class MassendruckJobDetailDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, massendruckJobNumber, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp, datenschutzbriefMassendrucks, verfuegungMassendrucks);
+    return Objects.hash(id, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp, datenschutzbriefMassendrucks, verfuegungMassendrucks);
   }
 
   @Override
@@ -247,7 +226,6 @@ public class MassendruckJobDetailDto  implements Serializable {
     sb.append("class MassendruckJobDetailDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    massendruckJobNumber: ").append(toIndentedString(massendruckJobNumber)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    massendruckJobStatus: ").append(toIndentedString(massendruckJobStatus)).append("\n");

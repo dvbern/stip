@@ -4,6 +4,7 @@ import {
   BESCHWERDEN_ROUTE,
   BUCHHALTUNG_ROUTE,
   DARLEHEN_ROUTE,
+  INFO_ADMIN_DOKUMENTE_ROUTE,
   INFO_ADMIN_ROUTE,
   NOTIZEN_ROUTE,
   PROTOKOLL_ROUTE,
@@ -26,6 +27,13 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos-notizen').then(
             (m) => m.sachbearbeitungAppFeatureInfosNotizenRoutes,
+          ),
+      },
+      {
+        path: INFO_ADMIN_DOKUMENTE_ROUTE.route,
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/infos-gesuchsdokumente').then(
+            (m) => m.sachbearbeitungAppFeatureInfosGesuchsdokumenteRoutes,
           ),
       },
       {

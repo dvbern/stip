@@ -58,12 +58,7 @@ public class DokumentDownloadUtil {
             response -> Multi.createFrom()
                 .items(response)
                 .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray())),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + fileName),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
+            response -> getRequiredHeaders(fileName)
         );
     }
 

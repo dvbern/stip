@@ -174,6 +174,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
               wohnkosten: f.effektiveWohnkosten,
               medizinischeGrundversorgung: f.medizinischeGrundversorgung,
               integrationszulage: f.integrationszulage,
+              abzugslimite: sd.abzugslimite,
               kantonsGemeindesteuern: f.steuernKantonGemeinde,
               bundessteuern: f.steuernBund,
               fahrkosten: f.fahrkostenPerson1,

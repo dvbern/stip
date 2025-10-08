@@ -21,10 +21,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.admindokumente.service.AdminDokumenteService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
@@ -49,6 +49,7 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
+import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
@@ -68,10 +69,8 @@ import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
-import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
@@ -120,6 +119,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final StatusprotokollService statusprotokollService;
+    private final AdminDokumenteService adminDokumenteService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -273,9 +273,9 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public List<VerfuegungDto> getAllVerfuegungen(UUID gesuchId) {
+    public AdminDokumenteDto getAdminDokumente(UUID gesuchId) {
         gesuchAuthorizer.sbCanRead();
-        return verfuegungService.getVerfuegungenByGesuch(gesuchId);
+        return adminDokumenteService.getAdminDokumente(gesuchId);
     }
 
     @Override
@@ -448,18 +448,8 @@ public class GesuchResourceImpl implements GesuchResource {
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
-        return RestMulti.fromUniResponse(
-            Uni.createFrom().item(finalByteStream),
-            response -> Multi.createFrom()
-                .items(response)
-                .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray())),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + gesuchService.getBerechnungsblattFileName(gesuchId)),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
-        );
+        return DokumentDownloadUtil
+            .getWrapedDokument(gesuchService.getBerechnungsblattFileName(gesuchId), finalByteStream);
     }
 
     @Override

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class MassendruckJobDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid Integer massendruckJobNumber;
   private @Valid String userErstellt;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus massendruckJobStatus;
@@ -44,25 +43,6 @@ public class MassendruckJobDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public MassendruckJobDto massendruckJobNumber(Integer massendruckJobNumber) {
-    this.massendruckJobNumber = massendruckJobNumber;
-    return this;
-  }
-
-  
-  @JsonProperty("massendruckJobNumber")
-  @NotNull
-  public Integer getMassendruckJobNumber() {
-    return massendruckJobNumber;
-  }
-
-  @JsonProperty("massendruckJobNumber")
-  public void setMassendruckJobNumber(Integer massendruckJobNumber) {
-    this.massendruckJobNumber = massendruckJobNumber;
   }
 
   /**
@@ -152,7 +132,6 @@ public class MassendruckJobDto  implements Serializable {
     }
     MassendruckJobDto massendruckJob = (MassendruckJobDto) o;
     return Objects.equals(this.id, massendruckJob.id) &&
-        Objects.equals(this.massendruckJobNumber, massendruckJob.massendruckJobNumber) &&
         Objects.equals(this.userErstellt, massendruckJob.userErstellt) &&
         Objects.equals(this.timestampErstellt, massendruckJob.timestampErstellt) &&
         Objects.equals(this.massendruckJobStatus, massendruckJob.massendruckJobStatus) &&
@@ -161,7 +140,7 @@ public class MassendruckJobDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, massendruckJobNumber, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
+    return Objects.hash(id, userErstellt, timestampErstellt, massendruckJobStatus, massendruckJobTyp);
   }
 
   @Override
@@ -170,7 +149,6 @@ public class MassendruckJobDto  implements Serializable {
     sb.append("class MassendruckJobDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    massendruckJobNumber: ").append(toIndentedString(massendruckJobNumber)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    massendruckJobStatus: ").append(toIndentedString(massendruckJobStatus)).append("\n");

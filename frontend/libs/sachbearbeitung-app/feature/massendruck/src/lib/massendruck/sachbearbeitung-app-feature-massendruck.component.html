@@ -58,71 +58,6 @@
                 }}
               </caption>
 
-              <ng-container matColumnDef="JOB_NUMBER">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                  <label for="massendruckJobNumber">{{
-                    'sachbearbeitung-app.massendruck.table.massendruckJobNumber' | transloco
-                  }}</label>
-                  <div class="tw:relative tw:flex">
-                    <mat-form-field class="tw:w-full">
-                      <input
-                        id="massendruckJobNumber"
-                        matInput
-                        formControlName="massendruckJobNumber"
-                        (click)="$event.stopPropagation()"
-                        (keydown)="$event.stopPropagation()"
-                        [maskito]="maskitoNumber"
-                      />
-                    </mat-form-field>
-                    <dv-shared-ui-clear-button
-                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
-                      (clear)="filterForm.controls.massendruckJobNumber.reset()"
-                      [valueSig]="filterForm.controls.massendruckJobNumber.value"
-                    ></dv-shared-ui-clear-button>
-                  </div>
-                </th>
-                <td
-                  mat-cell
-                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
-                  class="tw:w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="item.massendruckJobNumber.toString()"
-                >
-                  {{ item.massendruckJobNumber }}
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="USER_ERSTELLT">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
-                  <label for="userErstellt">{{
-                    'sachbearbeitung-app.massendruck.table.userErstellt' | transloco
-                  }}</label>
-                  <div class="tw:relative tw:flex">
-                    <mat-form-field class="tw:w-full">
-                      <input
-                        id="userErstellt"
-                        matInput
-                        formControlName="userErstellt"
-                        (click)="$event.stopPropagation()"
-                        (keydown)="$event.stopPropagation()"
-                      />
-                    </mat-form-field>
-                    <dv-shared-ui-clear-button
-                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
-                      (clear)="filterForm.controls.userErstellt.reset()"
-                      [valueSig]="filterForm.controls.userErstellt.value"
-                    ></dv-shared-ui-clear-button>
-                  </div>
-                </th>
-                <td
-                  mat-cell
-                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
-                  class="tw:w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="item.userErstellt"
-                >
-                  {{ item.userErstellt }}
-                </td>
-              </ng-container>
-
               <ng-container matColumnDef="TIMESTAMP_ERSTELLT">
                 <th
                   mat-header-cell
@@ -173,6 +108,38 @@
                   class="tw:whitespace-nowrap"
                 >
                   {{ item.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="USER_ERSTELLT">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
+                  <label for="userErstellt">{{
+                    'sachbearbeitung-app.massendruck.table.userErstellt' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field class="tw:w-full">
+                      <input
+                        id="userErstellt"
+                        matInput
+                        formControlName="userErstellt"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.userErstellt.reset()"
+                      [valueSig]="filterForm.controls.userErstellt.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="item.userErstellt"
+                >
+                  {{ item.userErstellt }}
                 </td>
               </ng-container>
 

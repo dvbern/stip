@@ -26,11 +26,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum MassendruckJobSortColumnDtoSpec {
   
-  JOB_NUMBER("JOB_NUMBER"),
+  TIMESTAMP_ERSTELLT("TIMESTAMP_ERSTELLT"),
   
   USER_ERSTELLT("USER_ERSTELLT"),
-  
-  TIMESTAMP_ERSTELLT("TIMESTAMP_ERSTELLT"),
   
   STATUS("STATUS");
 

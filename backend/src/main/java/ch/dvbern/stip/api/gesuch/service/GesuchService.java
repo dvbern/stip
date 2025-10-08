@@ -83,6 +83,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheCopyService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheStatusService;
@@ -90,8 +91,6 @@ import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheValidatorService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheCopyUtil;
-import ch.dvbern.stip.api.gesuchtranche.util.GesuchTrancheOverrideUtil;
 import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -192,6 +191,7 @@ public class GesuchService {
     private final VerfuegungService verfuegungService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
+    private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
@@ -1083,7 +1083,7 @@ public class GesuchService {
 
         toTranche.setGueltigkeit(fromTranche.getGueltigkeit());
 
-        GesuchTrancheOverrideUtil.overrideGesuchFormular(toTranche.getGesuchFormular(), formularOfFromTranche);
+        gesuchTrancheCopyService.overrideGesuchFormular(toTranche.getGesuchFormular(), formularOfFromTranche);
 
         // Dokumente
         // Remove doks that exist now but didn't exist then (i.e. past)
@@ -1231,7 +1231,7 @@ public class GesuchService {
         final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
 
         for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
-            final var newTranche = GesuchTrancheCopyUtil.copyTrancheExceptGesuchDokuments(
+            final var newTranche = gesuchTrancheCopyService.copyTrancheExceptGesuchDokuments(
                 gesuchTrancheToRevertTo,
                 gesuchTrancheToRevertTo.getGueltigkeit(),
                 gesuchTrancheToRevertTo.getComment()

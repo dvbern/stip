@@ -94,7 +94,6 @@ paths:
             $ref: '#/components/schemas/GetMassendruckJobQueryType'
           in: path
           required: true
-        - $ref: '#/components/parameters/massendruckJobNumber'
         - $ref: '#/components/parameters/userErstellt'
         - $ref: '#/components/parameters/timestampErstellt'
         - $ref: '#/components/parameters/MassendruckJobStatus'
@@ -3010,7 +3009,7 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchManuellPruefenJur
       summary: Das Gesuch manuell pruefen als Jurist
-  '/gesuch/{gesuchId}/verfuegungen':
+  '/gesuch/{gesuchId}/adminDokumente':
     parameters:
       - name: gesuchId
         schema:
@@ -3025,9 +3024,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Verfuegung'
+                $ref: '#/components/schemas/AdminDokumente'
           description: Returns a List of all Verfuegungen for a Gesuch
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -3037,8 +3034,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllVerfuegungen
-      summary: All Verfuegungen for a gesuch
+      operationId: getAdminDokumente
+      summary: All dokument information required for the Admin tab in Info of Gesuch
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -4637,7 +4634,6 @@ components:
       type: object
       required:
         - id
-        - massendruckJobNumber
         - userErstellt
         - timestampErstellt
         - massendruckJobStatus
@@ -4645,8 +4641,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        massendruckJobNumber:
-          type: integer
         userErstellt:
           type: string
         timestampErstellt:
@@ -7370,6 +7364,7 @@ components:
         - maxSaeule3a
         - einkommensfreibetrag
         - freibetragErwerbseinkommen
+        - abzugslimite
         - freibetragVermoegen
         - vermoegensanteilInProzent
         - anzahlWochenLehre
@@ -7382,6 +7377,8 @@ components:
         maxSaeule3a:
           type: integer
         einkommensfreibetrag:
+          type: integer
+        abzugslimite:
           type: integer
         freibetragErwerbseinkommen:
           type: integer
@@ -7748,9 +7745,8 @@ components:
           format: date
     MassendruckJobSortColumn:
       enum:
-        - JOB_NUMBER
-        - USER_ERSTELLT
         - TIMESTAMP_ERSTELLT
+        - USER_ERSTELLT
         - STATUS
     SbDashboardColumn:
       enum:
@@ -8027,6 +8023,17 @@ components:
           type: string
         bezeichnungFr:
           type: string
+    AdminDokumente:
+      type: object
+      required:
+        - verfuegungen
+      properties:
+        verfuegungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Verfuegung'
+        datenschutzbriefMassendruckJobId:
+          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:
@@ -8100,11 +8107,6 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
-    massendruckJobNumber:
-      in: query
-      name: massendruckJobNumber
-      schema:
-        type: integer
     MassendruckJobTyp:
       in: query
       name: massendruckJobTyp

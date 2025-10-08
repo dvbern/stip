@@ -30,6 +30,7 @@ import lombok.extern.jackson.Jacksonized;
 public class StammdatenV1 {
     int maxSaeule3a;
     int einkommensfreibetrag;
+    int abzugslimite;
     int freibetragErwerbseinkommen;
     int freibetragVermoegen;
     int vermoegensanteilInProzent;
@@ -42,6 +43,7 @@ public class StammdatenV1 {
     public static StammdatenV1 fromGesuchsperiode(final Gesuchsperiode gesuchsperiode) {
         return new StammdatenV1Builder()
             .maxSaeule3a(gesuchsperiode.getMaxSaeule3a())
+            .abzugslimite(gesuchsperiode.getLimiteEkFreibetragIntegrationszulage())
             .einkommensfreibetrag(gesuchsperiode.getEinkommensfreibetrag())
             .freibetragErwerbseinkommen(gesuchsperiode.getFreibetragErwerbseinkommen())
             .freibetragVermoegen(gesuchsperiode.getFreibetragVermoegen())

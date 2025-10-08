@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.verfuegung.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,7 +30,6 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
-import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.type.Kanton;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -59,7 +57,6 @@ public class VerfuegungService {
     private final VerfuegungRepository verfuegungRepository;
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
-    private final VerfuegungMapper verfuegungMapper;
     private final Antivirus antivirus;
 
     @Transactional
@@ -151,16 +148,6 @@ public class VerfuegungService {
         verfuegung.setObjectId(objectId);
         verfuegung.setFilename(VERFUEGUNG_DOKUMENT_NAME);
         verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
-    }
-
-    public List<VerfuegungDto> getVerfuegungenByGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        return gesuch.getVerfuegungs()
-            .stream()
-            .filter(verfuegung -> verfuegung.getObjectId() != null)
-            .map(verfuegungMapper::toDto)
-            .toList();
     }
 
     public Verfuegung getLatestVerfuegung(final UUID gesuchId) {
