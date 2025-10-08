@@ -32,9 +32,7 @@ public enum MassendruckJobSortColumnDtoSpec {
   
   TIMESTAMP_ERSTELLT("TIMESTAMP_ERSTELLT"),
   
-  STATUS("STATUS"),
-  
-  TYP("TYP");
+  STATUS("STATUS");
 
   private String value;
 
