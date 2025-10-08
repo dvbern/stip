@@ -659,17 +659,19 @@
 
         @if (nationalitaetBfsCodeSig() === bfsCodeSchweiz) {
           <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
-            <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
-              'shared.form.person.guardianship.label' | transloco
-            }}</mat-checkbox>
-            @if (vormundschaftDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges?.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
+            <div>
+              <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
+                'shared.form.person.guardianship.label' | transloco
+              }}</mat-checkbox>
+              @if (vormundschaftDocumentOptionsSig(); as options) {
+                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+              }
+              <dv-shared-ui-form-zuvor-hint
+                [changes]="
+                  view.formChanges?.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+                "
+              ></dv-shared-ui-form-zuvor-hint>
+            </div>
             <button
               type="button"
               (click)="vormundSchaftInfoDialog.toggle()"
