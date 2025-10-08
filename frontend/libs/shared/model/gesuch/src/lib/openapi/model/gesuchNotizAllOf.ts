@@ -19,6 +19,7 @@ export interface GesuchNotizAllOf {
     notizTyp: GesuchNotizTyp;
     gesuchNummer: string;
     antwort?: string;
+    pendenzAbgschlossen?: boolean;
 }
 
 

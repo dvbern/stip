@@ -104,6 +104,20 @@
                 mat-menu-item
                 type="button"
                 class="btn fw-normal px-2 shadow-none"
+                data-testid="pendenz-notiz-create"
+                (click)="createNotiz('PENDENZ_NOTIZ')"
+              >
+                <div class="d-flex align-items-center gap-2">
+                  <i class="material-symbols-rounded fs-4">pending_actions</i>
+                  <span>{{ 'sachbearbeitung-app.infos.penenzNotiz.erstellen' | transloco }}</span>
+                </div>
+              </button>
+
+              <button
+                *dvHasRoles="['V0_Sachbearbeiter']"
+                mat-menu-item
+                type="button"
+                class="btn fw-normal px-2 shadow-none"
                 data-testid="notiz-create"
                 (click)="createNotiz('GESUCH_NOTIZ')"
               >

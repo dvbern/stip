@@ -9,71 +9,87 @@
   [dvSharedUiFormReadonly]="dialogData.readonly"
   (ngSubmit)="handleSave()"
 >
-  @if (dialogData.notizTyp === 'GESUCH_NOTIZ') {
-    @if (dialogData.notiz?.id) {
-      <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
+  @switch (dialogData.notizTyp) {
+    @case ('GESUCH_NOTIZ') {
+      @if (dialogData.notiz?.id) {
+        <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
 
-      <hr class="tw:!my-8" />
-    }
-
-    <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
-  }
-
-  @if (isJurNotiz) {
-    @if (dialogData.notiz?.id) {
-      <!-- betreff -->
-      <div class="tw:flex tw:gap-2">
-        <div class="tw:!font-semibold">{{ 'shared.form.notizen.betreff.label' | transloco }}:</div>
-        <div>{{ dialogData.notiz?.betreff }}</div>
-      </div>
-
-      <hr class="tw:my-8" />
-
-      <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
-
-      <!-- text -->
-      <div class="tw:w-full">
-        {{ dialogData.notiz?.text }}
-      </div>
-
-      <hr class="tw:my-8" />
-
-      @if (dialogData.notiz?.antwort) {
-        <dl class="tw:grid tw:grid-cols-[max-content_1fr] tw:gap-x-4 tw:pl-0">
-          <dt class="tw:!font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | transloco }}:</dt>
-          <dd class="tw:font-normal">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
-          <dt class="tw:!font-semibold">{{ 'shared.form.notizen.userMutiert.label' | transloco }}:</dt>
-          <dd class="tw:font-normal">{{ dialogData.notiz?.userMutiert }}</dd>
-        </dl>
-
-        <div class="tw:w-full">
-          <div class="tw:font-normal">{{ dialogData.notiz?.antwort }}</div>
-        </div>
-      } @else if (userIsJurist) {
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.notizen.antwort.label' | transloco }}</mat-label>
-          <textarea
-            formControlName="antwort"
-            maxlength="2000"
-            data-testid="form-notiz-antwort"
-            matInput
-            [dvMaxLength]="'large'"
-            type="text"
-            rows="4"
-          ></textarea>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-      } @else {
-        <div class="tw:w-full">
-          <div class="tw:font-normal">
-            {{ 'sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet' | transloco }}
-          </div>
-        </div>
+        <hr class="tw:!my-8" />
       }
-    } @else {
+
       <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
+    }
+    @case ('PENDENZ_NOTIZ') {
+      @if (dialogData.notiz?.id) {
+        <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
+
+        <hr class="tw:!my-8" />
+      }
+
+      <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
+
+      @if (dialogData.notiz?.id) {
+        <mat-checkbox [formControl]="form.controls.pendenzAbgschlossen" data-testid="form-person-pendenz">{{
+          'shared.form.notizen.pendenz.label' | transloco
+        }}</mat-checkbox>
+      }
+    }
+    @case ('JURISTISCHE_NOTIZ') {
+      @if (dialogData.notiz?.id) {
+        <!-- betreff -->
+        <div class="tw:flex tw:gap-2">
+          <div class="tw:!font-semibold">{{ 'shared.form.notizen.betreff.label' | transloco }}:</div>
+          <div>{{ dialogData.notiz?.betreff }}</div>
+        </div>
+
+        <hr class="tw:my-8" />
+
+        <ng-container [ngTemplateOutlet]="datumUserErstellt"></ng-container>
+
+        <!-- text -->
+        <div class="tw:w-full">
+          {{ dialogData.notiz?.text }}
+        </div>
+
+        <hr class="tw:my-8" />
+
+        @if (dialogData.notiz?.antwort) {
+          <dl class="tw:grid tw:grid-cols-[max-content_1fr] tw:gap-x-4 tw:pl-0">
+            <dt class="tw:!font-semibold">{{ 'shared.form.notizen.datumMutiert.label' | transloco }}:</dt>
+            <dd class="tw:font-normal">{{ dialogData.notiz?.timestampMutiert | date: 'dd.MM.yyyy' }}</dd>
+            <dt class="tw:!font-semibold">{{ 'shared.form.notizen.userMutiert.label' | transloco }}:</dt>
+            <dd class="tw:font-normal">{{ dialogData.notiz?.userMutiert }}</dd>
+          </dl>
+
+          <div class="tw:w-full">
+            <div class="tw:font-normal">{{ dialogData.notiz?.antwort }}</div>
+          </div>
+        } @else if (userIsJurist) {
+          <mat-form-field dvSharedUiFormField class="tw:w-full">
+            <mat-label>{{ 'shared.form.notizen.antwort.label' | transloco }}</mat-label>
+            <textarea
+              [formControl]="form.controls.antwort"
+              maxlength="2000"
+              data-testid="form-notiz-antwort"
+              matInput
+              [dvMaxLength]="'large'"
+              type="text"
+              rows="4"
+            ></textarea>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        } @else {
+          <div class="tw:w-full">
+            <div class="tw:font-normal">
+              {{ 'sachbearbeitung-app.infos.juristischeNotiz.unbeantwortet' | transloco }}
+            </div>
+          </div>
+        }
+      } @else {
+        <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
+      }
     }
   }
   @if (!dialogData.readonly) {
@@ -103,7 +119,13 @@
     <!-- Betreff -->
     <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.form.notizen.betreff.label' | transloco }}</mat-label>
-      <input formControlName="betreff" data-testid="form-notiz-betreff" matInput dvMaxLength type="text" />
+      <input
+        [formControl]="form.controls.betreff"
+        data-testid="form-notiz-betreff"
+        matInput
+        dvMaxLength
+        type="textform.controls.antwort"
+      />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -113,7 +135,7 @@
     <mat-form-field dvSharedUiFormField class="tw:mt-4 tw:w-full">
       <mat-label>{{ 'shared.form.notizen.text.label' | transloco }}</mat-label>
       <textarea
-        formControlName="text"
+        [formControl]="form.controls.text"
         maxlength="2000"
         data-testid="form-notiz-text"
         matInput

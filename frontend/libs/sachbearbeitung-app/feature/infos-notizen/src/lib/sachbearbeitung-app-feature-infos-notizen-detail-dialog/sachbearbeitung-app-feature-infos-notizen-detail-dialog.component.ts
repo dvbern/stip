@@ -10,6 +10,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -21,6 +22,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchNotiz, GesuchNotizTyp } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -40,6 +42,7 @@ export type NotizDialogResult = {
   betreff: string;
   text: string;
   antwort?: string;
+  pendenzAbgschlossen?: boolean;
 };
 
 @Component({
@@ -49,6 +52,7 @@ export type NotizDialogResult = {
     ReactiveFormsModule,
     TranslocoPipe,
     MatInputModule,
+    MatCheckboxModule,
     MatFormFieldModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
@@ -77,6 +81,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     betreff: [<string | null>null, [Validators.required]],
     text: [<string | null>null, [Validators.required]],
     antwort: [<string | null>null],
+    pendenzAbgschlossen: [<boolean | null>null],
   });
 
   public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
@@ -89,40 +94,40 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       betreff: this.dialogData.notiz?.betreff,
       text: this.dialogData.notiz?.text,
       antwort: this.dialogData.notiz?.antwort,
+      pendenzAbgschlossen: this.dialogData.notiz?.pendenzAbgschlossen,
     });
 
-    if (!this.isJurNotiz) {
-      this.form.controls.antwort.disable();
-
-      if (!this.userIsSachbearbeiter) {
-        this.form.controls.betreff.disable();
-        this.form.controls.text.disable();
-      }
-      return;
-    }
-
-    if (!this.userIsJurist) {
-      if (this.dialogData.notiz?.id) {
-        this.form.controls.betreff.disable();
-        this.form.controls.text.disable();
-      }
-
-      this.form.controls.antwort.disable();
-      return;
-    }
-
-    if (this.userIsJurist) {
-      if (this.dialogData.notiz?.id) {
-        this.form.controls.betreff.disable();
-        this.form.controls.text.disable();
-      }
-
-      if (this.dialogData.notiz?.antwort || !this.dialogData.notiz?.id) {
+    switch (this.dialogData.notizTyp) {
+      case 'PENDENZ_NOTIZ':
+      case 'GESUCH_NOTIZ': {
         this.form.controls.antwort.disable();
-      } else {
-        this.form.controls.antwort.setValidators([Validators.required]);
-        this.form.controls.antwort.updateValueAndValidity();
+
+        if (!this.userIsSachbearbeiter) {
+          this.form.controls.betreff.disable();
+          this.form.controls.text.disable();
+          this.form.controls.pendenzAbgschlossen.disable();
+        }
+        break;
       }
+      case 'JURISTISCHE_NOTIZ': {
+        if (this.dialogData.notiz?.id) {
+          this.form.controls.betreff.disable();
+          this.form.controls.text.disable();
+        }
+        if (!this.userIsJurist) {
+          this.form.controls.antwort.disable();
+        } else {
+          if (this.dialogData.notiz?.antwort || !this.dialogData.notiz?.id) {
+            this.form.controls.antwort.disable();
+          } else {
+            this.form.controls.antwort.setValidators([Validators.required]);
+            this.form.controls.antwort.updateValueAndValidity();
+          }
+        }
+        break;
+      }
+      default:
+        assertUnreachable(this.dialogData.notizTyp);
     }
   }
 
@@ -155,6 +160,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       text: notizDaten.text,
       betreff: notizDaten.betreff,
       antwort: notizDaten.antwort,
+      pendenzAbgschlossen: notizDaten.pendenzAbgschlossen,
     });
   }
 }

@@ -30,6 +30,7 @@ import {
   GesuchNotizTyp,
 } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -160,26 +161,32 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
       .subscribe((result) => {
         if (!result) return;
 
-        if (notiz.notizTyp === 'GESUCH_NOTIZ') {
-          this.notizStore.editNotiz$({
-            gesuchId: this.gesuchIdSig(),
-            gesuchNotizUpdate: {
-              id: notiz.id,
-              betreff: result.betreff,
-              text: result.text,
-            },
-          });
-          return;
-        }
-
-        if (notiz.notizTyp === 'JURISTISCHE_NOTIZ' && result.antwort) {
-          this.notizStore.answerJuristischeAbklaerungNotiz$({
-            gesuchId: this.gesuchIdSig(),
-            notizId: notiz.id,
-            juristischeAbklaerungNotizAntwort: {
-              antwort: result.antwort,
-            },
-          });
+        switch (notiz.notizTyp) {
+          case 'PENDENZ_NOTIZ':
+          case 'GESUCH_NOTIZ':
+            this.notizStore.editNotiz$({
+              gesuchId: this.gesuchIdSig(),
+              gesuchNotizUpdate: {
+                id: notiz.id,
+                betreff: result.betreff,
+                text: result.text,
+                pendenzAbgschlossen: result.pendenzAbgschlossen,
+              },
+            });
+            return;
+          case 'JURISTISCHE_NOTIZ':
+            if (result.antwort) {
+              this.notizStore.answerJuristischeAbklaerungNotiz$({
+                gesuchId: this.gesuchIdSig(),
+                notizId: notiz.id,
+                juristischeAbklaerungNotizAntwort: {
+                  antwort: result.antwort,
+                },
+              });
+            }
+            return;
+          default:
+            assertUnreachable(notiz.notizTyp);
         }
       });
   }
