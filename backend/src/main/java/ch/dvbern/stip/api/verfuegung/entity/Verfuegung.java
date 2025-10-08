@@ -83,4 +83,8 @@ public class Verfuegung extends AbstractMandantEntity {
 
     @Column(name = "is_negative_verfuegung", nullable = false)
     private boolean isNegativeVerfuegung = false;
+
+    @NotNull
+    @Column(name = "is_versendet")
+    private boolean isVersendet = false;
 }

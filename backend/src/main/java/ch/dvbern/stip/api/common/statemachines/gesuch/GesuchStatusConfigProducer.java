@@ -22,6 +22,8 @@ import java.util.EnumMap;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -30,8 +32,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersandbereitHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VersendetHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -53,14 +55,16 @@ public class GesuchStatusConfigProducer {
     private final KomplettEingereichtHandler komplettEingereichtHandler;
     private final FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandler;
     private final FehlendeDokumenteHandler fehlendeDokumenteHandler;
-    private final VersandbereitHandler versandbereitHandler;
-    private final VersendetHandler versendetHandler;
+    private final VerfuegungDruckbereitHandler verfuegungDruckbereitHandler;
+    private final VerfuegungVersendetHandler verfuegungVersendetHandler;
     private final NegativeVerfuegungHandler negativeVerfuegungHandler;
     private final AenderungZurueckweisenHandler aenderungZurueckweisenHandler;
     private final AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandler;
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
     private final StatusprotokollService statusprotokollService;
+    private final DatenschutzDruckbereitHandler datenschutzbriefDruckbereitHandler;
+    private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -97,24 +101,24 @@ public class GesuchStatusConfigProducer {
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
         config.configure(Gesuchstatus.ANSPRUCH_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(
                 GesuchStatusChangeEvent.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
                 Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
             )
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG_DURCH_PRUEFUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
             .permit(GesuchStatusChangeEvent.ANSPRUCH_MANUELL_PRUEFEN, Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
-            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT);
+            .permit(GesuchStatusChangeEvent.NICHT_ANSPRUCHSBERECHTIGT, Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
-            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
+            .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG)
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG, Gesuchstatus.JURISTISCHE_ABKLAERUNG)
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.NICHT_BEITRAGSBERECHTIGT, Gesuchstatus.NICHT_BEITRAGSBERECHTIGT)
             .permit(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG, Gesuchstatus.NEGATIVE_VERFUEGUNG);
 
@@ -123,6 +127,10 @@ public class GesuchStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
                 fehlendeDokumenteEinreichenHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG),
+                bereitFuerBearbeitungHandler::handle
             );
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
@@ -163,41 +171,67 @@ public class GesuchStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.JURISTISCHE_ABKLAERUNG_DURCH_PRUEFUNG),
                 juristischeAbklaerungDurchPruefungHandler::handle
+            )
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
+
+        config.configure(Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT),
+                datenschutzbriefDruckbereitHandler::handle
+            )
+            .permit(
+                GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN,
+                Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN
             );
+
+        config.configure(Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN)
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_VERSANDBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
+
+        config.configure(Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
 
         config.configure(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT);
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
 
-        config.configure(Gesuchstatus.VERSANDBEREIT)
-            .permit(GesuchStatusChangeEvent.VERSENDET, Gesuchstatus.VERSENDET)
+        config.configure(Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.VERSANDBEREIT),
-                versandbereitHandler::handle
-            );
+                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT),
+                verfuegungDruckbereitHandler::handle
+            )
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN, Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET);
 
-        config.configure(Gesuchstatus.VERSENDET)
+        config.configure(Gesuchstatus.VERFUEGUNG_AM_GENERIEREN)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT, Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
+
+        config.configure(Gesuchstatus.VERFUEGUNG_VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET, Gesuchstatus.VERFUEGUNG_VERSENDET);
+
+        config.configure(Gesuchstatus.VERFUEGUNG_VERSENDET)
             .permit(GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH, Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.STIPENDIENANSPRUCH, Gesuchstatus.STIPENDIENANSPRUCH)
             .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.VERSENDET),
-                versendetHandler::handle
+                triggers.get(GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET),
+                verfuegungVersendetHandler::handle
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .permit(GesuchStatusChangeEvent.VERSANDBEREIT, Gesuchstatus.VERSANDBEREIT)
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
                 negativeVerfuegungHandler::handle
             );
-
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 

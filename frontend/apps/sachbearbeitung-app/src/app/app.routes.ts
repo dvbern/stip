@@ -57,6 +57,14 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'massendruck',
+        title: 'sachbearbeitung-app.massendruck.title',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/massendruck').then(
+            (m) => m.sachbearbeitungAppFeatureMassendruckRoutes,
+          ),
+      },
+      {
         path: 'sachbearbeitung-app-feature-cockpit',
         canActivate: [
           hasBenutzer,

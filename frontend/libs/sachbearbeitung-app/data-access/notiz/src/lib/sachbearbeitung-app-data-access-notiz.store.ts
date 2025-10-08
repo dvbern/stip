@@ -148,6 +148,7 @@ export class NotizStore extends signalStore(
 
   createNotiz$ = rxMethod<{
     gesuchNotizCreate: GesuchNotizCreate;
+    onSuccess: () => void;
   }>(
     pipe(
       tap(() => {
@@ -155,7 +156,7 @@ export class NotizStore extends signalStore(
           notiz: cachedPending(state.notiz),
         }));
       }),
-      switchMap(({ gesuchNotizCreate }) =>
+      switchMap(({ gesuchNotizCreate, onSuccess }) =>
         this.notizService
           .createNotiz$({
             gesuchNotizCreate,
@@ -172,6 +173,7 @@ export class NotizStore extends signalStore(
                       'sachbearbeitung-app.infos.notiz.erstellen.success',
                   });
                   this.loadNotizen$({ gesuchId: gesuchNotizCreate.gesuchId });
+                  onSuccess();
                 },
               },
             ),

@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  HostBinding,
   computed,
   effect,
   inject,
@@ -122,6 +123,10 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       ?.find((s) => s.steuerdatenTyp === this.stepSig().type);
   });
 
+  areSteuerdatenLoadingSig = computed(() => {
+    return this.steuerdatenStore.cachedSteuerdaten().type === 'pending';
+  });
+
   canCheckNeskoSig = computed(() => {
     const { gesuchFormular, permissions } = this.viewSig();
 
@@ -152,6 +157,11 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     this.form.controls.steuerjahr,
     this.viewSig,
   );
+
+  @HostBinding('class')
+  get hostClass() {
+    return 'tw:relative';
+  }
 
   constructor() {
     this.createSteuerDatenSBEffects();

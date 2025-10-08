@@ -28,15 +28,18 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -45,6 +48,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import wiremock.org.eclipse.jetty.http.HttpStatus;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -64,7 +68,7 @@ class GesuchZurueckweisenTest {
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
-
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private GesuchDtoSpec gesuch;
 
     @Test
@@ -72,6 +76,7 @@ class GesuchZurueckweisenTest {
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
@@ -102,6 +107,15 @@ class GesuchZurueckweisenTest {
     @TestAsSachbearbeiter
     @Order(4)
     void trancheErstellen() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         TestUtil.executeAndAssertOk(
             gesuchApiSpec.changeGesuchStatusToInBearbeitung()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -127,6 +141,30 @@ class GesuchZurueckweisenTest {
         );
 
         assertSBTranchenCount("Multiple Tranchen still exist after Resetting", 1);
+    }
+
+    @Order(6)
+    @TestAsGesuchsteller
+    @Test
+    void gesuchEinreichen2() {
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.gesuchEinreichenGs()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
+    }
+
+    @Order(7)
+    @TestAsSachbearbeiter
+    @Test
+    void changeGesuchToBereitFuerBearbeitungShouldFail() {
+        // because all Datenschutzbriefe have been deleted, it should not be possible now
+        // to change the gesuchstatus back to BEREIT_FUER_BEARBEITUNG directly...
+
+        TestUtil.executeAndAssert(
+            gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId()),
+            HttpStatus.FORBIDDEN_403
+        );
     }
 
     @Test

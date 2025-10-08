@@ -73,7 +73,7 @@ public class GesuchTrancheStatusConfigProducer {
             .permit(GesuchTrancheStatusChangeEvent.MANUELLE_AENDERUNG, GesuchTrancheStatus.MANUELLE_AENDERUNG)
             .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE, GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .onEntryFrom(
-                triggers.get(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN),
+                triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
                 gesuchTrancheFehlendeDokumenteEinreichenHandler::handle
             );
 
@@ -89,7 +89,7 @@ public class GesuchTrancheStatusConfigProducer {
             );
 
         config.configure(GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
-            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
+            .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN, GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),

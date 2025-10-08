@@ -60,10 +60,7 @@ export type AllFormSteps = GSFormStepProps | SBFormStepProps;
 export const TRANCHE_TYPE_INITIAL = 'INITIAL' as const;
 export type GesuchUrlType = GesuchTrancheTyp | typeof TRANCHE_TYPE_INITIAL;
 
-export type GesuchFilter = keyof Omit<
-  typeof GetGesucheSBQueryType,
-  'ALLE_MEINE'
->;
+export type GesuchFilter = keyof typeof GetGesucheSBQueryType;
 
 export type AenderungMelden = {
   gesuch: GesuchDashboardItem;
