@@ -41,6 +41,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 )
 @Getter
 @Setter
+@AnstellungsGradRequiredConstraint
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
@@ -86,12 +87,12 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "ausbildungskosten")
     private Integer ausbildungskosten;
 
-    // todo kstip-2780 - validierung pia only
+    // todo kstip-2779 - validierung pia only
     @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
 
-    // todo kstip-2780 - validierung partner only
+    // todo kstip-2779 - validierung partner only
     @Nullable
     @Column(name = "verpflegungskosten")
     private Integer verpflegungskosten;
@@ -117,26 +118,24 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Min(0)
     private Integer vermoegen;
 
-    // todo kstip-2780: required docs
     @Nullable
     @Min(0)
     @Column(name = "einnahmen_bgsa")
     private Integer einnahmenBGSA;
 
-    // todo kstip-2780: required docs
     @Nullable
     @Min(0)
     @Column(name = "taggeld_ahv_iv")
     private Integer taggeldAHVIV;
 
-    // todo kstip-2780: required docs
     @Nullable
     @Min(0)
     @Column(name = "andere_einnahmen")
     private Integer andereEinnahmen;
 
-    // todo kstip-2780: add validation 0-100 when einkommen gesettzt
-    @NotNull
+    @Min(0)
+    @Max(100)
+    @Nullable
     @Column(name = "anstellungsgrad")
     private Integer anstellungsGrad;
 }
