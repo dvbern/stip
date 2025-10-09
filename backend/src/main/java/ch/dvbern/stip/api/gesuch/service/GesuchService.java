@@ -529,24 +529,16 @@ public class GesuchService {
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        final var gesuchTranchen = gesuch.getTranchenTranchen().toList();
-        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
+        final var decision = getAnspruchDecision(gesuch);
 
-        for (GesuchTranche tranche : gesuchTranchen) {
-            final var trancheDecision = stipDecisionService.decide(tranche);
-            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
-                finalDecision = trancheDecision;
-                break;
-            }
-        }
-        final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(finalDecision);
+        final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
         KommentarDto kommentarDto = null;
-        if (finalDecision != StipDeciderResult.GESUCH_VALID) {
+        if (decision != StipDeciderResult.GESUCH_VALID) {
             kommentarDto = new KommentarDto();
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
-                    finalDecision,
-                    gesuchTranchen.getLast().getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                    decision,
+                    LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
                 )
             );
         }
@@ -557,6 +549,22 @@ public class GesuchService {
             kommentarDto,
             false
         );
+    }
+
+    @Transactional
+    public StipDeciderResult getAnspruchDecision(final Gesuch gesuch) {
+        final var gesuchTranchen = gesuch.getTranchenTranchen().toList();
+        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
+
+        for (GesuchTranche tranche : gesuchTranchen) {
+            final var trancheDecision = stipDecisionService.decide(tranche);
+            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
+                finalDecision = trancheDecision;
+                break;
+            }
+        }
+
+        return finalDecision;
     }
 
     @Transactional

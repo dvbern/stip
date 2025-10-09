@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
-import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusChangeHandler {
+    private final GesuchService gesuchService;
     private final StipDecisionService stipDecisionService;
     private final GesuchNotizService gesuchNotizService;
 
@@ -40,18 +41,12 @@ public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusCh
     @Transactional
     public void handle(Gesuch gesuch) {
         final var gesuchTranchen = gesuch.getGesuchTranchen();
-        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
 
-        for (GesuchTranche tranche : gesuchTranchen) {
-            final var trancheDecision = stipDecisionService.decide(tranche);
-            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
-                finalDecision = trancheDecision;
-                break;
-            }
-        }
+        final var decision = gesuchService.getAnspruchDecision(gesuch);
+
         final var stipDecisionText = stipDecisionService.getTextForDecision(
-            finalDecision,
-            gesuchTranchen.getLast().getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+            decision,
+            LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
         );
 
         gesuchNotizService.createJuristischeNotiz(gesuch, JURISTISCHE_NOTIZ_BETREFF, stipDecisionText);
