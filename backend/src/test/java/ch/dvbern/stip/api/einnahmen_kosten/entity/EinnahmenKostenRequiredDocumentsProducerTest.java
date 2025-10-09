@@ -38,7 +38,8 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfVerdienstRealisiert() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setVerdienstRealisiert(true)
+            // todo ksip-2780 what to do here?
+            // .setVerdienstRealisiert(true)
         );
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERDIENST);
@@ -133,7 +134,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfAlimente() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
-                .setAlimente(1)
+                .setUnterhaltsbeitraege(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ALIMENTE);

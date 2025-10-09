@@ -156,6 +156,12 @@ public class BerechnungRequestV1 implements CalculatorRequest {
         }
 
         while (steuerdatenListIterator.hasNext()) {
+            final var steuerdatenTypToUse = steuerdatenListIterator.next().getSteuerdatenTyp();
+            final var steuererklaerungToUse = gesuchFormular.getSteuererklaerung()
+                .stream()
+                .filter(steuererklaerung1 -> steuererklaerung1.getSteuerdatenTyp().equals(steuerdatenTypToUse))
+                .findFirst()
+                .orElseThrow();
             final int currentIdx = steuerdatenListIterator.nextIndex();
             elternteilerequests.set(
                 currentIdx,
@@ -163,6 +169,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
                     gesuch.getGesuchsperiode(),
                     elternteile,
                     steuerdatenListIterator.next(),
+                    steuererklaerungToUse,
                     personenImHaushaltList.get(currentIdx),
                     kinderDerElternInHaushalten,
                     (int) gesuchFormular.getGeschwisters()

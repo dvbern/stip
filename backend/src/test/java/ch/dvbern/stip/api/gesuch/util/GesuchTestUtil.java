@@ -72,7 +72,6 @@ public class GesuchTestUtil {
         gesuchFormular.getEinnahmenKosten().setRenten(0);
         gesuchFormular.getEinnahmenKosten().setFahrkosten(0);
         gesuchFormular.getEinnahmenKosten().setSteuerjahr(2023);
-        gesuchFormular.getEinnahmenKosten().setVerdienstRealisiert(false);
         gesuchFormular.getEinnahmenKosten().setNettoerwerbseinkommen(0);
         gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
         gesuch.setGesuchNummer("23");

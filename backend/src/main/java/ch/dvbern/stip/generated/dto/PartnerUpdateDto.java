@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AdresseDto;
+import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.io.Serializable;
@@ -26,10 +27,8 @@ public class PartnerUpdateDto  implements Serializable {
   private @Valid LocalDate geburtsdatum;
   private @Valid String sozialversicherungsnummer;
   private @Valid String nachname;
-  private @Valid Boolean ausbildungMitEinkommenOderErwerbstaetig;
-  private @Valid Integer jahreseinkommen;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer verpflegungskosten;
+  private @Valid Boolean inAusbildung;
+  private @Valid AusbildungsPensumDto ausbildungspensum;
 
   /**
    **/
@@ -128,77 +127,38 @@ public class PartnerUpdateDto  implements Serializable {
 
   /**
    **/
-  public PartnerUpdateDto ausbildungMitEinkommenOderErwerbstaetig(Boolean ausbildungMitEinkommenOderErwerbstaetig) {
-    this.ausbildungMitEinkommenOderErwerbstaetig = ausbildungMitEinkommenOderErwerbstaetig;
+  public PartnerUpdateDto inAusbildung(Boolean inAusbildung) {
+    this.inAusbildung = inAusbildung;
     return this;
   }
 
   
-  @JsonProperty("ausbildungMitEinkommenOderErwerbstaetig")
-  public Boolean getAusbildungMitEinkommenOderErwerbstaetig() {
-    return ausbildungMitEinkommenOderErwerbstaetig;
+  @JsonProperty("inAusbildung")
+  public Boolean getInAusbildung() {
+    return inAusbildung;
   }
 
-  @JsonProperty("ausbildungMitEinkommenOderErwerbstaetig")
-  public void setAusbildungMitEinkommenOderErwerbstaetig(Boolean ausbildungMitEinkommenOderErwerbstaetig) {
-    this.ausbildungMitEinkommenOderErwerbstaetig = ausbildungMitEinkommenOderErwerbstaetig;
+  @JsonProperty("inAusbildung")
+  public void setInAusbildung(Boolean inAusbildung) {
+    this.inAusbildung = inAusbildung;
   }
 
   /**
-   * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
    **/
-  public PartnerUpdateDto jahreseinkommen(Integer jahreseinkommen) {
-    this.jahreseinkommen = jahreseinkommen;
+  public PartnerUpdateDto ausbildungspensum(AusbildungsPensumDto ausbildungspensum) {
+    this.ausbildungspensum = ausbildungspensum;
     return this;
   }
 
   
-  @JsonProperty("jahreseinkommen")
-  public Integer getJahreseinkommen() {
-    return jahreseinkommen;
+  @JsonProperty("ausbildungspensum")
+  public AusbildungsPensumDto getAusbildungspensum() {
+    return ausbildungspensum;
   }
 
-  @JsonProperty("jahreseinkommen")
-  public void setJahreseinkommen(Integer jahreseinkommen) {
-    this.jahreseinkommen = jahreseinkommen;
-  }
-
-  /**
-   * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-   **/
-  public PartnerUpdateDto fahrkosten(Integer fahrkosten) {
-    this.fahrkosten = fahrkosten;
-    return this;
-  }
-
-  
-  @JsonProperty("fahrkosten")
-  public Integer getFahrkosten() {
-    return fahrkosten;
-  }
-
-  @JsonProperty("fahrkosten")
-  public void setFahrkosten(Integer fahrkosten) {
-    this.fahrkosten = fahrkosten;
-  }
-
-  /**
-   * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-   **/
-  public PartnerUpdateDto verpflegungskosten(Integer verpflegungskosten) {
-    this.verpflegungskosten = verpflegungskosten;
-    return this;
-  }
-
-  
-  @JsonProperty("verpflegungskosten")
-  public Integer getVerpflegungskosten() {
-    return verpflegungskosten;
-  }
-
-  @JsonProperty("verpflegungskosten")
-  public void setVerpflegungskosten(Integer verpflegungskosten) {
-    this.verpflegungskosten = verpflegungskosten;
+  @JsonProperty("ausbildungspensum")
+  public void setAusbildungspensum(AusbildungsPensumDto ausbildungspensum) {
+    this.ausbildungspensum = ausbildungspensum;
   }
 
 
@@ -216,15 +176,13 @@ public class PartnerUpdateDto  implements Serializable {
         Objects.equals(this.geburtsdatum, partnerUpdate.geburtsdatum) &&
         Objects.equals(this.sozialversicherungsnummer, partnerUpdate.sozialversicherungsnummer) &&
         Objects.equals(this.nachname, partnerUpdate.nachname) &&
-        Objects.equals(this.ausbildungMitEinkommenOderErwerbstaetig, partnerUpdate.ausbildungMitEinkommenOderErwerbstaetig) &&
-        Objects.equals(this.jahreseinkommen, partnerUpdate.jahreseinkommen) &&
-        Objects.equals(this.fahrkosten, partnerUpdate.fahrkosten) &&
-        Objects.equals(this.verpflegungskosten, partnerUpdate.verpflegungskosten);
+        Objects.equals(this.inAusbildung, partnerUpdate.inAusbildung) &&
+        Objects.equals(this.ausbildungspensum, partnerUpdate.ausbildungspensum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, vorname, geburtsdatum, sozialversicherungsnummer, nachname, ausbildungMitEinkommenOderErwerbstaetig, jahreseinkommen, fahrkosten, verpflegungskosten);
+    return Objects.hash(adresse, vorname, geburtsdatum, sozialversicherungsnummer, nachname, inAusbildung, ausbildungspensum);
   }
 
   @Override
@@ -237,10 +195,8 @@ public class PartnerUpdateDto  implements Serializable {
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    ausbildungMitEinkommenOderErwerbstaetig: ").append(toIndentedString(ausbildungMitEinkommenOderErwerbstaetig)).append("\n");
-    sb.append("    jahreseinkommen: ").append(toIndentedString(jahreseinkommen)).append("\n");
-    sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
-    sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
+    sb.append("    inAusbildung: ").append(toIndentedString(inAusbildung)).append("\n");
+    sb.append("    ausbildungspensum: ").append(toIndentedString(ausbildungspensum)).append("\n");
     sb.append("}");
     return sb.toString();
   }

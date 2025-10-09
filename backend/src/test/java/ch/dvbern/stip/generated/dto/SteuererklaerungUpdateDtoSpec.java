@@ -31,7 +31,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_ID,
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
-  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG_IN_BERN
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG_IN_BERN,
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE,
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_RENTEN,
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_EINNAHMEN_B_G_S_A
 })
 @JsonTypeName("SteuererklaerungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -44,6 +48,18 @@ public class SteuererklaerungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_STEUERERKLAERUNG_IN_BERN = "steuererklaerungInBern";
   private Boolean steuererklaerungInBern;
+
+  public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
+  private Integer ergaenzungsleistungen;
+
+  public static final String JSON_PROPERTY_UNTERHALTSBEITRAEGE = "unterhaltsbeitraege";
+  private Integer unterhaltsbeitraege;
+
+  public static final String JSON_PROPERTY_RENTEN = "renten";
+  private Integer renten;
+
+  public static final String JSON_PROPERTY_EINNAHMEN_B_G_S_A = "einnahmenBGSA";
+  private Integer einnahmenBGSA;
 
   public SteuererklaerungUpdateDtoSpec() {
   }
@@ -125,6 +141,110 @@ public class SteuererklaerungUpdateDtoSpec {
     this.steuererklaerungInBern = steuererklaerungInBern;
   }
 
+
+  public SteuererklaerungUpdateDtoSpec ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+    
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+    return this;
+  }
+
+   /**
+   * Get ergaenzungsleistungen
+   * @return ergaenzungsleistungen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getErgaenzungsleistungen() {
+    return ergaenzungsleistungen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  }
+
+
+  public SteuererklaerungUpdateDtoSpec unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+    
+    this.unterhaltsbeitraege = unterhaltsbeitraege;
+    return this;
+  }
+
+   /**
+   * Get unterhaltsbeitraege
+   * @return unterhaltsbeitraege
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getUnterhaltsbeitraege() {
+    return unterhaltsbeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
+    this.unterhaltsbeitraege = unterhaltsbeitraege;
+  }
+
+
+  public SteuererklaerungUpdateDtoSpec renten(Integer renten) {
+    
+    this.renten = renten;
+    return this;
+  }
+
+   /**
+   * Get renten
+   * @return renten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getRenten() {
+    return renten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRenten(Integer renten) {
+    this.renten = renten;
+  }
+
+
+  public SteuererklaerungUpdateDtoSpec einnahmenBGSA(Integer einnahmenBGSA) {
+    
+    this.einnahmenBGSA = einnahmenBGSA;
+    return this;
+  }
+
+   /**
+   * Get einnahmenBGSA
+   * @return einnahmenBGSA
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getEinnahmenBGSA() {
+    return einnahmenBGSA;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -136,12 +256,16 @@ public class SteuererklaerungUpdateDtoSpec {
     SteuererklaerungUpdateDtoSpec steuererklaerungUpdate = (SteuererklaerungUpdateDtoSpec) o;
     return Objects.equals(this.id, steuererklaerungUpdate.id) &&
         Objects.equals(this.steuerdatenTyp, steuererklaerungUpdate.steuerdatenTyp) &&
-        Objects.equals(this.steuererklaerungInBern, steuererklaerungUpdate.steuererklaerungInBern);
+        Objects.equals(this.steuererklaerungInBern, steuererklaerungUpdate.steuererklaerungInBern) &&
+        Objects.equals(this.ergaenzungsleistungen, steuererklaerungUpdate.ergaenzungsleistungen) &&
+        Objects.equals(this.unterhaltsbeitraege, steuererklaerungUpdate.unterhaltsbeitraege) &&
+        Objects.equals(this.renten, steuererklaerungUpdate.renten) &&
+        Objects.equals(this.einnahmenBGSA, steuererklaerungUpdate.einnahmenBGSA);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuererklaerungInBern);
+    return Objects.hash(id, steuerdatenTyp, steuererklaerungInBern, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA);
   }
 
   @Override
@@ -151,6 +275,10 @@ public class SteuererklaerungUpdateDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuererklaerungInBern: ").append(toIndentedString(steuererklaerungInBern)).append("\n");
+    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
+    sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
+    sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
     sb.append("}");
     return sb.toString();
   }

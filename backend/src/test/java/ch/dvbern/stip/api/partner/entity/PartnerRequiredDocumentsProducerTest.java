@@ -34,11 +34,12 @@ class PartnerRequiredDocumentsProducerTest {
         formular = new GesuchFormular();
     }
 
+    // todo ksitp-2780 adapt
     @Test
     void requiresIfFahrkosten() {
         formular.setPartner(
             new Partner()
-                .setFahrkosten(1)
+            // .setFahrkosten(1)
         );
 
         RequiredDocsUtil.requiresOneAndType(

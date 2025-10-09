@@ -38,9 +38,10 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
-        if (Boolean.TRUE.equals(ek.getVerdienstRealisiert())) {
-            requiredDocs.add(DokumentTyp.EK_VERDIENST);
-        }
+        // todo kstip-2780: is field exisitng somewhere and has to be checked?
+        // if (Boolean.TRUE.equals(ek.getVerdienstRealisiert())) {
+        // requiredDocs.add(DokumentTyp.EK_VERDIENST);
+        // }
 
         if (greaterThanZero(ek.getNettoerwerbseinkommen())) {
             requiredDocs.add(DokumentTyp.EK_LOHNABRECHNUNG);
@@ -74,7 +75,7 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
             requiredDocs.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
         }
 
-        if (greaterThanZero(ek.getAlimente())) {
+        if (greaterThanZero(ek.getUnterhaltsbeitraege())) {
             requiredDocs.add(DokumentTyp.EK_BELEG_ALIMENTE);
         }
 

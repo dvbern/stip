@@ -24,10 +24,11 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
     implements ConstraintValidator<AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint, Partner> {
     @Override
     public boolean isValid(Partner partner, ConstraintValidatorContext constraintValidatorContext) {
-        if (!partner.isAusbildungMitEinkommenOderErwerbstaetig()) {
-            return partner.getFahrkosten() == null
-            && partner.getJahreseinkommen() == null
-            && partner.getVerpflegungskosten() == null;
+        // todo kstip-2779: add new constraint to ek
+        if (!partner.isInAusbildung()) {
+            // return partner.getFahrkosten() == null
+            // && partner.getJahreseinkommen() == null
+            // && partner.getVerpflegungskosten() == null;
         }
         return true;
     }

@@ -39,13 +39,14 @@ public class PartnerRequiredDocumentsProducer implements RequiredDocumentsProduc
         final var requiredDocs = new HashSet<DokumentTyp>();
 
         // if fahrkosten > 0
-        if (partner.getFahrkosten() != null && partner.getFahrkosten() > 0) {
-            requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
-        }
-
-        if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
-            requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
-        }
+        // todo kstip-2779: check ek here
+        // if (partner.getFahrkosten() != null && partner.getFahrkosten() > 0) {
+        // requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
+        // }
+        //
+        // if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
+        // requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
+        // }
 
         return ImmutablePair.of("partner", requiredDocs);
     }

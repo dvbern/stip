@@ -168,7 +168,7 @@ class GesuchFormularMapperTest {
         updateFamsit.setGerichtlicheAlimentenregelung(true);
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setAlimente(1);
+        updateEinnahmenKosten.setUnterhaltsbeitraege(1);
 
         final var update = new GesuchFormularUpdateDto();
         update.setFamiliensituation(updateFamsit);
@@ -186,7 +186,7 @@ class GesuchFormularMapperTest {
         mapper.resetEinnahmenKosten(update, target);
 
         // Assert
-        assertThat(update.getEinnahmenKosten().getAlimente(), is(nullValue()));
+        assertThat(update.getEinnahmenKosten().getUnterhaltsbeitraege(), is(nullValue()));
     }
 
     @Test
@@ -333,7 +333,9 @@ class GesuchFormularMapperTest {
     void calculateSteuernKantonGemeindeTest() {
         GesuchFormular gesuchFormular =
             new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(0))
-                .setPartner(new Partner().setJahreseinkommen(0));
+                .setPartner(
+                    new Partner()
+                );
         final var ausbildung = new Ausbildung();
         ausbildung.setAusbildungBegin(LocalDate.now().minusYears(1));
         ausbildung.setAusbildungEnd(LocalDate.now().plusYears(1));
@@ -345,26 +347,26 @@ class GesuchFormularMapperTest {
 
         // total einkommen >= 20 000 : steuern = 10%
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000))
-            .setPartner(new Partner().setJahreseinkommen(0));
+            .setPartner(new Partner());
         gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000) * 0.1)));
 
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(20000))
-            .setPartner(new Partner().setJahreseinkommen(1));
+            .setPartner(new Partner());
         gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is((int) ((20000 + 1) * 0.1)));
         // sonst: steuern = 0
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(19999))
-            .setPartner(new Partner().setJahreseinkommen(0));
+            .setPartner(new Partner());
         gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));
 
         // handle null inputs
         gesuchFormular = new GesuchFormular().setEinnahmenKosten(new EinnahmenKosten().setNettoerwerbseinkommen(null))
-            .setPartner(new Partner().setJahreseinkommen(null));
+            .setPartner(new Partner());
         gesuchFormular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
         gesuchFormularDto = mapper.toDto(gesuchFormular);
         assertThat(gesuchFormularDto.getEinnahmenKosten().getSteuernKantonGemeinde(), is(0));

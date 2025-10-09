@@ -94,7 +94,7 @@ public class AntragsstellerV1 {
             )
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
             .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
-            .alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0))
+            .alimente(Objects.requireNonNullElse(einnahmenKosten.getUnterhaltsbeitraege(), 0))
             .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
             .kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0))
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
@@ -194,10 +194,12 @@ public class AntragsstellerV1 {
         );
 
         if (partner != null) {
-            builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            // TODO: builder.steuernKonkubinatspartner();
-            builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
-            builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
+            // todo kstip-2779: check values of ek here
+            //
+            // builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
+            // // TODO: builder.steuernKonkubinatspartner();
+            // builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
+            // builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
         }
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)

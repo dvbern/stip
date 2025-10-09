@@ -60,9 +60,10 @@ public class ElternRequiredDocumentsProducer {
 
         final var requiredDocs = new HashSet<DokumentTyp>();
 
-        if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())) {
-            requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
-        }
+        // todo KSTIP-2780: what to do with this?
+        // if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())) {
+        // requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
+        // }
 
         if (elternteil.isSozialhilfebeitraege()) {
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));

@@ -45,12 +45,12 @@ class ElternRequiredDocumentsProducerTest {
         formular = new GesuchFormular();
     }
 
+    // todo kstip-2780: rename test, since erganzungsleistungen has been moved
     @Test
     void mutterIfErgaenzungsleistungen() {
         formular.setElterns(
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.MUTTER)
-                    .setErgaenzungsleistungen(1)
                     .setSozialhilfebeitraege(false)
 
             )
@@ -62,12 +62,12 @@ class ElternRequiredDocumentsProducerTest {
         );
     }
 
+    // todo kstip-2780: rename test, since erganzungsleistungen has been moved
     @Test
     void vaterIfErgaenzungsleistungen() {
         formular.setElterns(
             Set.of(
                 new Eltern().setElternTyp(ElternTyp.VATER)
-                    .setErgaenzungsleistungen(1)
                     .setSozialhilfebeitraege(false)
             )
         );

@@ -255,13 +255,11 @@ class BerechnungTest {
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
                     .setWohnkosten(9_000)
-                    .setErgaenzungsleistungen(0)
                     .setSozialhilfebeitraege(false)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(12_720)
-                    .setErgaenzungsleistungen(0)
                     .setSozialhilfebeitraege(false)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )
@@ -327,7 +325,6 @@ class BerechnungTest {
                     .setVerpflegung(0)
                     .setTotalEinkuenfte(38_820)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
                     .setVermoegen(2717)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
@@ -340,7 +337,6 @@ class BerechnungTest {
                     .setVerpflegung(0)
                     .setTotalEinkuenfte(63_484)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
                     .setVermoegen(918)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
@@ -689,7 +685,6 @@ class BerechnungTest {
                     .setFahrkosten(0)
                     .setVerpflegung(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
                     .setVermoegen(0)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
@@ -702,7 +697,6 @@ class BerechnungTest {
                     .setFahrkosten(0)
                     .setVerpflegung(0)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setKinderalimente(0)
                     .setVermoegen(0)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
@@ -754,9 +748,6 @@ class BerechnungTest {
 
         gesuchFormular.setPartner(
             (Partner) new Partner()
-                .setJahreseinkommen(25000)
-                .setVerpflegungskosten(1000)
-                .setFahrkosten(1600)
                 .setGeburtsdatum(LocalDate.of(1990, 12, 1))
         );
 
@@ -775,7 +766,6 @@ class BerechnungTest {
                 .setVermoegen(12)
                 .setSteuerjahr(2023)
                 .setVeranlagungsStatus(null)
-                .setVerdienstRealisiert(false)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 
@@ -912,7 +902,6 @@ class BerechnungTest {
                 .setVermoegen(0)
                 .setSteuerjahr(2023)
                 .setVeranlagungsStatus(null)
-                .setVerdienstRealisiert(false)
                 .setAuswaertigeMittagessenProWoche(0)
         );
 

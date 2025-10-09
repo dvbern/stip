@@ -41,7 +41,7 @@ class AlimenteRequiredValidatorTest {
     void noAlimenteRegelungNoAlimente() {
         GesuchFormular gesuchFormular =
             gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
-        gesuchFormular.getEinnahmenKosten().setAlimente(null);
+        gesuchFormular.getEinnahmenKosten().setUnterhaltsbeitraege(null);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
         assertThat(validator.isValid(gesuchFormular, null)).isTrue();
@@ -51,7 +51,7 @@ class AlimenteRequiredValidatorTest {
     void alimenteRegelungNoAlimenteViolation() {
         GesuchFormular gesuchFormular =
             gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
-        gesuchFormular.getEinnahmenKosten().setAlimente(null);
+        gesuchFormular.getEinnahmenKosten().setUnterhaltsbeitraege(null);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 
         assertThat(validator.isValid(gesuchFormular, null)).isFalse();
@@ -61,7 +61,7 @@ class AlimenteRequiredValidatorTest {
     void alimenteRegelungAlimenteNoViolation() {
         GesuchFormular gesuchFormular =
             gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
-        gesuchFormular.getEinnahmenKosten().setAlimente(1);
+        gesuchFormular.getEinnahmenKosten().setUnterhaltsbeitraege(1);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
 
         assertThat(validator.isValid(gesuchFormular, null)).isTrue();
@@ -71,7 +71,7 @@ class AlimenteRequiredValidatorTest {
     void noAlimenteRegelungAlimenteViolation() {
         GesuchFormular gesuchFormular =
             gesuchFormularMapper.partialUpdate(createGesuchFormularUpdateDto(), createGesuchFormular());
-        gesuchFormular.getEinnahmenKosten().setAlimente(1);
+        gesuchFormular.getEinnahmenKosten().setUnterhaltsbeitraege(1);
         gesuchFormular.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
 
         assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext())).isFalse();

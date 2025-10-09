@@ -593,7 +593,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -615,7 +615,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -625,11 +625,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, true, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -639,11 +639,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, true, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -651,11 +651,14 @@ class GesuchServiceTest {
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromTrueToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         final var alimente = 1000;
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setUnterhaltsbeitraege(alimente);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, true, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.is(alimente));
     }
 
     @Test
@@ -665,11 +668,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, false, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -679,11 +682,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, false, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -691,7 +694,10 @@ class GesuchServiceTest {
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromFalseToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         final var alimente = 1000;
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setUnterhaltsbeitraege(alimente);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getFamiliensituation()
@@ -699,7 +705,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.is(alimente));
     }
 
     @Test

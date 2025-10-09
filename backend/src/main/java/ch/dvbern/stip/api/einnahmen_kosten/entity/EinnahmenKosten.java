@@ -58,13 +58,9 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
 
-    @NotNull
-    @Column(name = "verdienst_realisiert", nullable = false)
-    private Boolean verdienstRealisiert;
-
     @Nullable
-    @Column(name = "alimente")
-    private Integer alimente;
+    @Column(name = "unterhaltsbeitraege")
+    private Integer unterhaltsbeitraege;
 
     @Nullable
     @Column(name = "zulagen")
@@ -90,9 +86,15 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "ausbildungskosten")
     private Integer ausbildungskosten;
 
+    // todo kstip-2780 - validierung pia only
     @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
+
+    // todo kstip-2780 - validierung partner only
+    @Nullable
+    @Column(name = "verpflegungskosten")
+    private Integer verpflegungskosten;
 
     @Nullable
     @Column(name = "betreuungskosten_kinder")
@@ -114,4 +116,27 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Max(Integer.MAX_VALUE)
     @Min(0)
     private Integer vermoegen;
+
+    // todo kstip-2780: required docs
+    @Nullable
+    @Min(0)
+    @Column(name = "einnahmen_bgsa")
+    private Integer einnahmenBGSA;
+
+    // todo kstip-2780: required docs
+    @Nullable
+    @Min(0)
+    @Column(name = "taggeld_ahv_iv")
+    private Integer taggeldAHVIV;
+
+    // todo kstip-2780: required docs
+    @Nullable
+    @Min(0)
+    @Column(name = "andere_einnahmen")
+    private Integer andereEinnahmen;
+
+    // todo kstip-2780: add validation 0-100 when einkommen gesettzt
+    @NotNull
+    @Column(name = "anstellungsgrad")
+    private Integer anstellungsGrad;
 }

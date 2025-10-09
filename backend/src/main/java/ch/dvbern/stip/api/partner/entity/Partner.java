@@ -18,14 +18,16 @@
 package ch.dvbern.stip.api.partner.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.PartnerPageValidation;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
@@ -72,18 +74,11 @@ public class Partner extends AbstractPerson {
     private String sozialversicherungsnummer;
 
     @NotNull
-    @Column(name = "ausbildung_mit_einkommen_oder_erwerbstaetig", nullable = false)
-    private boolean ausbildungMitEinkommenOderErwerbstaetig = false;
+    @Column(name = "in_ausbildung", nullable = false)
+    private boolean inAusbildung = false;
 
-    @Nullable
-    @Column(name = "jahreseinkommen")
-    private Integer jahreseinkommen;
-
-    @Nullable
-    @Column(name = "verpflegungskosten")
-    private Integer verpflegungskosten;
-
-    @Nullable
-    @Column(name = "fahrkosten")
-    private Integer fahrkosten;
+    @NotNull
+    @Column(name = "ausbildungspensum")
+    @Enumerated(EnumType.STRING)
+    private AusbildungsPensum ausbildungsPensum;
 }

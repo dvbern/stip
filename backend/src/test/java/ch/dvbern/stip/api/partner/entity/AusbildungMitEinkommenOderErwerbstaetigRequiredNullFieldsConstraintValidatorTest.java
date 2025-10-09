@@ -30,8 +30,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
             new AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator();
 
         Partner partner = new Partner();
-        partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setJahreseinkommen(1);
+        partner.setInAusbildung(false);
 
         assertThat(validator.isValid(partner, null), is(false));
     }
@@ -42,8 +41,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
             new AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator();
 
         Partner partner = new Partner();
-        partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setVerpflegungskosten(1);
+        partner.setInAusbildung(false);
 
         assertThat(validator.isValid(partner, null), is(false));
     }
@@ -54,8 +52,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
             new AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator();
 
         Partner partner = new Partner();
-        partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setFahrkosten(1);
+        partner.setInAusbildung(false);
 
         assertThat(validator.isValid(partner, null), is(false));
     }
@@ -66,10 +63,7 @@ public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
             new AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator();
 
         Partner partner = new Partner();
-        partner.setAusbildungMitEinkommenOderErwerbstaetig(false);
-        partner.setFahrkosten(null);
-        partner.setJahreseinkommen(null);
-        partner.setVerpflegungskosten(null);
+        partner.setInAusbildung(false);
 
         assertThat(validator.isValid(partner, null), is(true));
     }

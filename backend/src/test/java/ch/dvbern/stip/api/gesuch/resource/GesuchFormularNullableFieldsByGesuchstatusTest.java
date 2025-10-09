@@ -272,9 +272,6 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     void addPartnerWithNullableFields() {
         partnerUpdateDtoSpec = (PartnerUpdateDtoSpec) PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec();
         var partner = partnerUpdateDtoSpec;
-        partner.setVerpflegungskosten(null);
-        partner.setFahrkosten(null);
-        partner.setJahreseinkommen(null);
 
         currentFormular.setPartner(partner);
         // patch should still be possible
@@ -326,13 +323,11 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
         // set nullable fields to null
         eltern.get(0).setWohnkosten(0);
-        eltern.get(0).setErgaenzungsleistungen(0);
 
         eltern.get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
         eltern.get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
         // set nullable fields to null
         eltern.get(1).setWohnkosten(0);
-        eltern.get(1).setErgaenzungsleistungen(0);
         currentFormular.setElterns(eltern);
 
         // validation should still fail
@@ -353,9 +348,6 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         );
 
         var partner = partnerUpdateDtoSpec;
-        partner.setVerpflegungskosten(0);
-        partner.setFahrkosten(0);
-        partner.setJahreseinkommen(0);
 
         currentFormular.setPartner(partner);
         patchAndValidate();

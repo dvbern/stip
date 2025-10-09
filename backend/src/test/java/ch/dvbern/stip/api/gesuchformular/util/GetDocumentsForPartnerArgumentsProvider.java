@@ -30,14 +30,14 @@ public class GetDocumentsForPartnerArgumentsProvider implements ArgumentsProvide
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
         final var jahreseinkommen = CreatePermutationUtil.createIntegerPermutations(
-            (val) -> new PartnerUpdateDto().jahreseinkommen(val),
-            (val) -> new Partner().setJahreseinkommen(val),
+            (val) -> new PartnerUpdateDto(),
+            (val) -> new Partner(),
             DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG
         );
 
         final var fahrkosten = CreatePermutationUtil.createIntegerPermutations(
-            (val) -> new PartnerUpdateDto().fahrkosten(val),
-            (val) -> new Partner().setFahrkosten(val),
+            (val) -> new PartnerUpdateDto(),
+            (val) -> new Partner(),
             DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
         );
 

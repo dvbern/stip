@@ -123,13 +123,14 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (hasChangedAndNewIsGreaterThanZero(oldPartner.getJahreseinkommen(), newPartner.getJahreseinkommen())) {
-            toDelete.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
-        }
-
-        if (hasChangedAndNewIsGreaterThanZero(oldPartner.getFahrkosten(), newPartner.getFahrkosten())) {
-            toDelete.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
-        }
+        // todo kstip-2779: check parter einnahmekosten here
+        // if (hasChangedAndNewIsGreaterThanZero(oldPartner.getJahreseinkommen(), newPartner.getJahreseinkommen())) {
+        // toDelete.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
+        // }
+        //
+        // if (hasChangedAndNewIsGreaterThanZero(oldPartner.getFahrkosten(), newPartner.getFahrkosten())) {
+        // toDelete.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
+        // }
 
         return toDelete;
     }
@@ -171,7 +172,7 @@ public class DeleteChangedDocumentsUtil {
             toDelete.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
         }
 
-        if (hasChangedAndNewIsGreaterThanZero(oldEk.getAlimente(), newEk.getAlimente())) {
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getUnterhaltsbeitraege(), newEk.getUnterhaltsbeitraege())) {
             toDelete.add(DokumentTyp.EK_BELEG_ALIMENTE);
         }
 

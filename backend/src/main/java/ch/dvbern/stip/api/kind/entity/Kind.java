@@ -62,4 +62,9 @@ public class Kind extends AbstractPerson {
     @Max(100)
     @Min(0)
     private Integer wohnsitzAnteilPia;
+
+    @Nullable
+    @Column(name = "ergaenzungsleistungen")
+    @Min(0)
+    private Integer ergaenzungsleistungen;
 }

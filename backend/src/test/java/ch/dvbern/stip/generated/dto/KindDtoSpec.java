@@ -36,7 +36,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   KindDtoSpec.JSON_PROPERTY_ID,
   KindDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA,
   KindDtoSpec.JSON_PROPERTY_NACHNAME,
-  KindDtoSpec.JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE
+  KindDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE,
+  KindDtoSpec.JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN,
+  KindDtoSpec.JSON_PROPERTY_RENTEN,
+  KindDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
+  KindDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN
 })
 @JsonTypeName("Kind")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -59,8 +63,20 @@ public class KindDtoSpec {
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
 
-  public static final String JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE = "erhalteneAlimentebeitraege";
-  private Integer erhalteneAlimentebeitraege;
+  public static final String JSON_PROPERTY_UNTERHALTSBEITRAEGE = "unterhaltsbeitraege";
+  private Integer unterhaltsbeitraege;
+
+  public static final String JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN = "kinderUndAusbildungszulagen";
+  private Integer kinderUndAusbildungszulagen;
+
+  public static final String JSON_PROPERTY_RENTEN = "renten";
+  private Integer renten;
+
+  public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
+  private Integer ergaenzungsleistungen;
+
+  public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
+  private Integer andereEinnahmen;
 
   public KindDtoSpec() {
   }
@@ -221,29 +237,133 @@ public class KindDtoSpec {
   }
 
 
-  public KindDtoSpec erhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
+  public KindDtoSpec unterhaltsbeitraege(Integer unterhaltsbeitraege) {
     
-    this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
+    this.unterhaltsbeitraege = unterhaltsbeitraege;
     return this;
   }
 
    /**
-   * Get erhalteneAlimentebeitraege
-   * @return erhalteneAlimentebeitraege
+   * Get unterhaltsbeitraege
+   * @return unterhaltsbeitraege
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
+  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getErhalteneAlimentebeitraege() {
-    return erhalteneAlimentebeitraege;
+  public Integer getUnterhaltsbeitraege() {
+    return unterhaltsbeitraege;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ERHALTENE_ALIMENTEBEITRAEGE)
+  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setErhalteneAlimentebeitraege(Integer erhalteneAlimentebeitraege) {
-    this.erhalteneAlimentebeitraege = erhalteneAlimentebeitraege;
+  public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
+    this.unterhaltsbeitraege = unterhaltsbeitraege;
+  }
+
+
+  public KindDtoSpec kinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+    
+    this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
+    return this;
+  }
+
+   /**
+   * Get kinderUndAusbildungszulagen
+   * @return kinderUndAusbildungszulagen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getKinderUndAusbildungszulagen() {
+    return kinderUndAusbildungszulagen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_UND_AUSBILDUNGSZULAGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKinderUndAusbildungszulagen(Integer kinderUndAusbildungszulagen) {
+    this.kinderUndAusbildungszulagen = kinderUndAusbildungszulagen;
+  }
+
+
+  public KindDtoSpec renten(Integer renten) {
+    
+    this.renten = renten;
+    return this;
+  }
+
+   /**
+   * Get renten
+   * @return renten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getRenten() {
+    return renten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_RENTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRenten(Integer renten) {
+    this.renten = renten;
+  }
+
+
+  public KindDtoSpec ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+    
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+    return this;
+  }
+
+   /**
+   * Get ergaenzungsleistungen
+   * @return ergaenzungsleistungen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getErgaenzungsleistungen() {
+    return ergaenzungsleistungen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
+    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  }
+
+
+  public KindDtoSpec andereEinnahmen(Integer andereEinnahmen) {
+    
+    this.andereEinnahmen = andereEinnahmen;
+    return this;
+  }
+
+   /**
+   * Get andereEinnahmen
+   * @return andereEinnahmen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAndereEinnahmen() {
+    return andereEinnahmen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAndereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
   }
 
   @Override
@@ -261,12 +381,16 @@ public class KindDtoSpec {
         Objects.equals(this.id, kind.id) &&
         Objects.equals(this.wohnsitzAnteilPia, kind.wohnsitzAnteilPia) &&
         Objects.equals(this.nachname, kind.nachname) &&
-        Objects.equals(this.erhalteneAlimentebeitraege, kind.erhalteneAlimentebeitraege);
+        Objects.equals(this.unterhaltsbeitraege, kind.unterhaltsbeitraege) &&
+        Objects.equals(this.kinderUndAusbildungszulagen, kind.kinderUndAusbildungszulagen) &&
+        Objects.equals(this.renten, kind.renten) &&
+        Objects.equals(this.ergaenzungsleistungen, kind.ergaenzungsleistungen) &&
+        Objects.equals(this.andereEinnahmen, kind.andereEinnahmen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, erhalteneAlimentebeitraege);
+    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
   }
 
   @Override
@@ -279,7 +403,11 @@ public class KindDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilPia: ").append(toIndentedString(wohnsitzAnteilPia)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    erhalteneAlimentebeitraege: ").append(toIndentedString(erhalteneAlimentebeitraege)).append("\n");
+    sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
+    sb.append("    kinderUndAusbildungszulagen: ").append(toIndentedString(kinderUndAusbildungszulagen)).append("\n");
+    sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
+    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
+    sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("}");
     return sb.toString();
   }
