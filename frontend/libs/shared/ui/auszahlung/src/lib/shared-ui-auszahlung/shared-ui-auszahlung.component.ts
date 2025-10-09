@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -74,6 +75,7 @@ export class SharedUiAuszahlungComponent {
   private formUtils = inject(SharedUtilFormService);
 
   auszahlungViewSig = input.required<SharedModelAuszahlung>();
+  showBackSig = input<boolean>(true, { alias: 'showBack' });
   saveTriggered = output<AuszahlungUpdate>();
   continueTriggered = output<void>();
   formIsUnsaved = output<boolean>();

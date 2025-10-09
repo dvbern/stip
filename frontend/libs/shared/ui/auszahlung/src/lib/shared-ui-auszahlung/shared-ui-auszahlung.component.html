@@ -102,8 +102,8 @@
 
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:md:col-span-2 tw:lg:col-span-3">
-      @if (view.backlink) {
-        <a [routerLink]="view.backlink" class="btn btn-secondary" data-testid="button-back">
+      @if (view.origin && showBackSig()) {
+        <a [routerLink]="view.origin.backlink" class="btn btn-secondary" data-testid="button-back">
           {{ 'shared.form.back' | transloco }}
         </a>
       }
@@ -115,6 +115,7 @@
         <dv-shared-ui-form-save
           [disabled]="form.invalid || form.pristine"
           [loading]="view.isLoading"
+          [labelKey]="view.origin ? 'shared.form.save-and-continue' : 'shared.form.save'"
         ></dv-shared-ui-form-save>
       }
     </dv-shared-ui-step-form-buttons>

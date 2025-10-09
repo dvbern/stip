@@ -4,26 +4,15 @@ import {
   HostBinding,
   OnInit,
   computed,
-  effect,
-  inject,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { Store } from '@ngrx/store';
 
-import { AuszahlungStore } from '@dv/shared/data-access/auszahlung';
-import { EinreichenStore } from '@dv/shared/data-access/einreichen';
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
-import { LandStore } from '@dv/shared/data-access/land';
-import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
+import { SharedFeatureAuszahlungComponent } from '@dv/shared/feature/auszahlung';
 import { SharedModelAuszahlung } from '@dv/shared/model/auszahlung';
-import { AuszahlungUpdate } from '@dv/shared/model/gesuch';
-import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
-import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiAuszahlungComponent } from '@dv/shared/ui/auszahlung';
 import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
-import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-auszahlung',
@@ -36,86 +25,33 @@ import { isPending } from '@dv/shared/util/remote-data';
   templateUrl: './shared-feature-gesuch-form-auszahlung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureGesuchFormAuszahlungComponent implements OnInit {
-  private store = inject(Store);
-  private einreichenStore = inject(EinreichenStore);
-  private auszahlungStore = inject(AuszahlungStore);
+export class SharedFeatureGesuchFormAuszahlungComponent
+  extends SharedFeatureAuszahlungComponent
+  implements OnInit
+{
+  @HostBinding('class')
+  hostClass = 'tw:pt-6';
 
-  private languageSig = this.store.selectSignal(selectLanguage);
-  private fallIdSig = computed(() => {
-    const { gesuch } = this.gesuchsViewSig();
-    return gesuch?.fallId;
-  });
+  extendedAuszahlungViewSig = computed(() => {
+    const baseView = this.auszahlungViewSig();
+    const gesuchView = this.gesuchsViewSig();
+    let origin: SharedModelAuszahlung['origin'] = undefined;
 
-  laenderStore = inject(LandStore);
-  router = inject(Router);
-  gesuchsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
-  hasUnsavedChanges = false;
-  auszahlungViewSig = computed<SharedModelAuszahlung>(() => {
-    const laender = this.laenderStore.landListViewSig() ?? [];
-    const language = this.languageSig();
-    const auszahlung = this.auszahlungStore.auszahlung();
-    const invalidFormularControls =
-      this.einreichenStore.invalidFormularControlsSig();
-
+    if (gesuchView.gesuch?.id && gesuchView.trancheId) {
+      origin = {
+        gesuchId: gesuchView.gesuch.id,
+        gesuchTrancheId: gesuchView.trancheId,
+        backlink: this.router.url,
+      };
+    }
     return {
-      auszahlung: auszahlung.data,
-      isLoading: isPending(auszahlung),
-      laender,
-      language,
-      invalidFormularControls,
+      ...baseView,
+      origin,
       readonly: true,
     };
   });
 
-  @HostBinding('class')
-  hostClass = 'tw:pt-6';
-
-  constructor() {
-    this.laenderStore.loadLaender$();
-    effect(() => {
-      const fallId = this.fallIdSig();
-
-      if (!isDefined(fallId)) {
-        return;
-      }
-
-      this.auszahlungStore.loadAuszahlung$({ fallId });
-    });
-  }
-
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormAuszahlung.init());
-  }
-
-  handleSave(auszahlung: AuszahlungUpdate): void {
-    const fallId = this.fallIdSig();
-
-    if (isDefined(fallId)) {
-      if (this.auszahlungStore.auszahlung().data?.auszahlung) {
-        this.auszahlungStore.updateAuszahlung$({
-          fallId,
-          auszahlung,
-        });
-      } else {
-        this.auszahlungStore.createAuszahlung$({
-          fallId,
-          auszahlung,
-        });
-      }
-    }
-  }
-
-  handleContinue() {
-    const { gesuchId, trancheId } = this.gesuchsViewSig();
-    if (gesuchId && trancheId) {
-      this.store.dispatch(
-        SharedEventGesuchFormAuszahlung.nextTriggered({
-          id: gesuchId,
-          trancheId,
-          origin: AUSZAHLUNG,
-        }),
-      );
-    }
   }
 }

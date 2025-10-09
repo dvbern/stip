@@ -1,9 +1,14 @@
 @let fallId = gesuchsViewSig().gesuch?.fallId;
+@let origin = extendedAuszahlungViewSig().origin;
 <div *dvIfGesuchsteller class="tw:pl-3 tw:pt-6">
   {{ 'shared.form.auszahlung.goToAuszahlung.pre' | transloco }}
   <a
     [routerLink]="['/auszahlung', fallId]"
-    [queryParams]="{ backlink: router.url }"
+    [queryParams]="{
+      backlink: origin?.backlink,
+      gesuchId: origin?.gesuchId,
+      gesuchTrancheId: origin?.gesuchTrancheId,
+    }"
     class="btn-link"
     data-testid="gesuch-form-go-to-auszahlung"
     >{{ 'shared.form.auszahlung.goToAuszahlung.linkText' | transloco }}</a
@@ -11,7 +16,8 @@
 </div>
 <dv-shared-ui-auszahlung
   class="tw:mt-6 tw:block"
-  [auszahlungViewSig]="auszahlungViewSig()"
+  [auszahlungViewSig]="extendedAuszahlungViewSig()"
+  [showBack]="false"
   (saveTriggered)="handleSave($event)"
   (continueTriggered)="handleContinue()"
   (formIsUnsaved)="hasUnsavedChanges = $event"

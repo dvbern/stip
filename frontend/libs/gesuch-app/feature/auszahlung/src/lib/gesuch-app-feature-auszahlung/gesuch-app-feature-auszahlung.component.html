@@ -26,8 +26,14 @@
     </a>
 
     @let fallId = fallIdSig();
+    @let origin = auszahlungViewSig().origin;
     <a
       [routerLink]="['/auszahlung', fallId]"
+      [queryParams]="{
+        backlink: origin?.backlink,
+        gesuchId: origin?.gesuchId,
+        gesuchTrancheId: origin?.gesuchTrancheId,
+      }"
       class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
       data-testid="gesuch-step-nav-auszahlung"
       [class.disabled]="!fallId"

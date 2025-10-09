@@ -120,6 +120,7 @@
     @let fallId = fallIdSig();
     <a
       [routerLink]="['/auszahlung', fallId]"
+      [queryParams]="{ backlink: router.url, gesuchId, gesuchTrancheId: trancheId }"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="gesuch-step-nav-auszahlung"
       [class.disabled]="!fallId"
