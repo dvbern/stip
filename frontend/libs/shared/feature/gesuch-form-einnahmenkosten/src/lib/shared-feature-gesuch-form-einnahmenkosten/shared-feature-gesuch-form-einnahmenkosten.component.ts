@@ -124,7 +124,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
-    alimente: [<string | null>null, [Validators.required]],
+    // todo: check if required or not visible
+    // arbeitspensumProzent: [<string | undefined>undefined, []],
     zulagen: [<string | null>null, [Validators.required]],
     renten: [<string | null>null, [Validators.required]],
     eoLeistungen: [<string | undefined>undefined, []],
@@ -134,7 +135,16 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     fahrkosten: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     betreuungskostenKinder: [<string | null>null, [Validators.required]],
-    verdienstRealisiert: [<boolean | null>null, [Validators.required]],
+    // todo: remove or move
+    // verdienstRealisiert: [<boolean | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
+
+    // todo: add new fields and document types
+    // einnahmenBGSA: [<string | undefined>undefined, []],
+    // taggelderAHVIV: [<string | undefined>undefined, []],
+    // andereEinnahmen: [<string | undefined>undefined, []],
+    // verpflegungskosten: [<string | undefined>undefined, []],
+
     auswaertigeMittagessenProWoche: [
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 5)],
@@ -267,8 +277,12 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const einkommen = fromFormatedNumber(
       this.nettoerwerbseinkommenSig() ?? '0',
     );
-    const einkommenPartner =
-      this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
+
+    // const einkommenPartner =
+    //   this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
+
+    // todo: get from new partner einnnahmenKosten tab in 2779
+    const einkommenPartner = 0;
 
     const gesamtEinkommen = einkommen + einkommenPartner;
 
@@ -287,12 +301,18 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     return nettoerwerbseinkommen > 0 ? DokumentTyp.EK_LOHNABRECHNUNG : null;
   }, {});
 
-  alimenteSig = toSignal(this.form.controls.alimente.valueChanges);
+  unterhaltsbeitraegeSig = toSignal(
+    this.form.controls.unterhaltsbeitraege.valueChanges,
+  );
 
-  alimenteDocumentSig = this.createUploadOptionsSig(() => {
-    const alimente = fromFormatedNumber(this.alimenteSig() ?? '0');
+  unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
+    const unterhaltsbeitraege = fromFormatedNumber(
+      this.unterhaltsbeitraegeSig() ?? '0',
+    );
 
-    return alimente > 0 ? DokumentTyp.EK_BELEG_ALIMENTE : null;
+    return unterhaltsbeitraege > 0
+      ? DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
+      : null;
   });
 
   zulagenSig = toSignal(this.form.controls.zulagen.valueChanges);
@@ -361,15 +381,15 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     return wohnkosten > 0 ? DokumentTyp.EK_MIETVERTRAG : null;
   });
 
-  verdienstRealisiertSig = toSignal(
-    this.form.controls.verdienstRealisiert.valueChanges,
-  );
+  // verdienstRealisiertSig = toSignal(
+  //   this.form.controls.verdienstRealisiert.valueChanges,
+  // );
 
-  verdienstRealisiertDocumentSig = this.createUploadOptionsSig(() => {
-    const verdienstRealisiert = this.verdienstRealisiertSig();
+  // verdienstRealisiertDocumentSig = this.createUploadOptionsSig(() => {
+  //   const verdienstRealisiert = this.verdienstRealisiertSig();
 
-    return verdienstRealisiert ? DokumentTyp.EK_VERDIENST : null;
-  });
+  //   return verdienstRealisiert ? DokumentTyp.EK_VERDIENST : null;
+  // });
 
   betreuungskostenKinderSig = toSignal(
     this.form.controls.betreuungskostenKinder.valueChanges,
@@ -424,7 +444,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         wohnsitzNotEigenerHaushalt,
       );
       this.setDisabledStateAndHide(
-        this.form.controls.alimente,
+        this.form.controls.unterhaltsbeitraege,
         !existiertGerichtlicheAlimentenregelung,
       );
       this.setDisabledStateAndHide(
@@ -459,7 +479,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ...einnahmenKosten,
           nettoerwerbseinkommen:
             einnahmenKosten.nettoerwerbseinkommen.toString(),
-          alimente: einnahmenKosten.alimente?.toString(),
+          unterhaltsbeitraege: einnahmenKosten.unterhaltsbeitraege?.toString(),
           zulagen: einnahmenKosten.zulagen?.toString(),
           renten: einnahmenKosten.renten?.toString(),
           eoLeistungen: einnahmenKosten.eoLeistungen?.toString(),
@@ -525,13 +545,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const { hatKinder } = this.formStateSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'nettoerwerbseinkommen',
-      'alimente',
+      'unterhaltsbeitraege',
       'renten',
       'ausbildungskosten',
       'fahrkosten',
       'wohnkosten',
       'wgWohnend',
-      'verdienstRealisiert',
+      // 'verdienstRealisiert',
       'auswaertigeMittagessenProWoche',
       'steuerjahr',
       'veranlagungsStatus',
@@ -547,7 +567,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           nettoerwerbseinkommen: fromFormatedNumber(
             formValues.nettoerwerbseinkommen,
           ),
-          alimente: fromFormatedNumber(formValues.alimente),
+          unterhaltsbeitraege: fromFormatedNumber(
+            formValues.unterhaltsbeitraege,
+          ),
           zulagen: fromFormatedNumber(formValues.zulagen),
           renten: fromFormatedNumber(formValues.renten),
           eoLeistungen: fromFormatedNumber(formValues.eoLeistungen),

@@ -166,7 +166,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       [Validators.required, sharedUtilValidatorTelefonNummer()],
     ],
     sozialversicherungsnummer: [<string | undefined>undefined, []],
-    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
+    // ergaenzungsleistungen: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     geburtsdatum: [
       '',
@@ -189,26 +189,26 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
   });
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
-    'ergaenzungsleistungen',
+    // 'ergaenzungsleistungen',
     'wohnkosten',
   ]);
 
   svnIsRequiredSig = signal(false);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
-  private ergaenzungsleistungChangedSig = toSignal(
-    this.form.controls.ergaenzungsleistungen.valueChanges,
-  );
-  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteilSig().elternTyp;
-    const ergaenzungsleistung =
-      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
-      0;
+  // private ergaenzungsleistungChangedSig = toSignal(
+  //   this.form.controls.ergaenzungsleistungen.valueChanges,
+  // );
+  // ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+  //   const elternTyp = this.elternteilSig().elternTyp;
+  //   const ergaenzungsleistung =
+  //     fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
+  //     0;
 
-    return ergaenzungsleistung > 0
-      ? `ELTERN_ERGAENZUNGSLEISTUNGEN_${elternTyp}`
-      : null;
-  });
+  //   return ergaenzungsleistung > 0
+  //     ? `ELTERN_ERGAENZUNGSLEISTUNGEN_${elternTyp}`
+  //     : null;
+  // });
 
   private sozialhilfeChangedSig = toSignal(
     this.form.controls.sozialhilfebeitraege.valueChanges,
@@ -350,7 +350,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     const { identischerZivilrechtlicherWohnsitzPlzOrt, ...formValues } =
       convertTempFormToRealValues(this.form, [
         'ausweisbFluechtling',
-        'ergaenzungsleistungen',
+        // 'ergaenzungsleistungen',
         'sozialhilfebeitraege',
         'wohnkosten',
       ]);

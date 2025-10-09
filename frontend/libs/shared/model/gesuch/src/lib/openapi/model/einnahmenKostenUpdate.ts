@@ -13,9 +13,25 @@
 export interface EinnahmenKostenUpdate { 
     nettoerwerbseinkommen: number;
     /**
-     * Required nur wenn mind. ein Elternteil Alimente zahlt
+     * Required nur wenn nettoerwerbseinkommen > 0
      */
-    alimente?: number;
+    arbeitspensumProzent?: number;
+    /**
+     * Wird immer angezeigt, ist aber optional
+     */
+    unterhaltsbeitraege?: number;
+    /**
+     * Mit Dokument wenn > 0
+     */
+    einnahmenBGSA?: number;
+    /**
+     * Mit Dokument wenn > 0
+     */
+    taggelderAHVIV?: number;
+    /**
+     * Mit Dokument wenn > 0
+     */
+    andereEinnahmen?: number;
     /**
      * Required nur wenn mind. ein Kind gibt
      */
@@ -37,11 +53,11 @@ export interface EinnahmenKostenUpdate {
      * Required nur wenn Person eigener Haushalt hat
      */
     wgWohnend?: boolean;
-    verdienstRealisiert: boolean;
     /**
      * Required nur wenn die Person keinen eigenen Haushalt führt
      */
     auswaertigeMittagessenProWoche?: number;
+    verplegungskosten?: number;
     /**
      * Betreuungskosten eigener Kinder
      */

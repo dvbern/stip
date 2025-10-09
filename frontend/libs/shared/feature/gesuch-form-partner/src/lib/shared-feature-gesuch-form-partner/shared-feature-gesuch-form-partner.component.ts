@@ -30,7 +30,7 @@ import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partn
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
-  DokumentTyp,
+  AusbildungsPensum,
   MASK_SOZIALVERSICHERUNGSNUMMER,
   PartnerUpdate,
 } from '@dv/shared/model/gesuch';
@@ -55,11 +55,7 @@ import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import { SharedUtilFormService } from '@dv/shared/util/form';
-import {
-  fromFormatedNumber,
-  maskitoMaxNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
+import { maskitoMaxNumber, maskitoNumber } from '@dv/shared/util/maskito-util';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   maxDateValidatorForLocale,
@@ -115,6 +111,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   readonly MASK_SOZIALVERSICHERUNGSNUMMER = MASK_SOZIALVERSICHERUNGSNUMMER;
   readonly maskitoNumber = maskitoNumber;
   readonly maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
+  readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPartnerView);
@@ -145,40 +142,42 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         ),
       ],
     ],
-    ausbildungMitEinkommenOderErwerbstaetig: [false, [Validators.required]],
-    jahreseinkommen: [<string | undefined>undefined, [Validators.required]],
-    fahrkosten: [<string | undefined>undefined, [Validators.required]],
-    verpflegungskosten: [<string | undefined>undefined, [Validators.required]],
+    inAusbildung: [<boolean | undefined>undefined],
+    ausbildungspensum: [<AusbildungsPensum | undefined>undefined],
+    // ausbildungMitEinkommenOderErwerbstaetig: [false, [Validators.required]],
+    // jahreseinkommen: [<string | undefined>undefined, [Validators.required]],
+    // fahrkosten: [<string | undefined>undefined, [Validators.required]],
+    // verpflegungskosten: [<string | undefined>undefined, [Validators.required]],
   });
 
-  ausbildungMitEinkommenOderErwerbstaetigSig = toSignal(
-    this.form.controls.ausbildungMitEinkommenOderErwerbstaetig.valueChanges,
-  );
+  // ausbildungMitEinkommenOderErwerbstaetigSig = toSignal(
+  //   this.form.controls.ausbildungMitEinkommenOderErwerbstaetig.valueChanges,
+  // );
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
-  jahreseinkommenSig = toSignal(
-    this.form.controls.jahreseinkommen.valueChanges,
-  );
+  // jahreseinkommenSig = toSignal(
+  //   this.form.controls.jahreseinkommen.valueChanges,
+  // );
 
-  fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
+  // fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
 
-  jahreseinkommenDocumentSig = this.createUploadOptionsSig(() => {
-    const jahreseinkommen = fromFormatedNumber(
-      this.jahreseinkommenSig() ?? '0',
-    );
+  // jahreseinkommenDocumentSig = this.createUploadOptionsSig(() => {
+  //   const jahreseinkommen = fromFormatedNumber(
+  //     this.jahreseinkommenSig() ?? '0',
+  //   );
 
-    return jahreseinkommen > 0
-      ? DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG
-      : null;
-  });
+  //   return jahreseinkommen > 0
+  //     ? DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG
+  //     : null;
+  // });
 
-  fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
+  // fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
+  //   const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
 
-    return fahrkosten > 0 ? DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT : null;
-  });
+  //   return fahrkosten > 0 ? DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT : null;
+  // });
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -207,9 +206,10 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
             partner.geburtsdatum,
             this.languageSig(),
           ),
-          jahreseinkommen: partnerForForm.jahreseinkommen?.toString(),
-          fahrkosten: partnerForForm.fahrkosten?.toString(),
-          verpflegungskosten: partnerForForm.verpflegungskosten?.toString(),
+
+          // jahreseinkommen: partnerForForm.jahreseinkommen?.toString(),
+          // fahrkosten: partnerForForm.fahrkosten?.toString(),
+          // verpflegungskosten: partnerForForm.verpflegungskosten?.toString(),
         });
         SharedUiFormAddressComponent.patchForm(
           this.form.controls.adresse,
@@ -242,32 +242,33 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         );
       }
     });
-    effect(() => {
-      this.gotReenabledSig();
-      const noAusbildungMitEinkommenOderErwerbstaetigkeit =
-        !this.ausbildungMitEinkommenOderErwerbstaetigSig();
-      if (this.viewSig().readonly) {
-        Object.values(this.form.controls).forEach((control) =>
-          control.disable(),
-        );
-      } else {
-        this.formUtils.setDisabledState(
-          this.form.controls.jahreseinkommen,
-          noAusbildungMitEinkommenOderErwerbstaetigkeit,
-          true,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.fahrkosten,
-          noAusbildungMitEinkommenOderErwerbstaetigkeit,
-          true,
-        );
-        this.formUtils.setDisabledState(
-          this.form.controls.verpflegungskosten,
-          noAusbildungMitEinkommenOderErwerbstaetigkeit,
-          true,
-        );
-      }
-    });
+
+    // effect(() => {
+    //   this.gotReenabledSig();
+    //   const noAusbildungMitEinkommenOderErwerbstaetigkeit =
+    //     !this.ausbildungMitEinkommenOderErwerbstaetigSig();
+    //   if (this.viewSig().readonly) {
+    //     Object.values(this.form.controls).forEach((control) =>
+    //       control.disable(),
+    //     );
+    //   } else {
+    //     this.formUtils.setDisabledState(
+    //       this.form.controls.jahreseinkommen,
+    //       noAusbildungMitEinkommenOderErwerbstaetigkeit,
+    //       true,
+    //     );
+    //     this.formUtils.setDisabledState(
+    //       this.form.controls.fahrkosten,
+    //       noAusbildungMitEinkommenOderErwerbstaetigkeit,
+    //       true,
+    //     );
+    //     this.formUtils.setDisabledState(
+    //       this.form.controls.verpflegungskosten,
+    //       noAusbildungMitEinkommenOderErwerbstaetigkeit,
+    //       true,
+    //     );
+    //   }
+    // });
   }
 
   ngOnInit() {
@@ -352,9 +353,9 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
         this.languageSig(),
         subYears(new Date(), MEDIUM_AGE_ADULT),
       )!,
-      jahreseinkommen: fromFormatedNumber(formValues.jahreseinkommen),
-      fahrkosten: fromFormatedNumber(formValues.fahrkosten),
-      verpflegungskosten: fromFormatedNumber(formValues.verpflegungskosten),
+      // jahreseinkommen: fromFormatedNumber(formValues.jahreseinkommen),
+      // fahrkosten: fromFormatedNumber(formValues.fahrkosten),
+      // verpflegungskosten: fromFormatedNumber(formValues.verpflegungskosten),
     };
     return {
       gesuchId: gesuch?.id,

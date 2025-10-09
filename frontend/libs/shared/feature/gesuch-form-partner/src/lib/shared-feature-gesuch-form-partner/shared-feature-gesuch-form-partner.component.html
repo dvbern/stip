@@ -116,9 +116,25 @@
           </mat-error>
         </mat-form-field>
       </div>
+
+      <!-- todo: check -->
+      <div class="row g-4 my-2">
+        <div class="d-flex col-12 col-md-12 col-xl-8 flex-column">
+          <mat-checkbox
+            formControlName="alimentenregelungExistiert"
+            data-testid="form-education-alimentenregelungExistiert"
+          >
+            {{ 'shared.form.kinder.alimentenregelungExistiert.label' | transloco }}
+          </mat-checkbox>
+          <dv-shared-ui-form-zuvor-hint
+            [changes]="view.formChanges?.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
+          ></dv-shared-ui-form-zuvor-hint>
+        </div>
+      </div>
+
       <div class="row g-4">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
+        <!-- <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
           <mat-checkbox
             type="checkbox"
             formControlName="ausbildungMitEinkommenOderErwerbstaetig"
@@ -140,17 +156,47 @@
           >
             <span class="material-symbols-rounded"> info </span>
           </button>
-        </div>
+        </div> -->
+
+        <!-- todo: check -->
+        <!-- PENSUM -->
+        <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:mt-9">
+          <mat-label>
+            {{ 'shared.form.ausbildung.pensum.label' | transloco }}
+          </mat-label>
+
+          <mat-select
+            formControlName="ausbildungspensum"
+            data-testid="form-partner-pensum"
+            [placeholder]="'shared.form.select.empty' | transloco"
+          >
+            @for (l of ausbildungspensumValues; track $index) {
+              <mat-option [value]="l" [attr.data-testid]="l">
+                {{ 'shared.form.partner.pensum.' + l | transloco }}
+              </mat-option>
+            }
+          </mat-select>
+
+          <mat-hint
+            *dvZuvorHint="
+              view.formChanges?.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
+            "
+          ></mat-hint>
+
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </mat-form-field>
         <div class="d-none d-xl-block col-xl-4"></div>
-        <div
+        <!-- <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label'"
           [dialogMessageKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.info'"
           #ausbildungEinkommenErwerbsDialog="dvSharedUiInfoDialog"
           class="d-none d-xl-block col-xl-4"
-        ></div>
+        ></div> -->
       </div>
-      @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
+      <!-- @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
         <div class="row g-4 my-2">
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -176,8 +222,8 @@
             }
           </div>
         </div>
-      }
-      @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
+      } -->
+      <!-- @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
         <div class="row g-4 my-2">
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
             <mat-label>{{ 'shared.form.partner.verpflegungskosten.label' | transloco }}</mat-label>
@@ -194,8 +240,8 @@
             </mat-error>
           </mat-form-field>
         </div>
-      }
-      @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
+      } -->
+      <!-- @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
         <div class="row g-4 my-2">
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -221,7 +267,8 @@
             }
           </div>
         </div>
-      }
+      } -->
+
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
         @if (!view.readonly) {

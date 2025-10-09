@@ -152,7 +152,12 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       [Validators.required],
     ),
     alimentenregelungExistiert: [<boolean | undefined>false],
-    erhalteneAlimentebeitraege: [<string | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
+    // todo: add new fields!
+    // kinderUndAusbildungszulagen: [<string | null>null],
+    // renten: [<string | null>null],
+    // ergaenzungsleistungen: [<string | null>null],
+    // andereEinnahmen: [<string | null>null],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
@@ -173,11 +178,11 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   alimentenregelungExistiertChangeSig = computed(() => {
     const changes = this.changesSig();
 
-    if (!changes || changes.erhalteneAlimentebeitraege === undefined) {
+    if (!changes || changes.unterhaltsbeitraege === undefined) {
       return;
     }
 
-    return changes.erhalteneAlimentebeitraege !== null;
+    return changes.unterhaltsbeitraege !== null;
   });
 
   constructor() {
@@ -195,7 +200,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     effect(() => {
       this.gotReenabledSig();
       this.formUtils.setDisabledState(
-        this.form.controls.erhalteneAlimentebeitraege,
+        this.form.controls.unterhaltsbeitraege,
         this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
         !this.viewSig().readonly,
       );
@@ -210,11 +215,8 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         this.languageSig(),
       ),
       wohnsitzAnteilPia: this.kind.wohnsitzAnteilPia?.toString(),
-      erhalteneAlimentebeitraege:
-        this.kind.erhalteneAlimentebeitraege?.toString(),
-      alimentenregelungExistiert: isDefined(
-        this.kind.erhalteneAlimentebeitraege,
-      ),
+      unterhaltsbeitraege: this.kind.unterhaltsbeitraege?.toString(),
+      alimentenregelungExistiert: isDefined(this.kind.unterhaltsbeitraege),
     });
   }
 
@@ -224,7 +226,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.updateValidity$.next({});
 
     const formValues = convertTempFormToRealValues(this.form, [
-      'erhalteneAlimentebeitraege',
+      'unterhaltsbeitraege',
       'wohnsitzAnteilPia',
     ]);
     delete formValues.alimentenregelungExistiert;
@@ -240,9 +242,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         id: this.kind?.id,
         geburtsdatum,
         wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
-        erhalteneAlimentebeitraege: fromFormatedNumber(
-          formValues.erhalteneAlimentebeitraege,
-        ),
+        unterhaltsbeitraege: fromFormatedNumber(formValues.unterhaltsbeitraege),
       });
       this.form.markAsPristine();
     }

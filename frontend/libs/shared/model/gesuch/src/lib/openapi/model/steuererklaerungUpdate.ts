@@ -15,6 +15,10 @@ export interface SteuererklaerungUpdate {
     id?: string;
     steuerdatenTyp: SteuerdatenTyp;
     steuererklaerungInBern: boolean;
+    ergaenzungsleistungen?: number;
+    unterhaltsbeitraege?: number;
+    renten?: number;
+    bgsa?: number;
 }
 
 

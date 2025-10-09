@@ -118,9 +118,15 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PARTNER_BELEG_OV_ABONNEMENT: 'shared.form.partner.file.OV_ABONNEMENT',
   PARTNER_BELEG_OV_ABONNEMENT_DESCRIPTION:
     'shared.form.partner.file.OV_ABONNEMENT_DESCRIPTION',
-  EK_BELEG_ALIMENTE: 'shared.form.einnahmenkosten.file.ALIMENTE',
-  EK_BELEG_ALIMENTE_DESCRIPTION:
-    'shared.form.einnahmenkosten.file.ALIMENTE_DESCRIPTION',
+  EK_BELEG_UNTERHALTSBEITRAEGE:
+    'shared.form.einnahmenkosten.file.UNTERHALTSBEITRAEGE',
+  EK_BELEG_UNTERHALTSBEITRAEGE_DESCRIPTION:
+    'shared.form.einnahmenkosten.file.UNTERHALTSBEITRAEGE_DESCRIPTION',
+  EK_BELEG_EINNAHMEN_BGSA: 'shared.form.einnahmenkosten.file.EINNAHMEN_BGSA',
+  EK_BELEG_TAGGELDER_AHV_IV:
+    'shared.form.einnahmenkosten.file.TAGGELDER_AHV_IV',
+  EK_BELEG_ANDERE_EINNAHMEN:
+    'shared.form.einnahmenkosten.file.ANDERE_EINNAHMEN',
   EK_BELEG_KINDERZULAGEN: 'shared.form.einnahmenkosten.file.KINDERZULAGEN',
   EK_VERFUEGUNG_GEMEINDE_INSTITUTION:
     'shared.form.einnahmenkosten.file.GEMEINDE_INSTITUTION',
@@ -142,9 +148,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   EK_BELEG_BETREUUNGSKOSTEN_KINDER_DESCRIPTION:
     'shared.form.einnahmenkosten.file.BETREUUNGSKOSTEN_KINDER_DESCRIPTION',
   EK_LOHNABRECHNUNG: 'shared.form.einnahmenkosten.file.LOHNABRECHNUNG',
-  EK_VERDIENST: 'shared.form.einnahmenkosten.file.VERDIENST',
-  EK_VERDIENST_DESCRIPTION:
-    'shared.form.einnahmenkosten.file.VERDIENST_DESCRIPTION',
   EK_VERMOEGEN: 'shared.form.einnahmenkosten.file.VERMOEGEN',
   EK_VERMOEGEN_DESCRIPTION:
     'shared.form.einnahmenkosten.file.VERMOEGEN_DESCRIPTION',

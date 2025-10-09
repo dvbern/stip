@@ -46,26 +46,26 @@
             }
           </div>
         </div>
-        @if (!hiddenFieldsSetSig().has(form.controls.alimente)) {
+        @if (!hiddenFieldsSetSig().has(form.controls.unterhaltsbeitraege)) {
           <div class="row g-4">
-            <!-- ALIMENTE -->
+            <!-- UNTERHALTSBEITRÄGE -->
             <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
-                <mat-label>{{ t('shared.form.einnahmenkosten.alimente.label') }}</mat-label>
+                <mat-label>{{ t('shared.form.einnahmenkosten.unterhaltsbeitraege.label') }}</mat-label>
                 <input
-                  formControlName="alimente"
+                  formControlName="unterhaltsbeitraege"
                   data-testid="form-einnahmen-kosten-alimente"
                   matInput
                   type="text"
                   [maskito]="maskitoNumber"
                 />
-                <mat-hint *dvZuvorHint="view.formChanges?.alimente"></mat-hint>
+                <mat-hint *dvZuvorHint="view.formChanges?.unterhaltsbeitraege"></mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ t('shared.form.error.required') }}
                 </mat-error>
               </mat-form-field>
 
-              @if (alimenteDocumentSig(); as options) {
+              @if (unterhaltsbeitraegeDocumentSig(); as options) {
                 <dv-shared-pattern-document-upload
                   class="flex-shrink-1"
                   [optionsSig]="options"
@@ -481,9 +481,10 @@
         <h3 class="pt-5 mb-4">
           {{ t('shared.form.einnahmenkosten.general.title') }}
         </h3>
-        @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
+
+        <!-- VERDIENST_REALISIERT -->
+        <!-- @if (!hiddenFieldsSetSig().has(form.controls.verdienstRealisiert)) {
           <div class="row g-4">
-            <!-- VERDIENST_REALISIERT -->
             <mat-radio-group
               class="col-12 col-md-6"
               formControlName="verdienstRealisiert"
@@ -536,7 +537,7 @@
               class="d-none d-xl-block col-xl-6"
             ></div>
           </div>
-        }
+        } -->
 
         <!-- Buttons -->
         <dv-shared-ui-step-form-buttons>

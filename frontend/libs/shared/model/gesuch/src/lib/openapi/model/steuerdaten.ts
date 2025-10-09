@@ -27,7 +27,6 @@ export interface Steuerdaten {
     isArbeitsverhaeltnisSelbstaendig: boolean;
     saeule3a?: number;
     saeule2?: number;
-    kinderalimente: number;
     vermoegen: number;
 }
 
