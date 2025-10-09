@@ -31,14 +31,6 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class ElternRequiredDocumentsProducer {
-
-    private static final Map<ElternTyp, DokumentTyp> ERGAENZUNGSLEISTUNGEN_MAP = Map.of(
-        ElternTyp.MUTTER,
-        DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER,
-        ElternTyp.VATER,
-        DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-    );
-
     private static final Map<ElternTyp, DokumentTyp> SOZIALHILFEBUDGET_MAP = Map.of(
         ElternTyp.MUTTER,
         DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER,
@@ -59,11 +51,6 @@ public class ElternRequiredDocumentsProducer {
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
-
-        // todo KSTIP-2780: what to do with this?
-        // if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getErgaenzungsleistungen())) {
-        // requiredDocs.add(ERGAENZUNGSLEISTUNGEN_MAP.get(elternteil.getElternTyp()));
-        // }
 
         if (elternteil.isSozialhilfebeitraege()) {
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));

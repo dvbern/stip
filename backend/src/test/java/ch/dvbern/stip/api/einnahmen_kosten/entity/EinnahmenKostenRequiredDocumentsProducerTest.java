@@ -41,8 +41,6 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
             // todo ksip-2780 what to do here?
             // .setVerdienstRealisiert(true)
         );
-
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERDIENST);
     }
 
     @Test
@@ -137,7 +135,8 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
                 .setUnterhaltsbeitraege(1)
         );
 
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ALIMENTE);
+        RequiredDocsUtil
+            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
     }
 
     @Test

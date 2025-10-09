@@ -173,7 +173,7 @@ public class DeleteChangedDocumentsUtil {
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getUnterhaltsbeitraege(), newEk.getUnterhaltsbeitraege())) {
-            toDelete.add(DokumentTyp.EK_BELEG_ALIMENTE);
+            toDelete.add(DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {

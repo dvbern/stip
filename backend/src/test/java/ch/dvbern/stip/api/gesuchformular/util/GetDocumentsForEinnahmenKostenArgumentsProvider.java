@@ -74,7 +74,7 @@ public class GetDocumentsForEinnahmenKostenArgumentsProvider implements Argument
             CreatePermutationUtil.createIntegerPermutations(
                 (val) -> new EinnahmenKostenUpdateDto().unterhaltsbeitraege(val),
                 (val) -> new EinnahmenKosten().setUnterhaltsbeitraege(val),
-                DokumentTyp.EK_BELEG_ALIMENTE
+                DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
             ),
             CreatePermutationUtil.createIntegerPermutations(
                 (val) -> new EinnahmenKostenUpdateDto().ergaenzungsleistungen(val),
