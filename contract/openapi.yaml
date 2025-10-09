@@ -7030,7 +7030,7 @@ components:
           type: integer
         renten:
           type: integer
-        bgsa:
+        einnahmenBGSA:
           type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
