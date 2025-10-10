@@ -465,14 +465,9 @@
         <!-- STEUERN KANTON / GEMEINDE -->
         <div class="row g-4 readonly">
           <mat-form-field class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ t('shared.form.einnahmenkosten.steuernKantonGemeinde.label') }}</mat-label>
-            <input
-              formControlName="steuernKantonGemeinde"
-              data-testid="form-einnahmen-kosten-steuernKantonGemeinde"
-              matInput
-              type="text"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.steuernKantonGemeinde"></mat-hint>
+            <mat-label>{{ t('shared.form.einnahmenkosten.steuern.label') }}</mat-label>
+            <input formControlName="steuern" data-testid="form-einnahmen-kosten-steuern" matInput type="text" />
+            <mat-hint *dvZuvorHint="view.formChanges?.steuern"></mat-hint>
           </mat-form-field>
         </div>
 

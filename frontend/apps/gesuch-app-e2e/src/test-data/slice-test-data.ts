@@ -164,7 +164,7 @@ export const einnahmenKosten: EinnahmenKosten = {
   vermoegen: 6,
   steuerjahr: +specificYearsAgo(1),
   veranlagungsStatus: 'Provisorisch Veranlagt',
-  steuernKantonGemeinde: 0,
+  steuern: 0,
   verdienstRealisiert: false,
 };
 

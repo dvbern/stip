@@ -61,6 +61,6 @@ export interface EinnahmenKostenUpdate {
     /**
      * transient and calculated readonly field
      */
-    steuernKantonGemeinde?: number;
+    steuern?: number;
 }
 

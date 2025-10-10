@@ -815,7 +815,7 @@
   "shared.form.einnahmenkosten.vermoegen.label": "Fortune",
   "shared.form.einnahmenkosten.veranlagungsStatus.label": "Status de taxation",
   "shared.form.einnahmenkosten.steuerjahr.label": "Année fiscale",
-  "shared.form.einnahmenkosten.steuernKantonGemeinde.label": "Impôts cantonaux et communaux",
+  "shared.form.einnahmenkosten.steuern.label": "Impôts cantonaux et communaux",
   "shared.form.einnahmenkosten.file.ALIMENTE": "Reçu bancaire ou postal",
   "shared.form.einnahmenkosten.file.ALIMENTE_DESCRIPTION": "Justificatif bancaire ou postal des pensions alimentaires payées actuellement",
   "shared.form.einnahmenkosten.file.KINDERZULAGEN": "Justificatif allocations pour enfant/allocations de formation",

@@ -33,8 +33,8 @@ export interface PersoenlichesBudgetresultat {
     grundbedarf: number;
     wohnkosten: number;
     medizinischeGrundversorgung: number;
-    steuernKantonGemeinde: number;
-    steuernKantonGemeindePartner: number;
+    steuern: number;
+    steuernPartner: number;
     fahrkosten: number;
     fahrkostenPartner: number;
     verpflegung: number;

@@ -815,7 +815,7 @@
   "shared.form.einnahmenkosten.vermoegen.label": "Vermögen",
   "shared.form.einnahmenkosten.veranlagungsStatus.label": "Status der Veranlagung",
   "shared.form.einnahmenkosten.steuerjahr.label": "Steuerjahr",
-  "shared.form.einnahmenkosten.steuernKantonGemeinde.label": "Steuern Kanton/Gemeinde",
+  "shared.form.einnahmenkosten.steuern.label": "Steuern Kanton/Gemeinde",
   "shared.form.einnahmenkosten.file.ALIMENTE": "Bank- oder Postbeleg",
   "shared.form.einnahmenkosten.file.ALIMENTE_DESCRIPTION": "Bank- oder Postbeleg über die aktuell bezahlten Alimente",
   "shared.form.einnahmenkosten.file.KINDERZULAGEN": "Beleg Kinder-/Ausbildungszulagen",

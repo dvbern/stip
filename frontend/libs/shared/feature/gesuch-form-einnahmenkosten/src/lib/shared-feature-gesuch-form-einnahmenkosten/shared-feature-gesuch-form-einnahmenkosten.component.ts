@@ -147,7 +147,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         /* See `vermoegenValidator` bellow */
       ],
     ],
-    steuernKantonGemeinde: [<string | null>null, []],
+    steuern: [<string | null>null, []],
     veranlagungsStatus: [<string | null>null, [Validators.required]],
     steuerjahr: [
       <number | null>null,
@@ -384,7 +384,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-    this.form.controls.steuernKantonGemeinde.disable();
+    this.form.controls.steuern.disable();
     effect(() => {
       this.gotReenabledSig();
       const { hasData, hatKinder, warErwachsenSteuerJahr } =
@@ -460,9 +460,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           vermoegen: einnahmenKosten.vermoegen?.toString(),
           veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
           steuerjahr: einnahmenKosten.steuerjahr,
-          steuernKantonGemeinde: toFormatedNumber(
-            einnahmenKosten.steuernKantonGemeinde ?? 0,
-          ),
+          steuern: toFormatedNumber(einnahmenKosten.steuern ?? 0),
         });
       }
     });
@@ -553,7 +551,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           vermoegen: fromFormatedNumber(formValues.vermoegen),
           steuerjahr: formValues.steuerjahr,
           veranlagungsStatus: formValues.veranlagungsStatus,
-          steuernKantonGemeinde: undefined,
+          steuern: undefined,
         },
       },
     };
