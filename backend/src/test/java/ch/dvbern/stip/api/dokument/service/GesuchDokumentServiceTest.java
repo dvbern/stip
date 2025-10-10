@@ -37,7 +37,6 @@ import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -140,7 +139,6 @@ class GesuchDokumentServiceTest {
         final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(GesuchDokumentStatus.AUSSTEHEND)
-            .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
@@ -166,7 +164,6 @@ class GesuchDokumentServiceTest {
         final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(GesuchDokumentStatus.AUSSTEHEND)
-            .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
         GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
@@ -193,7 +190,6 @@ class GesuchDokumentServiceTest {
         // Arrange
         mockedDokument = (GesuchDokument) new GesuchDokument()
             .setStatus(GesuchDokumentStatus.AUSSTEHEND)
-            .setDokumentTyp(DokumentTyp.EK_VERDIENST)
             .setId(id);
 
         GesuchTranche tranche = initGesuchTranche();

@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.PartnerPageValidation;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -77,7 +78,8 @@ public class Partner extends AbstractPerson {
     @Column(name = "in_ausbildung", nullable = false)
     private boolean inAusbildung = false;
 
-    @NotNull
+    // todo kstip-2780: darf nicht null sein bei ausbildung = true
+    @Nullable
     @Column(name = "ausbildungspensum")
     @Enumerated(EnumType.STRING)
     private AusbildungsPensum ausbildungsPensum;

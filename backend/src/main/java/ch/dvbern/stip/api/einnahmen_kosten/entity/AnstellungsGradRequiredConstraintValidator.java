@@ -34,6 +34,7 @@ public class AnstellungsGradRequiredConstraintValidator
             return true;
         }
 
-        return Objects.nonNull(einnahmenKosten.getAnstellungsGrad()) && einnahmenKosten.getAnstellungsGrad() > 0;
+        return Objects.nonNull(einnahmenKosten.getArbeitspensumProzent())
+        && einnahmenKosten.getArbeitspensumProzent() > 0;
     }
 }

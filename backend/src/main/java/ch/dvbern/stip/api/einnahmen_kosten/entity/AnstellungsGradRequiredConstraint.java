@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_WOHNSITUATION_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AnstellungsGradRequiredConstraintValidator.class)
 @Documented
 public @interface AnstellungsGradRequiredConstraint {
-    String message() default VALIDATION_FAMILIENSITUATION_WOHNSITUATION_MESSAGE;// todo kstip-2870 adapt
+    String message() default VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE;
 
     Class<?>[] groups() default {};
 

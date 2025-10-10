@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -46,7 +45,6 @@ class OneOfDocumentTypesRequiredConstraintValidatorTest {
 
     @Test
     void onlyDocumentTypPresentTest() {
-        dokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         assertTrue(validator.validate(dokument).isEmpty());
 
     }
@@ -60,7 +58,6 @@ class OneOfDocumentTypesRequiredConstraintValidatorTest {
     @Test
     void bothTypesPresentTest() {
         // one, NOT both should be present
-        dokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         dokument.setCustomDokumentTyp(new CustomDokumentTyp().setType("test").setDescription("description"));
         assertFalse(validator.validate(dokument).isEmpty());
     }

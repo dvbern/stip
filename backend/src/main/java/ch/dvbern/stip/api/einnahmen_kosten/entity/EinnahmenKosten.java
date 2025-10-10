@@ -136,6 +136,6 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Min(0)
     @Max(100)
     @Nullable
-    @Column(name = "anstellungsgrad")
-    private Integer anstellungsGrad;
+    @Column(name = "arbeitspensum_prozent")
+    private Integer arbeitspensumProzent;
 }

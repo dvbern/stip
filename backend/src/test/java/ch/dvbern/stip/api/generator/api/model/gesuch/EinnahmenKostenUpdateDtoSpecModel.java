@@ -25,6 +25,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
     public static EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDtoSpec() {
         return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model) -> {
             model.setNettoerwerbseinkommen(500);
+            model.setArbeitspensumProzent(100);
             model.setZulagen(500);
             model.setRenten(500);
             model.setEoLeistungen(500);
