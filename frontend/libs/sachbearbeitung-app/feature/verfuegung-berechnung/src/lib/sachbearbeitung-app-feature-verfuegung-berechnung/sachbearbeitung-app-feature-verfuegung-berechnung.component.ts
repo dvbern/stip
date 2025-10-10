@@ -135,6 +135,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
             wohnkostenPersonen: p.wohnkosten,
             medizinischeGrundversorgungPersonen: p.medizinischeGrundversorgung,
             kantonsGemeindesteuern: p.steuernKantonGemeinde,
+            kantonsGemeindesteuernPartner: p.steuernKantonGemeindePartner,
             bundessteuern: 0,
             fahrkosten: p.fahrkosten,
             fahrkostenPartner: p.fahrkostenPartner,

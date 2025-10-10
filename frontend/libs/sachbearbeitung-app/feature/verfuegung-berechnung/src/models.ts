@@ -41,6 +41,7 @@ export type PersoenlicheBerechnung = {
     wohnkostenPersonen: number;
     medizinischeGrundversorgungPersonen: number;
     kantonsGemeindesteuern: number;
+    kantonsGemeindesteuernPartner: number;
     bundessteuern: number;
     fahrkostenPartner: number;
     verpflegungPartner: number;

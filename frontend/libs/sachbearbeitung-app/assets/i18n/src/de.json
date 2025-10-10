@@ -633,6 +633,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen": "Wohnkosten für {{ anzahl }} Personenhaushalt",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen": "Medizinische Grundversorgung für {{ anzahl }} Personenhaushalt",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern": "Kantons- und Gemeindesteuern",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner": "Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern": "Bundessteuern",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner": "Fahrkosten Ehepartnerin/Ehepartner",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner": "Verpflegung Ehepartnerin/Ehepartner",
