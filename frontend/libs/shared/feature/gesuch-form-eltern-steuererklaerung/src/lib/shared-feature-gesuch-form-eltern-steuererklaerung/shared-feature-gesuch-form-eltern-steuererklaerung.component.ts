@@ -19,12 +19,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
+  ElternTyp,
   SharedModelGesuchFormularUpdate,
   SteuerdatenTyp,
   SteuererklaerungUpdate,
@@ -39,7 +41,9 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
   SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -47,6 +51,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 
 import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feature-gesuch-form-eltern-steuererklaerung.selector';
 
@@ -54,8 +62,11 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MaskitoDirective,
+    SharedUiInfoDialogDirective,
     TranslocoPipe,
     MatFormFieldModule,
+    SharedUiZuvorHintDirective,
     MatInputModule,
     MatRadioModule,
     SharedUiLoadingComponent,
@@ -86,15 +97,54 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
 
   hasUnsavedChanges = false;
 
+  maskitoNumber = maskitoNumber;
+
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   form = this.formBuilder.group({
+    // todo: check Validators
     steuererklaerungInBern: [<boolean | null>null, [Validators.required]],
+    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
+    renten: [<string | null>null, [Validators.required]],
+    einnahmenBGSA: [<string | null>null, [Validators.required]],
   });
 
   steuererklaerungInBernChangedSig = toSignal(
     this.form.controls.steuererklaerungInBern.valueChanges,
   );
+
+  private numberConverter = this.formUtils.createNumberConverter(this.form, [
+    'ergaenzungsleistungen',
+    'unterhaltsbeitraege',
+    'renten',
+    'einnahmenBGSA',
+  ]);
+
+  private ergaenzungsleistungChangedSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    // const elternTyp = this.elternteilSig().elternTyp;
+    const steuerdatenTyp = this.stepSig().type;
+
+    // todo: fix or change when mada answers the question
+    const STEUERDATEN_TO_ELTERN_MAPPING = {
+      [SteuerdatenTyp.MUTTER]: ElternTyp.MUTTER,
+      [SteuerdatenTyp.VATER]: ElternTyp.VATER,
+      [SteuerdatenTyp.FAMILIE]: ElternTyp.VATER,
+    } as const;
+
+    const elternTyp = STEUERDATEN_TO_ELTERN_MAPPING[steuerdatenTyp];
+
+    const ergaenzungsleistung =
+      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
+      0;
+
+    return ergaenzungsleistung > 0
+      ? `ELTERN_ERGAENZUNGSLEISTUNGEN_${elternTyp}`
+      : null;
+  });
 
   steuererklaerungInBernDocumentSig = this.createUploadOptionsSig(() => {
     const steuererklaerungInBern = this.steuererklaerungInBernChangedSig();
@@ -104,6 +154,38 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     // no value is set!
     return steuererklaerungInBern === false
       ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${type}`]
+      : null;
+  });
+
+  unterhaltsbeitraegeSig = toSignal(
+    this.form.controls.unterhaltsbeitraege.valueChanges,
+  );
+
+  unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
+    const unterhaltsbeitraege = fromFormatedNumber(
+      this.unterhaltsbeitraegeSig() ?? '0',
+    );
+
+    return unterhaltsbeitraege > 0
+      ? DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
+      : null;
+  });
+
+  rentenSig = toSignal(this.form.controls.renten.valueChanges);
+
+  rentenDocumentSig = this.createUploadOptionsSig(() => {
+    const renten = fromFormatedNumber(this.rentenSig() ?? '0');
+    // todo: falmily problem
+    return renten > 0 ? DokumentTyp.STEUERERKLAERUNG_RENTEN_VATER : null;
+  });
+
+  einnahmenBGSASig = toSignal(this.form.controls.einnahmenBGSA.valueChanges);
+
+  einnahmenBGSADocumentSig = this.createUploadOptionsSig(() => {
+    const einnahmenBGSA = fromFormatedNumber(this.einnahmenBGSASig() ?? '0');
+    // todo: falmily problem
+    return einnahmenBGSA > 0
+      ? DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER
       : null;
   });
 
@@ -121,7 +203,8 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
       const steuererklaerung = this.originalSteuererklaerungSig();
       if (steuererklaerung) {
         this.form.patchValue({
-          steuererklaerungInBern: steuererklaerung.steuererklaerungInBern,
+          ...steuererklaerung,
+          ...this.numberConverter.toString(steuererklaerung),
         });
       }
     });
@@ -163,12 +246,18 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'steuererklaerungInBern',
+      'ergaenzungsleistungen',
+      'unterhaltsbeitraege',
+      'renten',
+      'einnahmenBGSA',
     ]);
 
     const steuererklaerung = {
       ...formValues,
       steuerdatenTyp: this.stepSig().type,
+      ...this.numberConverter.toNumber(formValues),
     };
+
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,

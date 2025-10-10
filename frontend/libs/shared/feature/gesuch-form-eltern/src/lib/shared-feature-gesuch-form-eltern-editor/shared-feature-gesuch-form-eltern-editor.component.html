@@ -145,11 +145,11 @@
     </div>
     <div class="d-none d-xl-block col-xl-4"></div>
     <div
+      class="d-none d-xl-block col-xl-4"
       dvSharedUiInfoDialog
       [dialogTitleKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.infoTitle'"
       [dialogMessageKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.info'"
       #identischerZivilrechtlicherWohnsitzDialog="dvSharedUiInfoDialog"
-      class="d-none d-xl-block col-xl-4"
     ></div>
   </div>
   <!-- alternative civil residence -->
@@ -212,39 +212,6 @@
   <h3 class="pt-5">{{ 'shared.weiterangaben' | transloco }}</h3>
 
   <div class="row g-4 my-2">
-    <!-- Ergaenzungsleistungen-->
-    <!-- <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
-        <mat-label>{{ 'shared.form.eltern.ergaenzungsleistungen.label' | transloco }}</mat-label>
-        <input
-          formControlName="ergaenzungsleistungen"
-          data-testid="form-eltern-ergaenzungsleistungen"
-          matInput
-          [maskito]="maskitoNumber"
-          type="text"
-        />
-        <mat-hint *dvZuvorHint="changes?.ergaenzungsleistungen"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </mat-form-field>
-
-      @if (ergaenzungsleistungenDocumentSig(); as options) {
-        <dv-shared-pattern-document-upload
-          class="flex-shrink-1"
-          [optionsSig]="options"
-        ></dv-shared-pattern-document-upload>
-      }
-      <button
-        type="button"
-        (click)="ergaenzungsleistungenDialog.toggle()"
-        class="dv-icon-button dv-icon-button-md text-info mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-      >
-        <span class="material-symbols-rounded"> info </span>
-      </button>
-    </div> -->
-
     <!-- Wohnkosten-->
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -280,13 +247,8 @@
         <span class="material-symbols-rounded"> info </span>
       </button>
     </div>
+    <div class="d-none d-xl-block col-xl-4"></div>
     <div class="d-none d-xl-block col-xl-4">
-      <div
-        dvSharedUiInfoDialog
-        [dialogTitleKey]="'shared.form.eltern.ergaenzungsleistungen.infoTitle'"
-        [dialogMessageKey]="'shared.form.eltern.ergaenzungsleistungen.info'"
-        #ergaenzungsleistungenDialog="dvSharedUiInfoDialog"
-      ></div>
       <div
         dvSharedUiInfoDialog
         [dialogTitleKey]="'shared.form.eltern.wohnkosten.infoTitle'"
