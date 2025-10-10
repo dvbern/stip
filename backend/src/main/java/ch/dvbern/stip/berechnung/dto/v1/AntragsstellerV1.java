@@ -167,8 +167,9 @@ public class AntragsstellerV1 {
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie()
             )
         );
+        final var isPiaQuellenbesteuert = EinnahmenKostenMappingUtil.isQuellenBesteuert(personInAusbildung);
         builder.steuern(
-            EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular)
+            EinnahmenKostenMappingUtil.calculateSteuern(einnahmenKosten, isPiaQuellenbesteuert)
             // TODO: + einnahmenKosten.getSteuernStaat() + einnahmenKosten.getSteuernBund()
         );
         builder.fahrkosten(Objects.requireNonNullElse(einnahmenKosten.getFahrkosten(), 0));

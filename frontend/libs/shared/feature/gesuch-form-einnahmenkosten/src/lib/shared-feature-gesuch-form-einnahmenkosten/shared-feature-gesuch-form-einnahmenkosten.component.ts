@@ -147,6 +147,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         /* See `vermoegenValidator` bellow */
       ],
     ],
+    steuernKantonGemeinde: [<string | null>null, []],
     veranlagungsStatus: [<string | null>null, [Validators.required]],
     steuerjahr: [
       <number | null>null,
@@ -262,22 +263,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   nettoerwerbseinkommenSig = toSignal(
     this.form.controls.nettoerwerbseinkommen.valueChanges,
   );
-
-  steuernKantonGemeindeSig = computed(() => {
-    const einkommen = fromFormatedNumber(
-      this.nettoerwerbseinkommenSig() ?? '0',
-    );
-    const einkommenPartner =
-      this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
-
-    const gesamtEinkommen = einkommen + einkommenPartner;
-
-    if (gesamtEinkommen >= 20_000) {
-      return toFormatedNumber(gesamtEinkommen * 0.1);
-    }
-
-    return 0;
-  });
 
   nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
     const nettoerwerbseinkommen = fromFormatedNumber(
@@ -399,6 +384,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
+    this.form.controls.steuernKantonGemeinde.disable();
     effect(() => {
       this.gotReenabledSig();
       const { hasData, hatKinder, warErwachsenSteuerJahr } =
@@ -474,6 +460,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           vermoegen: einnahmenKosten.vermoegen?.toString(),
           veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
           steuerjahr: einnahmenKosten.steuerjahr,
+          steuernKantonGemeinde: toFormatedNumber(
+            einnahmenKosten.steuernKantonGemeinde ?? 0,
+          ),
         });
       }
     });
@@ -564,6 +553,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           vermoegen: fromFormatedNumber(formValues.vermoegen),
           steuerjahr: formValues.steuerjahr,
           veranlagungsStatus: formValues.veranlagungsStatus,
+          steuernKantonGemeinde: undefined,
         },
       },
     };

@@ -467,12 +467,10 @@
           <mat-form-field class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ t('shared.form.einnahmenkosten.steuernKantonGemeinde.label') }}</mat-label>
             <input
+              formControlName="steuernKantonGemeinde"
               data-testid="form-einnahmen-kosten-steuernKantonGemeinde"
               matInput
               type="text"
-              [maskito]="maskitoNumber"
-              disabled
-              [value]="steuernKantonGemeindeSig()"
             />
             <mat-hint *dvZuvorHint="view.formChanges?.steuernKantonGemeinde"></mat-hint>
           </mat-form-field>
