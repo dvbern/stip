@@ -18,7 +18,7 @@ export interface SteuererklaerungUpdate {
     ergaenzungsleistungen?: number;
     unterhaltsbeitraege?: number;
     renten?: number;
-    bgsa?: number;
+    einnahmenBGSA?: number;
 }
 
 
