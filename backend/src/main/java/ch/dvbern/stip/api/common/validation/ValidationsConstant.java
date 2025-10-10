@@ -116,6 +116,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.familiensituation.wohnsituation.message}";
     public static final String VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE =
         "{jakarta.validation.constraints.einnahmen_kosten.anstellungsgrad.message}";
+    public static final String VALIDATION_PARTNER_AUSBILDUNGS_PENSUM_MESSAGE =
+        "{jakarta.validation.constraints.partner.ausbildungspensum.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE =

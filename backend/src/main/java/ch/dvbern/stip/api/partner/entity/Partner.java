@@ -56,6 +56,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
         @Index(name = "IX_partner_mandant", columnList = "mandant")
     }
 )
+@AusbildungsPensumRequiredConstraint
 @Getter
 @Setter
 public class Partner extends AbstractPerson {
