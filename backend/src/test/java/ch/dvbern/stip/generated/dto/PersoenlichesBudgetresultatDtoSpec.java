@@ -46,8 +46,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GRUNDBEDARF,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_VERPFLEGUNG,
@@ -119,11 +119,11 @@ public class PersoenlichesBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG = "medizinischeGrundversorgung";
   private Integer medizinischeGrundversorgung;
 
-  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
-  private Integer steuernKantonGemeinde;
+  public static final String JSON_PROPERTY_STEUERN = "steuern";
+  private Integer steuern;
 
-  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER = "steuernKantonGemeindePartner";
-  private Integer steuernKantonGemeindePartner;
+  public static final String JSON_PROPERTY_STEUERN_PARTNER = "steuernPartner";
+  private Integer steuernPartner;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
@@ -652,55 +652,55 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+  public PersoenlichesBudgetresultatDtoSpec steuern(Integer steuern) {
     
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+    this.steuern = steuern;
     return this;
   }
 
    /**
-   * Get steuernKantonGemeinde
-   * @return steuernKantonGemeinde
+   * Get steuern
+   * @return steuern
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
+  public Integer getSteuern() {
+    return steuern;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
 
-  public PersoenlichesBudgetresultatDtoSpec steuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
+  public PersoenlichesBudgetresultatDtoSpec steuernPartner(Integer steuernPartner) {
     
-    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+    this.steuernPartner = steuernPartner;
     return this;
   }
 
    /**
-   * Get steuernKantonGemeindePartner
-   * @return steuernKantonGemeindePartner
+   * Get steuernPartner
+   * @return steuernPartner
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER)
+  @JsonProperty(JSON_PROPERTY_STEUERN_PARTNER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getSteuernKantonGemeindePartner() {
-    return steuernKantonGemeindePartner;
+  public Integer getSteuernPartner() {
+    return steuernPartner;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER)
+  @JsonProperty(JSON_PROPERTY_STEUERN_PARTNER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
-    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+  public void setSteuernPartner(Integer steuernPartner) {
+    this.steuernPartner = steuernPartner;
   }
 
 
@@ -991,8 +991,8 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.grundbedarf, persoenlichesBudgetresultat.grundbedarf) &&
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultat.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultat.medizinischeGrundversorgung) &&
-        Objects.equals(this.steuernKantonGemeinde, persoenlichesBudgetresultat.steuernKantonGemeinde) &&
-        Objects.equals(this.steuernKantonGemeindePartner, persoenlichesBudgetresultat.steuernKantonGemeindePartner) &&
+        Objects.equals(this.steuern, persoenlichesBudgetresultat.steuern) &&
+        Objects.equals(this.steuernPartner, persoenlichesBudgetresultat.steuernPartner) &&
         Objects.equals(this.fahrkosten, persoenlichesBudgetresultat.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultat.fahrkostenPartner) &&
         Objects.equals(this.verpflegung, persoenlichesBudgetresultat.verpflegung) &&
@@ -1007,7 +1007,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, steuernKantonGemeindePartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
+    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -1033,8 +1033,8 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
-    sb.append("    steuernKantonGemeindePartner: ").append(toIndentedString(steuernKantonGemeindePartner)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
+    sb.append("    steuernPartner: ").append(toIndentedString(steuernPartner)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");

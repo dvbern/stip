@@ -133,7 +133,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
         assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(),
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
             is(0)
         );
     }

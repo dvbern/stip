@@ -36,7 +36,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid String veranlagungsStatus;
   private @Valid Integer steuerjahr;
   private @Valid Integer vermoegen;
-  private @Valid Integer steuernKantonGemeinde;
+  private @Valid Integer steuern;
 
   /**
    **/
@@ -366,20 +366,20 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
    * minimum: 0
    * maximum: 2147483647
    **/
-  public EinnahmenKostenUpdateDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  public EinnahmenKostenUpdateDto steuern(Integer steuern) {
+    this.steuern = steuern;
     return this;
   }
 
   
-  @JsonProperty("steuernKantonGemeinde")
- @Min(0) @Max(2147483647)  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
+  @JsonProperty("steuern")
+ @Min(0) @Max(2147483647)  public Integer getSteuern() {
+    return steuern;
   }
 
-  @JsonProperty("steuernKantonGemeinde")
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  @JsonProperty("steuern")
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
 
@@ -409,12 +409,12 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
         Objects.equals(this.veranlagungsStatus, einnahmenKostenUpdate.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKostenUpdate.steuerjahr) &&
         Objects.equals(this.vermoegen, einnahmenKostenUpdate.vermoegen) &&
-        Objects.equals(this.steuernKantonGemeinde, einnahmenKostenUpdate.steuernKantonGemeinde);
+        Objects.equals(this.steuern, einnahmenKostenUpdate.steuern);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuern);
   }
 
   @Override
@@ -439,7 +439,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -39,8 +39,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer grundbedarf;
   private @Valid Integer wohnkosten;
   private @Valid Integer medizinischeGrundversorgung;
-  private @Valid Integer steuernKantonGemeinde;
-  private @Valid Integer steuernKantonGemeindePartner;
+  private @Valid Integer steuern;
+  private @Valid Integer steuernPartner;
   private @Valid Integer fahrkosten;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegung;
@@ -397,40 +397,40 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  public PersoenlichesBudgetresultatDto steuern(Integer steuern) {
+    this.steuern = steuern;
     return this;
   }
 
   
-  @JsonProperty("steuernKantonGemeinde")
+  @JsonProperty("steuern")
   @NotNull
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
+  public Integer getSteuern() {
+    return steuern;
   }
 
-  @JsonProperty("steuernKantonGemeinde")
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  @JsonProperty("steuern")
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
   /**
    **/
-  public PersoenlichesBudgetresultatDto steuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
-    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+  public PersoenlichesBudgetresultatDto steuernPartner(Integer steuernPartner) {
+    this.steuernPartner = steuernPartner;
     return this;
   }
 
   
-  @JsonProperty("steuernKantonGemeindePartner")
+  @JsonProperty("steuernPartner")
   @NotNull
-  public Integer getSteuernKantonGemeindePartner() {
-    return steuernKantonGemeindePartner;
+  public Integer getSteuernPartner() {
+    return steuernPartner;
   }
 
-  @JsonProperty("steuernKantonGemeindePartner")
-  public void setSteuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
-    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+  @JsonProperty("steuernPartner")
+  public void setSteuernPartner(Integer steuernPartner) {
+    this.steuernPartner = steuernPartner;
   }
 
   /**
@@ -667,8 +667,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.grundbedarf, persoenlichesBudgetresultat.grundbedarf) &&
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultat.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultat.medizinischeGrundversorgung) &&
-        Objects.equals(this.steuernKantonGemeinde, persoenlichesBudgetresultat.steuernKantonGemeinde) &&
-        Objects.equals(this.steuernKantonGemeindePartner, persoenlichesBudgetresultat.steuernKantonGemeindePartner) &&
+        Objects.equals(this.steuern, persoenlichesBudgetresultat.steuern) &&
+        Objects.equals(this.steuernPartner, persoenlichesBudgetresultat.steuernPartner) &&
         Objects.equals(this.fahrkosten, persoenlichesBudgetresultat.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultat.fahrkostenPartner) &&
         Objects.equals(this.verpflegung, persoenlichesBudgetresultat.verpflegung) &&
@@ -684,7 +684,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, steuernKantonGemeindePartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -710,8 +710,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
-    sb.append("    steuernKantonGemeindePartner: ").append(toIndentedString(steuernKantonGemeindePartner)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
+    sb.append("    steuernPartner: ").append(toIndentedString(steuernPartner)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
