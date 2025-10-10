@@ -196,15 +196,13 @@ public class AntragsstellerV1 {
         );
 
         if (partner != null) {
-            // TODO KSTIP-2785: Partner.isQuellenbesteuert is implemented
             builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            final var isPartnerQuellenbesteuert = false;
             builder.steuernPartner(
                 EinnahmenKostenMappingUtil.calculateSteuern(
                     // TODO KSTIP-2785: Update once einnahmenKosternPartner exists
                     einnahmenKosten
                         .setNettoerwerbseinkommen(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0)),
-                    isPartnerQuellenbesteuert
+                    false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
                 )
             );
             builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
