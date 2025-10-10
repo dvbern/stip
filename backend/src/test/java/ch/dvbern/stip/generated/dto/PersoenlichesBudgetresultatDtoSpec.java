@@ -47,6 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_VERPFLEGUNG,
@@ -120,6 +121,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
   private Integer steuernKantonGemeinde;
+
+  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER = "steuernKantonGemeindePartner";
+  private Integer steuernKantonGemeindePartner;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
@@ -674,6 +678,32 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
+  public PersoenlichesBudgetresultatDtoSpec steuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
+    
+    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+    return this;
+  }
+
+   /**
+   * Get steuernKantonGemeindePartner
+   * @return steuernKantonGemeindePartner
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getSteuernKantonGemeindePartner() {
+    return steuernKantonGemeindePartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setSteuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
+    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+  }
+
+
   public PersoenlichesBudgetresultatDtoSpec fahrkosten(Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
@@ -962,6 +992,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultat.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultat.medizinischeGrundversorgung) &&
         Objects.equals(this.steuernKantonGemeinde, persoenlichesBudgetresultat.steuernKantonGemeinde) &&
+        Objects.equals(this.steuernKantonGemeindePartner, persoenlichesBudgetresultat.steuernKantonGemeindePartner) &&
         Objects.equals(this.fahrkosten, persoenlichesBudgetresultat.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultat.fahrkostenPartner) &&
         Objects.equals(this.verpflegung, persoenlichesBudgetresultat.verpflegung) &&
@@ -976,7 +1007,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
+    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, steuernKantonGemeindePartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -1003,6 +1034,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
+    sb.append("    steuernKantonGemeindePartner: ").append(toIndentedString(steuernKantonGemeindePartner)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");

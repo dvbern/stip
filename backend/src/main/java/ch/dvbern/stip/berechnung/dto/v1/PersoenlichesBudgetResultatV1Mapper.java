@@ -103,6 +103,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .wohnkosten(antragssteller.getWohnkosten())
             .medizinischeGrundversorgung(antragssteller.getMedizinischeGrundversorgung())
             .steuernKantonGemeinde(antragssteller.getSteuern())
+            .steuernKantonGemeindePartner(antragssteller.getSteuernPartner())
             .fahrkosten(fahrkosten)
             .fahrkostenPartner(antragssteller.getFahrkostenPartner())
             .verpflegung(verpflegung)

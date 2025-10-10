@@ -97,6 +97,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
 
         final var steuernKantonGemeinde = antragssteller.getSteuern();
+        final var steuernKantonGemeindePartner = antragssteller.getSteuernPartner();
 
         var fahrkosten = antragssteller.getFahrkosten();
         if (antragssteller.isVerheiratetKonkubinat()) {
@@ -148,6 +149,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             + medizinischeGrundversorgung
             + ausbildungskosten
             + steuernKantonGemeinde
+            + steuernKantonGemeindePartner
             + fahrkosten
             + fahrkostenPartner
             + verpflegung
@@ -161,6 +163,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setMedizinischeGrundversorgung(medizinischeGrundversorgung);
         result.setAusbildungskosten(ausbildungskosten);
         result.setSteuernKantonGemeinde(steuernKantonGemeinde);
+        result.setSteuernKantonGemeindePartner(steuernKantonGemeindePartner);
         result.setFahrkosten(fahrkosten);
         result.setFahrkostenPartner(fahrkostenPartner);
         result.setVerpflegung(verpflegung);

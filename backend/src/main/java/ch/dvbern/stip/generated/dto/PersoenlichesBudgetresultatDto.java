@@ -40,6 +40,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer wohnkosten;
   private @Valid Integer medizinischeGrundversorgung;
   private @Valid Integer steuernKantonGemeinde;
+  private @Valid Integer steuernKantonGemeindePartner;
   private @Valid Integer fahrkosten;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegung;
@@ -415,6 +416,25 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   /**
    **/
+  public PersoenlichesBudgetresultatDto steuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
+    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+    return this;
+  }
+
+  
+  @JsonProperty("steuernKantonGemeindePartner")
+  @NotNull
+  public Integer getSteuernKantonGemeindePartner() {
+    return steuernKantonGemeindePartner;
+  }
+
+  @JsonProperty("steuernKantonGemeindePartner")
+  public void setSteuernKantonGemeindePartner(Integer steuernKantonGemeindePartner) {
+    this.steuernKantonGemeindePartner = steuernKantonGemeindePartner;
+  }
+
+  /**
+   **/
   public PersoenlichesBudgetresultatDto fahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
     return this;
@@ -648,6 +668,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultat.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultat.medizinischeGrundversorgung) &&
         Objects.equals(this.steuernKantonGemeinde, persoenlichesBudgetresultat.steuernKantonGemeinde) &&
+        Objects.equals(this.steuernKantonGemeindePartner, persoenlichesBudgetresultat.steuernKantonGemeindePartner) &&
         Objects.equals(this.fahrkosten, persoenlichesBudgetresultat.fahrkosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultat.fahrkostenPartner) &&
         Objects.equals(this.verpflegung, persoenlichesBudgetresultat.verpflegung) &&
@@ -663,7 +684,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuernKantonGemeinde, steuernKantonGemeindePartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -690,6 +711,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
+    sb.append("    steuernKantonGemeindePartner: ").append(toIndentedString(steuernKantonGemeindePartner)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");

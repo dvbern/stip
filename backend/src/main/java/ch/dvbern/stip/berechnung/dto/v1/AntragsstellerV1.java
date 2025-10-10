@@ -64,6 +64,7 @@ public class AntragsstellerV1 {
     int medizinischeGrundversorgung;
     int ausbildungskosten;
     int steuern;
+    int steuernPartner;
     int fahrkosten;
     int fahrkostenPartner;
     int verpflegung;
@@ -195,8 +196,17 @@ public class AntragsstellerV1 {
         );
 
         if (partner != null) {
+            // TODO KSTIP-2785: Partner.isQuellenbesteuert is implemented
             builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            // TODO: builder.steuernKonkubinatspartner();
+            final var isPartnerQuellenbesteuert = false;
+            builder.steuernPartner(
+                EinnahmenKostenMappingUtil.calculateSteuern(
+                    // TODO KSTIP-2785: Update once einnahmenKosternPartner exists
+                    einnahmenKosten
+                        .setNettoerwerbseinkommen(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0)),
+                    isPartnerQuellenbesteuert
+                )
+            );
             builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
             builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
         }
