@@ -7418,6 +7418,7 @@ components:
         - wohnkosten
         - medizinischeGrundversorgung
         - steuernKantonGemeinde
+        - steuernKantonGemeindePartner
         - fahrkosten
         - fahrkostenPartner
         - verpflegung
@@ -7467,6 +7468,8 @@ components:
         medizinischeGrundversorgung:
           type: integer
         steuernKantonGemeinde:
+          type: integer
+        steuernKantonGemeindePartner:
           type: integer
         fahrkosten:
           type: integer
