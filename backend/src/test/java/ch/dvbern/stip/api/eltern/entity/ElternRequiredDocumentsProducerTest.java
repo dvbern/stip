@@ -55,11 +55,11 @@ class ElternRequiredDocumentsProducerTest {
 
             )
         );
-
-        RequiredDocsUtil.requiresOneOfManyAndType(
-            getRequiredDocuments(formular),
-            DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        );
+        // TODO KSTIP-2780 REFACTOR/REMOVE
+        // RequiredDocsUtil.requiresOneOfManyAndType(
+        // getRequiredDocuments(formular),
+        // DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
+        // );
     }
 
     // todo kstip-2780: rename test, since erganzungsleistungen has been moved
@@ -71,11 +71,11 @@ class ElternRequiredDocumentsProducerTest {
                     .setSozialhilfebeitraege(false)
             )
         );
-
-        RequiredDocsUtil.requiresOneOfManyAndType(
-            getRequiredDocuments(formular),
-            DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-        );
+        // TODO KSTIP-2780 REFACTOR/REMOVE
+        // RequiredDocsUtil.requiresOneOfManyAndType(
+        // getRequiredDocuments(formular),
+        // DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
+        // );
     }
 
     @Test

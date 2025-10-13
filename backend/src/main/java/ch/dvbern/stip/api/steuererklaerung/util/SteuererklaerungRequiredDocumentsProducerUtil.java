@@ -53,10 +53,9 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
                 && steuererklarung.getErgaenzungsleistungen() > 0
             ) {
                 requiredDocs.add(switch (steuerdatenTyp) {
-                    case FAMILIE -> DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER; // todo kstip-2780: how to handle?
-                                                                                     // maybe also rename enum?
-                    case VATER -> DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER;
-                    case MUTTER -> DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER;
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
                 });
             }
         }
