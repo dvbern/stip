@@ -50,6 +50,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
@@ -315,6 +316,13 @@ class BerechnungTest {
                 .setAuswaertigeMittagessenProWoche(5)
         );
 
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+            )
+        );
+
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
@@ -427,6 +435,12 @@ class BerechnungTest {
                     .setElternTyp(ElternTyp.MUTTER)
                     .setWohnkosten(14000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
+            )
+        );
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
             )
         );
 
@@ -543,6 +557,12 @@ class BerechnungTest {
                     .setSaeule2(1500)
                     .setVermoegen(100000)
                     .setIsArbeitsverhaeltnisSelbstaendig(true)
+            )
+        );
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
             )
         );
 
@@ -673,6 +693,13 @@ class BerechnungTest {
                 .setRenten(0)
                 .setAusbildungskosten(1_500)
                 .setAuswaertigeMittagessenProWoche(0)
+        );
+
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+            )
         );
 
         gesuchFormular.setSteuerdaten(
@@ -816,6 +843,13 @@ class BerechnungTest {
             Set.of()
         );
 
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+            )
+        );
+
         Kind kind1 = (Kind) new Kind()
             .setNachname("Testfall5")
             .setVorname("Kind1")
@@ -847,6 +881,7 @@ class BerechnungTest {
         // Assert
         assertThat(berechnungsresultatDtos.size(), is(equalTo(1)));
         // TODO KSTIP-1503: Um 1 Franken daneben
+        // TODO KSTIP-2780: why test-failure (unexpected value)?
         assertThat(berechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(-9938)));
     }
 
@@ -955,6 +990,12 @@ class BerechnungTest {
                     .setWohnkosten(0)
                     .setGeburtsdatum(LocalDate.of(1963, 6, 1)))
                         .setElternTyp(ElternTyp.MUTTER)
+            )
+        );
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
             )
         );
 

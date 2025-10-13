@@ -668,6 +668,7 @@ public class TestUtil {
                 .setSteuerjahr(2000)
                 .setRenten(0)
                 .setVermoegen(null)
+                .setArbeitspensumProzent(100)
         );
 
         gesuchFormular.setPartner(
