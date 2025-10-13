@@ -57,7 +57,7 @@ export interface EinnahmenKosten {
      * Required nur wenn die Person keinen eigenen Haushalt führt
      */
     auswaertigeMittagessenProWoche?: number;
-    verplegungskosten?: number;
+    verpflegungskosten?: number;
     /**
      * Betreuungskosten eigener Kinder
      */
