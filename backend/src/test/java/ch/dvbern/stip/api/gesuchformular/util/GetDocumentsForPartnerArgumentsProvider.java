@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchformular.util;
 
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -32,13 +31,17 @@ public class GetDocumentsForPartnerArgumentsProvider implements ArgumentsProvide
         final var jahreseinkommen = CreatePermutationUtil.createIntegerPermutations(
             (val) -> new PartnerUpdateDto(),
             (val) -> new Partner(),
-            DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG
+            // todo KSTIP-2779 set correct Dokumenttyp
+            // DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG
+            null
         );
 
         final var fahrkosten = CreatePermutationUtil.createIntegerPermutations(
             (val) -> new PartnerUpdateDto(),
             (val) -> new Partner(),
-            DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
+            // todo KSTIP-2779 set correct Dokumenttyp
+            // DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
+            null
         );
 
         return Stream.concat(jahreseinkommen, fahrkosten);
