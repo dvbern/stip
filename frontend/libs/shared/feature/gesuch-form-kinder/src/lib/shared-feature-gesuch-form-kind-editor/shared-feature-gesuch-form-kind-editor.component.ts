@@ -7,8 +7,6 @@ import {
   Input,
   OnChanges,
   Output,
-  computed,
-  effect,
   inject,
   input,
 } from '@angular/core';
@@ -38,7 +36,6 @@ import {
   KindUpdate,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -151,38 +148,61 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       '' as Ausbildungssituation,
       [Validators.required],
     ),
-    alimentenregelungExistiert: [<boolean | undefined>false],
     unterhaltsbeitraege: [<string | null>null, [Validators.required]],
-    // todo: add new fields!
-    // kinderUndAusbildungszulagen: [<string | null>null],
-    // renten: [<string | null>null],
-    // ergaenzungsleistungen: [<string | null>null],
-    // andereEinnahmen: [<string | null>null],
+    kinderUndAusbildungszulagen: [<string | null>null],
+    renten: [<string | null>null],
+    ergaenzungsleistungen: [<string | null>null],
+    andereEinnahmen: [<string | null>null],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
-  alimentenregelungExistiertSig = toSignal(
-    this.form.controls.alimentenregelungExistiert.valueChanges,
+  unterhalsbetraegeChangeSig = toSignal(
+    this.form.controls.unterhaltsbeitraege.valueChanges,
   );
+  unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
+    const unterhaltsbeitraege = fromFormatedNumber(
+      this.unterhalsbetraegeChangeSig() ?? '0',
+    );
 
-  alimenteDocumentSig = this.createUploadOptionsSig(() => {
-    const alimentenRegelungExisitert = this.alimentenregelungExistiertSig();
-
-    return alimentenRegelungExisitert
+    return unterhaltsbeitraege > 0
       ? DokumentTyp.KINDER_ALIMENTENVERORDUNG
       : null;
   });
 
-  alimentenregelungExistiertChangeSig = computed(() => {
-    const changes = this.changesSig();
+  kinderUndAusbildungszulagenChangeSig = toSignal(
+    this.form.controls.kinderUndAusbildungszulagen.valueChanges,
+  );
+  kinderUndAusbildungszulagenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(
+      this.kinderUndAusbildungszulagenChangeSig() ?? '0',
+    );
+    return amount > 0 ? DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN : null;
+  });
 
-    if (!changes || changes.unterhaltsbeitraege === undefined) {
-      return;
-    }
+  rentenChangeSig = toSignal(this.form.controls.renten.valueChanges);
+  rentenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(this.rentenChangeSig() ?? '0');
+    return amount > 0 ? DokumentTyp.KINDER_RENTEN : null;
+  });
 
-    return changes.unterhaltsbeitraege !== null;
+  ergaenzungsleistungenChangeSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(
+      this.ergaenzungsleistungenChangeSig() ?? '0',
+    );
+    return amount > 0 ? DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN : null;
+  });
+
+  andereEinnahmenChangeSig = toSignal(
+    this.form.controls.andereEinnahmen.valueChanges,
+  );
+  andereEinnahmenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(this.andereEinnahmenChangeSig() ?? '0');
+    return amount > 0 ? DokumentTyp.KINDER_ANDERE_EINNAHMEN : null;
   });
 
   constructor() {
@@ -196,15 +216,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-
-    effect(() => {
-      this.gotReenabledSig();
-      this.formUtils.setDisabledState(
-        this.form.controls.unterhaltsbeitraege,
-        this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
-        !this.viewSig().readonly,
-      );
-    });
   }
 
   ngOnChanges() {
@@ -216,7 +227,11 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       ),
       wohnsitzAnteilPia: this.kind.wohnsitzAnteilPia?.toString(),
       unterhaltsbeitraege: this.kind.unterhaltsbeitraege?.toString(),
-      alimentenregelungExistiert: isDefined(this.kind.unterhaltsbeitraege),
+      kinderUndAusbildungszulagen:
+        this.kind.kinderUndAusbildungszulagen?.toString(),
+      renten: this.kind.renten?.toString(),
+      ergaenzungsleistungen: this.kind.ergaenzungsleistungen?.toString(),
+      andereEinnahmen: this.kind.andereEinnahmen?.toString(),
     });
   }
 
@@ -228,8 +243,11 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     const formValues = convertTempFormToRealValues(this.form, [
       'unterhaltsbeitraege',
       'wohnsitzAnteilPia',
+      'kinderUndAusbildungszulagen',
+      'renten',
+      'ergaenzungsleistungen',
+      'andereEinnahmen',
     ]);
-    delete formValues.alimentenregelungExistiert;
 
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
@@ -243,6 +261,14 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         geburtsdatum,
         wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
         unterhaltsbeitraege: fromFormatedNumber(formValues.unterhaltsbeitraege),
+        kinderUndAusbildungszulagen: fromFormatedNumber(
+          formValues.kinderUndAusbildungszulagen,
+        ),
+        renten: fromFormatedNumber(formValues.renten),
+        ergaenzungsleistungen: fromFormatedNumber(
+          formValues.ergaenzungsleistungen,
+        ),
+        andereEinnahmen: fromFormatedNumber(formValues.andereEinnahmen),
       });
       this.form.markAsPristine();
     }
