@@ -41,7 +41,7 @@ class KindRequiredDocumentsProducerTest {
         formular.setKinds(
             Set.of(
                 new Kind()
-                    .setErhalteneAlimentebeitraege(1)
+                    .setUnterhaltsbeitraege(1)
             )
         );
 

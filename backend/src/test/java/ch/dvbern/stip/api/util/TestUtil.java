@@ -760,6 +760,13 @@ public class TestUtil {
             )
         );
 
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER)
+            )
+        );
+
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()

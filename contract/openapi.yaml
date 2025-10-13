@@ -6187,7 +6187,7 @@ components:
         auswaertigeMittagessenProWoche:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
           type: integer
-        verplegungskosten:
+        verpflegungskosten:
           type: integer
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder

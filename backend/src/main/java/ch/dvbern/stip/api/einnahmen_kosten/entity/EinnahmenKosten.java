@@ -125,8 +125,8 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Min(0)
-    @Column(name = "taggeld_ahv_iv")
-    private Integer taggeldAHVIV;
+    @Column(name = "taggelder_ahv_iv")
+    private Integer taggelderAHVIV;
 
     @Nullable
     @Min(0)

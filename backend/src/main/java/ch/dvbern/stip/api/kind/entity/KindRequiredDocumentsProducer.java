@@ -40,7 +40,7 @@ public class KindRequiredDocumentsProducer implements RequiredDocumentsProducer 
 
         final var requiredDocs = new HashSet<DokumentTyp>();
         kinds.forEach(kind -> {
-            if (kind.getErhalteneAlimentebeitraege() != null) {
+            if (kind.getUnterhaltsbeitraege() != null) {
                 requiredDocs.add(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
             }
         }

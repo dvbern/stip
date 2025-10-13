@@ -87,7 +87,7 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         if (greaterThanZero(ek.getEinnahmenBGSA())) {
             requiredDocs.add(DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
         }
-        if (greaterThanZero(ek.getTaggeldAHVIV())) {
+        if (greaterThanZero(ek.getTaggelderAHVIV())) {
             requiredDocs.add(DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
         }
         if (greaterThanZero(ek.getAndereEinnahmen())) {

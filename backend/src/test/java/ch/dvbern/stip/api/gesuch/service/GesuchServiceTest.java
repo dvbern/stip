@@ -1314,7 +1314,7 @@ class GesuchServiceTest {
         // ad a "normal" gesuch document
         GesuchDokument gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
-        // gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        gesuchDokument.setDokumentTyp(DokumentTyp.values()[0]);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
         gesuchDokument.setStatus(GesuchDokumentStatus.ABGELEHNT);
@@ -1383,7 +1383,7 @@ class GesuchServiceTest {
         // ad a "normal" gesuch document
         GesuchDokument gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
-        // gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        gesuchDokument.setDokumentTyp(DokumentTyp.values()[0]);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
         gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);

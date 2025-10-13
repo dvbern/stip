@@ -43,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WG_WOHNEND,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERPLEGUNGSKOSTEN,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR,
@@ -101,8 +101,8 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE = "auswaertigeMittagessenProWoche";
   private Integer auswaertigeMittagessenProWoche;
 
-  public static final String JSON_PROPERTY_VERPLEGUNGSKOSTEN = "verplegungskosten";
-  private Integer verplegungskosten;
+  public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
+  private Integer verpflegungskosten;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
   private Integer betreuungskostenKinder;
@@ -538,29 +538,29 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec verplegungskosten(Integer verplegungskosten) {
+  public EinnahmenKostenDtoSpec verpflegungskosten(Integer verpflegungskosten) {
     
-    this.verplegungskosten = verplegungskosten;
+    this.verpflegungskosten = verpflegungskosten;
     return this;
   }
 
    /**
-   * Get verplegungskosten
-   * @return verplegungskosten
+   * Get verpflegungskosten
+   * @return verpflegungskosten
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERPLEGUNGSKOSTEN)
+  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getVerplegungskosten() {
-    return verplegungskosten;
+  public Integer getVerpflegungskosten() {
+    return verpflegungskosten;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_VERPLEGUNGSKOSTEN)
+  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerplegungskosten(Integer verplegungskosten) {
-    this.verplegungskosten = verplegungskosten;
+  public void setVerpflegungskosten(Integer verpflegungskosten) {
+    this.verpflegungskosten = verpflegungskosten;
   }
 
 
@@ -724,7 +724,7 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
-        Objects.equals(this.verplegungskosten, einnahmenKosten.verplegungskosten) &&
+        Objects.equals(this.verpflegungskosten, einnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
@@ -734,7 +734,7 @@ public class EinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, verplegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -757,7 +757,7 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
-    sb.append("    verplegungskosten: ").append(toIndentedString(verplegungskosten)).append("\n");
+    sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");

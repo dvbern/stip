@@ -50,8 +50,8 @@ public class Kind extends AbstractPerson {
     private Ausbildungssituation ausbildungssituation;
 
     @Nullable
-    @Column(name = "erhaltene_alimentebeitraege")
-    private Integer erhalteneAlimentebeitraege;
+    @Column(name = "unterhaltsbeitraege")
+    private Integer unterhaltsbeitraege;
 
     @Nullable
     @Column(name = "copy_of_id")
@@ -67,4 +67,19 @@ public class Kind extends AbstractPerson {
     @Column(name = "ergaenzungsleistungen")
     @Min(0)
     private Integer ergaenzungsleistungen;
+
+    @Nullable
+    @Column(name = "kinder_und_ausbildungszulagen")
+    @Min(0)
+    private Integer kinderUndAusbildungszulagen;
+
+    @Nullable
+    @Column(name = "renten")
+    @Min(0)
+    private Integer renten;
+
+    @Nullable
+    @Column(name = "andere_einnahmen")
+    @Min(0)
+    private Integer andereEinnahmen;
 }

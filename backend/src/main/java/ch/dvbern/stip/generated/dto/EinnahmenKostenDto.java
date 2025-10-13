@@ -35,7 +35,7 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Integer wohnkosten;
   private @Valid Boolean wgWohnend;
   private @Valid Integer auswaertigeMittagessenProWoche;
-  private @Valid Integer verplegungskosten;
+  private @Valid Integer verpflegungskosten;
   private @Valid Integer betreuungskostenKinder;
   private @Valid String veranlagungsStatus;
   private @Valid Integer steuerjahr;
@@ -344,20 +344,20 @@ public class EinnahmenKostenDto  implements Serializable {
 
   /**
    **/
-  public EinnahmenKostenDto verplegungskosten(Integer verplegungskosten) {
-    this.verplegungskosten = verplegungskosten;
+  public EinnahmenKostenDto verpflegungskosten(Integer verpflegungskosten) {
+    this.verpflegungskosten = verpflegungskosten;
     return this;
   }
 
   
-  @JsonProperty("verplegungskosten")
-  public Integer getVerplegungskosten() {
-    return verplegungskosten;
+  @JsonProperty("verpflegungskosten")
+  public Integer getVerpflegungskosten() {
+    return verpflegungskosten;
   }
 
-  @JsonProperty("verplegungskosten")
-  public void setVerplegungskosten(Integer verplegungskosten) {
-    this.verplegungskosten = verplegungskosten;
+  @JsonProperty("verpflegungskosten")
+  public void setVerpflegungskosten(Integer verpflegungskosten) {
+    this.verpflegungskosten = verpflegungskosten;
   }
 
   /**
@@ -487,7 +487,7 @@ public class EinnahmenKostenDto  implements Serializable {
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
-        Objects.equals(this.verplegungskosten, einnahmenKosten.verplegungskosten) &&
+        Objects.equals(this.verpflegungskosten, einnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
@@ -497,7 +497,7 @@ public class EinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, verplegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -521,7 +521,7 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
-    sb.append("    verplegungskosten: ").append(toIndentedString(verplegungskosten)).append("\n");
+    sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");

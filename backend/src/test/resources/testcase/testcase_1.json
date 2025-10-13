@@ -72,10 +72,8 @@
           "geburtsdatum": "1990-12-25",
           "sozialversicherungsnummer": "756.8180.9200.59",
           "nachname": "Schneider",
-          "ausbildungMitEinkommenOderErwerbstaetig": false,
-          "jahreseinkommen": null,
-          "fahrkosten": null,
-          "verpflegungskosten": null
+          "inAusbildung" : false,
+          "ausbildungspensum": null
         },
         "elterns": [
           {
@@ -98,7 +96,6 @@
             "identischerZivilrechtlicherWohnsitzOrt": null,
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "sozialversicherungsnummer": "756.1618.8208.08",
-            "ergaenzungsleistungen": 0,
             "wohnkosten": 4690
           },
           {
@@ -121,7 +118,6 @@
             "identischerZivilrechtlicherWohnsitzOrt": null,
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "sozialversicherungsnummer": "756.8927.6873.20",
-            "ergaenzungsleistungen": 0,
             "wohnkosten": 4690
           }
         ],
@@ -155,7 +151,11 @@
             "ausbildungssituation": "KEINE",
             "wohnsitzAnteilPia": 100,
             "nachname": "Meyer",
-            "erhalteneAlimentebeitraege": null
+            "unterhaltsbeitraege": 0,
+            "kinderUndAusbildungszulagen": null,
+            "renten": null,
+            "ergaenzungsleistungen": null,
+            "andereEinnahmen": null
           },
           {
             "vorname": "Peter",
@@ -163,14 +163,12 @@
             "ausbildungssituation": "VORSCHULPFLICHTIG",
             "wohnsitzAnteilPia": 100,
             "nachname": "Meyer",
-            "erhalteneAlimentebeitraege": null
+            "unterhaltsbeitraege": 0
           }
         ],
         "einnahmenKosten": {
           "nettoerwerbseinkommen": 70000,
           "fahrkosten": 988,
-          "verdienstRealisiert": false,
-          "alimente": null,
           "zulagen": 6000,
           "renten": 0,
           "eoLeistungen": 0,
@@ -184,12 +182,22 @@
           "veranlagungsStatus": "Manuell",
           "steuerjahr": 2024,
           "vermoegen": 0,
-          "steuernKantonGemeinde": 7000
+          "steuernKantonGemeinde": 7000,
+          "verpflegungskosten": 0,
+          "einnahmenBGSA": 0,
+          "taggelderAHVIV": 0,
+          "andereEinnahmen": 0,
+          "arbeitspensumProzent": 0
+
         },
         "steuererklaerung": [
           {
             "steuerdatenTyp": "FAMILIE",
-            "steuererklaerungInBern": true
+            "steuererklaerungInBern": true,
+            "ergaenzungsleistungen": 0,
+            "unterhaltsbeitraege": 0,
+            "renten": 0,
+            "einnahmenBGSA": 0
           }
         ],
         "darlehen": {
@@ -217,7 +225,6 @@
       "totalEinkuenfte": 103011,
       "eigenmietwert": 5440,
       "isArbeitsverhaeltnisSelbstaendig": false,
-      "kinderalimente": 0,
       "vermoegen": 73358,
       "fahrkostenPartner": 1848,
       "verpflegungPartner": 1280,

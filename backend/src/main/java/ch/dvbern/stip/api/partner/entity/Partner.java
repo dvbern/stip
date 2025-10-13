@@ -21,8 +21,6 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
-import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
-import ch.dvbern.stip.api.gesuchformular.validation.PartnerPageValidation;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -44,10 +42,6 @@ import org.hibernate.envers.Audited;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
-@AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint(
-    groups = { GesuchEinreichenValidationGroup.class, PartnerPageValidation.class }
-)
-@AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint
 @Entity
 @Table(
     name = "partner",
@@ -79,9 +73,8 @@ public class Partner extends AbstractPerson {
     @Column(name = "in_ausbildung", nullable = false)
     private boolean inAusbildung = false;
 
-    // todo kstip-2780: darf nicht null sein bei ausbildung = true
     @Nullable
     @Column(name = "ausbildungspensum")
     @Enumerated(EnumType.STRING)
-    private AusbildungsPensum ausbildungsPensum;
+    private AusbildungsPensum ausbildungspensum;
 }

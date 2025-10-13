@@ -30,6 +30,6 @@ public class AusbildungsPensumRequiredConstraintValidator
         if (!partner.isInAusbildung()) {
             return true;
         }
-        return Objects.nonNull(partner.getAusbildungsPensum());
+        return Objects.nonNull(partner.getAusbildungspensum());
     }
 }
