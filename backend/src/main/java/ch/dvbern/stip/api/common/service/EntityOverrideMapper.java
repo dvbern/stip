@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -43,6 +44,12 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public abstract class EntityOverrideMapper {
+    @Mapping(target = "fall", ignore = true)
+    @Mapping(target = "gesuchs", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @IgnoreStandardFields
+    public abstract void overrideFromTo(Ausbildung source, @MappingTarget Ausbildung target);
+
     @Mapping(target = "tranche", ignore = true)
     @IgnoreStandardFields
     public abstract void overrideFromTo(GesuchFormular source, @MappingTarget GesuchFormular target);

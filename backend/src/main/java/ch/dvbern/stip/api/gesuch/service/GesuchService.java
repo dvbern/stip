@@ -1182,6 +1182,10 @@ public class GesuchService {
         datenschutzbriefService.deleteDatenschutzbriefeOfGesuch(gesuch.getId());
 
         resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
+        if (gesuch.hasNeverBeenVerfuegt()) {
+            gesuchTrancheCopyService
+                .overrideAusbildung(gesuchOfStateEingereicht.getAusbildung(), gesuch.getAusbildung());
+        }
 
         final var allOtherTranchen = gesuch
             .getGesuchTranchen()
