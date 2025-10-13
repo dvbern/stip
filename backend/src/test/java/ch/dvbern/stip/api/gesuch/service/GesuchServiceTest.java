@@ -82,7 +82,7 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.api.pdf.service.PdfService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
@@ -224,7 +224,7 @@ class GesuchServiceTest {
     FallRepository fallRepository;
 
     @InjectMock
-    PdfService pdfService;
+    VerfuegungPdfService verfuegungPdfService;
 
     @InjectMock
     StipDecisionTextRepository stipDecisionTextRepository;
@@ -1215,7 +1215,7 @@ class GesuchServiceTest {
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         verfuegung.setGesuch(gesuch);
         gesuch.getVerfuegungs().add(verfuegung);
-        when(pdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
+        when(verfuegungPdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));

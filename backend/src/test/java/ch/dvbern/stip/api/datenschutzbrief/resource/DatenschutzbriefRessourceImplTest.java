@@ -110,7 +110,6 @@ class DatenschutzbriefRessourceImplTest {
             .as(FileDownloadTokenDtoSpec.class)
             .getToken();
 
-        // todo KSTIP-2738: check file content
         TestUtil.executeAndAssertOk(
             datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token).trancheIdPath(gesuchTrancheId)
         );
