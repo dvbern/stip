@@ -730,6 +730,14 @@ class GesuchServiceTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWgWohnend(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlternativeWohnformWohnend(false);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
@@ -778,7 +786,14 @@ class GesuchServiceTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setAuswaertigeMittagessenProWoche(1);
-
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWgWohnend(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlternativeWohnformWohnend(false);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 

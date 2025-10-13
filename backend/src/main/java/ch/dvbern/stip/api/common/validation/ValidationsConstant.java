@@ -101,6 +101,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.lebenslaufitem.ausbildung.fachrichtungBerufsbezeichnung.notnull.message}";
     public static final String VALIDATION_LEBENSLAUFITEM_ART_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
+    public static final String VALIDATION_WG_ANZAHL_PERSONEN_INVALID_MESSAGE =
+        "{jakarta.validation.constraints.einnahmenkosten.wgwohnend.anzahl.personen.invalid.message}";
+    public static final String VALIDATION_ALTERNATIVE_WOHNFORM_INVALID =
+        "{jakarta.validation.constraints.einnahmenkosten.alternativewohnform.invalid.message}";
     public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";
     public static final String VALIDATION_AHV_IF_SWISS_MESSAGE = "{jakarta.validation.contraints.ahvIfSwiss.message}";
     public static final String VALIDATION_EMAIL_MESSAGE = "{jakarta.validation.constraints.email.message}";
