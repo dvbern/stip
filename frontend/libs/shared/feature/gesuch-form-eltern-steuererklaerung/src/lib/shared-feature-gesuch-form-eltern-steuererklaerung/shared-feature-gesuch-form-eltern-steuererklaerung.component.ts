@@ -26,7 +26,6 @@ import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
-  ElternTyp,
   SharedModelGesuchFormularUpdate,
   SteuerdatenTyp,
   SteuererklaerungUpdate,
@@ -125,67 +124,59 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     this.form.controls.ergaenzungsleistungen.valueChanges,
   );
   ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    // const elternTyp = this.elternteilSig().elternTyp;
     const steuerdatenTyp = this.stepSig().type;
 
-    // todo: fix or change when mada answers the question
-    const STEUERDATEN_TO_ELTERN_MAPPING = {
-      [SteuerdatenTyp.MUTTER]: ElternTyp.MUTTER,
-      [SteuerdatenTyp.VATER]: ElternTyp.VATER,
-      [SteuerdatenTyp.FAMILIE]: ElternTyp.VATER,
-    } as const;
-
-    const elternTyp = STEUERDATEN_TO_ELTERN_MAPPING[steuerdatenTyp];
-
-    const ergaenzungsleistung =
-      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
-      0;
+    const ergaenzungsleistung = fromFormatedNumber(
+      this.ergaenzungsleistungChangedSig() ?? '0',
+    );
 
     return ergaenzungsleistung > 0
-      ? `ELTERN_ERGAENZUNGSLEISTUNGEN_${elternTyp}`
+      ? `STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_${steuerdatenTyp}`
       : null;
   });
 
   steuererklaerungInBernDocumentSig = this.createUploadOptionsSig(() => {
     const steuererklaerungInBern = this.steuererklaerungInBernChangedSig();
-    const type = this.stepSig().type;
+    const steuerdatenTyp = this.stepSig().type;
 
     // if in bern, no document is needed, explicit, so no document as long as
     // no value is set!
     return steuererklaerungInBern === false
-      ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${type}`]
+      ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${steuerdatenTyp}`]
       : null;
   });
 
-  unterhaltsbeitraegeSig = toSignal(
+  unterhaltsbeitraegeChangeSig = toSignal(
     this.form.controls.unterhaltsbeitraege.valueChanges,
   );
-
   unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
     const unterhaltsbeitraege = fromFormatedNumber(
-      this.unterhaltsbeitraegeSig() ?? '0',
+      this.unterhaltsbeitraegeChangeSig() ?? '0',
     );
+    const steuerdatenTyp = this.stepSig().type;
 
     return unterhaltsbeitraege > 0
-      ? DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
+      ? DokumentTyp[`STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_${steuerdatenTyp}`]
       : null;
   });
 
   rentenSig = toSignal(this.form.controls.renten.valueChanges);
-
   rentenDocumentSig = this.createUploadOptionsSig(() => {
     const renten = fromFormatedNumber(this.rentenSig() ?? '0');
-    // todo: falmily problem
-    return renten > 0 ? DokumentTyp.STEUERERKLAERUNG_RENTEN_VATER : null;
+    const steuerdatenTyp = this.stepSig().type;
+
+    return renten > 0
+      ? DokumentTyp[`STEUERERKLAERUNG_RENTEN_${steuerdatenTyp}`]
+      : null;
   });
 
   einnahmenBGSASig = toSignal(this.form.controls.einnahmenBGSA.valueChanges);
-
   einnahmenBGSADocumentSig = this.createUploadOptionsSig(() => {
     const einnahmenBGSA = fromFormatedNumber(this.einnahmenBGSASig() ?? '0');
-    // todo: falmily problem
+    const steuerdatenTyp = this.stepSig().type;
+
     return einnahmenBGSA > 0
-      ? DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER
+      ? DokumentTyp[`STEUERERKLAERUNG_EINNAHMEN_BGSA_${steuerdatenTyp}`]
       : null;
   });
 
