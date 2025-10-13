@@ -532,12 +532,9 @@ public class GesuchService {
     @Transactional
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuch.getGesuchTranchen().size() != 1) {
-            throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
-        }
 
-        final var gesuchTranche = gesuch.getLatestGesuchTranche();
-        final var decision = stipDecisionService.decide(gesuchTranche);
+        final var decision = getAnspruchDecision(gesuch);
+
         final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
         KommentarDto kommentarDto = null;
         if (decision != StipDeciderResult.GESUCH_VALID) {
@@ -545,17 +542,33 @@ public class GesuchService {
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
                     decision,
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                    LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
                 )
             );
         }
 
         gesuchStatusService.triggerStateMachineEventWithComment(
-            gesuchTranche.getGesuch(),
+            gesuch,
             gesuchStatusChangeEvent,
             kommentarDto,
             false
         );
+    }
+
+    @Transactional
+    public StipDeciderResult getAnspruchDecision(final Gesuch gesuch) {
+        final var gesuchTranchen = gesuch.getTranchenTranchen().toList();
+        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
+
+        for (GesuchTranche tranche : gesuchTranchen) {
+            final var trancheDecision = stipDecisionService.decide(tranche);
+            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
+                finalDecision = trancheDecision;
+                break;
+            }
+        }
+
+        return finalDecision;
     }
 
     @Transactional
