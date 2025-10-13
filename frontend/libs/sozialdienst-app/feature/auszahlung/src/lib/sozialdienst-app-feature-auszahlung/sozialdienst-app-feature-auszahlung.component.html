@@ -18,14 +18,8 @@
       <i class="material-symbols-rounded me-2 text-white">assignment_ind</i>
       <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
     </a>
-    @let origin = extendedAuszahlungViewSig().origin;
     <a
       [routerLink]="['/auszahlung', fallId]"
-      [queryParams]="{
-        backlink: origin?.backlink,
-        gesuchId: origin?.gesuchId,
-        gesuchTrancheId: origin?.gesuchTrancheId,
-      }"
       class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
       data-testid="gesuch-step-nav-auszahlung"
       [class.disabled]="!fallId"
@@ -49,7 +43,7 @@
     </h1>
     <dv-shared-ui-auszahlung
       [auszahlungViewSig]="auszahlungViewSig()"
-      (saveTriggered)="handleSave($event)"
+      (saveTriggered)="handleSave($event, '/fall/' + fallId)"
       (formIsUnsaved)="hasUnsavedChanges = $event"
     ></dv-shared-ui-auszahlung>
   </div>

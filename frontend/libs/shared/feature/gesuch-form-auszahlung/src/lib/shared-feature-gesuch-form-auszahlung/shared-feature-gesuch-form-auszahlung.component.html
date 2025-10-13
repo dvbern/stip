@@ -1,24 +1,16 @@
 @let fallId = gesuchsViewSig().gesuch?.fallId;
-@let origin = extendedAuszahlungViewSig().origin;
 <div *dvIfGesuchsteller class="tw:pl-3 tw:pt-6">
   {{ 'shared.form.auszahlung.goToAuszahlung.pre' | transloco }}
-  <a
-    [routerLink]="['/auszahlung', fallId]"
-    [queryParams]="{
-      backlink: origin?.backlink,
-      gesuchId: origin?.gesuchId,
-      gesuchTrancheId: origin?.gesuchTrancheId,
-    }"
-    class="btn-link"
-    data-testid="gesuch-form-go-to-auszahlung"
-    >{{ 'shared.form.auszahlung.goToAuszahlung.linkText' | transloco }}</a
+  <a [routerLink]="['/auszahlung', fallId]" class="btn-link" data-testid="gesuch-form-go-to-auszahlung">{{
+    'shared.form.auszahlung.goToAuszahlung.linkText' | transloco
+  }}</a
   >{{ 'shared.form.auszahlung.goToAuszahlung.post' | transloco }}
 </div>
 <dv-shared-ui-auszahlung
   class="tw:mt-6 tw:block"
   [auszahlungViewSig]="extendedAuszahlungViewSig()"
   [showBack]="false"
-  (saveTriggered)="handleSave($event)"
+  (saveTriggered)="handleSave($event, '/')"
   (continueTriggered)="handleContinue()"
   (formIsUnsaved)="hasUnsavedChanges = $event"
 ></dv-shared-ui-auszahlung>

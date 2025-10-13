@@ -80,7 +80,6 @@
         }
         <a
           [routerLink]="['/auszahlung', fallId]"
-          [queryParams]="{ backlink: router.url, gesuchId, gesuchTrancheId: trancheId }"
           class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
           data-testid="gesuch-step-nav-auszahlung"
           [class.disabled]="!fallId"

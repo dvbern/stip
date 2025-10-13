@@ -1,12 +1,5 @@
 /* eslint-disable @angular-eslint/no-input-rename */
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -24,6 +17,7 @@ import { AUSZAHLUNG } from '@dv/shared/model/gesuch-form';
 import { isNotReadonly } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { isPending } from '@dv/shared/util/remote-data';
+import { SharedUtilRouteHistoryService } from '@dv/shared/util/route-history';
 
 @Component({
   selector: 'dv-shared-feature-auszahlung',
@@ -36,6 +30,7 @@ export abstract class SharedFeatureAuszahlungComponent {
   private einreichenStore = inject(EinreichenStore);
   private auszahlungStore = inject(AuszahlungStore);
   private permissionStore = inject(PermissionStore);
+  private routeHistoryService = inject(SharedUtilRouteHistoryService);
 
   private config = inject(SharedModelCompileTimeConfig);
 
@@ -43,11 +38,6 @@ export abstract class SharedFeatureAuszahlungComponent {
 
   // QueryParam inputs
   fallIdQuerySig = input<string | undefined>(undefined, { alias: 'fallId' });
-  backlinkSig = input<string | undefined>(undefined, { alias: 'backlink' });
-  gesuchIdSig = input<string | undefined>(undefined, { alias: 'gesuchId' });
-  gesuchTrancheIdSig = input<string | undefined>(undefined, {
-    alias: 'gesuchTrancheId',
-  });
 
   fallIdSig = computed(() => {
     const fallIdQuery = this.fallIdQuerySig();
@@ -59,9 +49,6 @@ export abstract class SharedFeatureAuszahlungComponent {
     const { gesuch } = this.gesuchsViewSig();
     return gesuch?.fallId;
   });
-  optionalOriginSig = signal<SharedModelAuszahlung['origin'] | undefined>(
-    undefined,
-  );
   laenderStore = inject(LandStore);
   languageSig = this.store.selectSignal(selectLanguage);
   gesuchsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -72,7 +59,6 @@ export abstract class SharedFeatureAuszahlungComponent {
     const rolesMap = this.permissionStore.rolesMapSig();
     const invalidFormularControls =
       this.einreichenStore.invalidFormularControlsSig();
-    const origin = this.optionalOriginSig();
 
     return {
       auszahlung: auszahlung.data,
@@ -84,7 +70,6 @@ export abstract class SharedFeatureAuszahlungComponent {
       ),
       laender,
       language,
-      origin,
       invalidFormularControls,
     };
   });
@@ -99,37 +84,12 @@ export abstract class SharedFeatureAuszahlungComponent {
         this.auszahlungStore.loadAuszahlung$({ fallId });
       }
     });
-
-    effect(() => {
-      const backlink = this.backlinkSig();
-      const gesuchId = this.gesuchIdSig();
-      const gesuchTrancheId = this.gesuchTrancheIdSig();
-
-      if (
-        isDefined(backlink) &&
-        isDefined(gesuchId) &&
-        isDefined(gesuchTrancheId)
-      ) {
-        this.optionalOriginSig.set({
-          backlink,
-          gesuchId,
-          gesuchTrancheId,
-        });
-        this.router.navigate([], {
-          queryParams: { backlink: undefined },
-          replaceUrl: true,
-        });
-      }
-    });
   }
 
-  handleSave(auszahlung: AuszahlungUpdate): void {
+  handleSave(auszahlung: AuszahlungUpdate, alternativeBackRoute: string): void {
     const fallId = this.fallIdSig();
     const onSuccess = () => {
-      const { origin } = this.auszahlungViewSig();
-      if (origin) {
-        this.router.navigate([origin.backlink]);
-      }
+      this.routeHistoryService.navigateToPreviousPage(alternativeBackRoute);
     };
 
     if (isDefined(fallId)) {
