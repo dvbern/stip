@@ -38,9 +38,6 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
-        // todo kstip-2780: is field exisitng somewhere and has to be checked?
-        // if (Boolean.TRUE.equals(ek.getVerdienstRealisiert())) {
-        // }
 
         if (greaterThanZero(ek.getNettoerwerbseinkommen())) {
             requiredDocs.add(DokumentTyp.EK_LOHNABRECHNUNG);

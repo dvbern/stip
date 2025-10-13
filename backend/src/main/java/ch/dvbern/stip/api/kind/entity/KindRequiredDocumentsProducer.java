@@ -38,14 +38,37 @@ public class KindRequiredDocumentsProducer implements RequiredDocumentsProducer 
             return ImmutablePair.of("", Set.of());
         }
 
+        /*
+         * todo kstip-2780: when is this required?
+         * - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+         */
+
         final var requiredDocs = new HashSet<DokumentTyp>();
         kinds.forEach(kind -> {
             if (kind.getUnterhaltsbeitraege() != null) {
                 requiredDocs.add(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
             }
+
+            if (greaterThanZero(kind.getErgaenzungsleistungen())) {
+                requiredDocs.add(DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN);
+            }
+            if (greaterThanZero(kind.getKinderUndAusbildungszulagen())) {
+                requiredDocs.add(DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN);
+            }
+            if (greaterThanZero(kind.getRenten())) {
+                requiredDocs.add(DokumentTyp.KINDER_RENTEN);
+            }
+            if (greaterThanZero(kind.getAndereEinnahmen())) {
+                requiredDocs.add(DokumentTyp.KINDER_ANDERE_EINNAHMEN);
+            }
         }
         );
 
         return ImmutablePair.of("kinds", requiredDocs);
+    }
+
+    // todo kstip-2780: refactor to remove code duplication
+    private boolean greaterThanZero(final Integer base) {
+        return base != null && base > 0;
     }
 }

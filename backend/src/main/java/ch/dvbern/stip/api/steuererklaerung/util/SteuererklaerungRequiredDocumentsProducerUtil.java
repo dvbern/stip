@@ -33,7 +33,6 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
         SteuerdatenTyp steuerdatenTyp
     ) {
         final var requiredDocs = new HashSet<DokumentTyp>();
-
         if (steuererklarungen.stream().map(Steuererklaerung::getSteuerdatenTyp).toList().contains(steuerdatenTyp)) {
             final var steuererklarung = steuererklarungen.stream()
                 .filter(steuererklaerung -> steuererklaerung.getSteuerdatenTyp() == steuerdatenTyp)
@@ -58,8 +57,44 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
                     case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
                 });
             }
+
+            if (greaterThanZero(steuererklarung.getUnterhaltsbeitraege())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_MUTTER;
+                });
+            }
+
+            if (greaterThanZero(steuererklarung.getErgaenzungsleistungen())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
+                });
+            }
+
+            if (greaterThanZero(steuererklarung.getRenten())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_RENTEN_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_RENTEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_RENTEN_MUTTER;
+                });
+            }
+            if (greaterThanZero(steuererklarung.getEinnahmenBGSA())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER;
+                });
+            }
         }
 
         return requiredDocs;
+    }
+
+    // todo kstip-2780: refactor to remove code duplication
+    private boolean greaterThanZero(final Integer base) {
+        return base != null && base > 0;
     }
 }
