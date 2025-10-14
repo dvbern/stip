@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum GesuchNotizTypDtoSpec {
   
+  PENDENZ_NOTIZ("PENDENZ_NOTIZ"),
+  
   GESUCH_NOTIZ("GESUCH_NOTIZ"),
   
   JURISTISCHE_NOTIZ("JURISTISCHE_NOTIZ");

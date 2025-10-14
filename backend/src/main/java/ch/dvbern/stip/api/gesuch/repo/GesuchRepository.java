@@ -87,6 +87,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return addMeineFilter(benutzerId, getFindAlleJurBearbeitungQuery());
     }
 
+    public JPAQuery<Gesuch> getFindAllePendenteQuery() {
+        return getFindAlleQuery()
+            .where(
+                QGesuch.gesuch.notizen.any().abgeschlossen.not()
+            );
+    }
+
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();

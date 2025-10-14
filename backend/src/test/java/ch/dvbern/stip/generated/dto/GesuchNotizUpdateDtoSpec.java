@@ -30,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizUpdateDtoSpec.JSON_PROPERTY_BETREFF,
-  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TEXT
+  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_TEXT,
+  GesuchNotizUpdateDtoSpec.JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN
 })
 @JsonTypeName("GesuchNotizUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +44,9 @@ public class GesuchNotizUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_TEXT = "text";
   private String text;
+
+  public static final String JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN = "pendenzAbgschlossen";
+  private Boolean pendenzAbgschlossen;
 
   public GesuchNotizUpdateDtoSpec() {
   }
@@ -124,6 +128,32 @@ public class GesuchNotizUpdateDtoSpec {
     this.text = text;
   }
 
+
+  public GesuchNotizUpdateDtoSpec pendenzAbgschlossen(Boolean pendenzAbgschlossen) {
+    
+    this.pendenzAbgschlossen = pendenzAbgschlossen;
+    return this;
+  }
+
+   /**
+   * Get pendenzAbgschlossen
+   * @return pendenzAbgschlossen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getPendenzAbgschlossen() {
+    return pendenzAbgschlossen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPendenzAbgschlossen(Boolean pendenzAbgschlossen) {
+    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +165,13 @@ public class GesuchNotizUpdateDtoSpec {
     GesuchNotizUpdateDtoSpec gesuchNotizUpdate = (GesuchNotizUpdateDtoSpec) o;
     return Objects.equals(this.id, gesuchNotizUpdate.id) &&
         Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
-        Objects.equals(this.text, gesuchNotizUpdate.text);
+        Objects.equals(this.text, gesuchNotizUpdate.text) &&
+        Objects.equals(this.pendenzAbgschlossen, gesuchNotizUpdate.pendenzAbgschlossen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text);
+    return Objects.hash(id, betreff, text, pendenzAbgschlossen);
   }
 
   @Override
@@ -150,6 +181,7 @@ public class GesuchNotizUpdateDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    pendenzAbgschlossen: ").append(toIndentedString(pendenzAbgschlossen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

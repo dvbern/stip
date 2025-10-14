@@ -23,6 +23,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
+  private @Valid Boolean pendenzAbgschlossen;
 
   /**
    **/
@@ -81,6 +82,24 @@ public class GesuchNotizUpdateDto  implements Serializable {
     this.text = text;
   }
 
+  /**
+   **/
+  public GesuchNotizUpdateDto pendenzAbgschlossen(Boolean pendenzAbgschlossen) {
+    this.pendenzAbgschlossen = pendenzAbgschlossen;
+    return this;
+  }
+
+  
+  @JsonProperty("pendenzAbgschlossen")
+  public Boolean getPendenzAbgschlossen() {
+    return pendenzAbgschlossen;
+  }
+
+  @JsonProperty("pendenzAbgschlossen")
+  public void setPendenzAbgschlossen(Boolean pendenzAbgschlossen) {
+    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -93,12 +112,13 @@ public class GesuchNotizUpdateDto  implements Serializable {
     GesuchNotizUpdateDto gesuchNotizUpdate = (GesuchNotizUpdateDto) o;
     return Objects.equals(this.id, gesuchNotizUpdate.id) &&
         Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
-        Objects.equals(this.text, gesuchNotizUpdate.text);
+        Objects.equals(this.text, gesuchNotizUpdate.text) &&
+        Objects.equals(this.pendenzAbgschlossen, gesuchNotizUpdate.pendenzAbgschlossen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text);
+    return Objects.hash(id, betreff, text, pendenzAbgschlossen);
   }
 
   @Override
@@ -109,6 +129,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    pendenzAbgschlossen: ").append(toIndentedString(pendenzAbgschlossen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -88,6 +88,10 @@ public class GesuchNotizService {
         notiz.setGesuch(gesuch);
         gesuchNotizRepository.persistAndFlush(notiz);
 
+        if (createDto.getNotizTyp().equals(GesuchNotizTyp.PENDENZ)) {
+            notiz.setAbgeschlossen(false);
+        }
+
         return gesuchNotizMapper.toDto(notiz);
     }
 

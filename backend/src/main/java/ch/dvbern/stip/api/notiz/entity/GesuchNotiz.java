@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.notiz.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.GesuchNotizAntwortConstraint;
+import ch.dvbern.stip.api.common.validation.GesuchNotizPendenzAbgeschlossenConstraint;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import jakarta.persistence.Column;
@@ -41,6 +42,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @GesuchNotizAntwortConstraint
+@GesuchNotizPendenzAbgeschlossenConstraint
 @Getter
 @Setter
 @Entity
@@ -76,4 +78,7 @@ public class GesuchNotiz extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "antwort", length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String antwort;
+
+    @Column(name = "abgeschlossen")
+    private Boolean abgeschlossen;
 }
