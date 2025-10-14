@@ -93,8 +93,4 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
 
         return ImmutablePair.of("einnahmenKosten", requiredDocs);
     }
-
-    private boolean greaterThanZero(final Integer base) {
-        return base != null && base > 0;
-    }
 }
