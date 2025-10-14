@@ -1,183 +1,229 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-2">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-2">
     <addColumn tableName="einnahmen_kosten">
       <column name="andere_einnahmen" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-3">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-3">
     <addColumn tableName="einnahmen_kosten_aud">
       <column name="andere_einnahmen" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-4">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-4">
+    <addColumn tableName="kind">
+      <column name="andere_einnahmen" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-5">
+    <addColumn tableName="kind_aud">
+      <column name="andere_einnahmen" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-6">
     <addColumn tableName="einnahmen_kosten">
       <column name="arbeitspensum_prozent" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-5">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-7">
     <addColumn tableName="einnahmen_kosten_aud">
       <column name="arbeitspensum_prozent" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-6">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-8">
     <addColumn tableName="partner">
       <column name="ausbildungspensum" type="VARCHAR(255)"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-7">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-9">
     <addColumn tableName="partner_aud">
       <column name="ausbildungspensum" type="VARCHAR(255)"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-8">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-10">
     <addColumn tableName="einnahmen_kosten">
       <column name="einnahmen_bgsa" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-9">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-11">
     <addColumn tableName="einnahmen_kosten_aud">
       <column name="einnahmen_bgsa" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-10">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-12">
     <addColumn tableName="steuererklaerung">
       <column name="einnahmen_bgsa" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-11">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-13">
     <addColumn tableName="steuererklaerung_aud">
       <column name="einnahmen_bgsa" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-12">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-14">
     <addColumn tableName="kind">
       <column name="ergaenzungsleistungen" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-13">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-15">
     <addColumn tableName="kind_aud">
       <column name="ergaenzungsleistungen" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-14">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-16">
     <addColumn tableName="steuererklaerung">
       <column name="ergaenzungsleistungen" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-15">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-17">
     <addColumn tableName="steuererklaerung_aud">
       <column name="ergaenzungsleistungen" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-16">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-18">
     <addColumn tableName="partner">
       <column name="in_ausbildung" type="BOOLEAN">
         <constraints nullable="false"/>
       </column>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-17">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-19">
     <addColumn tableName="partner_aud">
       <column name="in_ausbildung" type="BOOLEAN"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-18">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-20">
+    <addColumn tableName="kind">
+      <column name="kinder_und_ausbildungszulagen" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-21">
+    <addColumn tableName="kind_aud">
+      <column name="kinder_und_ausbildungszulagen" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-22">
+    <addColumn tableName="kind">
+      <column name="renten" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-23">
+    <addColumn tableName="kind_aud">
+      <column name="renten" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-24">
     <addColumn tableName="steuererklaerung">
       <column name="renten" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-19">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-25">
     <addColumn tableName="steuererklaerung_aud">
       <column name="renten" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-20">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-26">
     <addColumn tableName="einnahmen_kosten">
-      <column name="taggeld_ahv_iv" type="INTEGER"/>
+      <column name="taggelder_ahv_iv" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-21">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-27">
     <addColumn tableName="einnahmen_kosten_aud">
-      <column name="taggeld_ahv_iv" type="INTEGER"/>
+      <column name="taggelder_ahv_iv" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-22">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-28">
     <addColumn tableName="einnahmen_kosten">
       <column name="unterhaltsbeitraege" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-23">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-29">
     <addColumn tableName="einnahmen_kosten_aud">
       <column name="unterhaltsbeitraege" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-24">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-30">
+    <addColumn tableName="kind">
+      <column name="unterhaltsbeitraege" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-31">
+    <addColumn tableName="kind_aud">
+      <column name="unterhaltsbeitraege" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-32">
     <addColumn tableName="steuererklaerung">
       <column name="unterhaltsbeitraege" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-25">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-33">
     <addColumn tableName="steuererklaerung_aud">
       <column name="unterhaltsbeitraege" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-26">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-34">
     <addColumn tableName="einnahmen_kosten">
       <column name="verpflegungskosten" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-27">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-35">
     <addColumn tableName="einnahmen_kosten_aud">
       <column name="verpflegungskosten" type="INTEGER"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-46">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-54">
     <dropColumn columnName="alimente" tableName="einnahmen_kosten"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-47">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-55">
     <dropColumn columnName="alimente" tableName="einnahmen_kosten_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-48">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-56">
     <dropColumn columnName="ausbildung_mit_einkommen_oder_erwerbstaetig" tableName="partner"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-49">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-57">
     <dropColumn columnName="ausbildung_mit_einkommen_oder_erwerbstaetig" tableName="partner_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-50">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-58">
     <dropColumn columnName="ergaenzungsleistungen" tableName="eltern"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-51">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-59">
     <dropColumn columnName="ergaenzungsleistungen" tableName="eltern_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-52">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-60">
+    <dropColumn columnName="erhaltene_alimentebeitraege" tableName="kind"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-61">
+    <dropColumn columnName="erhaltene_alimentebeitraege" tableName="kind_aud"/>
+  </changeSet>
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-62">
     <dropColumn columnName="fahrkosten" tableName="partner"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-53">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-63">
     <dropColumn columnName="fahrkosten" tableName="partner_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-54">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-64">
     <dropColumn columnName="jahreseinkommen" tableName="partner"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-55">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-65">
     <dropColumn columnName="jahreseinkommen" tableName="partner_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-56">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-66">
     <dropColumn columnName="kinderalimente" tableName="steuerdaten"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-57">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-67">
     <dropColumn columnName="kinderalimente" tableName="steuerdaten_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-58">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-68">
     <dropColumn columnName="verdienst_realisiert" tableName="einnahmen_kosten"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-59">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-69">
     <dropColumn columnName="verdienst_realisiert" tableName="einnahmen_kosten_aud"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-60">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-70">
     <dropColumn columnName="verpflegungskosten" tableName="partner"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760086709044-61">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760426705841-71">
     <dropColumn columnName="verpflegungskosten" tableName="partner_aud"/>
   </changeSet>
 </databaseChangeLog>
