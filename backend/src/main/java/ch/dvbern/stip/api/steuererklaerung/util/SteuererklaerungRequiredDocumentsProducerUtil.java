@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.steuererklaerung.util;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -44,17 +43,6 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
                     case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE;
                     case VATER -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER;
                     case MUTTER -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER;
-                });
-            }
-
-            if (
-                Objects.nonNull(steuererklarung.getErgaenzungsleistungen())
-                && steuererklarung.getErgaenzungsleistungen() > 0
-            ) {
-                requiredDocs.add(switch (steuerdatenTyp) {
-                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE;
-                    case VATER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER;
-                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
                 });
             }
 

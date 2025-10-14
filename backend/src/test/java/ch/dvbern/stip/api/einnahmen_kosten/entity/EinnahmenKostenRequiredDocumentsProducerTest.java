@@ -35,15 +35,6 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     }
 
     @Test
-    void requiresIfVerdienstRealisiert() {
-        formular.setEinnahmenKosten(
-            new EinnahmenKosten()
-            // todo ksip-2780 what to do here?
-            // .setVerdienstRealisiert(true)
-        );
-    }
-
-    @Test
     void requiresIfNettoerwerbseinkommen() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
@@ -129,7 +120,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     }
 
     @Test
-    void requiresIfAlimente() {
+    void requiresIfUnterhaltsbeitraege() {
         formular.setEinnahmenKosten(
             new EinnahmenKosten()
                 .setUnterhaltsbeitraege(1)
@@ -143,6 +134,26 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
     void requiresIfVermoegen() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(1000));
         RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERMOEGEN);
+    }
 
+    @Test
+    void requiresIfAndereEinnahmen() {
+        formular.setEinnahmenKosten(new EinnahmenKosten().setAndereEinnahmen(1000));
+        RequiredDocsUtil
+            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
+    }
+
+    @Test
+    void requiresIfEinnahmenBGSA() {
+        formular.setEinnahmenKosten(new EinnahmenKosten().setEinnahmenBGSA(1000));
+        RequiredDocsUtil
+            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
+    }
+
+    @Test
+    void requiresIfTaggelderAHVIV() {
+        formular.setEinnahmenKosten(new EinnahmenKosten().setTaggelderAHVIV(1000));
+        RequiredDocsUtil
+            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
     }
 }

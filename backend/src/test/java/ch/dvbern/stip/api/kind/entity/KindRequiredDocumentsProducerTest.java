@@ -37,7 +37,7 @@ class KindRequiredDocumentsProducerTest {
     }
 
     @Test
-    void requiresIfAlimentebeitraege() {
+    void requiresIfUnterhaltsbeitraege() {
         formular.setKinds(
             Set.of(
                 new Kind()
@@ -47,5 +47,57 @@ class KindRequiredDocumentsProducerTest {
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
         RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_ALIMENTENVERORDUNG);
+    }
+
+    @Test
+    void requiresIfKinderUndAusbildungszulagen() {
+        formular.setKinds(
+            Set.of(
+                new Kind()
+                    .setKinderUndAusbildungszulagen(1)
+            )
+        );
+
+        final var requiredDocs = producer.getRequiredDocuments(formular);
+        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN);
+    }
+
+    @Test
+    void requiresIfRenten() {
+        formular.setKinds(
+            Set.of(
+                new Kind()
+                    .setRenten(1)
+            )
+        );
+
+        final var requiredDocs = producer.getRequiredDocuments(formular);
+        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_RENTEN);
+    }
+
+    @Test
+    void requiresIfErgaenzungsleistungen() {
+        formular.setKinds(
+            Set.of(
+                new Kind()
+                    .setErgaenzungsleistungen(1)
+            )
+        );
+
+        final var requiredDocs = producer.getRequiredDocuments(formular);
+        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN);
+    }
+
+    @Test
+    void requiresIf() {
+        formular.setKinds(
+            Set.of(
+                new Kind()
+                    .setAndereEinnahmen(1)
+            )
+        );
+
+        final var requiredDocs = producer.getRequiredDocuments(formular);
+        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_ANDERE_EINNAHMEN);
     }
 }
