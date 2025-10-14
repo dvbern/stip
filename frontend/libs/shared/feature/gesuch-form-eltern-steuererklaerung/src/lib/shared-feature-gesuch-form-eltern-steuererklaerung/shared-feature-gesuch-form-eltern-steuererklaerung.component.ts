@@ -101,12 +101,11 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   form = this.formBuilder.group({
-    // todo: check Validators
     steuererklaerungInBern: [<boolean | null>null, [Validators.required]],
-    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
     unterhaltsbeitraege: [<string | null>null, [Validators.required]],
     renten: [<string | null>null, [Validators.required]],
-    einnahmenBGSA: [<string | null>null, [Validators.required]],
+    ergaenzungsleistungen: [<string | undefined>undefined],
+    einnahmenBGSA: [<string | undefined>undefined],
   });
 
   steuererklaerungInBernChangedSig = toSignal(
@@ -237,10 +236,8 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'steuererklaerungInBern',
-      'ergaenzungsleistungen',
       'unterhaltsbeitraege',
       'renten',
-      'einnahmenBGSA',
     ]);
 
     const steuererklaerung = {

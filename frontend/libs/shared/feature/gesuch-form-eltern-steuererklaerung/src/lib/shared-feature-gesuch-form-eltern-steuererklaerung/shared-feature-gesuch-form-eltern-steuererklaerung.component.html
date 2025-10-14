@@ -65,6 +65,59 @@
     }
 
     <div class="row g-4 my-2">
+      <!-- UNTERHALTSBEITRÄGE -->
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuererklaerung.unterhaltsbeitraege.label' | transloco }}</mat-label>
+          <input
+            formControlName="unterhaltsbeitraege"
+            data-testid="form-eltern-steuererklaerung-unterhaltsbeitraege"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-hint *dvZuvorHint="changes?.unterhaltsbeitraege"></mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </mat-form-field>
+
+        @if (unterhaltsbeitraegeDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
+
+      <!-- Renten -->
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuererklaerung.renten.label' | transloco }}</mat-label>
+          <input
+            formControlName="renten"
+            data-testid="form-eltern-steuererklaerung-renten"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-hint *dvZuvorHint="changes?.renten"></mat-hint>
+          <mat-hint>{{ 'shared.form.eltern-steuererklaerung.renten.info' | transloco }}</mat-hint>
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </mat-form-field>
+
+        @if (rentenDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
+    </div>
+
+    <div class="row g-4 my-2">
       <!-- Ergaenzungsleistungen-->
       <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -98,69 +151,6 @@
         </button>
       </div>
 
-      <!-- UNTERHALTSBEITRÄGE -->
-      <!-- todo: mada: welches dokument, das selbe wie bei EK? -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'shared.form.eltern-steuererklaerung.unterhaltsbeitraege.label' | transloco }}</mat-label>
-          <input
-            formControlName="unterhaltsbeitraege"
-            data-testid="form-eltern-steuererklaerung-unterhaltsbeitraege"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
-          <mat-hint *dvZuvorHint="changes?.unterhaltsbeitraege"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-
-        @if (unterhaltsbeitraegeDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-
-      <div class="d-none d-xl-block col-xl-4">
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.infoTitle'"
-          [dialogMessageKey]="'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.info'"
-          #ergaenzungsleistungenDialog="dvSharedUiInfoDialog"
-        ></div>
-      </div>
-    </div>
-
-    <div class="row g-4 my-2">
-      <!-- Renten -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
-          <mat-label>{{ 'shared.form.eltern-steuererklaerung.renten.label' | transloco }}</mat-label>
-          <input
-            formControlName="renten"
-            data-testid="form-eltern-steuererklaerung-renten"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
-          <mat-hint *dvZuvorHint="changes?.renten"></mat-hint>
-          <mat-hint>{{ 'shared.form.eltern-steuererklaerung.renten.info' | transloco }}</mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-
-        @if (rentenDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-
       <!-- Einnahmen BGSA -->
       <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
@@ -185,6 +175,15 @@
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
         }
+      </div>
+
+      <div class="d-none d-xl-block col-xl-4">
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.infoTitle'"
+          [dialogMessageKey]="'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.info'"
+          #ergaenzungsleistungenDialog="dvSharedUiInfoDialog"
+        ></div>
       </div>
     </div>
 

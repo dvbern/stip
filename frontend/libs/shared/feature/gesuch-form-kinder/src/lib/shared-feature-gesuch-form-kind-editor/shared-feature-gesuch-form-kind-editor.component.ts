@@ -148,11 +148,11 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       '' as Ausbildungssituation,
       [Validators.required],
     ),
-    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
-    kinderUndAusbildungszulagen: [<string | null>null],
-    renten: [<string | null>null],
-    ergaenzungsleistungen: [<string | null>null],
-    andereEinnahmen: [<string | null>null],
+    unterhaltsbeitraege: [<string | undefined>undefined],
+    kinderUndAusbildungszulagen: [<string | undefined>undefined],
+    renten: [<string | undefined>undefined],
+    ergaenzungsleistungen: [<string | undefined>undefined],
+    andereEinnahmen: [<string | undefined>undefined],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
@@ -241,9 +241,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.updateValidity$.next({});
 
     const formValues = convertTempFormToRealValues(this.form, [
-      'unterhaltsbeitraege',
       'wohnsitzAnteilPia',
-      'kinderUndAusbildungszulagen',
       'renten',
       'ergaenzungsleistungen',
       'andereEinnahmen',
