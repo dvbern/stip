@@ -4,9 +4,11 @@ import {
   Component,
   ElementRef,
   OnInit,
+  computed,
   effect,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -140,6 +142,13 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
     ],
     inAusbildung: [<boolean | undefined>undefined],
     ausbildungspensum: [<AusbildungsPensum | undefined>undefined],
+  });
+
+  inAusbildungChangedSig = toSignal(
+    this.form.controls.inAusbildung.valueChanges,
+  );
+  showAusbildungspensumSig = computed(() => {
+    return this.inAusbildungChangedSig() === true;
   });
 
   constructor() {
