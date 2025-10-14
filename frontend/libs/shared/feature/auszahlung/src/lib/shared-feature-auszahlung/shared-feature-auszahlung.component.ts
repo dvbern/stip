@@ -109,6 +109,10 @@ export abstract class SharedFeatureAuszahlungComponent {
     }
   }
 
+  handleBack(alternativeRoute: string): void {
+    this.routeHistoryService.navigateToPreviousPage(alternativeRoute);
+  }
+
   handleContinue() {
     const { gesuchId, trancheId } = this.gesuchsViewSig();
     if (gesuchId && trancheId) {

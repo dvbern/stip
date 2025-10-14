@@ -20,7 +20,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 
@@ -48,7 +47,6 @@ import { ibanValidator } from '@dv/shared/util/validator-iban';
   selector: 'dv-shared-ui-auszahlung',
   imports: [
     FormsModule,
-    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -75,7 +73,8 @@ export class SharedUiAuszahlungComponent {
   private formUtils = inject(SharedUtilFormService);
 
   auszahlungViewSig = input.required<SharedModelAuszahlung>();
-  showBackSig = input<boolean>(true, { alias: 'showBack' });
+  isGesuchFormStepSig = input<boolean>(false, { alias: 'isGesuchFormStep' });
+  backTriggered = output<void>();
   saveTriggered = output<AuszahlungUpdate>();
   continueTriggered = output<void>();
   formIsUnsaved = output<boolean>();

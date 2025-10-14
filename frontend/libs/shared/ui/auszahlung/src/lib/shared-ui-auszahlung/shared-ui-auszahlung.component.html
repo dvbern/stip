@@ -102,10 +102,17 @@
 
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:md:col-span-2 tw:lg:col-span-3">
-      @if (view.readonly) {
-        <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
-          {{ 'shared.form.gonext' | transloco }}
+      @if (!isGesuchFormStepSig()) {
+        <button type="button" class="btn btn-outline" (click)="backTriggered.emit()" data-testid="button-next">
+          {{ 'shared.form.back' | transloco }}
         </button>
+      }
+      @if (view.readonly) {
+        @if (isGesuchFormStepSig()) {
+          <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
+            {{ 'shared.form.gonext' | transloco }}
+          </button>
+        }
       } @else {
         <dv-shared-ui-form-save
           [disabled]="form.invalid || form.pristine"

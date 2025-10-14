@@ -5,6 +5,7 @@
     </h1>
     <dv-shared-ui-auszahlung
       [auszahlungViewSig]="auszahlungViewSig()"
+      (backTriggered)="handleBack('/')"
       (saveTriggered)="handleSave($event, '/')"
       (formIsUnsaved)="hasUnsavedChanges = $event"
     ></dv-shared-ui-auszahlung>

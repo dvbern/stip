@@ -9,7 +9,8 @@
 <dv-shared-ui-auszahlung
   class="tw:mt-6 tw:block"
   [auszahlungViewSig]="extendedAuszahlungViewSig()"
-  [showBack]="false"
+  [isGesuchFormStep]="true"
+  (backTriggered)="handleBack('/')"
   (saveTriggered)="handleSave($event, '/')"
   (continueTriggered)="handleContinue()"
   (formIsUnsaved)="hasUnsavedChanges = $event"
