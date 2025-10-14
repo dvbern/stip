@@ -812,6 +812,14 @@ class BerechnungTest {
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.of(1996, 7, 1));
 
+        // todo KSTIP-2779 set ekPartner fields here, so that berechnungsresult is correct
+        /*
+         * gesuchFormular.setPartner(
+         * (Partner) new Partner()
+         * .setJahreseinkommen(25000)
+         * .setVerpflegungskosten(1000)
+         * .setFahrkosten(1600)
+         */
         gesuchFormular.setPartner(
             (Partner) new Partner()
                 .setGeburtsdatum(LocalDate.of(1990, 12, 1))
