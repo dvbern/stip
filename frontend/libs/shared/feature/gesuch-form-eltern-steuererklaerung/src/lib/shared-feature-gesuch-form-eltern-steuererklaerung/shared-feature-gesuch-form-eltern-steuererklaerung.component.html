@@ -50,10 +50,10 @@
     </div>
     @if (steuererklaerungInBernDocumentSig(); as options) {
       <div class="row g-4 mt-1">
-        <div class="d-flex align-items-center gap-4 col-12 col-md-6">
+        <div class="d-flex gap-2 align-items-center col-12 col-md-6 col-xl-4">
           <p
-            class="m-0"
-            [innerHTML]="'shared.form.eltern-steuererklaerung.file.' + typ + '_DOCUMENTUPLOAD' | transloco"
+            class="flex-grow-1"
+            [innerHTML]="'shared.form.eltern-steuererklaerung.file.AUSBILDUNGSBEITRAEGE_' + typ | transloco"
           ></p>
 
           <dv-shared-pattern-document-upload
@@ -66,7 +66,7 @@
 
     <div class="row g-4 my-2">
       <!-- UNTERHALTSBEITRÄGE -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+      <div class="d-flex gap-2 align-items-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuererklaerung.unterhaltsbeitraege.label' | transloco }}</mat-label>
           <input
@@ -91,7 +91,7 @@
       </div>
 
       <!-- Renten -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+      <div class="d-flex gap-2 align-items-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuererklaerung.renten.label' | transloco }}</mat-label>
           <input
@@ -119,7 +119,7 @@
 
     <div class="row g-4 my-2">
       <!-- Ergaenzungsleistungen-->
-      <div class="col-12 col-md-6 col-xl-4 d-flex align-content-center gap-2">
+      <div class="col-12 col-md-6 col-xl-4 d-flex align-items-center gap-2">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.label' | transloco }}</mat-label>
           <input
@@ -152,7 +152,7 @@
       </div>
 
       <!-- Einnahmen BGSA -->
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+      <div class="d-flex gap-2 align-items-center col-12 col-md-6 col-xl-4">
         <mat-form-field dvSharedUiFormField class="flex-grow-1">
           <mat-label>{{ 'shared.form.eltern-steuererklaerung.einnahmenBGSA.label' | transloco }}</mat-label>
           <input
@@ -184,6 +184,29 @@
           [dialogMessageKey]="'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.info'"
           #ergaenzungsleistungenDialog="dvSharedUiInfoDialog"
         ></div>
+      </div>
+    </div>
+
+    <div class="row g-4 my-2">
+      <!-- Andere Einnahmen -->
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuererklaerung.andereEinnahmen.label' | transloco }}</mat-label>
+          <input
+            formControlName="andereEinnahmen"
+            data-testid="form-eltern-steuererklaerung-andereEinnahmen"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-hint *dvZuvorHint="changes?.andereEinnahmen"></mat-hint>
+        </mat-form-field>
+        @if (andereEinnahmenDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
       </div>
     </div>
 

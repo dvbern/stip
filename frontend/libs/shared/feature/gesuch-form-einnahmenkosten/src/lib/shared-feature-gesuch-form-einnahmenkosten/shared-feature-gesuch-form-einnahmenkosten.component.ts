@@ -50,7 +50,6 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
-import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
@@ -109,7 +108,6 @@ const MIN_WG_ANZAHL_PERSONEN = 2;
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
-    SharedUiInfoDialogDirective,
     SharedUiMaxLengthDirective,
     SharedUiAdvTranslocoDirective,
   ],
@@ -577,9 +575,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const formValues = convertTempFormToRealValues(this.form, [
       'nettoerwerbseinkommen',
       'arbeitspensumProzent',
-      'einnahmenBGSA',
-      'taggelderAHVIV',
-      'andereEinnahmen',
       'ausbildungskosten',
       'fahrkosten',
       'wohnkosten',

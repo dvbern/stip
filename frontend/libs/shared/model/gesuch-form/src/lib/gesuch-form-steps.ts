@@ -391,18 +391,18 @@ export const isStepValid = (
 export const getFormStepByDocumentType = (
   dokumentTyp: DokumentTyp,
 ): GesuchFormStep => {
+  if (dokumentTyp.startsWith('STEUERERKLAERUNG_')) {
+    const type: SteuerdatenTyp = Object.keys(SteuerdatenTyp).find((t) =>
+      dokumentTyp.endsWith(t),
+    ) as SteuerdatenTyp;
+    if (type) {
+      return ELTERN_STEUERERKLAERUNG_STEPS[type];
+    }
+  }
+
   switch (dokumentTyp) {
     case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
       return GSFormSteps.DOKUMENTE;
-    }
-    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE: {
-      return ELTERN_STEUERERKLAERUNG_FAMILIE;
-    }
-    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER: {
-      return ELTERN_STEUERERKLAERUNG_MUTTER;
-    }
-    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER: {
-      return ELTERN_STEUERERKLAERUNG_VATER;
     }
     default: {
       const step = (Object.keys(GSFormSteps) as GSFormStepKeys[]).find(

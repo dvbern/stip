@@ -38,7 +38,6 @@ import {
 import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 import { MAX_EINKOMMEN } from '@dv/shared/model/ui-constants';
-import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -86,7 +85,6 @@ const MEDIUM_AGE_ADULT = 30;
     SharedUiStepFormButtonsComponent,
     MatCheckboxModule,
     SharedUiLoadingComponent,
-    SharedPatternDocumentUploadComponent,
     SharedUiInfoDialogDirective,
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,

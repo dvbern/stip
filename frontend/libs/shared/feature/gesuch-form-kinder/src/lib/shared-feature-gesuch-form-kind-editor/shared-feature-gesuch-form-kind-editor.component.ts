@@ -44,7 +44,6 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
-  SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
@@ -89,7 +88,6 @@ const MEDIUM_AGE = 20;
     MatRadioModule,
     MaskitoDirective,
     SharedUiZuvorHintDirective,
-    SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
@@ -242,9 +240,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
 
     const formValues = convertTempFormToRealValues(this.form, [
       'wohnsitzAnteilPia',
-      'renten',
-      'ergaenzungsleistungen',
-      'andereEinnahmen',
     ]);
 
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(

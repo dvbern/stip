@@ -106,6 +106,7 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     renten: [<string | null>null, [Validators.required]],
     ergaenzungsleistungen: [<string | undefined>undefined],
     einnahmenBGSA: [<string | undefined>undefined],
+    andereEinnahmen: [<string | undefined>undefined],
   });
 
   steuererklaerungInBernChangedSig = toSignal(
@@ -117,6 +118,7 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     'unterhaltsbeitraege',
     'renten',
     'einnahmenBGSA',
+    'andereEinnahmen',
   ]);
 
   private ergaenzungsleistungChangedSig = toSignal(
@@ -176,6 +178,20 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
 
     return einnahmenBGSA > 0
       ? DokumentTyp[`STEUERERKLAERUNG_EINNAHMEN_BGSA_${steuerdatenTyp}`]
+      : null;
+  });
+
+  andereEinnahmenSig = toSignal(
+    this.form.controls.andereEinnahmen.valueChanges,
+  );
+  andereEinnahmenDocumentSig = this.createUploadOptionsSig(() => {
+    const andereEinnahmen = fromFormatedNumber(
+      this.andereEinnahmenSig() ?? '0',
+    );
+    const steuerdatenTyp = this.stepSig().type;
+
+    return andereEinnahmen > 0
+      ? DokumentTyp[`STEUERERKLAERUNG_ANDERE_EINNAHMEN_${steuerdatenTyp}`]
       : null;
   });
 
