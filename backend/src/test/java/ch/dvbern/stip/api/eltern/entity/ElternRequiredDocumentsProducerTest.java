@@ -45,39 +45,6 @@ class ElternRequiredDocumentsProducerTest {
         formular = new GesuchFormular();
     }
 
-    // todo kstip-2780: rename test, since erganzungsleistungen has been moved
-    @Test
-    void mutterIfErgaenzungsleistungen() {
-        formular.setElterns(
-            Set.of(
-                new Eltern().setElternTyp(ElternTyp.MUTTER)
-                    .setSozialhilfebeitraege(false)
-
-            )
-        );
-        // TODO KSTIP-2780 REFACTOR/REMOVE
-        // RequiredDocsUtil.requiresOneOfManyAndType(
-        // getRequiredDocuments(formular),
-        // DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
-        // );
-    }
-
-    // todo kstip-2780: rename test, since erganzungsleistungen has been moved
-    @Test
-    void vaterIfErgaenzungsleistungen() {
-        formular.setElterns(
-            Set.of(
-                new Eltern().setElternTyp(ElternTyp.VATER)
-                    .setSozialhilfebeitraege(false)
-            )
-        );
-        // TODO KSTIP-2780 REFACTOR/REMOVE
-        // RequiredDocsUtil.requiresOneOfManyAndType(
-        // getRequiredDocuments(formular),
-        // DokumentTyp.ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-        // );
-    }
-
     @Test
     void mutterIfSozialhilfebeitraege() {
         formular.setElterns(
