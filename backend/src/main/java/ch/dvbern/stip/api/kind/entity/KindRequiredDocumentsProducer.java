@@ -38,11 +38,6 @@ public class KindRequiredDocumentsProducer implements RequiredDocumentsProducer 
             return ImmutablePair.of("", Set.of());
         }
 
-        /*
-         * todo kstip-2780: when is this required?
-         * - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
-         */
-
         final var requiredDocs = new HashSet<DokumentTyp>();
         kinds.forEach(kind -> {
             if (kind.getUnterhaltsbeitraege() != null) {

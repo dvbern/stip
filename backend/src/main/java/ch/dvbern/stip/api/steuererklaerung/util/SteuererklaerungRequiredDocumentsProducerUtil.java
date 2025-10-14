@@ -101,7 +101,6 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
         return requiredDocs;
     }
 
-    // todo kstip-2780: refactor to remove code duplication
     private boolean greaterThanZero(final Integer base) {
         return base != null && base > 0;
     }

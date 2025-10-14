@@ -212,8 +212,6 @@ public final class GesuchGenerator {
     private static EinnahmenKostenUpdateDtoSpec createEinnahmeKosten() {
         EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDto =
             EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
-        // todo kstip-2780: what to do here?
-        // einnahmenKostenUpdateDto.setVerdienstRealisiert(false);
         return einnahmenKostenUpdateDto;
     }
 
