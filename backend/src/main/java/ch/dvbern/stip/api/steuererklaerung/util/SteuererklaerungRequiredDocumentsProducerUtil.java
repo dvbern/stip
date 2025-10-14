@@ -52,7 +52,7 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
                 && steuererklarung.getErgaenzungsleistungen() > 0
             ) {
                 requiredDocs.add(switch (steuerdatenTyp) {
-                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE;
                     case VATER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER;
                     case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
                 });
