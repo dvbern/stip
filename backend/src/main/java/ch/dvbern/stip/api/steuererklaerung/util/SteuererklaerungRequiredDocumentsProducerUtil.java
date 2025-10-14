@@ -88,6 +88,14 @@ public class SteuererklaerungRequiredDocumentsProducerUtil {
                     case MUTTER -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER;
                 });
             }
+
+            if (greaterThanZero(steuererklarung.getAndereEinnahmen())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER;
+                });
+            }
         }
 
         return requiredDocs;

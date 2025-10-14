@@ -27,6 +27,7 @@ public class SteuererklaerungUpdateDto  implements Serializable {
   private @Valid Integer unterhaltsbeitraege;
   private @Valid Integer renten;
   private @Valid Integer einnahmenBGSA;
+  private @Valid Integer andereEinnahmen;
 
   /**
    **/
@@ -156,6 +157,24 @@ public class SteuererklaerungUpdateDto  implements Serializable {
     this.einnahmenBGSA = einnahmenBGSA;
   }
 
+  /**
+   **/
+  public SteuererklaerungUpdateDto andereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
+    return this;
+  }
+
+  
+  @JsonProperty("andereEinnahmen")
+  public Integer getAndereEinnahmen() {
+    return andereEinnahmen;
+  }
+
+  @JsonProperty("andereEinnahmen")
+  public void setAndereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -172,12 +191,13 @@ public class SteuererklaerungUpdateDto  implements Serializable {
         Objects.equals(this.ergaenzungsleistungen, steuererklaerungUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.unterhaltsbeitraege, steuererklaerungUpdate.unterhaltsbeitraege) &&
         Objects.equals(this.renten, steuererklaerungUpdate.renten) &&
-        Objects.equals(this.einnahmenBGSA, steuererklaerungUpdate.einnahmenBGSA);
+        Objects.equals(this.einnahmenBGSA, steuererklaerungUpdate.einnahmenBGSA) &&
+        Objects.equals(this.andereEinnahmen, steuererklaerungUpdate.andereEinnahmen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuererklaerungInBern, id, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA);
+    return Objects.hash(steuerdatenTyp, steuererklaerungInBern, id, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
@@ -192,6 +212,7 @@ public class SteuererklaerungUpdateDto  implements Serializable {
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
     sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
+    sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

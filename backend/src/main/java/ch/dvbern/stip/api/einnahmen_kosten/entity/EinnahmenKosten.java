@@ -71,10 +71,6 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "alternative_wohnform_wohnend")
     private Boolean alternativeWohnformWohnend;
 
-    @NotNull
-    @Column(name = "verdienst_realisiert", nullable = false)
-    private Boolean verdienstRealisiert;
-
     @Nullable
     @Column(name = "unterhaltsbeitraege")
     private Integer unterhaltsbeitraege;

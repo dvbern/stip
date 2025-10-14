@@ -35,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE,
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_RENTEN,
-  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_EINNAHMEN_B_G_S_A
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_EINNAHMEN_B_G_S_A,
+  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN
 })
 @JsonTypeName("SteuererklaerungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -60,6 +61,9 @@ public class SteuererklaerungUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_EINNAHMEN_B_G_S_A = "einnahmenBGSA";
   private Integer einnahmenBGSA;
+
+  public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
+  private Integer andereEinnahmen;
 
   public SteuererklaerungUpdateDtoSpec() {
   }
@@ -245,6 +249,32 @@ public class SteuererklaerungUpdateDtoSpec {
     this.einnahmenBGSA = einnahmenBGSA;
   }
 
+
+  public SteuererklaerungUpdateDtoSpec andereEinnahmen(Integer andereEinnahmen) {
+    
+    this.andereEinnahmen = andereEinnahmen;
+    return this;
+  }
+
+   /**
+   * Get andereEinnahmen
+   * @return andereEinnahmen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAndereEinnahmen() {
+    return andereEinnahmen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAndereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -260,12 +290,13 @@ public class SteuererklaerungUpdateDtoSpec {
         Objects.equals(this.ergaenzungsleistungen, steuererklaerungUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.unterhaltsbeitraege, steuererklaerungUpdate.unterhaltsbeitraege) &&
         Objects.equals(this.renten, steuererklaerungUpdate.renten) &&
-        Objects.equals(this.einnahmenBGSA, steuererklaerungUpdate.einnahmenBGSA);
+        Objects.equals(this.einnahmenBGSA, steuererklaerungUpdate.einnahmenBGSA) &&
+        Objects.equals(this.andereEinnahmen, steuererklaerungUpdate.andereEinnahmen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuererklaerungInBern, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA);
+    return Objects.hash(id, steuerdatenTyp, steuererklaerungInBern, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
@@ -279,6 +310,7 @@ public class SteuererklaerungUpdateDtoSpec {
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
     sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
+    sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

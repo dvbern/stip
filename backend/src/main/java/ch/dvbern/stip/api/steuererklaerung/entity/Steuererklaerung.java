@@ -66,4 +66,8 @@ public class Steuererklaerung extends AbstractMandantEntity {
     @Column(name = "einnahmen_bgsa")
     @Min(0)
     private Integer einnahmenBGSA;
+
+    @Column(name = "andere_einnahmen")
+    @Min(0)
+    private Integer andereEinnahmen;
 }
