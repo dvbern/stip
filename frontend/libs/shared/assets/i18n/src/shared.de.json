@@ -786,6 +786,7 @@
   "shared.partner.page.title": "Ehe- / Konkubinatspartner:in",
   "shared.form.partner.sozialversicherungsnummer.infoTitle": "Sozialversicherungsnummer",
   "shared.form.partner.sozialversicherungsnummer.info": "Wenn Sie Ihre Sozialversicherungsnummer benötigen, prüfen Sie zunächst Ihre Krankenversicherungskarte. Die Nummer entspricht in der Regel der AHV-Nummer. Falls Sie die Nummer dort nicht finden, können Sie sie bei der Gemeindeverwaltung Ihrer Wohngemeinde erfragen. Wenn bei Ihnen keine Sozialversicherungsnummer vorhanden ist, kontaktieren Sie uns.",
+  "shared.form.partner.inAusbildung.label": "In Ausbildung",
 
   "shared.einnahmenkosten.title": "Einnahmen & Kosten",
   "shared.einnahmenkosten.page.title": "Einnahmen & Kosten Person in Ausbildung",

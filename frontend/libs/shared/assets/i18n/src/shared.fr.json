@@ -786,6 +786,7 @@
   "shared.partner.page.title": "Conjoint / concubin",
   "shared.form.partner.sozialversicherungsnummer.infoTitle": "Numéro de sécurité sociale",
   "shared.form.partner.sozialversicherungsnummer.info": "Le numéro d’assurance sociale correspond au numéro AVS. Ce numéro à 13 chiffres figure sur la carte d’assurance-maladie ou peut être obtenu auprès de l’administration communale de la commune de résidence. Si votre partenaire (conjoint·e, partenaire enregistré·e ou concubin·e) n’a pas de numéro d’assurance sociale, veuillez nous contacter.",
+  "shared.form.partner.inAusbildung.label": "En formation",
 
   "shared.einnahmenkosten.title": "Recettes & coûts",
   "shared.einnahmenkosten.page.title": "Recettes & coûts de la personne en formation",

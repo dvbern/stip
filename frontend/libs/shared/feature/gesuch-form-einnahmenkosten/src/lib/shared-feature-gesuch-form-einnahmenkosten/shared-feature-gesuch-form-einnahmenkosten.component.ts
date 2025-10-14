@@ -59,6 +59,7 @@ import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
+  percentStringToNumber,
 } from '@dv/shared/util/form';
 import {
   fromFormatedNumber,
@@ -461,10 +462,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       // arbeitspensumProzent is only visible and required if nettoerwerbseinkommen > 0
       const hatNettoerwerbseinkommen =
         fromFormatedNumber(this.nettoerwerbseinkommenSig() ?? '0') > 0;
-      // this.formUtils.setRequired(
-      //   this.form.controls.arbeitspensumProzent,
-      //   hatNettoerwerbseinkommen,
-      // );
+
       this.setDisabledStateAndHide(
         this.form.controls.arbeitspensumProzent,
         !hatNettoerwerbseinkommen,
@@ -564,11 +562,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'einnahmenBGSA',
       'taggelderAHVIV',
       'andereEinnahmen',
-      'unterhaltsbeitraege',
       'renten',
-      'eoLeistungen',
-      'ergaenzungsleistungen',
-      'beitraege',
       'ausbildungskosten',
       'fahrkosten',
       'wohnkosten',
@@ -588,7 +582,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           nettoerwerbseinkommen: fromFormatedNumber(
             formValues.nettoerwerbseinkommen,
           ),
-          arbeitspensumProzent: fromFormatedNumber(
+          arbeitspensumProzent: percentStringToNumber(
             formValues.arbeitspensumProzent,
           ),
           einnahmenBGSA: fromFormatedNumber(formValues.einnahmenBGSA),

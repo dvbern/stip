@@ -119,59 +119,47 @@
 
       <div class="row g-4 my-2">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <!-- <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
-          <mat-checkbox
-            type="checkbox"
-            formControlName="ausbildungMitEinkommenOderErwerbstaetig"
-            data-testid="form-partner-ausbildungMitEinkommenOderErwerbstaetig"
-            >{{ 'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label' | transloco }}</mat-checkbox
-          >
+        <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
+          <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
+            'shared.form.partner.inAusbildung.label' | transloco
+          }}</mat-checkbox>
           <dv-shared-ui-form-zuvor-hint
-            [changes]="
-              view.formChanges?.ausbildungMitEinkommenOderErwerbstaetig
-                | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
-                | async
-            "
+            [changes]="view.formChanges?.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
           ></dv-shared-ui-form-zuvor-hint>
-          <button
-            type="button"
-            (click)="ausbildungEinkommenErwerbsDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
-        </div> -->
+        </div>
+      </div>
 
-        <!-- todo: check -->
+      <div class="row g-4 my-2">
         <!-- PENSUM -->
-        <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:mt-9">
-          <mat-label>
-            {{ 'shared.form.ausbildung.pensum.label' | transloco }}
-          </mat-label>
+        @if (showAusbildungspensumSig()) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-xl-4">
+            <mat-label>
+              {{ 'shared.form.ausbildung.pensum.label' | transloco }}
+            </mat-label>
 
-          <mat-select
-            formControlName="ausbildungspensum"
-            data-testid="form-partner-pensum"
-            [placeholder]="'shared.form.select.empty' | transloco"
-          >
-            @for (l of ausbildungspensumValues; track $index) {
-              <mat-option [value]="l" [attr.data-testid]="l">
-                {{ 'shared.form.partner.pensum.' + l | transloco }}
-              </mat-option>
-            }
-          </mat-select>
+            <mat-select
+              formControlName="ausbildungspensum"
+              data-testid="form-partner-pensum"
+              [placeholder]="'shared.form.select.empty' | transloco"
+            >
+              @for (l of ausbildungspensumValues; track $index) {
+                <mat-option [value]="l" [attr.data-testid]="l">
+                  {{ 'shared.form.ausbildung.pensum.' + l | transloco }}
+                </mat-option>
+              }
+            </mat-select>
 
-          <mat-hint
-            *dvZuvorHint="
-              view.formChanges?.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
-            "
-          ></mat-hint>
+            <mat-hint
+              *dvZuvorHint="
+                view.formChanges?.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
+              "
+            ></mat-hint>
 
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        }
       </div>
 
       <!-- Buttons -->
