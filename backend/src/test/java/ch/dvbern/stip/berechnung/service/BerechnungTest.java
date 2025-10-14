@@ -928,7 +928,6 @@ class BerechnungTest {
         // Assert
         assertThat(berechnungsresultatDtos.size(), is(equalTo(1)));
         // TODO KSTIP-1503: Um 1 Franken daneben
-        // TODO KSTIP-2780: why test-failure (unexpected value)?
         assertThat(berechnungsresultatDtos.get(0).getBerechnung(), is(equalTo(-9938)));
     }
 
