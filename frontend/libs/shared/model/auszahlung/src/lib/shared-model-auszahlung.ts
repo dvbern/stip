@@ -7,6 +7,5 @@ export type SharedModelAuszahlung = {
   readonly: boolean;
   laender: Land[];
   language: Language;
-  backlink?: string | null;
   invalidFormularControls: string[] | undefined;
 };
