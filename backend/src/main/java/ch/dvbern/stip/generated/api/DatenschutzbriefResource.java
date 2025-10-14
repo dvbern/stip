@@ -25,7 +25,7 @@ public interface DatenschutzbriefResource {
     @GET
     @Path("/{trancheId}/download")
     @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream> getDatenschutzbrief(@QueryParam("token") @NotNull   String token,@PathParam("trancheId") UUID trancheId);
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDatenschutzbrief(@QueryParam("token") @NotNull   String token,@PathParam("trancheId") UUID trancheId);
 
     @GET
     @Path("/{elternId}/token")
