@@ -33,7 +33,7 @@ class PartnerRequiredDocumentsProducerTest {
         formular = new GesuchFormular();
     }
 
-    // todo ksitp-2780 update testcases
+    // // todo KSTIP-2779 set correct Dokumenttyp & update testcase
     @Test
     void requiresIfFahrkosten() {
         formular.setPartner(
@@ -44,7 +44,6 @@ class PartnerRequiredDocumentsProducerTest {
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDocuments(formular),
             // DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
-            // todo KSTIP-2779 set correct Dokumenttyp
             null
         );
     }
