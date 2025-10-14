@@ -191,6 +191,12 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.eltern-steuererklaerung.file.EINNAHMEN_BGSA_MUTTER',
   STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE:
     'shared.form.eltern-steuererklaerung.file.EINNAHMEN_BGSA_FAMILIE',
+  STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER:
+    'shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_VATER',
+  STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER:
+    'shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_MUTTER',
+  STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE:
+    'shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_FAMILIE',
 };
 
 /**

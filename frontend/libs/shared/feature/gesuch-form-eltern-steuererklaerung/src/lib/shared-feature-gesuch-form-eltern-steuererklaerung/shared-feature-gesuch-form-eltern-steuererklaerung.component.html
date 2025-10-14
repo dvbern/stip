@@ -187,6 +187,29 @@
       </div>
     </div>
 
+    <div class="row g-4 my-2">
+      <!-- Andere Einnahmen -->
+      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-label>{{ 'shared.form.eltern-steuererklaerung.andereEinnahmen.label' | transloco }}</mat-label>
+          <input
+            formControlName="andereEinnahmen"
+            data-testid="form-eltern-steuererklaerung-andereEinnahmen"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-hint *dvZuvorHint="changes?.andereEinnahmen"></mat-hint>
+        </mat-form-field>
+        @if (andereEinnahmenDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
+      </div>
+    </div>
+
     <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
         <button type="submit" (click)="handleSave()" class="btn btn-primary" data-testid="button-save-continue">

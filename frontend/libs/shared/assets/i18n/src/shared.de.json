@@ -649,6 +649,7 @@
   "shared.form.eltern-steuererklaerung.renten.info": "Kinder-/Waisenrente, IV-Rente, PK-Rente, etc.",
   "shared.form.eltern-steuererklaerung.einnahmenBGSA.label": "Einnahmen BGSA (optional)",
   "shared.form.eltern-steuererklaerung.einnahmenBGSA.info": "Bundesgesetz gegen die Schawarzarbeit (BGSA)",
+  "shared.form.eltern-steuererklaerung.andereEinnahmen.label": "Andere Einnahmen (optional)",
 
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total der Einkünfte",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle": "Total der Einkünfte",
@@ -694,6 +695,9 @@
   "shared.form.eltern-steuererklaerung.file.ERGAENZUNGSLEISTUNGEN_MUTTER_DESCRIPTION": "Kopie Leistungsausweis Ergänzungsleistungen des Vorjahres inklusive Berechnungsblatt Ihrer Mutter",
   "shared.form.eltern-steuererklaerung.file.ERGAENZUNGSLEISTUNGEN_FAMILIE": "Kopie Leistungsausweis Eltern",
   "shared.form.eltern-steuererklaerung.file.ERGAENZUNGSLEISTUNGEN_FAMILIE_DESCRIPTION": "Kopie Leistungsausweis Ergänzungsleistungen des Vorjahres inklusive Berechnungsblatt Ihrer Eltern",
+  "shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_VATER": "Andere Einnahmen Vater",
+  "shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_MUTTER": "Andere Einnahmen Mutter",
+  "shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_FAMILIE": "Andere Einnahmen Eltern",
 
   "shared.geschwister.title": "Geschwister",
   "shared.form.geschwister.top.info": "Geben Sie nur vorschulpflichtige, schulpflichtige oder in Ausbildung stehende Geschwister an. Bitte geben Sie auch Ihre Halbgeschwister und Stiefgeschwister an.",

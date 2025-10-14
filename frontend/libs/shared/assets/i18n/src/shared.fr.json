@@ -649,6 +649,7 @@
   "shared.form.eltern-steuererklaerung.renten.info": "Veuillez indiquer le montant total des rentes (AVS/AI, caisse de pension, etc.) perçues par vos parents.",
   "shared.form.eltern-steuererklaerung.einnahmenBGSA.label": "BGSA (en option)",
   "shared.form.eltern-steuererklaerung.einnahmenBGSA.info": "Veuillez indiquer le montant total des prestations complémentaires AVS/AI perçues par vos parents.",
+  "shared.form.eltern-steuererklaerung.andereEinnahmen.label": "Autres revenus (en option)",
 
   "shared.form.eltern-steuerdaten.totalEinkuenfte.label": "Total des revenus",
   "shared.form.eltern-steuerdaten.totalEinkuenfte.infoTitle": "Total des revenus",
@@ -694,6 +695,9 @@
   "shared.form.eltern-steuererklaerung.file.ERGAENZUNGSLEISTUNGEN_MUTTER": "Copie du certificat de performance",
   "shared.form.eltern-steuererklaerung.file.ERGAENZUNGSLEISTUNGEN_MUTTER_DESCRIPTION": "Copie de l’attestation relative aux prestations complémentaires perçues l’année précédente avec la feuille de calcul pour votre mère",
   "shared.form.eltern-steuererklaerung.file.ERGAENZUNGSLEISTUNGEN_FAMILIE_DESCRIPTION": "Copie de l’attestation relative aux prestations complémentaires perçues l’année précédente avec la feuille de calcul pour vos parents",
+  "shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_VATER": "Autres revenus Père",
+  "shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_MUTTER": "Autres revenus Mère",
+  "shared.form.eltern-steuererklaerung.file.ANDERE_EINNAHMEN_FAMILIE": "Autres revenus Parents",
 
   "shared.geschwister.title": "Frères et sœurs",
   "shared.form.geschwister.top.info": "N'indiquez que les frères et sœurs en âge préscolaire, scolarisés ou en formation. Veuillez également indiquer vos demi-frères et sœurs et vos beaux-frères et belles-sœurs.",

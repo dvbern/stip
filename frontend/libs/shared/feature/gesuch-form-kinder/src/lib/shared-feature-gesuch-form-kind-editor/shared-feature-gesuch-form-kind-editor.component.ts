@@ -155,7 +155,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     andereEinnahmen: [<string | undefined>undefined],
   });
 
-  private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   unterhalsbetraegeChangeSig = toSignal(
