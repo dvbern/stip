@@ -2493,7 +2493,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: updateLand
-  '/gesuch/{gesuchId}':
+  '/gesuch/{gesuchId}/gs':
     parameters:
       - name: gesuchId
         schema:
@@ -2522,8 +2522,46 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: updateGesuch
-      summary: Updates the Gesuch with the given Id
+      operationId: updateGesuchGS
+      summary: Updates the Gesuch with the given Id for GS
+  '/gesuch/{gesuchId}/sb':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
+      tags:
+        - Gesuch
+      responses:
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateGesuchSB
+      summary: Updates the Gesuch with the given Id for SB
+  '/gesuch/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     delete:
       tags:
         - Gesuch
