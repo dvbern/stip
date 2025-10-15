@@ -2687,6 +2687,42 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
+  /setVersteckteEltern/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ElternTyp'
+      tags:
+        - Eltern
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ElternTyp'
+          description: Versteckte Eltern updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      operationId: setVersteckteEltern
+      summary: Set the list of versteckte Eltern for the given gesuchTrancheId
   /steuerdaten/nesko/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
@@ -5885,6 +5921,10 @@ components:
           $ref: '#/components/schemas/Familiensituation'
         partner:
           $ref: '#/components/schemas/Partner'
+        versteckteEltern:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElternTyp'
         elterns:
           type: array
           items:
