@@ -212,5 +212,6 @@
   <include file="/db/migration/0.54/0.54.0-KSTIP-2663.xml" />
   <include file="/db/migration/0.54/0.54.0-KSTIP-2709.xml" />
   <include file="/db/migration/0.54/0.54.0-KSTIP-2690.xml" />
+  <include file="/db/migration/0.54/0.54.0-KSTIP-2629.xml" />
   <!--  </editor-fold> -->
 </databaseChangeLog>

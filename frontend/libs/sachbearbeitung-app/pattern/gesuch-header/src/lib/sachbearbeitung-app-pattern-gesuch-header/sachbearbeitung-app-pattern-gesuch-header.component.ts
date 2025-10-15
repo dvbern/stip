@@ -30,7 +30,6 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  SharedDataAccessGesuchEvents,
   selectRevision,
   selectRouteId,
   selectRouteTrancheId,
@@ -303,19 +302,13 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
                 gesuchTrancheId,
                 text: result.kommentar,
                 onSuccess: (newGesuchTrancheId) => {
-                  if (gesuchTrancheId !== newGesuchTrancheId) {
-                    this.router.navigate([
-                      'gesuch',
-                      'info',
-                      gesuchId,
-                      'tranche',
-                      newGesuchTrancheId,
-                    ]);
-                  } else {
-                    this.store.dispatch(
-                      SharedDataAccessGesuchEvents.loadGesuch(),
-                    );
-                  }
+                  this.router.navigate([
+                    'gesuch',
+                    'info',
+                    gesuchId,
+                    'tranche',
+                    newGesuchTrancheId,
+                  ]);
                   this.einreichenStore.validateSteps$({ gesuchTrancheId });
                 },
               });
