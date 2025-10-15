@@ -19,6 +19,7 @@ import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FamiliensituationDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterDtoSpec;
 import ch.dvbern.stip.generated.dto.KindDtoSpec;
@@ -46,6 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_PERSON_IN_AUSBILDUNG,
   GesuchFormularDtoSpec.JSON_PROPERTY_FAMILIENSITUATION,
   GesuchFormularDtoSpec.JSON_PROPERTY_PARTNER,
+  GesuchFormularDtoSpec.JSON_PROPERTY_VERSTECKTE_ELTERN,
   GesuchFormularDtoSpec.JSON_PROPERTY_ELTERNS,
   GesuchFormularDtoSpec.JSON_PROPERTY_GESCHWISTERS,
   GesuchFormularDtoSpec.JSON_PROPERTY_LEBENSLAUF_ITEMS,
@@ -69,6 +71,9 @@ public class GesuchFormularDtoSpec {
 
   public static final String JSON_PROPERTY_PARTNER = "partner";
   private PartnerDtoSpec partner;
+
+  public static final String JSON_PROPERTY_VERSTECKTE_ELTERN = "versteckteEltern";
+  private List<ElternTypDtoSpec> versteckteEltern;
 
   public static final String JSON_PROPERTY_ELTERNS = "elterns";
   private List<ElternDtoSpec> elterns;
@@ -198,6 +203,40 @@ public class GesuchFormularDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPartner(PartnerDtoSpec partner) {
     this.partner = partner;
+  }
+
+
+  public GesuchFormularDtoSpec versteckteEltern(List<ElternTypDtoSpec> versteckteEltern) {
+    
+    this.versteckteEltern = versteckteEltern;
+    return this;
+  }
+
+  public GesuchFormularDtoSpec addVersteckteElternItem(ElternTypDtoSpec versteckteElternItem) {
+    if (this.versteckteEltern == null) {
+      this.versteckteEltern = new ArrayList<>();
+    }
+    this.versteckteEltern.add(versteckteElternItem);
+    return this;
+  }
+
+   /**
+   * Get versteckteEltern
+   * @return versteckteEltern
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERSTECKTE_ELTERN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<ElternTypDtoSpec> getVersteckteEltern() {
+    return versteckteEltern;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERSTECKTE_ELTERN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVersteckteEltern(List<ElternTypDtoSpec> versteckteEltern) {
+    this.versteckteEltern = versteckteEltern;
   }
 
 
@@ -469,6 +508,7 @@ public class GesuchFormularDtoSpec {
         Objects.equals(this.personInAusbildung, gesuchFormular.personInAusbildung) &&
         Objects.equals(this.familiensituation, gesuchFormular.familiensituation) &&
         Objects.equals(this.partner, gesuchFormular.partner) &&
+        Objects.equals(this.versteckteEltern, gesuchFormular.versteckteEltern) &&
         Objects.equals(this.elterns, gesuchFormular.elterns) &&
         Objects.equals(this.geschwisters, gesuchFormular.geschwisters) &&
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
@@ -481,7 +521,7 @@ public class GesuchFormularDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuererklaerung, steuerdatenTabs, darlehen);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, versteckteEltern, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuererklaerung, steuerdatenTabs, darlehen);
   }
 
   @Override
@@ -492,6 +532,7 @@ public class GesuchFormularDtoSpec {
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
+    sb.append("    versteckteEltern: ").append(toIndentedString(versteckteEltern)).append("\n");
     sb.append("    elterns: ").append(toIndentedString(elterns)).append("\n");
     sb.append("    geschwisters: ").append(toIndentedString(geschwisters)).append("\n");
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
