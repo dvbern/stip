@@ -160,24 +160,24 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateTranche(final GesuchTranche gesuchTranche) {
+    public void canUpdateTrancheGS(final GesuchTranche gesuchTranche) {
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            canUpdateAenderungsTranche(gesuchTranche);
+            canUpdateAenderungsTrancheGS(gesuchTranche);
         } else {
-            canUpdateNormalTranche(gesuchTranche);
+            canUpdateNormalTrancheGS(gesuchTranche);
         }
     }
 
     @Transactional
-    public void canUpdateAenderungsTranche(final GesuchTranche gesuchTranche) {
-        if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
-            assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
-                gesuchTranche.getId(),
-                GesuchTrancheStatus.SACHBEARBEITER_CAN_EDIT
-            );
-            return;
+    public void canUpdateTrancheSB(final GesuchTranche gesuchTranche) {
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+            canUpdateAenderungsTrancheSB(gesuchTranche);
+        } else {
+            canUpdateNormalTrancheSB(gesuchTranche);
         }
+    }
 
+    private void canUpdateAenderungsTrancheGS(final GesuchTranche gesuchTranche) {
         assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
             gesuchTranche.getId(),
             GesuchTrancheStatus.GESUCHSTELLER_CAN_EDIT
@@ -186,18 +186,24 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
     }
 
-    private void canUpdateNormalTranche(final GesuchTranche gesuchTranche) {
-        if (isSbOrJurist(benutzerService.getCurrentBenutzer())) {
-            assertGesuchOfTrancheIsInOneOfGesuchstatus(
-                gesuchTranche.getId(),
-                SetUtils.union(Gesuchstatus.SACHBEARBEITER_CAN_EDIT, Gesuchstatus.JURIST_CAN_EDIT)
-            );
-            return;
-        }
+    private void canUpdateAenderungsTrancheSB(final GesuchTranche gesuchTranche) {
+        assertGesuchTrancheIsInOneOfGesuchTrancheStatus(
+            gesuchTranche.getId(),
+            GesuchTrancheStatus.SACHBEARBEITER_CAN_EDIT
+        );
+    }
 
+    private void canUpdateNormalTrancheGS(final GesuchTranche gesuchTranche) {
         assertGesuchOfTrancheIsInOneOfGesuchstatus(gesuchTranche.getId(), Gesuchstatus.GESUCHSTELLER_CAN_EDIT);
 
         assertCanWriteAndIsGesuchstellerOfGesuchTrancheOrDelegatedToSozialdienst(gesuchTranche.getId());
+    }
+
+    private void canUpdateNormalTrancheSB(final GesuchTranche gesuchTranche) {
+        assertGesuchOfTrancheIsInOneOfGesuchstatus(
+            gesuchTranche.getId(),
+            SetUtils.union(Gesuchstatus.SACHBEARBEITER_CAN_EDIT, Gesuchstatus.JURIST_CAN_EDIT)
+        );
     }
 
     public void assertGesuchTrancheIsInOneOfGesuchTrancheStatus(

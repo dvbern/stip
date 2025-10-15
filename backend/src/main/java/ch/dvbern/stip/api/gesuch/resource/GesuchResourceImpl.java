@@ -406,12 +406,22 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_UPDATE, SB_GESUCH_UPDATE })
-    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+    @RolesAllowed(GS_GESUCH_UPDATE)
+    public void updateGesuchGS(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getId()
         );
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchTrancheAuthorizer.canUpdateTrancheGS(gesuchTranche);
+        gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public void updateGesuchSB(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getId()
+        );
+        gesuchTrancheAuthorizer.canUpdateTrancheSB(gesuchTranche);
         gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
     }
 
@@ -507,7 +517,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto bearbeitungAbschliessen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchTrancheAuthorizer.canUpdateTrancheSB(gesuchTranche);
         gesuchAuthorizer.sbCanBearbeitungAbschliessen(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);

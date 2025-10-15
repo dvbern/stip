@@ -46,6 +46,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
@@ -115,7 +116,15 @@ class GesuchTrancheCreateTest {
     @Order(3)
     void prepareAddRequiredDocument() {
         // preparation for the last few tests
-        addDocument(gesuch.getGesuchTrancheToWorkWith().getId());
+        final var gesuchUpdateDTO = getAddDocumentDto(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchApiSpec.updateGesuchGS()
+            .gesuchIdPath(gesuch.getId())
+            .body(gesuchUpdateDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
     @Test
@@ -258,8 +267,16 @@ class GesuchTrancheCreateTest {
 
         // make the formlerly added document (by GS) superflous on tranche 2:
         // therefore, remove & re-add the document
-        removeDocument(tranchen.getTranchen().get(1).getId());
-        addDocument(tranchen.getTranchen().get(1).getId());
+        removeDocumentSB(tranchen.getTranchen().get(1).getId());
+        final var gesuchUpdateDTO = getAddDocumentDto(tranchen.getTranchen().get(1).getId());
+
+        gesuchApiSpec.updateGesuchSB()
+            .gesuchIdPath(gesuch.getId())
+            .body(gesuchUpdateDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
 
         var documentsToUploadOfTranche1 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
@@ -400,7 +417,7 @@ class GesuchTrancheCreateTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 
-    private void addDocument(UUID trancheId) {
+    private GesuchUpdateDtoSpec getAddDocumentDto(UUID trancheId) {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
         var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
@@ -411,16 +428,10 @@ class GesuchTrancheCreateTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
-        gesuchApiSpec.updateGesuch()
-            .gesuchIdPath(gesuch.getId())
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+        return gesuchUpdateDTO;
     }
 
-    private void removeDocument(UUID trancheId) {
+    private void removeDocumentSB(UUID trancheId) {
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
         var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.VORSCHULPFLICHTIG);
@@ -431,7 +442,7 @@ class GesuchTrancheCreateTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)

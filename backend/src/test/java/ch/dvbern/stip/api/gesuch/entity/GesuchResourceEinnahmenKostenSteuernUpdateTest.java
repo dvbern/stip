@@ -116,7 +116,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
 
         // total income is above 20 000
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)

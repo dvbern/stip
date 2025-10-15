@@ -122,7 +122,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -157,7 +157,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
         einnahmenKostenDto
             .setWgWohnend(wgWohnend);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -190,7 +190,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setAlternativeWohnformWohnend(false);
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)

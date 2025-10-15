@@ -246,7 +246,7 @@ class GesuchUpdateNachristDokumenteTest {
     @Test
     @Order(21)
     void updateGesuchShouldNotOverrideEingabefristTest() {
-        TestUtil.updateGesuch(gesuchApiSpec, gesuch);
+        TestUtil.updateGesuchSB(gesuchApiSpec, gesuch);
 
         final var updatedGesuch = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())

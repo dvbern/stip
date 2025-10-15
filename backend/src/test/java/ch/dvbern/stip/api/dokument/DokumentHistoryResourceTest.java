@@ -109,7 +109,7 @@ class DokumentHistoryResourceTest {
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setWohnkosten(0);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setWohnkosten(0);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -186,7 +186,7 @@ class DokumentHistoryResourceTest {
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setSozialhilfebeitraege(false);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setSozialhilfebeitraege(false);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)

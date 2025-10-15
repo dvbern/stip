@@ -153,7 +153,7 @@ class BuchhaltungResourceTest {
     void fillRequiredVeranlagungStatus() {
         var gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)

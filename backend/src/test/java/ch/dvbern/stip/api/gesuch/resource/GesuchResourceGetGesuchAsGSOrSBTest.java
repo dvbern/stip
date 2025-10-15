@@ -162,7 +162,7 @@ class GesuchResourceGetGesuchAsGSOrSBTest {
             .setWohnkosten(wohnkostenChangeValue);
 
         // Act
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
