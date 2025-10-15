@@ -49,14 +49,17 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
+    @Min(0)
     private Integer nettoerwerbseinkommen;
 
     @NotNull
     @Column(name = "fahrkosten", nullable = false)
+    @Min(0)
     private Integer fahrkosten;
 
     @Nullable
     @Column(name = "wohnkosten")
+    @Min(0)
     private Integer wohnkosten;
 
     @Nullable
@@ -65,6 +68,7 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "wg_anzahl_personen")
+    @Min(0)
     private Integer wgAnzahlPersonen;
 
     @Nullable
@@ -73,44 +77,54 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "unterhaltsbeitraege")
+    @Min(0)
     private Integer unterhaltsbeitraege;
 
     @Nullable
     @Column(name = "zulagen")
+    @Min(0)
     private Integer zulagen;
 
-    @NotNull
-    @Column(name = "renten", nullable = false)
+    @Nullable
+    @Column(name = "renten")
+    @Min(0)
     private Integer renten;
 
     @Nullable
     @Column(name = "eo_leistungen")
+    @Min(0)
     private Integer eoLeistungen;
 
     @Nullable
     @Column(name = "ergaenzungsleistungen")
+    @Min(0)
     private Integer ergaenzungsleistungen;
 
     @Nullable
     @Column(name = "beitraege")
+    @Min(0)
     private Integer beitraege;
 
     @Nullable
     @Column(name = "ausbildungskosten")
+    @Min(0)
     private Integer ausbildungskosten;
 
     // todo kstip-2779 - validierung pia only
     @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
+    @Min(0)
     private Integer auswaertigeMittagessenProWoche;
 
     // todo kstip-2779 - validierung partner only
     @Nullable
     @Column(name = "verpflegungskosten")
+    @Min(0)
     private Integer verpflegungskosten;
 
     @Nullable
     @Column(name = "betreuungskosten_kinder")
+    @Min(0)
     private Integer betreuungskostenKinder;
 
     @Nullable
