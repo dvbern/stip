@@ -60,6 +60,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenVeranlagungsStatusNotNul
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -263,6 +264,7 @@ import org.hibernate.envers.Audited;
         @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
+        @Index(name = "FK_gesuch_formular_einnahmen_kosten_partner_id", columnList = "einnahmen_kosten_id"),
         @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
     }
 )
@@ -305,6 +307,15 @@ public class GesuchFormular extends AbstractMandantEntity {
     )
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
+
+    @Nullable
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(
+        name = "einnahmen_kosten_partner_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_partner_id")
+    )
+    @HasPageValidation(EinnahmenKostenPageValidation.class) // todo ksitp-2571: add new interface?
+    private @Valid EinnahmenKosten einnahmenKostenPartner;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
