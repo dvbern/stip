@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -68,6 +69,7 @@ public class ElternteilV1 {
     public static ElternteilV1Builder builderFromDependants(
         final Gesuchsperiode gesuchsperiode,
         final List<Eltern> eltern,
+        final Steuererklaerung steuererklaerung,
         final Steuerdaten steuerdaten,
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
@@ -92,11 +94,12 @@ public class ElternteilV1 {
 
         builder.steuernBund(steuerdaten.getSteuernBund());
         builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
-
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
+
             for (final var elternteil : eltern) {
-                builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0));
+                builder
+                    .ergaenzungsleistungen(Objects.requireNonNullElse(steuererklaerung.getErgaenzungsleistungen(), 0));
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     elternteil.getGeburtsdatum(),
                     ausbildungsBegin,
@@ -121,7 +124,7 @@ public class ElternteilV1 {
                 )
                 .toList()
                 .get(0);
-            builder.ergaenzungsleistungen(Objects.requireNonNullElse(elternteilToUse.getErgaenzungsleistungen(), 0));
+            builder.ergaenzungsleistungen(Objects.requireNonNullElse(steuererklaerung.getErgaenzungsleistungen(), 0));
 
             final var kindDesElternteilsVollzeit = kinderDerElternInHaushalten.stream()
                 .filter(
@@ -230,7 +233,7 @@ public class ElternteilV1 {
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
-        builder.alimente(Objects.requireNonNullElse(steuerdaten.getKinderalimente(), 0));
+        builder.alimente(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0));
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
         builder.einzahlungSaeule3a(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0));
         builder.steuerbaresVermoegen(Objects.requireNonNullElse(steuerdaten.getVermoegen(), 0));
@@ -245,6 +248,7 @@ public class ElternteilV1 {
         final Gesuchsperiode gesuchsperiode,
         final List<Eltern> eltern,
         final Steuerdaten steuerdaten,
+        final Steuererklaerung steuererklaerung,
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
@@ -256,6 +260,7 @@ public class ElternteilV1 {
         return builderFromDependants(
             gesuchsperiode,
             eltern,
+            steuererklaerung,
             steuerdaten,
             anzahlPersonenImHaushalt,
             kinderDerElternInHaushalten,

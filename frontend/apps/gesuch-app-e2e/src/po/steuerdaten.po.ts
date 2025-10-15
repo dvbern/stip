@@ -16,7 +16,6 @@ export class SteuerdatenPO {
     arbeitsverhaeltnis: Locator;
     saeule3a: Locator;
     saeule2: Locator;
-    kinderalimente: Locator;
     vermoegen: Locator;
     steuernBund: Locator;
     steuernKantonGemeinde: Locator;
@@ -47,9 +46,7 @@ export class SteuerdatenPO {
       ),
       saeule3a: page.getByTestId('form-eltern-steuerdaten.saeule3a'),
       saeule2: page.getByTestId('form-eltern-steuerdaten.saeule2'),
-      kinderalimente: page.getByTestId(
-        'form-eltern-steuerdaten.kinderalimente',
-      ),
+
       vermoegen: page.getByTestId('form-eltern-steuerdaten.vermoegen'),
       steuernKantonGemeinde: page.getByTestId(
         'form-eltern-steuerdaten.steuernKantonGemeinde',
@@ -88,7 +85,6 @@ export class SteuerdatenPO {
       await this.elems.saeule2.fill(`${item.saeule2}`);
     }
 
-    await this.elems.kinderalimente.fill(`${item.kinderalimente}`);
     await this.elems.vermoegen.fill(`${item.vermoegen}`);
     await this.elems.steuernKantonGemeinde.fill(
       `${item.steuernKantonGemeinde}`,

@@ -45,6 +45,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Setter
 @EinnahmenKostenAnzahlPersonenWGValidConstraint
 @EinnahmenKostenAlternativeWohnformValidConstraint
+@AnstellungsGradRequiredConstraint
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
@@ -70,13 +71,9 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "alternative_wohnform_wohnend")
     private Boolean alternativeWohnformWohnend;
 
-    @NotNull
-    @Column(name = "verdienst_realisiert", nullable = false)
-    private Boolean verdienstRealisiert;
-
     @Nullable
-    @Column(name = "alimente")
-    private Integer alimente;
+    @Column(name = "unterhaltsbeitraege")
+    private Integer unterhaltsbeitraege;
 
     @Nullable
     @Column(name = "zulagen")
@@ -102,9 +99,15 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Column(name = "ausbildungskosten")
     private Integer ausbildungskosten;
 
+    // todo kstip-2779 - validierung pia only
     @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
     private Integer auswaertigeMittagessenProWoche;
+
+    // todo kstip-2779 - validierung partner only
+    @Nullable
+    @Column(name = "verpflegungskosten")
+    private Integer verpflegungskosten;
 
     @Nullable
     @Column(name = "betreuungskosten_kinder")
@@ -126,4 +129,25 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Max(Integer.MAX_VALUE)
     @Min(0)
     private Integer vermoegen;
+
+    @Nullable
+    @Min(0)
+    @Column(name = "einnahmen_bgsa")
+    private Integer einnahmenBGSA;
+
+    @Nullable
+    @Min(0)
+    @Column(name = "taggelder_ahv_iv")
+    private Integer taggelderAHVIV;
+
+    @Nullable
+    @Min(0)
+    @Column(name = "andere_einnahmen")
+    private Integer andereEinnahmen;
+
+    @Min(0)
+    @Max(100)
+    @Nullable
+    @Column(name = "arbeitspensum_prozent")
+    private Integer arbeitspensumProzent;
 }

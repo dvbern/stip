@@ -13,7 +13,7 @@ export class EinnahmenKostenPO {
     loading: Locator;
     form: Locator;
     nettoerwerbseinkommen: Locator;
-    alimente: Locator;
+    unterhaltsbeitraege: Locator;
     zulagen: Locator;
     renten: Locator;
     eoLeistungen: Locator;
@@ -24,11 +24,14 @@ export class EinnahmenKostenPO {
     wohnkosten: Locator;
     auswaertigeMittagessenProWoche: Locator;
     wgWohnend: Locator;
-    verdienstRealisiert: Locator;
     betreuungskostenKinder: Locator;
     steuerjahr: Locator;
     vermoegen: Locator;
     veranlagungsStatus: Locator;
+
+    einnahmenBGSA: Locator;
+    andereEinnahmen: Locator;
+    taggelderAHVIV: Locator;
 
     incompleteWarning: () => Locator;
 
@@ -49,7 +52,9 @@ export class EinnahmenKostenPO {
       nettoerwerbseinkommen: page.getByTestId(
         'form-einnahmen-kosten-nettoerwerbseinkommen',
       ),
-      alimente: page.getByTestId('form-einnahmen-kosten-alimente'),
+      unterhaltsbeitraege: page.getByTestId(
+        'form-einnahmen-kosten-unterhaltsbeitraege',
+      ),
       zulagen: page.getByTestId('form-einnahmen-kosten-zulagen'),
       renten: page.getByTestId('form-einnahmen-kosten-renten'),
       eoLeistungen: page.getByTestId('form-einnahmen-kosten-eoLeistungen'),
@@ -66,12 +71,16 @@ export class EinnahmenKostenPO {
         'form-einnahmen-kosten-auswaertigeMittagessenProWoche',
       ),
       wgWohnend: page.getByTestId('form-einnahmen-kosten-wgWohnend'),
-      verdienstRealisiert: page.getByTestId(
-        'form-einnahmen-kosten-verdienstRealisiert',
-      ),
+
       betreuungskostenKinder: page.getByTestId(
         'form-einnahmen-kosten-betreuungskostenKinder',
       ),
+      taggelderAHVIV: page.getByTestId('form-einnahmen-kosten-taggelderAHVIV'),
+      einnahmenBGSA: page.getByTestId('form-einnahmen-kosten-einnahmenBGSA'),
+      andereEinnahmen: page.getByTestId(
+        'form-einnahmen-kosten-andereEinnahmen',
+      ),
+
       steuerjahr: page.getByTestId('form-einnahmen-kosten-steuerjahr'),
       vermoegen: page.getByTestId('form-einnahmen-kosten-vermoegen'),
       veranlagungsStatus: page.getByTestId(
@@ -94,6 +103,11 @@ export class EinnahmenKostenPO {
     if (isDefined(einnahmenKosten.renten)) {
       await this.elems.renten.fill(`${einnahmenKosten.renten}`);
     }
+    if (isDefined(einnahmenKosten.unterhaltsbeitraege)) {
+      await this.elems.unterhaltsbeitraege.fill(
+        `${einnahmenKosten.unterhaltsbeitraege}`,
+      );
+    }
     if (isDefined(einnahmenKosten.eoLeistungen)) {
       await this.elems.eoLeistungen.fill(`${einnahmenKosten.eoLeistungen}`);
     }
@@ -105,15 +119,24 @@ export class EinnahmenKostenPO {
     if (isDefined(einnahmenKosten.beitraege)) {
       await this.elems.beitraege.fill(`${einnahmenKosten.beitraege}`);
     }
-
     await this.elems.ausbildungskosten.fill(
       `${einnahmenKosten.ausbildungskosten}`,
     );
-
     if (isDefined(einnahmenKosten.betreuungskostenKinder)) {
       await this.elems.betreuungskostenKinder.fill(
         `${einnahmenKosten.betreuungskostenKinder}`,
       );
+    }
+    if (isDefined(einnahmenKosten.einnahmenBGSA)) {
+      await this.elems.einnahmenBGSA.fill(`${einnahmenKosten.einnahmenBGSA}`);
+    }
+    if (isDefined(einnahmenKosten.andereEinnahmen)) {
+      await this.elems.andereEinnahmen.fill(
+        `${einnahmenKosten.andereEinnahmen}`,
+      );
+    }
+    if (isDefined(einnahmenKosten.taggelderAHVIV)) {
+      await this.elems.taggelderAHVIV.fill(`${einnahmenKosten.taggelderAHVIV}`);
     }
 
     await this.elems.fahrkosten.fill(`${einnahmenKosten.fahrkosten}`);
@@ -135,11 +158,6 @@ export class EinnahmenKostenPO {
     if (isDefined(einnahmenKosten.wgWohnend)) {
       await selectMatRadio(this.elems.wgWohnend, einnahmenKosten.wgWohnend);
     }
-
-    await selectMatRadio(
-      this.elems.verdienstRealisiert,
-      einnahmenKosten.verdienstRealisiert,
-    );
 
     await expectFormToBeValid(this.elems.form);
   }

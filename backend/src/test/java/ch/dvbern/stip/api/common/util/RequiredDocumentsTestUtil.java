@@ -15,18 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.validation;
+package ch.dvbern.stip.api.common.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.tuple.Pair;
 
-public interface RequiredDocumentsProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDocuments(final GesuchFormular formular);
+@UtilityClass
+public class RequiredDocumentsTestUtil {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(
+        final GesuchFormular formular,
+        final List<RequiredDocumentsProducer> producers
+    ) {
+        final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
+        for (final var producer : producers) {
+            requiredTypes.add(producer.getRequiredDocuments(formular));
+        }
 
-    default boolean greaterThanZero(final Integer base) {
-        return base != null && base > 0;
+        return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();
     }
 }

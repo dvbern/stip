@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
@@ -39,7 +40,9 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
   SharedUiFormZuvorHintComponent,
+  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -47,6 +50,10 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 
 import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feature-gesuch-form-eltern-steuererklaerung.selector';
 
@@ -54,8 +61,11 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MaskitoDirective,
+    SharedUiInfoDialogDirective,
     TranslocoPipe,
     MatFormFieldModule,
+    SharedUiZuvorHintDirective,
     MatInputModule,
     MatRadioModule,
     SharedUiLoadingComponent,
@@ -86,24 +96,102 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
 
   hasUnsavedChanges = false;
 
+  maskitoNumber = maskitoNumber;
+
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   form = this.formBuilder.group({
     steuererklaerungInBern: [<boolean | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
+    renten: [<string | null>null, [Validators.required]],
+    ergaenzungsleistungen: [<string | undefined>undefined],
+    einnahmenBGSA: [<string | undefined>undefined],
+    andereEinnahmen: [<string | undefined>undefined],
   });
 
   steuererklaerungInBernChangedSig = toSignal(
     this.form.controls.steuererklaerungInBern.valueChanges,
   );
 
+  private numberConverter = this.formUtils.createNumberConverter(this.form, [
+    'ergaenzungsleistungen',
+    'unterhaltsbeitraege',
+    'renten',
+    'einnahmenBGSA',
+    'andereEinnahmen',
+  ]);
+
+  private ergaenzungsleistungChangedSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const steuerdatenTyp = this.stepSig().type;
+
+    const ergaenzungsleistung = fromFormatedNumber(
+      this.ergaenzungsleistungChangedSig() ?? '0',
+    );
+
+    return ergaenzungsleistung > 0
+      ? `STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_${steuerdatenTyp}`
+      : null;
+  });
+
   steuererklaerungInBernDocumentSig = this.createUploadOptionsSig(() => {
     const steuererklaerungInBern = this.steuererklaerungInBernChangedSig();
-    const type = this.stepSig().type;
+    const steuerdatenTyp = this.stepSig().type;
 
     // if in bern, no document is needed, explicit, so no document as long as
     // no value is set!
     return steuererklaerungInBern === false
-      ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${type}`]
+      ? DokumentTyp[`STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_${steuerdatenTyp}`]
+      : null;
+  });
+
+  unterhaltsbeitraegeChangeSig = toSignal(
+    this.form.controls.unterhaltsbeitraege.valueChanges,
+  );
+  unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
+    const unterhaltsbeitraege = fromFormatedNumber(
+      this.unterhaltsbeitraegeChangeSig() ?? '0',
+    );
+    const steuerdatenTyp = this.stepSig().type;
+
+    return unterhaltsbeitraege > 0
+      ? DokumentTyp[`STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_${steuerdatenTyp}`]
+      : null;
+  });
+
+  rentenSig = toSignal(this.form.controls.renten.valueChanges);
+  rentenDocumentSig = this.createUploadOptionsSig(() => {
+    const renten = fromFormatedNumber(this.rentenSig() ?? '0');
+    const steuerdatenTyp = this.stepSig().type;
+
+    return renten > 0
+      ? DokumentTyp[`STEUERERKLAERUNG_RENTEN_${steuerdatenTyp}`]
+      : null;
+  });
+
+  einnahmenBGSASig = toSignal(this.form.controls.einnahmenBGSA.valueChanges);
+  einnahmenBGSADocumentSig = this.createUploadOptionsSig(() => {
+    const einnahmenBGSA = fromFormatedNumber(this.einnahmenBGSASig() ?? '0');
+    const steuerdatenTyp = this.stepSig().type;
+
+    return einnahmenBGSA > 0
+      ? DokumentTyp[`STEUERERKLAERUNG_EINNAHMEN_BGSA_${steuerdatenTyp}`]
+      : null;
+  });
+
+  andereEinnahmenSig = toSignal(
+    this.form.controls.andereEinnahmen.valueChanges,
+  );
+  andereEinnahmenDocumentSig = this.createUploadOptionsSig(() => {
+    const andereEinnahmen = fromFormatedNumber(
+      this.andereEinnahmenSig() ?? '0',
+    );
+    const steuerdatenTyp = this.stepSig().type;
+
+    return andereEinnahmen > 0
+      ? DokumentTyp[`STEUERERKLAERUNG_ANDERE_EINNAHMEN_${steuerdatenTyp}`]
       : null;
   });
 
@@ -121,7 +209,8 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
       const steuererklaerung = this.originalSteuererklaerungSig();
       if (steuererklaerung) {
         this.form.patchValue({
-          steuererklaerungInBern: steuererklaerung.steuererklaerungInBern,
+          ...steuererklaerung,
+          ...this.numberConverter.toString(steuererklaerung),
         });
       }
     });
@@ -163,12 +252,16 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'steuererklaerungInBern',
+      'unterhaltsbeitraege',
+      'renten',
     ]);
 
     const steuererklaerung = {
       ...formValues,
       steuerdatenTyp: this.stepSig().type,
+      ...this.numberConverter.toNumber(formValues),
     };
+
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,

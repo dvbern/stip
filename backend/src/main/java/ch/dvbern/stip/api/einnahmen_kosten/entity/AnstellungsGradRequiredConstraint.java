@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchformular.entity;
+package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AlimenteRequiredWhenAlimenteRegelungConstraintValidator.class)
+@Constraint(validatedBy = AnstellungsGradRequiredConstraintValidator.class)
 @Documented
-public @interface AlimenteRequiredWhenAlimenteregelungConstraint {
-    String message() default VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
+public @interface AnstellungsGradRequiredConstraint {
+    String message() default VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE;
 
     Class<?>[] groups() default {};
 

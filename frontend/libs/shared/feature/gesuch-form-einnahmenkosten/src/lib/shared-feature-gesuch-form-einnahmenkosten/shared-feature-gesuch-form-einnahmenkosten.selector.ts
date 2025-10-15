@@ -27,9 +27,6 @@ export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
       wohnsitzNotEigenerHaushalt:
         gesuchsView.gesuchFormular?.personInAusbildung?.wohnsitz !==
         Wohnsitz.EIGENER_HAUSHALT,
-      existiertGerichtlicheAlimentenregelung:
-        gesuchsView.gesuchFormular?.familiensituation
-          ?.gerichtlicheAlimentenregelung === true,
       readonly: gesuchsView.readonly,
       permissions: gesuchsView.permissions,
     };

@@ -255,7 +255,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     return;
                 }
 
-                newFormular.getEinnahmenKosten().setAlimente(null);
+                newFormular.getEinnahmenKosten().setUnterhaltsbeitraege(null);
             }
         );
 

@@ -25,6 +25,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
     public static EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDtoSpec() {
         return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model) -> {
             model.setNettoerwerbseinkommen(500);
+            model.setArbeitspensumProzent(100);
             model.setZulagen(500);
             model.setRenten(500);
             model.setEoLeistungen(500);
@@ -34,7 +35,6 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setFahrkosten(2500);
             model.setWohnkosten(2500);
             model.setWgWohnend(false);
-            model.setVerdienstRealisiert(false);
             model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setSteuerjahr(0);

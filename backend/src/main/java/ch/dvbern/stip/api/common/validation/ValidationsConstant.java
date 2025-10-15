@@ -118,6 +118,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.familiensituation.steuererklaerung.entity.message}";
     public static final String VALIDATION_FAMILIENSITUATION_WOHNSITUATION_MESSAGE =
         "{jakarta.validation.constraints.familiensituation.wohnsituation.message}";
+    public static final String VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE =
+        "{jakarta.validation.constraints.einnahmen_kosten.anstellungsgrad.message}";
+    public static final String VALIDATION_PARTNER_AUSBILDUNGS_PENSUM_MESSAGE =
+        "{jakarta.validation.constraints.partner.ausbildungspensum.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE =
@@ -158,10 +162,6 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.partner.null.required.message}";
     public static final String VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.partner.not.null.required.message}";
-    public static final String VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG =
-        "{jakarta.validation.constraints.alimente.alimenteregelung.required.message}";
-    public static final String VALIDATION_ALIMENTE_NULL_WHEN_NO_ALIMENTEREGELUNG =
-        "{jakarta.validation.constraints.alimente.no.alimenteregelung.null.message}";
     public static final String VALIDATION_GESUCHEINREICHEN_SV_NUMMER_UNIQUE_MESSAGE =
         "dvbern.stip.validation.gesuch.einreichen.svnummer.unique.message";
     public static final String VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE =

@@ -82,7 +82,6 @@ public class NeskoSteuerdatenMapper {
         }
         steuerdaten.setSaeule3a(saeule3a);
         steuerdaten.setSaeule2(saeule2);
-        steuerdaten.setKinderalimente(0); // TODO: Fix
         steuerdaten.setVermoegen(getMaxOrZeroFromEffSatzType(steuerdatenNesko.getSteuerbaresVermoegenKanton()));
         steuerdaten.setSteuernKantonGemeinde(
             Objects.requireNonNullElse(steuerdatenNesko.getSteuerbetragKanton(), BigDecimal.ZERO).intValue()

@@ -38,9 +38,6 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
-        if (Boolean.TRUE.equals(ek.getVerdienstRealisiert())) {
-            requiredDocs.add(DokumentTyp.EK_VERDIENST);
-        }
 
         if (greaterThanZero(ek.getNettoerwerbseinkommen())) {
             requiredDocs.add(DokumentTyp.EK_LOHNABRECHNUNG);
@@ -74,8 +71,8 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
             requiredDocs.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
         }
 
-        if (greaterThanZero(ek.getAlimente())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_ALIMENTE);
+        if (greaterThanZero(ek.getUnterhaltsbeitraege())) {
+            requiredDocs.add(DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
         }
 
         if (greaterThanZero(ek.getErgaenzungsleistungen())) {
@@ -84,11 +81,16 @@ public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumen
         if (greaterThanZero(ek.getVermoegen())) {
             requiredDocs.add(DokumentTyp.EK_VERMOEGEN);
         }
+        if (greaterThanZero(ek.getEinnahmenBGSA())) {
+            requiredDocs.add(DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
+        }
+        if (greaterThanZero(ek.getTaggelderAHVIV())) {
+            requiredDocs.add(DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
+        }
+        if (greaterThanZero(ek.getAndereEinnahmen())) {
+            requiredDocs.add(DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
+        }
 
         return ImmutablePair.of("einnahmenKosten", requiredDocs);
-    }
-
-    private boolean greaterThanZero(final Integer base) {
-        return base != null && base > 0;
     }
 }

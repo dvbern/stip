@@ -45,8 +45,12 @@ public class EinnahmenKostenMappingUtil {
         ) {
             totalEinkommen += gesuchFormular.getEinnahmenKosten().getNettoerwerbseinkommen();
         }
-        if (gesuchFormular.getPartner() != null && gesuchFormular.getPartner().getJahreseinkommen() != null) {
-            totalEinkommen += gesuchFormular.getPartner().getJahreseinkommen();
+        if (gesuchFormular.getPartner() != null
+        // todo kstip-2779: check parter einnahmekosten here
+        // && gesuchFormular.getPartner().getJahreseinkommen() != null
+        ) {
+            // todo kstip-2779: add parter einnahmekosten here
+            // totalEinkommen += gesuchFormular.getPartner().getJahreseinkommen();
         }
         if (totalEinkommen >= 20000) {
             return (int) (totalEinkommen * 0.1);

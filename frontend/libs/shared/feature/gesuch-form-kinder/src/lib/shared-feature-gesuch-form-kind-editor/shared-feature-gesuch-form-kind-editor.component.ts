@@ -7,8 +7,6 @@ import {
   Input,
   OnChanges,
   Output,
-  computed,
-  effect,
   inject,
   input,
 } from '@angular/core';
@@ -38,7 +36,6 @@ import {
   KindUpdate,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
-import { isDefined } from '@dv/shared/model/type-util';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -47,7 +44,6 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
-  SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
@@ -92,7 +88,6 @@ const MEDIUM_AGE = 20;
     MatRadioModule,
     MaskitoDirective,
     SharedUiZuvorHintDirective,
-    SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
     SharedUiStepFormButtonsComponent,
@@ -151,33 +146,61 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       '' as Ausbildungssituation,
       [Validators.required],
     ),
-    alimentenregelungExistiert: [<boolean | undefined>false],
-    erhalteneAlimentebeitraege: [<string | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | undefined>undefined],
+    kinderUndAusbildungszulagen: [<string | undefined>undefined],
+    renten: [<string | undefined>undefined],
+    ergaenzungsleistungen: [<string | undefined>undefined],
+    andereEinnahmen: [<string | undefined>undefined],
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
-  alimentenregelungExistiertSig = toSignal(
-    this.form.controls.alimentenregelungExistiert.valueChanges,
+  unterhalsbetraegeChangeSig = toSignal(
+    this.form.controls.unterhaltsbeitraege.valueChanges,
   );
+  unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
+    const unterhaltsbeitraege = fromFormatedNumber(
+      this.unterhalsbetraegeChangeSig() ?? '0',
+    );
 
-  alimenteDocumentSig = this.createUploadOptionsSig(() => {
-    const alimentenRegelungExisitert = this.alimentenregelungExistiertSig();
-
-    return alimentenRegelungExisitert
+    return unterhaltsbeitraege > 0
       ? DokumentTyp.KINDER_ALIMENTENVERORDUNG
       : null;
   });
 
-  alimentenregelungExistiertChangeSig = computed(() => {
-    const changes = this.changesSig();
+  kinderUndAusbildungszulagenChangeSig = toSignal(
+    this.form.controls.kinderUndAusbildungszulagen.valueChanges,
+  );
+  kinderUndAusbildungszulagenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(
+      this.kinderUndAusbildungszulagenChangeSig() ?? '0',
+    );
+    return amount > 0 ? DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN : null;
+  });
 
-    if (!changes || changes.erhalteneAlimentebeitraege === undefined) {
-      return;
-    }
+  rentenChangeSig = toSignal(this.form.controls.renten.valueChanges);
+  rentenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(this.rentenChangeSig() ?? '0');
+    return amount > 0 ? DokumentTyp.KINDER_RENTEN : null;
+  });
 
-    return changes.erhalteneAlimentebeitraege !== null;
+  ergaenzungsleistungenChangeSig = toSignal(
+    this.form.controls.ergaenzungsleistungen.valueChanges,
+  );
+  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(
+      this.ergaenzungsleistungenChangeSig() ?? '0',
+    );
+    return amount > 0 ? DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN : null;
+  });
+
+  andereEinnahmenChangeSig = toSignal(
+    this.form.controls.andereEinnahmen.valueChanges,
+  );
+  andereEinnahmenDocumentSig = this.createUploadOptionsSig(() => {
+    const amount = fromFormatedNumber(this.andereEinnahmenChangeSig() ?? '0');
+    return amount > 0 ? DokumentTyp.KINDER_ANDERE_EINNAHMEN : null;
   });
 
   constructor() {
@@ -191,15 +214,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-
-    effect(() => {
-      this.gotReenabledSig();
-      this.formUtils.setDisabledState(
-        this.form.controls.erhalteneAlimentebeitraege,
-        this.viewSig().readonly || !this.alimentenregelungExistiertSig(),
-        !this.viewSig().readonly,
-      );
-    });
   }
 
   ngOnChanges() {
@@ -210,11 +224,12 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         this.languageSig(),
       ),
       wohnsitzAnteilPia: this.kind.wohnsitzAnteilPia?.toString(),
-      erhalteneAlimentebeitraege:
-        this.kind.erhalteneAlimentebeitraege?.toString(),
-      alimentenregelungExistiert: isDefined(
-        this.kind.erhalteneAlimentebeitraege,
-      ),
+      unterhaltsbeitraege: this.kind.unterhaltsbeitraege?.toString(),
+      kinderUndAusbildungszulagen:
+        this.kind.kinderUndAusbildungszulagen?.toString(),
+      renten: this.kind.renten?.toString(),
+      ergaenzungsleistungen: this.kind.ergaenzungsleistungen?.toString(),
+      andereEinnahmen: this.kind.andereEinnahmen?.toString(),
     });
   }
 
@@ -224,10 +239,8 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     this.updateValidity$.next({});
 
     const formValues = convertTempFormToRealValues(this.form, [
-      'erhalteneAlimentebeitraege',
       'wohnsitzAnteilPia',
     ]);
-    delete formValues.alimentenregelungExistiert;
 
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
@@ -240,9 +253,15 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
         id: this.kind?.id,
         geburtsdatum,
         wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
-        erhalteneAlimentebeitraege: fromFormatedNumber(
-          formValues.erhalteneAlimentebeitraege,
+        unterhaltsbeitraege: fromFormatedNumber(formValues.unterhaltsbeitraege),
+        kinderUndAusbildungszulagen: fromFormatedNumber(
+          formValues.kinderUndAusbildungszulagen,
         ),
+        renten: fromFormatedNumber(formValues.renten),
+        ergaenzungsleistungen: fromFormatedNumber(
+          formValues.ergaenzungsleistungen,
+        ),
+        andereEinnahmen: fromFormatedNumber(formValues.andereEinnahmen),
       });
       this.form.markAsPristine();
     }

@@ -110,7 +110,6 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setNettoerwerbseinkommen(20001);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 

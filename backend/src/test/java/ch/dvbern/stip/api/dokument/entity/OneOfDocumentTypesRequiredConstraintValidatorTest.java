@@ -46,7 +46,7 @@ class OneOfDocumentTypesRequiredConstraintValidatorTest {
 
     @Test
     void onlyDocumentTypPresentTest() {
-        dokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        dokument.setDokumentTyp(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
         assertTrue(validator.validate(dokument).isEmpty());
 
     }
@@ -60,7 +60,7 @@ class OneOfDocumentTypesRequiredConstraintValidatorTest {
     @Test
     void bothTypesPresentTest() {
         // one, NOT both should be present
-        dokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        dokument.setDokumentTyp(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
         dokument.setCustomDokumentTyp(new CustomDokumentTyp().setType("test").setDescription("description"));
         assertFalse(validator.validate(dokument).isEmpty());
     }
