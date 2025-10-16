@@ -207,6 +207,7 @@
           data-testid="form-kind-andereEinnahmen"
           type="text"
         />
+        <mat-hint>{{ 'shared.form.kinder.andereEinnahmen.info' | transloco }}</mat-hint>
         <mat-hint *dvZuvorHint="changes?.andereEinnahmen"></mat-hint>
       </mat-form-field>
       @if (andereEinnahmenDocumentSig(); as options) {
