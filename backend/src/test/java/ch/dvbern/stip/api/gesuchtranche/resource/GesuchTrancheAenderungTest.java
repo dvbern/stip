@@ -401,7 +401,7 @@ class GesuchTrancheAenderungTest {
         formular.getPartner()
             .getAdresse()
             .setId(
-                aenderung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId()
+                aenderung.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().getId()
             );
 
         formular.getElterns()
