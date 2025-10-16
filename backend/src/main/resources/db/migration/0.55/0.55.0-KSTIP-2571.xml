@@ -1,19 +1,19 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760536300366-2">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760616520125-2">
     <addColumn tableName="gesuch_formular">
       <column name="einnahmen_kosten_partner_id" type="UUID"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760536300366-3">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760616520125-3">
     <addColumn tableName="gesuch_formular_aud">
       <column name="einnahmen_kosten_partner_id" type="UUID"/>
     </addColumn>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760536300366-5">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760616520125-5">
     <addUniqueConstraint columnNames="einnahmen_kosten_partner_id" constraintName="UC_GESUCH_FORMULAREINNAHMEN_KOSTEN_PARTNER_ID_COL" tableName="gesuch_formular"/>
   </changeSet>
-  <changeSet author="anna-lea.fuhrer (generated)" id="1760536300366-7">
+  <changeSet author="anna-lea.fuhrer (generated)" id="1760616520125-7">
     <addForeignKeyConstraint baseColumnNames="einnahmen_kosten_partner_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_einnahmen_kosten_partner_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="einnahmen_kosten" validate="true"/>
   </changeSet>
 </databaseChangeLog>
