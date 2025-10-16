@@ -20,15 +20,19 @@ package ch.dvbern.stip.api.common.util;
 import java.util.Locale;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class LocaleUtil {
-    public Locale getLocaleFromGesuch(Gesuch gesuch) {
+    public Sprache getKorrespondenzSpracheFomGesuch(Gesuch gesuch) {
         return gesuch.getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+            .getKorrespondenzSprache();
+    }
+
+    public Locale getLocaleFromGesuch(Gesuch gesuch) {
+        return getKorrespondenzSpracheFomGesuch(gesuch).getLocale();
     }
 }

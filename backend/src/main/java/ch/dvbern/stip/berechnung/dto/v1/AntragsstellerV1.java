@@ -136,13 +136,16 @@ public class AntragsstellerV1 {
                 }
             }
 
+            final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
+            final var isAlternativeWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend());
             builder.grundbedarf(
                 BerechnungRequestV1.getGrundbedarf(
                     gesuchsperiode,
-                    anzahlPersonenImHaushalt,
-                    Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())
+                    isAlternativeWgWohnend ? 1 : anzahlPersonenImHaushalt,
+                    isWgWohnend || isAlternativeWgWohnend
                 )
             );
+
         } else {
             builder.grundbedarf(0);
         }

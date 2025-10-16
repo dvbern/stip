@@ -25,7 +25,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.label') }}</mat-label>
               <input
-                formControlName="nettoerwerbseinkommen"
+                [formControl]="form.controls.nettoerwerbseinkommen"
                 data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
                 matInput
                 type="text"
@@ -53,7 +53,7 @@
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
                 <mat-label>{{ t('shared.form.einnahmenkosten.alimente.label') }}</mat-label>
                 <input
-                  formControlName="alimente"
+                  [formControl]="form.controls.alimente"
                   data-testid="form-einnahmen-kosten-alimente"
                   matInput
                   type="text"
@@ -86,7 +86,7 @@
               </mat-label>
               <input
                 data-testid="form-einnahmen-kosten-zulagen"
-                formControlName="zulagen"
+                [formControl]="form.controls.zulagen"
                 matInput
                 type="text"
                 [maskito]="maskitoNumber"
@@ -111,7 +111,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.renten.label') }}</mat-label>
               <input
-                formControlName="renten"
+                [formControl]="form.controls.renten"
                 data-testid="form-einnahmen-kosten-renten"
                 matInput
                 type="text"
@@ -138,7 +138,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.eoLeistungen.label') }}</mat-label>
               <input
-                formControlName="eoLeistungen"
+                [formControl]="form.controls.eoLeistungen"
                 data-testid="form-einnahmen-kosten-eoLeistungen"
                 matInput
                 type="text"
@@ -165,7 +165,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.ergaenzungsleistungen.label') }}</mat-label>
               <input
-                formControlName="ergaenzungsleistungen"
+                [formControl]="form.controls.ergaenzungsleistungen"
                 data-testid="form-einnahmen-kosten-ergaenzungsleistungen"
                 matInput
                 type="text"
@@ -192,7 +192,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.beitraege.label') }}</mat-label>
               <input
-                formControlName="beitraege"
+                [formControl]="form.controls.beitraege"
                 data-testid="form-einnahmen-kosten-beitraege"
                 matInput
                 type="text"
@@ -224,7 +224,7 @@
           <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
             <mat-label>{{ t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`) }}</mat-label>
             <input
-              formControlName="ausbildungskosten"
+              [formControl]="form.controls.ausbildungskosten"
               data-testid="form-einnahmen-kosten-ausbildungskosten"
               matInput
               type="text"
@@ -261,7 +261,7 @@
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
                 <mat-label>{{ t('shared.form.einnahmenkosten.betreuungskostenKinder.label') }}</mat-label>
                 <input
-                  formControlName="betreuungskostenKinder"
+                  [formControl]="form.controls.betreuungskostenKinder"
                   data-testid="form-einnahmen-kosten-betreuungskostenKinder"
                   matInput
                   type="text"
@@ -289,7 +289,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.fahrkosten.label') }}</mat-label>
               <input
-                formControlName="fahrkosten"
+                [formControl]="form.controls.fahrkosten"
                 data-testid="form-einnahmen-kosten-fahrkosten"
                 matInput
                 type="text"
@@ -317,7 +317,7 @@
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
                 <mat-label>{{ t('shared.form.einnahmenkosten.wohnkosten.label') }}</mat-label>
                 <input
-                  formControlName="wohnkosten"
+                  [formControl]="form.controls.wohnkosten"
                   data-testid="form-einnahmen-kosten-wohnkosten"
                   matInput
                   type="text"
@@ -344,7 +344,7 @@
             <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
               <mat-label>{{ t('shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label') }}</mat-label>
               <input
-                formControlName="auswaertigeMittagessenProWoche"
+                [formControl]="form.controls.auswaertigeMittagessenProWoche"
                 data-testid="form-einnahmen-kosten-auswaertigeMittagessenProWoche"
                 matInput
                 type="number"
@@ -366,7 +366,7 @@
             <!-- WG WOHNEND -->
             <mat-radio-group
               class="d-flex flex-column"
-              formControlName="wgWohnend"
+              [formControl]="form.controls.wgWohnend"
               data-testid="form-einnahmen-kosten-wgWohnend"
               dvSharedUiFormField
             >
@@ -382,6 +382,50 @@
                 </mat-error>
               </div>
             </mat-radio-group>
+            @if (!hiddenFieldsSetSig().has(form.controls.wgAnzahlPersonen)) {
+              <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+                <mat-label>{{ t('shared.form.einnahmenkosten.wgAnzahlPersonen.label') }}</mat-label>
+                <input
+                  [formControl]="form.controls.wgAnzahlPersonen"
+                  data-testid="form-einnahmen-kosten-wgAnzahlPersonen"
+                  matInput
+                  type="number"
+                  [min]="MIN_WG_ANZAHL_PERSONEN"
+                />
+                <mat-hint *dvZuvorHint="view.formChanges?.wgAnzahlPersonen"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+                <mat-error *dvSharedUiFormMessageError="'min'">
+                  {{ t('shared.form.error.min', { min: MIN_WG_ANZAHL_PERSONEN }) }}
+                </mat-error>
+              </mat-form-field>
+            }
+            @if (!hiddenFieldsSetSig().has(form.controls.alternativeWohnformWohnend)) {
+              <!-- alternative wohnform wohnend -->
+              <mat-radio-group
+                class="d-flex flex-column"
+                [formControl]="form.controls.alternativeWohnformWohnend"
+                data-testid="form-einnahmen-kosten-alternativeWohnformWohnend"
+                dvSharedUiFormField
+              >
+                <mat-label>{{ t('shared.form.einnahmenkosten.alternativeWohnformWohnend.label') }}</mat-label>
+                <mat-radio-button data-testid="yes" [value]="true"> {{ t('shared.form.radio.yes') }}</mat-radio-button>
+                <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
+                <dv-shared-ui-form-zuvor-hint
+                  [changes]="
+                    view.formChanges?.alternativeWohnformWohnend
+                      | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE'
+                      | async
+                  "
+                ></dv-shared-ui-form-zuvor-hint>
+                <div class="group-errors">
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ t('shared.form.error.required') }}
+                  </mat-error>
+                </div>
+              </mat-radio-group>
+            }
           </div>
         }
 
@@ -396,7 +440,7 @@
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
                 <mat-label>{{ t('shared.form.einnahmenkosten.vermoegen.label') }}</mat-label>
                 <input
-                  formControlName="vermoegen"
+                  [formControl]="form.controls.vermoegen"
                   data-testid="form-einnahmen-kosten-vermoegen"
                   matInput
                   type="text"
@@ -424,7 +468,7 @@
             <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
               <mat-label>{{ t('shared.form.einnahmenkosten.steuerjahr.label') }}</mat-label>
               <input
-                formControlName="steuerjahr"
+                [formControl]="form.controls.steuerjahr"
                 data-testid="form-einnahmen-kosten-steuerjahr"
                 matInput
                 min="1900"
@@ -448,7 +492,7 @@
             <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
               <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsStatus.label') }}</mat-label>
               <input
-                formControlName="veranlagungsStatus"
+                [formControl]="form.controls.veranlagungsStatus"
                 data-testid="form-einnahmen-kosten-veranlagungsStatus"
                 matInput
                 dvMaxLength
@@ -479,7 +523,7 @@
             <!-- VERDIENST_REALISIERT -->
             <mat-radio-group
               class="col-12 col-md-6"
-              formControlName="verdienstRealisiert"
+              [formControl]="form.controls.verdienstRealisiert"
               data-testid="form-einnahmen-kosten-verdienstRealisiert"
               dvSharedUiFormField
             >

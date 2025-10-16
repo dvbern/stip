@@ -102,19 +102,22 @@
 
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:md:col-span-2 tw:lg:col-span-3">
-      @if (view.backlink) {
-        <a [routerLink]="view.backlink" class="btn btn-secondary" data-testid="button-back">
+      @if (!isGesuchFormStepSig()) {
+        <button type="button" class="btn btn-outline" (click)="backTriggered.emit()" data-testid="button-next">
           {{ 'shared.form.back' | transloco }}
-        </a>
+        </button>
       }
       @if (view.readonly) {
-        <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
-          {{ 'shared.form.gonext' | transloco }}
-        </button>
+        @if (isGesuchFormStepSig()) {
+          <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
+            {{ 'shared.form.gonext' | transloco }}
+          </button>
+        }
       } @else {
         <dv-shared-ui-form-save
           [disabled]="form.invalid || form.pristine"
           [loading]="view.isLoading"
+          [labelKey]="'shared.form.save-and-continue'"
         ></dv-shared-ui-form-save>
       }
     </dv-shared-ui-step-form-buttons>

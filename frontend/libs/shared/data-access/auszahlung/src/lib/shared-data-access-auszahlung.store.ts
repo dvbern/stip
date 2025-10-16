@@ -55,6 +55,7 @@ export class AuszahlungStore extends signalStore(
   createAuszahlung$ = rxMethod<{
     fallId: string;
     auszahlung: AuszahlungUpdate;
+    onSuccess?: () => void;
   }>(
     pipe(
       tap(() => {
@@ -62,7 +63,7 @@ export class AuszahlungStore extends signalStore(
           auszahlung: cachedPending(state.auszahlung),
         }));
       }),
-      switchMap(({ fallId, auszahlung }) =>
+      switchMap(({ fallId, auszahlung, onSuccess }) =>
         this.auszahlungService
           .createAuszahlungForGesuch$({
             auszahlungUpdate: auszahlung,
@@ -78,6 +79,7 @@ export class AuszahlungStore extends signalStore(
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey: 'shared.auszahlung.create.success',
                   });
+                  onSuccess?.();
                 },
               },
             ),
@@ -89,6 +91,7 @@ export class AuszahlungStore extends signalStore(
   updateAuszahlung$ = rxMethod<{
     fallId: string;
     auszahlung: AuszahlungUpdate;
+    onSuccess?: () => void;
   }>(
     pipe(
       tap(({ auszahlung }) => {
@@ -98,7 +101,7 @@ export class AuszahlungStore extends signalStore(
           }),
         }));
       }),
-      switchMap(({ fallId, auszahlung }) =>
+      switchMap(({ fallId, auszahlung, onSuccess }) =>
         this.auszahlungService
           .updateAuszahlungForGesuch$({
             auszahlungUpdate: auszahlung,
@@ -114,6 +117,7 @@ export class AuszahlungStore extends signalStore(
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey: 'shared.auszahlung.update.success',
                   });
+                  onSuccess?.();
                 },
               },
             ),

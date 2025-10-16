@@ -807,6 +807,8 @@
   "shared.form.einnahmenkosten.fahrkosten.label": "Fahrkosten",
   "shared.form.einnahmenkosten.wohnkosten.label": "Wohnkosten",
   "shared.form.einnahmenkosten.wgWohnend.label": "In WG (Wohngemeinschaft) wohnend",
+  "shared.form.einnahmenkosten.wgAnzahlPersonen.label": "Wie viele Personen wohnen insgesamt in der WG?",
+  "shared.form.einnahmenkosten.alternativeWohnformWohnend.label": "Leben Sie in einer anderen Wohnform?",
   "shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label": "Anzahl auswärtiger Mittagessen pro Woche",
   "shared.form.einnahmenkosten.general.title": "Allgemeine Informationen",
   "shared.form.einnahmenkosten.verdienstRealisiert.label": "Haben Sie im Vorjahr einen Verdienst realisiert?",

@@ -2771,7 +2771,7 @@ paths:
           description: Datenschutzbrief File returned
       operationId: getDatenschutzbrief
       summary: get Datenschutzbrief
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream>
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/datenschutzbrief/{elternId}/token':
     parameters:
       - name: elternId
@@ -6159,6 +6159,10 @@ components:
           type: integer
         wgWohnend:
           description: Required nur wenn Person eigener Haushalt hat
+          type: boolean
+        wgAnzahlPersonen:
+          type: integer
+        alternativeWohnformWohnend:
           type: boolean
         verdienstRealisiert:
           type: boolean

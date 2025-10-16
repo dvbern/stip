@@ -21,19 +21,16 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefDownload;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefDownloadLogRepository;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -45,7 +42,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.resteasy.reactive.RestMulti;
 
 @Slf4j
 @RequestScoped
@@ -58,8 +54,7 @@ public class DatenschutzbriefService {
     private final DatenschutzbriefDownloadLogRepository datenschutzbriefDownloadLogRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
 
-    public RestMulti<ByteArrayOutputStream> getDatenschutzbriefDokument(final UUID trancheId, final UUID elternId) {
-        final var elternTeil = elternService.getElternTeilById(elternId);
+    public String getDatenschutzbriefFileName(final UUID trancheId, final Eltern elternTeil) {
         final Locale locale = gesuchTrancheRepository.requireById(trancheId)
             .getGesuchFormular()
             .getPersonInAusbildung()
@@ -70,14 +65,12 @@ public class DatenschutzbriefService {
             case MUTTER -> translator.translate("stip.pdf.datenschutzbrief.MUTTER");
             case VATER -> translator.translate("stip.pdf.datenschutzvrief.VATER");
         };
-        final var filename = String.format("%s.pdf", filenameTitle);
+        return String.format("%s.pdf", filenameTitle);
+    }
 
-        final CompletableFuture<ByteArrayOutputStream> generateDokumentFuture = CompletableFuture
-            .supplyAsync(() -> datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil));
-        final Supplier<CompletionStage<ByteArrayOutputStream>> stageSupplier =
-            () -> generateDokumentFuture;
-        logDatenschutzbriefDownload(trancheId, elternId);
-        return DokumentDownloadUtil.getWrapedDokument(filename, stageSupplier);
+    public ByteArrayOutputStream getDateschutzbriefByteStream(final UUID trancheId, final Eltern elternTeil) {
+        logDatenschutzbriefDownload(trancheId, elternTeil.getId());
+        return datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil, trancheId);
     }
 
     @Transactional

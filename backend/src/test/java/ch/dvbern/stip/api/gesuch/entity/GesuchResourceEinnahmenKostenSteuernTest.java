@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.entity;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
@@ -38,6 +39,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -138,10 +142,104 @@ class GesuchResourceEinnahmenKostenSteuernTest {
         );
     }
 
+    @TestAsGesuchsteller
+    @ParameterizedTest
+    @MethodSource("anzahlPersonenWgArguments")
+    @Order(4)
+    void testUpdateGesuchEinnahmenKostenWgWohnend(Boolean wgWohnend, Integer anzahlPersonen, int expected) {
+        final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        final var einnahmenKostenDto = gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten();
+        einnahmenKostenDto
+            .setWgAnzahlPersonen(anzahlPersonen);
+        einnahmenKostenDto
+            .setWgWohnend(wgWohnend);
+
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuchId)
+            .body(gesuchUpdateDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(expected);
+
+        gesuch = gesuchApiSpec.getGesuchGS()
+            .gesuchTrancheIdPath(trancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(5)
+    void testUpdateGesuchEinnahmenKostenAlternativeWohnformWohnend() {
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWgWohnend(false);
+
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlternativeWohnformWohnend(false);
+        gesuchApiSpec.updateGesuch()
+            .gesuchIdPath(gesuchId)
+            .body(gesuchUpdateDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        gesuch = gesuchApiSpec.getGesuchGS()
+            .gesuchTrancheIdPath(trancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+    }
+
     @Test
     @TestAsGesuchsteller
     @Order(99)
     void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
+    }
+
+    static Stream<Arguments> anzahlPersonenWgArguments() {
+        return Stream.of(
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    null, // Anzahl personen
+                    Status.BAD_REQUEST.getStatusCode() // expected
+                ),
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    0, // Anzahl personen
+                    Status.BAD_REQUEST.getStatusCode() // expected
+                ),
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    1, // Anzahl personen
+                    Status.NO_CONTENT.getStatusCode() // expected
+                ),
+            Arguments
+                .of(
+                    true, // Wg wohnend
+                    2, // Anzahl personen
+                    Status.NO_CONTENT.getStatusCode() // expected
+                )
+        );
     }
 }
