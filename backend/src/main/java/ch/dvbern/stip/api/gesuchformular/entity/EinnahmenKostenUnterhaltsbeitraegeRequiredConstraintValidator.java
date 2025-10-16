@@ -21,12 +21,12 @@ import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class EinnahmenKostenAlimenteRequiredConstraintValidator
-    implements ConstraintValidator<EinnahmenKostenAlimenteRequiredConstraint, GesuchFormular> {
+public class EinnahmenKostenUnterhaltsbeitraegeRequiredConstraintValidator
+    implements ConstraintValidator<EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint, GesuchFormular> {
     private String property = "";
 
     @Override
-    public void initialize(EinnahmenKostenAlimenteRequiredConstraint constraintAnnotation) {
+    public void initialize(EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
     }
 
