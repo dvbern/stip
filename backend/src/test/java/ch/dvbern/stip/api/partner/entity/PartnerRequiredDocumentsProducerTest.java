@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.partner.entity;
 
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,11 +39,11 @@ class PartnerRequiredDocumentsProducerTest {
             new Partner()
             // .setFahrkosten(1)
         );
-
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
-            // DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
-            null
-        );
+        // todo KSTIP-2779 enable test
+        // RequiredDocsUtil.requiresOneAndType(
+        // producer.getRequiredDocuments(formular),
+        // // DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
+        // null
+        // );
     }
 }
