@@ -143,7 +143,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     taggelderAHVIV: [<string | undefined>undefined],
     andereEinnahmen: [<string | undefined>undefined],
 
-    // todo: add field, no document in KSTIP-2779
+    // TODO KSTIP-2779: add field, no document
     // verpflegungskosten: [<string | undefined>undefined, []],
 
     auswaertigeMittagessenProWoche: [
@@ -295,7 +295,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     // const einkommenPartner =
     //   this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
 
-    // todo: get from new partner einnnahmenKosten tab in KSTIP-2779
+    // TODO KSTIP-2779: get from new partner einnnahmenKosten tab
     const einkommenPartner = 0;
 
     const gesamtEinkommen = einkommen + einkommenPartner;
