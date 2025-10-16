@@ -63,7 +63,7 @@ public class EinnahmenKostenMappingUtil {
     }
 
     private int calculateSteuern(final int einkommen) {
-        if (einkommen <= Constants.CH_STEUERN_EINKOMMEN_LIMIT) {
+        if (einkommen < Constants.CH_STEUERN_EINKOMMEN_LIMIT) {
             return 0;
         }
         return (int) (einkommen * Constants.CH_STEUERN_PERCENTAGE);
