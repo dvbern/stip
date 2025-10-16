@@ -20,10 +20,12 @@ package ch.dvbern.stip.api.einnahmen_kosten.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAlternativeWohnformValidConstraint;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAnzahlPersonenWGValidConstraint;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -41,6 +43,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "einnahmen_kosten",
     indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
 )
+
 @Getter
 @Setter
 @EinnahmenKostenAnzahlPersonenWGValidConstraint
@@ -162,4 +165,9 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Nullable
     @Column(name = "arbeitspensum_prozent")
     private Integer arbeitspensumProzent;
+
+    @NotNull
+    @OneToOne(mappedBy = "einnahmenKosten")
+    private GesuchFormular gesuchFormular;
+
 }
