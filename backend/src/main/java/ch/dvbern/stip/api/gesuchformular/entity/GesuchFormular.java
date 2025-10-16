@@ -103,6 +103,12 @@ import org.hibernate.envers.Audited;
         GeschwisterPageValidation.class
     }, property = "geschwisters"
 )
+// todo kstip-2779 - validierung nonNullable pia only - auswaertigeMittagessenProWoche
+@EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
+// todo kstip-2779 - validierung nonNullable partner only - verpflegungskosten
+
+// todo-kstip-2571: move to ek & adapt for pia/ neglect in partner
+
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -115,12 +121,16 @@ import org.hibernate.envers.Audited;
         LebenslaufItemPageValidation.class
     }, property = "lebenslaufItems"
 )
+// todo-kstip-2571: move to ek & rename
+
 @EinnahmenKostenAlimenteRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
+// todo-kstip-2571: move to ek
+
 @EinnahmenKostenZulagenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -133,24 +143,32 @@ import org.hibernate.envers.Audited;
         DarlehenPageValidation.class
     }, property = "darlehen"
 )
+// todo-kstip-2571: move to ek
+
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
+// todo-kstip-2571: move to ek
+
 @EinnahmenKostenWgWohnendRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
+// todo-kstip-2571: move to ek
+
 @EinnahmenKostenBetreuungskostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
+// todo-kstip-2571: move to ek
+
 @EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
     groups = {
         Default.class,
@@ -175,6 +193,7 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
+// todo-kstip-2571: duplicate for ek_partner
 @EinnahmenKostenVermoegenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
