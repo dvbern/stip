@@ -302,6 +302,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
+              <mat-hint>{{ t('shared.form.einnahmenkosten.andereEinnahmen.info') }}</mat-hint>
               <mat-hint *dvZuvorHint="view.formChanges?.andereEinnahmen"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ t('shared.form.error.required') }}
