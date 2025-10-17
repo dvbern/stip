@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
+import ch.dvbern.stip.api.notiz.entity.QGesuchNotiz;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
@@ -88,10 +89,13 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public JPAQuery<Gesuch> getFindAllePendenteQuery() {
+        final var gesuch = QGesuch.gesuch;
+        final var gesuchNotiz = QGesuchNotiz.gesuchNotiz;
+
         return getFindAlleQuery()
-            .where(
-                QGesuch.gesuch.notizen.any().abgeschlossen.not()
-            );
+            .join(gesuchNotiz)
+            .on(gesuchNotiz.gesuch.id.eq(gesuch.id))
+            .where(gesuchNotiz.abgeschlossen.not());
     }
 
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
