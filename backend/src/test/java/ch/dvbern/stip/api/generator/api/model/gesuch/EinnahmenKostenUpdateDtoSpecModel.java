@@ -39,6 +39,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setSteuerjahr(0);
             model.setVeranlagungsStatus("test");
+            model.setAlternativeWohnformWohnend(false);
         });
     }
 

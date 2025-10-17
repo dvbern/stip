@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.resource;
 
-import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -27,10 +26,12 @@ import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
+import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.generated.api.DatenschutzbriefResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -45,19 +46,24 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final DatenschutzbriefAuthorizer authorizer;
+    private final ElternService elternService;
 
     @Blocking
     @PermitAll
     @Override
-    public RestMulti<ByteArrayOutputStream> getDatenschutzbrief(final String token, final UUID trancheId) {
+    public RestMulti<Buffer> getDatenschutzbrief(final String token, final UUID trancheId) {
         final var elternId = DokumentDownloadUtil.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
+        final var elternTeil = elternService.getElternTeilById(elternId);
 
-        return datenschutzbriefService.getDatenschutzbriefDokument(trancheId, elternId);
+        final var filename = datenschutzbriefService.getDatenschutzbriefFileName(trancheId, elternTeil);
+
+        final var buffer = datenschutzbriefService.getDateschutzbriefByteStream(trancheId, elternTeil);
+        return DokumentDownloadUtil.getWrapedDokument(filename, buffer);
     }
 
     @PermitAll

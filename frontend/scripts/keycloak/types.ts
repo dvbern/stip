@@ -28,6 +28,10 @@ export type CurrentRoleOrPermission = CurrentRole | CurrentPermission;
 export type NamedRoleRepresentation = RoleRepresentation & {
   name: CurrentRoleOrPermission;
 };
+export type DefinedNamedRoleRepresentation = NamedRoleRepresentation & {
+  id: string;
+  name: CurrentRoleOrPermission;
+};
 
 const unique = <T>(arr: T[]) => {
   return Array.from(new Set(arr));
@@ -61,6 +65,14 @@ export const isRoleOrPermission = <T extends { name?: string }>(
   obj: T,
 ): obj is T & { name: CurrentRoleOrPermission } => {
   return ROLES_AND_PERMISSIONS.includes(obj.name as CurrentRoleOrPermission);
+};
+export const isDefinedRoleOrPermission = (
+  role: RoleRepresentation,
+): role is DefinedNamedRoleRepresentation => {
+  if (!role.id || !role.name) {
+    return false;
+  }
+  return true;
 };
 
 export const isDefined = <T>(value: T | undefined | null): value is T => {

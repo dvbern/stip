@@ -20,10 +20,12 @@ import { repairCompositeRoles } from './sync/repair-composite-roles';
 import { syncMissingRoles } from './sync/roles';
 import {
   CURRENT_VERSION,
+  CurrentRole,
   CurrentRoleOrPermission,
   PERMISSIONS,
   ROLES,
   isDefined,
+  isDefinedRoleOrPermission,
   isRoleOrPermission,
 } from './types';
 config({ path: join(__dirname, '../../.env') });
@@ -31,6 +33,7 @@ config({ path: join(__dirname, '../../.env') });
 const URL_ENV = 'KEYCLOAK_ADMIN_URL';
 const USERNAME_ENV = 'KEYCLOAK_ADMIN_USERNAME';
 const PASSWORD_ENV = 'KEYCLOAK_ADMIN_PASSWORD';
+const ADD_USER_PASSWORD_ENV = 'NEW_USER_PASSWORD';
 
 allowInsecure();
 const env = process.env;
@@ -58,7 +61,7 @@ program.exitOverride((err) => {
 });
 
 const envOption = program
-  .createOption('-e, --env <env>', 'Which environment to use')
+  .createOption('-e, --env <env>', 'which environment to use')
   .makeOptionMandatory(true)
   .choices(known.envs);
 const syncRolesCommand = program
@@ -76,6 +79,57 @@ This script will create missing roles and permissions, and repair composite role
 
 Example call:
   $ npm run sync-roles -- -e DEV
+`,
+  );
+const addUsersCommand = program
+  .command('add-users')
+  .addOption(envOption)
+  .addOption(
+    program
+      .createOption(
+        '-u, --user <user>',
+        `the user to add and its first and last name, comma separated. example: "username,FirstName,LastName[,email]"
+- If no email is provided, a default email will be generated based on the username (stip-{username}@mailbucket.dvbern.ch).`,
+      )
+      .makeOptionMandatory(true),
+  )
+  .addOption(
+    program
+      .createOption(
+        '-r, --roles <roles...>',
+        'roles to assign to the user, comma separated',
+      )
+      .choices(ROLES)
+      .makeOptionMandatory(true),
+  )
+  .addOption(
+    program
+      .createOption(
+        '--realm realm',
+        `realm to add users to, default is "${known.realms[0]}"`,
+      )
+      .choices(known.realms)
+      .default(known.realms[0]),
+  )
+  .addHelpText(
+    'before',
+    `Adds users to Keycloak with the specified roles.
+This script will create users if they do not exist and assign the specified roles.
+Or update the roles of existing users.
+
+The password will be taken from the environment variable \`${ADD_USER_PASSWORD_ENV}\`.
+`,
+  )
+  .addHelpText(
+    'after',
+    `
+
+Example call:
+  $ npm run add-users -- -e DEV -u "stip-scph-gs-2,Philipp,GS 2,philipp.schaerer+gs-2@dvbern.ch" -r V0_Gesuchsteller
+  $ npm run add-users -- -e DEV -u "stip-scph-gs-1,Philipp,GS 1"         -r V0_Gesuchsteller
+  $ npm run add-users -- -e DEV -u "stip-scph-sb-1,Philipp,SB 1"         -r V0_Sachbearbeiter
+  $ npm run add-users -- -e DEV -u "stip-scph-frei-1,Philipp,Freigabe 1" -r V0_Freigabestelle
+  $ npm run add-users -- -e DEV -u "stip-scph-admin-1,Philipp,Admin 1"   -r V0_Sachbearbeiter-Admin V0_Sachbearbeiter
 `,
   );
 
@@ -304,6 +358,116 @@ syncRolesCommand.action(async () => {
     } else {
       console.error('Error adding role:', error);
     }
+  }
+});
+addUsersCommand.action(async () => {
+  const {
+    env: targetEnv,
+    user: userInfo,
+    roles: rawRoles,
+    realm,
+  } = addUsersCommand.opts() as {
+    env: (typeof known.envs)[number];
+    user: string;
+    roles: CurrentRole[];
+    realm: (typeof known.realms)[number];
+  };
+
+  if (!userInfo || !rawRoles) {
+    addUsersCommand.addHelpText('after', 'Invalid user format');
+    addUsersCommand.help({ error: true });
+  }
+  const [username, firstName, lastName, email] = userInfo.split(',');
+  const roles = rawRoles.map((r) => r.trim());
+
+  if (!username || !roles || roles.length === 0) {
+    addUsersCommand.addHelpText(
+      'after',
+      'Please provide a username and at least one role',
+    );
+    addUsersCommand.help({ error: true });
+  }
+
+  const kcAdminClient = await initKc(targetEnv);
+  const ADD_USER_PASSWORD = env[ADD_USER_PASSWORD_ENV];
+  if (!ADD_USER_PASSWORD) {
+    addUsersCommand.addHelpText(
+      'after',
+      `Please set the environment variable ${ADD_USER_PASSWORD_ENV} to the password for the new user`,
+    );
+    addUsersCommand.help({ error: true });
+  }
+
+  const foundUsers = await kcAdminClient.users.find({
+    username,
+    realm,
+  });
+
+  let userId: string | undefined;
+  if (foundUsers.length < 1) {
+    console.info(`User ${username} not found, creating...`);
+    const newUser = await kcAdminClient.users.create({
+      realm,
+      username,
+      email: email ?? `stip-${username}@mailbucket.dvbern.ch`,
+      enabled: true,
+      emailVerified: true,
+      firstName,
+      lastName,
+      credentials: [
+        {
+          type: 'password',
+          value: ADD_USER_PASSWORD,
+          temporary: false,
+        },
+      ],
+    });
+    userId = newUser.id;
+  } else {
+    console.info(`User ${username} found, updating...`);
+    userId = foundUsers[0].id;
+  }
+
+  if (!userId) {
+    console.error(`User ${username} not found or created`);
+    process.exit(1);
+  }
+
+  const userRoles = await kcAdminClient.users.listRealmRoleMappings({
+    id: userId,
+    realm,
+  });
+
+  const rolesToAdd = roles.filter(
+    (role) => !userRoles.some((r) => r.name === role),
+  );
+
+  if (rolesToAdd.length > 0) {
+    console.info(`Adding roles ${rolesToAdd.join(', ')} to user ${username}`);
+    const rolesToAddRepr = rolesToAdd.map((role) => ({
+      name: role,
+    }));
+    const rawRolesOrPermissions = (
+      await kcAdminClient.roles.find({ realm })
+    ).filter(isDefinedRoleOrPermission);
+    const newRoles = rolesToAddRepr
+      .map((rawRole) =>
+        rawRolesOrPermissions.find((role) => role.name === rawRole.name),
+      )
+      .filter(isDefined);
+
+    if (newRoles.length < 1) {
+      console.info('No new roles to add');
+      return;
+    }
+    await kcAdminClient.users.addRealmRoleMappings({
+      id: userId,
+      realm,
+      roles: newRoles,
+    });
+    console.info(`Added roles ${rolesToAdd.join(', ')} to user ${username}`);
+  } else {
+    console.info(`User ${username} already has all roles`);
   }
 });
 program.parse(process.argv);

@@ -84,7 +84,7 @@ public class AusbildungAuthorizer extends BaseAuthorizer {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         // If a Folgegesuch was created, we can't update the Ausbildung anymore
-        if (ausbildung.getGesuchs().stream().anyMatch(gesuch -> !gesuch.isErstgesuch() || gesuch.isVerfuegt())) {
+        if (ausbildung.getGesuchs().stream().anyMatch(gesuch -> !gesuch.hasNeverBeenVerfuegt())) {
             return false;
         }
 

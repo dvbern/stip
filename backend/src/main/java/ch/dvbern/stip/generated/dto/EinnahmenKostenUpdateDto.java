@@ -30,7 +30,9 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   private @Valid Integer beitraege;
   private @Valid Integer ausbildungskosten;
   private @Valid Integer wohnkosten;
+  private @Valid Integer wgAnzahlPersonen;
   private @Valid Boolean wgWohnend;
+  private @Valid Boolean alternativeWohnformWohnend;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer betreuungskostenKinder;
   private @Valid String veranlagungsStatus;
@@ -244,6 +246,24 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   }
 
   /**
+   **/
+  public EinnahmenKostenUpdateDto wgAnzahlPersonen(Integer wgAnzahlPersonen) {
+    this.wgAnzahlPersonen = wgAnzahlPersonen;
+    return this;
+  }
+
+  
+  @JsonProperty("wgAnzahlPersonen")
+  public Integer getWgAnzahlPersonen() {
+    return wgAnzahlPersonen;
+  }
+
+  @JsonProperty("wgAnzahlPersonen")
+  public void setWgAnzahlPersonen(Integer wgAnzahlPersonen) {
+    this.wgAnzahlPersonen = wgAnzahlPersonen;
+  }
+
+  /**
    * Required nur wenn Person eigener Haushalt hat
    **/
   public EinnahmenKostenUpdateDto wgWohnend(Boolean wgWohnend) {
@@ -260,6 +280,24 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
   @JsonProperty("wgWohnend")
   public void setWgWohnend(Boolean wgWohnend) {
     this.wgWohnend = wgWohnend;
+  }
+
+  /**
+   **/
+  public EinnahmenKostenUpdateDto alternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+    return this;
+  }
+
+  
+  @JsonProperty("alternativeWohnformWohnend")
+  public Boolean getAlternativeWohnformWohnend() {
+    return alternativeWohnformWohnend;
+  }
+
+  @JsonProperty("alternativeWohnformWohnend")
+  public void setAlternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
   }
 
   /**
@@ -403,7 +441,9 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
         Objects.equals(this.beitraege, einnahmenKostenUpdate.beitraege) &&
         Objects.equals(this.ausbildungskosten, einnahmenKostenUpdate.ausbildungskosten) &&
         Objects.equals(this.wohnkosten, einnahmenKostenUpdate.wohnkosten) &&
+        Objects.equals(this.wgAnzahlPersonen, einnahmenKostenUpdate.wgAnzahlPersonen) &&
         Objects.equals(this.wgWohnend, einnahmenKostenUpdate.wgWohnend) &&
+        Objects.equals(this.alternativeWohnformWohnend, einnahmenKostenUpdate.alternativeWohnformWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKostenUpdate.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsStatus, einnahmenKostenUpdate.veranlagungsStatus) &&
@@ -414,7 +454,7 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgAnzahlPersonen, wgWohnend, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -433,7 +473,9 @@ public class EinnahmenKostenUpdateDto  implements Serializable {
     sb.append("    beitraege: ").append(toIndentedString(beitraege)).append("\n");
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    wgAnzahlPersonen: ").append(toIndentedString(wgAnzahlPersonen)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
+    sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");

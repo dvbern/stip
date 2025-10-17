@@ -25,4 +25,15 @@ public class PdfConstants {
     public static final String FONT_PATH = "/fonts/arial.ttf";
     public static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
     public static final PageSize PAGE_SIZE = PageSize.A4;
+
+    public static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
+    public static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
+    public static final String LOGO_PATH = "/images/bern_logo.svg";
+
+    public static final int SPACING_BIG = 30;
+    public static final int SPACING_MEDIUM = 20;
+    public static final int SPACING_SMALL = 10;
+    public static final float FONT_SIZE_BIG = 10.5f;
+    public static final float FONT_SIZE_MEDIUM = 8.5f;
+    public static final float FONT_SIZE_SMALL = 6.5f;
 }

@@ -550,7 +550,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       if (!staette) {
         this.form.controls.ausbildungsgangId.reset();
         this.form.controls.besuchtBMS.reset();
-        if (!this.form.controls.ausbildungNichtGefunden) {
+        if (!this.form.controls.ausbildungNichtGefunden.value) {
           this.form.controls.fachrichtungBerufsbezeichnung.reset();
           this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
           this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
@@ -583,9 +583,30 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         hiddenFieldsSetSig: this.hiddenFieldsSetSig,
         formControl: this.form.controls.fachrichtungBerufsbezeichnung,
         visible: !!ausbildungsgang?.zusatzfrage,
-        disabled: readonly,
+        disabled: readonly || !ausbildungsgang?.zusatzfrage,
       });
       this.form.controls.fachrichtungBerufsbezeichnung.updateValueAndValidity();
+    });
+
+    let previousAusbildungsgangValue: string | null = null;
+    effect(() => {
+      const newAusbildungsgangValue = this.ausbildungsgangIdSig();
+
+      if (previousAusbildungsgangValue === newAusbildungsgangValue) {
+        return;
+      }
+      if (!previousAusbildungsgangValue) {
+        previousAusbildungsgangValue = newAusbildungsgangValue ?? null;
+        return;
+      }
+      previousAusbildungsgangValue = newAusbildungsgangValue ?? null;
+
+      this.form.controls.fachrichtungBerufsbezeichnung.reset();
+      this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
+      this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
+      this.form.controls.isAusbildungAusland.reset();
+      this.form.controls.landId.reset();
+      this.form.controls.besuchtBMS.reset();
     });
   }
 
@@ -593,13 +614,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     if (!this.fallIdSig()) {
       this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
     }
-  }
-
-  handleGangChangedByUser() {
-    this.form.controls.fachrichtungBerufsbezeichnung.reset();
-    this.form.controls.ausbildungsortPlzOrt.controls.plz.reset();
-    this.form.controls.ausbildungsortPlzOrt.controls.ort.reset();
-    this.form.controls.besuchtBMS.reset();
   }
 
   handleManuellChangedByUser() {
