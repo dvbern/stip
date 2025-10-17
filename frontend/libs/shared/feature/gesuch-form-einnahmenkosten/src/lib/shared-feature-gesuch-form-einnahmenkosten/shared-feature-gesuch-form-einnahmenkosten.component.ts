@@ -7,6 +7,7 @@ import {
   computed,
   effect,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -32,6 +33,7 @@ import { Bildungskategorie, DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
   EINNAHMEN_KOSTEN,
+  EINNAHMEN_KOSTEN_PARTNER,
   FAMILIENSITUATION,
   PERSON,
 } from '@dv/shared/model/gesuch-form';
@@ -76,6 +78,11 @@ import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 import { selectSharedFeatureGesuchFormEinnahmenkostenView } from './shared-feature-gesuch-form-einnahmenkosten.selector';
+
+enum EinkommenTyp {
+  PIA = 'PIA',
+  PARTNER = 'PARTNER',
+}
 
 const bildungskategorieMap = {
   SEKUNDARSTUFE_I: 'SEKUNDAR_2',
@@ -122,6 +129,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private config = inject(SharedModelCompileTimeConfig);
   private einreichenStore = inject(EinreichenStore);
+  einkommenTyp = input(undefined, {
+    transform: (v: string | undefined): EinkommenTyp | undefined => {
+      if (v && v in EinkommenTyp) {
+        return v as EinkommenTyp;
+      }
+      return undefined;
+    },
+  });
 
   form = this.formBuilder.group({
     nettoerwerbseinkommen: [<string | null>null, [Validators.required]],
@@ -142,10 +157,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     einnahmenBGSA: [<string | undefined>undefined],
     taggelderAHVIV: [<string | undefined>undefined],
     andereEinnahmen: [<string | undefined>undefined],
-
-    // todo: add field, no document in KSTIP-2779
-    // verpflegungskosten: [<string | undefined>undefined, []],
-
+    verpflegungskosten: [<string | undefined>undefined, [Validators.required]],
     auswaertigeMittagessenProWoche: [
       <number | null>null,
       [Validators.required, sharedUtilValidatorRange(0, 5)],
@@ -155,7 +167,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       <number | undefined>undefined,
       [Validators.required, Validators.min(MIN_WG_ANZAHL_PERSONEN)],
     ],
-    alternativeWohnformWohnend: [<boolean | undefined>undefined, []],
+    alternativeWohnformWohnend: [
+      <boolean | undefined>undefined,
+      [Validators.required],
+    ],
     vermoegen: [
       <string | undefined>undefined,
       [
@@ -178,6 +193,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   );
   gotReenabled$ = new Subject<object>();
   languageSig = this.store.selectSignal(selectLanguage);
+
+  formChangesSig = computed(() => {
+    const isEKPartner = this.einkommenTyp() === 'PARTNER';
+
+    return isEKPartner
+      ? this.viewSig().formChangesPartner
+      : this.viewSig().formChanges;
+  });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
 
@@ -285,17 +308,19 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.nettoerwerbseinkommenSig() ?? '0',
     );
 
-    return nettoerwerbseinkommen > 0 ? DokumentTyp.EK_LOHNABRECHNUNG : null;
-  }, {});
+    return nettoerwerbseinkommen > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_LOHNABRECHNUNG'
+            : 'EK_LOHNABRECHNUNG'
+        ]
+      : null;
+  });
   steuernKantonGemeindeSig = computed(() => {
     const einkommen = fromFormatedNumber(
       this.nettoerwerbseinkommenSig() ?? '0',
     );
 
-    // const einkommenPartner =
-    //   this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
-
-    // todo: get from new partner einnnahmenKosten tab in KSTIP-2779
     const einkommenPartner = 0;
 
     const gesamtEinkommen = einkommen + einkommenPartner;
@@ -316,7 +341,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     );
 
     return unterhaltsbeitraege > 0
-      ? DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE'
+            : 'EK_BELEG_UNTERHALTSBEITRAEGE'
+        ]
       : null;
   });
 
@@ -324,14 +353,26 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   zulagenDocumentSig = this.createUploadOptionsSig(() => {
     const zulagen = fromFormatedNumber(this.zulagenSig() ?? '0');
 
-    return zulagen > 0 ? DokumentTyp.EK_BELEG_KINDERZULAGEN : null;
+    return zulagen > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_KINDERZULAGEN'
+            : 'EK_BELEG_KINDERZULAGEN'
+        ]
+      : null;
   });
 
   rentenSig = toSignal(this.form.controls.renten.valueChanges);
   rentenDocumentSig = this.createUploadOptionsSig(() => {
     const renten = fromFormatedNumber(this.rentenSig() ?? '0');
 
-    return renten > 0 ? DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN : null;
+    return renten > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_BEZAHLTE_RENTEN'
+            : 'EK_BELEG_BEZAHLTE_RENTEN'
+        ]
+      : null;
   });
 
   eoLeistungenSig = toSignal(this.form.controls.eoLeistungen.valueChanges);
@@ -339,7 +380,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const eoLeistungen = fromFormatedNumber(this.eoLeistungenSig() ?? '0');
 
     return eoLeistungen > 0
-      ? DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO'
+            : 'EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO'
+        ]
       : null;
   });
 
@@ -352,7 +397,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     );
 
     return ergaenzungsleistungen > 0
-      ? DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN'
+            : 'EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN'
+        ]
       : null;
   });
 
@@ -361,7 +410,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     const beitraege = fromFormatedNumber(this.beitraegeSig() ?? '0');
 
     return beitraege > 0
-      ? DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION'
+            : 'EK_VERFUEGUNG_GEMEINDE_INSTITUTION'
+        ]
       : null;
   });
 
@@ -369,14 +422,26 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
     const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
 
-    return fahrkosten > 0 ? DokumentTyp.EK_BELEG_OV_ABONNEMENT : null;
+    return fahrkosten > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_OV_ABONNEMENT'
+            : 'EK_BELEG_OV_ABONNEMENT'
+        ]
+      : null;
   });
 
   wohnkostenSig = toSignal(this.form.controls.wohnkosten.valueChanges);
   wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
     const wohnkosten = fromFormatedNumber(this.wohnkostenSig() ?? '0');
 
-    return wohnkosten > 0 ? DokumentTyp.EK_MIETVERTRAG : null;
+    return wohnkosten > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_MIETVERTRAG'
+            : 'EK_MIETVERTRAG'
+        ]
+      : null;
   });
 
   wgWohnendSig = toSignal(this.form.controls.wgWohnend.valueChanges);
@@ -390,7 +455,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     );
 
     return betreuungskostenKinder > 0
-      ? DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER'
+            : 'EK_BELEG_BETREUUNGSKOSTEN_KINDER'
+        ]
       : null;
   });
 
@@ -398,21 +467,39 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   vermoegenDocumentSig = this.createUploadOptionsSig(() => {
     const vermoegen = fromFormatedNumber(this.vermoegenSig() ?? '0');
 
-    return vermoegen > 0 ? DokumentTyp.EK_VERMOEGEN : null;
+    return vermoegen > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_VERMOEGEN'
+            : 'EK_VERMOEGEN'
+        ]
+      : null;
   });
 
   einnahmenBGSASig = toSignal(this.form.controls.einnahmenBGSA.valueChanges);
   einnahmenBGSADocumentSig = this.createUploadOptionsSig(() => {
     const einnahmenBGSA = fromFormatedNumber(this.einnahmenBGSASig() ?? '0');
 
-    return einnahmenBGSA > 0 ? DokumentTyp.EK_BELEG_EINNAHMEN_BGSA : null;
+    return einnahmenBGSA > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_EINNAHMEN_BGSA'
+            : 'EK_BELEG_EINNAHMEN_BGSA'
+        ]
+      : null;
   });
 
   taggelderAHVIVSig = toSignal(this.form.controls.taggelderAHVIV.valueChanges);
   taggelderAHVIVDocumentSig = this.createUploadOptionsSig(() => {
     const taggelderAHVIV = fromFormatedNumber(this.taggelderAHVIVSig() ?? '0');
 
-    return taggelderAHVIV > 0 ? DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV : null;
+    return taggelderAHVIV > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_TAGGELDER_AHV_IV'
+            : 'EK_BELEG_TAGGELDER_AHV_IV'
+        ]
+      : null;
   });
 
   andereEinnahmenSig = toSignal(
@@ -423,7 +510,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.andereEinnahmenSig() ?? '0',
     );
 
-    return andereEinnahmen > 0 ? DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN : null;
+    return andereEinnahmen > 0
+      ? DokumentTyp[
+          this.einkommenTyp() === 'PARTNER'
+            ? 'EK_PARTNER_BELEG_ANDERE_EINNAHMEN'
+            : 'EK_BELEG_ANDERE_EINNAHMEN'
+        ]
+      : null;
   });
 
   constructor() {
@@ -437,6 +530,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       const { hasData, hatKinder, warErwachsenSteuerJahr } =
         this.formStateSig();
 
+      const isEKPartner = this.einkommenTyp() === 'PARTNER';
+
       const wgWohnend = this.wgWohnendSig();
       const { wohnsitzNotEigenerHaushalt } = this.viewSig();
 
@@ -445,6 +540,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       }
 
       this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
+
+      this.setDisabledStateAndHide(
+        this.form.controls.verpflegungskosten,
+        !isEKPartner,
+      );
 
       this.setDisabledStateAndHide(
         this.form.controls.auswaertigeMittagessenProWoche,
@@ -497,7 +597,13 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
     // fill form
     effect(() => {
-      const { einnahmenKosten } = this.viewSig();
+      const view = this.viewSig();
+      const isEKPartner = this.einkommenTyp() === 'PARTNER';
+
+      const einnahmenKosten = isEKPartner
+        ? view.einnahmenKostenPartner
+        : view.einnahmenKosten;
+
       if (einnahmenKosten) {
         this.form.patchValue({
           ...einnahmenKosten,
@@ -518,6 +624,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           ausbildungskosten: einnahmenKosten.ausbildungskosten?.toString(),
           fahrkosten: einnahmenKosten.fahrkosten.toString(),
           wohnkosten: einnahmenKosten.wohnkosten?.toString(),
+          verpflegungskosten: einnahmenKosten.verpflegungskosten?.toString(),
           betreuungskostenKinder:
             einnahmenKosten.betreuungskostenKinder?.toString(),
           vermoegen: einnahmenKosten.vermoegen?.toString(),
@@ -542,6 +649,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     this.formUtils.focusFirstInvalid(this.elementRef);
     const { gesuchId, trancheId, gesuchFormular } =
       this.buildUpdatedGesuchFromForm();
+    const isEKPartner = this.einkommenTyp() === 'PARTNER';
 
     if (this.form.valid && gesuchId && trancheId) {
       this.store.dispatch(
@@ -549,7 +657,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           gesuchId,
           trancheId,
           gesuchFormular,
-          origin: EINNAHMEN_KOSTEN,
+          origin: isEKPartner ? EINNAHMEN_KOSTEN_PARTNER : EINNAHMEN_KOSTEN,
         }),
       );
       this.form.markAsPristine();
@@ -558,12 +666,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   handleContinue() {
     const { gesuch } = this.viewSig();
+    const isEKPartner = this.einkommenTyp() === 'PARTNER';
+
     if (gesuch?.id) {
       this.store.dispatch(
         SharedEventGesuchFormEinnahmenkosten.nextTriggered({
           id: gesuch.id,
           trancheId: gesuch.gesuchTrancheToWorkWith.id,
-          origin: EINNAHMEN_KOSTEN,
+          origin: isEKPartner ? EINNAHMEN_KOSTEN_PARTNER : EINNAHMEN_KOSTEN,
         }),
       );
     }
@@ -584,43 +694,52 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'veranlagungsStatus',
       ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
     ]);
+
+    const isEKPartner = this.einkommenTyp() === 'PARTNER';
+
+    const update = {
+      ...formValues,
+      nettoerwerbseinkommen: fromFormatedNumber(
+        formValues.nettoerwerbseinkommen,
+      ),
+      arbeitspensumProzent: percentStringToNumber(
+        formValues.arbeitspensumProzent,
+      ),
+      einnahmenBGSA: fromFormatedNumber(formValues.einnahmenBGSA),
+      taggelderAHVIV: fromFormatedNumber(formValues.taggelderAHVIV),
+      andereEinnahmen: fromFormatedNumber(formValues.andereEinnahmen),
+      unterhaltsbeitraege: fromFormatedNumber(formValues.unterhaltsbeitraege),
+      zulagen: fromFormatedNumber(formValues.zulagen),
+      renten: fromFormatedNumber(formValues.renten),
+      eoLeistungen: fromFormatedNumber(formValues.eoLeistungen),
+      ergaenzungsleistungen: fromFormatedNumber(
+        formValues.ergaenzungsleistungen,
+      ),
+      beitraege: fromFormatedNumber(formValues.beitraege),
+      ausbildungskosten: fromFormatedNumber(formValues.ausbildungskosten),
+      fahrkosten: fromFormatedNumber(formValues.fahrkosten),
+      wohnkosten: fromFormatedNumber(formValues.wohnkosten),
+      verpflegungskosten: fromFormatedNumber(formValues.verpflegungskosten),
+      betreuungskostenKinder: fromFormatedNumber(
+        formValues.betreuungskostenKinder,
+      ),
+      vermoegen: fromFormatedNumber(formValues.vermoegen),
+      steuerjahr: formValues.steuerjahr,
+      veranlagungsStatus: formValues.veranlagungsStatus,
+    };
+
     return {
       gesuchId: gesuch?.id,
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
-      gesuchFormular: {
-        ...gesuchFormular,
-        einnahmenKosten: {
-          ...formValues,
-          nettoerwerbseinkommen: fromFormatedNumber(
-            formValues.nettoerwerbseinkommen,
-          ),
-          arbeitspensumProzent: percentStringToNumber(
-            formValues.arbeitspensumProzent,
-          ),
-          einnahmenBGSA: fromFormatedNumber(formValues.einnahmenBGSA),
-          taggelderAHVIV: fromFormatedNumber(formValues.taggelderAHVIV),
-          andereEinnahmen: fromFormatedNumber(formValues.andereEinnahmen),
-          unterhaltsbeitraege: fromFormatedNumber(
-            formValues.unterhaltsbeitraege,
-          ),
-          zulagen: fromFormatedNumber(formValues.zulagen),
-          renten: fromFormatedNumber(formValues.renten),
-          eoLeistungen: fromFormatedNumber(formValues.eoLeistungen),
-          ergaenzungsleistungen: fromFormatedNumber(
-            formValues.ergaenzungsleistungen,
-          ),
-          beitraege: fromFormatedNumber(formValues.beitraege),
-          ausbildungskosten: fromFormatedNumber(formValues.ausbildungskosten),
-          fahrkosten: fromFormatedNumber(formValues.fahrkosten),
-          wohnkosten: fromFormatedNumber(formValues.wohnkosten),
-          betreuungskostenKinder: fromFormatedNumber(
-            formValues.betreuungskostenKinder,
-          ),
-          vermoegen: fromFormatedNumber(formValues.vermoegen),
-          steuerjahr: formValues.steuerjahr,
-          veranlagungsStatus: formValues.veranlagungsStatus,
-        },
-      },
+      gesuchFormular: isEKPartner
+        ? {
+            ...gesuchFormular,
+            einnahmenKostenPartner: update,
+          }
+        : {
+            ...gesuchFormular,
+            einnahmenKosten: update,
+          },
     };
   }
 
