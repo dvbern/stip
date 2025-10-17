@@ -27,16 +27,15 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class EinnahmenKostenRequiredDocumentsProducer implements RequiredDocumentsProducer {
-
+public class EinnahmeKostenPartnerRequiredDocumentsProducer implements RequiredDocumentsProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         final var ek = formular.getEinnahmenKosten();
         if (ek == null) {
             return ImmutablePair.of("", Set.of());
         }
-        final var requiredDocs = EinnahmeKostenRequiredDocumentsProducerUtil.getRequiredDocumentsForPIA(formular);
+        final var requiredDocs = EinnahmeKostenRequiredDocumentsProducerUtil.getRequiredDocumentsForPartner(formular);
 
-        return ImmutablePair.of("einnahmenKosten", requiredDocs);
+        return ImmutablePair.of("einnahmenKostenPartner", requiredDocs);
     }
 }
