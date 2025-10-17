@@ -88,7 +88,7 @@ public class GesuchNotizService {
         notiz.setGesuch(gesuch);
         gesuchNotizRepository.persistAndFlush(notiz);
 
-        if (createDto.getNotizTyp().equals(GesuchNotizTyp.PENDENZ)) {
+        if (createDto.getNotizTyp().equals(GesuchNotizTyp.PENDENZ_NOTIZ)) {
             notiz.setAbgeschlossen(false);
         }
 

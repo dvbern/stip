@@ -29,7 +29,7 @@ public class GesuchNotizAbgeschlossenOnlySetForPendenzValidator
 
     @Override
     public boolean isValid(GesuchNotiz gesuchNotiz, ConstraintValidatorContext context) {
-        if (gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.PENDENZ)) {
+        if (gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.PENDENZ_NOTIZ)) {
             return gesuchNotiz.getAbgeschlossen() != null;
         }
 
