@@ -39,6 +39,7 @@ const generatedApis = [
   'Delegieren',
   'Dokument',
   'Drucken',
+  'Eltern',
   'Fall',
   'Gesuch',
   'GesuchNotiz',

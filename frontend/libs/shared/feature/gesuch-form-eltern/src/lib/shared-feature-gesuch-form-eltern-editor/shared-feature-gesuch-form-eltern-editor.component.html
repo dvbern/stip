@@ -2,33 +2,39 @@
 <h3 class="mt-4">
   <div class="row g-4 my-2">
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
-      {{
-        'shared.form.eltern.' + (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') + '.title' | transloco
-      }}
+      {{ 'shared.form.eltern.' + elternteil.elternTyp + '.title' | transloco }}
     </div>
 
-    @if (
-      elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().trancheId;
-      as gesuchTrancheId
-    ) {
-      <div class="col-12 col-md-6 col-xl-4 d-flex gap-2 tw:md:justify-end tw:relative" *dvIfSachbearbeiter>
-        <button
-          type="button"
-          class="btn btn-link tw:p-0 tw:lg:absolute tw:top-0 tw:right-0"
-          [attr.aria-label]="'shared.dokumente.table.download' | transloco"
-          [dvDownloadButton]="{
-            type: 'datenschutzbrief',
-            id: elternteil.id,
-            gesuchTrancheId,
-          }"
+    <div class="col-12 col-md-6 col-xl-4 d-flex gap-2 tw:md:justify-end tw:relative" *dvIfSachbearbeiter>
+      <div class="tw:lg:absolute tw:top-0 tw:right-0 tw:text-right">
+        <mat-checkbox
+          class="tw:text-base tw:font-normal"
+          [checked]="sichtbar"
+          (change)="sichtbarChanged.emit($event.checked)"
+          >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
         >
-          <div class="material-symbols-rounded tw:text-4xl!">download</div>
-          <div>
-            {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
-          </div>
-        </button>
+        @if (
+          elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().trancheId;
+          as gesuchTrancheId
+        ) {
+          <button
+            type="button"
+            class="btn btn-link tw:p-0"
+            [attr.aria-label]="'shared.dokumente.table.download' | transloco"
+            [dvDownloadButton]="{
+              type: 'datenschutzbrief',
+              id: elternteil.id,
+              gesuchTrancheId,
+            }"
+          >
+            <div class="material-symbols-rounded tw:text-4xl!">download</div>
+            <div>
+              {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
+            </div>
+          </button>
+        }
       </div>
-    }
+    </div>
   </div>
 </h3>
 

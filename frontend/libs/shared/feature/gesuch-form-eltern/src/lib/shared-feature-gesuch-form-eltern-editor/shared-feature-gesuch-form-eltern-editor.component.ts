@@ -131,10 +131,12 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   >();
 
   @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
+  @Input({ required: true }) sichtbar!: boolean;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
   @Output() formIsUnsaved: Observable<boolean>;
+  @Output() sichtbarChanged = new EventEmitter<boolean>();
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
   gotReenabled$ = new Subject<object>();

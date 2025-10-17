@@ -601,8 +601,11 @@
   "shared.form.familiensituation.file.AUFENTHALT_UNBEKANNT_MUTTER": "Lettre d'explication",
 
   "shared.eltern.title": "Parent",
-  "shared.form.eltern.mutter.title": "mère",
-  "shared.form.eltern.vater.title": "père",
+  "shared.form.eltern.MUTTER.title": "Informations sur la mère",
+  "shared.form.eltern.VATER.title": "Informations sur le père",
+  "shared.form.eltern.sichtbar": "Visible pour la personne en formation",
+  "shared.form.eltern.sichtbar.success": "L'affichage des informations parentales a été mis à jour avec succès.",
+  "shared.form.eltern.nichtSichtbar": "Données non visibles",
   "shared.form.eltern.none": "Aucune information requise",
   "shared.form.eltern.datenschutzbrief": "Lettre de protection des données",
   "shared.form.eltern.ausweisbFluechtling.mutter.label": "Votre mère a-t-elle un permis B ou est-il un réfugié?",
