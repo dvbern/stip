@@ -2702,6 +2702,7 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/ElternTyp'
+        required: true
       tags:
         - Eltern
       responses:
