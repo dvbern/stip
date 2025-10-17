@@ -170,7 +170,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
                 id: notiz.id,
                 betreff: result.betreff,
                 text: result.text,
-                pendenzAbgschlossen: result.pendenzAbgschlossen,
+                pendenzAbgeschlossen: result.pendenzAbgeschlossen,
               },
             });
             return;

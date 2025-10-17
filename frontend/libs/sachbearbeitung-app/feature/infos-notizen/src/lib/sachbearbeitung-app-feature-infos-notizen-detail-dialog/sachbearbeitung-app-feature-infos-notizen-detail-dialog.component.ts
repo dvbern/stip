@@ -42,7 +42,7 @@ export type NotizDialogResult = {
   betreff: string;
   text: string;
   antwort?: string;
-  pendenzAbgschlossen?: boolean;
+  pendenzAbgeschlossen?: boolean;
 };
 
 @Component({
@@ -81,7 +81,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     betreff: [<string | null>null, [Validators.required]],
     text: [<string | null>null, [Validators.required]],
     antwort: [<string | null>null],
-    pendenzAbgschlossen: [<boolean | null>null],
+    pendenzAbgeschlossen: [<boolean | null>null],
   });
 
   public isJurNotiz = this.dialogData.notizTyp === 'JURISTISCHE_NOTIZ';
@@ -94,7 +94,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       betreff: this.dialogData.notiz?.betreff,
       text: this.dialogData.notiz?.text,
       antwort: this.dialogData.notiz?.antwort,
-      pendenzAbgschlossen: this.dialogData.notiz?.pendenzAbgschlossen,
+      pendenzAbgeschlossen: this.dialogData.notiz?.pendenzAbgeschlossen,
     });
 
     switch (this.dialogData.notizTyp) {
@@ -105,7 +105,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
         if (!this.userIsSachbearbeiter) {
           this.form.controls.betreff.disable();
           this.form.controls.text.disable();
-          this.form.controls.pendenzAbgschlossen.disable();
+          this.form.controls.pendenzAbgeschlossen.disable();
         }
         break;
       }
@@ -160,7 +160,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
       text: notizDaten.text,
       betreff: notizDaten.betreff,
       antwort: notizDaten.antwort,
-      pendenzAbgschlossen: notizDaten.pendenzAbgschlossen,
+      pendenzAbgeschlossen: notizDaten.pendenzAbgeschlossen,
     });
   }
 }

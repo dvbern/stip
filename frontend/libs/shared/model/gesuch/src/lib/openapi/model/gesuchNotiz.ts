@@ -15,7 +15,7 @@ export interface GesuchNotiz {
     id: string;
     betreff: string;
     text: string;
-    pendenzAbgschlossen?: boolean;
+    pendenzAbgeschlossen?: boolean;
     userErstellt: string;
     timestampErstellt: string;
     userMutiert?: string;

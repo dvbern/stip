@@ -14,6 +14,6 @@ export interface GesuchNotizUpdate {
     id: string;
     betreff: string;
     text: string;
-    pendenzAbgschlossen?: boolean;
+    pendenzAbgeschlossen?: boolean;
 }
 

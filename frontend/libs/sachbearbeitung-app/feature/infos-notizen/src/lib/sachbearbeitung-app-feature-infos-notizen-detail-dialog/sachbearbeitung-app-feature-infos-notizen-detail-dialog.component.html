@@ -29,7 +29,7 @@
       <ng-container [ngTemplateOutlet]="betreffTextControls"></ng-container>
 
       @if (dialogData.notiz?.id) {
-        <mat-checkbox [formControl]="form.controls.pendenzAbgschlossen" data-testid="form-person-pendenz">{{
+        <mat-checkbox [formControl]="form.controls.pendenzAbgeschlossen" data-testid="form-person-pendenz">{{
           'shared.form.notizen.pendenz.label' | transloco
         }}</mat-checkbox>
       }
