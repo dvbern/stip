@@ -29,9 +29,9 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = GesuchNotizPendenzAbegschlossenValidator.class)
+@Constraint(validatedBy = GesuchNotizAbgeschlossenOnlySetForPendenzValidator.class)
 @Documented
-public @interface GesuchNotizPendenzAbgeschlossenConstraint {
+public @interface GesuchNotizAbgeschlossenOnlySetForPendenzConstraint {
     String message() default VALIDATION_GESUCHNOTIZ_PENDENZ_ABGESCHLOSSEN_VALID_MESSAGE;
 
     Class<?>[] groups() default {};

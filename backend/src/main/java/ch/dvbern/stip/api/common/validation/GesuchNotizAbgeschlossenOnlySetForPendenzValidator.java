@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.common.validation;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,12 +24,15 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 @ApplicationScoped
-public class GesuchNotizPendenzAbegschlossenValidator
-    implements ConstraintValidator<GesuchNotizPendenzAbgeschlossenConstraint, GesuchNotiz> {
+public class GesuchNotizAbgeschlossenOnlySetForPendenzValidator
+    implements ConstraintValidator<GesuchNotizAbgeschlossenOnlySetForPendenzConstraint, GesuchNotiz> {
 
     @Override
     public boolean isValid(GesuchNotiz gesuchNotiz, ConstraintValidatorContext context) {
-        return !(gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.PENDENZ)
-        && Objects.isNull(gesuchNotiz.getAbgeschlossen()));
+        if (gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.PENDENZ)) {
+            return gesuchNotiz.getAbgeschlossen() != null;
+        }
+
+        return gesuchNotiz.getAbgeschlossen() == null;
     }
 }

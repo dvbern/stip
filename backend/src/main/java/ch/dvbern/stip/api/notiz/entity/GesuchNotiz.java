@@ -18,8 +18,8 @@
 package ch.dvbern.stip.api.notiz.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.GesuchNotizAbgeschlossenOnlySetForPendenzConstraint;
 import ch.dvbern.stip.api.common.validation.GesuchNotizAntwortConstraint;
-import ch.dvbern.stip.api.common.validation.GesuchNotizPendenzAbgeschlossenConstraint;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import jakarta.persistence.Column;
@@ -42,7 +42,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @GesuchNotizAntwortConstraint
-@GesuchNotizPendenzAbgeschlossenConstraint
+@GesuchNotizAbgeschlossenOnlySetForPendenzConstraint
 @Getter
 @Setter
 @Entity
