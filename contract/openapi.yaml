@@ -7651,7 +7651,7 @@ components:
           type: string
         text:
           type: string
-        pendenzAbgschlossen:
+        pendenzAbgeschlossen:
           type: boolean
     GesuchNotiz:
       required:
@@ -7676,7 +7676,7 @@ components:
           type: string
         antwort:
           type: string
-        pendenzAbgschlossen:
+        pendenzAbgeschlossen:
           type: boolean
       allOf:
         - type: object
