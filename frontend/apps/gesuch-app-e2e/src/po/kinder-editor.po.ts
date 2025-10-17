@@ -15,7 +15,10 @@ export class KinderEditorPO {
     geburtsdatum: Locator;
     wohnsitzAnteilPia: Locator;
     ausbildungssituationRadio: Locator;
-    formKindErhalteneAlimentebeitraege: Locator;
+    unterhaltsbeitraege: Locator;
+    kinderUndAusbildungszulagen: Locator;
+    renten: Locator;
+    andereEinnahmen: Locator;
 
     buttonSave: Locator;
     buttonCancel: Locator;
@@ -32,9 +35,12 @@ export class KinderEditorPO {
       ausbildungssituationRadio: page.getByTestId(
         'form-kind-ausbildungssituation',
       ),
-      formKindErhalteneAlimentebeitraege: page.getByTestId(
-        'form-kind-erhalteneAlimentebeitraege',
+      unterhaltsbeitraege: page.getByTestId('form-kind-unterhaltsbeitraege'),
+      kinderUndAusbildungszulagen: page.getByTestId(
+        'form-kind-kinderUndAusbildungszulagen',
       ),
+      renten: page.getByTestId('form-kind-renten'),
+      andereEinnahmen: page.getByTestId('form-kind-andereEinnahmen'),
 
       buttonSave: page.getByTestId('button-save'),
       buttonCancel: page.getByTestId('button-cance'),
@@ -51,6 +57,21 @@ export class KinderEditorPO {
       this.elems.ausbildungssituationRadio,
       item.ausbildungssituation,
     );
+
+    if (item.unterhaltsbeitraege) {
+      await this.elems.unterhaltsbeitraege.fill(`${item.unterhaltsbeitraege}`);
+    }
+    if (item.kinderUndAusbildungszulagen) {
+      await this.elems.kinderUndAusbildungszulagen.fill(
+        `${item.kinderUndAusbildungszulagen}`,
+      );
+    }
+    if (item.renten) {
+      await this.elems.renten.fill(`${item.renten}`);
+    }
+    if (item.andereEinnahmen) {
+      await this.elems.andereEinnahmen.fill(`${item.andereEinnahmen}`);
+    }
 
     await expectFormToBeValid(this.elems.form);
 

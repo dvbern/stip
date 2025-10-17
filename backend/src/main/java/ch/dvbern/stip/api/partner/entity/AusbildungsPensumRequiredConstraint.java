@@ -26,17 +26,18 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_PARTNER_KOSTEN_FIELDS_REQUIRED_NULL_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_PARTNER_AUSBILDUNGS_PENSUM_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator.class)
+@Constraint(validatedBy = AusbildungsPensumRequiredConstraintValidator.class)
 @Documented
-public @interface AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint {
-
-    String message() default VALIDATION_PARTNER_KOSTEN_FIELDS_REQUIRED_NULL_MESSAGE;
+public @interface AusbildungsPensumRequiredConstraint {
+    String message() default VALIDATION_PARTNER_AUSBILDUNGS_PENSUM_MESSAGE;
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    String property() default "";
 }

@@ -110,7 +110,6 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setNettoerwerbseinkommen(20001);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().setJahreseinkommen(0);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
@@ -132,7 +131,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .as(GesuchWithChangesDtoSpec.class);
         Integer value = (int) (20001 * 0.1);
         assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(),
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
             is(value)
         );
     }

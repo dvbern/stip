@@ -45,17 +45,21 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Setter
 @EinnahmenKostenAnzahlPersonenWGValidConstraint
 @EinnahmenKostenAlternativeWohnformValidConstraint
+@AnstellungsGradRequiredConstraint
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
+    @Min(0)
     private Integer nettoerwerbseinkommen;
 
     @NotNull
     @Column(name = "fahrkosten", nullable = false)
+    @Min(0)
     private Integer fahrkosten;
 
     @Nullable
     @Column(name = "wohnkosten")
+    @Min(0)
     private Integer wohnkosten;
 
     @Nullable
@@ -64,50 +68,63 @@ public class EinnahmenKosten extends AbstractMandantEntity {
 
     @Nullable
     @Column(name = "wg_anzahl_personen")
+    @Min(0)
     private Integer wgAnzahlPersonen;
 
     @Nullable
     @Column(name = "alternative_wohnform_wohnend")
     private Boolean alternativeWohnformWohnend;
 
-    @NotNull
-    @Column(name = "verdienst_realisiert", nullable = false)
-    private Boolean verdienstRealisiert;
-
     @Nullable
-    @Column(name = "alimente")
-    private Integer alimente;
+    @Column(name = "unterhaltsbeitraege")
+    @Min(0)
+    private Integer unterhaltsbeitraege;
 
     @Nullable
     @Column(name = "zulagen")
+    @Min(0)
     private Integer zulagen;
 
-    @NotNull
-    @Column(name = "renten", nullable = false)
+    @Nullable
+    @Column(name = "renten")
+    @Min(0)
     private Integer renten;
 
     @Nullable
     @Column(name = "eo_leistungen")
+    @Min(0)
     private Integer eoLeistungen;
 
     @Nullable
     @Column(name = "ergaenzungsleistungen")
+    @Min(0)
     private Integer ergaenzungsleistungen;
 
     @Nullable
     @Column(name = "beitraege")
+    @Min(0)
     private Integer beitraege;
 
     @Nullable
     @Column(name = "ausbildungskosten")
+    @Min(0)
     private Integer ausbildungskosten;
 
+    // todo kstip-2779 - validierung pia only
     @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
+    @Min(0)
     private Integer auswaertigeMittagessenProWoche;
+
+    // todo kstip-2779 - validierung partner only
+    @Nullable
+    @Column(name = "verpflegungskosten")
+    @Min(0)
+    private Integer verpflegungskosten;
 
     @Nullable
     @Column(name = "betreuungskosten_kinder")
+    @Min(0)
     private Integer betreuungskostenKinder;
 
     @Nullable
@@ -126,4 +143,25 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Max(Integer.MAX_VALUE)
     @Min(0)
     private Integer vermoegen;
+
+    @Nullable
+    @Min(0)
+    @Column(name = "einnahmen_bgsa")
+    private Integer einnahmenBGSA;
+
+    @Nullable
+    @Min(0)
+    @Column(name = "taggelder_ahv_iv")
+    private Integer taggelderAHVIV;
+
+    @Nullable
+    @Min(0)
+    @Column(name = "andere_einnahmen")
+    private Integer andereEinnahmen;
+
+    @Min(0)
+    @Max(100)
+    @Nullable
+    @Column(name = "arbeitspensum_prozent")
+    private Integer arbeitspensumProzent;
 }

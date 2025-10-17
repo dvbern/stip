@@ -38,10 +38,6 @@ public class PartnerUpdateDtoSpecModel {
             );
             model.setAdresse(AdresseSpecModel.adresseDtoSpec());
             model.setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER);
-            model.setAusbildungMitEinkommenOderErwerbstaetig(true);
-            model.setJahreseinkommen(5000);
-            model.setFahrkosten(2500);
-            model.setVerpflegungskosten(TestUtil.getRandomInt(1, 2000));
         });
     }
 

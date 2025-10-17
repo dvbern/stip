@@ -655,7 +655,13 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.kantonsGemeindesteuern", tl));
         persoenlichesBudgetTableKosten
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getSteuernKantonGemeinde()));
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getSteuern()));
+        persoenlichesBudgetTableKosten
+            .addCell(
+                getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner", tl)
+            );
+        persoenlichesBudgetTableKosten
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getSteuernPartner()));
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.bundessteuern", tl));
         persoenlichesBudgetTableKosten.addCell(getDefaultParagraphNumber(0)); // TODO: Bundessteuern

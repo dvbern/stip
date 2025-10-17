@@ -192,12 +192,6 @@ import org.hibernate.envers.Audited;
         PartnerPageValidation.class
     }, property = "partner"
 )
-@AlimenteRequiredWhenAlimenteregelungConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
-)
 @DocumentsRequiredConstraint(
     groups = {
         DocumentsRequiredValidationGroup.class

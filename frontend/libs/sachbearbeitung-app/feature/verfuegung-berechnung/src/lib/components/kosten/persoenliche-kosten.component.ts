@@ -184,6 +184,17 @@ import { PersoenlicheBerechnung } from '../../../models';
       </div>
     </div>
 
+    <!-- Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner'
+          | transloco
+      }}
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
+        {{ kostenSig().kantonsGemeindesteuernPartner | formatChfPositive }}
+      </div>
+    </div>
+
     <!-- Bundessteuern -->
     <div class="d-flex gap-2">
       {{

@@ -4856,8 +4856,6 @@ components:
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         - FAMILIENSITUATION_TRENNUNGSKONVENTION
-        - ELTERN_ERGAENZUNGSLEISTUNGEN_VATER
-        - ELTERN_ERGAENZUNGSLEISTUNGEN_MUTTER
         - ELTERN_SOZIALHILFEBUDGET_VATER
         - ELTERN_SOZIALHILFEBUDGET_MUTTER
         - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
@@ -4866,9 +4864,14 @@ components:
         - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
         - KINDER_ALIMENTENVERORDUNG
-        - PARTNER_AUSBILDUNG_LOHNABRECHNUNG
-        - PARTNER_BELEG_OV_ABONNEMENT
-        - EK_BELEG_ALIMENTE
+        - KINDER_ERGAENZUNGSLEISTUNGEN
+        - KINDER_UND_AUSBILDUNGSZULAGEN
+        - KINDER_RENTEN
+        - KINDER_ANDERE_EINNAHMEN
+        - EK_BELEG_UNTERHALTSBEITRAEGE
+        - EK_BELEG_EINNAHMEN_BGSA
+        - EK_BELEG_TAGGELDER_AHV_IV
+        - EK_BELEG_ANDERE_EINNAHMEN
         - EK_BELEG_KINDERZULAGEN
         - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
         - EK_BELEG_BEZAHLTE_RENTEN
@@ -4878,7 +4881,6 @@ components:
         - EK_MIETVERTRAG
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
-        - EK_VERDIENST
         - EK_VERMOEGEN
         - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
         - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
@@ -4887,6 +4889,21 @@ components:
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
+        - STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_VATER
+        - STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_MUTTER
+        - STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_FAMILIE
+        - STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER
+        - STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER
+        - STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE
+        - STEUERERKLAERUNG_RENTEN_VATER
+        - STEUERERKLAERUNG_RENTEN_MUTTER
+        - STEUERERKLAERUNG_RENTEN_FAMILIE
+        - STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER
+        - STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER
+        - STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE
+        - STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER
+        - STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER
+        - STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE
       type: string
     DokumentArt:
       enum:
@@ -5312,17 +5329,10 @@ components:
           type: string
         nachname:
           type: string
-        ausbildungMitEinkommenOderErwerbstaetig:
+        inAusbildung:
           type: boolean
-        jahreseinkommen:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: integer
-        fahrkosten:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: integer
-        verpflegungskosten:
-          description: Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-          type: integer
+        ausbildungspensum:
+          $ref: '#/components/schemas/AusbildungsPensum'
     KindUpdate:
       title: Root Type for Geschwister
       required:
@@ -5348,7 +5358,15 @@ components:
           type: integer
         nachname:
           type: string
-        erhalteneAlimentebeitraege:
+        unterhaltsbeitraege:
+          type: integer
+        kinderUndAusbildungszulagen:
+          type: integer
+        renten:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        andereEinnahmen:
           type: integer
     FallAuszahlung:
       type: object
@@ -5873,11 +5891,6 @@ components:
           $ref: '#/components/schemas/ElternTyp'
         nachname:
           type: string
-        ergaenzungsleistungen:
-          description: |
-            'Falls steuerdatenTyp = Familie: Ergaenzungsleistungen Vater'
-            'Falls steuerdatenTyp != Famile: Ergaenzungsleistungen steuerdatenTyp'
-          type: integer
         sozialhilfebeitraege:
           type: boolean
         wohnkosten:
@@ -6208,13 +6221,24 @@ components:
       required:
         - nettoerwerbseinkommen
         - fahrkosten
-        - verdienstRealisiert
       type: object
       properties:
         nettoerwerbseinkommen:
           type: integer
-        alimente:
-          description: Required nur wenn mind. ein Elternteil Alimente zahlt
+        arbeitspensumProzent:
+          description: Required nur wenn nettoerwerbseinkommen > 0
+          type: integer
+        unterhaltsbeitraege:
+          description: Wird immer angezeigt, ist aber optional
+          type: integer
+        einnahmenBGSA:
+          description: Mit Dokument wenn > 0
+          type: integer
+        taggelderAHVIV:
+          description: Mit Dokument wenn > 0
+          type: integer
+        andereEinnahmen:
+          description: Mit Dokument wenn > 0
           type: integer
         zulagen:
           description: Required nur wenn mind. ein Kind gibt
@@ -6242,10 +6266,10 @@ components:
           type: integer
         alternativeWohnformWohnend:
           type: boolean
-        verdienstRealisiert:
-          type: boolean
         auswaertigeMittagessenProWoche:
           description: Required nur wenn die Person keinen eigenen Haushalt führt
+          type: integer
+        verpflegungskosten:
           type: integer
         betreuungskostenKinder:
           description: Betreuungskosten eigener Kinder
@@ -6263,7 +6287,7 @@ components:
           type: integer
           minimum: 0
           maximum: 2147483647
-        steuernKantonGemeinde:
+        steuern:
           description: transient and calculated readonly field
           type: integer
           minimum: 0
@@ -7096,6 +7120,16 @@ components:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
+        ergaenzungsleistungen:
+          type: integer
+        unterhaltsbeitraege:
+          type: integer
+        renten:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        andereEinnahmen:
+          type: integer
     Steuerdaten:
       title: Root Type for Steuerdaten
       required:
@@ -7106,7 +7140,6 @@ components:
         - totalEinkuenfte
         - eigenmietwert
         - isArbeitsverhaeltnisSelbstaendig
-        - kinderalimente
         - vermoegen
         - steuerdatenTyp
       type: object
@@ -7140,8 +7173,6 @@ components:
         saeule3a:
           type: integer
         saeule2:
-          type: integer
-        kinderalimente:
           type: integer
         vermoegen:
           type: integer
@@ -7499,7 +7530,8 @@ components:
         - grundbedarf
         - wohnkosten
         - medizinischeGrundversorgung
-        - steuernKantonGemeinde
+        - steuern
+        - steuernPartner
         - fahrkosten
         - fahrkostenPartner
         - verpflegung
@@ -7548,7 +7580,9 @@ components:
           type: integer
         medizinischeGrundversorgung:
           type: integer
-        steuernKantonGemeinde:
+        steuern:
+          type: integer
+        steuernPartner:
           type: integer
         fahrkosten:
           type: integer

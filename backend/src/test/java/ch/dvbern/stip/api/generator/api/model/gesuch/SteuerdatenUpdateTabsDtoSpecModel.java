@@ -34,7 +34,6 @@ public class SteuerdatenUpdateTabsDtoSpecModel {
             model.setIsArbeitsverhaeltnisSelbstaendig(false);
             model.saeule3a(TestUtil.getRandomInt(1, 10000));
             model.saeule2(TestUtil.getRandomInt(1, 10000));
-            model.setKinderalimente(TestUtil.getRandomInt(1, 10000));
             model.setVermoegen(TestUtil.getRandomInt(1, 10000));
             model.setSteuernKantonGemeinde(TestUtil.getRandomInt(1, 10000));
             model.steuernBund(TestUtil.getRandomInt(1, 10000));

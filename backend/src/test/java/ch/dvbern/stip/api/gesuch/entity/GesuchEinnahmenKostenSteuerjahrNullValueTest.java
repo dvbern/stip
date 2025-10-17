@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -91,8 +92,10 @@ class GesuchEinnahmenKostenSteuerjahrNullValueTest {
     @TestAsGesuchsteller
     @Order(3)
     void testUpdateGesuchEinnahmenKostenSteuerjahrNullValue() {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
+        final var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        final var gesuchFormular = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular();
+        gesuchFormular.getEinnahmenKosten().setSteuerjahr(null);
+        gesuchFormular.setPersonInAusbildung(PersonInAusbildungUpdateDtoSpecModel.personInAusbildungUpdateDtoSpec());
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
         gesuchApiSpec.updateGesuchGS()

@@ -72,9 +72,9 @@ public class GetDocumentsForEinnahmenKostenArgumentsProvider implements Argument
                 DokumentTyp.EK_BELEG_KINDERZULAGEN
             ),
             CreatePermutationUtil.createIntegerPermutations(
-                (val) -> new EinnahmenKostenUpdateDto().alimente(val),
-                (val) -> new EinnahmenKosten().setAlimente(val),
-                DokumentTyp.EK_BELEG_ALIMENTE
+                (val) -> new EinnahmenKostenUpdateDto().unterhaltsbeitraege(val),
+                (val) -> new EinnahmenKosten().setUnterhaltsbeitraege(val),
+                DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
             ),
             CreatePermutationUtil.createIntegerPermutations(
                 (val) -> new EinnahmenKostenUpdateDto().ergaenzungsleistungen(val),

@@ -116,112 +116,52 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="row g-4">
+
+      <div class="row g-4 my-2">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
         <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
-          <mat-checkbox
-            type="checkbox"
-            formControlName="ausbildungMitEinkommenOderErwerbstaetig"
-            data-testid="form-partner-ausbildungMitEinkommenOderErwerbstaetig"
-            >{{ 'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label' | transloco }}</mat-checkbox
-          >
+          <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
+            'shared.form.partner.inAusbildung.label' | transloco
+          }}</mat-checkbox>
           <dv-shared-ui-form-zuvor-hint
-            [changes]="
-              view.formChanges?.ausbildungMitEinkommenOderErwerbstaetig
-                | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
-                | async
-            "
+            [changes]="view.formChanges?.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
           ></dv-shared-ui-form-zuvor-hint>
-          <button
-            type="button"
-            (click)="ausbildungEinkommenErwerbsDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
-            [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-          >
-            <span class="material-symbols-rounded"> info </span>
-          </button>
         </div>
-        <div class="d-none d-xl-block col-xl-4"></div>
-        <div
-          dvSharedUiInfoDialog
-          [dialogTitleKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.label'"
-          [dialogMessageKey]="'shared.form.partner.ausbildung-mit-einkommen-oder-erwerbstaetig.info'"
-          #ausbildungEinkommenErwerbsDialog="dvSharedUiInfoDialog"
-          class="d-none d-xl-block col-xl-4"
-        ></div>
       </div>
-      @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
-        <div class="row g-4 my-2">
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.partner.jahreseinkommen.label' | transloco }}</mat-label>
-              <input
-                formControlName="jahreseinkommen"
-                matInput
-                type="text"
-                data-testid="form-partner-jahreseinkommen"
-                [maskito]="maskitoMaxNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.jahreseinkommen"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | transloco }}
-              </mat-error>
-            </mat-form-field>
 
-            @if (jahreseinkommenDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-      }
-      @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
-        <div class="row g-4 my-2">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
-            <mat-label>{{ 'shared.form.partner.verpflegungskosten.label' | transloco }}</mat-label>
-            <input
-              formControlName="verpflegungskosten"
-              matInput
-              type="text"
-              data-testid="form-partner-verpflegungskosten"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges?.verpflegungskosten"></mat-hint>
+      <div class="row g-4 my-2">
+        <!-- PENSUM -->
+        @if (showAusbildungspensumSig()) {
+          <mat-form-field dvSharedUiFormField class="col-12 col-xl-4">
+            <mat-label>
+              {{ 'shared.form.ausbildung.pensum.label' | transloco }}
+            </mat-label>
+
+            <mat-select
+              formControlName="ausbildungspensum"
+              data-testid="form-partner-ausbildungspensum"
+              [placeholder]="'shared.form.select.empty' | transloco"
+            >
+              @for (l of ausbildungspensumValues; track $index) {
+                <mat-option [value]="l" [attr.data-testid]="l">
+                  {{ 'shared.form.ausbildung.pensum.' + l | transloco }}
+                </mat-option>
+              }
+            </mat-select>
+
+            <mat-hint
+              *dvZuvorHint="
+                view.formChanges?.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
+              "
+            ></mat-hint>
+
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </mat-form-field>
-        </div>
-      }
-      @if (ausbildungMitEinkommenOderErwerbstaetigSig()) {
-        <div class="row g-4 my-2">
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ 'shared.form.partner.fahrkosten.label' | transloco }}</mat-label>
-              <input
-                formControlName="fahrkosten"
-                matInput
-                type="text"
-                data-testid="form-partner-fahrkosten"
-                [maskito]="maskitoNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.fahrkosten"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | transloco }}
-              </mat-error>
-            </mat-form-field>
+        }
+      </div>
 
-            @if (fahrkostenDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-      }
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
         @if (!view.readonly) {
