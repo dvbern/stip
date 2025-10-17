@@ -202,7 +202,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     ) {
         final var documentsToDelete =
             DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(newFormular, targetFormular);
-
         resetEinnahmenKosten(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);

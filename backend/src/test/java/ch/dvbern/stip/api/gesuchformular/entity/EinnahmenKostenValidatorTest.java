@@ -233,49 +233,50 @@ class EinnahmenKostenValidatorTest {
     @Test
     void vermoegenConstraintValidatorTest() {
         final var validator = new EinnahmenKostenVermoegenRequiredConstraintValidator();
-        GesuchFormular gesuch = prepareGesuchFormularMitEinnahmenKosten();
+        GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
+        EinnahmenKosten einnahmenKosten = gesuchFormular.getEinnahmenKosten();
         // setup
-        gesuch.setTranche(
+        gesuchFormular.setTranche(
             new GesuchTranche().setGesuch(
                 new Gesuch()
                     .setGesuchsperiode(new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(2024)))
             )
         );
-        gesuch.setPersonInAusbildung(
+        gesuchFormular.setPersonInAusbildung(
             (PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG)
                 .setGeburtsdatum(LocalDate.of(1995, 8, 5))
         );
 
         // genau 18 Jahre alt
-        gesuch.setPersonInAusbildung(
+        gesuchFormular.setPersonInAusbildung(
             (PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG)
                 .setGeburtsdatum(LocalDate.of(2023, 12, 31).minusYears(18))
         );
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
-        assertThat(validator.isValid(gesuch, null)).isTrue();
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
-        assertThat(validator.isValid(gesuch, null)).isFalse();
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuchFormular, null)).isTrue();
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        assertThat(validator.isValid(gesuchFormular, null)).isFalse();
 
         // reset value
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         // fast 18 Jahre alt
-        gesuch.setPersonInAusbildung(
+        gesuchFormular.setPersonInAusbildung(
             (PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG)
                 .setGeburtsdatum(LocalDate.of(2024, 1, 1).minusYears(18))
         );
-        assertThat(validator.isValid(gesuch, null)).isTrue();
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
-        assertThat(validator.isValid(gesuch, null)).isFalse();
+        assertThat(validator.isValid(gesuchFormular, null)).isTrue();
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuchFormular, null)).isFalse();
 
         // reset value
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(null));
         // unter 18 Jahre alt
-        gesuch.setPersonInAusbildung(
+        gesuchFormular.setPersonInAusbildung(
             (PersonInAusbildung) new PersonInAusbildung().setZivilstand(Zivilstand.LEDIG)
                 .setGeburtsdatum(LocalDate.of(2023, 12, 31).minusYears(5))
         );
-        assertThat(validator.isValid(gesuch, null)).isTrue();
-        gesuch.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
-        assertThat(validator.isValid(gesuch, null)).isFalse();
+        assertThat(validator.isValid(gesuchFormular, null)).isTrue();
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
+        assertThat(validator.isValid(gesuchFormular, null)).isFalse();
     }
 }
