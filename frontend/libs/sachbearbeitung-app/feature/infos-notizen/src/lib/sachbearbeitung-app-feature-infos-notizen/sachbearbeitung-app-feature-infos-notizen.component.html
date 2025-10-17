@@ -165,7 +165,10 @@
               </button>
             }
 
-            @if (notiz.notizTyp === 'GESUCH_NOTIZ' && permissionStore.rolesMapSig().V0_Sachbearbeiter) {
+            @if (
+              (notiz.notizTyp === 'GESUCH_NOTIZ' || notiz.notizTyp === 'PENDENZ_NOTIZ') &&
+              permissionStore.rolesMapSig().V0_Sachbearbeiter
+            ) {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
