@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.common.validation.GesuchNotizAbgeschlossenOnlySetForPe
 import ch.dvbern.stip.api.common.validation.GesuchNotizAntwortConstraint;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -79,6 +80,7 @@ public class GesuchNotiz extends AbstractMandantEntity {
     @Column(name = "antwort", length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String antwort;
 
-    @Column(name = "abgeschlossen")
+    @Nullable
+    @Column(name = "abgeschlossen", nullable = true)
     private Boolean abgeschlossen;
 }
