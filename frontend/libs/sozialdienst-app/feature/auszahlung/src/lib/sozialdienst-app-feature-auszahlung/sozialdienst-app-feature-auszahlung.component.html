@@ -43,7 +43,8 @@
     </h1>
     <dv-shared-ui-auszahlung
       [auszahlungViewSig]="auszahlungViewSig()"
-      (saveTriggered)="handleSave($event)"
+      (backTriggered)="handleBack('/fall/' + fallId)"
+      (saveTriggered)="handleSave($event, '/fall/' + fallId)"
       (formIsUnsaved)="hasUnsavedChanges = $event"
     ></dv-shared-ui-auszahlung>
   </div>

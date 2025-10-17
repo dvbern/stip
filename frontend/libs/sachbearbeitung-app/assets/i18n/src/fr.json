@@ -633,6 +633,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen": "Frais de logement pour un ménage de {{ anzahl }} personnes",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen": "Soins médicaux de base pour un ménage de {{ anzahl }} personnes",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern": "Impôts cantonaux et communaux",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner": "Impôts cantonaux et communaux du partenaire",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern": "Impôts fédéraux",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner": "Frais de déplacement",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner": "Repas",

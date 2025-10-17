@@ -163,6 +163,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         /* See `vermoegenValidator` bellow */
       ],
     ],
+    steuern: [<string | null>null, []],
     veranlagungsStatus: [<string | null>null, [Validators.required]],
     steuerjahr: [
       <number | null>null,
@@ -287,25 +288,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
     return nettoerwerbseinkommen > 0 ? DokumentTyp.EK_LOHNABRECHNUNG : null;
   }, {});
-  steuernKantonGemeindeSig = computed(() => {
-    const einkommen = fromFormatedNumber(
-      this.nettoerwerbseinkommenSig() ?? '0',
-    );
-
-    // const einkommenPartner =
-    //   this.viewSig().gesuchFormular?.partner?.jahreseinkommen ?? 0;
-
-    // TODO KSTIP-2779: get from new partner einnnahmenKosten tab
-    const einkommenPartner = 0;
-
-    const gesamtEinkommen = einkommen + einkommenPartner;
-
-    if (gesamtEinkommen >= 20_000) {
-      return toFormatedNumber(gesamtEinkommen * 0.1);
-    }
-
-    return 0;
-  });
 
   unterhaltsbeitraegeSig = toSignal(
     this.form.controls.unterhaltsbeitraege.valueChanges,
@@ -432,6 +414,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
+    this.form.controls.steuern.disable();
     effect(() => {
       this.gotReenabledSig();
       const { hasData, hatKinder, warErwachsenSteuerJahr } =
@@ -523,6 +506,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           vermoegen: einnahmenKosten.vermoegen?.toString(),
           veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
           steuerjahr: einnahmenKosten.steuerjahr,
+          steuern: toFormatedNumber(einnahmenKosten.steuern ?? 0),
         });
       }
     });
@@ -619,6 +603,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           vermoegen: fromFormatedNumber(formValues.vermoegen),
           steuerjahr: formValues.steuerjahr,
           veranlagungsStatus: formValues.veranlagungsStatus,
+          steuern: undefined,
         },
       },
     };

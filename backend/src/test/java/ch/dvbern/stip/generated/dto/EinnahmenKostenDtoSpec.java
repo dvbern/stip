@@ -50,7 +50,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN
 })
 @JsonTypeName("EinnahmenKosten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -124,8 +124,8 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
 
-  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
-  private Integer steuernKantonGemeinde;
+  public static final String JSON_PROPERTY_STEUERN = "steuern";
+  private Integer steuern;
 
   public EinnahmenKostenDtoSpec() {
   }
@@ -732,9 +732,9 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+  public EinnahmenKostenDtoSpec steuern(Integer steuern) {
     
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+    this.steuern = steuern;
     return this;
   }
 
@@ -742,21 +742,21 @@ public class EinnahmenKostenDtoSpec {
    * transient and calculated readonly field
    * minimum: 0
    * maximum: 2147483647
-   * @return steuernKantonGemeinde
+   * @return steuern
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
+  public Integer getSteuern() {
+    return steuern;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
   @Override
@@ -791,12 +791,12 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
         Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
-        Objects.equals(this.steuernKantonGemeinde, einnahmenKosten.steuernKantonGemeinde);
+        Objects.equals(this.steuern, einnahmenKosten.steuern);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuern);
   }
 
   @Override
@@ -826,7 +826,7 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("}");
     return sb.toString();
   }

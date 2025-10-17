@@ -6209,7 +6209,7 @@ components:
           type: integer
           minimum: 0
           maximum: 2147483647
-        steuernKantonGemeinde:
+        steuern:
           description: transient and calculated readonly field
           type: integer
           minimum: 0
@@ -7452,7 +7452,8 @@ components:
         - grundbedarf
         - wohnkosten
         - medizinischeGrundversorgung
-        - steuernKantonGemeinde
+        - steuern
+        - steuernPartner
         - fahrkosten
         - fahrkostenPartner
         - verpflegung
@@ -7501,7 +7502,9 @@ components:
           type: integer
         medizinischeGrundversorgung:
           type: integer
-        steuernKantonGemeinde:
+        steuern:
+          type: integer
+        steuernPartner:
           type: integer
         fahrkosten:
           type: integer

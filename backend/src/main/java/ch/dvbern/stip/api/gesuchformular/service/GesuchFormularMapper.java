@@ -125,8 +125,23 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         if (gesuchFormularDto.getEinnahmenKosten() != null) {
             final var ek = gesuchFormularDto.getEinnahmenKosten();
             ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
-            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
+
+            // PiA Steuern
+            final var isQuellenbesteuert =
+                EinnahmenKostenMappingUtil.isQuellenBesteuert(gesuchFormular.getPersonInAusbildung());
+            final var steuern =
+                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKosten(), isQuellenbesteuert);
+            ek.setSteuern(steuern);
         }
+
+        // TODO KSTIP-2785: Update once einnahmenKosternPartner exists
+        // if (gesuchFormularDto.getEinnahmenKostenPartner() != null) {
+        // final var ek = gesuchFormularDto.getEinnahmenKostenPartner();
+        // // Partner Steuern
+        // final var steuern = EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKostenPartner(),
+        // false);
+        // ek.setSteuern(steuern);
+        // }
     }
 
     /**
