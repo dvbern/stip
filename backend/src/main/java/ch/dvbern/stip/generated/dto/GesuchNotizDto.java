@@ -28,7 +28,7 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid LocalDate timestampErstellt;
   private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
   private @Valid String gesuchNummer;
-  private @Valid Boolean pendenzAbgschlossen;
+  private @Valid Boolean pendenzAbgeschlossen;
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
   private @Valid String antwort;
@@ -168,20 +168,20 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
-  public GesuchNotizDto pendenzAbgschlossen(Boolean pendenzAbgschlossen) {
-    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  public GesuchNotizDto pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
     return this;
   }
 
   
-  @JsonProperty("pendenzAbgschlossen")
-  public Boolean getPendenzAbgschlossen() {
-    return pendenzAbgschlossen;
+  @JsonProperty("pendenzAbgeschlossen")
+  public Boolean getPendenzAbgeschlossen() {
+    return pendenzAbgeschlossen;
   }
 
-  @JsonProperty("pendenzAbgschlossen")
-  public void setPendenzAbgschlossen(Boolean pendenzAbgschlossen) {
-    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  @JsonProperty("pendenzAbgeschlossen")
+  public void setPendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
   }
 
   /**
@@ -255,7 +255,7 @@ public class GesuchNotizDto  implements Serializable {
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.gesuchNummer, gesuchNotiz.gesuchNummer) &&
-        Objects.equals(this.pendenzAbgschlossen, gesuchNotiz.pendenzAbgschlossen) &&
+        Objects.equals(this.pendenzAbgeschlossen, gesuchNotiz.pendenzAbgeschlossen) &&
         Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
         Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort);
@@ -263,7 +263,7 @@ public class GesuchNotizDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, gesuchNummer, pendenzAbgschlossen, userMutiert, timestampMutiert, antwort);
+    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, gesuchNummer, pendenzAbgeschlossen, userMutiert, timestampMutiert, antwort);
   }
 
   @Override
@@ -278,7 +278,7 @@ public class GesuchNotizDto  implements Serializable {
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
-    sb.append("    pendenzAbgschlossen: ").append(toIndentedString(pendenzAbgschlossen)).append("\n");
+    sb.append("    pendenzAbgeschlossen: ").append(toIndentedString(pendenzAbgeschlossen)).append("\n");
     sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
     sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");

@@ -23,7 +23,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
-  private @Valid Boolean pendenzAbgschlossen;
+  private @Valid Boolean pendenzAbgeschlossen;
 
   /**
    **/
@@ -84,20 +84,20 @@ public class GesuchNotizUpdateDto  implements Serializable {
 
   /**
    **/
-  public GesuchNotizUpdateDto pendenzAbgschlossen(Boolean pendenzAbgschlossen) {
-    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  public GesuchNotizUpdateDto pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
     return this;
   }
 
   
-  @JsonProperty("pendenzAbgschlossen")
-  public Boolean getPendenzAbgschlossen() {
-    return pendenzAbgschlossen;
+  @JsonProperty("pendenzAbgeschlossen")
+  public Boolean getPendenzAbgeschlossen() {
+    return pendenzAbgeschlossen;
   }
 
-  @JsonProperty("pendenzAbgschlossen")
-  public void setPendenzAbgschlossen(Boolean pendenzAbgschlossen) {
-    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  @JsonProperty("pendenzAbgeschlossen")
+  public void setPendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
   }
 
 
@@ -113,12 +113,12 @@ public class GesuchNotizUpdateDto  implements Serializable {
     return Objects.equals(this.id, gesuchNotizUpdate.id) &&
         Objects.equals(this.betreff, gesuchNotizUpdate.betreff) &&
         Objects.equals(this.text, gesuchNotizUpdate.text) &&
-        Objects.equals(this.pendenzAbgschlossen, gesuchNotizUpdate.pendenzAbgschlossen);
+        Objects.equals(this.pendenzAbgeschlossen, gesuchNotizUpdate.pendenzAbgeschlossen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text, pendenzAbgschlossen);
+    return Objects.hash(id, betreff, text, pendenzAbgeschlossen);
   }
 
   @Override
@@ -129,7 +129,7 @@ public class GesuchNotizUpdateDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
-    sb.append("    pendenzAbgschlossen: ").append(toIndentedString(pendenzAbgschlossen)).append("\n");
+    sb.append("    pendenzAbgeschlossen: ").append(toIndentedString(pendenzAbgeschlossen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

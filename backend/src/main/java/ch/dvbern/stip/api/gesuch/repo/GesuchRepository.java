@@ -95,7 +95,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return getFindAlleQuery()
             .join(gesuchNotiz)
             .on(gesuchNotiz.gesuch.id.eq(gesuch.id))
-            .where(gesuchNotiz.abgeschlossen.not());
+            .where(gesuchNotiz.pendenzAbgeschlossen.not());
     }
 
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {

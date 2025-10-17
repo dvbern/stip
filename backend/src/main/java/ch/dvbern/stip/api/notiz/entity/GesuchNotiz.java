@@ -81,6 +81,6 @@ public class GesuchNotiz extends AbstractMandantEntity {
     private String antwort;
 
     @Nullable
-    @Column(name = "abgeschlossen", nullable = true)
-    private Boolean abgeschlossen;
+    @Column(name = "pendenz_abgeschlossen", nullable = true)
+    private Boolean pendenzAbgeschlossen;
 }

@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchNotizDtoSpec.JSON_PROPERTY_NOTIZ_TYP,
   GesuchNotizDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
   GesuchNotizDtoSpec.JSON_PROPERTY_ANTWORT,
-  GesuchNotizDtoSpec.JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN,
+  GesuchNotizDtoSpec.JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN,
   GesuchNotizDtoSpec.JSON_PROPERTY_ID,
   GesuchNotizDtoSpec.JSON_PROPERTY_BETREFF,
   GesuchNotizDtoSpec.JSON_PROPERTY_TEXT
@@ -66,8 +66,8 @@ public class GesuchNotizDtoSpec {
   public static final String JSON_PROPERTY_ANTWORT = "antwort";
   private String antwort;
 
-  public static final String JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN = "pendenzAbgschlossen";
-  private Boolean pendenzAbgschlossen;
+  public static final String JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN = "pendenzAbgeschlossen";
+  private Boolean pendenzAbgeschlossen;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -263,29 +263,29 @@ public class GesuchNotizDtoSpec {
   }
 
 
-  public GesuchNotizDtoSpec pendenzAbgschlossen(Boolean pendenzAbgschlossen) {
+  public GesuchNotizDtoSpec pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
     
-    this.pendenzAbgschlossen = pendenzAbgschlossen;
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
     return this;
   }
 
    /**
-   * Get pendenzAbgschlossen
-   * @return pendenzAbgschlossen
+   * Get pendenzAbgeschlossen
+   * @return pendenzAbgeschlossen
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN)
+  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Boolean getPendenzAbgschlossen() {
-    return pendenzAbgschlossen;
+  public Boolean getPendenzAbgeschlossen() {
+    return pendenzAbgeschlossen;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGSCHLOSSEN)
+  @JsonProperty(JSON_PROPERTY_PENDENZ_ABGESCHLOSSEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPendenzAbgschlossen(Boolean pendenzAbgschlossen) {
-    this.pendenzAbgschlossen = pendenzAbgschlossen;
+  public void setPendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
   }
 
 
@@ -382,7 +382,7 @@ public class GesuchNotizDtoSpec {
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.gesuchNummer, gesuchNotiz.gesuchNummer) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort) &&
-        Objects.equals(this.pendenzAbgschlossen, gesuchNotiz.pendenzAbgschlossen) &&
+        Objects.equals(this.pendenzAbgeschlossen, gesuchNotiz.pendenzAbgeschlossen) &&
         Objects.equals(this.id, gesuchNotiz.id) &&
         Objects.equals(this.betreff, gesuchNotiz.betreff) &&
         Objects.equals(this.text, gesuchNotiz.text);
@@ -390,7 +390,7 @@ public class GesuchNotizDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, gesuchNummer, antwort, pendenzAbgschlossen, id, betreff, text);
+    return Objects.hash(userErstellt, timestampErstellt, userMutiert, timestampMutiert, notizTyp, gesuchNummer, antwort, pendenzAbgeschlossen, id, betreff, text);
   }
 
   @Override
@@ -404,7 +404,7 @@ public class GesuchNotizDtoSpec {
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");
-    sb.append("    pendenzAbgschlossen: ").append(toIndentedString(pendenzAbgschlossen)).append("\n");
+    sb.append("    pendenzAbgeschlossen: ").append(toIndentedString(pendenzAbgeschlossen)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    betreff: ").append(toIndentedString(betreff)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
