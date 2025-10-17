@@ -48,6 +48,7 @@ import { provideSharedPatternI18nTitleStrategy } from '@dv/shared/pattern/i18n-t
 import { SharedPatternInterceptorDeploymentConfig } from '@dv/shared/pattern/interceptor-deployment-config';
 import { provideSharedPatternRouteReuseStrategyConfigurable } from '@dv/shared/pattern/route-reuse-strategy-configurable';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
+import { SharedUtilRouteHistoryService } from '@dv/shared/util/route-history';
 
 import { TranslocoHttpLoader } from './transloco-loader';
 
@@ -140,6 +141,7 @@ export function provideSharedPatternCore(
       provide: ENVIRONMENT_INITIALIZER,
       multi: true,
       useValue() {
+        inject(SharedUtilRouteHistoryService);
         const store = inject(Store);
         // rework to ngrxOnEffectsInit once available for functional effects
         // https://twitter.com/MarkoStDev/status/1661094873116581901
