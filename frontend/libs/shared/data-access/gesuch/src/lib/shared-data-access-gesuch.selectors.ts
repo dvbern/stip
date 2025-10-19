@@ -144,7 +144,7 @@ const hasPartner = (gesuch: GesuchFormular | null) => {
   );
 };
 
-const selectStepsConfig = createSelector(
+export const selectSharedDataAccessGesuchStepsView = createSelector(
   sharedDataAccessGesuchsFeature.selectCache,
   selectSharedDataAccessBenutzersView,
   selectSharedDataAccessConfigsView,
@@ -174,27 +174,17 @@ const selectStepsConfig = createSelector(
         : []),
     ];
 
-    return addStepsByAppType(
+    const steps = addStepsByAppType(
       appendSteps(baseFormStepsArray, appendStepsConfig),
       rolesMap,
       state.gesuchFormular?.steuerdatenTabs,
       config?.compileTimeConfig,
     );
+    return {
+      steps,
+      stepsFlow: [...steps, RETURN_TO_HOME],
+    };
   },
-);
-
-const selectStepsFlow = createSelector(selectStepsConfig, (steps) => [
-  ...steps,
-  RETURN_TO_HOME,
-]);
-
-export const selectSharedDataAccessGesuchStepsView = createSelector(
-  selectStepsConfig,
-  selectStepsFlow,
-  (steps, stepsFlow) => ({
-    steps,
-    stepsFlow,
-  }),
 );
 
 export const selectSharedDataAccessGesuchSteuerdatenView = createSelector(
