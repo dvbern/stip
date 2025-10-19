@@ -29,6 +29,12 @@
                 class="material-symbols-rounded fs-4"
                 >notes</i
               >
+            } @else if (notiz.notizTyp === 'PENDENZ_NOTIZ') {
+              <i
+                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.PENDENZ_NOTIZ' | transloco"
+                class="material-symbols-rounded fs-4"
+                >pending_actions</i
+              >
             } @else {
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | transloco"
