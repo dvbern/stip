@@ -17,20 +17,23 @@
 
 package ch.dvbern.stip.api.common.validation;
 
-import java.util.Objects;
-
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.Objects;
+
 @ApplicationScoped
 public class GesuchNotizAntwortValidator implements ConstraintValidator<GesuchNotizAntwortConstraint, GesuchNotiz> {
 
     @Override
     public boolean isValid(GesuchNotiz gesuchNotiz, ConstraintValidatorContext context) {
-        return !(gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.GESUCH_NOTIZ)
-        && Objects.nonNull(gesuchNotiz.getAntwort()));
+        if(Objects.nonNull(gesuchNotiz.getAntwort())) {
+            // only a GesuchNotiz of GesuchNotizTyp may have an answer
+            return gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ);
+        }
+        return true;
     }
 }
