@@ -1,4 +1,4 @@
-abschlussDe;ausbildungskategorie;ausbildungsstaetteDe;bildungsrichtung
+abschlussDe;ausbildungskategorie;ausbildungsstaetteDe;Bildungsrichtung (Optional)
 Bachelor;UNIVERSITAET_ETH;Universität Bern;
 Master;UNIVERSITAET_ETH;Universität Bern;
 Bachelor;UNIVERSITAET_ETH;Universität Basel;
@@ -113,6 +113,7 @@ Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Freies Gymnasium Zü
 Anschlussklasse für Mittelschule;BRUECKENANGEBOT;GiBB Bern;ALLGEMEINBILDENDE_SCHULE
 Vorbereitungskurse für HF-Lehrgänge;BRUECKENANGEBOT;Scuola Universitaria Professionale della Svizzera Italiana SUPSI;HOEHERE_BERUFSBILDUNG
 Passerelle Fachhochschule (FH);BRUECKENANGEBOT;Berner Fachhochschule BFH;HOCHSCHULE
+10. Schuljahr;BRUECKENANGEBOT;Haarakademie;BERUFLICHE_GRUNDBILDUNG
 Diplom HF;HOEHERE_FACHSCHULE;Agogis;
 Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;AKAD College;
 Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;AKAD College;HOCHSCHULE
@@ -154,12 +155,13 @@ Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BFB Bildung Form
 Berufsmaturität 2;BERUFSFACHSCHULEN;BFB Bildung Formation Biel;
 Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;BFB Bildung Formation Biel;
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;BFF Bern;BERUFLICHE_GRUNDBILDUNG
-Vorlehre 25 Plus;BERUFSFACHSCHULEN;BFF Bern;
+Vorlehre 25 Plus;BRUECKENANGEBOT;BFF Bern;
 Diplom HF;HOEHERE_FACHSCHULE;BFF Bern;
 Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BFF Bern;
 Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;BFF Bern;
 Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BETRIEBE;BFF Bern;
 Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BETRIEBE;BFF Bern;
+Passerelle Fachhochschule (FH);BRUECKENANGEBOT;Berner Fachhochschule BFH;HOCHSCHULE
 Vorstudienpraktikum;BRUECKENANGEBOT;Berner Fachhochschule BFH;HOCHSCHULE
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;BiCT Der Berufsbildner;BERUFLICHE_GRUNDBILDUNG
 Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;BiCT Der Berufsbildner;
@@ -198,14 +200,11 @@ Berufsmaturität 2;BERUFSFACHSCHULEN;CEJEF - Division technique;
 Diplom HF;HOEHERE_FACHSCHULE;CEJEF - Division technique;
 Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Centre de Formation et de Placement;HOCHSCHULE
 Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Biel Seeland;
-Fachmaturität;FACHMITTELSCHULE;Gymnasium Biel Seeland;
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Didac Bern;BERUFLICHE_GRUNDBILDUNG
 10. Schuljahr;BRUECKENANGEBOT;Didac Bern;BERUFLICHE_GRUNDBILDUNG
 Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Didac Bern;
-Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Schule für Gestaltung und Hochschule für Kunst Edhéa;
-Berufsmaturität 2;BERUFSFACHSCHULEN;Schule für Gestaltung und Hochschule für Kunst Edhéa;
-Bachelor;FACHHOCHSCHULE;Schule für Gestaltung und Hochschule für Kunst Edhéa;
-Master;FACHHOCHSCHULE;Schule für Gestaltung und Hochschule für Kunst Edhéa;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Fachhochschule Westschweiz HES-SO;
+Berufsmaturität 2;BERUFSFACHSCHULEN;Fachhochschule Westschweiz HES-SO;
 Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Ecole Prévôtoise Moutier;HOCHSCHULE
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Ecole Prévôtoise Moutier;BERUFLICHE_GRUNDBILDUNG
 Vorlehre;BRUECKENANGEBOT;CEPV Centre d'enseignement professionnel de Vevey;BERUFLICHE_GRUNDBILDUNG
@@ -225,5 +224,107 @@ Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Collège et Ecole de
 Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;CsBe - ICT Ausbildungszentrum / Computerschule Bern;BERUFLICHE_GRUNDBILDUNG
 Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CsBe - ICT Ausbildungszentrum / Computerschule Bern;
 Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;CsBe - ICT Ausbildungszentrum / Computerschule Bern;
-Test;BRUECKENANGEBOT;CFP Arts, Genf;BERUFLICHE_GRUNDBILDUNG
-Test;BRUECKENANGEBOT;CFP Arts, Genf;HOCHSCHULE
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;CPNV - Centre professionel du Nord vaudois;
+Berufsmaturität 2;BERUFSFACHSCHULEN;CPNV - Centre professionel du Nord vaudois;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Lerbermatt;
+Fachmaturität;FACHMITTELSCHULE;Fachmittelschule FMS Lerbermatt;
+Fachmaturität;FACHMITTELSCHULE;Fachmittelschule FMS Neufeld;
+Fachmaturität;FACHMITTELSCHULE;Fachmittelschule FMS Thun;
+Fachmaturität;FACHMITTELSCHULE;Fachmittelschule Oberaargau;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Feusi Bildungszentrum, Bern;
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Feusi Bildungszentrum, Bern;BERUFLICHE_GRUNDBILDUNG
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Feusi Bildungszentrum, Bern;HOCHSCHULE
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Feusi Bildungszentrum, Bern;
+Berufsmaturität 2;BERUFSFACHSCHULEN;Feusi Bildungszentrum, Bern;
+Diplom HF;HOEHERE_FACHSCHULE;Feusi Bildungszentrum, Bern;
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;Feusi Bildungszentrum, Bern;
+Fachmaturität;FACHMITTELSCHULE;FMS Biel-Seeland;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Freies Gymnasium Bern;
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;Gartenbauschule Hünibach;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Gartenbauschule Hünibach;
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;GIBB Bern;
+Berufsmaturität 2;BERUFSFACHSCHULEN;GIBB Bern;
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;GIBB Bern;
+Diplom HF;HOEHERE_FACHSCHULE;GIBB Bern;
+Eidg. Diplom (höhere Fachprüfung HFP);HOEHERE_FACHPRUEFUNG;GIBB Bern;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnase de Bienne et du Jura bernois;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Gymnase de Bienne et du Jura bernois;
+FMS Ausweis;FACHMITTELSCHULE;Gymnase de Bienne et du Jura bernois;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Gymnase de Bienne et du Jura bernois;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnase pour adultes de Chamblandes;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium  Langenthal;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Biel Seeland;
+Berufsmaturität 2;BERUFSFACHSCHULEN;Gymnasium Biel Seeland;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Gymnasium Biel Seeland;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Burgdorf;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Hofwil, M'buchsee;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Interlaken;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Kirchenfeld, Bern;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Neufeld, Bern;
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;Gymnasium Neufeld, Bern;HOCHSCHULE
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Oberaargau;
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;Gymnasium Thun;
+Diplom HF;HOEHERE_FACHSCHULE;HF für Drogisten/Drogistinnen ESD;
+Diplom HF;HOEHERE_FACHSCHULE;HF für Technik Mittelland AG (hftm);
+Diplom HF;HOEHERE_FACHSCHULE;HF Gesundheit und Soziales HFGS;
+Diplom HF;HOEHERE_FACHSCHULE;Höhere Fachschule Bereich Gesundheit Valais-Wallis;
+Diplom HF;HOEHERE_FACHSCHULE;Höhere Fachschule Holz Biel;
+Eidg. Fachausweis (Berufsprüfung BP);HOEHERE_FACHSCHULE;Höhere Fachschule Holz Biel;
+Diplom HF;HOEHERE_FACHSCHULE;Hotelfachschule Thun;
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;INFORAMA Rütti Zollikofen;
+Berufsmaturität 2;BERUFSFACHSCHULEN;INFORAMA Rütti Zollikofen;
+Diplom HF;HOEHERE_FACHSCHULE;INFORAMA Rütti Zollikofen;
+10. Schuljahr;BRUECKENANGEBOT;Invers, Schule für Gestaltung, Bern;
+Vorkurs;BRUECKENANGEBOT;Invers, Schule für Gestaltung, Bern;BERUFLICHE_GRUNDBILDUNG
+Diplom HF;HOEHERE_FACHSCHULE;IST Höhere Fachschule für Tourismus Zürich;
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;JUVESO;BERUFLICHE_GRUNDBILDUNG
+Vorlehre;BRUECKENANGEBOT;Kantonale Gartenbauschule Oeschberg;BERUFLICHE_GRUNDBILDUNG
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;Kantonale Gartenbauschule Oeschberg;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Kantonale Gartenbauschule Oeschberg;
+Diplom HF;HOEHERE_FACHSCHULE;Kantonale Gartenbauschule Oeschberg;
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;Kantonale Gartenbauschule Oeschberg;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Kantonsschule Baden;
+Diplom HF;HOEHERE_FACHSCHULE;Lufthansa Aviation Training Switzerland AG;
+Diplom HF;HOEHERE_FACHSCHULE;Medi, Zentrum für medizinische Bildung;
+Propädeutikum;BRUECKENANGEBOT;Schule für Gestaltung Bern und Biel;BERUFLICHE_GRUNDBILDUNG
+Vorkurs;BRUECKENANGEBOT;Schule für Gestaltung Bern und Biel;BERUFLICHE_GRUNDBILDUNG
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Schule für Gestaltung Bern und Biel;
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;Schule für Gestaltung Bern und Biel;
+Diplom HF;HOEHERE_FACHSCHULE;Schule für Gestaltung Bern und Biel;
+Eidg. Diplom (höhere Fachprüfung HFP);HOEHERE_FACHPRUEFUNG;Schule für Gestaltung Bern und Biel;
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;Minerva Schulen Bern;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Minerva Schulen Bern;
+Berufsmaturität 2;BERUFSFACHSCHULEN;Minerva Schulen Bern;
+Propädeutikum;BRUECKENANGEBOT;Neue Schule für Gestaltung Bern Campus Muristalden;BERUFLICHE_GRUNDBILDUNG
+Vorkurs;BRUECKENANGEBOT;Neue Schule für Gestaltung Bern Campus Muristalden;BERUFLICHE_GRUNDBILDUNG
+Gymnasiale Maturität (ohne GYM1 im 9. Schuljahr);GYMNASIUM;NMS Bern;
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;NOSS Berufsbildungszentrum;BERUFLICHE_GRUNDBILDUNG
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;NOSS Berufsbildungszentrum;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Schule Holzbildhauerei Brienz;
+Diplom HF;HOEHERE_FACHSCHULE;Schweizerische Hotelfachschule Luzern SHL;
+Diplom HF;HOEHERE_FACHSCHULE;Scuola specializzata superiore in cure infermieristiche (SSSCI);
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;STS Schweizerische Treuhänder Schule Bern;
+Vorlehre;BRUECKENANGEBOT;Technische Fachschule Bern;BERUFLICHE_GRUNDBILDUNG
+Eidg. Berufsattest EBA (Vollzeitschule);BERUFSFACHSCHULEN;Technische Fachschule Bern;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Technische Fachschule Bern;
+Diplom HF;HOEHERE_FACHSCHULE;Technische Fachschule Bern;
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;Technische Fachschule Bern;
+Vorbereitungskurs;BRUECKENANGEBOT;Universität Freiburg;HOCHSCHULE
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Wirtschaftsmittelschule Neuenstadt;
+Berufsmaturität 2;BERUFSFACHSCHULEN;Wirtschaftsmittelschule WMS Biel;
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;Wirtschaftsmittelschule WMS Biel;
+Berufsvorbereitendes Schuljahr;BRUECKENANGEBOT;WKS Bern;BERUFLICHE_GRUNDBILDUNG
+Passerelle Berufsmaturität/Fachmaturität – universitäre Hochschulen;BRUECKENANGEBOT;WKS Bern;HOCHSCHULE
+Eidg. Fähigkeitszeugnis EFZ (Vollzeitschule);BERUFSFACHSCHULEN;WKS Bern;
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;WKS Bern;
+Eidg. Berufsattest EBA (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;WKS Bern;
+Berufsmaturität 2;BERUFSFACHSCHULEN;WKS Bern;
+Diplom HF;HOEHERE_FACHSCHULE;WKS Bern;
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;WKS Bern;
+Eidg. Diplom (höhere Fachprüfung HFP);HOEHERE_FACHPRUEFUNG;WKS Bern;
+Diplom HF;HOEHERE_FACHSCHULE;ESsanté - École supérieure de la santé;
+Diplom HF;HOEHERE_FACHSCHULE;Ecole supérieur technique Mittelland;
+Eidg. Fähigkeitszeugnis EFZ (dual Schule-Lehrbetrieb);BERUFSFACHSCHULEN;CPNE Centre de formation prof. neuchâtelois;
+Berufsmaturität 2;BERUFSFACHSCHULEN;CPNE Centre de formation prof. neuchâtelois;
+Diplom HF;HOEHERE_FACHSCHULE;CPNE Centre de formation prof. neuchâtelois;
+Eidg. Fachausweis (Berufsprüfung BP);BERUFSPRUEFUNG;CPNE Centre de formation prof. neuchâtelois;
