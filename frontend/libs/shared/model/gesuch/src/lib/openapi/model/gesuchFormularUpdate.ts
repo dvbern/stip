@@ -29,6 +29,7 @@ export interface GesuchFormularUpdate {
     lebenslaufItems?: Array<LebenslaufItemUpdate>;
     kinds?: Array<KindUpdate>;
     einnahmenKosten?: EinnahmenKostenUpdate;
+    einnahmenKostenPartner?: EinnahmenKostenUpdate;
     darlehen?: Darlehen;
     steuererklaerung?: Array<SteuererklaerungUpdate>;
 }
