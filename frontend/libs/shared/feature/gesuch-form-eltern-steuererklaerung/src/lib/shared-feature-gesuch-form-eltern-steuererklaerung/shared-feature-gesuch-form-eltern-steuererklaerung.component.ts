@@ -93,6 +93,11 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormSteuererklaerungView,
   );
+  isVerstecktSig = computed(() => {
+    const { gesuchFormular } = this.viewSig();
+    const typ = this.stepSig().type;
+    return typ !== 'FAMILIE' && gesuchFormular?.versteckteEltern?.includes(typ);
+  });
 
   hasUnsavedChanges = false;
 

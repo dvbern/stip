@@ -636,6 +636,7 @@
   "shared.eltern-steuererklaerung.title.VATER": "Weitere Angaben Vater",
   "shared.form.shared.section.einnahmen": "Einnahmen",
 
+  "shared.form.eltern-steuererklaerung.nichtSichtbar": "Daten nicht sichtbar",
   "shared.form.eltern-steuererklaerung.ergaenzungsleistungen.label": "Ergänzungsleistungen (optional)",
   "shared.form.eltern-steuererklaerung.ergaenzungsleistungen.infoTitle": "Ergänzungsleistungen",
   "shared.form.eltern-steuererklaerung.ergaenzungsleistungen.info": "Wenn dieser Elternteil Ergänzungsleistungen (EL) erhält, markieren Sie «Ja».",

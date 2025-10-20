@@ -636,6 +636,7 @@
   "shared.eltern-steuererklaerung.title.VATER": "Autres informations père",
   "shared.form.shared.section.einnahmen": "Revenus",
 
+  "shared.form.eltern-steuererklaerung.nichtSichtbar": "Données non visibles",
   "shared.form.eltern-steuererklaerung.ergaenzungsleistungen.infoTitle": "Contributions à l'aide sociale",
   "shared.form.eltern-steuererklaerung.ergaenzungsleistungen.label": "Prestation complémentaire (en option)",
   "shared.form.eltern-steuererklaerung.ergaenzungsleistungen.info": "Veuillez confirmer par «oui» le versement de prestations complémentaires.",
