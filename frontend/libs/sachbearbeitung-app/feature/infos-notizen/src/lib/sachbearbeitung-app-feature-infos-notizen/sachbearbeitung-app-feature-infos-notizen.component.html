@@ -29,6 +29,13 @@
                 class="material-symbols-rounded fs-4"
                 >notes</i
               >
+            } @else if (notiz.notizTyp === 'PENDENZ_NOTIZ') {
+              <i
+                [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.PENDENZ_NOTIZ' | transloco"
+                class="material-symbols-rounded fs-4"
+                [class.tw:text-dv-red]="!notiz.pendenzAbgeschlossen"
+                >pending_actions</i
+              >
             } @else {
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | transloco"
@@ -104,6 +111,20 @@
                 mat-menu-item
                 type="button"
                 class="btn fw-normal px-2 shadow-none"
+                data-testid="pendenz-notiz-create"
+                (click)="createNotiz('PENDENZ_NOTIZ')"
+              >
+                <div class="d-flex align-items-center gap-2">
+                  <i class="material-symbols-rounded fs-4">pending_actions</i>
+                  <span>{{ 'sachbearbeitung-app.infos.penenzNotiz.erstellen' | transloco }}</span>
+                </div>
+              </button>
+
+              <button
+                *dvHasRoles="['V0_Sachbearbeiter']"
+                mat-menu-item
+                type="button"
+                class="btn fw-normal px-2 shadow-none"
                 data-testid="notiz-create"
                 (click)="createNotiz('GESUCH_NOTIZ')"
               >
@@ -151,7 +172,10 @@
               </button>
             }
 
-            @if (notiz.notizTyp === 'GESUCH_NOTIZ' && permissionStore.rolesMapSig().V0_Sachbearbeiter) {
+            @if (
+              (notiz.notizTyp === 'GESUCH_NOTIZ' || notiz.notizTyp === 'PENDENZ_NOTIZ') &&
+              permissionStore.rolesMapSig().V0_Sachbearbeiter
+            ) {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"

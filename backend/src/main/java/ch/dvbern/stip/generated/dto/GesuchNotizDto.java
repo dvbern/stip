@@ -28,6 +28,7 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid LocalDate timestampErstellt;
   private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
   private @Valid String gesuchNummer;
+  private @Valid Boolean pendenzAbgeschlossen;
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
   private @Valid String antwort;
@@ -167,6 +168,24 @@ public class GesuchNotizDto  implements Serializable {
 
   /**
    **/
+  public GesuchNotizDto pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
+    return this;
+  }
+
+  
+  @JsonProperty("pendenzAbgeschlossen")
+  public Boolean getPendenzAbgeschlossen() {
+    return pendenzAbgeschlossen;
+  }
+
+  @JsonProperty("pendenzAbgeschlossen")
+  public void setPendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+    this.pendenzAbgeschlossen = pendenzAbgeschlossen;
+  }
+
+  /**
+   **/
   public GesuchNotizDto userMutiert(String userMutiert) {
     this.userMutiert = userMutiert;
     return this;
@@ -236,6 +255,7 @@ public class GesuchNotizDto  implements Serializable {
         Objects.equals(this.timestampErstellt, gesuchNotiz.timestampErstellt) &&
         Objects.equals(this.notizTyp, gesuchNotiz.notizTyp) &&
         Objects.equals(this.gesuchNummer, gesuchNotiz.gesuchNummer) &&
+        Objects.equals(this.pendenzAbgeschlossen, gesuchNotiz.pendenzAbgeschlossen) &&
         Objects.equals(this.userMutiert, gesuchNotiz.userMutiert) &&
         Objects.equals(this.timestampMutiert, gesuchNotiz.timestampMutiert) &&
         Objects.equals(this.antwort, gesuchNotiz.antwort);
@@ -243,7 +263,7 @@ public class GesuchNotizDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, gesuchNummer, userMutiert, timestampMutiert, antwort);
+    return Objects.hash(id, betreff, text, userErstellt, timestampErstellt, notizTyp, gesuchNummer, pendenzAbgeschlossen, userMutiert, timestampMutiert, antwort);
   }
 
   @Override
@@ -258,6 +278,7 @@ public class GesuchNotizDto  implements Serializable {
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    notizTyp: ").append(toIndentedString(notizTyp)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
+    sb.append("    pendenzAbgeschlossen: ").append(toIndentedString(pendenzAbgeschlossen)).append("\n");
     sb.append("    userMutiert: ").append(toIndentedString(userMutiert)).append("\n");
     sb.append("    timestampMutiert: ").append(toIndentedString(timestampMutiert)).append("\n");
     sb.append("    antwort: ").append(toIndentedString(antwort)).append("\n");

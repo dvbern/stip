@@ -4883,6 +4883,7 @@ components:
       enum:
         - ALLE_GESUCHE
         - MEINE_GESUCHE
+        - PENDENTE_GESUCHE
         - ALLE_BEARBEITBAR
         - MEINE_BEARBEITBAR
         - ALLE_JURISTISCHE_ABKLAERUNG
@@ -7279,6 +7280,7 @@ components:
           type: string
     GesuchNotizTyp:
       enum:
+        - PENDENZ_NOTIZ
         - GESUCH_NOTIZ
         - JURISTISCHE_NOTIZ
     NotificationType:
@@ -7649,6 +7651,8 @@ components:
           type: string
         text:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
     GesuchNotiz:
       required:
         - userErstellt
@@ -7672,6 +7676,8 @@ components:
           type: string
         antwort:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'
