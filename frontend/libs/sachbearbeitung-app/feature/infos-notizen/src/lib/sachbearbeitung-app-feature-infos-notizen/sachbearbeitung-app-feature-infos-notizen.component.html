@@ -33,6 +33,7 @@
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.PENDENZ_NOTIZ' | transloco"
                 class="material-symbols-rounded fs-4"
+                [class.tw:text-dv-red]="!notiz.pendenzAbgeschlossen"
                 >pending_actions</i
               >
             } @else {
