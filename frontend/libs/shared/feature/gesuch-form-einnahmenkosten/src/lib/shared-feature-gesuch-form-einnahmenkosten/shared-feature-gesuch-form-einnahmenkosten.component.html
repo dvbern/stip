@@ -54,13 +54,13 @@
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
                 <mat-label>{{ t('shared.form.einnahmenkosten.arbeitspensumProzent.label') }}</mat-label>
                 <input
-                  formControlName="arbeitspensumProzent"
+                  [formControl]="form.controls.arbeitspensumProzent"
                   data-testid="form-einnahmen-kosten-arbeitspensumProzent"
                   matInput
                   type="text"
                   [maskito]="maskitoPercent"
                 />
-                <mat-hint *dvZuvorHint="formChanges?.arbeitspensumProzent"></mat-hint>
+                <mat-hint *dvZuvorHint="formChanges?.arbeitspensumProzent; suffix: '%'"></mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ t('shared.form.error.required') }}
                 </mat-error>
@@ -75,7 +75,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.unterhaltsbeitraege.label') }}</mat-label>
               <input
-                formControlName="unterhaltsbeitraege"
+                [formControl]="form.controls.unterhaltsbeitraege"
                 data-testid="form-einnahmen-kosten-unterhaltsbeitraege"
                 matInput
                 type="text"
@@ -242,7 +242,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.einnahmenBGSA.label') }}</mat-label>
               <input
-                formControlName="einnahmenBGSA"
+                [formControl]="form.controls.einnahmenBGSA"
                 data-testid="form-einnahmen-kosten-einnahmenBGSA"
                 matInput
                 type="text"
@@ -270,7 +270,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.taggelderAHVIV.label') }}</mat-label>
               <input
-                formControlName="taggelderAHVIV"
+                [formControl]="form.controls.taggelderAHVIV"
                 data-testid="form-einnahmen-kosten-taggelderAHVIV"
                 matInput
                 type="text"
@@ -297,7 +297,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>{{ t('shared.form.einnahmenkosten.andereEinnahmen.label') }}</mat-label>
               <input
-                formControlName="andereEinnahmen"
+                [formControl]="form.controls.andereEinnahmen"
                 data-testid="form-einnahmen-kosten-andereEinnahmen"
                 matInput
                 type="text"
@@ -498,7 +498,7 @@
               dvSharedUiFormField
             >
               <mat-label>{{ t('shared.form.einnahmenkosten.wgWohnend.label') }}</mat-label>
-              <mat-radio-button data-testid="yes" [value]="true"> {{ t('shared.form.radio.yes') }}</mat-radio-button>
+              <mat-radio-button data-testid="yes" [value]="true">{{ t('shared.form.radio.yes') }}</mat-radio-button>
               <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
               <dv-shared-ui-form-zuvor-hint
                 [changes]="formChanges?.wgWohnend | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
@@ -636,22 +636,16 @@
         <!-- STEUERN KANTON / GEMEINDE -->
         <div class="row g-4 readonly">
           <mat-form-field class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ t('shared.form.einnahmenkosten.steuernKantonGemeinde.label') }}</mat-label>
+            <mat-label>{{ t('shared.form.einnahmenkosten.steuern.label') }}</mat-label>
             <input
-              data-testid="form-einnahmen-kosten-steuernKantonGemeinde"
+              [formControl]="form.controls.steuern"
+              data-testid="form-einnahmen-kosten-steuern"
               matInput
               type="text"
-              [maskito]="maskitoNumber"
-              disabled
-              [value]="steuernKantonGemeindeSig()"
             />
-            <mat-hint *dvZuvorHint="formChanges?.steuernKantonGemeinde"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges?.steuern"></mat-hint>
           </mat-form-field>
         </div>
-
-        <!-- <h3 class="pt-5 mb-4">
-          {{ t('shared.form.einnahmenkosten.general.title') }}
-        </h3> -->
 
         <!-- Buttons -->
         <dv-shared-ui-step-form-buttons>

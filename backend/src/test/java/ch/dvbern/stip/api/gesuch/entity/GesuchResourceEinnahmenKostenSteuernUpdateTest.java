@@ -131,7 +131,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .as(GesuchWithChangesDtoSpec.class);
         Integer value = (int) (20001 * 0.1);
         assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuernKantonGemeinde(),
+            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
             is(value)
         );
     }

@@ -569,6 +569,7 @@ public class TestUtil {
                             new GesuchFormular()
                                 .setPersonInAusbildung(
                                     new PersonInAusbildung()
+                                        .setNationalitaet(LandGenerator.initSwitzerland())
                                 )
                         )
                         .setId(trancheUuid)

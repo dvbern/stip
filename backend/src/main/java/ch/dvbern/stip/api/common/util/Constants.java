@@ -29,6 +29,9 @@ public final class Constants {
     public static final int MAX_AGE_AUSBILDUNGSBEGIN = 35;
     public static final int FALL_GESUCH_NUMBER_GEN_SEED = 184932;
 
+    public static final float CH_STEUERN_PERCENTAGE = 0.1f;
+    public static final int CH_STEUERN_EINKOMMEN_LIMIT = 20000;
+
     public static final String DVB_MAILBUCKET_MAIL = "stip@mailbucket.dvbern.ch";
     public static final String VERANLAGUNGSSTATUS_DEFAULT_VALUE = "Manuell";
 

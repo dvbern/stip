@@ -11,7 +11,7 @@
   <div class="row g-4 my-2">
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
-      <input matInput dvMaxLength formControlName="nachname" data-testid="form-kind-nachname" type="text" />
+      <input matInput dvMaxLength [formControl]="form.controls.nachname" data-testid="form-kind-nachname" type="text" />
       <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -19,7 +19,7 @@
     </mat-form-field>
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
-      <input matInput dvMaxLength formControlName="vorname" data-testid="form-kind-vorname" type="text" />
+      <input matInput dvMaxLength [formControl]="form.controls.vorname" data-testid="form-kind-vorname" type="text" />
       <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -36,7 +36,7 @@
         placeholder="dd.mm.yyyy"
         matInput
         [dvMaxLength]="'small'"
-        formControlName="geburtsdatum"
+        [formControl]="form.controls.geburtsdatum"
         data-testid="form-kind-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
@@ -63,7 +63,7 @@
         type="text"
         data-testid="form-kind-wohnsitzAnteilPia"
         matInput
-        formControlName="wohnsitzAnteilPia"
+        [formControl]="form.controls.wohnsitzAnteilPia"
         [maskito]="maskitoOptionsPercent"
       />
       <mat-hint *dvZuvorHint="changes?.wohnsitzAnteilPia | dvTranslateChange: '$VALUE%' | async"></mat-hint>
@@ -85,7 +85,7 @@
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
       <mat-radio-group
         class="d-flex flex-column"
-        formControlName="ausbildungssituation"
+        [formControl]="form.controls.ausbildungssituation"
         data-testid="form-kind-ausbildungssituation"
         dvSharedUiFormField
       >
@@ -118,7 +118,7 @@
         <input
           matInput
           [maskito]="maskitoNumber"
-          formControlName="unterhaltsbeitraege"
+          [formControl]="form.controls.unterhaltsbeitraege"
           data-testid="form-kind-unterhaltsbeitraege"
           type="text"
         />
@@ -142,7 +142,7 @@
         <input
           matInput
           [maskito]="maskitoNumber"
-          formControlName="kinderUndAusbildungszulagen"
+          [formControl]="form.controls.kinderUndAusbildungszulagen"
           data-testid="form-kind-kinderUndAusbildungszulagen"
           type="text"
         />
@@ -162,7 +162,13 @@
     <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
         <mat-label>{{ 'shared.form.kinder.renten.label' | transloco }}</mat-label>
-        <input matInput [maskito]="maskitoNumber" formControlName="renten" data-testid="form-kind-renten" type="text" />
+        <input
+          matInput
+          [maskito]="maskitoNumber"
+          [formControl]="form.controls.renten"
+          data-testid="form-kind-renten"
+          type="text"
+        />
         <mat-hint *dvZuvorHint="changes?.renten"></mat-hint>
       </mat-form-field>
       @if (rentenDocumentSig(); as options) {
@@ -180,7 +186,7 @@
         <input
           matInput
           [maskito]="maskitoNumber"
-          formControlName="ergaenzungsleistungen"
+          [formControl]="form.controls.ergaenzungsleistungen"
           data-testid="form-kind-ergaenzungsleistungen"
           type="text"
         />
@@ -203,7 +209,7 @@
         <input
           matInput
           [maskito]="maskitoNumber"
-          formControlName="andereEinnahmen"
+          [formControl]="form.controls.andereEinnahmen"
           data-testid="form-kind-andereEinnahmen"
           type="text"
         />
