@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import ch.dvbern.stip.api.gesuchformular.validation.AuszahlungPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenPageValidation;
@@ -121,14 +122,29 @@ import org.hibernate.envers.Audited;
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
 )
-
+@EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
+)
 @EinnahmenKostenZulagenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenZulagenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
@@ -149,19 +165,33 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten"
 )
-
 @EinnahmenKostenBetreuungskostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
 )
-
+@EinnahmenKostenBetreuungskostenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
+)
 @EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
     groups = {
         Default.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
+    groups = {
+        Default.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @SteuerdatenSteuerjahrInPastOrCurrentConstraint(
     groups = {
@@ -185,7 +215,15 @@ import org.hibernate.envers.Audited;
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenVermoegenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @LebenslaufAusbildungUeberschneidenConstraint(
     groups = {

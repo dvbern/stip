@@ -18,16 +18,19 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenUnterhaltsbeitraegeRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint, GesuchFormular> {
     private String property = "";
+    protected EinnahmenKostenType einnahmenKostenType;
 
     @Override
     public void initialize(EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
+        einnahmenKostenType = constraintAnnotation.einnahmenKostenType();
     }
 
     @Override
@@ -35,13 +38,14 @@ public class EinnahmenKostenUnterhaltsbeitraegeRequiredConstraintValidator
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext
     ) {
+        final var einnahmenKosten = einnahmenKostenType.getProducer().apply(gesuchFormular);
         if (gesuchFormular.getFamiliensituation() == null || gesuchFormular.getEinnahmenKosten() == null) {
             return true;
         }
 
         final var alimentenregelung = gesuchFormular.getFamiliensituation().getGerichtlicheAlimentenregelung();
         if (alimentenregelung != null && alimentenregelung) {
-            if (gesuchFormular.getEinnahmenKosten().getUnterhaltsbeitraege() == null) {
+            if (einnahmenKosten.getUnterhaltsbeitraege() == null) {
                 return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
             } else {
                 return true;

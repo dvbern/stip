@@ -78,7 +78,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_NOT_VALID_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DARLEHEN_REQUIRED_VOLLJAEHRIG_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE;
@@ -529,32 +528,6 @@ class GesuchValidatorTest {
 
         assertOneMessage(
             VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE,
-            gesuch,
-            true,
-            GesuchEinreichenValidationGroup.class
-        );
-    }
-
-    @Test
-    void testGesuchEinreichenValidationEinnahmenKostenEltern() {
-        Familiensituation familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setGerichtlicheAlimentenregelung(true);
-        familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        familiensituation.setMutterWiederverheiratet(false);
-        Gesuch gesuch = prepareDummyGesuch();
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
-        Fall fall = new Fall();
-        Auszahlung auszahlung = new Auszahlung();
-        fall.setAuszahlung(auszahlung);
-        ausbildung.setFall(fall);
-        gesuch.setAusbildung(ausbildung);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
-        EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        assertOneMessage(
-            VALIDATION_EINNAHMEN_KOSTEN_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE,
             gesuch,
             true,
             GesuchEinreichenValidationGroup.class

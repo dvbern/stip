@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -25,19 +26,26 @@ import jakarta.validation.ConstraintValidatorContext;
 public class EinnahmenKostenVermoegenRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenVermoegenRequiredConstraint, GesuchFormular> {
     private String property = "";
+    protected EinnahmenKostenType einnahmenKostenTyp;
 
     @Override
     public void initialize(EinnahmenKostenVermoegenRequiredConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
+        einnahmenKostenTyp = constraintAnnotation.einnahmenKostenType();
     }
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext context) {
-        if (gesuchFormular.getEinnahmenKosten() == null) {
+        final var einnahmenKosten = einnahmenKostenTyp.getProducer().apply(gesuchFormular);
+        if (einnahmenKosten == null) {
             return true;
         }
-        final var hasVermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen() != null;
-        if (GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)) {
+        final var hasVermoegen = einnahmenKosten.getVermoegen() != null;
+        final boolean personOfEinnahmeKostenWasOlderThan18 =
+            einnahmenKostenTyp.equals(EinnahmenKostenType.GESUCHSTELLER)
+                ? GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)
+                : GesuchFormularCalculationUtil.wasPartnerOlderThan18(gesuchFormular);
+        if (personOfEinnahmeKostenWasOlderThan18) {
             if (!hasVermoegen) {
                 return GesuchValidatorUtil.addProperty(
                     context,

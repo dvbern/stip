@@ -17,12 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -32,6 +27,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EinnahmenKostenUnterhaltsbeitraegeRequiredConstraintValidator.class)
 @Documented
+@Repeatable(EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint.List.class)
 public @interface EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint {
 
     String message() default VALIDATION_EINNAHMEN_KOSTEN_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE;
@@ -40,5 +36,14 @@ public @interface EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint {
 
     Class<? extends Payload>[] payload() default {};
 
+    EinnahmenKostenType einnahmenKostenType();
+
     String property() default "";
+
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @interface List {
+        EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint[] value();
+    }
 }
