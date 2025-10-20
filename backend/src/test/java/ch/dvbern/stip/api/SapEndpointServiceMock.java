@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerHEADER;
@@ -38,7 +39,6 @@ import ch.dvbern.stip.api.sap.service.BusinessPartnerReadMapper;
 import ch.dvbern.stip.api.sap.service.GeneralMapper;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.service.VendorPostingCreateMapper;
-import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 
@@ -156,7 +156,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerCreateResponse createBusinessPartner(
-        Zahlungsverbindung zahlungsverbindung,
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerCreateResponse;
@@ -164,7 +164,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerChangeResponse changeBusinessPartner(
-        Zahlungsverbindung zahlungsverbindung,
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerChangeResponse;
@@ -172,7 +172,6 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerReadResponse readBusinessPartner(
-        Zahlungsverbindung zahlungsverbindung,
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerReadResponse;
@@ -185,7 +184,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public VendorPostingCreateResponse createVendorPosting(
-        Zahlungsverbindung zahlungsverbindung,
+        Fall fall,
         Integer amount,
         BigDecimal sapDeliveryId,
         String qrIbanAddlInfo,

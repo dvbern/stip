@@ -46,16 +46,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GesuchRepository implements BaseRepository<Gesuch> {
     private final EntityManager entityManager;
+    private final QGesuch Q_GESUCH = QGesuch.gesuch;
 
     public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
-        final var gesuch = QGesuch.gesuch;
         final var ausbildung = QAusbildung.ausbildung;
 
         final var query = queryFactory
-            .selectFrom(gesuch)
+            .selectFrom(Q_GESUCH)
             .join(ausbildung)
-            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .on(Q_GESUCH.ausbildung.id.eq(ausbildung.id))
             .where(ausbildung.fall.gesuchsteller.id.eq(gesuchstellerId));
         return query.stream();
     }
@@ -70,7 +70,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public JPAQuery<Gesuch> getFindAlleQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
-        return new JPAQueryFactory(entityManager).selectFrom(QGesuch.gesuch);
+        return new JPAQueryFactory(entityManager).selectFrom(Q_GESUCH);
     }
 
     public JPAQuery<Gesuch> getFindAlleJurBearbeitungQuery() {
@@ -128,18 +128,16 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         final JPAQuery<Gesuch> query,
         final Gesuchstatus... toInclude
     ) {
-        final var gesuch = QGesuch.gesuch;
-        query.where(gesuch.gesuchStatus.in(toInclude));
+        query.where(Q_GESUCH.gesuchStatus.in(toInclude));
         return query;
     }
 
     private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
-        final var gesuch = QGesuch.gesuch;
         final var ausbildung = QAusbildung.ausbildung;
         final var zuordnung = QZuordnung.zuordnung;
 
         query.join(ausbildung)
-            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .on(Q_GESUCH.ausbildung.id.eq(ausbildung.id))
             .join(zuordnung)
             .on(ausbildung.fall.id.eq(zuordnung.fall.id))
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
@@ -149,47 +147,45 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Stream<Gesuch> findAllForFall(UUID fallId) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuch = QGesuch.gesuch;
         final var ausbildung = QAusbildung.ausbildung;
 
         var query = queryFactory
-            .selectFrom(gesuch)
+            .selectFrom(Q_GESUCH)
             .join(ausbildung)
-            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .on(Q_GESUCH.ausbildung.id.eq(ausbildung.id))
             .where(ausbildung.fall.id.eq(fallId));
         return query.stream();
     }
 
     public Stream<Gesuch> findAllNewestWithPia() {
-        final var gesuch = QGesuch.gesuch;
         final var tranche = QGesuchTranche.gesuchTranche;
         final var formular = QGesuchFormular.gesuchFormular;
         final var pia = QPersonInAusbildung.personInAusbildung;
         final var gesuchsperiode = QGesuchsperiode.gesuchsperiode;
 
         return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuch)
+            .selectFrom(Q_GESUCH)
             .join(tranche)
-            .on(tranche.gesuch.id.eq(gesuch.id))
+            .on(tranche.gesuch.id.eq(Q_GESUCH.id))
             .join(formular)
             .on(formular.tranche.id.eq(tranche.id))
             .join(pia)
             .on(formular.personInAusbildung.id.eq(pia.id))
             .join(gesuchsperiode)
-            .on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
+            .on(Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiode.id))
             .where(
-                gesuch.id.in(
+                Q_GESUCH.id.in(
                     JPAExpressions
-                        .select(gesuch.id)
-                        .from(gesuch)
+                        .select(Q_GESUCH.id)
+                        .from(Q_GESUCH)
                         .join(tranche)
-                        .on(tranche.gesuch.id.eq(gesuch.id))
+                        .on(tranche.gesuch.id.eq(Q_GESUCH.id))
                         .join(formular)
                         .on(formular.tranche.id.eq(tranche.id))
                         .join(pia)
                         .on(formular.personInAusbildung.id.eq(pia.id))
                         .join(gesuchsperiode)
-                        .on(gesuch.gesuchsperiode.id.eq(gesuchsperiode.id))
+                        .on(Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiode.id))
                         .limit(1)
                 )
             )
@@ -199,12 +195,11 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public Stream<Gesuch> findGesucheBySvNummer(String svNummer) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var gesuch = QGesuch.gesuch;
         var gesuchTranche = QGesuchTranche.gesuchTranche;
         var gesuchFormular = QGesuchFormular.gesuchFormular;
         var personInAubsilung = QPersonInAusbildung.personInAusbildung;
 
-        return queryFactory.select(gesuch)
+        return queryFactory.select(Q_GESUCH)
             .distinct()
             .from(gesuchTranche)
             .join(gesuchTranche.gesuchFormular, gesuchFormular)
@@ -214,13 +209,12 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Gesuch requireGesuchByTrancheId(final UUID gesuchTrancheId) {
-        final var gesuch = QGesuch.gesuch;
         final var gesuchTranche = QGesuchTranche.gesuchTranche;
 
         return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuch)
+            .selectFrom(Q_GESUCH)
             .join(gesuchTranche)
-            .on(gesuchTranche.gesuch.id.eq(gesuch.id))
+            .on(gesuchTranche.gesuch.id.eq(Q_GESUCH.id))
             .where(gesuchTranche.id.eq(gesuchTrancheId))
             .stream()
             .findFirst()
@@ -236,7 +230,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Gesuch requireGesuchForDokument(final UUID dokumentId) {
-        final var gesuch = QGesuch.gesuch;
         final var gesuchTranche = QGesuchTranche.gesuchTranche;
         final var gesuchDokument = QGesuchDokument.gesuchDokument;
         final var dokument = QDokument.dokument;
@@ -249,9 +242,9 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         // It is referentially possible that one Dokument could be attached to multiple Gesuche
         // but our business logic forbids that
         return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuch)
+            .selectFrom(Q_GESUCH)
             .join(gesuchTranche)
-            .on(gesuchTranche.gesuch.id.eq(gesuch.id))
+            .on(gesuchTranche.gesuch.id.eq(Q_GESUCH.id))
             .join(gesuchDokument)
             .on(gesuchDokument.gesuchTranche.id.eq(gesuchTranche.id))
             .where(gesuchDokument.dokumente.any().in(subQuery))
@@ -261,13 +254,12 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Gesuch findGesuchByAuszahlungId(final UUID auszahlungId) {
-        final var gesuch = QGesuch.gesuch;
         final var fall = QFall.fall;
         // join is necessary as querydsl defaults to max 4 levels of depth
         return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuch)
+            .selectFrom(Q_GESUCH)
             .join(fall)
-            .on(fall.id.eq(gesuch.ausbildung.fall.id))
+            .on(fall.id.eq(Q_GESUCH.ausbildung.fall.id))
             .where(fall.auszahlung.id.eq(auszahlungId))
             .stream()
             .findFirst()
@@ -275,20 +267,21 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public Stream<Gesuch> findGesuchWithPendingSapAction() {
-        final var gesuch = QGesuch.gesuch;
-
         return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuch)
-            .where(gesuch.pendingSapAction.isNotNull())
+            .selectFrom(Q_GESUCH)
+            .where(Q_GESUCH.pendingSapAction.isNotNull())
             .stream();
     }
 
-    public List<Gesuch> findGesuchsByGesuchsperiodeId(final UUID gesuchsperiodeId) {
-        final var gesuch = QGesuch.gesuch;
-
+    public List<Gesuch> findGesuchsByGesuchsperiodeIdWithPendingRemainderPayment(final UUID gesuchsperiodeId) {
         return new JPAQueryFactory(entityManager)
-            .selectFrom(gesuch)
-            .where(gesuch.gesuchsperiode.id.eq(gesuchsperiodeId))
+            .selectFrom(Q_GESUCH)
+            .where(
+                Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiodeId)
+                    .and(
+                        Q_GESUCH.remainderPaymentExecuted.not()
+                    )
+            )
             .stream()
             .toList();
     }

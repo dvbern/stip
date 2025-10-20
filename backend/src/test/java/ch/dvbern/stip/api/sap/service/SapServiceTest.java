@@ -390,13 +390,12 @@ public class SapServiceTest {
                 .setZweiterAuszahlungsterminMonat(12)
         );
         final var zahlungsverbindung = new Zahlungsverbindung()
-            .setSapBusinessPartnerId(123)
             .setAdresse(new Adresse().setLand(new Land()));
         gesuch.setAusbildung(
             new Ausbildung()
                 .setFall(
                     new Fall().setAuszahlung(
-                        new Auszahlung().setZahlungsverbindung(zahlungsverbindung)
+                        new Auszahlung().setZahlungsverbindung(zahlungsverbindung).setSapBusinessPartnerId(123)
                     )
                 )
         );

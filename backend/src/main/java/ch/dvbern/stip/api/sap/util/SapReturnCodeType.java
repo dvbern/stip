@@ -41,7 +41,7 @@ public enum SapReturnCodeType {
         };
     }
 
-    public static void assertSuccess(final String raw) {
+    public static void assertSuccess(final String raw) throws BadRequestException {
         if (!isSuccess(raw)) {
             throw new BadRequestException();
         }

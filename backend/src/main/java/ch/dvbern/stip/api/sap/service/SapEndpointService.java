@@ -29,6 +29,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
@@ -45,7 +46,6 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.OsVendorPostingCreateServ
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.sap.util.SOAPLoggingHandler;
-import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
@@ -110,7 +110,7 @@ public class SapEndpointService {
     }
 
     public BusinessPartnerCreateResponse createBusinessPartner(
-        Zahlungsverbindung zahlungsverbindung,
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         final OsBusinessPartnerCreateService businessPartnerCreateService = new OsBusinessPartnerCreateService();
@@ -119,13 +119,13 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
-            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, zahlungsverbindung);
+            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, fall);
         businessPartnerCreateRequest.getBUSINESSPARTNER().setHEADER(businessPartnerCreateMapper.getHeader());
         return port.osBusinessPartnerCreate(businessPartnerCreateRequest);
     }
 
     public BusinessPartnerChangeResponse changeBusinessPartner(
-        Zahlungsverbindung zahlungsverbindung,
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
@@ -134,14 +134,11 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
-            businessPartnerChangeMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, zahlungsverbindung);
-        businessPartnerChangeRequest.getBUSINESSPARTNER()
-            .setHEADER(businessPartnerChangeMapper.getHeader(zahlungsverbindung.getSapBusinessPartnerId()));
+            businessPartnerChangeMapper.toBusinessPartnerChangeRequest(systemid, sapDeliveryId, fall);
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 
     public BusinessPartnerReadResponse readBusinessPartner(
-        Zahlungsverbindung zahlungsverbindung,
         BigDecimal sapDeliveryId
     ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
@@ -150,7 +147,7 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
-            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, sapDeliveryId, zahlungsverbindung);
+            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, sapDeliveryId);
         return port.osBusinessPartnerRead(businessPartnerReadRequest);
     }
 
@@ -169,7 +166,7 @@ public class SapEndpointService {
     }
 
     public VendorPostingCreateResponse createVendorPosting(
-        Zahlungsverbindung zahlungsverbindung,
+        Fall fall,
         Integer amount,
         BigDecimal sapDeliveryId,
         String qrIbanAddlInfo,
@@ -182,7 +179,7 @@ public class SapEndpointService {
 
         final VendorPostingCreateRequest vendorPostingCreateRequest =
             vendorPostingCreateMapper
-                .toVendorPostingCreateRequest(systemid, sapDeliveryId, amount, qrIbanAddlInfo, zahlungsverbindung);
+                .toVendorPostingCreateRequest(systemid, sapDeliveryId, amount, qrIbanAddlInfo, fall);
 
         XMLGregorianCalendar docDate;
         XMLGregorianCalendar pstngDate;

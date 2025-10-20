@@ -35,6 +35,7 @@ public class SapPendingAuszahlungScheduledTask {
 
     private void run() {
         try {
+            LOG.info("processPendingCreateVendorPostingActions from scheduled task");
             sapService.processPendingCreateVendorPostingActions();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
