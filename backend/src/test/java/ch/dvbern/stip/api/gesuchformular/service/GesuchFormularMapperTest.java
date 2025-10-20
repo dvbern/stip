@@ -149,14 +149,19 @@ class GesuchFormularMapperTest {
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setWohnkosten(1);
 
+        final var updateParnterEinnahmeKosten = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setWohnkosten(1);
+
         final var update = new GesuchFormularUpdateDto();
         update.setPersonInAusbildung(updatePia);
         update.setEinnahmenKosten(updateEinnahmenKosten);
+        update.setEinnahmenKostenPartner(updateParnterEinnahmeKosten);
 
         final var mapper = createMapper();
         mapper.resetEinnahmenKosten(update, target);
 
         assertThat(update.getEinnahmenKosten().getWohnkosten(), is(nullValue()));
+        assertThat(update.getEinnahmenKostenPartner().getWohnkosten(), is(nullValue()));
     }
 
     @Test
@@ -169,9 +174,13 @@ class GesuchFormularMapperTest {
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setUnterhaltsbeitraege(1);
 
+        final var updateEinnahmenKostenPartner = new EinnahmenKostenUpdateDto();
+        updateEinnahmenKosten.setUnterhaltsbeitraege(1);
+
         final var update = new GesuchFormularUpdateDto();
         update.setFamiliensituation(updateFamsit);
         update.setEinnahmenKosten(updateEinnahmenKosten);
+        update.setEinnahmenKostenPartner(updateEinnahmenKostenPartner);
 
         final var mapper = createMapper();
         final var target = initTarget();
@@ -186,6 +195,7 @@ class GesuchFormularMapperTest {
 
         // Assert
         assertThat(update.getEinnahmenKosten().getUnterhaltsbeitraege(), is(nullValue()));
+        assertThat(update.getEinnahmenKostenPartner().getUnterhaltsbeitraege(), is(nullValue()));
     }
 
     @Test
