@@ -21,54 +21,54 @@
 
         <div class="row g-4">
           <!-- NETTOERWERBSEINKOMMEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.label') }}</mat-label>
-              <input
-                [formControl]="form.controls.nettoerwerbseinkommen"
-                data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
-                matInput
-                type="text"
-                [maskito]="maskitoMaxNumber"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges?.nettoerwerbseinkommen"></mat-hint>
-              <mat-hint>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.info') }}</mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ t('shared.form.error.required') }}
-              </mat-error>
-            </mat-form-field>
-
-            @if (nettoerwerbseinkommenDocumentSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
-            }
-          </div>
-        </div>
-        @if (!hiddenFieldsSetSig().has(form.controls.arbeitspensumProzent)) {
-          <div class="row g-4">
-            <!-- ARBEITSPENSUM PROZENT -->
-            <div class="d-flex col-12 col-md-6 col-xl-6">
+          <div class="d-flex gap-2 align-content-center tw:flex-wrap col-12 col-md-6 col-xl-6">
+            <div class="d-flex gap-2 flex-grow-1">
               <mat-form-field dvSharedUiFormField class="flex-grow-1">
-                <mat-label>{{ t('shared.form.einnahmenkosten.arbeitspensumProzent.label') }}</mat-label>
+                <mat-label>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.label') }}</mat-label>
                 <input
-                  [formControl]="form.controls.arbeitspensumProzent"
-                  data-testid="form-einnahmen-kosten-arbeitspensumProzent"
+                  [formControl]="form.controls.nettoerwerbseinkommen"
+                  data-testid="form-einnahmen-kosten-nettoerwerbseinkommen"
                   matInput
                   type="text"
-                  [maskito]="maskitoPercent"
+                  [maskito]="maskitoMaxNumber"
                 />
-                <mat-hint
-                  *dvZuvorHint="view.formChanges?.arbeitspensumProzent | dvTranslateChange: '$VALUE%' | async"
-                ></mat-hint>
+                <mat-hint *dvZuvorHint="view.formChanges?.nettoerwerbseinkommen"></mat-hint>
+                <mat-hint>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.info') }}</mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ t('shared.form.error.required') }}
                 </mat-error>
               </mat-form-field>
+
+              @if (nettoerwerbseinkommenDocumentSig(); as options) {
+                <dv-shared-pattern-document-upload
+                  class="flex-shrink-1"
+                  [optionsSig]="options"
+                ></dv-shared-pattern-document-upload>
+              }
             </div>
+            @if (!hiddenFieldsSetSig().has(form.controls.arbeitspensumProzent)) {
+              <!-- ARBEITSPENSUM PROZENT -->
+              <div class="d-flex">
+                <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                  <mat-label>{{ t('shared.form.einnahmenkosten.arbeitspensumProzent.label') }}</mat-label>
+                  <input
+                    [formControl]="form.controls.arbeitspensumProzent"
+                    data-testid="form-einnahmen-kosten-arbeitspensumProzent"
+                    matInput
+                    type="text"
+                    [maskito]="maskitoPercent"
+                  />
+                  <mat-hint
+                    *dvZuvorHint="view.formChanges?.arbeitspensumProzent | dvTranslateChange: '$VALUE%' | async"
+                  ></mat-hint>
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ t('shared.form.error.required') }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            }
           </div>
-        }
+        </div>
 
         <div class="row g-4">
           <!-- UNTERHALTSBEITRÄGE -->
