@@ -120,6 +120,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.familiensituation.wohnsituation.message}";
     public static final String VALIDATION_EINNAHME_KOSTEN_ANSTELLUNGSGRAD_MESSAGE =
         "{jakarta.validation.constraints.einnahmen_kosten.anstellungsgrad.message}";
+    public static final String VALIDATION_EINNAHME_KOSTEN_VERPFLEGUNGSKOSTEN_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.einnahmen_kosten.verpflegungskosten.message}";
     public static final String VALIDATION_PARTNER_AUSBILDUNGS_PENSUM_MESSAGE =
         "{jakarta.validation.constraints.partner.ausbildungspensum.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
@@ -156,6 +158,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.steuerdaten.tab.invalid.message}";
     public static final String VALIDATION_LEBENSLAUF_AUSBILDUNG_UEBERSCHNEIDEN_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.ausbildung.ueberschneiden.message}";
+    public static final String VALIDATION_EINNAHMEN_KOSTEN_PARTNER_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.einnahmen.kosten.partner.required.message}";
     public static final String VALIDATION_PERSONS_AHV_NUMBER_UNIQUENESS_MESSAGE =
         "{jakarta.validation.constraints.sv.uniqueness.message}";
     public static final String VALIDATION_PARTNER_NULL_REQUIRED_MESSAGE =

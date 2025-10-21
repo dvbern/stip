@@ -44,7 +44,12 @@ public class PartnerUpdateDtoSpecModel {
     public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecPartner() {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
-            (model) -> model.setPartner(partnerUpdateDtoSpec())
+            (model) -> {
+                model.setPartner(partnerUpdateDtoSpec());
+                model.setEinnahmenKostenPartner(
+                    EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec()
+                );
+            }
         );
     }
 }

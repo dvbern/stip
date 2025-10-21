@@ -163,6 +163,7 @@ public class GesuchTestSpecGenerator {
                 SteuererklaerungUpdateTabsDtoSpecModel.steuererklaerungDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE)
             );
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
+            model.setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
             model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
@@ -177,6 +178,7 @@ public class GesuchTestSpecGenerator {
             model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecNoElterns());
 
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
+            model.setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
             model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());

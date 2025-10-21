@@ -247,6 +247,11 @@ import org.hibernate.envers.Audited;
         GesuchEinreichenValidationGroup.class
     }
 )
+@EinnahmenKostenPartnerRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class
+    }
+)
 @SteuererklaerungTabsRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -358,7 +363,7 @@ public class GesuchFormular extends AbstractMandantEntity {
         name = "einnahmen_kosten_partner_id",
         foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_partner_id")
     )
-    @HasPageValidation(EinnahmenKostenPageValidation.class) // todo ksitp-2571: add new interface?
+    @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKostenPartner;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

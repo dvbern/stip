@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.partner.entity;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDocumentsProducerUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -36,18 +36,7 @@ public class PartnerRequiredDocumentsProducer implements RequiredDocumentsProduc
             return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new HashSet<DokumentTyp>();
-
-        // if fahrkosten > 0
-        // todo kstip-2779: check ek here
-        // if (partner.getFahrkosten() != null && partner.getFahrkosten() > 0) {
-        // requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
-        // }
-        //
-        // if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
-        // requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
-        // }
-
+        final var requiredDocs = EinnahmeKostenRequiredDocumentsProducerUtil.getRequiredDocumentsForPartner(formular);
         return ImmutablePair.of("partner", requiredDocs);
     }
 }
