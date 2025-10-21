@@ -31,6 +31,8 @@ public class EinnahmenKostenDto  implements Serializable {
   private @Valid Integer ausbildungskosten;
   private @Valid Integer wohnkosten;
   private @Valid Boolean wgWohnend;
+  private @Valid Integer wgAnzahlPersonen;
+  private @Valid Boolean alternativeWohnformWohnend;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer betreuungskostenKinder;
   private @Valid String veranlagungsStatus;
@@ -263,6 +265,42 @@ public class EinnahmenKostenDto  implements Serializable {
   }
 
   /**
+   **/
+  public EinnahmenKostenDto wgAnzahlPersonen(Integer wgAnzahlPersonen) {
+    this.wgAnzahlPersonen = wgAnzahlPersonen;
+    return this;
+  }
+
+  
+  @JsonProperty("wgAnzahlPersonen")
+  public Integer getWgAnzahlPersonen() {
+    return wgAnzahlPersonen;
+  }
+
+  @JsonProperty("wgAnzahlPersonen")
+  public void setWgAnzahlPersonen(Integer wgAnzahlPersonen) {
+    this.wgAnzahlPersonen = wgAnzahlPersonen;
+  }
+
+  /**
+   **/
+  public EinnahmenKostenDto alternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+    return this;
+  }
+
+  
+  @JsonProperty("alternativeWohnformWohnend")
+  public Boolean getAlternativeWohnformWohnend() {
+    return alternativeWohnformWohnend;
+  }
+
+  @JsonProperty("alternativeWohnformWohnend")
+  public void setAlternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+  }
+
+  /**
    * Required nur wenn die Person keinen eigenen Haushalt führt
    **/
   public EinnahmenKostenDto auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
@@ -404,6 +442,8 @@ public class EinnahmenKostenDto  implements Serializable {
         Objects.equals(this.ausbildungskosten, einnahmenKosten.ausbildungskosten) &&
         Objects.equals(this.wohnkosten, einnahmenKosten.wohnkosten) &&
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
+        Objects.equals(this.wgAnzahlPersonen, einnahmenKosten.wgAnzahlPersonen) &&
+        Objects.equals(this.alternativeWohnformWohnend, einnahmenKosten.alternativeWohnformWohnend) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
@@ -414,7 +454,7 @@ public class EinnahmenKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, fahrkosten, verdienstRealisiert, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -434,6 +474,8 @@ public class EinnahmenKostenDto  implements Serializable {
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
+    sb.append("    wgAnzahlPersonen: ").append(toIndentedString(wgAnzahlPersonen)).append("\n");
+    sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");

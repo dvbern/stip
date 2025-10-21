@@ -30,7 +30,10 @@ public class GesuchNotizAntwortValidator implements ConstraintValidator<GesuchNo
 
     @Override
     public boolean isValid(GesuchNotiz gesuchNotiz, ConstraintValidatorContext context) {
-        return !(gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.GESUCH_NOTIZ)
-        && Objects.nonNull(gesuchNotiz.getAntwort()));
+        if (Objects.nonNull(gesuchNotiz.getAntwort())) {
+            // only a GesuchNotiz of GesuchNotizTyp may have an answer
+            return gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.JURISTISCHE_NOTIZ);
+        }
+        return true;
     }
 }

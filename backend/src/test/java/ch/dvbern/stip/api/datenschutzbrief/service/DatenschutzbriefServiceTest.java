@@ -20,8 +20,10 @@ package ch.dvbern.stip.api.datenschutzbrief.service;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefDownloadLogRepository;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.repo.ElternRepository;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.util.TestUtil;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -44,6 +46,8 @@ class DatenschutzbriefServiceTest {
     private GesuchTrancheRepository gesuchTrancheRepository;
     @InjectMock
     private DatenschutzbriefDownloadLogRepository datenschutzbriefDownloadLogRepository;
+    @InjectMock
+    private DatenschutzbriefPdfService datenschutzbriefPdfService;
     @InjectMocks
     @InjectSpy
     private DatenschutzbriefService datenschutzbriefService;
@@ -61,7 +65,9 @@ class DatenschutzbriefServiceTest {
 
     @Test
     void getDatenschutzbriefShouldAddLogs() {
-        datenschutzbriefService.getDatenschutzbriefDokument(UUID.randomUUID(), UUID.randomUUID());
+        final var eltern = new Eltern();
+        eltern.setId(UUID.randomUUID());
+        datenschutzbriefService.getDateschutzbriefByteStream(UUID.randomUUID(), eltern);
         verify(datenschutzbriefService, times(1)).logDatenschutzbriefDownload(any(), any());
     }
 

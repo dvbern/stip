@@ -2771,7 +2771,7 @@ paths:
           description: Datenschutzbrief File returned
       operationId: getDatenschutzbrief
       summary: get Datenschutzbrief
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<java.io.ByteArrayOutputStream>
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/datenschutzbrief/{elternId}/token':
     parameters:
       - name: elternId
@@ -4883,6 +4883,7 @@ components:
       enum:
         - ALLE_GESUCHE
         - MEINE_GESUCHE
+        - PENDENTE_GESUCHE
         - ALLE_BEARBEITBAR
         - MEINE_BEARBEITBAR
         - ALLE_JURISTISCHE_ABKLAERUNG
@@ -6160,6 +6161,10 @@ components:
         wgWohnend:
           description: Required nur wenn Person eigener Haushalt hat
           type: boolean
+        wgAnzahlPersonen:
+          type: integer
+        alternativeWohnformWohnend:
+          type: boolean
         verdienstRealisiert:
           type: boolean
         auswaertigeMittagessenProWoche:
@@ -7275,6 +7280,7 @@ components:
           type: string
     GesuchNotizTyp:
       enum:
+        - PENDENZ_NOTIZ
         - GESUCH_NOTIZ
         - JURISTISCHE_NOTIZ
     NotificationType:
@@ -7645,6 +7651,8 @@ components:
           type: string
         text:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
     GesuchNotiz:
       required:
         - userErstellt
@@ -7668,6 +7676,8 @@ components:
           type: string
         antwort:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'

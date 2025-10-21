@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 import java.time.LocalDate;
 import java.util.Comparator;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.service.EntityOverrideMapper;
@@ -135,6 +136,10 @@ public class GesuchTrancheCopyService {
     }
 
     public void overrideGesuchFormular(final GesuchFormular target, final GesuchFormular source) {
+        entityOverrideMapper.overrideFromTo(source, target);
+    }
+
+    public void overrideAusbildung(Ausbildung source, Ausbildung target) {
         entityOverrideMapper.overrideFromTo(source, target);
     }
 

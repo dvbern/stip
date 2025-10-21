@@ -18,6 +18,8 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.EinnahmenKostenAlternativeWohnformValidConstraint;
+import ch.dvbern.stip.api.common.validation.EinnahmenKostenAnzahlPersonenWGValidConstraint;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +43,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 )
 @Getter
 @Setter
+@EinnahmenKostenAnzahlPersonenWGValidConstraint
+@EinnahmenKostenAlternativeWohnformValidConstraint
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
@@ -57,6 +61,14 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Nullable
     @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
+
+    @Nullable
+    @Column(name = "wg_anzahl_personen")
+    private Integer wgAnzahlPersonen;
+
+    @Nullable
+    @Column(name = "alternative_wohnform_wohnend")
+    private Boolean alternativeWohnformWohnend;
 
     @NotNull
     @Column(name = "verdienst_realisiert", nullable = false)

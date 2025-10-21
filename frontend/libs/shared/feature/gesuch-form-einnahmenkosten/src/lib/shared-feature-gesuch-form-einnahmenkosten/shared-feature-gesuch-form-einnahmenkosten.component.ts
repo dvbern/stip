@@ -84,6 +84,7 @@ const bildungskategorieMap = {
 } satisfies Record<Bildungskategorie, 'SEKUNDAR_2' | 'TERTIAER'>;
 type MainBildungskategorie =
   (typeof bildungskategorieMap)[keyof typeof bildungskategorieMap];
+const MIN_WG_ANZAHL_PERSONEN = 2;
 
 @Component({
   standalone: true,
@@ -140,6 +141,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       [Validators.required, sharedUtilValidatorRange(0, 5)],
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
+    wgAnzahlPersonen: [
+      <number | undefined>undefined,
+      [Validators.required, Validators.min(MIN_WG_ANZAHL_PERSONEN)],
+    ],
+    alternativeWohnformWohnend: [
+      <boolean | undefined>undefined,
+      [Validators.required],
+    ],
     vermoegen: [
       <string | undefined>undefined,
       [
@@ -179,6 +188,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   maskitoNumber = maskitoNumber;
   maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
   hiddenFieldsSetSig = signal(new Set());
+  MIN_WG_ANZAHL_PERSONEN = MIN_WG_ANZAHL_PERSONEN;
 
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
@@ -361,6 +371,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     return wohnkosten > 0 ? DokumentTyp.EK_MIETVERTRAG : null;
   });
 
+  wgWohnendSig = toSignal(this.form.controls.wgWohnend.valueChanges);
+
   verdienstRealisiertSig = toSignal(
     this.form.controls.verdienstRealisiert.valueChanges,
   );
@@ -408,6 +420,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         wohnsitzNotEigenerHaushalt,
         existiertGerichtlicheAlimentenregelung,
       } = this.viewSig();
+      const wgWohnend = this.wgWohnendSig();
 
       if (!hasData) {
         return;
@@ -430,6 +443,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.setDisabledStateAndHide(
         this.form.controls.wgWohnend,
         wohnsitzNotEigenerHaushalt,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.wgAnzahlPersonen,
+        wgWohnend !== true,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.alternativeWohnformWohnend,
+        wgWohnend !== false,
       );
       this.setDisabledStateAndHide(
         this.form.controls.betreuungskostenKinder,

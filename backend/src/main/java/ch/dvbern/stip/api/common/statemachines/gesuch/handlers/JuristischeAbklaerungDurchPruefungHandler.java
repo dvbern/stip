@@ -17,7 +17,9 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusChangeHandler {
+    private final GesuchService gesuchService;
     private final StipDecisionService stipDecisionService;
     private final GesuchNotizService gesuchNotizService;
 
@@ -37,11 +40,13 @@ public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusCh
     @Override
     @Transactional
     public void handle(Gesuch gesuch) {
-        final var gesuchTranche = gesuch.getLatestGesuchTranche();
-        final var stipDeciderResult = stipDecisionService.decide(gesuchTranche);
+        final var gesuchTranchen = gesuch.getGesuchTranchen();
+
+        final var decision = gesuchService.getAnspruchDecision(gesuch);
+
         final var stipDecisionText = stipDecisionService.getTextForDecision(
-            stipDeciderResult,
-            gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+            decision,
+            LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
         );
 
         gesuchNotizService.createJuristischeNotiz(gesuch, JURISTISCHE_NOTIZ_BETREFF, stipDecisionText);

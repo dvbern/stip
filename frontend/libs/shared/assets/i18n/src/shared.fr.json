@@ -807,6 +807,8 @@
   "shared.form.einnahmenkosten.fahrkosten.label": "Frais de déplacement",
   "shared.form.einnahmenkosten.wohnkosten.label": "Frais de logement",
   "shared.form.einnahmenkosten.wgWohnend.label": "Vivant en colocation",
+  "shared.form.einnahmenkosten.wgAnzahlPersonen.label": "Combien de personnes vivent au total dans la colocation?",
+  "shared.form.einnahmenkosten.alternativeWohnformWohnend.label": "Vivez-vous dans une autre forme de logement?",
   "shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label": "Nombre de déjeuners à l'extérieur par semaine",
   "shared.form.einnahmenkosten.general.title": "Informations générales",
   "shared.form.einnahmenkosten.verdienstRealisiert.label": "Avez-vous réalisé un gain l'année précédente?",
@@ -883,6 +885,7 @@
   "shared.form.notizen.userErstellt.label": "Gestionnaire de dossier",
   "shared.form.notizen.userMutiert.label": "Juriste",
   "shared.form.notizen.antwort.label": "Décision",
+  "shared.form.notizen.pendenz.label": "Période de traitement terminée",
   "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Note",
   "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Legal Note",
 

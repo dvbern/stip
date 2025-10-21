@@ -37,7 +37,6 @@ import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.core.Response;
 import lombok.experimental.UtilityClass;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -50,16 +49,16 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @UtilityClass
 public class DokumentDownloadUtil {
-    public RestMulti<ByteArrayOutputStream> getWrapedDokument(
+    public RestMulti<Buffer> getWrapedDokument(
         final String fileName,
-        final Supplier<CompletionStage<ByteArrayOutputStream>> generateDocumentTask
+        final ByteArrayOutputStream byteStream
     ) {
-
         return RestMulti.fromUniResponse(
-            Uni.createFrom().completionStage(generateDocumentTask.get()),
-            s -> Multi.createFrom().completionStage(generateDocumentTask.get()),
-            s -> getRequiredHeaders(fileName),
-            s -> Response.Status.OK.getStatusCode()
+            Uni.createFrom().item(byteStream),
+            response -> Multi.createFrom()
+                .items(response)
+                .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray())),
+            response -> getRequiredHeaders(fileName)
         );
     }
 

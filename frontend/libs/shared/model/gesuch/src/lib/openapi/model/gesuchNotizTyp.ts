@@ -10,9 +10,10 @@
  * Do not edit the class manually.
  */
 
-export type GesuchNotizTyp = 'GESUCH_NOTIZ' | 'JURISTISCHE_NOTIZ';
+export type GesuchNotizTyp = 'PENDENZ_NOTIZ' | 'GESUCH_NOTIZ' | 'JURISTISCHE_NOTIZ';
 
 export const GesuchNotizTyp = {
+    PENDENZ_NOTIZ: 'PENDENZ_NOTIZ' as GesuchNotizTyp,
     GESUCH_NOTIZ: 'GESUCH_NOTIZ' as GesuchNotizTyp,
     JURISTISCHE_NOTIZ: 'JURISTISCHE_NOTIZ' as GesuchNotizTyp
 };
