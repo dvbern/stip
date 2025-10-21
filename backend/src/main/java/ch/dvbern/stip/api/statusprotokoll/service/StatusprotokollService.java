@@ -53,7 +53,7 @@ public class StatusprotokollService {
             .setTyp(typ)
             .setComment(comment)
             .setGesuch(gesuch);
-        statusprotokollRepository.persist(statusprotokoll);
+        statusprotokollRepository.persistAndFlush(statusprotokoll);
         return statusprotokoll;
     }
 

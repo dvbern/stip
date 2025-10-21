@@ -648,6 +648,14 @@ public class GesuchService {
             kommentar,
             false
         );
+
+        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
+        if (
+            changeEvent.equals(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT)
+            && gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()
+        ) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 
     @Transactional
@@ -657,6 +665,11 @@ public class GesuchService {
             gesuch,
             GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT
         );
+
+        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
+        if (gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 
     @Transactional
