@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.OsVendorPostingCreateServ
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRequest;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.sap.util.SOAPLoggingHandler;
+import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
@@ -65,7 +66,6 @@ public class SapEndpointService {
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
     private final BusinessPartnerReadMapper businessPartnerReadMapper;
     private final VendorPostingCreateMapper vendorPostingCreateMapper;
-    private final GeneralMapper generalMapper;
 
     private static final int MAX_LENGTH_REF_DOC_NO = 16;
     private static final long MAX_DELIVERY_ID = 0x1FFFFFFFFFFFFL;
@@ -163,7 +163,7 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final ImportStatusReadRequest importStatusReadRequest = new ImportStatusReadRequest();
-        importStatusReadRequest.setSENDER(generalMapper.getSenderParms(getSystemid()));
+        importStatusReadRequest.setSENDER(SapMapperUtil.getImportStatusReadSenderParms(getSystemid()));
         importStatusReadRequest.setFILTERPARMS(new ImportStatusReadRequest.FILTERPARMS());
         importStatusReadRequest.getFILTERPARMS().setDELIVERYID(deliveryid.setScale(0));
 

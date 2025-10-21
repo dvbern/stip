@@ -136,10 +136,10 @@ public class SapService {
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
-        final var lastSapDelivery = sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
-
         BigDecimal deliveryid = null;
         if (sapDeliveryInProgress.isEmpty()) {
+            final var lastSapDelivery =
+                sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
             final var lastTryWasBeforeRetryPeriod = lastSapDelivery.isPresent()
             && lastSapDelivery.get()
                 .getTimestampErstellt()
@@ -152,23 +152,26 @@ public class SapService {
                 sapDeliveryRepository.persistAndFlush(sapDelivery);
                 sapDelivery = sapDeliveryRepository.requireById(sapDelivery.getId());
 
-                boolean success = false;
+                // boolean success = false;
                 try {
                     final var createResponse = sapEndpointService.createBusinessPartner(fall, deliveryid);
                     SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
-                    success = true;
+                    // success = true;
                 } catch (Exception e) {
                     LOG.error("Failed to send createBusinessPartner action", e);
                     sapDelivery.setSapStatus(SapStatus.FAILURE);
                 }
 
-                if (success) {
-                    final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
-                    SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
-
-                    sapDelivery
-                        .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
-                }
+                // // TOOO: Most likely not needed as we check the status just after this if block. But still here for
+                // safety.
+                // IF IT IS NEEDED WE NEED A TRY CATCH AROUND IT
+                // if (success) {
+                // final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
+                // SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
+                //
+                // sapDelivery
+                // .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+                // }
 
                 sapDelivery.setBuchhaltung(businessPartnerCreateBuchhaltung);
                 businessPartnerCreateBuchhaltung.getSapDeliverys().add(sapDelivery);
@@ -251,10 +254,10 @@ public class SapService {
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
-        final var lastSapDelivery = sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
-
         BigDecimal deliveryid = null;
         if (sapDeliveryInProgress.isEmpty()) {
+            final var lastSapDelivery =
+                sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
             final var lastTryWasBeforeRetryPeriod = lastSapDelivery.isPresent()
             && lastSapDelivery.get()
                 .getTimestampErstellt()
@@ -418,7 +421,6 @@ public class SapService {
     public void createRemainderAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
-        final var zahlungsverbindung = fall.getRelevantZahlungsverbindung();
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {

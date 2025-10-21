@@ -168,8 +168,7 @@ public abstract class VendorPostingCreateMapper {
     ) {
         final SenderParmsDelivery sender = new SenderParmsDelivery();
         sender.setSYSID(sysid);
-        final String deliveryIdString = String.format("%d, %d", sysid, deliveryid.longValue());
-        sender.setDELIVERYID(new BigDecimal(deliveryIdString));
+        sender.setDELIVERYID(deliveryid);
         return sender;
     }
 

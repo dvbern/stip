@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.sap.generated.general.SenderParms;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import lombok.experimental.UtilityClass;
 
@@ -77,6 +78,14 @@ public class SapMapperUtil {
             new ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery();
         sender.setSYSID(sysid);
         sender.setDELIVERYID(deliveryid);
+        return sender;
+    }
+
+    public SenderParms getImportStatusReadSenderParms(
+        BigInteger sysid
+    ) {
+        final SenderParms sender = new SenderParms();
+        sender.setSYSID(sysid);
         return sender;
     }
 }
