@@ -40,13 +40,19 @@ public abstract class BusinessPartnerChangeMapper {
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER getHeader(Integer businessPartnerId);
 
     @Mapping(source = "fallNummer", target = "EXTID")
+    @Mapping(source = ".", target = "AHVNR", qualifiedByName = "getAhvNr")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
-        String fallNummer
+        Fall fall
     );
+
+    @Named("getAhvNr")
+    public String getAhvNr(Fall fall) {
+        return SapMapperUtil.getAhvNr(fall);
+    }
 
     @Mapping(source = "vorname", target = "FIRSTNAME")
     @Mapping(source = "nachname", target = "LASTNAME")
-    @Mapping(source = "nationalitaet.iso3code", target = "NATIONALITYISO")
+    @Mapping(source = "nationalitaet.iso2code", target = "NATIONALITYISO")
     @Mapping(source = "geburtsdatum", target = "BIRTHDATE")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PERSDATA toPersData(
@@ -81,7 +87,7 @@ public abstract class BusinessPartnerChangeMapper {
         return SapMapperUtil.getAccountHolder(zahlungsverbindung);
     }
 
-    @Mapping(source = "fallNummer", target = "IDKEYS")
+    @Mapping(source = ".", target = "IDKEYS")
     @Mapping(source = "auszahlung.sapBusinessPartnerId", target = "HEADER")
     @Mapping(source = ".", target = "PERSDATA", qualifiedByName = "setPersdata")
     @Mapping(source = ".", target = "ADDRESS", qualifiedByName = "setAdress")

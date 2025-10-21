@@ -17,121 +17,76 @@
 
 package ch.dvbern.stip.api.sap.scheduledtask;
 
-import ch.dvbern.stip.api.SapEndpointServiceMock;
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
-import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
-import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
+import java.time.LocalDate;
+import java.util.List;
+
+import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.sap.service.SapService;
-import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
-import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
-import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.generated.api.AusbildungApiSpec;
-import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
-import ch.dvbern.stip.generated.api.DokumentApiSpec;
-import ch.dvbern.stip.generated.api.FallApiSpec;
-import ch.dvbern.stip.generated.api.GesuchApiSpec;
-import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
-import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
-import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
-import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 
-@QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ExtendWith(StepwiseExtension.class)
 @Slf4j
 public class SapScheduledTaskFilterTest {
-    private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
-    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
-    private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
-    private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
-    private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
-        GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
-    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
-    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
-
     @InjectSpy
     private final SapService sapService;
 
-    @Inject
-    SapEndpointServiceMock sapEndpointServiceMock;
+    @InjectMock
+    GesuchRepository gesuchRepository;
 
-    @Inject
-    SapDeliveryRepository sapDeliveryRepository;
-
-    private GesuchDtoSpec gesuch;
+    @InjectMock
+    GesuchsperiodeRepository gesuchsperiodeRepository;
 
     @BeforeAll
     void setUp() {
         QuarkusMock.installMockForType(sapService, SapService.class);
+        QuarkusMock.installMockForType(gesuchRepository, GesuchRepository.class);
+        QuarkusMock.installMockForType(gesuchsperiodeRepository, GesuchsperiodeRepository.class);
     }
 
     @BeforeEach
     void setUpEach() {
-        Mockito.doNothing().when(sapService).processPendingSapAction(any());
-        Mockito.doNothing().when(sapService).processPendingCreateVendorPostingAction(any());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(1)
-    void createGesuchAusbildungFall() {
-        gesuch = TestUtil.createAndSubmitGesuch(
-            fallApiSpec,
-            ausbildungApiSpec,
-            gesuchApiSpec,
-            auszahlungApiSpec,
-            dokumentApiSpec
-        );
-    }
-
-    @Test
-    @TestAsFreigabestelleAndSachbearbeiter
-    @Order(2)
-    void gesuchToInFreigabe() {
-        sapEndpointServiceMock.setBusinessPartnerCreateResponse(SapEndpointServiceMock.ERROR_STRING);
-        sapEndpointServiceMock.setImportStatusReadResponse(SapEndpointServiceMock.ERROR_STRING, SapStatus.FAILURE);
-
-        TestUtil.gesuchToInFreigabe(
-            gesuch,
-            gesuchApiSpec,
-            steuerdatenApiSpec,
-            dokumentApiSpec,
-            gesuchTrancheApiSpec
-        );
-
-        MatcherAssert
-            .assertThat(sapDeliveryRepository.findAll().list().getFirst().getSapStatus(), equalTo(SapStatus.FAILURE));
-
-        Mockito.doNothing().when(sapService).createBusinessPartnerOrGetStatus(any());
-
         Mockito.doNothing().when(sapService).createRemainderAuszahlungOrGetStatus(any());
-        Mockito.doNothing().when(sapService).createVendorPostingOrGetStatus(any(), any(), any());
     }
 
+    @Test
+    void testProcessRemainderAuszahlungActions() {
+        final var now = LocalDate.now();
+
+        final var gesuchsperiode = new Gesuchsperiode();
+        gesuchsperiode.setZweiterAuszahlungsterminTag(now.getDayOfMonth());
+        gesuchsperiode.setZweiterAuszahlungsterminMonat(3);
+        Mockito.when(gesuchsperiodeRepository.listAll()).thenReturn(List.of(gesuchsperiode));
+
+        final var testGesuch = new Gesuch();
+        testGesuch.setGesuchsperiode(gesuchsperiode);
+        final var testGesuchTranche = new GesuchTranche();
+        testGesuchTranche.setGueltigkeit(
+            new DateRange().setGueltigAb(now.minusMonths(gesuchsperiode.getZweiterAuszahlungsterminMonat()))
+        );
+        testGesuch.setGesuchTranchen(List.of(testGesuchTranche));
+
+        Mockito.when(gesuchRepository.findGesuchsByGesuchsperiodeIdWithPendingRemainderPayment(any()))
+            .thenReturn(List.of(testGesuch));
+        sapService.processRemainderAuszahlungActions();
+        Mockito.verify(sapService, Mockito.times(1)).createRemainderAuszahlungOrGetStatus(any());
+    }
 }

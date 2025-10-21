@@ -51,6 +51,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.handler.MessageContext;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -67,7 +68,9 @@ public class SapEndpointService {
     private final GeneralMapper generalMapper;
 
     private static final int MAX_LENGTH_REF_DOC_NO = 16;
+    private static final long MAX_DELIVERY_ID = 0x1FFFFFFFFFFFFL;
 
+    @Getter
     @ConfigProperty(name = "kstip.sap.system-id")
     BigInteger systemid;
 
@@ -104,9 +107,11 @@ public class SapEndpointService {
         port.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, headers);
     }
 
-    public static BigDecimal generateDeliveryId() {
+    public static BigDecimal generateDeliveryId(final BigInteger systemid) {
         SecureRandom secureRandom = new SecureRandom();
-        return BigDecimal.valueOf(Math.abs(secureRandom.nextLong() & Long.MAX_VALUE)).setScale(0);
+        final var uniqueId = BigDecimal.valueOf(Math.abs(secureRandom.nextLong() & MAX_DELIVERY_ID)).setScale(0);
+
+        return new BigDecimal(String.format("%d%d", systemid, uniqueId.longValue()));
     }
 
     public BusinessPartnerCreateResponse createBusinessPartner(
@@ -119,7 +124,7 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
-            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(systemid, sapDeliveryId, fall);
+            businessPartnerCreateMapper.toBusinessPartnerCreateRequest(getSystemid(), sapDeliveryId, fall);
         businessPartnerCreateRequest.getBUSINESSPARTNER().setHEADER(businessPartnerCreateMapper.getHeader());
         return port.osBusinessPartnerCreate(businessPartnerCreateRequest);
     }
@@ -134,7 +139,7 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
-            businessPartnerChangeMapper.toBusinessPartnerChangeRequest(systemid, sapDeliveryId, fall);
+            businessPartnerChangeMapper.toBusinessPartnerChangeRequest(getSystemid(), sapDeliveryId, fall);
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 
@@ -147,7 +152,7 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
-            businessPartnerReadMapper.toBusinessPartnerReadRequest(systemid, sapDeliveryId);
+            businessPartnerReadMapper.toBusinessPartnerReadRequest(getSystemid(), sapDeliveryId);
         return port.osBusinessPartnerRead(businessPartnerReadRequest);
     }
 
@@ -158,7 +163,7 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final ImportStatusReadRequest importStatusReadRequest = new ImportStatusReadRequest();
-        importStatusReadRequest.setSENDER(generalMapper.getSenderParms(systemid));
+        importStatusReadRequest.setSENDER(generalMapper.getSenderParms(getSystemid()));
         importStatusReadRequest.setFILTERPARMS(new ImportStatusReadRequest.FILTERPARMS());
         importStatusReadRequest.getFILTERPARMS().setDELIVERYID(deliveryid.setScale(0));
 
@@ -179,7 +184,7 @@ public class SapEndpointService {
 
         final VendorPostingCreateRequest vendorPostingCreateRequest =
             vendorPostingCreateMapper
-                .toVendorPostingCreateRequest(systemid, sapDeliveryId, amount, qrIbanAddlInfo, fall);
+                .toVendorPostingCreateRequest(getSystemid(), sapDeliveryId, amount, qrIbanAddlInfo, fall);
 
         XMLGregorianCalendar docDate;
         XMLGregorianCalendar pstngDate;

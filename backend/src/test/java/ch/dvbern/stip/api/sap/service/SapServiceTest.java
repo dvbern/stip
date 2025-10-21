@@ -277,7 +277,7 @@ public class SapServiceTest {
     }
 
     @Test
-    void testRetryFailedAuszahlungBuchhaltunManually() {
+    void testRetryFailedAuszahlungBuchhaltungManually() {
         // Arrange
         final var gesuch = prepareGesuchForSapService();
 

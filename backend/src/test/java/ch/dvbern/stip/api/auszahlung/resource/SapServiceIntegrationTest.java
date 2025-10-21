@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -74,7 +75,7 @@ class SapServiceIntegrationTest {
     @Order(1)
     void createBusinessPartnerTest() {
         final var auszahlung = createAuszahlung();
-        deliveryid = SapEndpointService.generateDeliveryId();
+        deliveryid = SapEndpointService.generateDeliveryId(BigInteger.ZERO);
 
         final var businessPartnerCreateResponse =
             sapEndpointService.createBusinessPartner(auszahlung.getBuchhaltung().getFall(), deliveryid);
@@ -91,7 +92,7 @@ class SapServiceIntegrationTest {
         final var auszahlung = createAuszahlung();
         auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
         auszahlung.getZahlungsverbindung();
-        deliveryid = SapEndpointService.generateDeliveryId();
+        deliveryid = SapEndpointService.generateDeliveryId(BigInteger.ZERO);
 
         final var businessPartnerChangeResponse =
             sapEndpointService.changeBusinessPartner(auszahlung.getBuchhaltung().getFall(), deliveryid);
@@ -132,7 +133,7 @@ class SapServiceIntegrationTest {
     void createVendorPostingTest() {
         final var auszahlung = createAuszahlung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
         auszahlung.getZahlungsverbindung();
-        deliveryid = SapEndpointService.generateDeliveryId();
+        deliveryid = SapEndpointService.generateDeliveryId(BigInteger.ZERO);
 
         final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(
             auszahlung.getBuchhaltung().getFall(),

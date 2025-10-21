@@ -146,7 +146,7 @@ public class SapService {
                 .plusHours(HOURS_BETWEEN_SAP_TRIES)
                 .isBefore(LocalDateTime.now());
             if (lastSapDelivery.isEmpty() || lastTryWasBeforeRetryPeriod) {
-                deliveryid = SapEndpointService.generateDeliveryId();
+                deliveryid = SapEndpointService.generateDeliveryId(sapEndpointService.getSystemid());
 
                 var sapDelivery = new SapDelivery().setSapDeliveryId(deliveryid);
                 sapDeliveryRepository.persistAndFlush(sapDelivery);
@@ -172,6 +172,8 @@ public class SapService {
 
                 sapDelivery.setBuchhaltung(businessPartnerCreateBuchhaltung);
                 businessPartnerCreateBuchhaltung.getSapDeliverys().add(sapDelivery);
+            } else {
+                return;
             }
         }
         try {
@@ -184,13 +186,6 @@ public class SapService {
             fall.setFailedBuchhaltungAuszahlungType(BUSINESSPARTNER_CREATE);
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
             mailService.sendStandardNotificationEmailForGesuch(gesuch);
-        } else if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.SUCCESS) {
-            // gesuch.getAusbildung()
-            // .getFall()
-            // .getAuszahlung()
-            // .setSapBusinessPartnerId(
-            // businessPartnerCreateBuchhaltung.getZahlungsverbindung().getSapBusinessPartnerId()
-            // );
         }
     }
 
@@ -267,7 +262,7 @@ public class SapService {
                 .isBefore(LocalDateTime.now());
 
             if (lastSapDelivery.isEmpty() || lastTryWasBeforeRetryPeriod) {
-                deliveryid = SapEndpointService.generateDeliveryId();
+                deliveryid = SapEndpointService.generateDeliveryId(sapEndpointService.getSystemid());
 
                 final var newSapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
                     .setSapBusinessPartnerId(auszahlung.getSapBusinessPartnerId());
@@ -362,16 +357,17 @@ public class SapService {
             .getGueltigkeit()
             .getGueltigAb();
 
-        return startDateFirstTranche.plusMonths(gesuch.getGesuchsperiode().getZweiterAuszahlungsterminMonat())
-            .minusDays(1)
-            .isAfter(LocalDate.now());
+        return LocalDate.now()
+            .isAfter(
+                startDateFirstTranche.plusMonths(gesuch.getGesuchsperiode().getZweiterAuszahlungsterminMonat())
+                    .minusDays(1)
+            );
     }
 
     @Transactional
     public void createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
-        final var zahlungsverbindung = fall.getRelevantZahlungsverbindung();
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {

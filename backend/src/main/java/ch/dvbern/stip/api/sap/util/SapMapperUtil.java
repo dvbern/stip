@@ -51,6 +51,10 @@ public class SapMapperUtil {
         return gesuchTranche.getGesuchFormular().getPersonInAusbildung();
     }
 
+    public String getAhvNr(Fall fall) {
+        return getPia(fall).getSozialversicherungsnummer();
+    }
+
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
         final var adresse = zahlungsverbindung.getAdresse();
         return String.format(
@@ -72,8 +76,7 @@ public class SapMapperUtil {
         final ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery sender =
             new ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery();
         sender.setSYSID(sysid);
-        final String deliveryIdString = String.format("%d, %d", sysid, deliveryid.longValue());
-        sender.setDELIVERYID(new BigDecimal(deliveryIdString));
+        sender.setDELIVERYID(deliveryid);
         return sender;
     }
 }
