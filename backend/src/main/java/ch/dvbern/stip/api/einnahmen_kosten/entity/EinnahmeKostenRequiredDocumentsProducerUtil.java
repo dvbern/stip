@@ -96,62 +96,63 @@ public class EinnahmeKostenRequiredDocumentsProducerUtil {
     public Set<DokumentTyp> getRequiredDocumentsForPartner(
         GesuchFormular formular
     ) {
-        final var ek = formular.getEinnahmenKosten();
-        if (ek == null) {
+        final var partner = formular.getPartner();
+        final var ekPartner = formular.getEinnahmenKostenPartner();
+        if (partner == null || ekPartner == null) {
             return Set.of();
         }
 
         final var requiredDocs = new HashSet<DokumentTyp>();
 
-        if (greaterThanZero(ek.getNettoerwerbseinkommen())) {
+        if (greaterThanZero(ekPartner.getNettoerwerbseinkommen())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_LOHNABRECHNUNG);
         }
 
-        if (greaterThanZero(ek.getBetreuungskostenKinder())) {
+        if (greaterThanZero(ekPartner.getBetreuungskostenKinder())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER);
         }
 
-        if (greaterThanZero(ek.getWohnkosten())) {
+        if (greaterThanZero(ekPartner.getWohnkosten())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_MIETVERTRAG);
         }
 
-        if (greaterThanZero(ek.getFahrkosten())) {
+        if (greaterThanZero(ekPartner.getFahrkosten())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT);
         }
 
-        if (greaterThanZero(ek.getEoLeistungen())) {
+        if (greaterThanZero(ekPartner.getEoLeistungen())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO);
         }
 
-        if (greaterThanZero(ek.getRenten())) {
+        if (greaterThanZero(ekPartner.getRenten())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN);
         }
 
-        if (greaterThanZero(ek.getBeitraege())) {
+        if (greaterThanZero(ekPartner.getBeitraege())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION);
         }
 
-        if (greaterThanZero(ek.getZulagen())) {
+        if (greaterThanZero(ekPartner.getZulagen())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_KINDERZULAGEN);
         }
 
-        if (greaterThanZero(ek.getUnterhaltsbeitraege())) {
+        if (greaterThanZero(ekPartner.getUnterhaltsbeitraege())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE);
         }
 
-        if (greaterThanZero(ek.getErgaenzungsleistungen())) {
+        if (greaterThanZero(ekPartner.getErgaenzungsleistungen())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
         }
-        if (greaterThanZero(ek.getVermoegen())) {
+        if (greaterThanZero(ekPartner.getVermoegen())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_VERMOEGEN);
         }
-        if (greaterThanZero(ek.getEinnahmenBGSA())) {
+        if (greaterThanZero(ekPartner.getEinnahmenBGSA())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_EINNAHMEN_BGSA);
         }
-        if (greaterThanZero(ek.getTaggelderAHVIV())) {
+        if (greaterThanZero(ekPartner.getTaggelderAHVIV())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_TAGGELDER_AHV_IV);
         }
-        if (greaterThanZero(ek.getAndereEinnahmen())) {
+        if (greaterThanZero(ekPartner.getAndereEinnahmen())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN);
         }
 

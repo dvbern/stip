@@ -384,20 +384,13 @@ class GesuchFillFormularTest {
             DokumentTypDtoSpec.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE,
             DokumentTypDtoSpec.EK_BELEG_KINDERZULAGEN, DokumentTypDtoSpec.EK_BELEG_BEZAHLTE_RENTEN,
             DokumentTypDtoSpec.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO, DokumentTypDtoSpec.EK_MIETVERTRAG,
-            DokumentTypDtoSpec.EK_LOHNABRECHNUNG, DokumentTypDtoSpec.EK_PARTNER_BELEG_KINDERZULAGEN,
-            DokumentTypDtoSpec.EK_PARTNER_BELEG_BEZAHLTE_RENTEN,
-            DokumentTypDtoSpec.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO, DokumentTypDtoSpec.EK_PARTNER_MIETVERTRAG,
-            DokumentTypDtoSpec.EK_PARTNER_LOHNABRECHNUNG,
+            DokumentTypDtoSpec.EK_LOHNABRECHNUNG,
             DokumentTypDtoSpec.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE,
             DokumentTypDtoSpec.PERSON_SOZIALHILFEBUDGET, DokumentTypDtoSpec.ELTERN_SOZIALHILFEBUDGET_MUTTER,
             DokumentTypDtoSpec.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTypDtoSpec.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
             DokumentTypDtoSpec.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN, DokumentTypDtoSpec.EK_BELEG_OV_ABONNEMENT,
             DokumentTypDtoSpec.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
-            DokumentTypDtoSpec.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION,
-            DokumentTypDtoSpec.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
-            DokumentTypDtoSpec.EK_PARTNER_BELEG_OV_ABONNEMENT,
-            DokumentTypDtoSpec.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
         };
 
         var gesuchDokumente = gesuchTrancheApiSpec.getGesuchDokumenteGS()

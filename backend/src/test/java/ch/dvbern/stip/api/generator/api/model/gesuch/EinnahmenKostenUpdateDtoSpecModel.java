@@ -71,4 +71,11 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             (model) -> model.setEinnahmenKosten(einnahmenKostenUpdateDtoSpec())
         );
     }
+
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecEinnahmenKostenPartner() {
+        return TestUtil.createUpdateDtoSpec(
+            GesuchFormularUpdateDtoSpec::new,
+            (model) -> model.setEinnahmenKostenPartner(einnahmenKostenPartnerUpdateDtoSpec())
+        );
+    }
 }
