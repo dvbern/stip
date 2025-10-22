@@ -109,8 +109,7 @@ public class Buchhaltung extends AbstractMandantEntity {
     @Transient
     public SapDelivery getLatestSapDelivery() {
         return sapDeliverys.stream()
-            .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt))
-            .findFirst()
+            .max(Comparator.comparing(SapDelivery::getTimestampErstellt))
             .orElseThrow();
     }
 
