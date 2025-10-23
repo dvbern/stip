@@ -133,6 +133,18 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKosten(), isQuellenbesteuert);
             ek.setSteuern(steuern);
         }
+
+        if (
+            Objects.nonNull(gesuchFormularDto.getPartner()) &&
+            Objects.nonNull(gesuchFormularDto.getEinnahmenKostenPartner())
+        ) {
+            final var ekPartner = gesuchFormularDto.getEinnahmenKostenPartner();
+            ekPartner.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegenForPatner(gesuchFormular));
+
+            final var steuern =
+                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKostenPartner(), false);
+            ekPartner.setSteuern(steuern);
+        }
     }
 
     /**
@@ -325,14 +337,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             "Reset dependent partner data",
             () -> {
                 // // TODO KSTIP-2785: Update once einnahmenKosternPartner exists
-                // if (gesuchFormularDto.getEinnahmenKostenPartner() != null) {
-                // final var ek = gesuchFormularDto.getEinnahmenKostenPartner();
-                // // Partner Steuern
-                // final var steuern =
-                // EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKostenPartner(),
-                // false);
-                // ek.setSteuern(steuern);
-                // }
+                if (gesuchFormularUpdateDto.getEinnahmenKostenPartner() != null) {
+                    final var ek = gesuchFormularUpdateDto.getEinnahmenKostenPartner();
+                    // Partner Steuern
+                    final var steuern =
+                        EinnahmenKostenMappingUtil.calculateSteuern(
+                            targetFormular.getEinnahmenKostenPartner(),
+                            false
+                        );
+                    ek.setSteuern(steuern);
+                }
                 targetFormular.setEinnahmenKostenPartner(null);
             }
         );
