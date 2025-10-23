@@ -47,6 +47,8 @@ class NeskoSteuerdatenMapperTest {
         getSteuerdatenResponse.getSteuerdaten().setStatusVeranlagung(VeranlagungsStatusType.DEFINITIV_BEARBEITET);
         steuerdaten = new Steuerdaten();
         steuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+        getSteuerdatenResponse.getSteuerdaten().setTotalEinkuenfte(new EffSatzType());
+
     }
 
     @Test
@@ -63,6 +65,33 @@ class NeskoSteuerdatenMapperTest {
                 .getTotalEinkuenfte()
                 .longValue(),
             value2
+        );
+    }
+
+    @Test
+    void shouldTakeZeroOrAbsoluteValueOfVermoegenTest() {
+        var effSatzType = new EffSatzType();
+        final var value1 = 1000L;
+        final var value2 = -2000L;
+        effSatzType.setEffektiv(BigDecimal.valueOf(value1));
+        effSatzType.setSatzbestimmend(BigDecimal.valueOf(value1));
+        getSteuerdatenResponse.getSteuerdaten().setSteuerbaresVermoegenKanton(effSatzType);
+
+        assertEquals(
+            NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse)
+                .getVermoegen()
+                .longValue(),
+            value1
+        );
+
+        effSatzType.setEffektiv(BigDecimal.valueOf(value2));
+        effSatzType.setSatzbestimmend(BigDecimal.valueOf(value2));
+        getSteuerdatenResponse.getSteuerdaten().setSteuerbaresVermoegenKanton(effSatzType);
+        assertEquals(
+            NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse)
+                .getVermoegen()
+                .longValue(),
+            0
         );
     }
 }
