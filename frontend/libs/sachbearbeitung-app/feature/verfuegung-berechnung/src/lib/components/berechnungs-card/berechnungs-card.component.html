@@ -30,6 +30,7 @@
       </mat-accordion>
     </mat-card-content>
     <mat-card-footer class="px-3 py-4">
+      <!-- wenn verheiratet, geteilt durch anzahl personen im haushalt -->
       @if (berechnung.typ === 'persoenlich' && berechnung.totalVorTeilung) {
         <div class="d-flex justify-content-between fs-5 h4">
           <div>
@@ -57,7 +58,7 @@
         @if (Math.sign(berechnung.total) === 1) {
           <!-- nicht angerechnet  -->
           <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
-            <div>Positive Beträge werden nicht ans Stipendium angerechnet</div>
+            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.hinweis.positiverBetrag' | transloco }}</div>
             <div>
               {{ berechnung.total | formatChfNegative: true }}
             </div>
@@ -65,13 +66,13 @@
         }
 
         <!-- Stipendienanspruch -->
-        <div class="d-flex justify-content-between fs-3 h4">
+        <div class="d-flex justify-content-between fs-3 h4 mt-3">
           <div>
             {{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}
           </div>
           <div>{{ berechnung.totalBetragStipendium | formatChf }}</div>
         </div>
-      } @else {
+      } @else if (berechnung.typ === 'persoenlich') {
         <div class="d-flex justify-content-between fs-4 h4">
           {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.total' | transloco }}
           <span class="text-nowrap" [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'">{{
@@ -82,7 +83,7 @@
         @if (Math.sign(berechnung.total) === 1) {
           <!-- nicht angerechnet  -->
           <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
-            <div>Positive Beträge werden nicht ans Stipendium angerechnet</div>
+            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.hinweis.positiverBetrag' | transloco }}</div>
             <div>
               {{ berechnung.total | formatChfNegative: true }}
             </div>
@@ -90,9 +91,16 @@
         }
 
         <!-- Stipendienanspruch -->
-        <div class="d-flex justify-content-between fs-3 h4">
-          <div>Stipendienanspruch</div>
+        <div class="d-flex justify-content-between fs-3 h4 mt-3">
+          <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}</div>
           <div>{{ berechnung.totalBetragStipendium | formatChf }}</div>
+        </div>
+      } @else {
+        <div class="d-flex justify-content-between fs-4 h4">
+          {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.total' | transloco }}
+          <span class="text-nowrap" [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'">{{
+            berechnung.total | formatChfNegative
+          }}</span>
         </div>
       }
       @if (berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung) {
