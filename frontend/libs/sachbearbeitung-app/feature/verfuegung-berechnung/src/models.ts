@@ -2,6 +2,7 @@ export type PersoenlicheBerechnung = {
   typ: 'persoenlich';
   name: string;
   total: number;
+  totalBetragStipendium: number;
   totalEinnahmen: number;
   totalKosten: number;
   totalVorTeilung?: number;
@@ -55,6 +56,7 @@ export type FamilienBerechnung = {
   nameKey: string;
   year: number;
   total: number;
+  totalBetragStipendium: number;
   totalEinnahmen: number;
   totalKosten: number;
   einnahmen: {

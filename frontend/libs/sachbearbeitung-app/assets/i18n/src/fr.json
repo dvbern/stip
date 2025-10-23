@@ -641,7 +641,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Frais de déplacement de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Montant total du budget",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.anzahlPersonen": "Partage par tête",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Budget imputable",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Montant de la bourse",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Montant du budget imputable ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
 

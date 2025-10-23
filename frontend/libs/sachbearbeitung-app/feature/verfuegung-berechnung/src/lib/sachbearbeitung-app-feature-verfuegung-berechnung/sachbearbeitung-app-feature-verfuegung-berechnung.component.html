@@ -11,35 +11,54 @@
       <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | transloco }}:</dt>
       <dd class="me-4">{{ berechnung.monate }}</dd>
     </dl>
-    <div class="row">
-      <div class="col-12">
-        <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
-          <dv-persoenliche-einnahmen
-            class="d-flex flex-column gap-3 ps-4"
-            [einnahmenSig]="berechnung.persoenlich.einnahmen"
-          ></dv-persoenliche-einnahmen>
-          <dv-persoenliche-kosten
-            class="d-flex flex-column gap-3 ps-4"
-            [kostenSig]="berechnung.persoenlich.kosten"
-          ></dv-persoenliche-kosten>
-        </dv-berechnungs-card>
-      </div>
-    </div>
-    <div class="row mt-4 mb-4">
-      @for (familienbudget of berechnung.familien; track $index) {
-        <div class="col-6">
-          <dv-berechnungs-card [berechnungSig]="familienbudget">
-            <dv-familien-einnahmen
-              class="d-flex flex-column gap-3 ps-4"
-              [einnahmenSig]="familienbudget.einnahmen"
-            ></dv-familien-einnahmen>
-            <dv-familien-kosten
-              class="d-flex flex-column gap-3 ps-4"
-              [kostenSig]="familienbudget.kosten"
-            ></dv-familien-kosten>
-          </dv-berechnungs-card>
+    <div class="d-flex tw:gap-1">
+      <div>
+        <div class="row">
+          <div class="col-12">
+            <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
+              <dv-persoenliche-einnahmen
+                class="d-flex flex-column gap-3 ps-4"
+                [einnahmenSig]="berechnung.persoenlich.einnahmen"
+              ></dv-persoenliche-einnahmen>
+              <dv-persoenliche-kosten
+                class="d-flex flex-column gap-3 ps-4"
+                [kostenSig]="berechnung.persoenlich.kosten"
+              ></dv-persoenliche-kosten>
+            </dv-berechnungs-card>
+          </div>
         </div>
-      }
+        <div class="row mt-4 mb-4">
+          @for (familienbudget of berechnung.familien; track $index) {
+            <div class="col-6">
+              <dv-berechnungs-card [berechnungSig]="familienbudget">
+                <dv-familien-einnahmen
+                  class="d-flex flex-column gap-3 ps-4"
+                  [einnahmenSig]="familienbudget.einnahmen"
+                ></dv-familien-einnahmen>
+                <dv-familien-kosten
+                  class="d-flex flex-column gap-3 ps-4"
+                  [kostenSig]="familienbudget.kosten"
+                ></dv-familien-kosten>
+              </dv-berechnungs-card>
+            </div>
+          }
+        </div>
+      </div>
+      <div>
+        Berechnung Raw Debug:
+        <details>
+          <summary>Show Raw Data</summary>
+          <pre>{{ berechnungStore.berechnung().data | json }}</pre>
+        </details>
+        <details>
+          <summary>Show Store Data</summary>
+          <pre>{{ berechnungStore.berechnungZusammenfassungViewSig() | json }}</pre>
+        </details>
+        <details>
+          <summary>Show Converted Result</summary>
+          <pre>{{ berechnungenSig() | json }}</pre>
+        </details>
+      </div>
     </div>
   } @else {
     <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | transloco }}</p>

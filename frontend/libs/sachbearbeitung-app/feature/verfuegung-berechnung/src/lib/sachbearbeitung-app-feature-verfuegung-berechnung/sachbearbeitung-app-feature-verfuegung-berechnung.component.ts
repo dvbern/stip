@@ -96,6 +96,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         persoenlich: {
           typ: 'persoenlich' as const,
           name: nameGesuchsteller,
+          totalBetragStipendium: view.totalBetragStipendium,
           total: p.persoenlichesbudgetBerechnet,
           totalEinnahmen: p.einnahmenPersoenlichesBudget,
           totalKosten: p.ausgabenPersoenlichesBudget,
@@ -148,6 +149,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
             typ: 'familien' as const,
             nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${f.familienBudgetTyp}`,
             year: view.year - 1,
+            totalBetragStipendium: view.totalBetragStipendium,
             total: f.familienbudgetBerechnet,
             totalEinnahmen: f.einnahmenFamilienbudget,
             totalKosten: f.ausgabenFamilienbudget,
