@@ -22,7 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { AusbildungsstaetteStore } from '@dv/shared/data-access/ausbildungsstaette';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -245,7 +245,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         ],
       };
     }
-    const { personInAusbildung, familiensituation, kinds } = gesuchFormular;
+    const { personInAusbildung, familiensituation, kinds, partner } =
+      gesuchFormular;
 
     const schritte = [
       ...(!personInAusbildung ? [PERSON.translationKey] : []),
@@ -261,7 +262,9 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       familiensituation.mutterUnbekanntVerstorben === 'VERSTORBEN';
     const hatKinder = kinds ? kinds.length > 0 : false;
     const geburtsdatum = parseBackendLocalDateAndPrint(
-      personInAusbildung.geburtsdatum,
+      this.einkommenTyp() === 'PARTNER'
+        ? partner?.geburtsdatum
+        : personInAusbildung.geburtsdatum,
       this.languageSig(),
     );
     const ausbildungsgang = ausbildungsstaettes
@@ -301,209 +304,114 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     } as const;
   });
 
-  nettoerwerbseinkommenSig = toSignal(
-    this.form.controls.nettoerwerbseinkommen.valueChanges,
-  );
-  nettoerwerbseinkommenDocumentSig = this.createUploadOptionsSig(() => {
-    const nettoerwerbseinkommen = fromFormatedNumber(
-      this.nettoerwerbseinkommenSig() ?? '0',
+  private createFieldDocumentSig<T extends keyof typeof this.form.controls>(
+    controlName: T,
+    dokumentTypBase: keyof typeof DokumentTyp,
+    dokumentTypPartner: keyof typeof DokumentTyp,
+  ) {
+    const valueSig = toSignal(
+      this.form.controls[controlName].valueChanges as Observable<
+        string | null | undefined
+      >,
+      { initialValue: undefined },
     );
+    return this.createUploadOptionsSig(() => {
+      const value = fromFormatedNumber((valueSig() ?? '0') as string);
+      return value > 0
+        ? DokumentTyp[
+            this.einkommenTyp() === 'PARTNER'
+              ? dokumentTypPartner
+              : dokumentTypBase
+          ]
+        : null;
+    });
+  }
 
-    return nettoerwerbseinkommen > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_LOHNABRECHNUNG'
-            : 'EK_LOHNABRECHNUNG'
-        ]
-      : null;
-  });
-
-  unterhaltsbeitraegeSig = toSignal(
-    this.form.controls.unterhaltsbeitraege.valueChanges,
+  nettoerwerbseinkommenDocumentSig = this.createFieldDocumentSig(
+    'nettoerwerbseinkommen',
+    'EK_LOHNABRECHNUNG',
+    'EK_PARTNER_LOHNABRECHNUNG',
   );
-  unterhaltsbeitraegeDocumentSig = this.createUploadOptionsSig(() => {
-    const unterhaltsbeitraege = fromFormatedNumber(
-      this.unterhaltsbeitraegeSig() ?? '0',
-    );
 
-    return unterhaltsbeitraege > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE'
-            : 'EK_BELEG_UNTERHALTSBEITRAEGE'
-        ]
-      : null;
-  });
-
-  zulagenSig = toSignal(this.form.controls.zulagen.valueChanges);
-  zulagenDocumentSig = this.createUploadOptionsSig(() => {
-    const zulagen = fromFormatedNumber(this.zulagenSig() ?? '0');
-
-    return zulagen > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_KINDERZULAGEN'
-            : 'EK_BELEG_KINDERZULAGEN'
-        ]
-      : null;
-  });
-
-  rentenSig = toSignal(this.form.controls.renten.valueChanges);
-  rentenDocumentSig = this.createUploadOptionsSig(() => {
-    const renten = fromFormatedNumber(this.rentenSig() ?? '0');
-
-    return renten > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_BEZAHLTE_RENTEN'
-            : 'EK_BELEG_BEZAHLTE_RENTEN'
-        ]
-      : null;
-  });
-
-  eoLeistungenSig = toSignal(this.form.controls.eoLeistungen.valueChanges);
-  eoLeistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const eoLeistungen = fromFormatedNumber(this.eoLeistungenSig() ?? '0');
-
-    return eoLeistungen > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO'
-            : 'EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO'
-        ]
-      : null;
-  });
-
-  ergaenzungsleistungenSig = toSignal(
-    this.form.controls.ergaenzungsleistungen.valueChanges,
+  unterhaltsbeitraegeDocumentSig = this.createFieldDocumentSig(
+    'unterhaltsbeitraege',
+    'EK_BELEG_UNTERHALTSBEITRAEGE',
+    'EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE',
   );
-  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const ergaenzungsleistungen = fromFormatedNumber(
-      this.ergaenzungsleistungenSig() ?? '0',
-    );
 
-    return ergaenzungsleistungen > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN'
-            : 'EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN'
-        ]
-      : null;
-  });
+  zulagenDocumentSig = this.createFieldDocumentSig(
+    'zulagen',
+    'EK_BELEG_KINDERZULAGEN',
+    'EK_PARTNER_BELEG_KINDERZULAGEN',
+  );
 
-  beitraegeSig = toSignal(this.form.controls.beitraege.valueChanges);
-  beitraegeDocumentSig = this.createUploadOptionsSig(() => {
-    const beitraege = fromFormatedNumber(this.beitraegeSig() ?? '0');
+  rentenDocumentSig = this.createFieldDocumentSig(
+    'renten',
+    'EK_BELEG_BEZAHLTE_RENTEN',
+    'EK_PARTNER_BELEG_BEZAHLTE_RENTEN',
+  );
 
-    return beitraege > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION'
-            : 'EK_VERFUEGUNG_GEMEINDE_INSTITUTION'
-        ]
-      : null;
-  });
+  eoLeistungenDocumentSig = this.createFieldDocumentSig(
+    'eoLeistungen',
+    'EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO',
+    'EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO',
+  );
 
-  fahrkostenSig = toSignal(this.form.controls.fahrkosten.valueChanges);
-  fahrkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const fahrkosten = fromFormatedNumber(this.fahrkostenSig() ?? '0');
+  ergaenzungsleistungenDocumentSig = this.createFieldDocumentSig(
+    'ergaenzungsleistungen',
+    'EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN',
+    'EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN',
+  );
 
-    return fahrkosten > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_OV_ABONNEMENT'
-            : 'EK_BELEG_OV_ABONNEMENT'
-        ]
-      : null;
-  });
+  beitraegeDocumentSig = this.createFieldDocumentSig(
+    'beitraege',
+    'EK_VERFUEGUNG_GEMEINDE_INSTITUTION',
+    'EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION',
+  );
 
-  wohnkostenSig = toSignal(this.form.controls.wohnkosten.valueChanges);
-  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
-    const wohnkosten = fromFormatedNumber(this.wohnkostenSig() ?? '0');
+  fahrkostenDocumentSig = this.createFieldDocumentSig(
+    'fahrkosten',
+    'EK_BELEG_OV_ABONNEMENT',
+    'EK_PARTNER_BELEG_OV_ABONNEMENT',
+  );
 
-    return wohnkosten > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_MIETVERTRAG'
-            : 'EK_MIETVERTRAG'
-        ]
-      : null;
-  });
+  wohnkostenDocumentSig = this.createFieldDocumentSig(
+    'wohnkosten',
+    'EK_MIETVERTRAG',
+    'EK_PARTNER_MIETVERTRAG',
+  );
 
   wgWohnendSig = toSignal(this.form.controls.wgWohnend.valueChanges);
 
-  betreuungskostenKinderSig = toSignal(
-    this.form.controls.betreuungskostenKinder.valueChanges,
+  betreuungskostenKinderDocumentSig = this.createFieldDocumentSig(
+    'betreuungskostenKinder',
+    'EK_BELEG_BETREUUNGSKOSTEN_KINDER',
+    'EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER',
   );
-  betreuungskostenKinderDocumentSig = this.createUploadOptionsSig(() => {
-    const betreuungskostenKinder = fromFormatedNumber(
-      this.betreuungskostenKinderSig() ?? '0',
-    );
 
-    return betreuungskostenKinder > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER'
-            : 'EK_BELEG_BETREUUNGSKOSTEN_KINDER'
-        ]
-      : null;
-  });
-
-  vermoegenSig = toSignal(this.form.controls.vermoegen.valueChanges);
-  vermoegenDocumentSig = this.createUploadOptionsSig(() => {
-    const vermoegen = fromFormatedNumber(this.vermoegenSig() ?? '0');
-
-    return vermoegen > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_VERMOEGEN'
-            : 'EK_VERMOEGEN'
-        ]
-      : null;
-  });
-
-  einnahmenBGSASig = toSignal(this.form.controls.einnahmenBGSA.valueChanges);
-  einnahmenBGSADocumentSig = this.createUploadOptionsSig(() => {
-    const einnahmenBGSA = fromFormatedNumber(this.einnahmenBGSASig() ?? '0');
-
-    return einnahmenBGSA > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_EINNAHMEN_BGSA'
-            : 'EK_BELEG_EINNAHMEN_BGSA'
-        ]
-      : null;
-  });
-
-  taggelderAHVIVSig = toSignal(this.form.controls.taggelderAHVIV.valueChanges);
-  taggelderAHVIVDocumentSig = this.createUploadOptionsSig(() => {
-    const taggelderAHVIV = fromFormatedNumber(this.taggelderAHVIVSig() ?? '0');
-
-    return taggelderAHVIV > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_TAGGELDER_AHV_IV'
-            : 'EK_BELEG_TAGGELDER_AHV_IV'
-        ]
-      : null;
-  });
-
-  andereEinnahmenSig = toSignal(
-    this.form.controls.andereEinnahmen.valueChanges,
+  vermoegenDocumentSig = this.createFieldDocumentSig(
+    'vermoegen',
+    'EK_VERMOEGEN',
+    'EK_PARTNER_VERMOEGEN',
   );
-  andereEinnahmenDocumentSig = this.createUploadOptionsSig(() => {
-    const andereEinnahmen = fromFormatedNumber(
-      this.andereEinnahmenSig() ?? '0',
-    );
 
-    return andereEinnahmen > 0
-      ? DokumentTyp[
-          this.einkommenTyp() === 'PARTNER'
-            ? 'EK_PARTNER_BELEG_ANDERE_EINNAHMEN'
-            : 'EK_BELEG_ANDERE_EINNAHMEN'
-        ]
-      : null;
-  });
+  einnahmenBGSADocumentSig = this.createFieldDocumentSig(
+    'einnahmenBGSA',
+    'EK_BELEG_EINNAHMEN_BGSA',
+    'EK_PARTNER_BELEG_EINNAHMEN_BGSA',
+  );
+
+  taggelderAHVIVDocumentSig = this.createFieldDocumentSig(
+    'taggelderAHVIV',
+    'EK_BELEG_TAGGELDER_AHV_IV',
+    'EK_PARTNER_BELEG_TAGGELDER_AHV_IV',
+  );
+
+  andereEinnahmenDocumentSig = this.createFieldDocumentSig(
+    'andereEinnahmen',
+    'EK_BELEG_ANDERE_EINNAHMEN',
+    'EK_PARTNER_BELEG_ANDERE_EINNAHMEN',
+  );
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
@@ -563,8 +471,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       );
 
       // arbeitspensumProzent is only visible and required if nettoerwerbseinkommen > 0
+      const nettoerwerbseinkommen =
+        this.form.controls.nettoerwerbseinkommen.value;
       const hatNettoerwerbseinkommen =
-        fromFormatedNumber(this.nettoerwerbseinkommenSig() ?? '0') > 0;
+        fromFormatedNumber((nettoerwerbseinkommen ?? '0') as string) > 0;
 
       this.setDisabledStateAndHide(
         this.form.controls.arbeitspensumProzent,

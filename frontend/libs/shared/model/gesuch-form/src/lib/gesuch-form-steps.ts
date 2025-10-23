@@ -396,7 +396,7 @@ export const getFormStepByDocumentType = (
     }
   }
 
-  if (dokumentTyp.startsWith('EINNAHMEN_KOSTEN_PARTNER')) {
+  if (dokumentTyp.startsWith('EK_PARTNER')) {
     return EINNAHMEN_KOSTEN_PARTNER;
   }
 
