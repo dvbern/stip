@@ -56,6 +56,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
+import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.MockPersonInAusbildungMapperImpl;
@@ -336,6 +337,7 @@ class GesuchFormularMapperTest {
 
         // Assert
         assertThat(update.getPartner(), is(nullValue()));
+        assertThat(update.getEinnahmenKostenPartner(), is(nullValue()));
     }
 
     @Test
@@ -355,6 +357,54 @@ class GesuchFormularMapperTest {
         GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
         assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
         assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
+    }
+
+    @Test
+    void setCorrectVermoegenForPartnerValueGT18Test() {
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
+        tranche.setGesuchFormular(
+            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
+                .setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        var parter = new Partner();
+        parter.setGeburtsdatum(geburtsDatum);
+        var ekPartner = new EinnahmenKosten();
+        ekPartner.setVermoegen(5);
+        tranche.getGesuchFormular().setEinnahmenKostenPartner(ekPartner);
+        tranche.getGesuchFormular().setPartner(parter);
+        GesuchFormularMapper gesuchFormularMapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertTrue(GesuchFormularCalculationUtil.wasPartnerOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertTrue(formular.getEinnahmenKostenPartner().getVermoegen() == 5);
+    }
+
+    @Test
+    void setCorrectVermoegenForPartnerValueLT18Test() {
+        // neues gesuch
+        Gesuch gesuch = GesuchGenerator.initGesuch();
+        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
+        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
+        tranche.setGesuchFormular(
+            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
+                .setTranche(tranche)
+        );
+        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
+        var parter = new Partner();
+        parter.setGeburtsdatum(geburtsDatum);
+        var ekPartner = new EinnahmenKosten();
+        ekPartner.setVermoegen(5);
+        tranche.getGesuchFormular().setEinnahmenKostenPartner(ekPartner);
+        tranche.getGesuchFormular().setPartner(parter);
+        GesuchFormularMapper gesuchFormularMapper = createMapper();
+        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
+        assertFalse(GesuchFormularCalculationUtil.wasPartnerOlderThan18(tranche.getGesuchFormular()));
+        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
+        assertTrue(formular.getEinnahmenKostenPartner().getVermoegen() == null);
     }
 
     @Test
