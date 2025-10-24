@@ -118,20 +118,6 @@ import org.hibernate.envers.Audited;
         LebenslaufItemPageValidation.class
     }, property = "lebenslaufItems"
 )
-@EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten",
-    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
-)
-@EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten",
-    einnahmenKostenType = EinnahmenKostenType.PARTNER
-)
 @EinnahmenKostenZulagenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,

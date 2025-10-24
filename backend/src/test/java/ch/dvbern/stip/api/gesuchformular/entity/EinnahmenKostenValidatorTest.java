@@ -26,12 +26,9 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
@@ -49,7 +46,6 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
 
 class EinnahmenKostenValidatorTest {
 
@@ -289,31 +285,6 @@ class EinnahmenKostenValidatorTest {
         assertThat(validator.isValid(gesuchFormular, null)).isTrue();
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(0));
         assertThat(validator.isValid(gesuchFormular, null)).isFalse();
-    }
-
-    @Test
-    void testGesuchEinreichenValidationEinnahmenKostenEltern() {
-        Familiensituation familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setGerichtlicheAlimentenregelung(true);
-        familiensituation.setWerZahltAlimente(Elternschaftsteilung.VATER);
-        familiensituation.setMutterWiederverheiratet(false);
-        Gesuch gesuch = prepareDummyGesuch();
-        Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungBegin(LocalDate.now().minusDays(1));
-        Fall fall = new Fall();
-        Auszahlung auszahlung = new Auszahlung();
-        fall.setAuszahlung(auszahlung);
-        ausbildung.setFall(fall);
-        gesuch.setAusbildung(ausbildung);
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setFamiliensituation(familiensituation);
-        EinnahmenKosten einnahmenKosten = new EinnahmenKosten();
-        getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        var validator = new EinnahmenKostenUnterhaltsbeitraegeRequiredConstraintValidator();
-        validator.einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER;
-        assertFalse(
-            validator.isValid(gesuch.getGesuchTranchen().get(0).getGesuchFormular(), null)
-        );
     }
 
     private Gesuch prepareDummyGesuch() {
