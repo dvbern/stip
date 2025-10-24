@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
@@ -37,7 +37,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Repeatable(EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint.List.class)
 public @interface EinnahmenKostenUnterhaltsbeitraegeRequiredConstraint {
 
-    String message() default VALIDATION_EINNAHMEN_KOSTEN_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE;
+    String message() default VALIDATION_STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE;
 
     Class<?>[] groups() default {};
 

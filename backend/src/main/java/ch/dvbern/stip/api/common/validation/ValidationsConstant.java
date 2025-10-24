@@ -126,8 +126,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.partner.ausbildungspensum.message}";
     public static final String VALIDATION_LEBENSLAUF_LUCKENLOS_MESSAGE =
         "{jakarta.validation.constraints.lebenslauf.luckenlos.message}";
-    public static final String VALIDATION_EINNAHMEN_KOSTEN_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE =
-        "{jakarta.validation.constraints.einnahmen.kosten.alimente.required.message}";
+    public static final String VALIDATION_STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_REQUIRED_MESSAGE =
+        "{jakarta.validation.constraints.steuererklaerung.unterhaltsbeitraege.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_RENTEN_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.renten.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE =
