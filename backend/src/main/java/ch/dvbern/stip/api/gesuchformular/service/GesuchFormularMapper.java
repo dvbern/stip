@@ -317,13 +317,11 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             }
         );
 
-
         resetFieldIf(
-            () -> (
-                newFormular.getPartner() != null &&
-                newFormular.getEinnahmenKostenPartner() != null &&
-                !GesuchFormularCalculationUtil
-                    .isDateOfBirthGreaterThanOrEquals18(newFormular.getPartner().getGeburtsdatum())),
+            () -> (newFormular.getPartner() != null &&
+            newFormular.getEinnahmenKostenPartner() != null &&
+            !GesuchFormularCalculationUtil
+                .isDateOfBirthGreaterThanOrEquals18(newFormular.getPartner().getGeburtsdatum())),
             "Reset Vermoegen if Partner is < 18 years old",
             () -> {
                 newFormular.getEinnahmenKostenPartner().setVermoegen(null);
