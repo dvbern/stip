@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import jakarta.validation.ConstraintValidator;
@@ -44,8 +46,9 @@ public class EinnahmenKostenUnterhaltsbeitraegeRequiredConstraintValidator
         }
 
         final var alimentenregelung = gesuchFormular.getFamiliensituation().getGerichtlicheAlimentenregelung();
-        if (alimentenregelung != null && alimentenregelung) {
-            if (einnahmenKosten.getUnterhaltsbeitraege() == null) {
+
+        if (Boolean.TRUE.equals(alimentenregelung) && einnahmenKostenType.equals(EinnahmenKostenType.GESUCHSTELLER)) {
+            if (Objects.isNull(einnahmenKosten.getUnterhaltsbeitraege())) {
                 return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
             } else {
                 return true;
