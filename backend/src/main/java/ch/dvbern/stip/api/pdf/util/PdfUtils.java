@@ -173,6 +173,7 @@ public class PdfUtils {
             translator,
             isDeckblatt,
             pdfFont,
+            null,
             ausbildungsbeitraegeUri,
             Optional.empty()
         );
@@ -185,6 +186,7 @@ public class PdfUtils {
         final TL translator,
         final boolean isDeckblatt,
         final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
         final Link ausbildungsbeitraegeUri,
         final Optional<Eltern> elternteilOptional
     ) {
@@ -296,11 +298,45 @@ public class PdfUtils {
                 pdfFont,
                 FONT_SIZE_MEDIUM,
                 1,
-                1,
-                elternteil.getFullName(),
-                elternteil.getAdresse().getStrasse(),
-                elternteil.getAdresse().getPlz() + " " + elternteil.getAdresse().getOrt()
+                1
             ).setPaddingTop(SPACING_MEDIUM);
+
+            receiver.add(
+                PdfUtils.createParagraph(
+                    pdfFontBold,
+                    FONT_SIZE_MEDIUM,
+                    leftMargin,
+                    "Einschreiben"
+                )
+            );
+
+            receiver.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_MEDIUM,
+                    leftMargin,
+                    elternteil.getFullName()
+                )
+            );
+
+            receiver.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_MEDIUM,
+                    leftMargin,
+                    elternteil.getAdresse().getStrasse() + " " + elternteil.getAdresse().getHausnummer()
+                )
+            );
+
+            receiver.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_MEDIUM,
+                    leftMargin,
+                    elternteil.getAdresse().getPlz() + " " + elternteil.getAdresse().getOrt()
+                )
+            );
+
             headerTable.addCell(receiver);
         }
 
@@ -352,7 +388,8 @@ public class PdfUtils {
         final Document document,
         float leftMargin,
         final TL translator,
-        final PdfFont pdfFont
+        final PdfFont pdfFont,
+        final boolean addKopieAn
     ) {
         final float[] columnWidths = { 50, 50 };
         final Table signatureTable = PdfUtils.createTable(columnWidths, leftMargin);
@@ -403,7 +440,9 @@ public class PdfUtils {
             )
         );
 
-        addCopieAnParagraph(gesuch, translator, leftMargin, document, pdfFont);
+        if (addKopieAn) {
+            addCopieAnParagraph(gesuch, translator, leftMargin, document, pdfFont);
+        }
     }
 
     private void addCopieAnParagraph(
