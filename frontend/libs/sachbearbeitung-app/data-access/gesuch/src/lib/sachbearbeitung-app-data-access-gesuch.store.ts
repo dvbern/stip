@@ -139,13 +139,11 @@ export class GesuchStore extends signalStore(
 
     BEREIT_FUER_BEARBEITUNG: rxMethod<{
       gesuchTrancheId: string;
-      text?: string;
     }>(
       pipe(
-        this.handleStatusChange(({ gesuchTrancheId, text }) =>
+        this.handleStatusChange(({ gesuchTrancheId }) =>
           this.gesuchService.changeGesuchStatusToBereitFuerBearbeitung$({
             gesuchTrancheId,
-            ...(text ? { kommentar: { text } } : {}),
           }),
         ),
       ),
@@ -201,11 +199,15 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: rxMethod<{ gesuchTrancheId: string }>(
+    SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: rxMethod<{
+      gesuchTrancheId: string;
+      text: string;
+    }>(
       pipe(
-        this.handleStatusChange(({ gesuchTrancheId }) =>
+        this.handleStatusChange(({ gesuchTrancheId, text }) =>
           this.gesuchService.changeGesuchStatusToDatenschutzbriefDruckbereit$({
             gesuchTrancheId,
+            kommentar: { text },
           }),
         ),
       ),
