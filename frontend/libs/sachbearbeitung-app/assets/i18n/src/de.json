@@ -642,6 +642,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Totaler Betrag des Budgets",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.positiverBetrag": "Positive Beträge werden nicht ans Stipendium angerechnet",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch": "Stipendienanspruch",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate": "Berechnung für {{ monate }} Monate",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.anzahlPersonen": "Pro Kopf Teilung",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Stipendienanspruch",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Anrechenbarer Betrag des Budgets ({{ berechnungsanteilKinder }}%)",

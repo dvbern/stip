@@ -28,7 +28,17 @@
       "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.color": "#f85c05",
-    "git.blame.statusBarItem.enabled": false,
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "request": "attach",
+        "name": "Attach by Process ID",
+        "processId": "${command:PickJavaProcess}"
+      }
+    ]
   }
 }

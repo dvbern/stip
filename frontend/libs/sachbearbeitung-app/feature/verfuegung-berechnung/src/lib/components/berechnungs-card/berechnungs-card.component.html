@@ -68,9 +68,17 @@
         <!-- Stipendienanspruch -->
         <div class="d-flex justify-content-between fs-3 h4 mt-3">
           <div>
-            {{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}
+            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}</div>
+            @if (berechnung.monate !== 12) {
+              <div class="text-muted mt-1 fw-normal fs-6">
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate'
+                    | transloco: { monate: berechnung.monate }
+                }}
+              </div>
+            }
           </div>
-          <div>{{ berechnung.totalBetragStipendium | formatChf }}</div>
+          <div>{{ berechnung.berechnung | formatChf }}</div>
         </div>
       } @else if (berechnung.typ === 'persoenlich') {
         <div class="d-flex justify-content-between fs-4 h4">
@@ -92,8 +100,18 @@
 
         <!-- Stipendienanspruch -->
         <div class="d-flex justify-content-between fs-3 h4 mt-3">
-          <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}</div>
-          <div>{{ berechnung.totalBetragStipendium | formatChf }}</div>
+          <div>
+            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}</div>
+            @if (berechnung.monate !== 12) {
+              <div class="text-muted mt-1 fw-normal fs-6">
+                {{
+                  'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate'
+                    | transloco: { monate: berechnung.monate }
+                }}
+              </div>
+            }
+          </div>
+          <div>{{ berechnung.berechnung | formatChf }}</div>
         </div>
       } @else {
         <div class="d-flex justify-content-between fs-4 h4">
