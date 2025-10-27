@@ -212,8 +212,13 @@ public class BernStipDecider extends BaseStipDecider {
         }
 
         private static StipDeciderResult evaluateStep3(final GesuchTranche gesuchTranche, final PlzService plzService) {
-            if (piaBevormundet(gesuchTranche) && !zuestaendigeKESBImKantonBern(gesuchTranche)) {
-                return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN;
+            if (piaBevormundet(gesuchTranche)) {
+                if (!zuestaendigeKESBImKantonBern(gesuchTranche)) {
+                    return StipDeciderResult.ANSPRUCH_MANUELL_PRUEFEN_STIPENDIENRECHTLICHER_WOHNSITZ_KESB_NICHT_BERN;
+
+                } else {
+                    return StipDeciderResult.GESUCH_VALID;
+                }
             }
             return evaluateElternWohnsitz(gesuchTranche, plzService);
         }
