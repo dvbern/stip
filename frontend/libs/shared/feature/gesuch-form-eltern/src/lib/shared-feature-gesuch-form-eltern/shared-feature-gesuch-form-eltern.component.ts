@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -44,6 +45,7 @@ const allEltern = Object.values(ElternTyp);
   selector: 'dv-shared-feature-gesuch-form-eltern',
   imports: [
     ReactiveFormsModule,
+    CommonModule,
     MatListModule,
     ElternteilCardComponent,
     SharedFeatureGesuchFormElternEditorComponent,
@@ -131,9 +133,13 @@ export class SharedFeatureGesuchFormElternComponent {
 
     effect(() => {
       const gesuchTrancheId = this.viewSig().gesuch?.gesuchTrancheToWorkWith.id;
-      const versteckteEltern = this.sichtbareElternChangedSig()?.value;
+      const sichtbareEltern = this.sichtbareElternChangedSig()?.value;
 
-      if (gesuchTrancheId && versteckteEltern) {
+      if (gesuchTrancheId && sichtbareEltern) {
+        // Convert visible eltern to hidden eltern (inverse)
+        const versteckteEltern = allEltern.filter(
+          (e) => !sichtbareEltern.includes(e),
+        );
         this.versteckteElternStore.saveVersteckteEltern$({
           gesuchTrancheId,
           versteckteEltern: versteckteEltern,
