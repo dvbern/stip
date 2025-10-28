@@ -123,7 +123,8 @@ public interface GesuchTrancheMapper {
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
-        // TODO KSTIP-2784: Selective remove only the specified Elternteil
-        gesuchTrancheDto.getGesuchFormular().getElterns().clear();
+        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
+        final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
+        eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
     }
 }
