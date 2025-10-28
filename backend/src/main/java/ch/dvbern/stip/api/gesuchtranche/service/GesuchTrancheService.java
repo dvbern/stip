@@ -497,7 +497,7 @@ public class GesuchTrancheService {
                 .add(steuererklaerungMapper.toUpdateDto(steuererklaerung).id(null));
         }
 
-        gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
+        gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung, false);
         if (aenderung.getGesuchFormular().getPartner() != null) {
             aenderung.getGesuchFormular().getPartner().getAdresse().setId(null);
         }

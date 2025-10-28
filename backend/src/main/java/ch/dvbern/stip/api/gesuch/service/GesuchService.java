@@ -272,9 +272,13 @@ public class GesuchService {
         einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
     }
 
+    // TODO KSTIP-2784: Split this into 2 methods, one GS one SB/ override with a boolean whether or not to clear eltern
     @Transactional
-    public void updateGesuch(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto, final String tenantId)
-    throws ValidationsException {
+    public void updateGesuch(
+        final UUID gesuchId,
+        final GesuchUpdateDto gesuchUpdateDto,
+        final boolean overrideIncomingVersteckteEltern
+    ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
         var trancheToUpdate = gesuch
             .getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
@@ -287,7 +291,11 @@ public class GesuchService {
             );
         }
 
-        updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
+        updateGesuchTranche(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith(),
+            trancheToUpdate,
+            overrideIncomingVersteckteEltern
+        );
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
         gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
@@ -298,8 +306,12 @@ public class GesuchService {
         }
     }
 
-    private void updateGesuchTranche(final GesuchTrancheUpdateDto trancheUpdate, final GesuchTranche trancheToUpdate) {
-        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
+    private void updateGesuchTranche(
+        final GesuchTrancheUpdateDto trancheUpdate,
+        final GesuchTranche trancheToUpdate,
+        final boolean overrideIncomingVersteckteEltern
+    ) {
+        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, overrideIncomingVersteckteEltern);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);

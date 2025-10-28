@@ -22,16 +22,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
+import jakarta.inject.Inject;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -44,35 +47,33 @@ import org.mapstruct.Qualifier;
     config = MappingConfig.class,
     uses = GesuchFormularMapper.class
 )
-public interface GesuchTrancheMapper {
-
-    @Mapping(source = "gueltigAb", target = "gueltigkeit.gueltigAb")
-    @Mapping(source = "gueltigBis", target = "gueltigkeit.gueltigBis")
-    GesuchTranche toEntity(GesuchTrancheDto gesuchTrancheDto);
+public abstract class GesuchTrancheMapper {
+    @Inject
+    ElternMapper elternMapper;
 
     @ToDtoDefaultMapping
     @BeanMapping(qualifiedBy = WithVersteckteEltern.class)
-    GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+    public abstract GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
 
-    default GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch) {
+    public GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch) {
         return toDtoWithVersteckteEltern(gesuch, gesuch);
     }
 
     @ToDtoDefaultMapping
     @BeanMapping(qualifiedBy = WithoutVersteckteEltern.class)
-    GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+    public abstract GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
 
-    default GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch) {
+    public GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch) {
         return toDtoWithoutVersteckteEltern(gesuch, gesuch);
     }
 
     @Named("toSlimDto")
     @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
     @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
-    GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
+    public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
 
     @Named("toSlimDtoWithRevision")
-    default List<GesuchTrancheSlimDto> toSlimDtoWithRevision(List<Pair<GesuchTranche, DefaultRevisionEntity>> value) {
+    public List<GesuchTrancheSlimDto> toSlimDtoWithRevision(List<Pair<GesuchTranche, DefaultRevisionEntity>> value) {
         return value.stream()
             .map(pair -> toSlimDto(pair.getLeft()).revision(pair.getRight().getId()))
             .toList();
@@ -82,21 +83,46 @@ public interface GesuchTrancheMapper {
     @Mapping(target = "initialTranchen", qualifiedByName = "toSlimDto")
     @Mapping(target = "aenderungen", qualifiedByName = "toSlimDto")
     @Mapping(target = "abgelehnteAenderungen", qualifiedByName = "toSlimDtoWithRevision")
-    GesuchTrancheListDto toListDto(
+    public abstract GesuchTrancheListDto toListDto(
         List<GesuchTranche> tranchen,
         List<GesuchTranche> initialTranchen,
         List<GesuchTranche> aenderungen,
         List<Pair<GesuchTranche, DefaultRevisionEntity>> abgelehnteAenderungen
     );
 
+    @BeanMapping(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        qualifiedByName = "beforeMappingOverrideIncomingVersteckteEltern"
+    )
+    public abstract GesuchTranche partialUpdateOverrideIncomingVersteckteEltern(
+        GesuchTrancheUpdateDto gesuchUpdateDto,
+        @MappingTarget GesuchTranche gesuch
+    );
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    GesuchTranche partialUpdate(GesuchTrancheUpdateDto gesuchUpdateDto, @MappingTarget GesuchTranche gesuch);
+    public abstract GesuchTranche partialUpdateAcceptIncomingVersteckteEltern(
+        GesuchTrancheUpdateDto gesuchUpdateDto,
+        @MappingTarget GesuchTranche gesuch
+    );
+
+    public GesuchTranche partialUpdate(
+        final GesuchTrancheUpdateDto gesuchUpdateDto,
+        final GesuchTranche gesuch,
+        final boolean overrideIncomingVersteckteEltern
+    ) {
+        if (overrideIncomingVersteckteEltern) {
+            return partialUpdateOverrideIncomingVersteckteEltern(gesuchUpdateDto, gesuch);
+        } else {
+            return partialUpdateAcceptIncomingVersteckteEltern(gesuchUpdateDto, gesuch);
+        }
+    }
 
     @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
     @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
     @interface ToDtoDefaultMapping {
     }
 
+    // TODO KSTIP-2784: Move this into GesuchFormularMapper?
     @Qualifier
     @Retention(RetentionPolicy.CLASS)
     @interface WithVersteckteEltern {
@@ -109,7 +135,7 @@ public interface GesuchTrancheMapper {
 
     @WithVersteckteEltern
     @AfterMapping
-    default void afterMappingWithVersteckteEltern(
+    protected void afterMappingWithVersteckteEltern(
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
@@ -119,12 +145,37 @@ public interface GesuchTrancheMapper {
 
     @WithoutVersteckteEltern
     @AfterMapping
-    default void afterMappingWithoutVersteckteEltern(
+    protected void afterMappingWithoutVersteckteEltern(
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
         final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
         eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
+    }
+
+    @Named("beforeMappingOverrideIncomingVersteckteEltern")
+    @BeforeMapping
+    protected void beforeMappingOverrideIncomingVersteckteEltern(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
+        final var replacements = gesuchTranche.getGesuchFormular()
+            .getElterns()
+            .stream()
+            .filter(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()))
+            .map(elternMapper::toUpdateDto)
+            .toList();
+
+        for (final var replacement : replacements) {
+            final var newFormular = newTranche.getGesuchFormular();
+            newFormular.getElterns()
+                .removeIf(eltern -> eltern.getElternTyp() == replacement.getElternTyp());
+
+            newFormular.getElterns().add(replacement);
+        }
+
+        newTranche.getGesuchFormular().getElterns().addAll(replacements);
     }
 }
