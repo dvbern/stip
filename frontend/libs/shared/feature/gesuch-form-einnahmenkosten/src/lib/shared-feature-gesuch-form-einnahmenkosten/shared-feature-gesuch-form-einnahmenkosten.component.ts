@@ -469,17 +469,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.form.controls.vermoegen,
         !warErwachsenSteuerJahr,
       );
-
-      // arbeitspensumProzent is only visible and required if nettoerwerbseinkommen > 0
-      const nettoerwerbseinkommen =
-        this.form.controls.nettoerwerbseinkommen.value;
-      const hatNettoerwerbseinkommen =
-        fromFormatedNumber((nettoerwerbseinkommen ?? '0') as string) > 0;
-
-      this.setDisabledStateAndHide(
-        this.form.controls.arbeitspensumProzent,
-        !hatNettoerwerbseinkommen,
-      );
       this.setDisabledStateAndHide(
         this.form.controls.veranlagungsStatus,
         this.config.isGesuchApp,
@@ -487,6 +476,21 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.setDisabledStateAndHide(
         this.form.controls.steuerjahr,
         this.config.isGesuchApp,
+      );
+    });
+
+    // hide and show arbeitsPensum
+    const nettoerwerbseinkommenChangedSig = toSignal(
+      this.form.controls.nettoerwerbseinkommen.valueChanges,
+    );
+    effect(() => {
+      const nettoerwerbseinkommen = nettoerwerbseinkommenChangedSig();
+      const hatNettoerwerbseinkommen =
+        fromFormatedNumber((nettoerwerbseinkommen ?? '0') as string) > 0;
+
+      this.setDisabledStateAndHide(
+        this.form.controls.arbeitspensumProzent,
+        !hatNettoerwerbseinkommen,
       );
     });
 
