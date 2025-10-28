@@ -726,7 +726,7 @@
   "shared.form.geschwister.file.AUSBILDUNGSSTAETTE": "Attestation de l'établissement de formation",
   "shared.form.geschwister.file.AUSBILDUNGSSTAETTE_DESCRIPTION": "Copie d’une attestation actuelle de l’établissement de formation indiquant que votre frère ou sœur suit une formation postobligatoire et dont la date d’émission est postérieure au début de la formation (pour les apprenti-e-s, une attestation actuelle de l’employeur)",
 
-  "shared.kinder.title": "Enfants",
+  "shared.kinder.title": "Propres enfants",
   "shared.form.kinder.add": "Ajouter un enfant",
   "shared.form.kinder.edit": "Modifier l'enfant",
   "shared.form.kinder.view": "Afficher l'enfant",
