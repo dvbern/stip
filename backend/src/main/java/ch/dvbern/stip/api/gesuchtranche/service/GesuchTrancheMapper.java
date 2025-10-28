@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -41,18 +39,21 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.Qualifier;
 
 @Mapper(
     config = MappingConfig.class,
     uses = GesuchFormularMapper.class
 )
 public abstract class GesuchTrancheMapper {
+    @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
+    @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
+    @interface ToDtoDefaultMapping {
+    }
+
     @Inject
     ElternMapper elternMapper;
 
     @ToDtoDefaultMapping
-    @BeanMapping(qualifiedBy = WithVersteckteEltern.class)
     public abstract GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
 
     public GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch) {
@@ -60,7 +61,7 @@ public abstract class GesuchTrancheMapper {
     }
 
     @ToDtoDefaultMapping
-    @BeanMapping(qualifiedBy = WithoutVersteckteEltern.class)
+    @BeanMapping(qualifiedByName = "afterMappingWithoutVersteckteEltern")
     public abstract GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
 
     public GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch) {
@@ -68,8 +69,7 @@ public abstract class GesuchTrancheMapper {
     }
 
     @Named("toSlimDto")
-    @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
-    @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
+    @ToDtoDefaultMapping
     public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
 
     @Named("toSlimDtoWithRevision")
@@ -117,40 +117,19 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
-    @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
-    @interface ToDtoDefaultMapping {
-    }
-
     // TODO KSTIP-2784: Move this into GesuchFormularMapper?
-    @Qualifier
-    @Retention(RetentionPolicy.CLASS)
-    @interface WithVersteckteEltern {
-    }
-
-    @Qualifier
-    @Retention(RetentionPolicy.CLASS)
-    @interface WithoutVersteckteEltern {
-    }
-
-    @WithVersteckteEltern
-    @AfterMapping
-    protected void afterMappingWithVersteckteEltern(
-        @MappingTarget GesuchTrancheDto gesuchTrancheDto,
-        @Context GesuchTranche context
-    ) {
-        // Do nothing, this is just for the sake of symmetry
-        ;
-    }
-
-    @WithoutVersteckteEltern
+    @Named("afterMappingWithoutVersteckteEltern")
     @AfterMapping
     protected void afterMappingWithoutVersteckteEltern(
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
-        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
+        if (eltern == null) {
+            return;
+        }
+
+        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
         eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
     }
 
@@ -160,6 +139,10 @@ public abstract class GesuchTrancheMapper {
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
     ) {
+        if (newTranche.getGesuchFormular().getElterns() == null) {
+            return;
+        }
+
         final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         final var replacements = gesuchTranche.getGesuchFormular()
             .getElterns()
