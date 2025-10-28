@@ -38,6 +38,7 @@ import {
 import { PARTNER, isStepDisabled } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 import { MAX_EINKOMMEN } from '@dv/shared/model/ui-constants';
+import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -91,6 +92,7 @@ const MEDIUM_AGE_ADULT = 30;
     SharedUiTranslateChangePipe,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
+    SharedUiAppDatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-partner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
