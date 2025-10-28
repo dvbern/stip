@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 import java.util.Set;
 
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +31,7 @@ class BetreuungskostenRequiredConstraintValidatorTest {
     @Test
     void isValidTest() {
         final var validator = new EinnahmenKostenBetreuungskostenRequiredConstraintValidator();
+        validator.einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER;
 
         final var formular = new GesuchFormular()
             .setKinds(Set.of(new Kind()))

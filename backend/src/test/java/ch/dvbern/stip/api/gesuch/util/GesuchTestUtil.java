@@ -76,6 +76,11 @@ public class GesuchTestUtil {
         gesuchFormular.getPartner().setSozialversicherungsnummer("756.6523.5720.40");
         gesuch.setGesuchNummer("23");
 
+        gesuchFormular.getEinnahmenKostenPartner().setVerpflegungskosten(5);
+        gesuchFormular.getEinnahmenKostenPartner().setRenten(0);
+        gesuchFormular.getEinnahmenKostenPartner().setFahrkosten(0);
+        gesuchFormular.getEinnahmenKostenPartner().setSteuerjahr(2023);
+        gesuchFormular.getEinnahmenKostenPartner().setNettoerwerbseinkommen(0);
         setupValidFall(gesuch, gesuchFormular);
         return gesuch;
     }
@@ -145,6 +150,7 @@ public class GesuchTestUtil {
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
             .setEinnahmenKosten(new EinnahmenKosten())
+            .setEinnahmenKostenPartner(new EinnahmenKosten())
             .setDarlehen(new Darlehen().setWillDarlehen(false));
         return formular;
     }

@@ -19,10 +19,12 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -32,6 +34,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = EinnahmenKostenSteuerjahrInPastOrCurrentConstraintValidator.class)
 @Documented
+@Repeatable(EinnahmenKostenSteuerjahrInPastOrCurrentConstraint.List.class)
 public @interface EinnahmenKostenSteuerjahrInPastOrCurrentConstraint {
     String message() default VALIDATION_EINNAHMEN_KOSTEN_STEUERJAHR_INVALID_MESSAGE;
 
@@ -40,4 +43,13 @@ public @interface EinnahmenKostenSteuerjahrInPastOrCurrentConstraint {
     Class<? extends Payload>[] payload() default {};
 
     String property() default "";
+
+    EinnahmenKostenType einnahmenKostenType();
+
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Documented
+    @interface List {
+        EinnahmenKostenSteuerjahrInPastOrCurrentConstraint[] value();
+    }
 }

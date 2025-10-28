@@ -63,6 +63,17 @@ public class GesuchFormularCalculationUtil {
         ) >= 18;
     }
 
+    public boolean wasPartnerOlderThan18(final GesuchFormular gesuchFormular) {
+        if (gesuchFormular.getPartner() == null) {
+            return true;
+        }
+
+        return calculateNumberOfYearsBetween(
+            gesuchFormular.getPartner().getGeburtsdatum(),
+            getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)
+        ) >= 18;
+    }
+
     public boolean isPersonInAusbildungVolljaehrig(final GesuchFormular gesuchFormular) {
         if (
             gesuchFormular.getPersonInAusbildung() == null
