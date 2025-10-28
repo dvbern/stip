@@ -305,7 +305,7 @@ public class PdfUtils {
                 PdfUtils.createParagraph(
                     pdfFontBold,
                     FONT_SIZE_MEDIUM,
-                    leftMargin,
+                    0,
                     "Einschreiben"
                 )
             );
@@ -314,7 +314,7 @@ public class PdfUtils {
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_MEDIUM,
-                    leftMargin,
+                    0,
                     elternteil.getFullName()
                 )
             );
@@ -323,7 +323,7 @@ public class PdfUtils {
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_MEDIUM,
-                    leftMargin,
+                    0,
                     elternteil.getAdresse().getStrasse() + " " + elternteil.getAdresse().getHausnummer()
                 )
             );
@@ -332,7 +332,7 @@ public class PdfUtils {
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_MEDIUM,
-                    leftMargin,
+                    0,
                     elternteil.getAdresse().getPlz() + " " + elternteil.getAdresse().getOrt()
                 )
             );
