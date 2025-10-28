@@ -54,14 +54,14 @@ public interface GesuchResource {
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
-    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+    GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Path("/status/datenschutzbrief-druckbereit/{gesuchTrancheId}")
+    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull KommentarDto kommentarDto);
 
     @POST
     @Path("/status/in-bearbeitung/{gesuchTrancheId}")
