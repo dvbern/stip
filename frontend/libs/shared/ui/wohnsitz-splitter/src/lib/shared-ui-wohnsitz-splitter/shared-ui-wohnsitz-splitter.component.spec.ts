@@ -30,6 +30,10 @@ describe('SharedUiWohnsitzSplitterComponent', () => {
         nonNullable: true,
       }),
     };
+    component.changes = {
+      wohnsitzAnteilMutter: undefined,
+      wohnsitzAnteilVater: undefined,
+    };
     fixture.detectChanges();
   });
 

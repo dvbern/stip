@@ -44,6 +44,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import {
   SharedUiFormFieldDirective,
@@ -111,6 +112,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiInfoDialogDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiPlzOrtAutocompleteDirective,
+    SharedUiAppDatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],
@@ -130,7 +132,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       Required<Pick<ElternUpdate, 'elternTyp'>>
   >();
 
-  @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
+  @Input({ required: true }) changes!: Partial<ElternUpdate>;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();

@@ -25,11 +25,11 @@ import { SharedUiZuvorHintComponent } from './shared-ui-form-zuvor-hint.template
  *
  * @example <caption>Translated or values which need parsing</caption>
  * <mat-hint
- *   *dvZuvorHint="view.formChanges?.anrede | lowercase | dvTranslateChange: 'shared.form.select.salutation.$VALUE' | async"
+ *   *dvZuvorHint="view.formChanges.anrede | dvTranslateChange: 'shared.form.select.salutation.$VALUE' | async"
  * ></mat-hint>
  *
  * @example <caption>With a suffix</caption>
- * <mat-hint *dvZuvorHint="view.formChanges?.wohnsitzAnteilMutter; suffix: '%'" translate>
+ * <mat-hint *dvZuvorHint="view.formChanges.wohnsitzAnteilMutter; suffix: '%'" translate>
  */
 @Directive({
   selector: '[dvZuvorHint]',
@@ -51,6 +51,9 @@ export class SharedUiZuvorHintDirective {
       let value = this.dvZuvorHintSig();
       const suffix = this.dvZuvorHintSuffixSig();
 
+      if (value === null) {
+        value = '';
+      }
       if (isDefined(value)) {
         if (!componentRef) {
           this.viewContainerRef.clear();
@@ -67,7 +70,7 @@ export class SharedUiZuvorHintDirective {
         }
         componentRef.setInput(
           <keyof SharedUiZuvorHintComponent>'zuvorSig',
-          value + suffix,
+          value + (value.toString().length > 0 ? suffix : ''),
         );
       } else {
         componentRef?.destroy();

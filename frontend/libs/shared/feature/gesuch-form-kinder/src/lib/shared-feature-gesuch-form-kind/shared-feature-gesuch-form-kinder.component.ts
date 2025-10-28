@@ -2,14 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
+  computed,
   inject,
+  signal,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder';
-import { KindUpdate } from '@dv/shared/model/gesuch';
+import { Kind, KindUpdate } from '@dv/shared/model/gesuch';
 import { KINDER } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
@@ -37,6 +39,11 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private store = inject(Store);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormKinderView);
+  changesSig = computed<Partial<Kind>>(() => {
+    const view = this.viewSig();
+    const index = this.editedKindIndexSig();
+    return view.listChanges?.changesByIndex?.[index ?? -1] ?? {};
+  });
 
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
@@ -44,7 +51,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   editedKind?: Partial<KindUpdate>;
-  editedKindIndex: number | undefined;
+  editedKindIndexSig = signal<number | undefined>(undefined);
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormKinder.init());
@@ -52,12 +59,12 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
 
   public handleAddKinder(): void {
     this.editedKind = {};
-    this.editedKindIndex = undefined;
+    this.editedKindIndexSig.set(undefined);
   }
 
   public handleSelectKinder(ge: KindUpdate, index: number): void {
     this.editedKind = ge;
-    this.editedKindIndex = index;
+    this.editedKindIndexSig.set(index);
   }
 
   handleEditorSave(kind: KindUpdate) {

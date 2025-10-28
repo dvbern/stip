@@ -57,6 +57,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -166,6 +167,7 @@ const berechtigteNiederlassungsstatus = {
     SharedUiMaxLengthDirective,
     SharedUiSelectSearchComponent,
     SharedUiPlzOrtAutocompleteDirective,
+    SharedUiAppDatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-person.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -440,7 +442,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       this.viewSig().gesuchFormular?.personInAusbildung?.niederlassungsstatus;
 
     if (!niederlassungstatusChanges) {
-      return null;
+      return {};
     }
     const changed = niederlassungsStatusConverter.from(
       niederlassungstatusChanges,

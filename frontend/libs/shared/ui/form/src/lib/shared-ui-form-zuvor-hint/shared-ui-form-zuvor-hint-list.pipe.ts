@@ -21,8 +21,12 @@ export class SharedUiFormZuvorHintListPipe implements PipeTransform {
     value: ReturnType<typeof getChangesForList>,
     index: number,
   ): boolean {
-    return !!(
-      value?.changesByIndex[index] ?? value?.newEntriesByIdentifier[index]
+    return (
+      Object.keys(
+        value?.changesByIndex[index] ??
+          value?.newEntriesByIdentifier[index] ??
+          {},
+      ).length > 0
     );
   }
 }

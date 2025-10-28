@@ -23,7 +23,7 @@
       <mat-radio-button data-testid="yes" [value]="true"> {{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
       <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
       <dv-shared-ui-form-zuvor-hint
-        [changes]="view.formChanges?.willDarlehen | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+        [changes]="view.formChanges.willDarlehen | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
       ></dv-shared-ui-form-zuvor-hint>
       <div class="group-errors">
         <mat-error *dvSharedUiFormMessageError="'required'">
@@ -44,7 +44,7 @@
             type="text"
             [maskito]="maskitoNumber"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.betragDarlehen"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.betragDarlehen"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -60,7 +60,7 @@
             type="text"
             [maskito]="maskitoNumber"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.betragBezogenKanton"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.betragBezogenKanton"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -76,7 +76,7 @@
             type="text"
             [maskito]="maskitoNumber"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.schulden"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.schulden"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -93,7 +93,7 @@
               type="number"
               min="0"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.anzahlBetreibungen"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.anzahlBetreibungen"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
@@ -126,7 +126,7 @@
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.grundNichtBerechtigt | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+                view.formChanges.grundNichtBerechtigt | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
               "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
@@ -148,7 +148,7 @@
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.grundAusbildungZwoelfJahre
+                view.formChanges.grundAusbildungZwoelfJahre
                   | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
                   | async
               "
@@ -166,7 +166,7 @@
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.grundHoheGebuehren | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+                view.formChanges.grundHoheGebuehren | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
               "
             ></dv-shared-ui-form-zuvor-hint>
           </div>
@@ -188,7 +188,7 @@
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.grundAnschaffungenFuerAusbildung
+                view.formChanges.grundAnschaffungenFuerAusbildung
                   | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
                   | async
               "
@@ -212,7 +212,7 @@
             </mat-checkbox>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.grundZweitausbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+                view.formChanges.grundZweitausbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
               "
             ></dv-shared-ui-form-zuvor-hint>
           </div>

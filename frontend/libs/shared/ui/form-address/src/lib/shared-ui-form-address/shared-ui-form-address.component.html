@@ -1,11 +1,12 @@
 <div class="row g-4" [formGroup]="group" [class.touched]="touchedSig()">
   <!-- touchedSig muessen wir irgendwo lesen, damit die change detection funktioniert, deshalb hier im html -->
 
+  @let changes = adresseChangesSig();
   <!-- Strasse -->
   <mat-form-field dvSharedUiFormField class="col-8 col-lg-4 pe-0">
     <mat-label>{{ 'shared.form.shared.address.street.label' | transloco }} </mat-label>
     <input matInput dvMaxLength type="text" formControlName="strasse" data-testid="form-address-strasse" />
-    <mat-hint *dvZuvorHint="changes?.strasse"></mat-hint>
+    <mat-hint *dvZuvorHint="changes.strasse"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
       {{ 'shared.form.error.required' | transloco }}
     </mat-error>
@@ -21,7 +22,7 @@
       formControlName="hausnummer"
       data-testid="form-address-hausnummer"
     />
-    <mat-hint *dvZuvorHint="changes?.hausnummer"></mat-hint>
+    <mat-hint *dvZuvorHint="changes.hausnummer"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
       {{ 'shared.form.error.required' | transloco }}
     </mat-error>
@@ -44,7 +45,7 @@
         formControlName="plz"
         data-testid="form-address-plz"
       />
-      <mat-hint *dvZuvorHint="changes?.plz"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.plz"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.requiredShort' | transloco }}
       </mat-error>
@@ -60,7 +61,7 @@
     <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-lg-4 ps-0">
       <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }} </mat-label>
       <input matInput dvMaxLength type="text" formControlName="ort" data-testid="form-address-ort" />
-      <mat-hint *dvZuvorHint="changes?.ort"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.ort"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -75,7 +76,7 @@
       }})</mat-label
     >
     <input matInput dvMaxLength type="text" formControlName="coAdresse" data-testid="form-address-coAdresse" />
-    <mat-hint *dvZuvorHint="changes?.coAdresse"></mat-hint>
+    <mat-hint *dvZuvorHint="changes.coAdresse"></mat-hint>
   </mat-form-field>
 
   <!-- Land -->
@@ -88,7 +89,7 @@
       [languageSig]="languageSig()"
       [panelWidthSig]="'auto'"
       [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
-      [zuvorValueSig]="changes?.landId"
+      [zuvorValueSig]="changes.landId"
     ></dv-shared-ui-select-search>
   </div>
 </div>

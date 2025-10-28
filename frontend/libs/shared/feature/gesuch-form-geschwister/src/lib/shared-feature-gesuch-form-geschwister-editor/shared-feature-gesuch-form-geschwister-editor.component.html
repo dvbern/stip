@@ -11,7 +11,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
-      <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -19,7 +19,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
-      <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -39,7 +39,7 @@
         data-testid="form-geschwister-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
-      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -70,7 +70,7 @@
         }
       </mat-select>
       <mat-hint
-        *dvZuvorHint="changes?.wohnsitz | dvTranslateChange: 'shared.form.shared.wohnsitz.$VALUE' | async"
+        *dvZuvorHint="changes.wohnsitz | dvTranslateChange: 'shared.form.shared.wohnsitz.$VALUE' | async"
       ></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -86,8 +86,8 @@
           [updateValidity]="updateValidity$ | async"
           [controls]="form.controls"
           [changes]="{
-            wohnsitzAnteilVater: changes?.wohnsitzAnteilVater,
-            wohnsitzAnteilMutter: changes?.wohnsitzAnteilMutter,
+            wohnsitzAnteilVater: changes.wohnsitzAnteilVater,
+            wohnsitzAnteilMutter: changes.wohnsitzAnteilMutter,
           }"
         ></dv-shared-ui-wohnsitz-splitter>
       </div>
@@ -112,7 +112,7 @@
           }
           <dv-shared-ui-form-zuvor-hint
             [changes]="
-              changes?.ausbildungssituation
+              changes.ausbildungssituation
                 | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
                 | async
             "

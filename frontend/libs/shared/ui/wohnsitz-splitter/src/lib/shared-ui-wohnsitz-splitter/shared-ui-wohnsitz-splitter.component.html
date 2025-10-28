@@ -6,6 +6,6 @@
   <label>{{ 'shared.form.shared.wohnsitzanteil.label' | transloco }}</label>
   <span dvLabelA>{{ 'shared.form.shared.wohnsitzanteil.mutter' | transloco }}</span>
   <span dvLabelB>{{ 'shared.form.shared.wohnsitzanteil.vater' | transloco }}</span>
-  <span dvHintA *dvZuvorHint="changes?.wohnsitzAnteilMutter; suffix: '%'"></span>
-  <span dvHintB *dvZuvorHint="changes?.wohnsitzAnteilVater; suffix: '%'"></span>
+  <span dvHintA *dvZuvorHint="changes.wohnsitzAnteilMutter; suffix: '%'"></span>
+  <span dvHintB *dvZuvorHint="changes.wohnsitzAnteilVater; suffix: '%'"></span>
 </dv-shared-ui-percentage-splitter>
