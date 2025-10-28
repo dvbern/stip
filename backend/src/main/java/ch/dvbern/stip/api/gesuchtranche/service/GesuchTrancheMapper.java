@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -28,12 +30,15 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.envers.DefaultRevisionEntity;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.Qualifier;
 
 @Mapper(
     config = MappingConfig.class,
@@ -45,9 +50,21 @@ public interface GesuchTrancheMapper {
     @Mapping(source = "gueltigBis", target = "gueltigkeit.gueltigBis")
     GesuchTranche toEntity(GesuchTrancheDto gesuchTrancheDto);
 
-    @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
-    @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
-    GesuchTrancheDto toDto(GesuchTranche gesuchTranche);
+    @ToDtoDefaultMapping
+    @BeanMapping(qualifiedBy = WithVersteckteEltern.class)
+    GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+
+    default GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch) {
+        return toDtoWithVersteckteEltern(gesuch, gesuch);
+    }
+
+    @ToDtoDefaultMapping
+    @BeanMapping(qualifiedBy = WithoutVersteckteEltern.class)
+    GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+
+    default GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch) {
+        return toDtoWithoutVersteckteEltern(gesuch, gesuch);
+    }
 
     @Named("toSlimDto")
     @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
@@ -74,4 +91,39 @@ public interface GesuchTrancheMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     GesuchTranche partialUpdate(GesuchTrancheUpdateDto gesuchUpdateDto, @MappingTarget GesuchTranche gesuch);
+
+    @Mapping(source = "gueltigkeit.gueltigAb", target = "gueltigAb")
+    @Mapping(source = "gueltigkeit.gueltigBis", target = "gueltigBis")
+    @interface ToDtoDefaultMapping {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.CLASS)
+    @interface WithVersteckteEltern {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.CLASS)
+    @interface WithoutVersteckteEltern {
+    }
+
+    @WithVersteckteEltern
+    @AfterMapping
+    default void afterMappingWithVersteckteEltern(
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto,
+        @Context GesuchTranche context
+    ) {
+        // Do nothing, this is just for the sake of symmetry
+        ;
+    }
+
+    @WithoutVersteckteEltern
+    @AfterMapping
+    default void afterMappingWithoutVersteckteEltern(
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto,
+        @Context GesuchTranche context
+    ) {
+        // TODO KSTIP-2784: Selective remove only the specified Elternteil
+        gesuchTrancheDto.getGesuchFormular().getElterns().clear();
+    }
 }

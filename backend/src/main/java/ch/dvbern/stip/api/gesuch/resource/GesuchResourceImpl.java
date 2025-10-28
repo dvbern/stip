@@ -147,7 +147,7 @@ public class GesuchResourceImpl implements GesuchResource {
             ausgewaehlterGrundDto
         );
         gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Blocking
@@ -179,7 +179,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.sbCanChangeGesuchStatusToVersandbereit(gesuchId);
 
         gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -191,7 +191,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.sbCanChangeGesuchStatusToVersendet(gesuchId);
 
         gesuchService.changeToVersendentAndAnspruchOrKeinAnspruch(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Blocking
@@ -288,7 +288,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
     }
 
     @Override
@@ -300,7 +300,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -312,7 +312,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override

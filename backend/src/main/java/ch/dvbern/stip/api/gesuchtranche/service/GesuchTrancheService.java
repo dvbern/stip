@@ -378,7 +378,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDto(newTranche);
+        return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(newTranche);
     }
 
     @Transactional
@@ -403,7 +403,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDto(newTranche);
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche);
     }
 
     @Transactional
@@ -437,7 +437,7 @@ public class GesuchTrancheService {
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
         final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
-        return gesuchTrancheMapper.toDto(newTranche.orElseThrow(NotFoundException::new));
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche.orElseThrow(NotFoundException::new));
     }
 
     @Transactional
@@ -520,7 +520,7 @@ public class GesuchTrancheService {
 
         notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDto(aenderung);
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
     }
 
     @Transactional
@@ -551,7 +551,7 @@ public class GesuchTrancheService {
         gesuchStatusService
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
-        return gesuchTrancheMapper.toDto(aenderung);
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
     }
 
     private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {
@@ -644,7 +644,7 @@ public class GesuchTrancheService {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService
             .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche, false);
     }
 
     @Transactional
@@ -674,7 +674,7 @@ public class GesuchTrancheService {
 
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());
-        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche, true);
     }
 
     @Transactional
