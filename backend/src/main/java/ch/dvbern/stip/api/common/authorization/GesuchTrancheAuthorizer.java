@@ -169,6 +169,12 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canUpdateTrancheSB(final UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        canUpdateAenderungsTrancheSB(gesuchTranche);
+    }
+
+    @Transactional
     public void canUpdateTrancheSB(final GesuchTranche gesuchTranche) {
         if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
             canUpdateAenderungsTrancheSB(gesuchTranche);

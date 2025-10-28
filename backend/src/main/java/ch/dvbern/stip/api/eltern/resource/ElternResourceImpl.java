@@ -42,10 +42,9 @@ public class ElternResourceImpl implements ElternResource {
     @RolesAllowed(SB_GESUCH_UPDATE)
     public List<ElternTyp> setVersteckteEltern(
         UUID gesuchTrancheId,
-        List<ElternTyp> chDvbernStipApiElternTypeElternTyp
+        List<ElternTyp> versteckteEltern
     ) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        gesuchTrancheAuthorizer.canUpdateTrancheSB(gesuchTranche);
-        return List.of();
+        gesuchTrancheAuthorizer.canUpdateTrancheSB(gesuchTrancheId);
+        return gesuchTrancheService.setVersteckteEltern(gesuchTrancheId, versteckteEltern);
     }
 }

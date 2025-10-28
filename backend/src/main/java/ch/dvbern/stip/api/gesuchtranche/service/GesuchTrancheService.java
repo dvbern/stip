@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -43,6 +44,7 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -675,4 +677,11 @@ public class GesuchTrancheService {
         return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
     }
 
+    @Transactional
+    public List<ElternTyp> setVersteckteEltern(final UUID gesuchTrancheId, final List<ElternTyp> elternTyps) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        gesuchTranche.getGesuchFormular().setVersteckteEltern(new LinkedHashSet<>(elternTyps));
+
+        return new ArrayList<>(gesuchTranche.getGesuchFormular().getVersteckteEltern());
+    }
 }
