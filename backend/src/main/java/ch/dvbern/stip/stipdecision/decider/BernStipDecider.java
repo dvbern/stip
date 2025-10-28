@@ -85,7 +85,8 @@ public class BernStipDecider extends BaseStipDecider {
     }
 
     private static boolean eingabefristAbgelaufen(final GesuchTranche gesuchTranche) {
-        return LocalDate.now().isAfter(gesuchTranche.getGesuch().getGesuchsperiode().getEinreichefristReduziert());
+        return false;
+        //return LocalDate.now().isAfter(gesuchTranche.getGesuch().getGesuchsperiode().getEinreichefristReduziert());
     }
 
     private static boolean ausbildungNichtAnerkannt(final GesuchTranche gesuchTranche) {
@@ -203,10 +204,15 @@ public class BernStipDecider extends BaseStipDecider {
                 return StipDeciderResult.ANSPRUCH_UNKLAR;
             }
             if (
-                piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche)
-                && !heimatortImKantonBern(gesuchTranche, plzService)
+                piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche) && heimatortImKantonBern(gesuchTranche, plzService)
             ) {
+                return StipDeciderResult.GESUCH_VALID;
+            }
+            else if(
+                piaHasSchweizerBuergerrecht(gesuchTranche) && elternlosOderElternImAusland(gesuchTranche) && !heimatortImKantonBern(gesuchTranche, plzService)
+            ){
                 return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_HEIMATORT_NICHT_BERN;
+
             }
             return StipDeciderResult.ANSPRUCH_UNKLAR;
         }
