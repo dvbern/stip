@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
@@ -88,6 +89,7 @@ class GesuchTrancheCreateTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
@@ -102,6 +104,7 @@ class GesuchTrancheCreateTest {
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
@@ -323,12 +326,11 @@ class GesuchTrancheCreateTest {
     @Order(12)
     @Test
     void makeGesuchVerfuegt() {
-        gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+        TestUtil.executeAndAssert(
+            gesuchApiSpec.getInitialTrancheChanges()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId()),
+            Status.INTERNAL_SERVER_ERROR.getStatusCode()
+        );
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -338,20 +340,16 @@ class GesuchTrancheCreateTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-        var gesuchWithChanges =
-            gesuchApiSpec.getInitialTrancheChanges()
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.changeGesuchStatusToVerfuegt()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchWithChangesDtoSpec.class);
+        );
+
+        var gesuchWithChanges = TestUtil.executeAndExtract(
+            GesuchWithChangesDtoSpec.class,
+            gesuchApiSpec.getInitialTrancheChanges().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
+
         Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
         // make sure this flag is true whenever especially this endpoint is called
         Assertions.assertThat(gesuchWithChanges.getIsInitial()).isTrue();

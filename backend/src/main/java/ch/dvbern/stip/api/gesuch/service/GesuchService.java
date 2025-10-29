@@ -930,6 +930,8 @@ public class GesuchService {
             // changes
             requestedTrancheFromGesuchInStatusEingereicht.orElse(null),
             // make sure this flag is true whenever especially this endpoint is called
+            true,
+            // this is the implementation of an SB Endpoint, send versteckte Eltern
             true
         );
     }
