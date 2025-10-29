@@ -173,8 +173,9 @@ public class UnterschriftenblattService {
     }
 
     @Transactional
-    public boolean requiredUnterschriftenblaetterExistOrIsVerfuegt(final Gesuch gesuch) {
-        if (gesuch.isVerfuegt()) {
+    public boolean requiredUnterschriftenblaetterExistOrIsVerfuegtTheFirstTime(final Gesuch gesuch) {
+        // skip this execution, if the gesuch has already been verfuegt more than one time
+        if (!gesuch.isVerfuegtForTheFirstTime()) {
             return true;
         }
 

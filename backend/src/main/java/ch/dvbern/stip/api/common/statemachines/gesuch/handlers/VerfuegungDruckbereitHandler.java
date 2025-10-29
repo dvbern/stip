@@ -40,8 +40,6 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
             gesuch,
             configService.getCurrentDmnMajorVersion(),

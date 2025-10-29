@@ -663,6 +663,7 @@ public class GesuchService {
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);
+        gesuch.setVerfuegt(true);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
 
@@ -673,7 +674,7 @@ public class GesuchService {
             return;
         }
 
-        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(gesuch)) {
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegtTheFirstTime(gesuch)) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(
