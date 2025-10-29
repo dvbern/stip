@@ -41,9 +41,12 @@ import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
+import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
+import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -55,9 +58,49 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BerechnungService {
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
+    private final Instance<PersoenlichesBudgetResultatMapper> persoenlichesBudgetResultatMappers;
+    private final Instance<FamilienBudgetresultatMapper> familienBudgetresultatMappers;
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
+
+    private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
+        final CalculatorRequest berechnungRequest,
+        final BerechnungResult berechnungResult,
+        final List<FamilienBudgetresultatDto> familienBudgetresultatList,
+        final int majorVersion,
+        final int minorVersion
+    ) {
+        final var mapper = persoenlichesBudgetResultatMappers.stream().filter(persoenlichesBudgetResultatMapper -> {
+            final var versionAnnotation =
+                persoenlichesBudgetResultatMapper.getClass().getAnnotation(CalculatorVersion.class);
+            return (versionAnnotation != null) &&
+            (versionAnnotation.major() == majorVersion) &&
+            (versionAnnotation.minor() == minorVersion);
+        }).findFirst();
+
+        if (mapper.isEmpty()) {
+            throw new IllegalArgumentException(
+                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
+            );
+        }
+        final var persoenlichesBudgetResultatDto = berechnungResult.getPersoenlichesBudgetresultat();
+
+        final int einnahmenPersoenlichesBudget = persoenlichesBudgetResultatDto.getEinnahmenPersoenlichesBudget();
+
+        final int ausgabenPersoenlichesBudget = persoenlichesBudgetResultatDto.getAusgabenPersoenlichesBudget();
+
+        final int persoenlichesbudgetBerechnet = persoenlichesBudgetResultatDto.getPersoenlichesbudgetBerechnet();
+
+        return mapper.get()
+            .mapFromRequest(
+                berechnungRequest,
+                einnahmenPersoenlichesBudget,
+                ausgabenPersoenlichesBudget,
+                persoenlichesbudgetBerechnet,
+                familienBudgetresultatList
+            );
+    }
 
     private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
         final BerechnungResult berechnungResult,
@@ -256,7 +299,14 @@ public class BerechnungService {
                             majorVersion,
                             minorVersion
                         ),
-                        stipendienCalculated.getPersoenlichesBudgetresultat(),
+                        persoenlichesBudgetresultatFromRequest(
+                            berechnungsRequest,
+                            stipendienCalculated,
+                            familienBudgetresultatList,
+                            majorVersion,
+                            minorVersion
+                        ),
+                        // stipendienCalculated.getPersoenlichesBudgetresultat(),
                         familienBudgetresultatList
                     )
                 );
@@ -300,7 +350,14 @@ public class BerechnungService {
                             majorVersion,
                             minorVersion
                         ),
-                        stipendienCalculated.getPersoenlichesBudgetresultat(),
+                        // stipendienCalculated.getPersoenlichesBudgetresultat(),
+                        persoenlichesBudgetresultatFromRequest(
+                            berechnungsRequest,
+                            stipendienCalculated,
+                            familienBudgetresultatList,
+                            majorVersion,
+                            minorVersion
+                        ),
                         familienBudgetresultatList
                     )
                 );
