@@ -81,6 +81,16 @@ export class SharedFeatureGesuchFormElternComponent {
       VATER: !!sichtbareEltern?.includes('VATER'),
     };
   });
+  hasChangesSig = computed(() => {
+    const { listChanges } = this.viewSig();
+    const changes =
+      listChanges?.newEntriesByIdentifier ?? listChanges?.changesByIdentifier;
+
+    return {
+      VATER: Object.keys(changes?.['VATER'] ?? {}).length > 0,
+      MUTTER: Object.keys(changes?.['MUTTER'] ?? {}).length > 0,
+    };
+  });
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
   elternTyps = ElternTyp;
   sichtbareEltern = new FormControl(allEltern, {

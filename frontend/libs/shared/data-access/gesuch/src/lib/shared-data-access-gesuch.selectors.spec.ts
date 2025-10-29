@@ -9,6 +9,7 @@ import {
 import {
   ELTERN,
   ELTERN_STEUERERKLAERUNG_FAMILIE,
+  PARTNER,
 } from '@dv/shared/model/gesuch-form';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { DeepPartial } from '@dv/shared/pattern/vitest-test-setup';
@@ -29,7 +30,93 @@ import {
   selectSharedDataAccessGesuchsView,
 } from './shared-data-access-gesuch.selectors';
 
+const partnerCases = [
+  ['hide', 'LEDIG', false],
+  ['hide', 'VERWITWET', false],
+  ['hide', 'GESCHIEDEN_GERICHTLICH', false],
+  ['hide', 'AUFGELOESTE_PARTNERSCHAFT', false],
+  ['show', 'KONKUBINAT', true],
+  ['show', 'EINGETRAGENE_PARTNERSCHAFT', true],
+  ['show', 'VERHEIRATET', true],
+] as const;
+
 describe('selectSharedDataAccessGesuchsView', () => {
+  it.each(partnerCases)(
+    'should %s show Partner Step if GS is %s',
+    (_, zivilstand, state) => {
+      const baseState: State = {
+        gesuch: null,
+        gesuchs: [],
+        gesuchFormular: null,
+        isEditingAenderung: null,
+        trancheTyp: null,
+        gsDashboard: [],
+        steuerdatenTabs: success([SteuerdatenTyp.FAMILIE]),
+        cache: {
+          gesuch: null,
+          gesuchId: null,
+          gesuchFormular: {
+            personInAusbildung: {
+              zivilstand,
+              adresse: {
+                landId: '',
+                strasse: '',
+                plz: '',
+                ort: '',
+              },
+              sozialversicherungsnummer: '',
+              vorname: '',
+              anrede: 'HERR',
+              identischerZivilrechtlicherWohnsitz: false,
+              email: '',
+              telefonnummer: '',
+              geburtsdatum: '',
+              nationalitaetId: '',
+              wohnsitz: 'FAMILIE',
+              sozialhilfebeitraege: false,
+              nachname: '',
+              korrespondenzSprache: 'DEUTSCH',
+            },
+            ausbildung: {
+              fallId: '',
+              ausbildungBegin: '',
+              ausbildungEnd: '',
+              pensum: 'VOLLZEIT',
+              status: 'AKTIV',
+              editable: false,
+            },
+          },
+        },
+        lastUpdate: null,
+        loading: false,
+        error: undefined,
+      };
+      const result = selectSharedDataAccessGesuchStepsView.projector(
+        baseState.cache,
+        {
+          rolesMap: { V0_Gesuchsteller: true },
+          currentBenutzerRd: initial(),
+          lastFetchTs: null,
+        },
+        {
+          deploymentConfig: undefined,
+          compileTimeConfig: {
+            appType: 'gesuch-app',
+            authClientId: 'stip-gesuch-app',
+          },
+          loading: false,
+          error: undefined,
+          isGesuchApp: true,
+          isSachbearbeitungApp: false,
+        },
+      );
+      const hasPartnerStep = result.steps.some(
+        (step) => step.route === PARTNER.route,
+      );
+      expect(hasPartnerStep).toBe(state);
+    },
+  );
+
   it('selects view', () => {
     const state: State = {
       gesuch: null,
@@ -124,7 +211,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
     },
   );
 
-  it('should append steuerdatenTab Familie to steps after Eltern', () => {
+  it('should append steuererklaerung Familie Tab after Eltern', () => {
     const state: State = {
       gesuch: null,
       gesuchs: [],
@@ -136,16 +223,27 @@ describe('selectSharedDataAccessGesuchsView', () => {
       cache: {
         gesuch: null,
         gesuchId: null,
-        gesuchFormular: null,
+        gesuchFormular: {
+          familiensituation: { elternVerheiratetZusammen: true },
+          steuerdatenTabs: [SteuerdatenTyp.FAMILIE],
+          ausbildung: {
+            fallId: '',
+            ausbildungBegin: '',
+            ausbildungEnd: '',
+            pensum: 'VOLLZEIT',
+            status: 'AKTIV',
+            editable: false,
+          },
+        },
       },
       lastUpdate: null,
       loading: false,
       error: undefined,
     };
     const result = selectSharedDataAccessGesuchStepsView.projector(
-      state,
+      state.cache,
       {
-        rolesMap: { V0_Sachbearbeiter: true },
+        rolesMap: { V0_Gesuchsteller: true },
         currentBenutzerRd: initial(),
         lastFetchTs: null,
       },

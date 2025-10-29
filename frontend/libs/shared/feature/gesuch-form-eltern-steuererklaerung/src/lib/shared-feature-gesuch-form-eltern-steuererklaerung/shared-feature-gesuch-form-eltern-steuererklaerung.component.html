@@ -13,8 +13,7 @@
       </div>
     } @else {
       @let typ = stepSig().type;
-      @let changes = view.listChanges?.changesByIdentifier?.[typ];
-
+      @let changes = changesSig();
       <form
         [formGroup]="form"
         novalidate
@@ -47,7 +46,7 @@
             </div>
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                changes?.steuererklaerungInBern
+                changes.steuererklaerungInBern
                   | dvTranslateChange: 'shared.form.eltern-steuererklaerung.steuererklaerungInBern.$VALUE'
                   | async
               "
@@ -87,7 +86,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
-              <mat-hint *dvZuvorHint="changes?.unterhaltsbeitraege"></mat-hint>
+              <mat-hint *dvZuvorHint="changes.unterhaltsbeitraege"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | transloco }}
               </mat-error>
@@ -112,7 +111,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
-              <mat-hint *dvZuvorHint="changes?.renten"></mat-hint>
+              <mat-hint *dvZuvorHint="changes.renten"></mat-hint>
               <mat-hint>{{ 'shared.form.eltern-steuererklaerung.renten.info' | transloco }}</mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | transloco }}
@@ -140,7 +139,7 @@
                 [maskito]="maskitoNumber"
                 type="text"
               />
-              <mat-hint *dvZuvorHint="changes?.ergaenzungsleistungen"></mat-hint>
+              <mat-hint *dvZuvorHint="changes.ergaenzungsleistungen"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | transloco }}
               </mat-error>
@@ -173,7 +172,7 @@
                 type="text"
                 [maskito]="maskitoNumber"
               />
-              <mat-hint *dvZuvorHint="changes?.einnahmenBGSA"></mat-hint>
+              <mat-hint *dvZuvorHint="changes.einnahmenBGSA"></mat-hint>
               <mat-hint>{{ 'shared.form.eltern-steuererklaerung.einnahmenBGSA.info' | transloco }}</mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | transloco }}
@@ -211,7 +210,7 @@
                 [maskito]="maskitoNumber"
               />
               <mat-hint>{{ 'shared.form.eltern-steuererklaerung.andereEinnahmen.info' | transloco }}</mat-hint>
-              <mat-hint *dvZuvorHint="changes?.andereEinnahmen"></mat-hint>
+              <mat-hint *dvZuvorHint="changes.andereEinnahmen"></mat-hint>
             </mat-form-field>
             @if (andereEinnahmenDocumentSig(); as options) {
               <dv-shared-pattern-document-upload

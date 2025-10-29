@@ -34,8 +34,19 @@ public class EinnahmenKostenMappingUtil {
         if (gesuchFormular.getEinnahmenKosten() == null) {
             return null;
         }
-        Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen();
+        Integer vermoegen = gesuchFormular.getEinnahmenKosten().getVermoegen(); // todo: also do it for ekPartner
         if (GesuchFormularCalculationUtil.wasGSOlderThan18(gesuchFormular)) {
+            return vermoegen;
+        }
+        return null;
+    }
+
+    public Integer calculateVermoegenForPatner(final GesuchFormular gesuchFormular) {
+        if (gesuchFormular.getEinnahmenKostenPartner() == null) {
+            return null;
+        }
+        Integer vermoegen = gesuchFormular.getEinnahmenKostenPartner().getVermoegen(); // todo: also do it for ekPartner
+        if (GesuchFormularCalculationUtil.wasPartnerOlderThan18(gesuchFormular)) {
             return vermoegen;
         }
         return null;

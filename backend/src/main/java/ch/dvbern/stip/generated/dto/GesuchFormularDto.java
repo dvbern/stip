@@ -43,6 +43,7 @@ public class GesuchFormularDto  implements Serializable {
   private @Valid List<LebenslaufItemDto> lebenslaufItems;
   private @Valid List<KindDto> kinds;
   private @Valid EinnahmenKostenDto einnahmenKosten;
+  private @Valid EinnahmenKostenDto einnahmenKostenPartner;
   private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
   private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
   private @Valid DarlehenDto darlehen;
@@ -310,6 +311,24 @@ public class GesuchFormularDto  implements Serializable {
 
   /**
    **/
+  public GesuchFormularDto einnahmenKostenPartner(EinnahmenKostenDto einnahmenKostenPartner) {
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+    return this;
+  }
+
+  
+  @JsonProperty("einnahmenKostenPartner")
+  public EinnahmenKostenDto getEinnahmenKostenPartner() {
+    return einnahmenKostenPartner;
+  }
+
+  @JsonProperty("einnahmenKostenPartner")
+  public void setEinnahmenKostenPartner(EinnahmenKostenDto einnahmenKostenPartner) {
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+  }
+
+  /**
+   **/
   public GesuchFormularDto steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
     return this;
@@ -414,6 +433,7 @@ public class GesuchFormularDto  implements Serializable {
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
+        Objects.equals(this.einnahmenKostenPartner, gesuchFormular.einnahmenKostenPartner) &&
         Objects.equals(this.steuererklaerung, gesuchFormular.steuererklaerung) &&
         Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs) &&
         Objects.equals(this.darlehen, gesuchFormular.darlehen);
@@ -421,7 +441,7 @@ public class GesuchFormularDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, versteckteEltern, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuererklaerung, steuerdatenTabs, darlehen);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, versteckteEltern, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung, steuerdatenTabs, darlehen);
   }
 
   @Override
@@ -439,6 +459,7 @@ public class GesuchFormularDto  implements Serializable {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    einnahmenKostenPartner: ").append(toIndentedString(einnahmenKostenPartner)).append("\n");
     sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("    steuerdatenTabs: ").append(toIndentedString(steuerdatenTabs)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");

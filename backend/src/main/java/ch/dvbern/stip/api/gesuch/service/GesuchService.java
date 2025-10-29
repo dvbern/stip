@@ -63,6 +63,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -233,7 +234,8 @@ public class GesuchService {
     @Transactional
     public void setAndValidateEinnahmenkostenUpdateLegality(
         final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
-        final GesuchTranche trancheToUpdate
+        final GesuchTranche trancheToUpdate,
+        final EinnahmenKosten einnahmenKostenToUpdate
     ) {
         final var benutzerRollenIdentifiers = benutzerService
             .getCurrentBenutzer()
@@ -245,12 +247,11 @@ public class GesuchService {
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
-        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
         String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 
-        if (einnahmenKosten != null) {
+        if (einnahmenKostenToUpdate != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
-            final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
+            final Integer steuerjahrExistingValue = einnahmenKostenToUpdate.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
             steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
@@ -260,7 +261,7 @@ public class GesuchService {
             );
 
             final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
-            final String veranlagungsStatusExistingValue = einnahmenKosten.getVeranlagungsStatus();
+            final String veranlagungsStatusExistingValue = einnahmenKostenToUpdate.getVeranlagungsStatus();
             veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
                 veranlagungsStatusDtoValue,
@@ -287,7 +288,16 @@ public class GesuchService {
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
             setAndValidateEinnahmenkostenUpdateLegality(
                 gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten(),
-                trancheToUpdate
+                trancheToUpdate,
+                trancheToUpdate.getGesuchFormular().getEinnahmenKosten()
+            );
+        }
+
+        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKostenPartner() != null) {
+            setAndValidateEinnahmenkostenUpdateLegality(
+                gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKostenPartner(),
+                trancheToUpdate,
+                trancheToUpdate.getGesuchFormular().getEinnahmenKostenPartner()
             );
         }
 

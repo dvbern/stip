@@ -165,9 +165,9 @@ export const stepHasChanges = (
 export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
   changed?: T,
   original?: T,
-) {
+): { [key in K]?: T[key] | undefined } {
   if (!original || !changed) {
-    return null;
+    return {};
   }
   const rawDiff = diff(original, changed, { keysToSkip });
   const addChange = <T>(record: T, change: IChange) => {
@@ -200,7 +200,7 @@ export function getChangesForForm<T extends NonArrayForm, K extends keyof T>(
   );
 
   if (Object.keys(difference).length === 0) {
-    return null;
+    return {};
   }
   return difference;
 }
@@ -271,6 +271,15 @@ export function getChangesForList<
       {} as Record<R, T>,
     ),
     newEntriesByIdentifier,
+    hasChangesByIdentifier: collectedChanges.reduce(
+      (acc, c) => ({
+        ...acc,
+        ...(c.identifier
+          ? { [c.identifier]: Object.keys(c.values ?? {}).length > 0 }
+          : {}),
+      }),
+      {} as Record<R, boolean>,
+    ),
   };
 }
 

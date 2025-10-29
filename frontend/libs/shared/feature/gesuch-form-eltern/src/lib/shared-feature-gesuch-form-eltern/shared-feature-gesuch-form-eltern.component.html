@@ -11,7 +11,7 @@
     <dv-shared-feature-gesuch-form-eltern-editor
       [elternteilSig]="editedElternteil"
       [gesuchFormularSig]="gesuchFormular"
-      [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp]"
+      [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp] ?? {}"
       [sichtbar]="sichtbareElternSig()[editedElternteil.elternTyp]"
       (saveTriggered)="handleEditorSave($event)"
       (closeTriggered)="handleEditorClose()"
@@ -40,7 +40,7 @@
               (addTriggered)="handleAddElternteil($event)"
               (editTriggered)="handleEdit($event)"
             />
-            @if (changes?.changesByIdentifier?.['VATER'] || changes?.newEntriesByIdentifier?.['VATER']) {
+            @if (changes?.hasChangesByIdentifier?.['VATER']) {
               <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
             }
           </div>
@@ -58,7 +58,7 @@
               (addTriggered)="handleAddElternteil($event)"
               (editTriggered)="handleEdit($event)"
             />
-            @if (changes?.changesByIdentifier?.['MUTTER'] || changes?.newEntriesByIdentifier?.['MUTTER']) {
+            @if (changes?.hasChangesByIdentifier?.['MUTTER']) {
               <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
             }
           </div>

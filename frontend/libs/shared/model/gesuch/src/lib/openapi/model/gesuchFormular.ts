@@ -34,6 +34,7 @@ export interface GesuchFormular {
     lebenslaufItems?: Array<LebenslaufItem>;
     kinds?: Array<Kind>;
     einnahmenKosten?: EinnahmenKosten;
+    einnahmenKostenPartner?: EinnahmenKosten;
     steuererklaerung?: Array<SteuererklaerungUpdate>;
     steuerdatenTabs?: Array<SteuerdatenTyp>;
     darlehen?: Darlehen;

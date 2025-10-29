@@ -98,6 +98,11 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const typ = this.stepSig().type;
     return typ !== 'FAMILIE' && gesuchFormular?.versteckteEltern?.includes(typ);
   });
+  changesSig = computed<Partial<SteuererklaerungUpdate>>(() => {
+    const view = this.viewSig();
+    const typ = this.stepSig().type;
+    return view.listChanges?.changesByIdentifier?.[typ] ?? {};
+  });
 
   hasUnsavedChanges = false;
 

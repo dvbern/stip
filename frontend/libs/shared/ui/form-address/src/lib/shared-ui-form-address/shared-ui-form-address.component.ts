@@ -71,9 +71,16 @@ export class SharedUiFormAddressComponent implements DoCheck {
   private landLookupService = inject(LandLookupService);
   @Input({ required: true }) group!: AddresseFormGroup;
   languageSig = input.required<Language>();
-  @Input() changes?: Partial<Adresse>;
+  changesSig = input<Partial<Adresse> | undefined>(undefined, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
+    alias: 'changes',
+  });
   plzValues?: Plz[];
   onlyIso2Laender = input<boolean>(false);
+
+  adresseChangesSig = computed(() => {
+    return this.changesSig() ?? {};
+  });
 
   laenderSig = computed(() => {
     const isIso2Only = this.onlyIso2Laender();

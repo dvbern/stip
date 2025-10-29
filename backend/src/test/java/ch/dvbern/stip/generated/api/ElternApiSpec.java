@@ -81,7 +81,7 @@ public class ElternApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * @see #body  (optional)
+     * @see #body  (required)
      * return List&lt;ElternTypDtoSpec&gt;
      */
     public static class SetVersteckteElternOper implements Oper {
@@ -121,7 +121,7 @@ public class ElternApiSpec {
         }
 
          /**
-         * @param elternTypDtoSpec (List&lt;ElternTypDtoSpec&gt;)  (optional)
+         * @param elternTypDtoSpec (List&lt;ElternTypDtoSpec&gt;)  (required)
          * @return operation
          */
         public SetVersteckteElternOper body(List<ElternTypDtoSpec> elternTypDtoSpec) {

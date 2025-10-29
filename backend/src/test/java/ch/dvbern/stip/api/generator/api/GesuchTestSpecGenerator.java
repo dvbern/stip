@@ -136,6 +136,17 @@ public class GesuchTestSpecGenerator {
         });
     }
 
+    public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecEinnahmenKostenPartner() {
+        return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
+            model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
+            model.getGesuchTrancheToWorkWith().setId(UUID.randomUUID());
+            model.getGesuchTrancheToWorkWith()
+                .setGesuchFormular(
+                    EinnahmenKostenUpdateDtoSpecModel.gesuchFormularUpdateDtoSpecEinnahmenKostenPartner()
+                );
+        });
+    }
+
     public static GesuchUpdateDtoSpec gesuchUpdateDtoSpecKinder() {
         return TestUtil.createUpdateDtoSpec(GesuchUpdateDtoSpec::new, (model) -> {
             model.setGesuchTrancheToWorkWith(gesuchTrancheDtoSpec());
@@ -163,6 +174,7 @@ public class GesuchTestSpecGenerator {
                 SteuererklaerungUpdateTabsDtoSpecModel.steuererklaerungDtoSpecs(SteuerdatenTypDtoSpec.FAMILIE)
             );
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
+            model.setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
             model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
@@ -177,6 +189,7 @@ public class GesuchTestSpecGenerator {
             model.setFamiliensituation(FamiliensituationUpdateDtoSpecModel.familiensituationUpdateDtoSpecNoElterns());
 
             model.setPartner(PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec());
+            model.setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
             model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());

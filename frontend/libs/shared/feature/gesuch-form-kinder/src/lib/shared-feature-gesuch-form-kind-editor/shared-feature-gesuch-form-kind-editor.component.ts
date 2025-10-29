@@ -40,6 +40,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -93,6 +94,7 @@ const MEDIUM_AGE = 20;
     SharedUiStepFormButtonsComponent,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
+    SharedUiAppDatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-kind-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-kind-editor.component.scss'],
@@ -105,7 +107,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   private formUtils = inject(SharedUtilFormService);
 
   @Input({ required: true }) kind!: Partial<KindUpdate>;
-  changesSig = input<Partial<KindUpdate> | undefined | null>(undefined);
+  changesSig = input<Partial<KindUpdate>>({});
   @Output() saveTriggered = new EventEmitter<KindUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() formIsUnsaved: Observable<boolean>;

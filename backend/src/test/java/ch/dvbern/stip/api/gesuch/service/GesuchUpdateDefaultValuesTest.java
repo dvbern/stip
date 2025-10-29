@@ -82,7 +82,11 @@ class GesuchUpdateDefaultValuesTest {
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang());
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
@@ -90,7 +94,11 @@ class GesuchUpdateDefaultValuesTest {
             .getEinnahmenKosten()
             .setVeranlagungsStatus(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
     }
 
@@ -110,7 +118,11 @@ class GesuchUpdateDefaultValuesTest {
             .getAusbildung()
             .setAusbildungsgang(new Ausbildungsgang());
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
@@ -118,7 +130,11 @@ class GesuchUpdateDefaultValuesTest {
             .getEinnahmenKosten()
             .setVeranlagungsStatus(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
     }
 
@@ -136,7 +152,11 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang());
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(
             einnahmeKostenUpdateDto.getSteuerjahr(),
             is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
@@ -144,7 +164,11 @@ class GesuchUpdateDefaultValuesTest {
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2023);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(einnahmeKostenUpdateDto.getSteuerjahr(), is(2023));
     }
 
@@ -162,7 +186,11 @@ class GesuchUpdateDefaultValuesTest {
             .setAusbildungsgang(new Ausbildungsgang());
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(null);
 
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(
             einnahmeKostenUpdateDto.getSteuerjahr(),
             is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)
@@ -170,7 +198,11 @@ class GesuchUpdateDefaultValuesTest {
 
         // update attempt should be ignored, same default value should remain
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2023);
-        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(einnahmeKostenUpdateDto, tranche);
+        gesuchService.setAndValidateEinnahmenkostenUpdateLegality(
+            einnahmeKostenUpdateDto,
+            tranche,
+            tranche.getGesuchFormular().getEinnahmenKosten()
+        );
         assertThat(
             einnahmeKostenUpdateDto.getSteuerjahr(),
             is(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() - 1)

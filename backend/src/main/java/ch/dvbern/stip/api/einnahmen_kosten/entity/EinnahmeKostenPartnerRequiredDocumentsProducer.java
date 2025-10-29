@@ -15,9 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.partner.entity;
+package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
@@ -28,26 +27,15 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class PartnerRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class EinnahmeKostenPartnerRequiredDocumentsProducer implements RequiredDocumentsProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var partner = formular.getPartner();
-        if (partner == null) {
+        final var ek = formular.getEinnahmenKosten();
+        if (ek == null) {
             return ImmutablePair.of("", Set.of());
         }
+        final var requiredDocs = EinnahmeKostenRequiredDocumentsProducerUtil.getRequiredDocumentsForPartner(formular);
 
-        final var requiredDocs = new HashSet<DokumentTyp>();
-
-        // if fahrkosten > 0
-        // todo kstip-2779: check ek here
-        // if (partner.getFahrkosten() != null && partner.getFahrkosten() > 0) {
-        // requiredDocs.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
-        // }
-        //
-        // if (partner.getJahreseinkommen() != null && partner.getJahreseinkommen() > 0) {
-        // requiredDocs.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
-        // }
-
-        return ImmutablePair.of("partner", requiredDocs);
+        return ImmutablePair.of("einnahmenKostenPartner", requiredDocs);
     }
 }

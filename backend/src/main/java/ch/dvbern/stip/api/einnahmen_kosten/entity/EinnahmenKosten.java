@@ -41,6 +41,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "einnahmen_kosten",
     indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
 )
+
 @Getter
 @Setter
 @EinnahmenKostenAnzahlPersonenWGValidConstraint
@@ -110,13 +111,11 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Min(0)
     private Integer ausbildungskosten;
 
-    // todo kstip-2779 - validierung pia only
     @Nullable
     @Column(name = "auswaertige_mittagessen_pro_woche")
     @Min(0)
     private Integer auswaertigeMittagessenProWoche;
 
-    // todo kstip-2779 - validierung partner only
     @Nullable
     @Column(name = "verpflegungskosten")
     @Min(0)
@@ -164,4 +163,5 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Nullable
     @Column(name = "arbeitspensum_prozent")
     private Integer arbeitspensumProzent;
+
 }

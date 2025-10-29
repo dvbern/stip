@@ -23,5 +23,5 @@ public interface ElternResource {
     @PATCH
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    List<ch.dvbern.stip.api.eltern.type.ElternTyp> setVersteckteEltern(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid List<ch.dvbern.stip.api.eltern.type.ElternTyp> chDvbernStipApiElternTypeElternTyp);
+    List<ch.dvbern.stip.api.eltern.type.ElternTyp> setVersteckteEltern(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull List<ch.dvbern.stip.api.eltern.type.ElternTyp> chDvbernStipApiElternTypeElternTyp);
 }

@@ -12,7 +12,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength [formControl]="form.controls.nachname" data-testid="form-kind-nachname" type="text" />
-      <mat-hint *dvZuvorHint="changes?.nachname"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -20,7 +20,7 @@
     <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength [formControl]="form.controls.vorname" data-testid="form-kind-vorname" type="text" />
-      <mat-hint *dvZuvorHint="changes?.vorname"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -40,7 +40,7 @@
         data-testid="form-kind-geburtsdatum"
         (blur)="onGeburtsdatumBlur()"
       />
-      <mat-hint *dvZuvorHint="changes?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -66,7 +66,7 @@
         [formControl]="form.controls.wohnsitzAnteilPia"
         [maskito]="maskitoOptionsPercent"
       />
-      <mat-hint *dvZuvorHint="changes?.wohnsitzAnteilPia | dvTranslateChange: '$VALUE%' | async"></mat-hint>
+      <mat-hint *dvZuvorHint="changes.wohnsitzAnteilPia; suffix: '%'"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'pattern'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
@@ -102,7 +102,7 @@
       </mat-radio-group>
       <mat-hint
         *dvZuvorHint="
-          changes?.ausbildungssituation
+          changes.ausbildungssituation
             | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
             | async
         "
@@ -122,7 +122,7 @@
           data-testid="form-kind-unterhaltsbeitraege"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.unterhaltsbeitraege"></mat-hint>
+        <mat-hint *dvZuvorHint="changes.unterhaltsbeitraege"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
         </mat-error>
@@ -146,7 +146,7 @@
           data-testid="form-kind-kinderUndAusbildungszulagen"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.kinderUndAusbildungszulagen"></mat-hint>
+        <mat-hint *dvZuvorHint="changes.kinderUndAusbildungszulagen"></mat-hint>
       </mat-form-field>
       @if (kinderUndAusbildungszulagenDocumentSig(); as options) {
         <dv-shared-pattern-document-upload
@@ -169,7 +169,7 @@
           data-testid="form-kind-renten"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.renten"></mat-hint>
+        <mat-hint *dvZuvorHint="changes.renten"></mat-hint>
       </mat-form-field>
       @if (rentenDocumentSig(); as options) {
         <dv-shared-pattern-document-upload
@@ -190,7 +190,7 @@
           data-testid="form-kind-ergaenzungsleistungen"
           type="text"
         />
-        <mat-hint *dvZuvorHint="changes?.ergaenzungsleistungen"></mat-hint>
+        <mat-hint *dvZuvorHint="changes.ergaenzungsleistungen"></mat-hint>
       </mat-form-field>
       @if (ergaenzungsleistungenDocumentSig(); as options) {
         <dv-shared-pattern-document-upload
@@ -214,7 +214,7 @@
           type="text"
         />
         <mat-hint>{{ 'shared.form.kinder.andereEinnahmen.info' | transloco }}</mat-hint>
-        <mat-hint *dvZuvorHint="changes?.andereEinnahmen"></mat-hint>
+        <mat-hint *dvZuvorHint="changes.andereEinnahmen"></mat-hint>
       </mat-form-field>
       @if (andereEinnahmenDocumentSig(); as options) {
         <dv-shared-pattern-document-upload

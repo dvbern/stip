@@ -29,7 +29,7 @@
               placeholder="756.xxxx.xxxx.xx"
               [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.sozialversicherungsnummer"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.sozialversicherungsnummer"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
@@ -62,7 +62,7 @@
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
           <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
-          <mat-hint *dvZuvorHint="view.formChanges?.nachname"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.nachname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -70,7 +70,7 @@
         <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
           <input formControlName="vorname" data-testid="form-partner-vorname" matInput dvMaxLength type="text" />
-          <mat-hint *dvZuvorHint="view.formChanges?.vorname"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.vorname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -82,7 +82,7 @@
         <dv-shared-ui-form-address
           class="col-12 col-xl-8"
           [group]="form.controls.adresse"
-          [changes]="view.formChanges?.adresse"
+          [changes]="view.formChanges.adresse"
           [languageSig]="languageSig()"
         />
       </div>
@@ -100,7 +100,7 @@
             data-testid="form-partner-geburtsdatum"
             (blur)="onGeburtsdatumBlur()"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
 
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
@@ -124,7 +124,7 @@
             'shared.form.partner.inAusbildung.label' | transloco
           }}</mat-checkbox>
           <dv-shared-ui-form-zuvor-hint
-            [changes]="view.formChanges?.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
+            [changes]="view.formChanges.inAusbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
           ></dv-shared-ui-form-zuvor-hint>
         </div>
       </div>
@@ -151,7 +151,7 @@
 
             <mat-hint
               *dvZuvorHint="
-                view.formChanges?.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
+                view.formChanges.ausbildungspensum | dvTranslateChange: 'shared.form.ausbildung.pensum.$VALUE' | async
               "
             ></mat-hint>
 

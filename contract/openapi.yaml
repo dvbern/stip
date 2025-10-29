@@ -4883,6 +4883,20 @@ components:
         - EK_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_LOHNABRECHNUNG
         - EK_VERMOEGEN
+        - EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE
+        - EK_PARTNER_BELEG_EINNAHMEN_BGSA
+        - EK_PARTNER_BELEG_TAGGELDER_AHV_IV
+        - EK_PARTNER_BELEG_ANDERE_EINNAHMEN
+        - EK_PARTNER_BELEG_KINDERZULAGEN
+        - EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION
+        - EK_PARTNER_BELEG_BEZAHLTE_RENTEN
+        - EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+        - EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+        - EK_PARTNER_BELEG_OV_ABONNEMENT
+        - EK_PARTNER_MIETVERTRAG
+        - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
+        - EK_PARTNER_LOHNABRECHNUNG
+        - EK_PARTNER_VERMOEGEN
         - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
         - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
         - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
@@ -5957,6 +5971,8 @@ components:
             $ref: '#/components/schemas/Kind'
         einnahmenKosten:
           $ref: '#/components/schemas/EinnahmenKosten'
+        einnahmenKostenPartner:
+          $ref: '#/components/schemas/EinnahmenKosten'
         steuererklaerung:
           type: array
           items:
@@ -6128,6 +6144,8 @@ components:
           items:
             $ref: '#/components/schemas/KindUpdate'
         einnahmenKosten:
+          $ref: '#/components/schemas/EinnahmenKostenUpdate'
+        einnahmenKostenPartner:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
         darlehen:
           $ref: '#/components/schemas/Darlehen'

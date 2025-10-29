@@ -187,6 +187,7 @@
       "@dv/shared/ui/adv-transloco-directive": ["libs/shared/ui/adv-transloco-directive/src/index.ts"],
       "@dv/shared/ui/aenderungs-entry": ["libs/shared/ui/aenderungs-entry/src/index.ts"],
       "@dv/shared/ui/animations": ["libs/shared/ui/animations/src/index.ts"],
+      "@dv/shared/ui/app-date-pipe": ["libs/shared/ui/app-date-pipe/src/index.ts"],
       "@dv/shared/ui/auszahlung": ["libs/shared/ui/auszahlung/src/index.ts"],
       "@dv/shared/ui/badge": ["libs/shared/ui/badge/src/index.ts"],
       "@dv/shared/ui/change-indicator": ["libs/shared/ui/change-indicator/src/index.ts"],

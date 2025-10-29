@@ -15,7 +15,7 @@ import { SharedUiZuvorHintDirective } from './shared-ui-form-zuvor-hint.directiv
  *   >{{ 'shared.form.shared.identical-civil-residence.label' | transloco }}</mat-checkbox
  * >
  * <dv-shared-ui-form-zuvor-hint
- *   [changes]="view.formChanges?.identischerZivilrechtlicherWohnsitz | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
+ *   [changes]="view.formChanges.identischerZivilrechtlicherWohnsitz | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async"
  * ></dv-shared-ui-form-zuvor-hint>
  *
  * @example
@@ -24,7 +24,7 @@ import { SharedUiZuvorHintDirective } from './shared-ui-form-zuvor-hint.directiv
  *   'shared.form.radio.no' | transloco
  * }}</mat-radio-button>
  * <dv-shared-ui-form-zuvor-hint
- *   [changes]="view.formChanges?.sozialhilfebeitraege | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+ *   [changes]="view.formChanges.sozialhilfebeitraege | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
  * ></dv-shared-ui-form-zuvor-hint>
  */
 @Component({

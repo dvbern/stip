@@ -687,6 +687,21 @@ public class TestUtil {
                 .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
         );
 
+        gesuchFormular.setEinnahmenKostenPartner(
+            new EinnahmenKosten()
+                .setNettoerwerbseinkommen(12916)
+                .setErgaenzungsleistungen(1200)
+                .setWohnkosten(6000)
+                .setAusbildungskosten(450)
+                .setFahrkosten(523)
+                .setZulagen(0)
+                .setBetreuungskostenKinder(0)
+                .setSteuerjahr(2000)
+                .setRenten(0)
+                .setArbeitspensumProzent(100)
+                .setVerpflegungskosten(5)
+        );
+
         gesuchFormular.setFamiliensituation(
             new Familiensituation()
                 .setElternVerheiratetZusammen(false)
