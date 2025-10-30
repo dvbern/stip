@@ -132,8 +132,12 @@ class AusbildungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
+
+        var kommentar = new KommentarDtoSpec();
+        kommentar.setText("DONT_CARE");
         var foundGesuch = gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(kommentar)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
