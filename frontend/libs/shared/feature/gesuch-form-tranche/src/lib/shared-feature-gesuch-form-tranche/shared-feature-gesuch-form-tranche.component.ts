@@ -22,7 +22,7 @@ import {
   translateSignal,
 } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { addMonths } from 'date-fns';
+import { addMonths, endOfMonth } from 'date-fns';
 import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -262,7 +262,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
       gesuchFormular?.ausbildung?.ausbildungBegin,
     );
     if (!begin) return;
-    const maxDate = addMonths(new Date(begin), 12);
+
+    const maxDate = endOfMonth(addMonths(new Date(begin), 11));
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'updateAenderungVonBis',
