@@ -43,7 +43,7 @@ public class UnterschriftenblattAuthorizer extends BaseAuthorizer {
         }
 
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuch.isVerfuegt()) {
+        if (!gesuch.isVerfuegtForTheFirstTime()) {
             forbidden();
         }
         if (Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus())) {

@@ -261,7 +261,7 @@ public class UnterschriftenblattService {
     }
 
     private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
-        if (gesuch.isVerfuegt()) {
+        if (!gesuch.isVerfuegtForTheFirstTime()) {
             return gesuch.getUnterschriftenblaetter().stream().map(Unterschriftenblatt::getDokumentTyp);
         }
 

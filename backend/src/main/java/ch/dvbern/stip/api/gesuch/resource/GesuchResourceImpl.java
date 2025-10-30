@@ -510,7 +510,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
         gesuchAuthorizer.sbCanBearbeitungAbschliessen(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
-        gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
+        // gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
