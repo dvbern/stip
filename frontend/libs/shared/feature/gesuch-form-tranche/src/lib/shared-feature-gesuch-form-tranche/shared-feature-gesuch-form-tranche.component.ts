@@ -22,6 +22,7 @@ import {
   translateSignal,
 } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { addMonths, endOfMonth } from 'date-fns';
 import { filter, firstValueFrom } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -53,6 +54,7 @@ import {
   getLatestTrancheIdFromGesuchOnUpdate$,
 } from '@dv/shared/util/gesuch';
 import {
+  dateFromMonthYearString,
   formatBackendLocalDate,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
@@ -252,14 +254,22 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
   updateAenderungVonBis(gesuch: SharedModelGesuch) {
     const {
-      gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis },
-      gesuchsperiode: { gesuchsperiodeStart, gesuchsperiodeStopp },
+      gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis, gesuchFormular },
+      gesuchsperiode: { gesuchsperiodeStart },
     } = gesuch;
+
+    const begin = dateFromMonthYearString(
+      gesuchFormular?.ausbildung?.ausbildungBegin,
+    );
+    if (!begin) return;
+
+    const maxDate = endOfMonth(addMonths(new Date(begin), 11));
+
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'updateAenderungVonBis',
       id: id,
       minDate: new Date(gesuchsperiodeStart),
-      maxDate: new Date(gesuchsperiodeStopp),
+      maxDate,
       currentGueligAb: new Date(gueltigAb),
       currentGueligBis: new Date(gueltigBis),
     })
