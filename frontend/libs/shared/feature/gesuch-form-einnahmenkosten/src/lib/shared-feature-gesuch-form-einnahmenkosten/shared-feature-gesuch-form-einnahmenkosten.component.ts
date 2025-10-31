@@ -145,7 +145,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       <number | undefined>undefined,
       [Validators.required, Validators.min(MIN_WG_ANZAHL_PERSONEN)],
     ],
-    alternativeWohnformWohnend: [<boolean | undefined>undefined, []],
+    alternativeWohnformWohnend: [
+      <boolean | undefined>undefined,
+      [Validators.required],
+    ],
     vermoegen: [
       <string | undefined>undefined,
       [

@@ -85,7 +85,6 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @TestAsGesuchsteller
     @Order(1)
     void setupCreateGesuch() {
-        // gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
         TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
@@ -94,14 +93,6 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsGesuchsteller
     @Order(2)
-    void setupFillGesuch() {
-        // TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
-        // TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(3)
     void setupGesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -112,7 +103,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(4)
+    @Order(3)
     @Test
     void setupGesuchVerfuegen() {
         gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
@@ -158,7 +149,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     @TestAsSachbearbeiter
     void setupGesuchVersenden() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
@@ -188,7 +179,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("SB should be able to create a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to false")
-    @Order(6)
+    @Order(5)
     void createBeschwerdeEntscheidWithFalseFlagShouldWorkTest() {
         final var file = TestUtil.getTestPng();
         TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), false, "test", file)
@@ -201,7 +192,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Description(
         "Verify the Gesuchstatus has not changed, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to false had been created"
     )
-    @Order(7)
+    @Order(6)
     void verifyGesuchShouldBeInSameStatus() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -223,7 +214,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that a BeschwerdeVerlaufEntry has been created")
-    @Order(8)
+    @Order(7)
     void verifyBeschwerdeVerlaufEntryCreated() {
         final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
             .gesuchIdPath(gesuch.getId())
@@ -243,7 +234,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("SB should be able to create a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to true")
-    @Order(9)
+    @Order(8)
     void createBeschwerdeEntscheidWithTrueFlagShouldWorkTest() {
         final var file = TestUtil.getTestPng();
         TestUtil.uploadBeschwerdeEntscheid(gesuchApiSpec, gesuch.getId(), true, "test2", file)
@@ -256,7 +247,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Description(
         "Verify the Gesuchstatus has been set to BEREIT_FUER_BEARBEITUNG, when a BeschwerdeEntscheid with the isBeschwerdeErfolgreich-flag set to true had been created"
     )
-    @Order(10)
+    @Order(9)
     void verifyGesuchShouldBeInStatus_BEREIT_FUER_BEARBEITUNG() {
         var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -277,7 +268,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that another BeschwerdeVerlaufEntry has been created")
-    @Order(11)
+    @Order(10)
     void verifyBeschwerdeVerlaufEntryCreated2() {
         final var beschwerdeVerlaufEntries = gesuchApiSpec.getAllBeschwerdeVerlaufEntrys()
             .gesuchIdPath(gesuch.getId())
@@ -295,7 +286,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
     @Test
     @TestAsSachbearbeiter
     @Description("Verify that the documents of a BeschwerdeEntscheid is available")
-    @Order(12)
+    @Order(11)
     void getBeschwerdeEntscheidDokumentTest() throws IOException {
         final var token = dokumentApiSpec.getDokumentDownloadToken()
             .dokumentIdPath(dokumentId)

@@ -199,6 +199,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.gesuchTranche.daterangeTooShort.message}";
     public static final String VALIDATION_GESUCHNOTIZ_ANTWORT_VALID_MESSAGE =
         "{jakarta.validation.constraints.gesuchnotiz.antwort.valid.message}";
+    public static final String VALIDATION_GESUCHNOTIZ_PENDENZ_ABGESCHLOSSEN_VALID_MESSAGE =
+        "{jakarta.validation.constraints.gesuchnotiz.pendenz.abgeschlossen.valid.message}";
     public static final String VALIDATION_GESUCH_NO_VALID_GESUCHSPERIODE =
         "jakarta.validation.constraints.gesuch.create.gesuchsperiode.notfound.message";
     public static final String VALIDATION_NO_ACTIVE_GESUCHSPERIODE =

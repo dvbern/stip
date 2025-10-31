@@ -37,8 +37,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
-  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WG_ANZAHL_PERSONEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WG_WOHNEND,
+  EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_WG_ANZAHL_PERSONEN,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_VERDIENST_REALISIERT,
   EinnahmenKostenUpdateDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
@@ -81,11 +81,11 @@ public class EinnahmenKostenUpdateDtoSpec {
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
   private Integer wohnkosten;
 
-  public static final String JSON_PROPERTY_WG_ANZAHL_PERSONEN = "wgAnzahlPersonen";
-  private Integer wgAnzahlPersonen;
-
   public static final String JSON_PROPERTY_WG_WOHNEND = "wgWohnend";
   private Boolean wgWohnend;
+
+  public static final String JSON_PROPERTY_WG_ANZAHL_PERSONEN = "wgAnzahlPersonen";
+  private Integer wgAnzahlPersonen;
 
   public static final String JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND = "alternativeWohnformWohnend";
   private Boolean alternativeWohnformWohnend;
@@ -374,32 +374,6 @@ public class EinnahmenKostenUpdateDtoSpec {
   }
 
 
-  public EinnahmenKostenUpdateDtoSpec wgAnzahlPersonen(Integer wgAnzahlPersonen) {
-    
-    this.wgAnzahlPersonen = wgAnzahlPersonen;
-    return this;
-  }
-
-   /**
-   * Get wgAnzahlPersonen
-   * @return wgAnzahlPersonen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_WG_ANZAHL_PERSONEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getWgAnzahlPersonen() {
-    return wgAnzahlPersonen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_WG_ANZAHL_PERSONEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWgAnzahlPersonen(Integer wgAnzahlPersonen) {
-    this.wgAnzahlPersonen = wgAnzahlPersonen;
-  }
-
-
   public EinnahmenKostenUpdateDtoSpec wgWohnend(Boolean wgWohnend) {
     
     this.wgWohnend = wgWohnend;
@@ -423,6 +397,32 @@ public class EinnahmenKostenUpdateDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setWgWohnend(Boolean wgWohnend) {
     this.wgWohnend = wgWohnend;
+  }
+
+
+  public EinnahmenKostenUpdateDtoSpec wgAnzahlPersonen(Integer wgAnzahlPersonen) {
+    
+    this.wgAnzahlPersonen = wgAnzahlPersonen;
+    return this;
+  }
+
+   /**
+   * Get wgAnzahlPersonen
+   * @return wgAnzahlPersonen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WG_ANZAHL_PERSONEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getWgAnzahlPersonen() {
+    return wgAnzahlPersonen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WG_ANZAHL_PERSONEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWgAnzahlPersonen(Integer wgAnzahlPersonen) {
+    this.wgAnzahlPersonen = wgAnzahlPersonen;
   }
 
 
@@ -658,8 +658,8 @@ public class EinnahmenKostenUpdateDtoSpec {
         Objects.equals(this.ausbildungskosten, einnahmenKostenUpdate.ausbildungskosten) &&
         Objects.equals(this.fahrkosten, einnahmenKostenUpdate.fahrkosten) &&
         Objects.equals(this.wohnkosten, einnahmenKostenUpdate.wohnkosten) &&
-        Objects.equals(this.wgAnzahlPersonen, einnahmenKostenUpdate.wgAnzahlPersonen) &&
         Objects.equals(this.wgWohnend, einnahmenKostenUpdate.wgWohnend) &&
+        Objects.equals(this.wgAnzahlPersonen, einnahmenKostenUpdate.wgAnzahlPersonen) &&
         Objects.equals(this.alternativeWohnformWohnend, einnahmenKostenUpdate.alternativeWohnformWohnend) &&
         Objects.equals(this.verdienstRealisiert, einnahmenKostenUpdate.verdienstRealisiert) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKostenUpdate.auswaertigeMittagessenProWoche) &&
@@ -672,7 +672,7 @@ public class EinnahmenKostenUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgAnzahlPersonen, wgWohnend, alternativeWohnformWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -689,8 +689,8 @@ public class EinnahmenKostenUpdateDtoSpec {
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
-    sb.append("    wgAnzahlPersonen: ").append(toIndentedString(wgAnzahlPersonen)).append("\n");
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
+    sb.append("    wgAnzahlPersonen: ").append(toIndentedString(wgAnzahlPersonen)).append("\n");
     sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
     sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");

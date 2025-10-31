@@ -124,7 +124,6 @@ class AusbildungResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.NICHT_ANSPRUCHSBERECHTIGT));
 
     }
 

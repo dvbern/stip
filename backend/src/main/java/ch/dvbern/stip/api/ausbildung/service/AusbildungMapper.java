@@ -132,7 +132,7 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
     public void resetAusbildungsgangIfNull(
         @MappingTarget Ausbildung ausbildung
     ) {
-        if (ausbildung.getAusbildungsgang().getId() == null) {
+        if (ausbildung.getAusbildungsgang() != null && ausbildung.getAusbildungsgang().getId() == null) {
             ausbildung.setAusbildungsgang(null);
         }
     }
