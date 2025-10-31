@@ -131,15 +131,19 @@ class AusbildungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
-        var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
+        var foundGesuch = TestUtil.executeAndExtract(
+            GesuchWithChangesDtoSpec.class,
+            gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+
+        foundGesuch = TestUtil.executeAndExtract(
+            GesuchWithChangesDtoSpec.class,
+            gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
 
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }

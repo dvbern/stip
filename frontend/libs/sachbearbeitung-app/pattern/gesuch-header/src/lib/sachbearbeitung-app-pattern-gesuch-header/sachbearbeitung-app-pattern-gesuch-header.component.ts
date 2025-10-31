@@ -254,7 +254,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'STATUS_PRUEFUNG_AUSLOESEN':
-      case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
+      case 'BEREIT_FUER_BEARBEITUNG':
       case 'VERFUEGT':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
@@ -266,7 +266,25 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           },
         });
         break;
-      case 'BEREIT_FUER_BEARBEITUNG':
+      case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
+        SharedUiKommentarDialogComponent.open(this.dialog, {
+          entityId: gesuchTrancheId,
+          titleKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.title`,
+          messageKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message`,
+          placeholderKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder`,
+          confirmKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.confirm`,
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT({
+                gesuchTrancheId,
+                text: result.kommentar,
+              });
+            }
+          });
+        break;
       case 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {
           entityId: gesuchTrancheId,
@@ -279,7 +297,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$.BEREIT_FUER_BEARBEITUNG({
+              this.gesuchStore.setStatus$.ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG({
                 gesuchTrancheId,
                 text: result.kommentar,
               });
