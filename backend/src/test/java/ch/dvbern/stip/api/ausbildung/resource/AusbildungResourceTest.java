@@ -131,30 +131,19 @@ class AusbildungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
+        var foundGesuch = TestUtil.executeAndExtract(
+            GesuchWithChangesDtoSpec.class,
+            gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
 
-        var kommentar = new KommentarDtoSpec();
-        kommentar.setText("DONT_CARE");
-        var foundGesuch = gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(kommentar)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
 
-        foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
+        foundGesuch = TestUtil.executeAndExtract(
+            GesuchWithChangesDtoSpec.class,
+            gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
 
         assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
     }
