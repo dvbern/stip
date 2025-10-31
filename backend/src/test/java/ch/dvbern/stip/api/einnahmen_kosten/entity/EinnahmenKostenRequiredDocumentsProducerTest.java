@@ -24,13 +24,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class EinnahmenKostenRequiredDocumentsProducerTest {
-    private EinnahmenKostenRequiredDocumentsProducer producer;
+    private EinnahmenKostenPersonInAusbildungRequiredDocumentsProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new EinnahmenKostenRequiredDocumentsProducer();
+        producer = new EinnahmenKostenPersonInAusbildungRequiredDocumentsProducer();
         formular = new GesuchFormular();
     }
 

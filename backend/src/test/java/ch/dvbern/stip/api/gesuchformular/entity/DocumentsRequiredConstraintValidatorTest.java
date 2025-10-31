@@ -206,7 +206,6 @@ class DocumentsRequiredConstraintValidatorTest {
         // setup some mandatory doctypes for ekpartner
         formular.getEinnahmenKostenPartner().setNettoerwerbseinkommen(5);
         formular.getEinnahmenKostenPartner().setBetreuungskostenKinder(5);
-        formular.getEinnahmenKostenPartner().setWohnkosten(5);
         formular.getEinnahmenKostenPartner().setFahrkosten(5);
         formular.getEinnahmenKostenPartner().setEoLeistungen(5);
         formular.getEinnahmenKostenPartner().setRenten(5);
