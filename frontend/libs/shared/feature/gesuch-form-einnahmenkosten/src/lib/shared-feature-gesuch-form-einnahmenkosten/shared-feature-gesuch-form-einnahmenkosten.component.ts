@@ -34,7 +34,6 @@ import {
   AUSBILDUNG,
   EINNAHMEN_KOSTEN,
   EINNAHMEN_KOSTEN_PARTNER,
-  FAMILIENSITUATION,
   PERSON,
 } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -238,28 +237,20 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     if (!gesuchFormular) {
       return {
         hasData: false as const,
-        schritte: [
-          PERSON.translationKey,
-          AUSBILDUNG.translationKey,
-          FAMILIENSITUATION.translationKey,
-        ],
+        schritte: [PERSON.translationKey, AUSBILDUNG.translationKey],
       };
     }
-    const { personInAusbildung, familiensituation, kinds, partner } =
-      gesuchFormular;
+    const { personInAusbildung, kinds, partner } = gesuchFormular;
 
     const schritte = [
       ...(!personInAusbildung ? [PERSON.translationKey] : []),
       ...(!ausbildung ? [AUSBILDUNG.translationKey] : []),
-      ...(!familiensituation ? [FAMILIENSITUATION.translationKey] : []),
     ];
 
-    if (!personInAusbildung || !familiensituation || !ausbildung) {
+    if (!personInAusbildung || !ausbildung) {
       return { hasData: false, schritte } as const;
     }
-    const hatElternteilVerloren =
-      familiensituation.vaterUnbekanntVerstorben === 'VERSTORBEN' ||
-      familiensituation.mutterUnbekanntVerstorben === 'VERSTORBEN';
+
     const hatKinder = kinds ? kinds.length > 0 : false;
     const geburtsdatum = parseBackendLocalDateAndPrint(
       this.einkommenTyp() === 'PARTNER'
@@ -296,7 +287,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
     return {
       hasData: true,
-      hatElternteilVerloren,
       hatKinder,
       ausbildungsKostenLimit,
       ausbiludungsStufe,
@@ -434,7 +424,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         return;
       }
 
-      this.formUtils.setRequired(this.form.controls.zulagen, hatKinder);
+      this.formUtils.setRequired(
+        this.form.controls.zulagen,
+        isEKPartner || hatKinder,
+      );
 
       this.setDisabledStateAndHide(
         this.form.controls.verpflegungskosten,
@@ -463,11 +456,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       );
       this.setDisabledStateAndHide(
         this.form.controls.betreuungskostenKinder,
-        !hatKinder,
+        !(isEKPartner || hatKinder),
       );
       this.setDisabledStateAndHide(
         this.form.controls.vermoegen,
-        !warErwachsenSteuerJahr,
+        !(isEKPartner || warErwachsenSteuerJahr),
       );
       this.setDisabledStateAndHide(
         this.form.controls.veranlagungsStatus,
