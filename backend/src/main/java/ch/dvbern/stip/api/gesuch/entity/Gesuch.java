@@ -265,8 +265,8 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
-    public boolean isVerfuegtForTheFirstTime() {
-        return verfuegt && verfuegungs.stream().count() == 1;
+    public boolean isFirstVerfuegung() {
+        return verfuegungs.size() < 2;
     }
 
     public boolean isErstgesuch() {

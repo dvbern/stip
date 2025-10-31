@@ -674,7 +674,7 @@ public class GesuchService {
             return;
         }
 
-        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegtTheFirstTime(gesuch)) {
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(gesuch)) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(
