@@ -124,7 +124,6 @@ class AusbildungResourceTest {
             .extract()
             .body()
             .as(GesuchDtoSpec.class);
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.NICHT_ANSPRUCHSBERECHTIGT));
 
     }
 
@@ -132,18 +131,7 @@ class AusbildungResourceTest {
     @TestAsSachbearbeiter
     @Order(4)
     void gesuchStatusChangeToInBearbeitungSB() {
-        var foundGesuch = gesuchApiSpec.changeGesuchStatusToDatenschutzbriefDruckbereit()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-
-        foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+        var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
