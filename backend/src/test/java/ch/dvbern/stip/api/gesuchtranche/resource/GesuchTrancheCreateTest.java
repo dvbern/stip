@@ -116,23 +116,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(3)
-    void prepareAddRequiredDocument() {
-        // preparation for the last few tests
-        final var gesuchUpdateDTO = getAddDocumentDto(gesuch.getGesuchTrancheToWorkWith().getId());
-
-        gesuchApiSpec.updateGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(4)
+    @Order(5)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -144,7 +128,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void prepareSachbearbeiter() {
         benutzerApiSpec.prepareCurrentBenutzer()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -155,7 +139,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void createTrancheFail() {
         gesuchTrancheApiSpec.createGesuchTrancheCopy()
             .gesuchIdPath(gesuch.getId())
@@ -167,7 +151,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void setStatusInBearbeitungSb() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -188,7 +172,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void createTrancheSuccess() {
         final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
         createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(2));
@@ -206,7 +190,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(10)
     void getTranchen() {
         var result = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -226,7 +210,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(11)
     void overwriteTranche() {
         final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
         createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1));
@@ -256,7 +240,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(12)
     void testIfSuperflousDocumentOnlyGetsDeletedOnOneTranche() {
         var tranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -323,7 +307,7 @@ class GesuchTrancheCreateTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(12)
+    @Order(13)
     @Test
     void makeGesuchVerfuegt() {
         TestUtil.executeAndAssert(
@@ -357,7 +341,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(13)
+    @Order(14)
     void getInitialTrancheChangesAsSBInGesuchstatusEingereichtShouldThrow() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -378,7 +362,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(15)
     void getInitialTrancheChangesWithInvalidTrancheId() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
