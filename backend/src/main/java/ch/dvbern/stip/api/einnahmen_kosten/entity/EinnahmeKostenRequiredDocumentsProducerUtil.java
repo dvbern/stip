@@ -112,10 +112,6 @@ public class EinnahmeKostenRequiredDocumentsProducerUtil {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER);
         }
 
-        if (greaterThanZero(ekPartner.getWohnkosten())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_MIETVERTRAG);
-        }
-
         if (greaterThanZero(ekPartner.getFahrkosten())) {
             requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT);
         }
