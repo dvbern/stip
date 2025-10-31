@@ -447,11 +447,11 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       );
       this.setDisabledStateAndHide(
         this.form.controls.wohnkosten,
-        wohnsitzNotEigenerHaushalt,
+        isEKPartner || wohnsitzNotEigenerHaushalt,
       );
       this.setDisabledStateAndHide(
         this.form.controls.wgWohnend,
-        wohnsitzNotEigenerHaushalt,
+        isEKPartner || wohnsitzNotEigenerHaushalt,
       );
       this.setDisabledStateAndHide(
         this.form.controls.wgAnzahlPersonen,
@@ -476,6 +476,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.setDisabledStateAndHide(
         this.form.controls.steuerjahr,
         this.config.isGesuchApp,
+      );
+      this.setDisabledStateAndHide(
+        this.form.controls.ausbildungskosten,
+        isEKPartner,
       );
     });
 
