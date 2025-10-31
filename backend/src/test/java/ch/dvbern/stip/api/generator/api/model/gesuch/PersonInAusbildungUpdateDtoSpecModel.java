@@ -52,6 +52,7 @@ public final class PersonInAusbildungUpdateDtoSpecModel {
                     LocalDate.of(2000, 1, 1)
                 )
             );
+            model.setHeimatortPLZ("3007");
             model.setHeimatort("Bern");
             model.setZivilstand(ZivilstandDtoSpec.LEDIG);
             model.setSozialhilfebeitraege(true);

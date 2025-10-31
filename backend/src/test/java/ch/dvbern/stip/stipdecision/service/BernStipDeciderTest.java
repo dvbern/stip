@@ -455,7 +455,28 @@ class BernStipDeciderTest {
 
     @Test
     void testZustaendigeKESBNichtImKantonBern() {
+        /*
+         * PIA & Eltern in Zürich wohnhaft, KESB ist NICHT in BERN.
+         * expected: KEIN Stipendenanspruch, da KESB in BERN:
+         */
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getAdresse()
+            .setPlz("8032");
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getAdresse()
+            .setOrt("Zürich");
+        gesuch.getNewestGesuchTranche().get().getGesuchFormular().getElterns().forEach(eltern -> {
+            var adresse = eltern.getAdresse();
+            adresse.setPlz("8032");
+            adresse.setOrt("Zürich");
+        });
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()
@@ -472,7 +493,28 @@ class BernStipDeciderTest {
 
     @Test
     void testZustaendigeKESBImKantonBern() {
+        /*
+         * PIA & Eltern in Zürich wohnhaft, KESB ist in BERN.
+         * expected: Stipendenanspruch, da KESB in BERN:
+         */
         final var gesuch = TestUtil.getGesuchForDecision(UUID.randomUUID());
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getAdresse()
+            .setPlz("8032");
+        gesuch.getNewestGesuchTranche()
+            .get()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getAdresse()
+            .setOrt("Zürich");
+        gesuch.getNewestGesuchTranche().get().getGesuchFormular().getElterns().forEach(eltern -> {
+            var adresse = eltern.getAdresse();
+            adresse.setPlz("8032");
+            adresse.setOrt("Zürich");
+        });
         gesuch.getNewestGesuchTranche()
             .get()
             .getGesuchFormular()

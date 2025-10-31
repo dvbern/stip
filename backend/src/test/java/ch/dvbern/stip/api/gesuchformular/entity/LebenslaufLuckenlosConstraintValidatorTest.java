@@ -154,20 +154,20 @@ class LebenslaufLuckenlosConstraintValidatorTest {
             );
         gesuchFormular.getAusbildung()
             .setAusbildungBegin(
-                LocalDate.of(2016, 7, 31)
+                LocalDate.of(2016, 8, 1)
             );
 
         // Act/Assert
         assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
 
         // Arrange
-        gesuchFormular.getPersonInAusbildung()
-            .setGeburtsdatum(
-                LocalDate.of(2000, 12, 16)
+        gesuchFormular.getAusbildung()
+            .setAusbildungBegin(
+                LocalDate.of(2016, 9, 1)
             );
 
         // Act/Assert
-        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
     }
 
     @Test
@@ -184,7 +184,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
             );
 
         // Act/Assert
-        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
 
         // Arrange
         gesuchFormular.getPersonInAusbildung()
@@ -193,7 +193,7 @@ class LebenslaufLuckenlosConstraintValidatorTest {
             );
 
         // Act/Assert
-        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(false));
+        assertThat(lebenslaufLuckenlosConstraintValidator.isValid(gesuchFormular, null), is(true));
     }
 
     @NotNull
