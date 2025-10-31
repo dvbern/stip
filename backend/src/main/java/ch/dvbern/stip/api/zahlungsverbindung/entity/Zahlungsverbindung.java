@@ -20,8 +20,6 @@ package ch.dvbern.stip.api.zahlungsverbindung.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
-import ch.dvbern.stip.api.sap.entity.SapDelivery;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +27,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -73,16 +70,4 @@ public class Zahlungsverbindung extends AbstractMandantEntity {
     @Column(name = "iban", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @IbanConstraint
     private String iban;
-
-    @Nullable
-    @Column(name = "sap_business_partner_id", nullable = true)
-    private Integer sapBusinessPartnerId;
-
-    @Nullable
-    @ManyToOne(optional = true)
-    @JoinColumn(
-        name = "sapdelivery_id", foreignKey = @ForeignKey(name = "FK_zahlungsverbindung_sapdelivery_id"),
-        nullable = true
-    )
-    private SapDelivery sapDelivery;
 }

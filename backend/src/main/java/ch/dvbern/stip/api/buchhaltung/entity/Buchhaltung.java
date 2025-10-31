@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.buchhaltung.entity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
@@ -104,6 +105,13 @@ public class Buchhaltung extends AbstractMandantEntity {
     @OneToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "zahlungsverbindung_id")
     private Zahlungsverbindung zahlungsverbindung;
+
+    @Transient
+    public SapDelivery getLatestSapDelivery() {
+        return sapDeliverys.stream()
+            .max(Comparator.comparing(SapDelivery::getTimestampErstellt))
+            .orElseThrow();
+    }
 
     @Transient
     public SapStatus getSapStatus() {
