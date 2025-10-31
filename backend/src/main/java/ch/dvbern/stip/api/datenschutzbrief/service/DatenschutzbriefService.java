@@ -63,7 +63,7 @@ public class DatenschutzbriefService {
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
         final var filenameTitle = switch (elternTeil.getElternTyp()) {
             case MUTTER -> translator.translate("stip.pdf.datenschutzbrief.MUTTER");
-            case VATER -> translator.translate("stip.pdf.datenschutzvrief.VATER");
+            case VATER -> translator.translate("stip.pdf.datenschutzbrief.VATER");
         };
         return String.format("%s.pdf", filenameTitle);
     }

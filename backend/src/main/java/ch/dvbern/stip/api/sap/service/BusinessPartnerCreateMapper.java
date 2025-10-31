@@ -22,9 +22,12 @@ import java.math.BigInteger;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery;
+import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
@@ -39,33 +42,35 @@ public abstract class BusinessPartnerCreateMapper {
         return header;
     }
 
-    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
+    @Mapping(source = "fallNummer", target = "EXTID")
+    @Mapping(source = ".", target = "AHVNR", qualifiedByName = "getAhvNr")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
-        @Context BigDecimal deliveryid,
-        Zahlungsverbindung zahlungsverbindung
+        Fall fall
     );
 
-    @Named("getExtId")
-    public String getExtId(@Context BigDecimal deliveryid, Zahlungsverbindung zahlungsverbindung) {
-        return String.valueOf(Math.abs(deliveryid.longValue()));
+    @Named("getAhvNr")
+    public String getAhvNr(Fall fall) {
+        return SapMapperUtil.getAhvNr(fall);
     }
 
-    @Mapping(source = "zahlungsverbindung.vorname", target = "FIRSTNAME")
-    @Mapping(source = "zahlungsverbindung.nachname", target = "LASTNAME")
+    @Mapping(source = "vorname", target = "FIRSTNAME")
+    @Mapping(source = "nachname", target = "LASTNAME")
+    @Mapping(source = "nationalitaet.iso2code", target = "NATIONALITYISO")
+    @Mapping(source = "geburtsdatum", target = "BIRTHDATE")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PERSDATA toPersData(
-        Zahlungsverbindung zahlungsverbindung
+        PersonInAusbildung pia
     );
 
     @Mapping(target = "ADRKIND", constant = "XXDEFAULT")
-    @Mapping(source = "zahlungsverbindung.adresse.land", target = "COUNTRY", qualifiedByName = "getLandStringFromLand")
-    @Mapping(source = "zahlungsverbindung.adresse.ort", target = "CITY")
-    @Mapping(source = "zahlungsverbindung.adresse.coAdresse", target = "CONAME")
-    @Mapping(source = "zahlungsverbindung.adresse.strasse", target = "STREET")
-    @Mapping(source = "zahlungsverbindung.adresse.hausnummer", target = "HOUSENO")
-    @Mapping(source = "zahlungsverbindung.adresse.plz", target = "POSTLCOD1")
+    @Mapping(source = "adresse.land", target = "COUNTRY", qualifiedByName = "getLandStringFromLand")
+    @Mapping(source = "adresse.ort", target = "CITY")
+    @Mapping(source = "adresse.coAdresse", target = "CONAME")
+    @Mapping(source = "adresse.strasse", target = "STREET")
+    @Mapping(source = "adresse.hausnummer", target = "HOUSENO")
+    @Mapping(source = "adresse.plz", target = "POSTLCOD1")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS toAddress(
-        Zahlungsverbindung zahlungsverbindung
+        PersonInAusbildung pia
     );
 
     @Named("getLandStringFromLand")
@@ -73,42 +78,54 @@ public abstract class BusinessPartnerCreateMapper {
         return land.getIso2code();
     }
 
-    @Mapping(source = "zahlungsverbindung.iban", target = "IBAN")
+    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = ".", target = "ACCOUNTHOLDER", qualifiedByName = "getAccountHolder")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
         Zahlungsverbindung zahlungsverbindung
     );
 
-    @Mapping(source = "zahlungsverbindung", target = "IDKEYS")
-    @Mapping(source = "zahlungsverbindung", target = "PERSDATA")
-    @Mapping(source = "zahlungsverbindung", target = "ADDRESS", qualifiedByName = "setAdress")
-    @Mapping(source = "zahlungsverbindung", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
+    @Named("getAccountHolder")
+    public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
+        return SapMapperUtil.getAccountHolder(zahlungsverbindung);
+    }
+
+    @Mapping(source = ".", target = "IDKEYS")
+    @Mapping(source = ".", target = "PERSDATA", qualifiedByName = "setPersdata")
+    @Mapping(source = ".", target = "ADDRESS", qualifiedByName = "setAdress")
+    @Mapping(source = ".", target = "PAYMENTDETAIL", qualifiedByName = "setPaymentDetail")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER toBusinessPartner(
-        @Context BigDecimal deliveryid,
-        Zahlungsverbindung zahlungsverbindung
+        Fall fall
     );
 
+    @Named("setPersdata")
+    public BusinessPartnerCreateRequest.BUSINESSPARTNER.PERSDATA setPersdata(
+        Fall fall
+    ) {
+        return toPersData(SapMapperUtil.getPia(fall));
+    }
+
     @Named("setAdress")
-    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS> setAdress(Zahlungsverbindung zahlungsverbindung) {
-        return List.of(toAddress(zahlungsverbindung));
+    public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.ADDRESS> setAdress(Fall fall) {
+        return List.of(toAddress(SapMapperUtil.getPia(fall)));
     }
 
     @Named("setPaymentDetail")
     public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
-        Zahlungsverbindung zahlungsverbindung
+        Fall fall
     ) {
-        return List.of(toPaymentDetails(zahlungsverbindung));
+        return List.of(toPaymentDetails(fall.getRelevantZahlungsverbindung()));
     }
 
     @Named("getSenderParmsDelivery")
     public SenderParmsDelivery getSenderParmsDelivery(
         @Context BigInteger sysid,
         @Context BigDecimal deliveryid,
-        Zahlungsverbindung zahlungsverbindung
+        Fall fall
     ) {
-        final SenderParmsDelivery sender = new SenderParmsDelivery();
-        sender.setSYSID(sysid);
-        sender.setDELIVERYID(deliveryid);
-        return sender;
+        return SapMapperUtil.getBusinessPartnerSenderParmsDelivery(
+            sysid,
+            deliveryid
+        );
     }
 
     @Mapping(source = ".", target = "BUSINESSPARTNER")
@@ -116,6 +133,6 @@ public abstract class BusinessPartnerCreateMapper {
     public abstract BusinessPartnerCreateRequest toBusinessPartnerCreateRequest(
         @Context BigInteger sysid,
         @Context BigDecimal deliveryid,
-        Zahlungsverbindung zahlungsverbindung
+        Fall fall
     );
 }

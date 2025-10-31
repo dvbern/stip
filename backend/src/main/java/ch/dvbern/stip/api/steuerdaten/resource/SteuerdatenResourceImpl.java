@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
 import ch.dvbern.stip.generated.dto.NeskoGetSteuerdatenRequestDto;
@@ -42,14 +41,13 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @Validated
 public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenService steuerdatenService;
-    private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenAuthorizer steuerdatenAuthorizer;
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
         steuerdatenAuthorizer.canRead();
-        return steuerdatenService.getSteuerdaten(gesuchTrancheId).stream().map(steuerdatenMapper::toDto).toList();
+        return steuerdatenService.getSteuerdaten(gesuchTrancheId);
     }
 
     @Override
@@ -59,10 +57,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
         List<SteuerdatenDto> steuerdatenDto
     ) {
         steuerdatenAuthorizer.canUpdate(gesuchTrancheId);
-        return steuerdatenService.updateSteuerdaten(gesuchTrancheId, steuerdatenDto)
-            .stream()
-            .map(steuerdatenMapper::toDto)
-            .toList();
+        return steuerdatenService.updateSteuerdaten(gesuchTrancheId, steuerdatenDto);
     }
 
     @Override
@@ -76,6 +71,6 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
             gesuchTrancheId,
             neskoGetSteuerdatenRequestDto.getSteuerdatenTyp(),
             neskoGetSteuerdatenRequestDto.getSteuerjahr()
-        ).stream().map(steuerdatenMapper::toDto).toList();
+        );
     }
 }

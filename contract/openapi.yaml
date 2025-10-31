@@ -540,12 +540,6 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Kommentar'
       responses:
         200:
           content:
@@ -572,6 +566,12 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
       responses:
         200:
           content:
@@ -4914,6 +4914,7 @@ components:
       enum:
         - ALLE_GESUCHE
         - MEINE_GESUCHE
+        - PENDENTE_GESUCHE
         - ALLE_BEARBEITBAR
         - MEINE_BEARBEITBAR
         - ALLE_JURISTISCHE_ABKLAERUNG
@@ -7328,6 +7329,7 @@ components:
           type: string
     GesuchNotizTyp:
       enum:
+        - PENDENZ_NOTIZ
         - GESUCH_NOTIZ
         - JURISTISCHE_NOTIZ
     NotificationType:
@@ -7701,6 +7703,8 @@ components:
           type: string
         text:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
     GesuchNotiz:
       required:
         - userErstellt
@@ -7724,6 +7728,8 @@ components:
           type: string
         antwort:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'

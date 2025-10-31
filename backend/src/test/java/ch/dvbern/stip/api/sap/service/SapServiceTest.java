@@ -277,7 +277,7 @@ public class SapServiceTest {
     }
 
     @Test
-    void testRetryFailedAuszahlungBuchhaltunManually() {
+    void testRetryFailedAuszahlungBuchhaltungManually() {
         // Arrange
         final var gesuch = prepareGesuchForSapService();
 
@@ -390,13 +390,12 @@ public class SapServiceTest {
                 .setZweiterAuszahlungsterminMonat(12)
         );
         final var zahlungsverbindung = new Zahlungsverbindung()
-            .setSapBusinessPartnerId(123)
             .setAdresse(new Adresse().setLand(new Land()));
         gesuch.setAusbildung(
             new Ausbildung()
                 .setFall(
                     new Fall().setAuszahlung(
-                        new Auszahlung().setZahlungsverbindung(zahlungsverbindung)
+                        new Auszahlung().setZahlungsverbindung(zahlungsverbindung).setSapBusinessPartnerId(123)
                     )
                 )
         );

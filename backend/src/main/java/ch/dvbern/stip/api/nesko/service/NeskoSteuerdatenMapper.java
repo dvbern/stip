@@ -82,7 +82,11 @@ public class NeskoSteuerdatenMapper {
         }
         steuerdaten.setSaeule3a(saeule3a);
         steuerdaten.setSaeule2(saeule2);
-        steuerdaten.setVermoegen(getMaxOrZeroFromEffSatzType(steuerdatenNesko.getSteuerbaresVermoegenKanton()));
+
+        steuerdaten.setVermoegen(
+            getZeroOrPositiveValue(getValueOrZeroFromEffSatzType(steuerdatenNesko.getSteuerbaresVermoegenKanton()))
+        );
+
         steuerdaten.setSteuernKantonGemeinde(
             Objects.requireNonNullElse(steuerdatenNesko.getSteuerbetragKanton(), BigDecimal.ZERO).intValue()
         );
@@ -111,6 +115,19 @@ public class NeskoSteuerdatenMapper {
         steuerdaten.setVerpflegungPartner(verpflegungPartner);
 
         return steuerdaten;
+    }
+
+    private Integer getZeroOrPositiveValue(final Integer value) {
+        if (value > 0) {
+            return value;
+        }
+        return 0;
+    }
+
+    private Integer getValueOrZeroFromEffSatzType(final EffSatzType effSatzType) {
+        var effektiv = Objects.requireNonNullElse(effSatzType.getEffektiv(), BigDecimal.ZERO);
+        var satzbestimmend = Objects.requireNonNullElse(effSatzType.getSatzbestimmend(), BigDecimal.ZERO);
+        return effektiv.max(satzbestimmend).intValue();
     }
 
     private Integer getMaxOrZeroFromEffSatzType(EffSatzType effSatzType) {

@@ -15,14 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.zahlungsverbindung.repo;
+package ch.dvbern.stip.api.common.validation;
 
-import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
+import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
+import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-public class ZahlungsverbindungRepository implements BaseRepository<Zahlungsverbindung> {
+public class GesuchNotizAbgeschlossenOnlySetForPendenzValidator
+    implements ConstraintValidator<GesuchNotizAbgeschlossenOnlySetForPendenzConstraint, GesuchNotiz> {
+
+    @Override
+    public boolean isValid(GesuchNotiz gesuchNotiz, ConstraintValidatorContext context) {
+        if (gesuchNotiz.getNotizTyp().equals(GesuchNotizTyp.PENDENZ_NOTIZ)) {
+            return gesuchNotiz.getPendenzAbgeschlossen() != null;
+        }
+
+        return gesuchNotiz.getPendenzAbgeschlossen() == null;
+    }
 }

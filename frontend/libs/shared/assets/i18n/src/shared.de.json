@@ -943,6 +943,7 @@
   "shared.form.notizen.userErstellt.label": "Sachbearbeiter",
   "shared.form.notizen.userMutiert.label": "Jurist",
   "shared.form.notizen.antwort.label": "Entscheid",
+  "shared.form.notizen.pendenz.label": "Pendenz abgeschlossen",
   "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Notiz",
   "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Juristische Notiz",
 

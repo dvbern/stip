@@ -186,7 +186,9 @@ public class BuchhaltungService {
 
         buchhaltungRepository.persistAndFlush(buchhaltungEntry);
         buchhaltungEntry.setUserErstellt(JwtUtil.SYSTEM_USR);
-        gesuch.getAusbildung().getFall().getBuchhaltungs().add(buchhaltungEntry);
+        final var fall = gesuch.getAusbildung().getFall();
+        fall.getAuszahlung().setBuchhaltung(buchhaltungEntry);
+        fall.getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungEntry;
     }
 
