@@ -82,7 +82,7 @@ public interface GesuchResource {
     @POST
     @Path("/status/unterschriftenblatt-erhalten/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto changeGesuchStatusToVersandbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto changeGesuchStatusToVerfuegungDruckbereit(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @POST
     @Path("/status/versendet/{gesuchTrancheId}")
