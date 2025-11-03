@@ -166,10 +166,6 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
               after: LEBENSLAUF,
               steps: [PARTNER],
             },
-          ]
-        : []),
-      ...(state.gesuchFormular?.partner
-        ? [
             {
               after: EINNAHMEN_KOSTEN,
               steps: [EINNAHMEN_KOSTEN_PARTNER],
