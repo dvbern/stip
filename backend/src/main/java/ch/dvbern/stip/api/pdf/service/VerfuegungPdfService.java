@@ -17,30 +17,22 @@
 
 package ch.dvbern.stip.api.pdf.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
-import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -55,51 +47,34 @@ import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
-import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.borders.Border;
-import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
-import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Link;
-import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
-import com.itextpdf.layout.properties.VerticalAlignment;
-import com.itextpdf.svg.converter.SvgConverter;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_PATH;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
 
 @RequestScoped
 @RequiredArgsConstructor
 @Slf4j
-public class PdfService {
-    private static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
-    private static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
-
-    private static final String LOGO_PATH = "/images/bern_logo.svg";
-
-    private static final int SPACING_BIG = 30;
-    private static final int SPACING_MEDIUM = 20;
-    private static final int SPACING_SMALL = 10;
-    private static final float FONT_SIZE_BIG = 10.5f;
-    private static final float FONT_SIZE_MEDIUM = 8.5f;
-    private static final float FONT_SIZE_SMALL = 6.5f;
-
+public class VerfuegungPdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final BerechnungsblattService berechnungsblattService;
     private final TenantConfigService tenantConfigService;
@@ -110,14 +85,14 @@ public class PdfService {
     private Link ausbildungsbeitraegeUri = null;
 
     public ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
-        final PdfSection negativeVerfuegungSection = this::negativeVerfuegung;
+        final VerfuegungPdfSection negativeVerfuegungSection = this::negativeVerfuegung;
         return this.createPdf(verfuegung, negativeVerfuegungSection, false);
     }
 
     public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(
         final Verfuegung verfuegung
     ) {
-        final PdfSection negativeVerfuegungSection =
+        final VerfuegungPdfSection negativeVerfuegungSection =
             this::verfuegungOhneAnspruch;
         return this.createPdf(verfuegung, negativeVerfuegungSection, true);
     }
@@ -125,17 +100,16 @@ public class PdfService {
     public ByteArrayOutputStream createVerfuegungMitAnspruchPdf(
         final Verfuegung verfuegung
     ) {
-        final PdfSection negativeVerfuegungSection =
+        final VerfuegungPdfSection negativeVerfuegungSection =
             this::verfuegungMitAnspruch;
         return this.createPdf(verfuegung, negativeVerfuegungSection, true);
     }
 
     private ByteArrayOutputStream createPdf(
         final Verfuegung verfuegung,
-        final PdfSection section,
+        final VerfuegungPdfSection section,
         final boolean addBerechnungsblaetter
     ) {
-        final Gesuch gesuch = verfuegung.getGesuch();
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final FontProgram font;
@@ -155,6 +129,7 @@ public class PdfService {
 
         ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
+        final Gesuch gesuch = verfuegung.getGesuch();
         final Locale locale = gesuch
             .getLatestGesuchTranche()
             .getGesuchFormular()
@@ -170,7 +145,7 @@ public class PdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            final Image logo = getLogo(pdfDocument, LOGO_PATH);
+            final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
             logo.setMarginLeft(-25);
             logo.setMarginTop(-35);
 
@@ -182,25 +157,26 @@ public class PdfService {
                     logo,
                     leftMargin,
                     translator,
-                    addBerechnungsblaetter
+                    false
                 );
 
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 document.add(logo);
-                header(gesuch, document, leftMargin, translator, true);
+                PdfUtils.header(gesuch, document, leftMargin, translator, true, pdfFont, ausbildungsbeitraegeUri);
             }
 
             addVerfuegung(verfuegung, document, section, logo, leftMargin, translator, addBerechnungsblaetter);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
+
         return out;
     }
 
     private void addVerfuegung(
         final Verfuegung verfuegung,
         final Document document,
-        final PdfSection section,
+        final VerfuegungPdfSection section,
         final Image logo,
         final float leftMargin,
         final TL translator,
@@ -208,356 +184,18 @@ public class PdfService {
     ) throws IOException {
         final var gesuch = verfuegung.getGesuch();
         document.add(logo);
-        header(gesuch, document, leftMargin, translator, false);
+        PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
         // Add the main content and footer sections.
         section.render(verfuegung, document, leftMargin, translator);
-        footer(gesuch, document, leftMargin, translator);
-        rechtsmittelbelehrung(translator, document, leftMargin);
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, true);
+        PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
         PdfUtils.makePageNumberEven(document);
 
         if (addBerechnungsblaetter) {
-            berechnungsblaetter(document, gesuch);
+            PdfUtils.addBerechnungsblaetter(document, gesuch, berechnungsblattService);
             PdfUtils.makePageNumberEven(document);
         }
-    }
-
-    private void header(
-        final Gesuch gesuch,
-        final Document document,
-        float leftMargin,
-        TL translator,
-        boolean isDeckblatt
-    ) {
-        final float[] columnWidths = { 50, 50 };
-        final Table headerTable = createTable(columnWidths, leftMargin);
-
-        final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
-
-        final Sachbearbeiter sachbearbeiterBenutzer = gesuch
-            .getAusbildung()
-            .getFall()
-            .getSachbearbeiterZuordnung()
-            .getSachbearbeiter();
-
-        final Cell sender = createCell(
-            pdfFont,
-            PdfService.FONT_SIZE_MEDIUM,
-            1,
-            1,
-            translator.translate("stip.pdf.header.bkd"),
-            translator.translate("stip.pdf.header.amt"),
-            translator.translate("stip.pdf.header.abteilung")
-        );
-        headerTable.addCell(sender);
-
-        final Paragraph recieverHeaderParagraph = new Paragraph()
-            .add(translator.translate("stip.pdf.header.bkd") + ", ")
-            .add(translator.translate("stip.pdf.header.strasse") + ", ")
-            .add(translator.translate("stip.pdf.header.plz"));
-
-        final Cell recieverHeader = createCell(pdfFont, FONT_SIZE_SMALL, 3, 1)
-            .setVerticalAlignment(VerticalAlignment.BOTTOM)
-            .setBorderBottom(new SolidBorder(1))
-            .setPaddingBottom(0);
-        recieverHeader.add(recieverHeaderParagraph);
-        headerTable.addCell(recieverHeader);
-
-        final Cell address = createCell(
-            pdfFont,
-            FONT_SIZE_MEDIUM,
-            1,
-            1,
-            translator.translate("stip.pdf.header.strasse"),
-            translator.translate("stip.pdf.header.plz")
-        );
-        headerTable.addCell(address);
-
-        final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
-
-        final Cell url = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
-        headerTable.addCell(url);
-
-        final String mail = sachbearbeiterBenutzer.getEmail() != null
-            ? sachbearbeiterBenutzer.getEmail()
-            : Constants.DVB_MAILBUCKET_MAIL;
-
-        final Link email = new Link(mail, PdfAction.createURI(String.format("mailto:%s", mail)));
-        final Paragraph emailParagraph = new Paragraph().add(email);
-
-        final Cell sachbearbeiter = createCell(
-            pdfFont,
-            FONT_SIZE_MEDIUM,
-            1,
-            1,
-            String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-            sachbearbeiterBenutzer.getTelefonnummer()
-        )
-            .setPaddingBottom(SPACING_BIG)
-            .setPaddingTop(SPACING_MEDIUM)
-            .add(emailParagraph);
-        headerTable.addCell(sachbearbeiter);
-
-        if (!isDeckblatt) {
-            final Cell receiver = createCell(
-                pdfFont,
-                FONT_SIZE_MEDIUM,
-                1,
-                1,
-                gesuchFormular.getPersonInAusbildung().getFullName(),
-                gesuchFormular.getPersonInAusbildung().getAdresse().getStrasse(),
-                gesuchFormular.getPersonInAusbildung().getAdresse().getPlz() +
-                " " +
-                gesuchFormular.getPersonInAusbildung().getAdresse().getOrt()
-            ).setPaddingTop(SPACING_MEDIUM);
-            headerTable.addCell(receiver);
-        }
-
-        if (isDeckblatt) {
-            final var sozialdienst = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst();
-            final Cell receiver = createCell(
-                pdfFont,
-                FONT_SIZE_MEDIUM,
-                1,
-                1,
-                sozialdienst.getName(),
-                sozialdienst.getZahlungsverbindung().getVorname() + " "
-                + sozialdienst.getZahlungsverbindung().getNachname(),
-                sozialdienst.getZahlungsverbindung().getAdresse().getStrasse(),
-                sozialdienst.getZahlungsverbindung().getAdresse().getPlz() +
-                " " +
-                sozialdienst.getZahlungsverbindung().getAdresse().getOrt()
-            ).setPaddingTop(SPACING_MEDIUM);
-            headerTable.addCell(receiver);
-        }
-
-        final Paragraph dossierNr = new Paragraph()
-            .add(translator.translate("stip.pdf.header.dossier.nr") + " ")
-            .add(gesuch.getGesuchNummer());
-
-        final Paragraph svNr = new Paragraph()
-            .add(translator.translate("stip.pdf.header.svNr") + " ")
-            .add(gesuchFormular.getPersonInAusbildung().getSozialversicherungsnummer());
-
-        final Cell fallInformations = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1);
-        fallInformations.add(dossierNr);
-        fallInformations.add(svNr);
-        headerTable.addCell(fallInformations);
-
-        final Cell date = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, DateUtil.formatDate(LocalDate.now()));
-        headerTable.addCell(date);
-
-        if (!isDeckblatt) {
-            final Locale locale = gesuch
-                .getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale();
-
-            final var ausbildungsStaette = gesuch.getAusbildung().getAusbildungsstaetteOrAlternative(locale);
-            final var ausbildungsGang = gesuch.getAusbildung().getAusbildungsgangOrAlternative(locale);
-
-            final Cell ausbildung = createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1, ausbildungsStaette, ausbildungsGang);
-
-            headerTable.addCell(ausbildung);
-        }
-
-        headerTable.setMarginBottom(SPACING_MEDIUM);
-
-        document.add(headerTable);
-
-        if (isDeckblatt) {
-            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        }
-    }
-
-    private void footer(final Gesuch gesuch, final Document document, float leftMargin, TL translator) {
-        final float[] columnWidths = { 50, 50 };
-        final Table signatureTable = createTable(columnWidths, leftMargin);
-        signatureTable.setMarginTop(SPACING_MEDIUM);
-        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
-        signatureTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.footer.gruesse"),
-                translator.translate("stip.pdf.header.abteilung")
-            )
-        );
-        signatureTable.addCell(createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
-
-        final var sachbearbeiterBenutzer =
-            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
-
-        final var locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
-
-        signatureTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                String.format("%s %s", sachbearbeiterBenutzer.getVorname(), sachbearbeiterBenutzer.getNachname()),
-                sachbearbeiterBenutzer.getFunktion(locale)
-            )
-        );
-        signatureTable.setMarginBottom(SPACING_MEDIUM);
-        document.add(signatureTable);
-
-        document.add(
-            createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY)
-            )
-        );
-
-        addCopieAnParagraph(gesuch, translator, leftMargin, document);
-    }
-
-    private void berechnungsblaetter(Document document, final Gesuch gesuch) throws IOException {
-        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        berechnungsblattService
-            .addBerechnungsblattToDocument(gesuch, LocaleUtil.getLocaleFromGesuch(gesuch), document, false);
-    }
-
-    private void rechtsmittelbelehrung(TL translator, Document document, float leftMargin) {
-        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-
-        document.add(
-            createParagraph(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                leftMargin,
-                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY).toUpperCase()
-            )
-                .setUnderline()
-                .setPaddingTop(SPACING_MEDIUM)
-        );
-
-        final Table mainTable = createTable(new float[] { 10, 90 }, leftMargin);
-        mainTable.setMarginTop(SPACING_MEDIUM);
-
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "1."));
-        mainTable.addCell(
-            createCell(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.gesetzlicheGrundlagen.title")
-            )
-        );
-        mainTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.gesetzlicheGrundlagen.text")
-            )
-        );
-
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2."));
-        mainTable.addCell(
-            createCell(pdfFontBold, FONT_SIZE_BIG, 1, 1, translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY))
-        );
-        mainTable.addCell(
-            createCell(pdfFont, FONT_SIZE_BIG, 1, 1, translator.translate("stip.pdf.rechtsmittelbelehrung.text"))
-        );
-
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2.1."));
-        mainTable.addCell(
-            createCell(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.beschwerdeGruende.title")
-            )
-        );
-        mainTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.beschwerdeGruende.text")
-            )
-        );
-
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2.2."));
-        mainTable.addCell(
-            createCell(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.formUndSprache.title")
-            )
-        );
-        mainTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.formUndSprache.text")
-            )
-        );
-
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "2.3."));
-        mainTable.addCell(
-            createCell(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.verfahrenskosten.title")
-            )
-        );
-        mainTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.verfahrenskosten.text")
-            )
-        );
-
-        mainTable.addCell(createCell(pdfFontBold, FONT_SIZE_BIG, 2, 1, "3."));
-        mainTable.addCell(
-            createCell(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.revision.title")
-            )
-        );
-        mainTable.addCell(
-            createCell(
-                pdfFont,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                translator.translate("stip.pdf.rechtsmittelbelehrung.revision.text")
-            )
-        );
-
-        document.add(mainTable);
     }
 
     private void verfuegungOhneAnspruch(
@@ -588,7 +226,7 @@ public class PdfService {
             ausbildungsjahrBis.getYear()
         );
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -612,11 +250,11 @@ public class PdfService {
         final String translateKey = personInAusbildung
             .getAnrede()
             .equals(Anrede.HERR)
-                ? "stip.pdf.verfuegung.begruessung.mann"
-                : "stip.pdf.verfuegung.begruessung.frau";
+                ? "stip.pdf.begruessung.mann"
+                : "stip.pdf.begruessung.frau";
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -629,7 +267,7 @@ public class PdfService {
             Objects.requireNonNull(verfuegung.getGesuch().getEinreichedatum())
         );
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -642,7 +280,7 @@ public class PdfService {
         );
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -653,7 +291,7 @@ public class PdfService {
         );
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -664,7 +302,7 @@ public class PdfService {
         );
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -675,7 +313,7 @@ public class PdfService {
         );
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -743,7 +381,7 @@ public class PdfService {
         }
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -766,7 +404,7 @@ public class PdfService {
                 .toLocalDate();
 
             document.add(
-                createParagraph(
+                PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
@@ -784,7 +422,7 @@ public class PdfService {
                 DateUtil.formatDate(Objects.requireNonNull(verfuegung.getGesuch().getEinreichedatum()));
 
             document.add(
-                createParagraph(
+                PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
@@ -798,7 +436,7 @@ public class PdfService {
         }
 
         final float[] columnWidths = { 50, 50 };
-        final Table calculationTable = createTable(columnWidths, leftMargin);
+        final Table calculationTable = PdfUtils.createTable(columnWidths, leftMargin);
         calculationTable.setMarginTop(SPACING_MEDIUM);
         calculationTable.setMarginBottom(SPACING_MEDIUM);
         calculationTable.setPaddingRight(SPACING_MEDIUM);
@@ -808,7 +446,7 @@ public class PdfService {
             : 12;
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -824,7 +462,7 @@ public class PdfService {
         final int anspruch = relevantBuchhaltung.getStipendium();
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -834,7 +472,7 @@ public class PdfService {
         );
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -846,7 +484,7 @@ public class PdfService {
         final int ausbezahlt = isRueckforderung ? 0 : anspruch - relevantBuchhaltung.getSaldo();
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -856,7 +494,7 @@ public class PdfService {
         );
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -869,7 +507,7 @@ public class PdfService {
             isRueckforderung ? relevantBuchhaltung.getStipendium() - relevantBuchhaltung.getSaldo() : 0;
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -895,7 +533,7 @@ public class PdfService {
         }
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -907,7 +545,7 @@ public class PdfService {
         final int total = relevantBuchhaltung.getSaldo();
 
         calculationTable.addCell(
-            createCell(
+            PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
@@ -920,7 +558,7 @@ public class PdfService {
 
         if (total < 0) {
             document.add(
-                createParagraph(
+                PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
@@ -951,7 +589,7 @@ public class PdfService {
             );
 
             document.add(
-                createParagraph(
+                PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
@@ -963,7 +601,7 @@ public class PdfService {
                 )
             );
             document.add(
-                createParagraph(
+                PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
@@ -973,7 +611,7 @@ public class PdfService {
         }
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -982,7 +620,7 @@ public class PdfService {
         );
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -990,44 +628,6 @@ public class PdfService {
             )
         );
 
-    }
-
-    private void addCopieAnParagraph(
-        final Gesuch gesuch,
-        final TL translator,
-        final float leftMargin,
-        final Document document
-    ) {
-        if (gesuch.getAusbildung().getFall().getDelegierung() == null) {
-            return;
-        }
-
-        final List<String> kopieAn = new ArrayList<>();
-        final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
-        final var sozialdienstAdresse = gesuch.getAusbildung()
-            .getFall()
-            .getDelegierung()
-            .getSozialdienst()
-            .getZahlungsverbindung()
-            .getAdresse();
-
-        kopieAn.add(sozialdienstName);
-        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
-            kopieAn.add(sozialdienstAdresse.getCoAdresse());
-        }
-        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
-        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
-
-        document.add(
-            createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate("stip.pdf.footer.kopieAn") + " ",
-                String.join(", ", kopieAn)
-            )
-        );
     }
 
     private void negativeVerfuegung(
@@ -1066,7 +666,7 @@ public class PdfService {
             ausbildungsjahrBis.getYear()
         );
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFontBold,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -1085,11 +685,11 @@ public class PdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.verfuegung.begruessung.mann"
-            : "stip.pdf.verfuegung.begruessung.frau";
+            ? "stip.pdf.begruessung.mann"
+            : "stip.pdf.begruessung.frau";
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -1100,7 +700,7 @@ public class PdfService {
 
         final String einreichedatum = DateUtil.formatDate(Objects.requireNonNull(gesuch.getEinreichedatum()));
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -1121,17 +721,17 @@ public class PdfService {
             decision = decision.replace("{WOHNSITZKANTON}", wohnsitzKantonName);
         }
 
-        document.add(createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, decision));
+        document.add(PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, decision));
 
         document.add(
-            createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
+            PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
                 .add(translator.translate("stip.pdf.verfuegung.entschuldigung") + " ")
                 .add(ausbildungsbeitraegeUri)
                 .add(".")
         );
 
         document.add(
-            createParagraph(
+            PdfUtils.createParagraph(
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
@@ -1140,54 +740,8 @@ public class PdfService {
         );
     }
 
-    private Image getLogo(PdfDocument pdfDocument, String pathToSvg) throws IOException {
-        final ByteArrayOutputStream svgOut = new ByteArrayOutputStream();
-        try (final InputStream svgStream = getClass().getResourceAsStream(pathToSvg)) {
-            SvgConverter.createPdf(svgStream, svgOut);
-        }
-        try (
-            final PdfReader reader = new PdfReader(new ByteArrayInputStream(svgOut.toByteArray()));
-            final PdfDocument tempSvgDoc = new PdfDocument(reader)
-        ) {
-            final PdfFormXObject xObject = tempSvgDoc.getFirstPage().copyAsFormXObject(pdfDocument);
-            return new Image(xObject).scaleToFit(150, 87);
-        }
-    }
-
-    private Paragraph createParagraph(PdfFont font, float fontSize, float leftMargin, String... texts) {
-        final Paragraph paragraph = new Paragraph();
-        paragraph.setFont(font);
-        paragraph.setFontSize(fontSize);
-        paragraph.setMultipliedLeading(1f);
-        paragraph.setMarginLeft(leftMargin);
-        for (final String text : texts) {
-            paragraph.add(new Text(text));
-        }
-        return paragraph;
-    }
-
-    private Table createTable(float[] columnWidths, float leftMargin) {
-        final Table table = new Table(UnitValue.createPercentArray(columnWidths));
-        table.setWidth(UnitValue.createPercentValue(100));
-        table.setMarginLeft(leftMargin);
-        return table;
-    }
-
-    private Cell createCell(PdfFont font, float fontSize, int rowSpan, int colSpan, String... paragraphs) {
-        final Cell cell = new Cell(rowSpan, colSpan)
-            .setTextAlignment(TextAlignment.LEFT)
-            .setBorder(Border.NO_BORDER)
-            .setFont(font)
-            .setFontSize(fontSize)
-            .setPaddingBottom(SPACING_SMALL);
-        for (final String text : paragraphs) {
-            cell.add(createParagraph(font, fontSize, 0, text));
-        }
-        return cell;
-    }
-
     @FunctionalInterface
-    private interface PdfSection {
+    private interface VerfuegungPdfSection {
         void render(Verfuegung verfuegung, Document document, float leftMargin, TL translator)
         throws IOException;
     }

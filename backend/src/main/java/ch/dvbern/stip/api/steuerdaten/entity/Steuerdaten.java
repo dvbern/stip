@@ -71,10 +71,6 @@ public class Steuerdaten extends AbstractMandantEntity {
     private Integer saeule2;
 
     @NotNull
-    @Column(name = "kinderalimente", nullable = false)
-    private Integer kinderalimente;
-
-    @NotNull
     @Column(name = "vermoegen", nullable = false)
     private Integer vermoegen;
 

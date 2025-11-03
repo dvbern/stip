@@ -25,7 +25,7 @@
               placeholder="756.xxxx.xxxx.xx"
               [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.sozialversicherungsnummer"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.sozialversicherungsnummer"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
@@ -70,16 +70,14 @@
             data-testid="form-person-anrede"
             [placeholder]="'shared.form.select.empty' | transloco"
           >
-            @for (a of anredeValues; track $index) {
-              <mat-option [attr.data-testid]="a" [value]="a">
-                {{ 'shared.form.select.salutation.' + (a | lowercase) | transloco }}
+            @for (anrede of anredeValues; track $index) {
+              <mat-option [attr.data-testid]="anrede" [value]="anrede">
+                {{ 'shared.form.select.salutation.' + anrede | transloco }}
               </mat-option>
             }
           </mat-select>
           <mat-hint
-            *dvZuvorHint="
-              view.formChanges?.anrede | lowercase | dvTranslateChange: 'shared.form.select.salutation.$VALUE' | async
-            "
+            *dvZuvorHint="view.formChanges.anrede | dvTranslateChange: 'shared.form.select.salutation.$VALUE' | async"
           ></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
@@ -98,7 +96,7 @@
             [formControl]="form.controls.nachname"
             data-testid="form-person-nachname"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.nachname; testId: 'form-person-nachname-zuvor-hint'"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.nachname; testId: 'form-person-nachname-zuvor-hint'"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -113,7 +111,7 @@
             [formControl]="form.controls.vorname"
             data-testid="form-person-vorname"
           />
-          <mat-hint *dvZuvorHint="view.formChanges?.vorname"></mat-hint>
+          <mat-hint *dvZuvorHint="view.formChanges.vorname"></mat-hint>
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
@@ -125,7 +123,7 @@
         <dv-shared-ui-form-address
           class="col-xl-8 col-12"
           [group]="form.controls.adresse"
-          [changes]="view.formChanges?.adresse"
+          [changes]="view.formChanges.adresse"
           [languageSig]="languageSig()"
         />
       </div>
@@ -141,7 +139,7 @@
             >
             <dv-shared-ui-form-zuvor-hint
               [changes]="
-                view.formChanges?.identischerZivilrechtlicherWohnsitz
+                view.formChanges.identischerZivilrechtlicherWohnsitz
                   | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
                   | async
               "
@@ -189,7 +187,7 @@
                   [matAutocomplete]="plzAutocomplete"
                   data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
                 />
-                <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
+                <mat-hint *dvZuvorHint="view.formChanges.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | transloco }}
                 </mat-error>
@@ -212,7 +210,7 @@
                   [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
                   data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
                 />
-                <mat-hint *dvZuvorHint="view.formChanges?.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
+                <mat-hint *dvZuvorHint="view.formChanges.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ 'shared.form.error.required' | transloco }}
                 </mat-error>
@@ -238,7 +236,7 @@
               [formControl]="form.controls.email"
               data-testid="form-person-email"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.email"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.email"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
@@ -267,7 +265,7 @@
               [formControl]="form.controls.telefonnummer"
               data-testid="form-person-telefonnummer"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.telefonnummer"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.telefonnummer"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
@@ -299,7 +297,7 @@
               data-testid="form-person-geburtsdatum"
               (blur)="onGeburtsdatumBlur()"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.geburtsdatum | date: 'dd.MM.yyyy'"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
 
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
@@ -336,7 +334,7 @@
             </mat-select>
             <mat-hint
               *dvZuvorHint="
-                view.formChanges?.zivilstand | dvTranslateChange: 'shared.form.person.zivilstand.$VALUE' | async
+                view.formChanges.zivilstand | dvTranslateChange: 'shared.form.person.zivilstand.$VALUE' | async
               "
             ></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
@@ -382,7 +380,7 @@
             [languageSig]="languageSig()"
             [panelWidthSig]="'auto'"
             [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
-            [zuvorValueSig]="view.formChanges?.nationalitaetId"
+            [zuvorValueSig]="view.formChanges.nationalitaetId"
           ></dv-shared-ui-select-search>
         </div>
 
@@ -469,7 +467,7 @@
                 [matAutocomplete]="plzAutocomplete"
                 data-testid="form-person-heimatortPLZ"
               />
-              <mat-hint *dvZuvorHint="view.formChanges?.heimatortPLZ"></mat-hint>
+              <mat-hint *dvZuvorHint="view.formChanges.heimatortPLZ"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.requiredShort' | transloco }}
               </mat-error>
@@ -492,7 +490,7 @@
                 [formControl]="form.controls.heimatortPlzOrt.controls.ort"
                 data-testid="form-person-heimatort"
               />
-              <mat-hint *dvZuvorHint="view.formChanges?.heimatort"></mat-hint>
+              <mat-hint *dvZuvorHint="view.formChanges.heimatort"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ 'shared.form.error.required' | transloco }}
               </mat-error>
@@ -606,7 +604,7 @@
               data-testid="form-person-einreisedatum"
               (blur)="onEinreisedatumBlur()"
             />
-            <mat-hint *dvZuvorHint="view.formChanges?.einreisedatum | date: 'dd.MM.yyyy'"></mat-hint>
+            <mat-hint *dvZuvorHint="view.formChanges.einreisedatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
@@ -642,9 +640,7 @@
               }
             </mat-select>
             <mat-hint
-              *dvZuvorHint="
-                view.formChanges?.wohnsitz | dvTranslateChange: 'shared.form.shared.wohnsitz.$VALUE' | async
-              "
+              *dvZuvorHint="view.formChanges.wohnsitz | dvTranslateChange: 'shared.form.shared.wohnsitz.$VALUE' | async"
             ></mat-hint>
             <mat-error *dvSharedUiFormMessageError="'required'">
               {{ 'shared.form.error.required' | transloco }}
@@ -659,17 +655,19 @@
 
         @if (nationalitaetBfsCodeSig() === bfsCodeSchweiz) {
           <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
-            <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
-              'shared.form.person.guardianship.label' | transloco
-            }}</mat-checkbox>
-            @if (vormundschaftDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-            }
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges?.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
+            <div>
+              <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
+                'shared.form.person.guardianship.label' | transloco
+              }}</mat-checkbox>
+              @if (vormundschaftDocumentOptionsSig(); as options) {
+                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+              }
+              <dv-shared-ui-form-zuvor-hint
+                [changes]="
+                  view.formChanges.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+                "
+              ></dv-shared-ui-form-zuvor-hint>
+            </div>
             <button
               type="button"
               (click)="vormundSchaftInfoDialog.toggle()"
@@ -709,7 +707,7 @@
               </mat-select>
               <mat-hint
                 *dvZuvorHint="
-                  view.formChanges?.zustaendigeKESB
+                  view.formChanges.zustaendigeKESB
                     | dvTranslateChange: 'shared.form.person.zustaendigeKESB.$VALUE'
                     | async
                 "
@@ -730,8 +728,8 @@
               [updateValidity]="updateValidity$ | async"
               [controls]="form.controls"
               [changes]="{
-                wohnsitzAnteilVater: view.formChanges?.wohnsitzAnteilVater,
-                wohnsitzAnteilMutter: view.formChanges?.wohnsitzAnteilMutter,
+                wohnsitzAnteilVater: view.formChanges.wohnsitzAnteilVater,
+                wohnsitzAnteilMutter: view.formChanges.wohnsitzAnteilMutter,
               }"
             ></dv-shared-ui-wohnsitz-splitter>
           </div>
@@ -768,7 +766,7 @@
               }}</mat-radio-button>
               <dv-shared-ui-form-zuvor-hint
                 [changes]="
-                  view.formChanges?.sozialhilfebeitraege | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async
+                  view.formChanges.sozialhilfebeitraege | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async
                 "
               ></dv-shared-ui-form-zuvor-hint>
             </div>
@@ -819,7 +817,7 @@
           </mat-radio-group>
           <dv-shared-ui-form-zuvor-hint
             [changes]="
-              view.formChanges?.korrespondenzSprache
+              view.formChanges.korrespondenzSprache
                 | dvTranslateChange: 'shared.form.person.korrespondenzSprache.$VALUE'
                 | async
             "

@@ -19,31 +19,313 @@ package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
+import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.pdf.util.PdfUtils;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import com.itextpdf.io.font.FontProgram;
+import com.itextpdf.io.font.FontProgramFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.DottedBorder;
+import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Link;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.AreaBreakType;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_PATH;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_BIG;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class DatenschutzbriefPdfService {
-    public ByteArrayOutputStream createDatenschutzbriefForElternteil(final Eltern elternTeil) {
+    private final GesuchTrancheService gesuchTrancheService;
+
+    private PdfFont pdfFont = null;
+    private PdfFont pdfFontBold = null;
+    private Link ausbildungsbeitraegeUri = null;
+
+    public ByteArrayOutputStream createDatenschutzbriefForElternteil(
+        final Eltern elternteil,
+        final UUID gesuchtrancheId
+    ) {
         final var out = new ByteArrayOutputStream();
+        final FontProgram font;
+        final FontProgram fontBold;
+
+        try {
+            final byte[] fontBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_PATH));
+            final byte[] fontBoldBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_BOLD_PATH));
+            font = FontProgramFactory.createFont(fontBytes);
+            fontBold = FontProgramFactory.createFont(fontBoldBytes);
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
+        }
+
+        pdfFont = PdfFontFactory.createFont(font);
+        pdfFontBold = PdfFontFactory.createFont(fontBold);
+
+        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+
+        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchtrancheId);
+        final Gesuch gesuch = gesuchTranche.getGesuch();
+
+        final Locale locale = gesuchTranche
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
+
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
 
         try (
             final var writer = new PdfWriter(out);
             final var pdfDocument = new PdfDocument(writer);
             final var document = new Document(pdfDocument, PAGE_SIZE);
         ) {
-            // Dom nothing to the PDF, we just need 'document' to be closed so an empty PDF is created
+            final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
+            logo.setMarginLeft(-25);
+            logo.setMarginTop(-35);
+            document.add(logo);
+
+            final var leftMargin = document.getLeftMargin();
+
+            PdfUtils.header(
+                gesuch,
+                document,
+                leftMargin,
+                translator,
+                false,
+                pdfFont,
+                pdfFontBold,
+                ausbildungsbeitraegeUri,
+                Optional.of(elternteil)
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFontBold,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.pdf.datenschutzbrief.title")
+                )
+            );
+
+            final String translationKey = elternteil.getElternTyp().equals(ElternTyp.MUTTER)
+                ? "stip.pdf.begruessung.frau"
+                : "stip.pdf.begruessung.mann";
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate(translationKey) + " ",
+                    elternteil.getNachname()
+                )
+            );
+
+            final var pia = gesuchTranche.getGesuchFormular().getPersonInAusbildung();
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate(
+                        "stip.pdf.datenschutzbrief.textBlock.eins",
+                        "NAME_PIA",
+                        String.format(" %s %s", pia.getVorname(), pia.getNachname())
+                    )
+                )
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.pdf.datenschutzbrief.textBlock.zwei.title"),
+                    translator.translate("stip.pdf.datenschutzbrief.textBlock.zwei.body")
+                )
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.pdf.datenschutzbrief.textBlock.drei.title"),
+                    translator.translate("stip.pdf.datenschutzbrief.textBlock.drei.body")
+                )
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFontBold,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate(
+                        "stip.pdf.datenschutzbrief.textBlock.vier",
+                        "NAME_PIA",
+                        pia.getFullName()
+                    )
+                )
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.pdf.datenschutzbrief.textBlock.fuenf")
+                )
+            );
+
+            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
+
+            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+            document.add(logo);
+
+            returnLetter(gesuch, document, leftMargin, translator, pdfFont, elternteil, pia);
+
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
 
         return out;
+    }
+
+    public void returnLetter(
+        final Gesuch gesuch,
+        final Document document,
+        final float leftMargin,
+        final TL translator,
+        final PdfFont pdfFont,
+        final Eltern elternteil,
+        final PersonInAusbildung pia
+    ) {
+        float[] columnWidths = { 50, 50 };
+        final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
+
+        final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
+
+        final Cell sender = PdfUtils.createCell(
+            pdfFont,
+            FONT_SIZE_MEDIUM,
+            1,
+            1,
+            elternteil.getFullName(),
+            String.format("%s %s", elternteil.getAdresse().getStrasse(), elternteil.getAdresse().getHausnummer()),
+            String.format("%s %s", elternteil.getAdresse().getPlz(), elternteil.getAdresse().getOrt())
+        ).setHeight(150).setVerticalAlignment(VerticalAlignment.BOTTOM);
+        headerTable.addCell(sender);
+
+        final Cell receiverNew = PdfUtils.createCell(
+            pdfFont,
+            FONT_SIZE_MEDIUM,
+            2,
+            1,
+            translator.translate("stip.pdf.header.bkd"),
+            translator.translate("stip.pdf.header.abteilung"),
+            translator.translate("stip.pdf.header.strasse"),
+            translator.translate("stip.pdf.header.plz")
+        ).setHeight(200).setVerticalAlignment(VerticalAlignment.BOTTOM);
+        headerTable.addCell(receiverNew);
+
+        headerTable.setMarginBottom(SPACING_MEDIUM);
+
+        document.add(headerTable);
+
+        final var title = PdfUtils.createParagraph(
+            pdfFontBold,
+            FONT_SIZE_BIG,
+            leftMargin,
+            translator.translate("stip.pdf.datenschutzbrief.returnLetter.title")
+        ).setMarginTop(SPACING_BIG * 2f);
+        document.add(title);
+
+        final var subtitle = PdfUtils.createParagraph(
+            pdfFont,
+            FONT_SIZE_BIG,
+            leftMargin,
+            String.format(
+                "(%s; %s %s)",
+                pia.getFullName(),
+                translator.translate("stip.pdf.header.dossier.nr"),
+                gesuch.getGesuchNummer()
+            )
+        );
+        document.add(subtitle);
+
+        final var einwilligung = PdfUtils.createParagraph(
+            pdfFont,
+            FONT_SIZE_BIG,
+            leftMargin,
+            translator.translate(
+                "stip.pdf.datenschutzbrief.returnLetter.einwilligung",
+                "NAME_PIA",
+                pia.getFullName()
+            )
+        ).setMarginTop(SPACING_BIG);
+        document.add(einwilligung);
+
+        columnWidths = new float[] { 100 };
+        final Table unterschrift = PdfUtils.createTable(columnWidths, leftMargin);
+        unterschrift.setMarginRight(leftMargin);
+        unterschrift.setMarginTop(SPACING_BIG);
+
+        final String[] labels = {
+            translator.translate("stip.pdf.datenschutzbrief.returnLetter.ortDatum"),
+            translator.translate("stip.pdf.datenschutzbrief.returnLetter.name"),
+            translator.translate("stip.pdf.datenschutzbrief.returnLetter.unterschrift"),
+        };
+
+        for (String label : labels) {
+
+            final Cell cell = PdfUtils.createCell(
+                pdfFont,
+                FONT_SIZE_BIG,
+                1,
+                1,
+                label
+            )
+                .setBorderBottom(new DottedBorder(1))
+                .setPaddingTop(SPACING_MEDIUM)
+                .setPaddingBottom(0);
+            unterschrift.addCell(cell);
+        }
+
+        document.add(unterschrift);
     }
 }

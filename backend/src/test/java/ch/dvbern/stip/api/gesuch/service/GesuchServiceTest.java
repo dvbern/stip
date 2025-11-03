@@ -82,7 +82,7 @@ import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.api.pdf.service.PdfService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.sap.service.SapService;
@@ -224,7 +224,7 @@ class GesuchServiceTest {
     FallRepository fallRepository;
 
     @InjectMock
-    PdfService pdfService;
+    VerfuegungPdfService verfuegungPdfService;
 
     @InjectMock
     StipDecisionTextRepository stipDecisionTextRepository;
@@ -593,7 +593,7 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
         gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
@@ -615,7 +615,7 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -625,11 +625,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, true, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -639,11 +639,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, true, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -651,11 +651,14 @@ class GesuchServiceTest {
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromTrueToTrue() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         final var alimente = 1000;
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setUnterhaltsbeitraege(alimente);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, true, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.is(alimente));
     }
 
     @Test
@@ -665,11 +668,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(null, false, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -679,11 +682,11 @@ class GesuchServiceTest {
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setAlimente(1000);
+            .setUnterhaltsbeitraege(1000);
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(true, false, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.nullValue());
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.nullValue());
     }
 
     @Test
@@ -691,7 +694,10 @@ class GesuchServiceTest {
     void noResetAlimenteIfGesetzlicheAlimenteregelungFromFalseToFalse() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         final var alimente = 1000;
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().setAlimente(alimente);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setUnterhaltsbeitraege(alimente);
         gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getFamiliensituation()
@@ -699,7 +705,7 @@ class GesuchServiceTest {
 
         GesuchTranche tranche = updateGesetzlicheAlimenteRegel(false, false, gesuchUpdateDto);
 
-        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getAlimente(), Matchers.is(alimente));
+        assertThat(tranche.getGesuchFormular().getEinnahmenKosten().getUnterhaltsbeitraege(), Matchers.is(alimente));
     }
 
     @Test
@@ -730,6 +736,14 @@ class GesuchServiceTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setAuswaertigeMittagessenProWoche(1);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWgWohnend(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlternativeWohnformWohnend(false);
 
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
 
@@ -778,7 +792,14 @@ class GesuchServiceTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setAuswaertigeMittagessenProWoche(1);
-
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setWgWohnend(false);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setAlternativeWohnformWohnend(false);
         when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
         gesuchService.updateGesuch(any(), gesuchUpdateDto, TENANT_ID);
 
@@ -1215,7 +1236,7 @@ class GesuchServiceTest {
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         verfuegung.setGesuch(gesuch);
         gesuch.getVerfuegungs().add(verfuegung);
-        when(pdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
+        when(verfuegungPdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));
@@ -1308,7 +1329,7 @@ class GesuchServiceTest {
         // ad a "normal" gesuch document
         GesuchDokument gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
-        gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        gesuchDokument.setDokumentTyp(DokumentTyp.values()[0]);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
         gesuchDokument.setStatus(GesuchDokumentStatus.ABGELEHNT);
@@ -1377,7 +1398,7 @@ class GesuchServiceTest {
         // ad a "normal" gesuch document
         GesuchDokument gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(gesuch.getNewestGesuchTranche().orElseThrow());
-        gesuchDokument.setDokumentTyp(DokumentTyp.EK_VERDIENST);
+        gesuchDokument.setDokumentTyp(DokumentTyp.values()[0]);
         // gesuchDokument.setDokumente(List.of(new Dokument()));
         gesuchDokument.setId(UUID.randomUUID());
         gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);

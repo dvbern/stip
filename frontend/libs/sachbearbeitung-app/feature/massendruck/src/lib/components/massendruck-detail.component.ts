@@ -172,7 +172,6 @@ export class MassendruckDetailComponent {
     });
   }
 
-  // todo: check failure handling when backend is ready
   setMasendruckJobVersendet(item: TableItem) {
     if (item.isVersendet) {
       return;

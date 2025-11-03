@@ -125,7 +125,25 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         if (gesuchFormularDto.getEinnahmenKosten() != null) {
             final var ek = gesuchFormularDto.getEinnahmenKosten();
             ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
-            ek.setSteuernKantonGemeinde(EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular));
+
+            // PiA Steuern
+            final var isQuellenbesteuert =
+                EinnahmenKostenMappingUtil.isQuellenBesteuert(gesuchFormular.getPersonInAusbildung());
+            final var steuern =
+                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKosten(), isQuellenbesteuert);
+            ek.setSteuern(steuern);
+        }
+
+        if (
+            Objects.nonNull(gesuchFormularDto.getPartner()) &&
+            Objects.nonNull(gesuchFormularDto.getEinnahmenKostenPartner())
+        ) {
+            final var ekPartner = gesuchFormularDto.getEinnahmenKostenPartner();
+            ekPartner.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegenForPatner(gesuchFormular));
+
+            final var steuern =
+                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKostenPartner(), false);
+            ekPartner.setSteuern(steuern);
         }
     }
 
@@ -202,11 +220,12 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     ) {
         final var documentsToDelete =
             DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(newFormular, targetFormular);
-
         resetEinnahmenKosten(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
+        resetDependentPartnerData(newFormular, targetFormular);
+
         resetSteuererklaerungTabs(newFormular, targetFormular);
         resetSteuererdatenTabs(newFormular, targetFormular);
 
@@ -255,7 +274,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                     return;
                 }
 
-                newFormular.getEinnahmenKosten().setAlimente(null);
+                newFormular.getEinnahmenKosten().setUnterhaltsbeitraege(null);
             }
         );
 
@@ -297,6 +316,17 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 newFormular.getEinnahmenKosten().setVermoegen(null);
             }
         );
+
+        resetFieldIf(
+            () -> (newFormular.getPartner() != null &&
+            newFormular.getEinnahmenKostenPartner() != null &&
+            !GesuchFormularCalculationUtil
+                .isDateOfBirthGreaterThanOrEquals18(newFormular.getPartner().getGeburtsdatum())),
+            "Reset Vermoegen if Partner is < 18 years old",
+            () -> {
+                newFormular.getEinnahmenKostenPartner().setVermoegen(null);
+            }
+        );
     }
 
     void resetDarlehen(
@@ -306,6 +336,30 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(targetFormular),
             "Set Darlehen to null because pia is not volljaehrig",
             () -> targetFormular.setDarlehen(null)
+        );
+    }
+
+    void resetDependentPartnerData(
+        final GesuchFormularUpdateDto gesuchFormularUpdateDto,
+        GesuchFormular targetFormular
+    ) {
+        resetFieldIf(
+            () -> Objects.isNull(gesuchFormularUpdateDto.getPartner()),
+            "Reset dependent partner data",
+            () -> {
+                // // TODO KSTIP-2785: Update once einnahmenKosternPartner exists
+                if (gesuchFormularUpdateDto.getEinnahmenKostenPartner() != null) {
+                    final var ek = gesuchFormularUpdateDto.getEinnahmenKostenPartner();
+                    // Partner Steuern
+                    final var steuern =
+                        EinnahmenKostenMappingUtil.calculateSteuern(
+                            targetFormular.getEinnahmenKostenPartner(),
+                            false
+                        );
+                    ek.setSteuern(steuern);
+                }
+                targetFormular.setEinnahmenKostenPartner(null);
+            }
         );
     }
 

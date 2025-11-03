@@ -58,6 +58,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -84,7 +85,9 @@ import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.Oper;
+import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
@@ -92,8 +95,12 @@ import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
 import io.restassured.response.ValidatableResponse;
@@ -109,6 +116,8 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class TestUtil {
     public static final DateTimeFormatter DATE_TIME_FORMATTER =
@@ -383,6 +392,116 @@ public class TestUtil {
         );
     }
 
+    public static GesuchDtoSpec createAndSubmitGesuch(
+        final FallApiSpec fallApiSpec,
+        final AusbildungApiSpec ausbildungApiSpec,
+        final GesuchApiSpec gesuchApiSpec,
+        final AuszahlungApiSpec auszahlungApiSpec,
+        final DokumentApiSpec dokumentApiSpec
+    ) {
+        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
+        var foundGesuch = gesuchApiSpec.gesuchEinreichenGs()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT));
+        return foundGesuch;
+    }
+
+    public static void gesuchToInFreigabe(
+        final GesuchDtoSpec gesuch,
+        final GesuchApiSpec gesuchApiSpec,
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec
+    ) {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        final var foundGesuch = gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB));
+
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+        steuerdatenApiSpec.updateSteuerdaten()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .body(List.of(steuerdatenUpdateDto))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+
+        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentDtoSpec[].class);
+
+        for (var dokument : gesuchdokuments) {
+            dokumentApiSpec.gesuchDokumentAkzeptieren()
+                .gesuchDokumentIdPath(dokument.getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.NO_CONTENT.getStatusCode());
+        }
+
+        uploadUnterschriftenblatt(
+            dokumentApiSpec,
+            gesuch.getId(),
+            UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM,
+            TestUtil.getTestPng()
+        );
+
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
+
     public static ConstraintValidatorContextImpl initValidatorContext() {
         return new ConstraintValidatorContextImpl(
             null, PathImpl.createRootPath(), null, null,
@@ -398,7 +517,6 @@ public class TestUtil {
         steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdaten.setTotalEinkuenfte(0);
         steuerdaten.setFahrkosten(0);
-        steuerdaten.setKinderalimente(0);
         steuerdaten.setSteuernBund(0);
         steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
@@ -570,6 +688,7 @@ public class TestUtil {
                             new GesuchFormular()
                                 .setPersonInAusbildung(
                                     new PersonInAusbildung()
+                                        .setNationalitaet(LandGenerator.initSwitzerland())
                                 )
                         )
                         .setId(trancheUuid)
@@ -665,19 +784,16 @@ public class TestUtil {
                 .setAusbildungskosten(450)
                 .setFahrkosten(523)
                 .setZulagen(0)
-                .setVerdienstRealisiert(true)
                 .setBetreuungskostenKinder(0)
                 .setSteuerjahr(2000)
                 .setRenten(0)
                 .setVermoegen(null)
+                .setArbeitspensumProzent(100)
         );
 
         gesuchFormular.setPartner(
             (Partner) new Partner()
                 .setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER)
-                .setJahreseinkommen(null)
-                .setFahrkosten(null)
-                .setVerpflegungskosten(null)
                 .setAdresse(
                     new Adresse().setPlz("1321")
                         .setLand(LandGenerator.initSwitzerland())
@@ -688,6 +804,21 @@ public class TestUtil {
                 .setNachname("a")
                 .setVorname("a")
                 .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
+        );
+
+        gesuchFormular.setEinnahmenKostenPartner(
+            new EinnahmenKosten()
+                .setNettoerwerbseinkommen(12916)
+                .setErgaenzungsleistungen(1200)
+                .setWohnkosten(6000)
+                .setAusbildungskosten(450)
+                .setFahrkosten(523)
+                .setZulagen(0)
+                .setBetreuungskostenKinder(0)
+                .setSteuerjahr(2000)
+                .setRenten(0)
+                .setArbeitspensumProzent(100)
+                .setVerpflegungskosten(5)
         );
 
         gesuchFormular.setFamiliensituation(
@@ -734,7 +865,6 @@ public class TestUtil {
                     .setElternTyp(ElternTyp.VATER)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_VATER)
                     .setWohnkosten(0)
-                    .setErgaenzungsleistungen(0)
                     .setTelefonnummer("0987654321")
                     .setAusweisbFluechtling(false)
                     .setAdresse(
@@ -751,7 +881,6 @@ public class TestUtil {
                     .setElternTyp(ElternTyp.MUTTER)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_MUTTER)
                     .setWohnkosten(0)
-                    .setErgaenzungsleistungen(0)
                     .setTelefonnummer("0987654321")
                     .setAusweisbFluechtling(false)
                     .setAdresse(
@@ -764,6 +893,13 @@ public class TestUtil {
                     .setNachname("a")
                     .setVorname("a")
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
+            )
+        );
+
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER)
             )
         );
 
@@ -782,7 +918,6 @@ public class TestUtil {
                     .setSaeule2(null)
                     .setSaeule3a(null)
                     .setVermoegen(0)
-                    .setKinderalimente(0)
                     .setSteuerjahr(2000)
                     .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE)
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
@@ -799,7 +934,6 @@ public class TestUtil {
                     .setSaeule2(null)
                     .setSaeule3a(null)
                     .setVermoegen(0)
-                    .setKinderalimente(0)
                     .setSteuerjahr(2000)
                     .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
@@ -871,8 +1005,7 @@ public class TestUtil {
             .setAdresse(gesuchFormular.getPersonInAusbildung().getAdresse())
             .setVorname("asd")
             .setNachname("qwe")
-            .setIban("CH2289144464431833761")
-            .setSapBusinessPartnerId(9887965);
+            .setIban("CH2289144464431833761");
 
         gesuchFormular.getTranche()
             .getGesuch()
@@ -882,6 +1015,7 @@ public class TestUtil {
                 new Auszahlung()
                     .setZahlungsverbindung(zahlungsverbindung)
                     .setAuszahlungAnSozialdienst(false)
+                    .setSapBusinessPartnerId(9887965)
             );
 
         gesuchFormular.setDarlehen(

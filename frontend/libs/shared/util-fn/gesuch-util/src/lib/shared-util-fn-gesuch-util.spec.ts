@@ -138,7 +138,7 @@ describe('calculate differences', () => {
           nachname: 'Sanchez',
           vorname: 'Laura',
         },
-        VATER: null,
+        VATER: {},
       },
       changesByIndex: [
         {
@@ -149,8 +149,12 @@ describe('calculate differences', () => {
           nachname: 'Sanchez',
           vorname: 'Laura',
         },
-        null,
+        {},
       ],
+      hasChangesByIdentifier: {
+        MUTTER: true,
+        VATER: false,
+      },
       newEntriesByIdentifier: {},
     });
   });
@@ -174,6 +178,9 @@ describe('calculate differences', () => {
           nachname: 'Sanchez',
         },
       ],
+      hasChangesByIdentifier: {
+        MUTTER: true,
+      },
       newEntriesByIdentifier: { VATER: true },
     });
   });

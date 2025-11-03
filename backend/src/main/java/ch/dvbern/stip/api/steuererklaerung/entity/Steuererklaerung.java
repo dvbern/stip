@@ -25,6 +25,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,4 +50,24 @@ public class Steuererklaerung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "steuererklaerung_in_bern", nullable = false)
     private Boolean steuererklaerungInBern;
+
+    @Column(name = "ergaenzungsleistungen")
+    @Min(0)
+    private Integer ergaenzungsleistungen;
+
+    @Column(name = "unterhaltsbeitraege")
+    @Min(0)
+    private Integer unterhaltsbeitraege;
+
+    @Column(name = "renten")
+    @Min(0)
+    private Integer renten;
+
+    @Column(name = "einnahmen_bgsa")
+    @Min(0)
+    private Integer einnahmenBGSA;
+
+    @Column(name = "andere_einnahmen")
+    @Min(0)
+    private Integer andereEinnahmen;
 }

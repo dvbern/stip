@@ -20,16 +20,19 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class EinnahmenKostenZulagenRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenZulagenRequiredConstraint, GesuchFormular> {
     private String property = "";
+    protected EinnahmenKostenType einnahmenKostenType;
 
     @Override
     public void initialize(EinnahmenKostenZulagenRequiredConstraint constraintAnnotation) {
         property = constraintAnnotation.property();
+        einnahmenKostenType = constraintAnnotation.einnahmenKostenType();
     }
 
     @Override
@@ -37,8 +40,9 @@ public class EinnahmenKostenZulagenRequiredConstraintValidator
         GesuchFormular gesuchFormular,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (!gesuchFormular.getKinds().isEmpty() && Objects.nonNull(gesuchFormular.getEinnahmenKosten())) {
-            if (Objects.isNull(gesuchFormular.getEinnahmenKosten().getZulagen())) {
+        final var einnahmeKosten = einnahmenKostenType.getProducer().apply(gesuchFormular);
+        if (!gesuchFormular.getKinds().isEmpty() && Objects.nonNull(einnahmeKosten)) {
+            if (Objects.isNull(einnahmeKosten.getZulagen())) {
                 return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
             } else {
                 return true;

@@ -178,4 +178,64 @@ class DocumentsRequiredConstraintValidatorTest {
         gesuch.getGesuchTranchen().get(0).getGesuchDokuments().add(customGesuchDokument);
         assertFalse(constraintValidator.isValid(formular, null));
     }
+
+    @Description("test behaviour for required documents for einnahmenkosten partner (and reset)")
+    @Test
+    void validationShoudWorkWithEinnahmeKostenParter_andReset() {
+        gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS);
+        formular = gesuch.getGesuchTranchen().get(0).getGesuchFormular();
+        formular.setPersonInAusbildung(null);
+
+        final List<DokumentTyp> requiredDokTypes = List.of(
+            DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
+            DokumentTyp.EK_PARTNER_LOHNABRECHNUNG,
+            DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER,
+            DokumentTyp.EK_PARTNER_MIETVERTRAG,
+            DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT,
+            DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
+            DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN,
+            DokumentTyp.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION,
+            DokumentTyp.EK_PARTNER_BELEG_KINDERZULAGEN,
+            DokumentTyp.EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE,
+            DokumentTyp.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
+            DokumentTyp.EK_PARTNER_VERMOEGEN,
+            DokumentTyp.EK_PARTNER_BELEG_EINNAHMEN_BGSA,
+            DokumentTyp.EK_PARTNER_BELEG_TAGGELDER_AHV_IV,
+            DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN
+        );
+
+        // setup some mandatory doctypes for ekpartner
+        formular.getEinnahmenKostenPartner().setNettoerwerbseinkommen(5);
+        formular.getEinnahmenKostenPartner().setBetreuungskostenKinder(5);
+        formular.getEinnahmenKostenPartner().setWohnkosten(5);
+        formular.getEinnahmenKostenPartner().setFahrkosten(5);
+        formular.getEinnahmenKostenPartner().setEoLeistungen(5);
+        formular.getEinnahmenKostenPartner().setRenten(5);
+        formular.getEinnahmenKostenPartner().setBeitraege(5);
+        formular.getEinnahmenKostenPartner().setBetreuungskostenKinder(5);
+        formular.getEinnahmenKostenPartner().setUnterhaltsbeitraege(5);
+
+        formular.getEinnahmenKostenPartner().setErgaenzungsleistungen(5);
+        formular.getEinnahmenKostenPartner().setVermoegen(5);
+        formular.getEinnahmenKostenPartner().setEinnahmenBGSA(5);
+        formular.getEinnahmenKostenPartner().setTaggelderAHVIV(5);
+        formular.getEinnahmenKostenPartner().setAndereEinnahmen(5);
+        assertFalse(constraintValidator.isValid(formular, null));
+
+        var gesuchDokuments = new ArrayList<GesuchDokument>();
+        requiredDokTypes.forEach(dokumentType -> {
+            GesuchDokument gesuchDokument = new GesuchDokument();
+            gesuchDokument.addDokument(new Dokument());
+            gesuchDokument.setDokumentTyp(dokumentType);
+            gesuchDokument.setStatus(GesuchDokumentStatus.AKZEPTIERT);
+            gesuchDokuments.add(gesuchDokument);
+        });
+        gesuch.getGesuchTranchen().get(0).getGesuchDokuments().addAll(gesuchDokuments);
+        assertTrue(constraintValidator.isValid(formular, null));
+
+        formular.setEinnahmenKostenPartner(null);
+        formular.setPartner(null);
+        assertTrue(constraintValidator.isValid(formular, null));
+
+    }
 }

@@ -19,16 +19,6 @@ import {
 } from './gesuch-form-steps';
 import { GesuchFormStep } from './shared-model-gesuch-form';
 
-const partnerCases = [
-  ['disable', 'LEDIG', true],
-  ['disable', 'VERWITWET', true],
-  ['disable', 'AUFGELOESTE_PARTNERSCHAFT', true],
-  ['disable', 'GESCHIEDEN_GERICHTLICH', true],
-  ['enable', 'KONKUBINAT', false],
-  ['enable', 'VERHEIRATET', false],
-  ['enable', 'EINGETRAGENE_PARTNERSCHAFT', false],
-] as const;
-
 const alimentAufteilungCases = [
   ['enable', Elternschaftsteilung.MUTTER, false],
   ['enable', Elternschaftsteilung.VATER, false],
@@ -50,29 +40,6 @@ const validationCases = type<[GesuchFormStep, keyof GesuchFormularUpdate][]>([
 );
 
 describe('GesuchFormSteps', () => {
-  it.each(partnerCases)(
-    'should %s Partner Step if GS is %s',
-    (_, zivilstand, state) => {
-      expect(
-        isStepDisabled(
-          PARTNER,
-          {
-            gesuchStatus: 'IN_BEARBEITUNG_GS',
-            gesuchTrancheToWorkWith: {
-              status: 'IN_BEARBEITUNG_GS',
-              gesuchFormular: {
-                personInAusbildung: {
-                  zivilstand,
-                },
-              },
-            },
-          } as SharedModelGesuch,
-          {},
-        ),
-      ).toBe(state);
-    },
-  );
-
   it.each(alimentAufteilungCases)(
     'should %s Eltern Step if GS is %s',
     (_, werZahltAlimente, state) => {

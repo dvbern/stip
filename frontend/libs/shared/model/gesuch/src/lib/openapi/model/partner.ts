@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Adresse } from './adresse';
+import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface Partner { 
     adresse: Adresse;
@@ -17,18 +18,9 @@ export interface Partner {
     geburtsdatum: string;
     sozialversicherungsnummer: string;
     nachname: string;
-    ausbildungMitEinkommenOderErwerbstaetig?: boolean;
-    /**
-     * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-     */
-    jahreseinkommen?: number;
-    /**
-     * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-     */
-    fahrkosten?: number;
-    /**
-     * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-     */
-    verpflegungskosten?: number;
+    inAusbildung?: boolean;
+    ausbildungspensum?: AusbildungsPensum;
 }
+
+
 

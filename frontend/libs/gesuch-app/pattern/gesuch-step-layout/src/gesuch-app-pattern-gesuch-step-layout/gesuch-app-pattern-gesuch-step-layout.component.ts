@@ -71,8 +71,8 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
-  private router = inject(Router);
 
+  router = inject(Router);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);

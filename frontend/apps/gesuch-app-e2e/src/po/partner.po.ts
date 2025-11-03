@@ -1,7 +1,11 @@
 import { Locator, Page } from '@playwright/test';
 
 import { Partner } from '@dv/shared/model/gesuch';
-import { expectFormToBeValid } from '@dv/shared/util-fn/e2e-util';
+import {
+  expectFormToBeValid,
+  handleCheckbox,
+  selectMatOption,
+} from '@dv/shared/util-fn/e2e-util';
 
 import { AddressPO } from './adresse.po';
 
@@ -15,10 +19,9 @@ export class PartnerPO {
     vorname: Locator;
     adresse: AddressPO;
     geburtsdatum: Locator;
-    ausbildungMitEinkommenOderErwerbstaetigCheckbox: Locator;
-    jahreseinkommen: Locator;
-    verpflegungskosten: Locator;
-    fahrkosten: Locator;
+
+    inAusbildungCheckbox: Locator;
+    ausbildungspensumSelect: Locator;
 
     buttonSaveContinue: Locator;
     buttonNext: Locator;
@@ -39,12 +42,10 @@ export class PartnerPO {
 
       geburtsdatum: page.getByTestId('form-partner-geburtsdatum'),
 
-      ausbildungMitEinkommenOderErwerbstaetigCheckbox: page.getByTestId(
-        'form-partner-ausbildungMitEinkommenOderErwerbstaetig',
+      inAusbildungCheckbox: page.getByTestId('form-partner-inAusbildung'),
+      ausbildungspensumSelect: page.getByTestId(
+        'form-partner-ausbildungspensum',
       ),
-      jahreseinkommen: page.getByTestId('form-partner-jahreseinkommen'),
-      verpflegungskosten: page.getByTestId('form-partner-verpflegungskosten'),
-      fahrkosten: page.getByTestId('form-partner-fahrkosten'),
 
       buttonSaveContinue: page.getByTestId('button-save-continue'),
       buttonNext: page.getByTestId('button-next'),
@@ -62,6 +63,15 @@ export class PartnerPO {
     await this.elems.adresse.fillAddressForm(partner.adresse);
 
     await this.elems.geburtsdatum.fill(partner.geburtsdatum);
+
+    await handleCheckbox(this.elems.inAusbildungCheckbox, partner.inAusbildung);
+
+    if (partner.inAusbildung && partner.ausbildungspensum) {
+      await selectMatOption(
+        this.elems.ausbildungspensumSelect,
+        partner.ausbildungspensum,
+      );
+    }
 
     await expectFormToBeValid(this.elems.form);
   }

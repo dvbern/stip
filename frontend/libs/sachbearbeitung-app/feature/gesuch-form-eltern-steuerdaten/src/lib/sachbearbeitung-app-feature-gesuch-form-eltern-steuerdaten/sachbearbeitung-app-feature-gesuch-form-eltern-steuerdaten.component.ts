@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  HostBinding,
   computed,
   effect,
   inject,
@@ -92,7 +93,6 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     arbeitsverhaeltnis: [<boolean | null>null, [Validators.required]],
     saeule3a: [<string | null>null, [Validators.required]],
     saeule2: [<string | null>null, [Validators.required]],
-    kinderalimente: [<string | null>null, [Validators.required]],
     vermoegen: [<string | null>null, [Validators.required]],
     steuernKantonGemeinde: [<string | null>null, [Validators.required]],
     steuernBund: [<string | null>null, [Validators.required]],
@@ -122,6 +122,10 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       ?.find((s) => s.steuerdatenTyp === this.stepSig().type);
   });
 
+  areSteuerdatenLoadingSig = computed(() => {
+    return this.steuerdatenStore.cachedSteuerdaten().type === 'pending';
+  });
+
   canCheckNeskoSig = computed(() => {
     const { gesuchFormular, permissions } = this.viewSig();
 
@@ -138,7 +142,6 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     'eigenmietwert',
     'saeule3a',
     'saeule2',
-    'kinderalimente',
     'vermoegen',
     'steuernKantonGemeinde',
     'steuernBund',
@@ -152,6 +155,11 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     this.form.controls.steuerjahr,
     this.viewSig,
   );
+
+  @HostBinding('class')
+  get hostClass() {
+    return 'tw:relative';
+  }
 
   constructor() {
     this.createSteuerDatenSBEffects();
@@ -258,7 +266,6 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
       'arbeitsverhaeltnis',
       'saeule3a',
       'saeule2',
-      'kinderalimente',
       'vermoegen',
       'steuernKantonGemeinde',
       'steuernBund',

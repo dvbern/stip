@@ -26,9 +26,9 @@
         data-testid="form-delegieren-anrede"
         [placeholder]="'shared.form.select.empty' | transloco"
       >
-        @for (a of anredeValues; track $index) {
-          <mat-option [attr.data-testid]="a" [value]="a">
-            {{ 'shared.form.select.salutation.' + (a | lowercase) | transloco }}
+        @for (anrede of anredeValues; track $index) {
+          <mat-option [attr.data-testid]="anrede" [value]="anrede">
+            {{ 'shared.form.select.salutation.' + anrede | transloco }}
           </mat-option>
         }
       </mat-select>

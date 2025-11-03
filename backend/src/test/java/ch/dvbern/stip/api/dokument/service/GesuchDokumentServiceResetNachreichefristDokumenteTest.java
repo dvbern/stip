@@ -67,7 +67,6 @@ class GesuchDokumentServiceResetNachreichefristDokumenteTest {
         gesuchDokument1 = new GesuchDokument();
         gesuchDokument2 = new GesuchDokument();;
 
-        gesuchDokument1.setDokumentTyp(DokumentTyp.EK_VERDIENST);
         gesuchDokument1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokument1.setId(UUID.randomUUID());
         gesuchDokument1.setGesuchTranche(tranche);

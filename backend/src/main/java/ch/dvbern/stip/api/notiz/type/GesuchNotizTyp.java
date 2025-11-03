@@ -19,5 +19,6 @@ package ch.dvbern.stip.api.notiz.type;
 
 public enum GesuchNotizTyp {
     GESUCH_NOTIZ,
-    JURISTISCHE_NOTIZ
+    JURISTISCHE_NOTIZ,
+    PENDENZ_NOTIZ
 }

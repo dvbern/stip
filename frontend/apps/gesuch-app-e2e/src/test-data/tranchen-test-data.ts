@@ -138,7 +138,7 @@ export const gesuchFormularUpdateFn = (
     veranlagungsStatus: 'Provisorisch Veranlagt',
     steuerjahr: 2023,
     vermoegen: 20900,
-    steuernKantonGemeinde: 0,
+    steuern: 0,
   },
   darlehen: {
     willDarlehen: false,

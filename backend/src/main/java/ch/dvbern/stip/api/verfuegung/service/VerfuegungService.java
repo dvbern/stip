@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.pdf.service.PdfService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
@@ -51,7 +51,7 @@ public class VerfuegungService {
     private static final String NEGATIVE_VERFUEGUNG_DOKUMENT_NAME = "Negative_Verfuegung.pdf";
     private static final String VERFUEGUNG_DOKUMENT_NAME = "Verfuegung.pdf";
 
-    private final PdfService pdfService;
+    private final VerfuegungPdfService verfuegungPdfService;
     private final ConfigService configService;
     private final S3AsyncClient s3;
     private final VerfuegungRepository verfuegungRepository;
@@ -105,7 +105,7 @@ public class VerfuegungService {
 
     @Transactional
     public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = pdfService.createNegativeVerfuegungPdf(verfuegung);
+        final ByteArrayOutputStream out = verfuegungPdfService.createNegativeVerfuegungPdf(verfuegung);
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             out.toByteArray(),
@@ -121,7 +121,7 @@ public class VerfuegungService {
 
     @Transactional
     public void createPdfForVerfuegungMitAnspruch(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = pdfService.createVerfuegungMitAnspruchPdf(verfuegung);
+        final ByteArrayOutputStream out = verfuegungPdfService.createVerfuegungMitAnspruchPdf(verfuegung);
 
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             out.toByteArray(),
@@ -137,7 +137,7 @@ public class VerfuegungService {
 
     @Transactional
     public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) throws IOException {
-        final ByteArrayOutputStream verfuegungOut = pdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
+        final ByteArrayOutputStream verfuegungOut = verfuegungPdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             verfuegungOut.toByteArray(),
             VERFUEGUNG_DOKUMENT_NAME,

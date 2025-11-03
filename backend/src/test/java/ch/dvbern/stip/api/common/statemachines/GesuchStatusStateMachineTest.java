@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -64,7 +63,6 @@ class GesuchStatusStateMachineTest {
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
-    private DatenschutzDruckbereitHandler datenschutzDruckbereitHandlerMock;
     private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private StatusprotokollService statusprotokollService;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
@@ -86,7 +84,6 @@ class GesuchStatusStateMachineTest {
         stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
-        datenschutzDruckbereitHandlerMock = Mockito.mock(DatenschutzDruckbereitHandler.class);
         bereitFuerBearbeitungHandler = Mockito.mock(BereitFuerBearbeitungHandler.class);
 
         config = new GesuchStatusConfigProducer(
@@ -103,7 +100,6 @@ class GesuchStatusStateMachineTest {
             stipendienAnspruchHandlerSpy,
             juristischeAbklaerungDurchPruefungHandlerSpy,
             statusprotokollService,
-            datenschutzDruckbereitHandlerMock,
             bereitFuerBearbeitungHandler
         ).createStateMachineConfig();
     }

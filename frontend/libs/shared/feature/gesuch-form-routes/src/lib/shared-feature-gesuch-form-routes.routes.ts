@@ -7,6 +7,7 @@ import {
   DARLEHEN,
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
+  EINNAHMEN_KOSTEN_PARTNER,
   ELTERN,
   ELTERN_STEUERERKLAERUNG_STEPS,
   FAMILIENSITUATION,
@@ -147,7 +148,24 @@ export const baseGesuchFormRoutes: Routes = [
     resolve: {
       step: () => EINNAHMEN_KOSTEN,
     },
+    data: {
+      einkommenTyp: 'PIA',
+    },
     title: EINNAHMEN_KOSTEN.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
+        (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
+      ),
+  },
+  {
+    path: EINNAHMEN_KOSTEN_PARTNER.route,
+    resolve: {
+      step: () => EINNAHMEN_KOSTEN_PARTNER,
+    },
+    data: {
+      einkommenTyp: 'PARTNER',
+    },
+    title: EINNAHMEN_KOSTEN_PARTNER.translationKey,
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,

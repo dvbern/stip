@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -93,6 +94,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final NotificationApiSpec notificationApiSpec =
         NotificationApiSpec.notification(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private UUID fallId;
     private UUID gesuchId;
     private UUID gesuchTrancheId;
@@ -106,6 +108,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @Order(1)
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
         gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
@@ -272,11 +275,12 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     void addPartnerWithNullableFields() {
         partnerUpdateDtoSpec = (PartnerUpdateDtoSpec) PartnerUpdateDtoSpecModel.partnerUpdateDtoSpec();
         var partner = partnerUpdateDtoSpec;
-        partner.setVerpflegungskosten(null);
-        partner.setFahrkosten(null);
-        partner.setJahreseinkommen(null);
 
         currentFormular.setPartner(partner);
+        final var einnahmenKosten = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec();
+
+        currentFormular.setEinnahmenKostenPartner(einnahmenKosten);
+
         // patch should still be possible
         final var updatedGesuch = patchGesuch();
         assertThat(getValidationReport().getValidationErrors().size(), is(greaterThan(0)));
@@ -326,13 +330,11 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         eltern.get(0).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_VATER);
         // set nullable fields to null
         eltern.get(0).setWohnkosten(0);
-        eltern.get(0).setErgaenzungsleistungen(0);
 
         eltern.get(1).setElternTyp(ElternTypDtoSpec.MUTTER);
         eltern.get(1).setSozialversicherungsnummer(TestConstants.AHV_NUMMER_VALID_MUTTER);
         // set nullable fields to null
         eltern.get(1).setWohnkosten(0);
-        eltern.get(1).setErgaenzungsleistungen(0);
         currentFormular.setElterns(eltern);
 
         // validation should still fail
@@ -353,9 +355,6 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         );
 
         var partner = partnerUpdateDtoSpec;
-        partner.setVerpflegungskosten(0);
-        partner.setFahrkosten(0);
-        partner.setJahreseinkommen(0);
 
         currentFormular.setPartner(partner);
         patchAndValidate();

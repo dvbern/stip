@@ -32,6 +32,7 @@ public class SteuererklaerungUpdateTabsDtoSpecModel {
         return TestUtil.createUpdateDtoSpec(SteuererklaerungUpdateDtoSpec::new, (model) -> {
             model.setSteuerdatenTyp(steuerdatenTypDtoSpec);
             model.setSteuererklaerungInBern(Boolean.FALSE);
+            model.setErgaenzungsleistungen(500);
         });
     }
 

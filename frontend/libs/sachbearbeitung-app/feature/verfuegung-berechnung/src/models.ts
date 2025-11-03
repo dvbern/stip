@@ -43,6 +43,7 @@ export type PersoenlicheBerechnung = {
     wohnkostenPersonen: number;
     medizinischeGrundversorgungPersonen: number;
     kantonsGemeindesteuern: number;
+    kantonsGemeindesteuernPartner: number;
     bundessteuern: number;
     fahrkostenPartner: number;
     verpflegungPartner: number;
@@ -76,6 +77,7 @@ export type FamilienBerechnung = {
   };
   kosten: {
     total: number;
+    abzugslimite: number;
     anzahlPersonen: number;
     grundbedarf: number;
     wohnkosten: number;

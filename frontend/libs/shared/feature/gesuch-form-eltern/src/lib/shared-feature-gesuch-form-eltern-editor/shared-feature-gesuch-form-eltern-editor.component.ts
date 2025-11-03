@@ -44,6 +44,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import {
   SharedUiFormFieldDirective,
@@ -111,6 +112,7 @@ const MEDIUM_AGE_ADULT = 40;
     SharedUiInfoDialogDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiPlzOrtAutocompleteDirective,
+    SharedUiAppDatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-eltern-editor.component.scss'],
@@ -130,7 +132,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       Required<Pick<ElternUpdate, 'elternTyp'>>
   >();
 
-  @Input({ required: true }) changes: Partial<ElternUpdate> | undefined | null;
+  @Input({ required: true }) changes!: Partial<ElternUpdate>;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
@@ -166,7 +168,6 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       [Validators.required, sharedUtilValidatorTelefonNummer()],
     ],
     sozialversicherungsnummer: [<string | undefined>undefined, []],
-    ergaenzungsleistungen: [<string | null>null, [Validators.required]],
     wohnkosten: [<string | null>null, [Validators.required]],
     geburtsdatum: [
       '',
@@ -189,26 +190,11 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
   });
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
-    'ergaenzungsleistungen',
     'wohnkosten',
   ]);
 
   svnIsRequiredSig = signal(false);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
-
-  private ergaenzungsleistungChangedSig = toSignal(
-    this.form.controls.ergaenzungsleistungen.valueChanges,
-  );
-  ergaenzungsleistungenDocumentSig = this.createUploadOptionsSig(() => {
-    const elternTyp = this.elternteilSig().elternTyp;
-    const ergaenzungsleistung =
-      fromFormatedNumber(this.ergaenzungsleistungChangedSig() ?? undefined) ??
-      0;
-
-    return ergaenzungsleistung > 0
-      ? `ELTERN_ERGAENZUNGSLEISTUNGEN_${elternTyp}`
-      : null;
-  });
 
   private sozialhilfeChangedSig = toSignal(
     this.form.controls.sozialhilfebeitraege.valueChanges,
@@ -350,7 +336,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     const { identischerZivilrechtlicherWohnsitzPlzOrt, ...formValues } =
       convertTempFormToRealValues(this.form, [
         'ausweisbFluechtling',
-        'ergaenzungsleistungen',
+        // 'ergaenzungsleistungen',
         'sozialhilfebeitraege',
         'wohnkosten',
       ]);

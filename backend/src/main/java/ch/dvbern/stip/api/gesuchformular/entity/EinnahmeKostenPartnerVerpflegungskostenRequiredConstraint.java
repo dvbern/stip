@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHME_KOSTEN_VERPFLEGUNGSKOSTEN_REQUIRED_MESSAGE;
 
 @Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AlimenteRequiredWhenAlimenteRegelungConstraintValidator.class)
+@Constraint(validatedBy = EinnahmeKostenPartnerVerpflegungskostenRequiredConstraintValidator.class)
 @Documented
-public @interface AlimenteRequiredWhenAlimenteregelungConstraint {
-    String message() default VALIDATION_ALIMENTE_REQUIRED_WHEN_ALIMENTEREGELUNG;
+public @interface EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint {
+    String message() default VALIDATION_EINNAHME_KOSTEN_VERPFLEGUNGSKOSTEN_REQUIRED_MESSAGE;
 
     Class<?>[] groups() default {};
 

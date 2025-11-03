@@ -11,7 +11,6 @@ import {
   SharedModelGesuch,
   Steuerdaten,
   SteuerdatenTyp,
-  Zivilstand,
 } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -98,6 +97,13 @@ export const EINNAHMEN_KOSTEN: GesuchFormStep = {
   titleTranslationKey: 'shared.einnahmenkosten.page.title',
   iconSymbolName: 'call_missed_outgoing',
 } satisfies GesuchFormStep;
+
+export const EINNAHMEN_KOSTEN_PARTNER: GesuchFormStep = {
+  route: 'einnahmenkosten-partner',
+  translationKey: 'shared.einnahmenkosten-partner.title',
+  titleTranslationKey: 'shared.einnahmenkosten-partner.page.title',
+  iconSymbolName: 'credit_card_heart',
+};
 
 export const DOKUMENTE: GesuchFormStep = {
   route: 'dokumente',
@@ -201,7 +207,6 @@ export const BaseFormSteps = {
   FAMILIENSITUATION,
   ELTERN,
   GESCHWISTER,
-  PARTNER,
   KINDER,
   AUSZAHLUNG,
   EINNAHMEN_KOSTEN,
@@ -236,6 +241,7 @@ export const FormPropsToStepsMap: Record<
   lebenslaufItems: LEBENSLAUF,
   kinds: KINDER,
   einnahmenKosten: EINNAHMEN_KOSTEN,
+  einnahmenKostenPartner: EINNAHMEN_KOSTEN_PARTNER,
   darlehen: DARLEHEN,
   dokuments: DOKUMENTE,
   abschluss: ABSCHLUSS,
@@ -261,6 +267,7 @@ export const FormRoutesToPropsMap: Record<
   [KINDER.route]: 'kinds',
   [AUSZAHLUNG.route]: 'auszahlung',
   [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
+  [EINNAHMEN_KOSTEN_PARTNER.route]: 'einnahmenKostenPartner',
   [DARLEHEN.route]: 'darlehen',
   [DOKUMENTE.route]: 'dokuments',
 };
@@ -277,17 +284,6 @@ export const isStepDisabled = (
   const readonly = !permissions.canWrite;
 
   switch (step) {
-    case PARTNER: {
-      const zivilstand = formular?.personInAusbildung?.zivilstand;
-      return (
-        !zivilstand ||
-        ![
-          Zivilstand.VERHEIRATET,
-          Zivilstand.KONKUBINAT,
-          Zivilstand.EINGETRAGENE_PARTNERSCHAFT,
-        ].includes(zivilstand)
-      );
-    }
     case GESCHWISTER: {
       const geschwister = formular?.geschwisters;
       return readonly && (!geschwister || geschwister.length === 0);
@@ -391,18 +387,22 @@ export const isStepValid = (
 export const getFormStepByDocumentType = (
   dokumentTyp: DokumentTyp,
 ): GesuchFormStep => {
+  if (dokumentTyp.startsWith('STEUERERKLAERUNG_')) {
+    const type: SteuerdatenTyp = Object.keys(SteuerdatenTyp).find((t) =>
+      dokumentTyp.endsWith(t),
+    ) as SteuerdatenTyp;
+    if (type) {
+      return ELTERN_STEUERERKLAERUNG_STEPS[type];
+    }
+  }
+
+  if (dokumentTyp.startsWith('EK_PARTNER')) {
+    return EINNAHMEN_KOSTEN_PARTNER;
+  }
+
   switch (dokumentTyp) {
     case DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION: {
       return GSFormSteps.DOKUMENTE;
-    }
-    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE: {
-      return ELTERN_STEUERERKLAERUNG_FAMILIE;
-    }
-    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER: {
-      return ELTERN_STEUERERKLAERUNG_MUTTER;
-    }
-    case DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER: {
-      return ELTERN_STEUERERKLAERUNG_VATER;
     }
     default: {
       const step = (Object.keys(GSFormSteps) as GSFormStepKeys[]).find(

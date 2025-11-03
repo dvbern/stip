@@ -15,21 +15,24 @@ export const selectSharedFeatureGesuchFormEinnahmenkostenView = createSelector(
       'einnahmenKosten',
     );
 
+    const { current: currentPartner, previous: previousPartner } =
+      selectChangeForView(gesuchsView, 'einnahmenKostenPartner');
+
     return {
       loading: gesuchsView.loading,
       gesuch: gesuchsView.gesuch,
       gesuchId: gesuchsView.gesuchId,
       trancheId: gesuchsView.trancheId,
       formChanges: getChangesForForm(current, previous),
+      formChangesPartner: getChangesForForm(currentPartner, previousPartner),
       allowTypes: gesuchsView.allowTypes,
       gesuchFormular: gesuchsView.gesuchFormular,
       einnahmenKosten: gesuchsView.gesuchFormular?.einnahmenKosten,
+      einnahmenKostenPartner:
+        gesuchsView.gesuchFormular?.einnahmenKostenPartner,
       wohnsitzNotEigenerHaushalt:
         gesuchsView.gesuchFormular?.personInAusbildung?.wohnsitz !==
         Wohnsitz.EIGENER_HAUSHALT,
-      existiertGerichtlicheAlimentenregelung:
-        gesuchsView.gesuchFormular?.familiensituation
-          ?.gerichtlicheAlimentenregelung === true,
       readonly: gesuchsView.readonly,
       permissions: gesuchsView.permissions,
     };

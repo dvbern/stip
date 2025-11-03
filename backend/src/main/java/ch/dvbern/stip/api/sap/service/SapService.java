@@ -27,6 +27,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.repo.AdresseRepository;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.auszahlung.repo.AuszahlungRepository;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -43,8 +45,6 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
-import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
-import ch.dvbern.stip.api.zahlungsverbindung.repo.ZahlungsverbindungRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -65,7 +65,7 @@ public class SapService {
     private final SapEndpointService sapEndpointService;
     private final BuchhaltungService buchhaltungService;
     private final SapDeliveryRepository sapDeliveryRepository;
-    private final ZahlungsverbindungRepository zahlungsverbindungRepository;
+    private final AuszahlungRepository auszahlungRepository;
     private final BuchhaltungRepository buchhaltungRepository;
     private final GesuchRepository gesuchRepository;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
@@ -74,39 +74,44 @@ public class SapService {
     private final MailService mailService;
 
     @Transactional
-    public SapStatus getBusinessPartnerCreateStatus(final UUID zahlungsverbindungId) {
-        final var zahlungsverbindung = zahlungsverbindungRepository.requireById(zahlungsverbindungId);
+    public void getBusinessPartnerCreateStatus(final UUID auszahlungId) {
+        final var auszahlung = auszahlungRepository.requireById(auszahlungId);
+        final var buchhaltung = auszahlung.getBuchhaltung();
+        final SapDelivery sapDelivery = buchhaltung.getLatestSapDelivery();
+        final BigDecimal deliveryid = sapDelivery.getSapDeliveryId();
 
-        final BigDecimal deliveryid = zahlungsverbindung.getSapDelivery().getSapDeliveryId();
         final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
-        SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
-        final var sapDelivery = sapDeliveryRepository.requireById(zahlungsverbindung.getSapDelivery().getId());
-        final var status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        var status = SapStatus.FAILURE;
+        if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
+            status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
+        }
         if (status == SapStatus.SUCCESS) {
-            final var readResponse = sapEndpointService.readBusinessPartner(zahlungsverbindung, deliveryid);
+            final var readResponse = sapEndpointService.readBusinessPartner(deliveryid);
             SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
-            zahlungsverbindung.setSapBusinessPartnerId(
-                Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
-            );
-            zahlungsverbindungRepository.persist(zahlungsverbindung);
+            buchhaltung.getFall()
+                .getAuszahlung()
+                .setSapBusinessPartnerId(
+                    Integer.valueOf(readResponse.getBUSINESSPARTNER().getHEADER().getBPARTNER())
+                );
         }
         sapDelivery.setSapStatus(status);
-        return status;
     }
 
     @Transactional
-    public SapStatus createBusinessPartnerOrGetStatus(
-        final Gesuch gesuch,
-        final Zahlungsverbindung zahlungsverbindung
+    public void createBusinessPartnerOrGetStatus(
+        final Gesuch gesuch
     ) {
-        Buchhaltung businessPartnerCreateBuchhaltung;
-        if (Objects.isNull(zahlungsverbindung.getSapDelivery())) {
+        final var fall = gesuch.getAusbildung().getFall();
+        final var auszahlung = fall.getAuszahlung();
+        Buchhaltung businessPartnerCreateBuchhaltung = auszahlung.getBuchhaltung();
+        if (
+            Objects.isNull(businessPartnerCreateBuchhaltung)
+            || businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.FAILURE
+        ) {
             businessPartnerCreateBuchhaltung =
                 buchhaltungService.createBuchhaltungForBusinessPartnerCreate(gesuch.getId());
-            gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(null);
-        } else {
-            businessPartnerCreateBuchhaltung = zahlungsverbindung.getSapDelivery().getBuchhaltung();
+            fall.setFailedBuchhaltungAuszahlungType(null);
         }
 
         if (
@@ -131,54 +136,60 @@ public class SapService {
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
-        final var lastSapDelivery = sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
-
         BigDecimal deliveryid = null;
         if (sapDeliveryInProgress.isEmpty()) {
+            final var lastSapDelivery =
+                sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
             final var lastTryWasBeforeRetryPeriod = lastSapDelivery.isPresent()
             && lastSapDelivery.get()
                 .getTimestampErstellt()
                 .plusHours(HOURS_BETWEEN_SAP_TRIES)
                 .isBefore(LocalDateTime.now());
             if (lastSapDelivery.isEmpty() || lastTryWasBeforeRetryPeriod) {
-                deliveryid = SapEndpointService.generateDeliveryId();
-                final var createResponse = sapEndpointService.createBusinessPartner(zahlungsverbindung, deliveryid);
-                SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
+                deliveryid = SapEndpointService.generateDeliveryId(sapEndpointService.getSystemid());
 
                 var sapDelivery = new SapDelivery().setSapDeliveryId(deliveryid);
                 sapDeliveryRepository.persistAndFlush(sapDelivery);
-                zahlungsverbindung.setSapDelivery(sapDelivery);
                 sapDelivery = sapDeliveryRepository.requireById(sapDelivery.getId());
-                final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
-                SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
-                zahlungsverbindung.getSapDelivery()
-                    .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+                // boolean success = false;
+                try {
+                    final var createResponse = sapEndpointService.createBusinessPartner(fall, deliveryid);
+                    SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
+                    // success = true;
+                } catch (Exception e) {
+                    LOG.error("Failed to send createBusinessPartner action", e);
+                    sapDelivery.setSapStatus(SapStatus.FAILURE);
+                }
+
+                // // TOOO: Most likely not needed as we check the status just after this if block. But still here for
+                // safety.
+                // IF IT IS NEEDED WE NEED A TRY CATCH AROUND IT
+                // if (success) {
+                // final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
+                // SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
+                //
+                // sapDelivery
+                // .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
+                // }
+
                 sapDelivery.setBuchhaltung(businessPartnerCreateBuchhaltung);
                 businessPartnerCreateBuchhaltung.getSapDeliverys().add(sapDelivery);
-                businessPartnerCreateBuchhaltung.getZahlungsverbindung().setSapDelivery(sapDelivery);
+            } else {
+                return;
             }
         }
-        final var businessPartnerCreateStatus = getBusinessPartnerCreateStatus(zahlungsverbindung.getId());
+        try {
+            getBusinessPartnerCreateStatus(auszahlung.getId());
+        } catch (Exception e) {
+            LOG.error("Failed to read BusinessPartnerCreateStatus", e);
+        }
+
         if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.FAILURE) {
-            gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(BUSINESSPARTNER_CREATE);
+            fall.setFailedBuchhaltungAuszahlungType(BUSINESSPARTNER_CREATE);
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
             mailService.sendStandardNotificationEmailForGesuch(gesuch);
-        } else if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.SUCCESS) {
-            gesuch.getAusbildung()
-                .getFall()
-                .getRelevantZahlungsverbindung()
-                .setSapBusinessPartnerId(
-                    businessPartnerCreateBuchhaltung.getZahlungsverbindung().getSapBusinessPartnerId()
-                );
         }
-        return businessPartnerCreateStatus;
-    }
-
-    public SapStatus getStatusOfOrCreateBusinessPartner(final Gesuch gesuch) {
-        final var zahlungsverbindung = gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung();
-        createBusinessPartnerOrGetStatus(gesuch, zahlungsverbindung);
-        return zahlungsverbindung.getSapDelivery().getSapStatus();
     }
 
     private String getQrIbanAddlInfoString(final Gesuch gesuch) {
@@ -198,7 +209,7 @@ public class SapService {
     }
 
     @Transactional
-    public SapStatus getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
+    public void getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
         final var sapDeliveryOpt = buchhaltung.getSapDeliverys()
             .stream()
             .filter(
@@ -206,7 +217,7 @@ public class SapService {
             )
             .findFirst();
         if (sapDeliveryOpt.isEmpty()) {
-            return SapStatus.IN_PROGRESS;
+            return;
         }
         final var sapDelivery = sapDeliveryOpt.get();
         final var deliveryid = sapDelivery.getSapDeliveryId();
@@ -216,16 +227,15 @@ public class SapService {
         sapDelivery
             .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
 
-        return sapDelivery.getSapStatus();
     }
 
     @Transactional
-    public SapStatus createVendorPostingOrGetStatus(
+    public void createVendorPostingOrGetStatus(
         final Gesuch gesuch,
-        final Zahlungsverbindung zahlungsverbindung,
+        final Auszahlung auszahlung,
         final Buchhaltung buchhaltung
     ) {
-        if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
+        if (Objects.isNull(auszahlung.getSapBusinessPartnerId())) {
             throw new IllegalStateException("Cannot create vendor posting without existing businessPartnerId");
         }
         if (buchhaltung.getSapStatus() != SapStatus.IN_PROGRESS) {
@@ -244,10 +254,10 @@ public class SapService {
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
-        final var lastSapDelivery = sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
-
         BigDecimal deliveryid = null;
         if (sapDeliveryInProgress.isEmpty()) {
+            final var lastSapDelivery =
+                sapDeliverys.stream().max(Comparator.comparing(SapDelivery::getTimestampErstellt));
             final var lastTryWasBeforeRetryPeriod = lastSapDelivery.isPresent()
             && lastSapDelivery.get()
                 .getTimestampErstellt()
@@ -255,33 +265,42 @@ public class SapService {
                 .isBefore(LocalDateTime.now());
 
             if (lastSapDelivery.isEmpty() || lastTryWasBeforeRetryPeriod) {
-                deliveryid = SapEndpointService.generateDeliveryId();
+                deliveryid = SapEndpointService.generateDeliveryId(sapEndpointService.getSystemid());
 
                 final var newSapDelivery = new SapDelivery().setSapDeliveryId(deliveryid)
-                    .setSapBusinessPartnerId(zahlungsverbindung.getSapBusinessPartnerId());
+                    .setSapBusinessPartnerId(auszahlung.getSapBusinessPartnerId());
                 newSapDelivery.setSapStatus(SapStatus.IN_PROGRESS);
                 newSapDelivery.setBuchhaltung(buchhaltung);
                 sapDeliveryRepository.persistAndFlush(newSapDelivery);
                 buchhaltung.getSapDeliverys().add(newSapDelivery);
 
-                final var vendorPostingCreateResponse =
-                    sapEndpointService.createVendorPosting(
-                        zahlungsverbindung,
-                        buchhaltung.getBetrag(),
-                        deliveryid,
-                        getQrIbanAddlInfoString(gesuch),
-                        String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
-                    );
-                SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
+                try {
+                    final var vendorPostingCreateResponse =
+                        sapEndpointService.createVendorPosting(
+                            gesuch.getAusbildung().getFall(),
+                            buchhaltung.getBetrag(),
+                            deliveryid,
+                            getQrIbanAddlInfoString(gesuch),
+                            String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
+                        );
+                    SapReturnCodeType.assertSuccess(vendorPostingCreateResponse.getRETURNCODE().get(0).getTYPE());
+                } catch (Exception e) {
+                    LOG.error("Failed to send createVendorPosting action", e);
+                    newSapDelivery.setSapStatus(SapStatus.FAILURE);
+                }
             }
         }
-        final var vendorPostingCreateStatus = getVendorPostingCreateStatus(buchhaltung);
+        try {
+            getVendorPostingCreateStatus(buchhaltung);
+        } catch (Exception e) {
+            LOG.error("Failed to read VendorPostingCreateStatus", e);
+        }
+
         if (buchhaltung.getSapStatus() == SapStatus.FAILURE) {
             gesuch.getAusbildung().getFall().setFailedBuchhaltungAuszahlungType(buchhaltung.getBuchhaltungType());
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
             mailService.sendStandardNotificationEmailForGesuch(gesuch);
         }
-        return vendorPostingCreateStatus;
     }
 
     public Buchhaltung retryAuszahlungBuchhaltung(final Fall fall) {
@@ -304,11 +323,8 @@ public class SapService {
             case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuch.getId());
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuch.getId());
             case BUSINESSPARTNER_CREATE -> {
-                gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().setSapDelivery(null);
-                createBusinessPartnerOrGetStatus(
-                    gesuch,
-                    gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
-                );
+                gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
+                createBusinessPartnerOrGetStatus(gesuch);
             }
             case null, default -> throw new BadRequestException();
         }
@@ -324,11 +340,8 @@ public class SapService {
             case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuchId);
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
             case BUSINESSPARTNER_CREATE -> {
-                gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung().setSapDelivery(null);
-                createBusinessPartnerOrGetStatus(
-                    gesuch,
-                    gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung()
-                );
+                gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
+                createBusinessPartnerOrGetStatus(gesuch);
             }
             default -> throw new BadRequestException();
         }
@@ -347,22 +360,23 @@ public class SapService {
             .getGueltigkeit()
             .getGueltigAb();
 
-        return startDateFirstTranche.plusMonths(gesuch.getGesuchsperiode().getZweiterAuszahlungsterminMonat())
-            .minusDays(1)
-            .isBefore(LocalDate.now());
+        return LocalDate.now()
+            .isAfter(
+                startDateFirstTranche.plusMonths(gesuch.getGesuchsperiode().getZweiterAuszahlungsterminMonat())
+                    .minusDays(1)
+            );
     }
 
     @Transactional
-    public SapStatus createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
+    public void createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
-        final var zahlungsverbindung = fall.getRelevantZahlungsverbindung();
         fall.setFailedBuchhaltungAuszahlungType(null);
 
-        if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
-            final var createBusinessPartnerStatus = getStatusOfOrCreateBusinessPartner(gesuch);
+        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
+            createBusinessPartnerOrGetStatus(gesuch);
             gesuch.setPendingSapAction(AUSZAHLUNG_INITIAL);
-            return createBusinessPartnerStatus;
+            return;
         }
         final var pendingAuszahlungOpt =
             buchhaltungService
@@ -388,7 +402,7 @@ public class SapService {
             auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());
 
             if (auszahlungsBetrag <= 0) {
-                return SapStatus.SUCCESS;
+                return;
             }
 
             relevantBuchhaltung =
@@ -400,20 +414,19 @@ public class SapService {
         } else {
             relevantBuchhaltung = pendingAuszahlungOpt.get();
         }
-        return createVendorPostingOrGetStatus(gesuch, zahlungsverbindung, relevantBuchhaltung);
+        createVendorPostingOrGetStatus(gesuch, fall.getAuszahlung(), relevantBuchhaltung);
     }
 
     @Transactional
-    public SapStatus createRemainderAuszahlungOrGetStatus(final UUID gesuchId) {
+    public void createRemainderAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
-        final var zahlungsverbindung = fall.getRelevantZahlungsverbindung();
         fall.setFailedBuchhaltungAuszahlungType(null);
 
-        if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
-            final var createBusinessPartnerStatus = getStatusOfOrCreateBusinessPartner(gesuch);
+        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
+            createBusinessPartnerOrGetStatus(gesuch);
             gesuch.setPendingSapAction(BuchhaltungType.AUSZAHLUNG_REMAINDER);
-            return createBusinessPartnerStatus;
+            return;
         }
         gesuch.setRemainderPaymentExecuted(true);
 
@@ -431,7 +444,7 @@ public class SapService {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
             if (lastBuchhaltungEntry.getSaldo() <= 0) {
-                return SapStatus.SUCCESS;
+                return;
             }
             relevantBuchhaltung =
                 buchhaltungService.createAuszahlungBuchhaltungForGesuch(
@@ -442,19 +455,19 @@ public class SapService {
         } else {
             relevantBuchhaltung = pendingAuszahlungOpt.get();
         }
-        return createVendorPostingOrGetStatus(gesuch, zahlungsverbindung, relevantBuchhaltung);
+        createVendorPostingOrGetStatus(gesuch, fall.getAuszahlung(), relevantBuchhaltung);
     }
 
     @Transactional(TxType.REQUIRES_NEW)
     public void processPendingSapAction(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var zahlungsverbindung = gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung();
+        final var fall = gesuch.getAusbildung().getFall();
 
-        if (!zahlungsverbindung.getSapDelivery().getSapStatus().equals(SapStatus.SUCCESS)) {
+        if (!fall.getAuszahlung().getBuchhaltung().getSapStatus().equals(SapStatus.SUCCESS)) {
             return;
         }
 
-        if (Objects.isNull(zahlungsverbindung.getSapBusinessPartnerId())) {
+        if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
             return;
         }
 
@@ -480,9 +493,8 @@ public class SapService {
                         pendingBusinessPartnerCreateBuchhaltung.getId()
                     )
                 );
-                final var zahlungsverbindung = pendingBusinessPartnerCreateBuchhaltung.getZahlungsverbindung();
                 final var gesuch = pendingBusinessPartnerCreateBuchhaltung.getGesuch();
-                createBusinessPartnerOrGetStatus(gesuch, zahlungsverbindung);
+                createBusinessPartnerOrGetStatus(gesuch);
             } catch (Exception e) {
                 LOG.error(
                     String.format(
@@ -545,14 +557,15 @@ public class SapService {
                 gesuchsperiode -> gesuchsperiode.getZweiterAuszahlungsterminTag() == LocalDate.now().getDayOfMonth()
             )
             .flatMap(
-                gesuchsperiode -> gesuchRepository.findGesuchsByGesuchsperiodeId(gesuchsperiode.getId()).stream()
+                gesuchsperiode -> gesuchRepository
+                    .findGesuchsByGesuchsperiodeIdWithPendingRemainderPayment(gesuchsperiode.getId())
+                    .stream()
             )
-            .filter(gesuch -> !gesuch.isRemainderPaymentExecuted())
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {
                     createRemainderAuszahlungOrGetStatus(
-                        gesuch.getAusbildung().getFall().getAuszahlung().getId()
+                        gesuch.getId()
                     );
                 } catch (Exception e) {
                     LOG.error(
@@ -570,7 +583,7 @@ public class SapService {
     @Transactional(TxType.REQUIRES_NEW)
     void retryOngoingBuchhaltungAuszahlungWithFailures(final Buchhaltung buchhaltung) {
         assert buchhaltung.getZahlungsverbindung() != null;
-        createVendorPostingOrGetStatus(buchhaltung.getGesuch(), buchhaltung.getZahlungsverbindung(), buchhaltung);
+        createVendorPostingOrGetStatus(buchhaltung.getGesuch(), buchhaltung.getFall().getAuszahlung(), buchhaltung);
     }
 
     @Transactional

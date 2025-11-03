@@ -118,7 +118,12 @@ class SteuerdatenServiceTest {
             .thenReturn(getSteuerdatenResponse);
 
         steuerdatenService = new SteuerdatenService(
-            null, trancheRepository, null, steuerdatenRepository, neskoGetSteuerdatenService, null
+            null,
+            trancheRepository,
+            new SteuerdatenMapperImpl(),
+            steuerdatenRepository,
+            neskoGetSteuerdatenService,
+            null
         );
     }
 

@@ -17,18 +17,19 @@
 
 package ch.dvbern.stip.api.partner.entity;
 
+import java.util.Objects;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraintValidator
-    implements ConstraintValidator<AusbildungMitEinkommenOderErwerbstaetigRequiredNullFieldsConstraint, Partner> {
+public class AusbildungsPensumRequiredConstraintValidator
+    implements ConstraintValidator<AusbildungsPensumRequiredConstraint, Partner> {
+
     @Override
-    public boolean isValid(Partner partner, ConstraintValidatorContext constraintValidatorContext) {
-        if (!partner.isAusbildungMitEinkommenOderErwerbstaetig()) {
-            return partner.getFahrkosten() == null
-            && partner.getJahreseinkommen() == null
-            && partner.getVerpflegungskosten() == null;
+    public boolean isValid(Partner partner, ConstraintValidatorContext context) {
+        if (!partner.isInAusbildung()) {
+            return true;
         }
-        return true;
+        return Objects.nonNull(partner.getAusbildungspensum());
     }
 }

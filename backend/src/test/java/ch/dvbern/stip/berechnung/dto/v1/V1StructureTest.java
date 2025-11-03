@@ -38,6 +38,7 @@ class V1StructureTest {
             "templateJson": {
                 "Stammdaten_V1": {
                     "maxSaeule3a": 7000,
+                    "abzugslimite": 13200,
                     "einkommensfreibetrag": 6000,
                     "freibetragErwerbseinkommen": 6000,
                     "freibetragVermoegen": 30000,
@@ -117,6 +118,7 @@ class V1StructureTest {
                         "medizinischeGrundversorgung": 2800,
                         "ausbildungskosten": 450,
                         "steuern": 0,
+                        "steuernPartner": 0,
                         "fahrkosten": 523,
                         "fahrkostenPartner": 0,
                         "verpflegung": 0,

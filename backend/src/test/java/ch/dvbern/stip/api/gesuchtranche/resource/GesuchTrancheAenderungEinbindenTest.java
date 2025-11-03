@@ -153,6 +153,9 @@ class GesuchTrancheAenderungEinbindenTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setEinnahmenKosten(einnahmeKostenUpdateDto);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)

@@ -22,14 +22,14 @@ export class SharedUiTranslateChangePipe implements PipeTransform {
       | `shared.form.zuvor.radio.${Placeholder}`
       | (`${string}${typeof PLACEHOLDER}${string}` & {}),
   ) {
+    if (!isDefined(value)) {
+      return of(value);
+    }
     if (value === '') {
       return of('');
     }
-    if (isDefined(value)) {
-      return this.translate.selectTranslate(
-        translationKey.replace(`${PLACEHOLDER}`, value.toString()),
-      );
-    }
-    return of(null);
+    return this.translate.selectTranslate(
+      translationKey.replace(`${PLACEHOLDER}`, value.toString()),
+    );
   }
 }

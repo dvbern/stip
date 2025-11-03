@@ -21,7 +21,11 @@ export interface Kind {
     id?: string;
     wohnsitzAnteilPia: number;
     nachname: string;
-    erhalteneAlimentebeitraege?: number;
+    unterhaltsbeitraege?: number;
+    kinderUndAusbildungszulagen?: number;
+    renten?: number;
+    ergaenzungsleistungen?: number;
+    andereEinnahmen?: number;
 }
 
 

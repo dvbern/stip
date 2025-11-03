@@ -111,7 +111,6 @@ export const mutter = (seed: string): Eltern => ({
   adresse: adressen.mutter,
   identischerZivilrechtlicherWohnsitz: true,
   telefonnummer: '0316338355',
-  ergaenzungsleistungen: 0,
   sozialhilfebeitraege: false,
   wohnkosten: 16260,
   geburtsdatum: `01.01.${specificYearsAgo(44)}`,
@@ -123,6 +122,11 @@ export const mutter = (seed: string): Eltern => ({
 export const steuererklaerung: Omit<SteuererklaerungUpdate, 'steuerdatenTyp'> =
   {
     steuererklaerungInBern: true,
+    ergaenzungsleistungen: 1200,
+    unterhaltsbeitraege: 250,
+    renten: 600,
+    einnahmenBGSA: 100,
+    andereEinnahmen: 300,
   };
 
 export const steuerdaten: Steuerdaten = {
@@ -130,7 +134,6 @@ export const steuerdaten: Steuerdaten = {
   totalEinkuenfte: 8620,
   eigenmietwert: 0,
   isArbeitsverhaeltnisSelbstaendig: false,
-  kinderalimente: 0,
   vermoegen: 0,
   steuernKantonGemeinde: 0,
   steuernBund: 0,
@@ -164,8 +167,7 @@ export const einnahmenKosten: EinnahmenKosten = {
   vermoegen: 6,
   steuerjahr: +specificYearsAgo(1),
   veranlagungsStatus: 'Provisorisch Veranlagt',
-  steuernKantonGemeinde: 0,
-  verdienstRealisiert: false,
+  steuern: 0,
 };
 
 export const darlehen: Darlehen = {

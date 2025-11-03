@@ -269,4 +269,8 @@ public class Gesuch extends AbstractMandantEntity {
         // TODO KSTIP-1777: Implement isErstgesuch logic
         return true;
     }
+
+    public boolean hasNeverBeenVerfuegt() {
+        return isErstgesuch() && !isVerfuegt();
+    }
 }

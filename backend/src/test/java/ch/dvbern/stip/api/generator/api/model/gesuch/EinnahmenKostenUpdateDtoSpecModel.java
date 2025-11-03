@@ -25,6 +25,7 @@ public class EinnahmenKostenUpdateDtoSpecModel {
     public static EinnahmenKostenUpdateDtoSpec einnahmenKostenUpdateDtoSpec() {
         return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model) -> {
             model.setNettoerwerbseinkommen(500);
+            model.setArbeitspensumProzent(100);
             model.setZulagen(500);
             model.setRenten(500);
             model.setEoLeistungen(500);
@@ -34,11 +35,33 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setFahrkosten(2500);
             model.setWohnkosten(2500);
             model.setWgWohnend(false);
-            model.setVerdienstRealisiert(false);
             model.setAuswaertigeMittagessenProWoche(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setSteuerjahr(0);
             model.setVeranlagungsStatus("test");
+            model.setAlternativeWohnformWohnend(false);
+        });
+    }
+
+    public static EinnahmenKostenUpdateDtoSpec einnahmenKostenPartnerUpdateDtoSpec() {
+        return TestUtil.createUpdateDtoSpec(EinnahmenKostenUpdateDtoSpec::new, (model) -> {
+            model.setNettoerwerbseinkommen(500);
+            model.setArbeitspensumProzent(100);
+            model.setZulagen(500);
+            model.setRenten(500);
+            model.setEoLeistungen(500);
+            model.setVermoegen(1000);
+            model.setErgaenzungsleistungen(500);
+            model.setBeitraege(Math.min(2500, 1));
+            model.setAusbildungskosten(2500);
+            model.setFahrkosten(2500);
+            model.setWohnkosten(2500);
+            model.setWgWohnend(false);
+            model.setVerpflegungskosten(3);
+            model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
+            model.setSteuerjahr(0);
+            model.setVeranlagungsStatus("test");
+            model.setAlternativeWohnformWohnend(false);
         });
     }
 
@@ -46,6 +69,13 @@ public class EinnahmenKostenUpdateDtoSpecModel {
         return TestUtil.createUpdateDtoSpec(
             GesuchFormularUpdateDtoSpec::new,
             (model) -> model.setEinnahmenKosten(einnahmenKostenUpdateDtoSpec())
+        );
+    }
+
+    public static GesuchFormularUpdateDtoSpec gesuchFormularUpdateDtoSpecEinnahmenKostenPartner() {
+        return TestUtil.createUpdateDtoSpec(
+            GesuchFormularUpdateDtoSpec::new,
+            (model) -> model.setEinnahmenKostenPartner(einnahmenKostenPartnerUpdateDtoSpec())
         );
     }
 }

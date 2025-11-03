@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_MAX_SAEULE3A,
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_EINKOMMENSFREIBETRAG,
+  BerechnungsStammdatenDtoSpec.JSON_PROPERTY_ABZUGSLIMITE,
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN,
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_FREIBETRAG_VERMOEGEN,
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_VERMOEGENSANTEIL_IN_PROZENT,
@@ -46,6 +47,9 @@ public class BerechnungsStammdatenDtoSpec {
 
   public static final String JSON_PROPERTY_EINKOMMENSFREIBETRAG = "einkommensfreibetrag";
   private Integer einkommensfreibetrag;
+
+  public static final String JSON_PROPERTY_ABZUGSLIMITE = "abzugslimite";
+  private Integer abzugslimite;
 
   public static final String JSON_PROPERTY_FREIBETRAG_ERWERBSEINKOMMEN = "freibetragErwerbseinkommen";
   private Integer freibetragErwerbseinkommen;
@@ -123,6 +127,32 @@ public class BerechnungsStammdatenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinkommensfreibetrag(Integer einkommensfreibetrag) {
     this.einkommensfreibetrag = einkommensfreibetrag;
+  }
+
+
+  public BerechnungsStammdatenDtoSpec abzugslimite(Integer abzugslimite) {
+    
+    this.abzugslimite = abzugslimite;
+    return this;
+  }
+
+   /**
+   * Get abzugslimite
+   * @return abzugslimite
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ABZUGSLIMITE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAbzugslimite() {
+    return abzugslimite;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ABZUGSLIMITE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAbzugslimite(Integer abzugslimite) {
+    this.abzugslimite = abzugslimite;
   }
 
 
@@ -344,6 +374,7 @@ public class BerechnungsStammdatenDtoSpec {
     BerechnungsStammdatenDtoSpec berechnungsStammdaten = (BerechnungsStammdatenDtoSpec) o;
     return Objects.equals(this.maxSaeule3a, berechnungsStammdaten.maxSaeule3a) &&
         Objects.equals(this.einkommensfreibetrag, berechnungsStammdaten.einkommensfreibetrag) &&
+        Objects.equals(this.abzugslimite, berechnungsStammdaten.abzugslimite) &&
         Objects.equals(this.freibetragErwerbseinkommen, berechnungsStammdaten.freibetragErwerbseinkommen) &&
         Objects.equals(this.freibetragVermoegen, berechnungsStammdaten.freibetragVermoegen) &&
         Objects.equals(this.vermoegensanteilInProzent, berechnungsStammdaten.vermoegensanteilInProzent) &&
@@ -356,7 +387,7 @@ public class BerechnungsStammdatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(maxSaeule3a, einkommensfreibetrag, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag);
+    return Objects.hash(maxSaeule3a, einkommensfreibetrag, abzugslimite, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag);
   }
 
   @Override
@@ -365,6 +396,7 @@ public class BerechnungsStammdatenDtoSpec {
     sb.append("class BerechnungsStammdatenDtoSpec {\n");
     sb.append("    maxSaeule3a: ").append(toIndentedString(maxSaeule3a)).append("\n");
     sb.append("    einkommensfreibetrag: ").append(toIndentedString(einkommensfreibetrag)).append("\n");
+    sb.append("    abzugslimite: ").append(toIndentedString(abzugslimite)).append("\n");
     sb.append("    freibetragErwerbseinkommen: ").append(toIndentedString(freibetragErwerbseinkommen)).append("\n");
     sb.append("    freibetragVermoegen: ").append(toIndentedString(freibetragVermoegen)).append("\n");
     sb.append("    vermoegensanteilInProzent: ").append(toIndentedString(vermoegensanteilInProzent)).append("\n");

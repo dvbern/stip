@@ -269,6 +269,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
       group: 'GESUCHE',
     },
+    PENDENTE_GESUCHE: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'GESUCHE',
+    },
     MEINE_BEARBEITBAR: {
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'BEARBEITBAR',

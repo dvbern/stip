@@ -63,6 +63,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -232,7 +233,8 @@ public class GesuchService {
     @Transactional
     public void setAndValidateEinnahmenkostenUpdateLegality(
         final EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
-        final GesuchTranche trancheToUpdate
+        final GesuchTranche trancheToUpdate,
+        final EinnahmenKosten einnahmenKostenToUpdate
     ) {
         final var benutzerRollenIdentifiers = benutzerService
             .getCurrentBenutzer()
@@ -244,12 +246,11 @@ public class GesuchService {
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
-        final var einnahmenKosten = trancheToUpdate.getGesuchFormular().getEinnahmenKosten();
         String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 
-        if (einnahmenKosten != null) {
+        if (einnahmenKostenToUpdate != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
-            final Integer steuerjahrExistingValue = einnahmenKosten.getSteuerjahr();
+            final Integer steuerjahrExistingValue = einnahmenKostenToUpdate.getSteuerjahr();
             final Integer steuerjahrDefaultValue = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
             steuerjahrToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
@@ -259,7 +260,7 @@ public class GesuchService {
             );
 
             final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
-            final String veranlagungsStatusExistingValue = einnahmenKosten.getVeranlagungsStatus();
+            final String veranlagungsStatusExistingValue = einnahmenKostenToUpdate.getVeranlagungsStatus();
             veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
                 veranlagungsStatusDtoValue,
@@ -282,7 +283,16 @@ public class GesuchService {
         if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten() != null) {
             setAndValidateEinnahmenkostenUpdateLegality(
                 gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten(),
-                trancheToUpdate
+                trancheToUpdate,
+                trancheToUpdate.getGesuchFormular().getEinnahmenKosten()
+            );
+        }
+
+        if (gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKostenPartner() != null) {
+            setAndValidateEinnahmenkostenUpdateLegality(
+                gesuchUpdateDto.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKostenPartner(),
+                trancheToUpdate,
+                trancheToUpdate.getGesuchFormular().getEinnahmenKostenPartner()
             );
         }
 
@@ -532,12 +542,9 @@ public class GesuchService {
     @Transactional
     public void stipendienAnspruchPruefen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuch.getGesuchTranchen().size() != 1) {
-            throw new IllegalStateException("Gesuch kann only be eingereicht with exactly 1 Tranche");
-        }
 
-        final var gesuchTranche = gesuch.getLatestGesuchTranche();
-        final var decision = stipDecisionService.decide(gesuchTranche);
+        final var decision = getAnspruchDecision(gesuch);
+
         final var gesuchStatusChangeEvent = stipDecisionService.getGesuchStatusChangeEvent(decision);
         KommentarDto kommentarDto = null;
         if (decision != StipDeciderResult.GESUCH_VALID) {
@@ -545,17 +552,33 @@ public class GesuchService {
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
                     decision,
-                    gesuchTranche.getGesuchFormular().getPersonInAusbildung().getKorrespondenzSprache()
+                    LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
                 )
             );
         }
 
         gesuchStatusService.triggerStateMachineEventWithComment(
-            gesuchTranche.getGesuch(),
+            gesuch,
             gesuchStatusChangeEvent,
             kommentarDto,
             false
         );
+    }
+
+    @Transactional
+    public StipDeciderResult getAnspruchDecision(final Gesuch gesuch) {
+        final var gesuchTranchen = gesuch.getTranchenTranchen().toList();
+        StipDeciderResult finalDecision = StipDeciderResult.GESUCH_VALID;
+
+        for (GesuchTranche tranche : gesuchTranchen) {
+            final var trancheDecision = stipDecisionService.decide(tranche);
+            if (trancheDecision != StipDeciderResult.GESUCH_VALID) {
+                finalDecision = trancheDecision;
+                break;
+            }
+        }
+
+        return finalDecision;
     }
 
     @Transactional
@@ -615,12 +638,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
-        gesuchStatusToBereitFuerBearbeitung(gesuchId, null);
-    }
-
-    @Transactional
-    public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
+    public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
@@ -629,21 +647,34 @@ public class GesuchService {
             changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
-        gesuchStatusService.triggerStateMachineEventWithComment(
+        gesuchStatusService.triggerStateMachineEvent(
             gesuch,
-            changeEvent,
-            kommentar,
-            false
+            changeEvent
         );
+
+        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
+        if (
+            changeEvent.equals(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT)
+            && gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()
+        ) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 
     @Transactional
-    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId) {
+    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(
+        gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
-            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT
+            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT,
+            kommentar,
+            false
         );
+
+        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
+        if (gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 
     @Transactional
@@ -1169,6 +1200,10 @@ public class GesuchService {
         datenschutzbriefService.deleteDatenschutzbriefeOfGesuch(gesuch.getId());
 
         resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
+        if (gesuch.hasNeverBeenVerfuegt()) {
+            gesuchTrancheCopyService
+                .overrideAusbildung(gesuchOfStateEingereicht.getAusbildung(), gesuch.getAusbildung());
+        }
 
         final var allOtherTranchen = gesuch
             .getGesuchTranchen()

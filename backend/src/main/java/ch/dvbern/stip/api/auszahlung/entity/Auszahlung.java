@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.auszahlung.entity;
 
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.annotation.Nullable;
@@ -26,6 +27,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -53,4 +55,16 @@ public class Auszahlung extends AbstractMandantEntity {
 
     @Column(name = "auszahlung_an_sozialdienst", nullable = false)
     private boolean auszahlungAnSozialdienst;
+
+    @Nullable
+    @Column(name = "sap_business_partner_id", nullable = true)
+    private Integer sapBusinessPartnerId;
+
+    @Nullable
+    @ManyToOne(optional = true)
+    @JoinColumn(
+        name = "buchhaltung_id", foreignKey = @ForeignKey(name = "FK_zahlungsverbindung_buchhaltung_id"),
+        nullable = true
+    )
+    private Buchhaltung buchhaltung;
 }

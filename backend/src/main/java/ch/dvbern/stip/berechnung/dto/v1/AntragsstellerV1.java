@@ -64,6 +64,7 @@ public class AntragsstellerV1 {
     int medizinischeGrundversorgung;
     int ausbildungskosten;
     int steuern;
+    int steuernPartner;
     int fahrkosten;
     int fahrkostenPartner;
     int verpflegung;
@@ -94,7 +95,7 @@ public class AntragsstellerV1 {
             )
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
             .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
-            .alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0))
+            .alimente(Objects.requireNonNullElse(einnahmenKosten.getUnterhaltsbeitraege(), 0))
             .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
             .kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0))
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
@@ -135,13 +136,16 @@ public class AntragsstellerV1 {
                 }
             }
 
+            final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
+            final var isAlternativeWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend());
             builder.grundbedarf(
                 BerechnungRequestV1.getGrundbedarf(
                     gesuchsperiode,
-                    anzahlPersonenImHaushalt,
-                    Boolean.TRUE.equals(einnahmenKosten.getWgWohnend())
+                    isAlternativeWgWohnend ? 1 : anzahlPersonenImHaushalt,
+                    isWgWohnend || isAlternativeWgWohnend
                 )
             );
+
         } else {
             builder.grundbedarf(0);
         }
@@ -167,8 +171,9 @@ public class AntragsstellerV1 {
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie()
             )
         );
+        final var isPiaQuellenbesteuert = EinnahmenKostenMappingUtil.isQuellenBesteuert(personInAusbildung);
         builder.steuern(
-            EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular)
+            EinnahmenKostenMappingUtil.calculateSteuern(einnahmenKosten, isPiaQuellenbesteuert)
             // TODO: + einnahmenKosten.getSteuernStaat() + einnahmenKosten.getSteuernBund()
         );
         builder.fahrkosten(Objects.requireNonNullElse(einnahmenKosten.getFahrkosten(), 0));
@@ -194,10 +199,17 @@ public class AntragsstellerV1 {
         );
 
         if (partner != null) {
-            builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            // TODO: builder.steuernKonkubinatspartner();
-            builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
-            builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
+            // TODO KSTIP-2779: Update once einnahmenKosternPartner exists
+            // builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
+            // builder.steuernPartner(
+            // EinnahmenKostenMappingUtil.calculateSteuern(
+            // einnahmenKosten
+            // .setNettoerwerbseinkommen(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0)),
+            // false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
+            // )
+            // );
+            // builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
+            // builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
         }
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)

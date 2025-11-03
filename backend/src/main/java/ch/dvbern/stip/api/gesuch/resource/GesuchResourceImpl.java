@@ -21,7 +21,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -72,7 +71,6 @@ import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
@@ -450,18 +448,8 @@ public class GesuchResourceImpl implements GesuchResource {
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
-        return RestMulti.fromUniResponse(
-            Uni.createFrom().item(finalByteStream),
-            response -> Multi.createFrom()
-                .items(response)
-                .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray())),
-            response -> Map.of(
-                "Content-Disposition",
-                List.of("attachment;filename=" + gesuchService.getBerechnungsblattFileName(gesuchId)),
-                "Content-Type",
-                List.of("application/octet-stream")
-            )
-        );
+        return DokumentDownloadUtil
+            .getWrapedDokument(gesuchService.getBerechnungsblattFileName(gesuchId), finalByteStream);
     }
 
     @Override
@@ -529,24 +517,26 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
     public GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(
-        UUID gesuchTrancheId,
-        KommentarDto kommentarDto
+        UUID gesuchTrancheId
     ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
 
-        gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId, kommentarDto);
+        gesuchService.gesuchStatusToBereitFuerBearbeitung(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
     @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     @Override
-    public GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(UUID gesuchTrancheId) {
+    public GesuchWithChangesDto changeGesuchStatusToDatenschutzbriefDruckbereit(
+        UUID gesuchTrancheId,
+        KommentarDto kommentarDto
+    ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(gesuchId);
-        gesuchService.gesuchStatusToDatenschutzbriefDruckbereit(gesuchId);
+        gesuchService.gesuchStatusToDatenschutzbriefDruckbereit(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 

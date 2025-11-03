@@ -15,20 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.partner.entity;
+package ch.dvbern.stip.api.common.validation;
 
+import java.util.Objects;
+
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraintValidator
-    implements ConstraintValidator<AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint, Partner> {
+public class EinnahmenKostenAlternativeWohnformValidConstraintValidator
+    implements ConstraintValidator<EinnahmenKostenAlternativeWohnformValidConstraint, EinnahmenKosten> {
     @Override
-    public boolean isValid(Partner partner, ConstraintValidatorContext constraintValidatorContext) {
-        if (partner.isAusbildungMitEinkommenOderErwerbstaetig()) {
-            return partner.getFahrkosten() != null
-            && partner.getJahreseinkommen() != null
-            && partner.getVerpflegungskosten() != null;
+    public boolean isValid(EinnahmenKosten einnahmenKosten, ConstraintValidatorContext context) {
+        if (Objects.isNull(einnahmenKosten.getWgWohnend()) || einnahmenKosten.getWgWohnend()) {
+            return true;
         }
-        return true;
+        return Objects.nonNull(einnahmenKosten.getAlternativeWohnformWohnend());
     }
 }

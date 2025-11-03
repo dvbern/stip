@@ -23,7 +23,6 @@ import java.math.BigInteger;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.SenderParms;
-import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -31,24 +30,18 @@ import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
 public abstract class BusinessPartnerReadMapper {
-    // @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
-    // @Mapping(source = "sapBusinessPartnerId", target = "BPARTNER")
-    @Mapping(source = ".", target = "DELIVERYID", qualifiedByName = "getDeliveryId")
+    @Mapping(source = "deliveryid", target = "DELIVERYID", qualifiedByName = "getDeliveryId")
     public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(
-        @Context BigDecimal deliveryid,
-        Zahlungsverbindung zahlungsverbindung
+        BigDecimal deliveryid
     );
 
     @Named("getDeliveryId")
-    public String getDeliveryId(@Context BigDecimal deliveryid, Zahlungsverbindung zahlungsverbindung) {
+    public String getDeliveryId(BigDecimal deliveryid) {
         return String.valueOf(Math.abs(deliveryid.longValue()));
     }
 
     @Named("getSenderParms")
-    public SenderParms getSenderParms(
-        @Context BigInteger sysid,
-        Zahlungsverbindung zahlungsverbindung
-    ) {
+    public SenderParms getSenderParms(@Context BigInteger sysid, BigDecimal deliveryid) {
         final SenderParms sender = new SenderParms();
         sender.setSYSID(sysid);
         return sender;
@@ -58,8 +51,7 @@ public abstract class BusinessPartnerReadMapper {
     @Mapping(source = ".", target = "SENDER", qualifiedByName = "getSenderParms")
     public abstract BusinessPartnerReadRequest toBusinessPartnerReadRequest(
         @Context BigInteger sysid,
-        @Context BigDecimal deliveryid,
-        Zahlungsverbindung zahlungsverbindung
+        BigDecimal deliveryid
     );
 
 }
