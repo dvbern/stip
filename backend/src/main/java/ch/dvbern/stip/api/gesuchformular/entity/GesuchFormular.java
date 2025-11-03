@@ -23,6 +23,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.EinnahmenKostenPartnerNeglectedFieldsNullConstraint;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import ch.dvbern.stip.api.gesuchformular.validation.AuszahlungPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenPageValidation;
@@ -60,6 +62,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenVeranlagungsStatusNotNul
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -102,6 +105,8 @@ import org.hibernate.envers.Audited;
         GeschwisterPageValidation.class
     }, property = "geschwisters"
 )
+@EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
+
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -114,17 +119,25 @@ import org.hibernate.envers.Audited;
         LebenslaufItemPageValidation.class
     }, property = "lebenslaufItems"
 )
-@EinnahmenKostenAlimenteRequiredConstraint(
+@EinnahmenKostenZulagenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenPartnerNeglectedFieldsNullConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner"
 )
 @EinnahmenKostenZulagenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
@@ -132,6 +145,7 @@ import org.hibernate.envers.Audited;
         DarlehenPageValidation.class
     }, property = "darlehen"
 )
+
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -148,13 +162,29 @@ import org.hibernate.envers.Audited;
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenBetreuungskostenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
     groups = {
         Default.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
+    groups = {
+        Default.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @SteuerdatenSteuerjahrInPastOrCurrentConstraint(
     groups = {
@@ -178,7 +208,15 @@ import org.hibernate.envers.Audited;
     groups = {
         GesuchEinreichenValidationGroup.class,
         EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenVermoegenRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @LebenslaufAusbildungUeberschneidenConstraint(
     groups = {
@@ -192,18 +230,17 @@ import org.hibernate.envers.Audited;
         PartnerPageValidation.class
     }, property = "partner"
 )
-@AlimenteRequiredWhenAlimenteregelungConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten"
-)
 @DocumentsRequiredConstraint(
     groups = {
         DocumentsRequiredValidationGroup.class
     }, payload = Severity.Warning.class
 )
 @DocumentsRequiredConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class
+    }
+)
+@EinnahmenKostenPartnerRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class
     }
@@ -269,6 +306,7 @@ import org.hibernate.envers.Audited;
         @Index(name = "IX_gesuch_formular_familiensituation_id", columnList = "familiensituation_id"),
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
+        @Index(name = "FK_gesuch_formular_einnahmen_kosten_partner_id", columnList = "einnahmen_kosten_id"),
         @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
     }
 )
@@ -311,6 +349,15 @@ public class GesuchFormular extends AbstractMandantEntity {
     )
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
+
+    @Nullable
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(
+        name = "einnahmen_kosten_partner_id",
+        foreignKey = @ForeignKey(name = "FK_gesuch_formular_einnahmen_kosten_partner_id")
+    )
+    @HasPageValidation(EinnahmenKostenPageValidation.class)
+    private @Valid EinnahmenKosten einnahmenKostenPartner;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(

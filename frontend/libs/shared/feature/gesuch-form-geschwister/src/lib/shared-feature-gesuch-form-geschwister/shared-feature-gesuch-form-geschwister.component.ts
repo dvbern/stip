@@ -2,14 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
+  computed,
   inject,
+  signal,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-geschwister';
-import { GeschwisterUpdate } from '@dv/shared/model/gesuch';
+import { Geschwister, GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
@@ -41,6 +43,11 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   viewSig = this.store.selectSignal(
     selectSharedFeatureGesuchFormGeschwisterView,
   );
+  changesSig = computed<Partial<Geschwister>>(() => {
+    const view = this.viewSig();
+    const index = this.editedGeschwisterIndexSig();
+    return view.listChanges?.changesByIndex?.[index ?? -1] ?? {};
+  });
 
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
@@ -48,7 +55,7 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   editedGeschwister?: Partial<GeschwisterUpdate>;
-  editedGeschwisterIndex: number | undefined;
+  editedGeschwisterIndexSig = signal<number | undefined>(undefined);
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormGeschwister.init());
@@ -56,12 +63,12 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   public handleAddGeschwister(): void {
     this.editedGeschwister = {};
-    this.editedGeschwisterIndex = undefined;
+    this.editedGeschwisterIndexSig.set(undefined);
   }
 
   public handleSelectGeschwister(ge: GeschwisterUpdate, index: number): void {
     this.editedGeschwister = ge;
-    this.editedGeschwisterIndex = index;
+    this.editedGeschwisterIndexSig.set(index);
   }
 
   handleEditorSave(geschwister: GeschwisterUpdate) {

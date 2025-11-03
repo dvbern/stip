@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AdresseDtoSpec;
+import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -34,10 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PartnerUpdateDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   PartnerUpdateDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
   PartnerUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
-  PartnerUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNG_MIT_EINKOMMEN_ODER_ERWERBSTAETIG,
-  PartnerUpdateDtoSpec.JSON_PROPERTY_JAHRESEINKOMMEN,
-  PartnerUpdateDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
-  PartnerUpdateDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN
+  PartnerUpdateDtoSpec.JSON_PROPERTY_IN_AUSBILDUNG,
+  PartnerUpdateDtoSpec.JSON_PROPERTY_AUSBILDUNGSPENSUM
 })
 @JsonTypeName("PartnerUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -57,17 +56,11 @@ public class PartnerUpdateDtoSpec {
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
 
-  public static final String JSON_PROPERTY_AUSBILDUNG_MIT_EINKOMMEN_ODER_ERWERBSTAETIG = "ausbildungMitEinkommenOderErwerbstaetig";
-  private Boolean ausbildungMitEinkommenOderErwerbstaetig;
+  public static final String JSON_PROPERTY_IN_AUSBILDUNG = "inAusbildung";
+  private Boolean inAusbildung;
 
-  public static final String JSON_PROPERTY_JAHRESEINKOMMEN = "jahreseinkommen";
-  private Integer jahreseinkommen;
-
-  public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
-  private Integer fahrkosten;
-
-  public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
-  private Integer verpflegungskosten;
+  public static final String JSON_PROPERTY_AUSBILDUNGSPENSUM = "ausbildungspensum";
+  private AusbildungsPensumDtoSpec ausbildungspensum;
 
   public PartnerUpdateDtoSpec() {
   }
@@ -202,107 +195,55 @@ public class PartnerUpdateDtoSpec {
   }
 
 
-  public PartnerUpdateDtoSpec ausbildungMitEinkommenOderErwerbstaetig(Boolean ausbildungMitEinkommenOderErwerbstaetig) {
+  public PartnerUpdateDtoSpec inAusbildung(Boolean inAusbildung) {
     
-    this.ausbildungMitEinkommenOderErwerbstaetig = ausbildungMitEinkommenOderErwerbstaetig;
+    this.inAusbildung = inAusbildung;
     return this;
   }
 
    /**
-   * Get ausbildungMitEinkommenOderErwerbstaetig
-   * @return ausbildungMitEinkommenOderErwerbstaetig
+   * Get inAusbildung
+   * @return inAusbildung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_MIT_EINKOMMEN_ODER_ERWERBSTAETIG)
+  @JsonProperty(JSON_PROPERTY_IN_AUSBILDUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Boolean getAusbildungMitEinkommenOderErwerbstaetig() {
-    return ausbildungMitEinkommenOderErwerbstaetig;
+  public Boolean getInAusbildung() {
+    return inAusbildung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_MIT_EINKOMMEN_ODER_ERWERBSTAETIG)
+  @JsonProperty(JSON_PROPERTY_IN_AUSBILDUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAusbildungMitEinkommenOderErwerbstaetig(Boolean ausbildungMitEinkommenOderErwerbstaetig) {
-    this.ausbildungMitEinkommenOderErwerbstaetig = ausbildungMitEinkommenOderErwerbstaetig;
+  public void setInAusbildung(Boolean inAusbildung) {
+    this.inAusbildung = inAusbildung;
   }
 
 
-  public PartnerUpdateDtoSpec jahreseinkommen(Integer jahreseinkommen) {
+  public PartnerUpdateDtoSpec ausbildungspensum(AusbildungsPensumDtoSpec ausbildungspensum) {
     
-    this.jahreseinkommen = jahreseinkommen;
+    this.ausbildungspensum = ausbildungspensum;
     return this;
   }
 
    /**
-   * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-   * @return jahreseinkommen
+   * Get ausbildungspensum
+   * @return ausbildungspensum
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_JAHRESEINKOMMEN)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSPENSUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getJahreseinkommen() {
-    return jahreseinkommen;
+  public AusbildungsPensumDtoSpec getAusbildungspensum() {
+    return ausbildungspensum;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_JAHRESEINKOMMEN)
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSPENSUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setJahreseinkommen(Integer jahreseinkommen) {
-    this.jahreseinkommen = jahreseinkommen;
-  }
-
-
-  public PartnerUpdateDtoSpec fahrkosten(Integer fahrkosten) {
-    
-    this.fahrkosten = fahrkosten;
-    return this;
-  }
-
-   /**
-   * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-   * @return fahrkosten
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getFahrkosten() {
-    return fahrkosten;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFahrkosten(Integer fahrkosten) {
-    this.fahrkosten = fahrkosten;
-  }
-
-
-  public PartnerUpdateDtoSpec verpflegungskosten(Integer verpflegungskosten) {
-    
-    this.verpflegungskosten = verpflegungskosten;
-    return this;
-  }
-
-   /**
-   * Required falls ausbildungMitEinkommenOderErwerbstaetig true ist
-   * @return verpflegungskosten
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getVerpflegungskosten() {
-    return verpflegungskosten;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerpflegungskosten(Integer verpflegungskosten) {
-    this.verpflegungskosten = verpflegungskosten;
+  public void setAusbildungspensum(AusbildungsPensumDtoSpec ausbildungspensum) {
+    this.ausbildungspensum = ausbildungspensum;
   }
 
   @Override
@@ -319,15 +260,13 @@ public class PartnerUpdateDtoSpec {
         Objects.equals(this.geburtsdatum, partnerUpdate.geburtsdatum) &&
         Objects.equals(this.sozialversicherungsnummer, partnerUpdate.sozialversicherungsnummer) &&
         Objects.equals(this.nachname, partnerUpdate.nachname) &&
-        Objects.equals(this.ausbildungMitEinkommenOderErwerbstaetig, partnerUpdate.ausbildungMitEinkommenOderErwerbstaetig) &&
-        Objects.equals(this.jahreseinkommen, partnerUpdate.jahreseinkommen) &&
-        Objects.equals(this.fahrkosten, partnerUpdate.fahrkosten) &&
-        Objects.equals(this.verpflegungskosten, partnerUpdate.verpflegungskosten);
+        Objects.equals(this.inAusbildung, partnerUpdate.inAusbildung) &&
+        Objects.equals(this.ausbildungspensum, partnerUpdate.ausbildungspensum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, vorname, geburtsdatum, sozialversicherungsnummer, nachname, ausbildungMitEinkommenOderErwerbstaetig, jahreseinkommen, fahrkosten, verpflegungskosten);
+    return Objects.hash(adresse, vorname, geburtsdatum, sozialversicherungsnummer, nachname, inAusbildung, ausbildungspensum);
   }
 
   @Override
@@ -339,10 +278,8 @@ public class PartnerUpdateDtoSpec {
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
-    sb.append("    ausbildungMitEinkommenOderErwerbstaetig: ").append(toIndentedString(ausbildungMitEinkommenOderErwerbstaetig)).append("\n");
-    sb.append("    jahreseinkommen: ").append(toIndentedString(jahreseinkommen)).append("\n");
-    sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
-    sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
+    sb.append("    inAusbildung: ").append(toIndentedString(inAusbildung)).append("\n");
+    sb.append("    ausbildungspensum: ").append(toIndentedString(ausbildungspensum)).append("\n");
     sb.append("}");
     return sb.toString();
   }

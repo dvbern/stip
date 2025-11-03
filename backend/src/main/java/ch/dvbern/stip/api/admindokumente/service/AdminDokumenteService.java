@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.massendruck.service.MassendruckJobService;
-import ch.dvbern.stip.api.verfuegung.service.AdminDokumenteMapperImpl;
+import ch.dvbern.stip.api.verfuegung.service.AdminDokumenteMapper;
 import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminDokumenteService {
     private final GesuchRepository gesuchRepository;
     private final MassendruckJobService massendruckJobService;
-    private final AdminDokumenteMapperImpl adminDokumenteMapper;
+    private final AdminDokumenteMapper adminDokumenteMapper;
 
     public AdminDokumenteDto getAdminDokumente(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);

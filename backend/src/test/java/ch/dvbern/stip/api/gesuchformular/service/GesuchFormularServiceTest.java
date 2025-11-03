@@ -149,7 +149,7 @@ class GesuchFormularServiceTest {
         /* case there are both: required custom dokuments & normal dokuments */
         // act & assert
         final var kind = new Kind();
-        kind.setErhalteneAlimentebeitraege(10);
+        kind.setUnterhaltsbeitraege(10);
         gesuchFormular.setKinds(Set.of(kind));
         var gesuchDokument = new GesuchDokument();
         gesuchDokument.setGesuchTranche(tranche);

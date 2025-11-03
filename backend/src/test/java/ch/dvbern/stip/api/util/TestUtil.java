@@ -517,7 +517,6 @@ public class TestUtil {
         steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
         steuerdaten.setTotalEinkuenfte(0);
         steuerdaten.setFahrkosten(0);
-        steuerdaten.setKinderalimente(0);
         steuerdaten.setSteuernBund(0);
         steuerdaten.setSteuernKantonGemeinde(0);
         steuerdaten.setVermoegen(0);
@@ -689,6 +688,7 @@ public class TestUtil {
                             new GesuchFormular()
                                 .setPersonInAusbildung(
                                     new PersonInAusbildung()
+                                        .setNationalitaet(LandGenerator.initSwitzerland())
                                 )
                         )
                         .setId(trancheUuid)
@@ -784,19 +784,16 @@ public class TestUtil {
                 .setAusbildungskosten(450)
                 .setFahrkosten(523)
                 .setZulagen(0)
-                .setVerdienstRealisiert(true)
                 .setBetreuungskostenKinder(0)
                 .setSteuerjahr(2000)
                 .setRenten(0)
                 .setVermoegen(null)
+                .setArbeitspensumProzent(100)
         );
 
         gesuchFormular.setPartner(
             (Partner) new Partner()
                 .setSozialversicherungsnummer(AHV_NUMMER_VALID_PARTNER)
-                .setJahreseinkommen(null)
-                .setFahrkosten(null)
-                .setVerpflegungskosten(null)
                 .setAdresse(
                     new Adresse().setPlz("1321")
                         .setLand(LandGenerator.initSwitzerland())
@@ -807,6 +804,19 @@ public class TestUtil {
                 .setNachname("a")
                 .setVorname("a")
                 .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
+        );
+
+        gesuchFormular.setEinnahmenKostenPartner(
+            new EinnahmenKosten()
+                .setNettoerwerbseinkommen(12916)
+                .setErgaenzungsleistungen(1200)
+                .setFahrkosten(523)
+                .setZulagen(0)
+                .setBetreuungskostenKinder(0)
+                .setSteuerjahr(2000)
+                .setRenten(0)
+                .setArbeitspensumProzent(100)
+                .setVerpflegungskosten(5)
         );
 
         gesuchFormular.setFamiliensituation(
@@ -853,7 +863,6 @@ public class TestUtil {
                     .setElternTyp(ElternTyp.VATER)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_VATER)
                     .setWohnkosten(0)
-                    .setErgaenzungsleistungen(0)
                     .setTelefonnummer("0987654321")
                     .setAusweisbFluechtling(false)
                     .setAdresse(
@@ -870,7 +879,6 @@ public class TestUtil {
                     .setElternTyp(ElternTyp.MUTTER)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_MUTTER)
                     .setWohnkosten(0)
-                    .setErgaenzungsleistungen(0)
                     .setTelefonnummer("0987654321")
                     .setAusweisbFluechtling(false)
                     .setAdresse(
@@ -883,6 +891,13 @@ public class TestUtil {
                     .setNachname("a")
                     .setVorname("a")
                     .setGeburtsdatum(LocalDate.now().minusYears(30))
+            )
+        );
+
+        gesuchFormular.setSteuererklaerung(
+            Set.of(
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER),
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER)
             )
         );
 
@@ -901,7 +916,6 @@ public class TestUtil {
                     .setSaeule2(null)
                     .setSaeule3a(null)
                     .setVermoegen(0)
-                    .setKinderalimente(0)
                     .setSteuerjahr(2000)
                     .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE)
                     .setIsArbeitsverhaeltnisSelbstaendig(false),
@@ -918,7 +932,6 @@ public class TestUtil {
                     .setSaeule2(null)
                     .setSaeule3a(null)
                     .setVermoegen(0)
-                    .setKinderalimente(0)
                     .setSteuerjahr(2000)
                     .setVeranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)

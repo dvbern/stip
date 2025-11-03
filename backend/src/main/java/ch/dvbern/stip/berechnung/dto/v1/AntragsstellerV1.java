@@ -64,6 +64,7 @@ public class AntragsstellerV1 {
     int medizinischeGrundversorgung;
     int ausbildungskosten;
     int steuern;
+    int steuernPartner;
     int fahrkosten;
     int fahrkostenPartner;
     int verpflegung;
@@ -94,7 +95,7 @@ public class AntragsstellerV1 {
             )
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
             .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
-            .alimente(Objects.requireNonNullElse(einnahmenKosten.getAlimente(), 0))
+            .alimente(Objects.requireNonNullElse(einnahmenKosten.getUnterhaltsbeitraege(), 0))
             .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
             .kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0))
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
@@ -170,8 +171,9 @@ public class AntragsstellerV1 {
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie()
             )
         );
+        final var isPiaQuellenbesteuert = EinnahmenKostenMappingUtil.isQuellenBesteuert(personInAusbildung);
         builder.steuern(
-            EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular)
+            EinnahmenKostenMappingUtil.calculateSteuern(einnahmenKosten, isPiaQuellenbesteuert)
             // TODO: + einnahmenKosten.getSteuernStaat() + einnahmenKosten.getSteuernBund()
         );
         builder.fahrkosten(Objects.requireNonNullElse(einnahmenKosten.getFahrkosten(), 0));
@@ -197,10 +199,17 @@ public class AntragsstellerV1 {
         );
 
         if (partner != null) {
-            builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            // TODO: builder.steuernKonkubinatspartner();
-            builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
-            builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
+            final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
+            builder.einkommenPartner(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0));
+            builder.steuernPartner(
+                EinnahmenKostenMappingUtil.calculateSteuern(
+                    ekPartner
+                        .setNettoerwerbseinkommen(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0)),
+                    false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
+                )
+            );
+            builder.fahrkostenPartner(Objects.requireNonNullElse(ekPartner.getFahrkosten(), 0));
+            builder.verpflegungPartner(Objects.requireNonNullElse(ekPartner.getVerpflegungskosten(), 0));
         }
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)

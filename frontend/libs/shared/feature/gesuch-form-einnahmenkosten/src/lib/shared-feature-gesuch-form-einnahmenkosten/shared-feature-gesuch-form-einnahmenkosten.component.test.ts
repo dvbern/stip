@@ -91,20 +91,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
       ).toBeInTheDocument();
     });
-
-    it('should display warning if familiensituation is undefined', async () => {
-      const { queryByTestId, detectChanges } = await setup({
-        personInAusbildung: createEmptyPersonInAusbildung(),
-        ausbildung: createEmptyAusbildung(),
-        familiensituation: undefined,
-      });
-
-      detectChanges();
-
-      expect(
-        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
-      ).toBeInTheDocument();
-    });
   });
 
   describe('visibility rules for field "auswaertigeMittagessenProWoche"', () => {
@@ -232,63 +218,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
       expect(getByTestId('form-einnahmen-kosten-zulagen')).toHaveClass(
         'ng-invalid',
       );
-    });
-  });
-
-  describe('should display alimente field correctly based on current state', () => {
-    it('should not display alimente field if gerichtlicheAlimentenregelung is undefined', async () => {
-      const { queryByTestId, detectChanges } = await setup({
-        personInAusbildung: createEmptyPersonInAusbildung(),
-        ausbildung: createEmptyAusbildung(),
-        familiensituation: {
-          elternVerheiratetZusammen: true,
-        },
-      });
-
-      detectChanges();
-
-      expect(
-        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
-      ).toBeNull();
-      expect(queryByTestId('form-einnahmen-kosten-alimente')).toBeNull();
-    });
-
-    it('should not display alimente field if gerichtlicheAlimentenregelung is false', async () => {
-      const { queryByTestId, detectChanges } = await setup({
-        personInAusbildung: createEmptyPersonInAusbildung(),
-        ausbildung: createEmptyAusbildung(),
-        familiensituation: {
-          elternVerheiratetZusammen: false,
-          gerichtlicheAlimentenregelung: false,
-        },
-      });
-
-      detectChanges();
-
-      expect(
-        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
-      ).toBeNull();
-      expect(queryByTestId('form-einnahmen-kosten-alimente')).toBeNull();
-    });
-
-    it('should display alimente field if gerichtlicheAlimentenregelung is true', async () => {
-      const { queryByTestId, detectChanges } = await setup({
-        personInAusbildung: createEmptyPersonInAusbildung(),
-        ausbildung: createEmptyAusbildung(),
-        familiensituation: {
-          elternVerheiratetZusammen: false,
-          gerichtlicheAlimentenregelung: true,
-        },
-      });
-
-      detectChanges();
-
-      expect(
-        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
-      ).toBeNull();
-      expect(
-        queryByTestId('form-einnahmen-kosten-alimente'),
-      ).toBeInTheDocument();
     });
   });
 

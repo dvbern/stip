@@ -5,7 +5,7 @@
 } @else if (editedGeschwister) {
   <dv-shared-feature-gesuch-form-geschwister-editor
     [geschwister]="editedGeschwister"
-    [changes]="view.listChanges?.changesByIndex?.[editedGeschwisterIndex ?? -1]"
+    [changes]="changesSig()"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (formIsUnsaved)="hasUnsavedChanges = $event"

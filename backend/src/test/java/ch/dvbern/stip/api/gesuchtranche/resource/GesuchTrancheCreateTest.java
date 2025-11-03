@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
@@ -44,8 +45,10 @@ import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchFormularDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
@@ -87,6 +90,7 @@ class GesuchTrancheCreateTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
@@ -95,6 +99,7 @@ class GesuchTrancheCreateTest {
     private UUID overwrittenTrancheId;
 
     private GesuchTrancheSlimDtoSpec trancheToOverwrite;
+    private GesuchUpdateDtoSpec gesuchUpdateDto;
 
     @Test
     @TestAsGesuchsteller
@@ -108,6 +113,7 @@ class GesuchTrancheCreateTest {
     @Order(2)
     void fillGesuch() {
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
@@ -115,7 +121,9 @@ class GesuchTrancheCreateTest {
     @Order(3)
     void prepareAddRequiredDocument() {
         // preparation for the last few tests
-        addDocument(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        addDocument(gesuchUpdateDto, false);
     }
 
     @Test
@@ -258,8 +266,11 @@ class GesuchTrancheCreateTest {
 
         // make the formlerly added document (by GS) superflous on tranche 2:
         // therefore, remove & re-add the document
-        removeDocument(tranchen.getTranchen().get(1).getId());
-        addDocument(tranchen.getTranchen().get(1).getId());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(tranchen.getTranchen().get(1).getId());
+
+        removeDocument(gesuchUpdateDto, true);
+
+        addDocument(gesuchUpdateDto, true);
 
         var documentsToUploadOfTranche1 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
@@ -400,8 +411,46 @@ class GesuchTrancheCreateTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 
-    private void addDocument(UUID trancheId) {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
+    private void resetAdressen(GesuchUpdateDtoSpec gesuchUpdateDTO, final boolean runAsSB) {
+        GesuchFormularDtoSpec currentGesuchFormular;
+        if (runAsSB) {
+            final var currentGesuch = gesuchApiSpec.getGesuchSB()
+                .gesuchTrancheIdPath(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchWithChangesDtoSpec.class);
+            currentGesuchFormular = currentGesuch.getGesuchTrancheToWorkWith().getGesuchFormular();
+        } else {
+            final var currentGesuch = gesuchApiSpec.getGesuchGS()
+                .gesuchTrancheIdPath(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .extract()
+                .body()
+                .as(GesuchDtoSpec.class);
+            currentGesuchFormular = currentGesuch.getGesuchTrancheToWorkWith().getGesuchFormular();
+        }
+
+        var gesuchFormularUpdate = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular();
+
+        gesuchFormularUpdate.getPersonInAusbildung()
+            .getAdresse()
+            .setId(currentGesuchFormular.getPersonInAusbildung().getAdresse().getId());
+        gesuchFormularUpdate.getPartner().getAdresse().setId(currentGesuchFormular.getPartner().getAdresse().getId());
+        gesuchFormularUpdate.getElterns().forEach(eltern -> {
+            var elternteilOfCurrentGesuch = currentGesuchFormular.getElterns()
+                .stream()
+                .filter(el -> el.getElternTyp().equals(eltern.getElternTyp()))
+                .findFirst()
+                .orElse(null);
+            eltern.getAdresse().setId(elternteilOfCurrentGesuch.getAdresse().getId());
+        });
+    }
+
+    private void addDocument(GesuchUpdateDtoSpec gesuchUpdateDTO, final boolean runAsSB) {
+        resetAdressen(gesuchUpdateDTO, runAsSB);
         var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
         geschwisterUpdate.setNachname("test");
@@ -410,7 +459,6 @@ class GesuchTrancheCreateTest {
         geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
@@ -420,8 +468,8 @@ class GesuchTrancheCreateTest {
             .statusCode(Status.NO_CONTENT.getStatusCode());
     }
 
-    private void removeDocument(UUID trancheId) {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
+    private void removeDocument(GesuchUpdateDtoSpec gesuchUpdateDTO, final boolean runAsSB) {
+        resetAdressen(gesuchUpdateDTO, runAsSB);
         var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.VORSCHULPFLICHTIG);
         geschwisterUpdate.setNachname("test");
@@ -430,7 +478,7 @@ class GesuchTrancheCreateTest {
         geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
 
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
+        // gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)

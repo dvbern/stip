@@ -4,14 +4,19 @@ import { createSelector } from '@ngrx/store';
 import { selectSharedDataAccessBenutzersView } from '@dv/shared/data-access/benutzer';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import {
+  GesuchFormular,
   GesuchTrancheTyp,
   GesuchUrlType,
   TRANCHE_TYPE_INITIAL,
 } from '@dv/shared/model/gesuch';
 import {
   BaseFormSteps,
+  EINNAHMEN_KOSTEN,
+  EINNAHMEN_KOSTEN_PARTNER,
   ELTERN,
   ELTERN_STEUERERKLAERUNG_STEPS,
+  LEBENSLAUF,
+  PARTNER,
   RETURN_TO_HOME,
 } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
@@ -130,26 +135,49 @@ export const selectSharedDataAccessGesuchTrancheSettingsView = createSelector(
   },
 );
 
+const hasPartner = (gesuch: GesuchFormular | null) => {
+  const zivilstand = gesuch?.personInAusbildung?.zivilstand;
+  return (
+    zivilstand === 'VERHEIRATET' ||
+    zivilstand === 'KONKUBINAT' ||
+    zivilstand === 'EINGETRAGENE_PARTNERSCHAFT'
+  );
+};
+
 export const selectSharedDataAccessGesuchStepsView = createSelector(
-  sharedDataAccessGesuchsFeature.selectGesuchsState,
+  sharedDataAccessGesuchsFeature.selectCache,
   selectSharedDataAccessBenutzersView,
   selectSharedDataAccessConfigsView,
   (state, { rolesMap }, config) => {
-    const sharedSteps = state.steuerdatenTabs.data
-      ? appendSteps(baseFormStepsArray, [
-          {
-            after: ELTERN,
-            steps: state.steuerdatenTabs.data?.map(
-              (typ) => ELTERN_STEUERERKLAERUNG_STEPS[typ],
-            ),
-          },
-        ])
-      : baseFormStepsArray;
+    const appendStepsConfig = [
+      ...(state.gesuchFormular?.steuerdatenTabs
+        ? [
+            {
+              after: ELTERN,
+              steps: state.gesuchFormular.steuerdatenTabs.map(
+                (typ) => ELTERN_STEUERERKLAERUNG_STEPS[typ],
+              ),
+            },
+          ]
+        : []),
+      ...(hasPartner(state.gesuchFormular)
+        ? [
+            {
+              after: LEBENSLAUF,
+              steps: [PARTNER],
+            },
+            {
+              after: EINNAHMEN_KOSTEN,
+              steps: [EINNAHMEN_KOSTEN_PARTNER],
+            },
+          ]
+        : []),
+    ];
 
     const steps = addStepsByAppType(
-      sharedSteps,
+      appendSteps(baseFormStepsArray, appendStepsConfig),
       rolesMap,
-      state.steuerdatenTabs.data,
+      state.gesuchFormular?.steuerdatenTabs,
       config?.compileTimeConfig,
     );
     return {

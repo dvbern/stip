@@ -150,9 +150,18 @@ class BuchhaltungResourceTest {
     @Test
     @TestAsSachbearbeiter
     @Order(5)
-    void fillRequiredVeranlagungStatus() {
+    void fillRequiredVeranlagungStatusAndEKPartner() {
         var gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .setEinnahmenKostenPartner(
+                GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKostenPartner()
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getEinnahmenKostenPartner()
+            );
+
         gesuchApiSpec.updateGesuch()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDto)

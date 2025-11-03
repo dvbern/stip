@@ -15,35 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.partner.entity;
+package ch.dvbern.stip.api.common.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.util.RequiredDocsUtil;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.tuple.Pair;
 
-class PartnerRequiredDocumentsProducerTest {
-    private PartnerRequiredDocumentsProducer producer;
+@UtilityClass
+public class RequiredDocumentsTestUtil {
+    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(
+        final GesuchFormular formular,
+        final List<RequiredDocumentsProducer> producers
+    ) {
+        final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
+        for (final var producer : producers) {
+            requiredTypes.add(producer.getRequiredDocuments(formular));
+        }
 
-    private GesuchFormular formular;
-
-    @BeforeEach
-    void setup() {
-        producer = new PartnerRequiredDocumentsProducer();
-        formular = new GesuchFormular();
-    }
-
-    @Test
-    void requiresIfFahrkosten() {
-        formular.setPartner(
-            new Partner()
-                .setFahrkosten(1)
-        );
-
-        RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
-            DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT
-        );
+        return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();
     }
 }

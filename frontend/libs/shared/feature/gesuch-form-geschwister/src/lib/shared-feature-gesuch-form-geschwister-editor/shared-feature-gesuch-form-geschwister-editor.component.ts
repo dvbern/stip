@@ -39,6 +39,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -89,6 +90,7 @@ const MEDIUM_AGE = 20;
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
+    SharedUiAppDatePipe,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -104,10 +106,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
     // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'geschwister',
   });
-  @Input({ required: true }) changes:
-    | Partial<GeschwisterUpdate>
-    | undefined
-    | null;
+  @Input({ required: true }) changes!: Partial<GeschwisterUpdate>;
 
   @Output() saveTriggered = new EventEmitter<GeschwisterUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();

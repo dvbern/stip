@@ -44,7 +44,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SteuerdatenDtoSpec.JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG,
   SteuerdatenDtoSpec.JSON_PROPERTY_SAEULE3A,
   SteuerdatenDtoSpec.JSON_PROPERTY_SAEULE2,
-  SteuerdatenDtoSpec.JSON_PROPERTY_KINDERALIMENTE,
   SteuerdatenDtoSpec.JSON_PROPERTY_VERMOEGEN
 })
 @JsonTypeName("Steuerdaten")
@@ -94,9 +93,6 @@ public class SteuerdatenDtoSpec {
 
   public static final String JSON_PROPERTY_SAEULE2 = "saeule2";
   private Integer saeule2;
-
-  public static final String JSON_PROPERTY_KINDERALIMENTE = "kinderalimente";
-  private Integer kinderalimente;
 
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
@@ -494,32 +490,6 @@ public class SteuerdatenDtoSpec {
   }
 
 
-  public SteuerdatenDtoSpec kinderalimente(Integer kinderalimente) {
-    
-    this.kinderalimente = kinderalimente;
-    return this;
-  }
-
-   /**
-   * Get kinderalimente
-   * @return kinderalimente
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KINDERALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getKinderalimente() {
-    return kinderalimente;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_KINDERALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKinderalimente(Integer kinderalimente) {
-    this.kinderalimente = kinderalimente;
-  }
-
-
   public SteuerdatenDtoSpec vermoegen(Integer vermoegen) {
     
     this.vermoegen = vermoegen;
@@ -569,13 +539,12 @@ public class SteuerdatenDtoSpec {
         Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, steuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.saeule3a, steuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, steuerdaten.saeule2) &&
-        Objects.equals(this.kinderalimente, steuerdaten.kinderalimente) &&
         Objects.equals(this.vermoegen, steuerdaten.vermoegen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, kinderalimente, vermoegen);
+    return Objects.hash(id, steuerdatenTyp, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, vermoegen);
   }
 
   @Override
@@ -597,7 +566,6 @@ public class SteuerdatenDtoSpec {
     sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
-    sb.append("    kinderalimente: ").append(toIndentedString(kinderalimente)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -15,20 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.partner.entity;
+package ch.dvbern.stip.api.einnahmen_kosten.entity;
+
+import java.util.Objects;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraintValidator
-    implements ConstraintValidator<AusbildungMitEinkommenOderErwerbstaetigRequiredFieldsConstraint, Partner> {
+public class AnstellungsGradRequiredConstraintValidator
+    implements ConstraintValidator<AnstellungsGradRequiredConstraint, EinnahmenKosten> {
     @Override
-    public boolean isValid(Partner partner, ConstraintValidatorContext constraintValidatorContext) {
-        if (partner.isAusbildungMitEinkommenOderErwerbstaetig()) {
-            return partner.getFahrkosten() != null
-            && partner.getJahreseinkommen() != null
-            && partner.getVerpflegungskosten() != null;
+    public boolean isValid(EinnahmenKosten einnahmenKosten, ConstraintValidatorContext context) {
+        if (
+            Objects.isNull(einnahmenKosten) ||
+            Objects.isNull(einnahmenKosten.getNettoerwerbseinkommen())
+            || einnahmenKosten.getNettoerwerbseinkommen() < 1
+        ) {
+            return true;
         }
-        return true;
+
+        return Objects.nonNull(einnahmenKosten.getArbeitspensumProzent())
+        && einnahmenKosten.getArbeitspensumProzent() > 0;
     }
 }

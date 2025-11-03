@@ -51,6 +51,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularDtoSpec.JSON_PROPERTY_LEBENSLAUF_ITEMS,
   GesuchFormularDtoSpec.JSON_PROPERTY_KINDS,
   GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
+  GesuchFormularDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER,
   GesuchFormularDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG,
   GesuchFormularDtoSpec.JSON_PROPERTY_STEUERDATEN_TABS,
   GesuchFormularDtoSpec.JSON_PROPERTY_DARLEHEN
@@ -84,6 +85,9 @@ public class GesuchFormularDtoSpec {
 
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN = "einnahmenKosten";
   private EinnahmenKostenDtoSpec einnahmenKosten;
+
+  public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER = "einnahmenKostenPartner";
+  private EinnahmenKostenDtoSpec einnahmenKostenPartner;
 
   public static final String JSON_PROPERTY_STEUERERKLAERUNG = "steuererklaerung";
   private List<SteuererklaerungUpdateDtoSpec> steuererklaerung;
@@ -363,6 +367,32 @@ public class GesuchFormularDtoSpec {
   }
 
 
+  public GesuchFormularDtoSpec einnahmenKostenPartner(EinnahmenKostenDtoSpec einnahmenKostenPartner) {
+    
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+    return this;
+  }
+
+   /**
+   * Get einnahmenKostenPartner
+   * @return einnahmenKostenPartner
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public EinnahmenKostenDtoSpec getEinnahmenKostenPartner() {
+    return einnahmenKostenPartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinnahmenKostenPartner(EinnahmenKostenDtoSpec einnahmenKostenPartner) {
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+  }
+
+
   public GesuchFormularDtoSpec steuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
     
     this.steuererklaerung = steuererklaerung;
@@ -474,6 +504,7 @@ public class GesuchFormularDtoSpec {
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
         Objects.equals(this.kinds, gesuchFormular.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormular.einnahmenKosten) &&
+        Objects.equals(this.einnahmenKostenPartner, gesuchFormular.einnahmenKostenPartner) &&
         Objects.equals(this.steuererklaerung, gesuchFormular.steuererklaerung) &&
         Objects.equals(this.steuerdatenTabs, gesuchFormular.steuerdatenTabs) &&
         Objects.equals(this.darlehen, gesuchFormular.darlehen);
@@ -481,7 +512,7 @@ public class GesuchFormularDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, steuererklaerung, steuerdatenTabs, darlehen);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung, steuerdatenTabs, darlehen);
   }
 
   @Override
@@ -497,6 +528,7 @@ public class GesuchFormularDtoSpec {
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    einnahmenKostenPartner: ").append(toIndentedString(einnahmenKostenPartner)).append("\n");
     sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("    steuerdatenTabs: ").append(toIndentedString(steuerdatenTabs)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");

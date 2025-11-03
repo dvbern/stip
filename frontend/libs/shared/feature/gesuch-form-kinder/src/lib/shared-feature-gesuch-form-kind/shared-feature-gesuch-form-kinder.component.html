@@ -5,7 +5,7 @@
 } @else if (editedKind) {
   <dv-shared-feature-gesuch-form-kinder-editor
     [kind]="editedKind"
-    [changesSig]="view.listChanges?.changesByIndex?.[editedKindIndex ?? -1]"
+    [changesSig]="changesSig()"
     (saveTriggered)="handleEditorSave($event)"
     (closeTriggered)="handleEditorClose()"
     (formIsUnsaved)="hasUnsavedChanges = $event"

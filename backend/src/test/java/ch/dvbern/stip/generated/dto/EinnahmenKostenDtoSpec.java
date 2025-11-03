@@ -28,7 +28,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   EinnahmenKostenDtoSpec.JSON_PROPERTY_NETTOERWERBSEINKOMMEN,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_ALIMENTE,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_ARBEITSPENSUM_PROZENT,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_EINNAHMEN_B_G_S_A,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_TAGGELDER_A_H_V_I_V,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_ZULAGEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_RENTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_EO_LEISTUNGEN,
@@ -40,13 +44,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WG_WOHNEND,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_WG_ANZAHL_PERSONEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERDIENST_REALISIERT,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERANLAGUNGS_STATUS,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERJAHR,
   EinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
-  EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE
+  EinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN
 })
 @JsonTypeName("EinnahmenKosten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -54,8 +58,20 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_NETTOERWERBSEINKOMMEN = "nettoerwerbseinkommen";
   private Integer nettoerwerbseinkommen;
 
-  public static final String JSON_PROPERTY_ALIMENTE = "alimente";
-  private Integer alimente;
+  public static final String JSON_PROPERTY_ARBEITSPENSUM_PROZENT = "arbeitspensumProzent";
+  private Integer arbeitspensumProzent;
+
+  public static final String JSON_PROPERTY_UNTERHALTSBEITRAEGE = "unterhaltsbeitraege";
+  private Integer unterhaltsbeitraege;
+
+  public static final String JSON_PROPERTY_EINNAHMEN_B_G_S_A = "einnahmenBGSA";
+  private Integer einnahmenBGSA;
+
+  public static final String JSON_PROPERTY_TAGGELDER_A_H_V_I_V = "taggelderAHVIV";
+  private Integer taggelderAHVIV;
+
+  public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
+  private Integer andereEinnahmen;
 
   public static final String JSON_PROPERTY_ZULAGEN = "zulagen";
   private Integer zulagen;
@@ -90,11 +106,11 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND = "alternativeWohnformWohnend";
   private Boolean alternativeWohnformWohnend;
 
-  public static final String JSON_PROPERTY_VERDIENST_REALISIERT = "verdienstRealisiert";
-  private Boolean verdienstRealisiert;
-
   public static final String JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE = "auswaertigeMittagessenProWoche";
   private Integer auswaertigeMittagessenProWoche;
+
+  public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
+  private Integer verpflegungskosten;
 
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
   private Integer betreuungskostenKinder;
@@ -108,8 +124,8 @@ public class EinnahmenKostenDtoSpec {
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
 
-  public static final String JSON_PROPERTY_STEUERN_KANTON_GEMEINDE = "steuernKantonGemeinde";
-  private Integer steuernKantonGemeinde;
+  public static final String JSON_PROPERTY_STEUERN = "steuern";
+  private Integer steuern;
 
   public EinnahmenKostenDtoSpec() {
   }
@@ -140,29 +156,133 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec alimente(Integer alimente) {
+  public EinnahmenKostenDtoSpec arbeitspensumProzent(Integer arbeitspensumProzent) {
     
-    this.alimente = alimente;
+    this.arbeitspensumProzent = arbeitspensumProzent;
     return this;
   }
 
    /**
-   * Required nur wenn mind. ein Elternteil Alimente zahlt
-   * @return alimente
+   * Required nur wenn nettoerwerbseinkommen &gt; 0
+   * @return arbeitspensumProzent
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ALIMENTE)
+  @JsonProperty(JSON_PROPERTY_ARBEITSPENSUM_PROZENT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getAlimente() {
-    return alimente;
+  public Integer getArbeitspensumProzent() {
+    return arbeitspensumProzent;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ALIMENTE)
+  @JsonProperty(JSON_PROPERTY_ARBEITSPENSUM_PROZENT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAlimente(Integer alimente) {
-    this.alimente = alimente;
+  public void setArbeitspensumProzent(Integer arbeitspensumProzent) {
+    this.arbeitspensumProzent = arbeitspensumProzent;
+  }
+
+
+  public EinnahmenKostenDtoSpec unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+    
+    this.unterhaltsbeitraege = unterhaltsbeitraege;
+    return this;
+  }
+
+   /**
+   * Wird immer angezeigt, ist aber optional
+   * @return unterhaltsbeitraege
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getUnterhaltsbeitraege() {
+    return unterhaltsbeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUnterhaltsbeitraege(Integer unterhaltsbeitraege) {
+    this.unterhaltsbeitraege = unterhaltsbeitraege;
+  }
+
+
+  public EinnahmenKostenDtoSpec einnahmenBGSA(Integer einnahmenBGSA) {
+    
+    this.einnahmenBGSA = einnahmenBGSA;
+    return this;
+  }
+
+   /**
+   * Mit Dokument wenn &gt; 0
+   * @return einnahmenBGSA
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getEinnahmenBGSA() {
+    return einnahmenBGSA;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+  }
+
+
+  public EinnahmenKostenDtoSpec taggelderAHVIV(Integer taggelderAHVIV) {
+    
+    this.taggelderAHVIV = taggelderAHVIV;
+    return this;
+  }
+
+   /**
+   * Mit Dokument wenn &gt; 0
+   * @return taggelderAHVIV
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TAGGELDER_A_H_V_I_V)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTaggelderAHVIV() {
+    return taggelderAHVIV;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TAGGELDER_A_H_V_I_V)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTaggelderAHVIV(Integer taggelderAHVIV) {
+    this.taggelderAHVIV = taggelderAHVIV;
+  }
+
+
+  public EinnahmenKostenDtoSpec andereEinnahmen(Integer andereEinnahmen) {
+    
+    this.andereEinnahmen = andereEinnahmen;
+    return this;
+  }
+
+   /**
+   * Mit Dokument wenn &gt; 0
+   * @return andereEinnahmen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAndereEinnahmen() {
+    return andereEinnahmen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAndereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
   }
 
 
@@ -452,32 +572,6 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec verdienstRealisiert(Boolean verdienstRealisiert) {
-    
-    this.verdienstRealisiert = verdienstRealisiert;
-    return this;
-  }
-
-   /**
-   * Get verdienstRealisiert
-   * @return verdienstRealisiert
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERDIENST_REALISIERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getVerdienstRealisiert() {
-    return verdienstRealisiert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERDIENST_REALISIERT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerdienstRealisiert(Boolean verdienstRealisiert) {
-    this.verdienstRealisiert = verdienstRealisiert;
-  }
-
-
   public EinnahmenKostenDtoSpec auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
     
     this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
@@ -501,6 +595,32 @@ public class EinnahmenKostenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAuswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
     this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
+  }
+
+
+  public EinnahmenKostenDtoSpec verpflegungskosten(Integer verpflegungskosten) {
+    
+    this.verpflegungskosten = verpflegungskosten;
+    return this;
+  }
+
+   /**
+   * Get verpflegungskosten
+   * @return verpflegungskosten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getVerpflegungskosten() {
+    return verpflegungskosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVerpflegungskosten(Integer verpflegungskosten) {
+    this.verpflegungskosten = verpflegungskosten;
   }
 
 
@@ -612,9 +732,9 @@ public class EinnahmenKostenDtoSpec {
   }
 
 
-  public EinnahmenKostenDtoSpec steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+  public EinnahmenKostenDtoSpec steuern(Integer steuern) {
     
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+    this.steuern = steuern;
     return this;
   }
 
@@ -622,21 +742,21 @@ public class EinnahmenKostenDtoSpec {
    * transient and calculated readonly field
    * minimum: 0
    * maximum: 2147483647
-   * @return steuernKantonGemeinde
+   * @return steuern
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
+  public Integer getSteuern() {
+    return steuern;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STEUERN_KANTON_GEMEINDE)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
   @Override
@@ -649,7 +769,11 @@ public class EinnahmenKostenDtoSpec {
     }
     EinnahmenKostenDtoSpec einnahmenKosten = (EinnahmenKostenDtoSpec) o;
     return Objects.equals(this.nettoerwerbseinkommen, einnahmenKosten.nettoerwerbseinkommen) &&
-        Objects.equals(this.alimente, einnahmenKosten.alimente) &&
+        Objects.equals(this.arbeitspensumProzent, einnahmenKosten.arbeitspensumProzent) &&
+        Objects.equals(this.unterhaltsbeitraege, einnahmenKosten.unterhaltsbeitraege) &&
+        Objects.equals(this.einnahmenBGSA, einnahmenKosten.einnahmenBGSA) &&
+        Objects.equals(this.taggelderAHVIV, einnahmenKosten.taggelderAHVIV) &&
+        Objects.equals(this.andereEinnahmen, einnahmenKosten.andereEinnahmen) &&
         Objects.equals(this.zulagen, einnahmenKosten.zulagen) &&
         Objects.equals(this.renten, einnahmenKosten.renten) &&
         Objects.equals(this.eoLeistungen, einnahmenKosten.eoLeistungen) &&
@@ -661,18 +785,18 @@ public class EinnahmenKostenDtoSpec {
         Objects.equals(this.wgWohnend, einnahmenKosten.wgWohnend) &&
         Objects.equals(this.wgAnzahlPersonen, einnahmenKosten.wgAnzahlPersonen) &&
         Objects.equals(this.alternativeWohnformWohnend, einnahmenKosten.alternativeWohnformWohnend) &&
-        Objects.equals(this.verdienstRealisiert, einnahmenKosten.verdienstRealisiert) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, einnahmenKosten.auswaertigeMittagessenProWoche) &&
+        Objects.equals(this.verpflegungskosten, einnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.betreuungskostenKinder, einnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.veranlagungsStatus, einnahmenKosten.veranlagungsStatus) &&
         Objects.equals(this.steuerjahr, einnahmenKosten.steuerjahr) &&
         Objects.equals(this.vermoegen, einnahmenKosten.vermoegen) &&
-        Objects.equals(this.steuernKantonGemeinde, einnahmenKosten.steuernKantonGemeinde);
+        Objects.equals(this.steuern, einnahmenKosten.steuern);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuern);
   }
 
   @Override
@@ -680,7 +804,11 @@ public class EinnahmenKostenDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class EinnahmenKostenDtoSpec {\n");
     sb.append("    nettoerwerbseinkommen: ").append(toIndentedString(nettoerwerbseinkommen)).append("\n");
-    sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
+    sb.append("    arbeitspensumProzent: ").append(toIndentedString(arbeitspensumProzent)).append("\n");
+    sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
+    sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
+    sb.append("    taggelderAHVIV: ").append(toIndentedString(taggelderAHVIV)).append("\n");
+    sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("    zulagen: ").append(toIndentedString(zulagen)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");
     sb.append("    eoLeistungen: ").append(toIndentedString(eoLeistungen)).append("\n");
@@ -692,13 +820,13 @@ public class EinnahmenKostenDtoSpec {
     sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
     sb.append("    wgAnzahlPersonen: ").append(toIndentedString(wgAnzahlPersonen)).append("\n");
     sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
-    sb.append("    verdienstRealisiert: ").append(toIndentedString(verdienstRealisiert)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
+    sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    veranlagungsStatus: ").append(toIndentedString(veranlagungsStatus)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("}");
     return sb.toString();
   }

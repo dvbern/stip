@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
 } from '@angular/core';
@@ -50,6 +51,16 @@ export class SharedFeatureGesuchFormElternComponent {
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  hasChangesSig = computed(() => {
+    const { listChanges } = this.viewSig();
+    const changes =
+      listChanges?.newEntriesByIdentifier ?? listChanges?.changesByIdentifier;
+
+    return {
+      VATER: Object.keys(changes?.['VATER'] ?? {}).length > 0,
+      MUTTER: Object.keys(changes?.['MUTTER'] ?? {}).length > 0,
+    };
+  });
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
 
   editedElternteil?: Omit<Partial<ElternUpdate>, 'elternTyp'> &

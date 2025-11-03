@@ -25,6 +25,8 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
@@ -108,7 +110,14 @@ public class BerechnungTestcaseTest {
                 steuerdatenMapper::toEntity
             );
 
+        gesuchFormular.getPersonInAusbildung().setNationalitaet(LandGenerator.initSwitzerland());
         gesuchFormular.setSteuerdaten(steuerdaten.collect(Collectors.toSet()));
+        var ekPartner = new EinnahmenKosten();
+        // ekPartner.setNettoerwerbseinkommen(70000);
+        ekPartner.setNettoerwerbseinkommen(0);
+        // ekPartner.setVermoegen(5000);
+        ekPartner.setVermoegen(0);
+        gesuchFormular.setEinnahmenKostenPartner(ekPartner);
         gesuchTranche.setGesuchFormular(gesuchFormular);
         gesuch.setGesuchTranchen(List.of(gesuchTranche));
 

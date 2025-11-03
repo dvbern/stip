@@ -15,12 +15,17 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
     const form = fb.group(addWohnsitzControls(fb));
     return form;
   };
+  const changes = {
+    wohnsitzAnteilMutter: undefined,
+    wohnsitzAnteilVater: undefined,
+  };
 
   it('should show component with empty values', async () => {
     await render(SharedUiWohnsitzSplitterComponent, {
       imports: [getTranslocoModule(), NoopAnimationsModule],
       componentProperties: {
         controls: initializeControls().controls,
+        changes,
       },
     });
   });
@@ -30,6 +35,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
       imports: [getTranslocoModule(), NoopAnimationsModule],
       componentProperties: {
         controls: initializeControls().controls,
+        changes,
       },
     });
     expect(screen.getByTestId('component-percentage-splitter-a')).toHaveValue(
@@ -51,6 +57,7 @@ describe(SharedUiWohnsitzSplitterComponent.name, () => {
         imports: [getTranslocoModule(), NoopAnimationsModule],
         componentProperties: {
           controls: initializeControls().controls,
+          changes,
         },
       });
       const controlA = screen.getByTestId('component-percentage-splitter-a');

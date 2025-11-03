@@ -84,6 +84,8 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       type: geteilteBerechnungsArt,
     } = getBerechnungByIndex(view.berechnungsresultate, index);
 
+    const monate = differenceInMonths(addDays(gueltigBis, 2), gueltigAb);
+
     return {
       loading: false,
       berechnung: {
@@ -92,10 +94,12 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         gueltigBis: gueltigBis,
         // Add 2 days as date-fns differenceInMonths does have issues with february
         // 2024-07-01 to 2025-03-01 should be 8 months but is 7, with 2025-03-02 it is 8 months
-        monate: differenceInMonths(addDays(gueltigBis, 2), gueltigAb),
+        monate,
         persoenlich: {
           typ: 'persoenlich' as const,
           name: nameGesuchsteller,
+          monate,
+          berechnung,
           total: p.persoenlichesbudgetBerechnet,
           totalEinnahmen: p.einnahmenPersoenlichesBudget,
           totalKosten: p.ausgabenPersoenlichesBudget,
@@ -134,7 +138,8 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
             grundbedarfPersonen: p.grundbedarf,
             wohnkostenPersonen: p.wohnkosten,
             medizinischeGrundversorgungPersonen: p.medizinischeGrundversorgung,
-            kantonsGemeindesteuern: p.steuernKantonGemeinde,
+            kantonsGemeindesteuern: p.steuern,
+            kantonsGemeindesteuernPartner: p.steuernPartner,
             bundessteuern: 0,
             fahrkosten: p.fahrkosten,
             fahrkostenPartner: p.fahrkostenPartner,

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchformular.entity;
+package ch.dvbern.stip.api.common.validation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -26,19 +26,20 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EK_PARTNER_NEGLECTED_FIELDS_MUST_BE_NULL_MESSAGE;
 
-@Target({ ElementType.TYPE, ElementType.PARAMETER })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EinnahmenKostenAlimenteRequiredConstraintValidator.class)
+@Constraint(validatedBy = EinnahmenKostenPartnerNeglectedFieldsNullConstraintValidator.class)
 @Documented
-public @interface EinnahmenKostenAlimenteRequiredConstraint {
-
-    String message() default VALIDATION_EINNAHMEN_KOSTEN_ALIMENTE_REQUIRED_MESSAGE;
+public @interface EinnahmenKostenPartnerNeglectedFieldsNullConstraint {
+    String message() default VALIDATION_EK_PARTNER_NEGLECTED_FIELDS_MUST_BE_NULL_MESSAGE;
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
     String property() default "";
+
+    boolean optional() default false;
 }
