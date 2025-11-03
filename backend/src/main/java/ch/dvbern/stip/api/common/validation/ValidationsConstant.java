@@ -103,6 +103,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.lebenslaufitem.art.required.null.message}";
     public static final String VALIDATION_WG_ANZAHL_PERSONEN_INVALID_MESSAGE =
         "{jakarta.validation.constraints.einnahmenkosten.wgwohnend.anzahl.personen.invalid.message}";
+    public static final String VALIDATION_EK_PARTNER_NEGLECTED_FIELDS_MUST_BE_NULL_MESSAGE =
+        "{jakarta.validation.constraints.einnahmenkosten.neglected.fields.must.be.null.message}";
     public static final String VALIDATION_ALTERNATIVE_WOHNFORM_INVALID =
         "{jakarta.validation.constraints.einnahmenkosten.alternativewohnform.invalid.message}";
     public static final String VALIDATION_AHV_MESSAGE = "{jakarta.validation.constraints.ahv.message}";

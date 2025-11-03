@@ -23,6 +23,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.validation.EinnahmenKostenPartnerNeglectedFieldsNullConstraint;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -124,6 +125,12 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten",
     einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenPartnerNeglectedFieldsNullConstraint(
+    groups = {
+        GesuchEinreichenValidationGroup.class,
+        EinnahmenKostenPageValidation.class
+    }, property = "einnahmenKostenPartner"
 )
 @EinnahmenKostenZulagenRequiredConstraint(
     groups = {
