@@ -326,39 +326,41 @@
 
         @let ausbildungsStufe = formStateSig().ausbiludungsStufe;
 
-        <div class="row g-4">
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
-            <mat-label>{{ t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`) }}</mat-label>
-            <input
-              [formControl]="form.controls.ausbildungskosten"
-              data-testid="form-einnahmen-kosten-ausbildungskosten"
-              matInput
-              type="text"
-              [maskito]="maskitoNumber"
-            />
-            <mat-hint *dvZuvorHint="formChanges.ausbildungskosten"></mat-hint>
-            @if (ausbildungsStufe && istAusbildungskostenMoreThanLimitSig()) {
-              <mat-hint class="mat-caution">
-                {{
-                  t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, {
-                    max: formStateSig().ausbildungsKostenLimit,
-                  })
-                }}
-              </mat-hint>
-            } @else {
-              <mat-hint>
-                {{
-                  t(`shared.form.einnahmenkosten.ausbildungskosten.info.${ausbildungsStufe}`, {
-                    max: formStateSig().ausbildungsKostenLimit,
-                  })
-                }}</mat-hint
-              >
-            }
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ t('shared.form.error.required') }}
-            </mat-error>
-          </mat-form-field>
-        </div>
+        @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskosten)) {
+          <div class="row g-4">
+            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+              <mat-label>{{ t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`) }}</mat-label>
+              <input
+                [formControl]="form.controls.ausbildungskosten"
+                data-testid="form-einnahmen-kosten-ausbildungskosten"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+              <mat-hint *dvZuvorHint="formChanges.ausbildungskosten"></mat-hint>
+              @if (ausbildungsStufe && istAusbildungskostenMoreThanLimitSig()) {
+                <mat-hint class="mat-caution">
+                  {{
+                    t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, {
+                      max: formStateSig().ausbildungsKostenLimit,
+                    })
+                  }}
+                </mat-hint>
+              } @else {
+                <mat-hint>
+                  {{
+                    t(`shared.form.einnahmenkosten.ausbildungskosten.info.${ausbildungsStufe}`, {
+                      max: formStateSig().ausbildungsKostenLimit,
+                    })
+                  }}</mat-hint
+                >
+              }
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        }
 
         @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
           <div class="row g-4">

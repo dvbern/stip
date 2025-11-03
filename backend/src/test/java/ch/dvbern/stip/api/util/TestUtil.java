@@ -810,8 +810,6 @@ public class TestUtil {
             new EinnahmenKosten()
                 .setNettoerwerbseinkommen(12916)
                 .setErgaenzungsleistungen(1200)
-                .setWohnkosten(6000)
-                .setAusbildungskosten(450)
                 .setFahrkosten(523)
                 .setZulagen(0)
                 .setBetreuungskostenKinder(0)

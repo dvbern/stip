@@ -190,7 +190,6 @@ class DocumentsRequiredConstraintValidatorTest {
             DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
             DokumentTyp.EK_PARTNER_LOHNABRECHNUNG,
             DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER,
-            DokumentTyp.EK_PARTNER_MIETVERTRAG,
             DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT,
             DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
             DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN,
@@ -207,7 +206,6 @@ class DocumentsRequiredConstraintValidatorTest {
         // setup some mandatory doctypes for ekpartner
         formular.getEinnahmenKostenPartner().setNettoerwerbseinkommen(5);
         formular.getEinnahmenKostenPartner().setBetreuungskostenKinder(5);
-        formular.getEinnahmenKostenPartner().setWohnkosten(5);
         formular.getEinnahmenKostenPartner().setFahrkosten(5);
         formular.getEinnahmenKostenPartner().setEoLeistungen(5);
         formular.getEinnahmenKostenPartner().setRenten(5);

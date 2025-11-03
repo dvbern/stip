@@ -91,20 +91,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
       ).toBeInTheDocument();
     });
-
-    it('should display warning if familiensituation is undefined', async () => {
-      const { queryByTestId, detectChanges } = await setup({
-        personInAusbildung: createEmptyPersonInAusbildung(),
-        ausbildung: createEmptyAusbildung(),
-        familiensituation: undefined,
-      });
-
-      detectChanges();
-
-      expect(
-        queryByTestId('gesuch-form-einnahmenkosten-data-incomplete-warning'),
-      ).toBeInTheDocument();
-    });
   });
 
   describe('visibility rules for field "auswaertigeMittagessenProWoche"', () => {
