@@ -32,7 +32,7 @@ public class EinnahmeKostenPartnerRequiredDocumentsProducer implements RequiredD
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
         return ImmutablePair.of(
-            "einnahmenKosten",
+            "einnahmenKostenPartner",
             EinnahmeKostenRequiredDocumentsProducerUtil.getRequiredDocuments(
                 formular,
                 EinnahmenKostenType.PARTNER
