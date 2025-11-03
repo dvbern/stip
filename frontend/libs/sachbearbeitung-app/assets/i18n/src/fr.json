@@ -647,8 +647,11 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten": "Coûts de formation de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten": "Frais de déplacement de l'apprenti(e)",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.total": "Montant total du budget",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch": "Montant du bourse",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate": "Calcul pour {{ monate }} mois",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.positiverBetrag": "Montant positifs ne sont pas pris en compte dans le calcul de la bourse.",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.anzahlPersonen": "Partage par tête",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Budget imputable",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.totalVorTeilung": "Montant de la bourse",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.geteilteBerechnung": "Montant du budget imputable ({{ berechnungsanteilKinder }}%)",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
 

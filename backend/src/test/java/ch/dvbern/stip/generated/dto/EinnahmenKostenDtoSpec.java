@@ -796,11 +796,7 @@ public class EinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-<<<<<<< HEAD
     return Objects.hash(nettoerwerbseinkommen, arbeitspensumProzent, unterhaltsbeitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, auswaertigeMittagessenProWoche, verpflegungskosten, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuern);
-=======
-    return Objects.hash(nettoerwerbseinkommen, alimente, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, ausbildungskosten, fahrkosten, wohnkosten, wgWohnend, wgAnzahlPersonen, alternativeWohnformWohnend, verdienstRealisiert, auswaertigeMittagessenProWoche, betreuungskostenKinder, veranlagungsStatus, steuerjahr, vermoegen, steuernKantonGemeinde);
->>>>>>> main
   }
 
   @Override

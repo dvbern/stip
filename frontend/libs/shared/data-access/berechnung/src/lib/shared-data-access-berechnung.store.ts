@@ -32,8 +32,25 @@ export class BerechnungStore extends signalStore(
 ) {
   private gesuchService = inject(GesuchService);
 
+  /**
+   * Transforms the raw berechnung data into a view model grouped by tranche ID.
+   *
+   * This computed signal:
+   * - Groups `tranchenBerechnungsresultate` by `gesuchTrancheId`
+   * - Calculates the total stipend amount (`totalBetragStipendium`)
+   * - Handles split calculations (type 'a' and 'b') when a tranche has multiple results
+   * - Includes reduced calculation details (`verminderteBerechnung`) if applicable
+   *
+   * @returns An object containing:
+   * - `loading`: Boolean indicating if the data is being fetched
+   * - `year`: The calculation year
+   * - `totalBetragStipendium`: Total stipend amount calculated
+   * - `berechnungsresultate`: Array of tranche calculation results, grouped and mapped
+   * - `verminderteBerechnung`: Optional reduced calculation details (months, reduction amount, reduced calculation)
+   */
   berechnungZusammenfassungViewSig = computed(() => {
     const berechnungRd = this.berechnung();
+
     const value: {
       year: number;
       totalBetragStipendium: number;
