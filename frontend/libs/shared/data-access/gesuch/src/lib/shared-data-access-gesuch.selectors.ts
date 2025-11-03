@@ -15,7 +15,7 @@ import {
   EINNAHMEN_KOSTEN_PARTNER,
   ELTERN,
   ELTERN_STEUERERKLAERUNG_STEPS,
-  GESCHWISTER,
+  LEBENSLAUF,
   PARTNER,
   RETURN_TO_HOME,
 } from '@dv/shared/model/gesuch-form';
@@ -163,7 +163,7 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
       ...(hasPartner(state.gesuchFormular)
         ? [
             {
-              after: GESCHWISTER,
+              after: LEBENSLAUF,
               steps: [PARTNER],
             },
           ]
