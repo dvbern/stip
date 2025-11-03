@@ -66,8 +66,20 @@
   }
 </div>
 
+@let dokumente = dokumentsStore.dokuments();
+<dv-shared-ui-step-form-buttons *dvIfSachbearbeiter>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="handleContinue()"
+    data-testid="button-continue"
+    [disabled]="dokumente | rdIsPending"
+  >
+    {{ 'shared.form.gonext' | transloco }}
+  </button>
+</dv-shared-ui-step-form-buttons>
+
 <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
-  @let dokumente = dokumentsStore.dokuments();
   @if (!gesuch.isFehlendeDokumente) {
     <button
       type="button"

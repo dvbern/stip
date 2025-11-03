@@ -204,14 +204,14 @@ export const BaseFormSteps = {
   AUSBILDUNG,
   PERSON,
   LEBENSLAUF,
+  KINDER,
+  EINNAHMEN_KOSTEN,
   FAMILIENSITUATION,
   ELTERN,
   GESCHWISTER,
-  KINDER,
-  AUSZAHLUNG,
-  EINNAHMEN_KOSTEN,
-  DARLEHEN,
   DOKUMENTE,
+  AUSZAHLUNG,
+  DARLEHEN,
 };
 export type BaseStepKeys = keyof typeof BaseFormSteps;
 
