@@ -28,3 +28,8 @@
     3. Run `deploy:uat`
 4. Test a random feature on `https://uat-stip.kibon.ch/`
 5. Create an _Änderung_ on `https://uat-stip.kibon.ch/` and _Verfügung_ for an _Änderung_
+
+## Troubleshooting
+
+If there are any problems ocurring during the deployment, check the following Documentation(s):
+* [`Migration / Liquibase / DB Lock Problems`](backend/docs/troubleshooting.md#Liquibase)
