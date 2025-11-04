@@ -265,6 +265,10 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
+    public boolean isFirstVerfuegung() {
+        return verfuegungs.size() < 2;
+    }
+
     public boolean isErstgesuch() {
         // TODO KSTIP-1777: Implement isErstgesuch logic
         return true;

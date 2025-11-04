@@ -79,7 +79,7 @@ export interface GesuchServiceChangeGesuchStatusToVerfuegtRequestParams {
     gesuchTrancheId: string;
 }
 
-export interface GesuchServiceChangeGesuchStatusToVersandbereitRequestParams {
+export interface GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams {
     /** Die ID von der GesuchTranche */
     gesuchTrancheId: string;
 }
@@ -854,13 +854,13 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVersandbereit$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVerfuegungDruckbereit$.');
         }
 
         let localVarHeaders = this.defaultHeaders;

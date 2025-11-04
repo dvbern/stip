@@ -681,7 +681,6 @@ public class GesuchService {
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);
-        // todo kstip-2663: move setting of verfuegt flag to a statuschangehandler again
         gesuch.setVerfuegt(true);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
@@ -693,7 +692,7 @@ public class GesuchService {
             return;
         }
 
-        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(gesuch)) {
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(gesuch)) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(

@@ -172,17 +172,6 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
-    public GesuchDto changeGesuchStatusToVersandbereit(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
-        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchAuthorizer.sbCanChangeGesuchStatusToVersandbereit(gesuchId);
-
-        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
-    }
-
-    @Override
     @RolesAllowed(FREIGABESTELLE_GESUCH_UPDATE)
     public GesuchDto changeGesuchStatusToVerfuegt(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
@@ -191,6 +180,17 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public GesuchDto changeGesuchStatusToVerfuegungDruckbereit(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToVerfuegungDruckbereit(gesuchId);
+
+        gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
     }
 
