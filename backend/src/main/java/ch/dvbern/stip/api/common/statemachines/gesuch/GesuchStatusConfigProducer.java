@@ -280,7 +280,7 @@ public class GesuchStatusConfigProducer {
                 continue;
             }
 
-            state.addEntryAction(this::logTransition);
+            state.insertEntryAction(this::logTransition);
         }
 
         return config;
