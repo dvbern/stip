@@ -221,6 +221,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
 
         final var einkommenPartner = antragssteller.getEinkommenPartner();
+        final var alimentePartner = antragssteller.getAlimentePartner() * 12;
 
         final var anrechenbaresVermoegen = roundHalfUp(
             BigDecimal.valueOf(antragssteller.getVermoegen())
@@ -228,9 +229,10 @@ public class PersoenlichesBudgetCalculatorV1 {
                 .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
         );
 
-        final var alimente = antragssteller.getAlimente();
+        final var alimente = antragssteller.getAlimente() * 12;
         final var rente = antragssteller.getRente();
-        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen() * 12;
+        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraege() * 12;
         final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
         final var leistungenEO = antragssteller.getLeistungenEO();
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
@@ -241,9 +243,10 @@ public class PersoenlichesBudgetCalculatorV1 {
             einkommen
             + einkommenPartner
             + anrechenbaresVermoegen
-            + alimente
+            + alimente + alimentePartner
             + rente
             + kinderAusbildungszulagen
+            + kinderUnterhaltsbeitraege
             + ergaenzungsleistungen
             + leistungenEO
             + gemeindeInstitutionen
@@ -258,6 +261,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setAlimente(antragssteller.getAlimente());
         result.setRente(antragssteller.getRente());
         result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen());
+        result.setKinderUnterhaltsbeitraege(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
         result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
         result.setLeistungenEO(antragssteller.getLeistungenEO());
         result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());

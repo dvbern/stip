@@ -240,7 +240,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             case 4 -> gesuchsperiode.getWohnkostenFam4pers();
             default -> gesuchsperiode.getWohnkostenFam5pluspers();
         };
-        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
+        return Integer.min(eingegebeneWohnkosten * 12, maxWohnkosten);
     }
 
     public static int getMedizinischeGrundversorgung(

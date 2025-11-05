@@ -7461,6 +7461,7 @@ components:
         - leistungenEO
         - rente
         - kinderAusbildungszulagen
+        - kinderUnterhaltsbeitraege
         - ergaenzungsleistungen
         - gemeindeInstitutionen
         - steuerbaresVermoegen
@@ -7500,6 +7501,8 @@ components:
         rente:
           type: integer
         kinderAusbildungszulagen:
+          type: integer
+        kinderUnterhaltsbeitraege:
           type: integer
         ergaenzungsleistungen:
           type: integer

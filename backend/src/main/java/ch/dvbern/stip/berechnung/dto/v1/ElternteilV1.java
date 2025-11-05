@@ -233,7 +233,7 @@ public class ElternteilV1 {
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
-        builder.alimente(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0));
+        builder.alimente(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0) * 12);
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
         builder.einzahlungSaeule3a(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0));
         builder.steuerbaresVermoegen(Objects.requireNonNullElse(steuerdaten.getVermoegen(), 0));

@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_LEISTUNGEN_E_O,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_RENTE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GEMEINDE_INSTITUTIONEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_STEUERBARES_VERMOEGEN,
@@ -88,6 +89,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN = "kinderAusbildungszulagen";
   private Integer kinderAusbildungszulagen;
+
+  public static final String JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE = "kinderUnterhaltsbeitraege";
+  private Integer kinderUnterhaltsbeitraege;
 
   public static final String JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN = "ergaenzungsleistungen";
   private Integer ergaenzungsleistungen;
@@ -389,6 +393,32 @@ public class PersoenlichesBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setKinderAusbildungszulagen(Integer kinderAusbildungszulagen) {
     this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderUnterhaltsbeitraege(Integer kinderUnterhaltsbeitraege) {
+    
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
+    return this;
+  }
+
+   /**
+   * Get kinderUnterhaltsbeitraege
+   * @return kinderUnterhaltsbeitraege
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getKinderUnterhaltsbeitraege() {
+    return kinderUnterhaltsbeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinderUnterhaltsbeitraege(Integer kinderUnterhaltsbeitraege) {
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
   }
 
 
@@ -981,6 +1011,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.leistungenEO, persoenlichesBudgetresultat.leistungenEO) &&
         Objects.equals(this.rente, persoenlichesBudgetresultat.rente) &&
         Objects.equals(this.kinderAusbildungszulagen, persoenlichesBudgetresultat.kinderAusbildungszulagen) &&
+        Objects.equals(this.kinderUnterhaltsbeitraege, persoenlichesBudgetresultat.kinderUnterhaltsbeitraege) &&
         Objects.equals(this.ergaenzungsleistungen, persoenlichesBudgetresultat.ergaenzungsleistungen) &&
         Objects.equals(this.gemeindeInstitutionen, persoenlichesBudgetresultat.gemeindeInstitutionen) &&
         Objects.equals(this.steuerbaresVermoegen, persoenlichesBudgetresultat.steuerbaresVermoegen) &&
@@ -1007,7 +1038,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
+    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, kinderUnterhaltsbeitraege, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -1023,6 +1054,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");
     sb.append("    rente: ").append(toIndentedString(rente)).append("\n");
     sb.append("    kinderAusbildungszulagen: ").append(toIndentedString(kinderAusbildungszulagen)).append("\n");
+    sb.append("    kinderUnterhaltsbeitraege: ").append(toIndentedString(kinderUnterhaltsbeitraege)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    gemeindeInstitutionen: ").append(toIndentedString(gemeindeInstitutionen)).append("\n");
     sb.append("    steuerbaresVermoegen: ").append(toIndentedString(steuerbaresVermoegen)).append("\n");
