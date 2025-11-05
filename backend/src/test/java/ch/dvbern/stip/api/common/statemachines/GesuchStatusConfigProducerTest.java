@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -48,6 +49,7 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(GesuchFehlendeDokumenteNichtEingereichtHandler.class),
             Mockito.mock(GesuchZurueckweisenHandler.class),
             Mockito.mock(KomplettEingereichtHandler.class),
+            Mockito.mock(DatenschutzbriefDruckbereitHandler.class),
             Mockito.mock(FehlendeDokumenteEinreichenHandler.class),
             Mockito.mock(FehlendeDokumenteHandler.class),
             Mockito.mock(VerfuegungDruckbereitHandler.class),
