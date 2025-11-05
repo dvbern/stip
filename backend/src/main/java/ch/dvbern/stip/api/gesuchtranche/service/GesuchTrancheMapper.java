@@ -21,8 +21,10 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
@@ -52,6 +54,9 @@ public abstract class GesuchTrancheMapper {
 
     @Inject
     ElternMapper elternMapper;
+
+    @Inject
+    SteuererklaerungMapper steuererklaerungMapper;
 
     @ToDtoDefaultMapping
     public abstract GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
@@ -117,7 +122,6 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    // TODO KSTIP-2784: Move this into GesuchFormularMapper?
     @Named("afterMappingWithoutVersteckteEltern")
     @AfterMapping
     protected void afterMappingWithoutVersteckteEltern(
@@ -125,12 +129,20 @@ public abstract class GesuchTrancheMapper {
         @Context GesuchTranche context
     ) {
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
-        if (eltern == null) {
-            return;
+        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
+        if (eltern != null) {
+            eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
         }
 
-        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
-        eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
+        final var steuererklaerungen = gesuchTrancheDto.getGesuchFormular().getSteuererklaerung();
+        if (steuererklaerungen != null) {
+            steuererklaerungen.removeIf(steuererklaerung -> switch (steuererklaerung.getSteuerdatenTyp()) {
+                case MUTTER -> versteckteEltern.contains(ElternTyp.MUTTER);
+                case VATER -> versteckteEltern.contains(ElternTyp.VATER);
+                case FAMILIE -> !versteckteEltern.isEmpty();
+            }
+            );
+        }
     }
 
     @Named("beforeMappingOverrideIncomingVersteckteEltern")
@@ -144,14 +156,16 @@ public abstract class GesuchTrancheMapper {
         }
 
         final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
-        final var replacements = gesuchTranche.getGesuchFormular()
+
+        // Load and find Eltern to replace the incoming one(s) (i.e. ignoring incoming changes)
+        final var replacementEltern = gesuchTranche.getGesuchFormular()
             .getElterns()
             .stream()
             .filter(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()))
             .map(elternMapper::toUpdateDto)
             .toList();
 
-        for (final var replacement : replacements) {
+        for (final var replacement : replacementEltern) {
             final var newFormular = newTranche.getGesuchFormular();
             newFormular.getElterns()
                 .removeIf(eltern -> eltern.getElternTyp() == replacement.getElternTyp());
@@ -159,6 +173,29 @@ public abstract class GesuchTrancheMapper {
             newFormular.getElterns().add(replacement);
         }
 
-        newTranche.getGesuchFormular().getElterns().addAll(replacements);
+        // Load and find Steuererklaerungen to replace the incoming one(s)
+        final var replacementSteuererklaerungen = gesuchTranche.getGesuchFormular()
+            .getSteuererklaerung()
+            .stream()
+            .filter(steuererklaerung -> switch (steuererklaerung.getSteuerdatenTyp()) {
+                case null -> false;
+                case MUTTER -> versteckteEltern.contains(ElternTyp.MUTTER);
+                case VATER -> versteckteEltern.contains(ElternTyp.VATER);
+                case FAMILIE -> versteckteEltern.isEmpty();
+            }
+            )
+            .map(steuererklaerungMapper::toUpdateDto)
+            .toList();
+
+        for (final var replacementSteuererklaerung : replacementSteuererklaerungen) {
+            final var newFormular = newTranche.getGesuchFormular();
+            newFormular.getSteuererklaerung()
+                .removeIf(
+                    steuererklaerung -> steuererklaerung.getSteuerdatenTyp() == replacementSteuererklaerung
+                        .getSteuerdatenTyp()
+                );
+
+            newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
+        }
     }
 }

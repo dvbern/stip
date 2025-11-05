@@ -7133,8 +7133,6 @@ components:
         - steuererklaerungInBern
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/UUID'
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:

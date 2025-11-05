@@ -494,7 +494,7 @@ public class GesuchTrancheService {
         gesuchFormularUpdateDto.setSteuererklaerung(new ArrayList<>(List.of()));
         for (final var steuererklaerung : lastFreigegebenFormular.getSteuererklaerung()) {
             gesuchFormularUpdateDto.getSteuererklaerung()
-                .add(steuererklaerungMapper.toUpdateDto(steuererklaerung).id(null));
+                .add(steuererklaerungMapper.toUpdateDto(steuererklaerung));
         }
 
         gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung, false);

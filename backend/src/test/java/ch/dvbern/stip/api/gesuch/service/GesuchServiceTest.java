@@ -2058,7 +2058,6 @@ class GesuchServiceTest {
 
         if (trancheUpdate.getGesuchFormular().getSteuererklaerung() != null) {
             trancheUpdate.getGesuchFormular().getSteuererklaerung().forEach(item -> {
-                item.setId(UUID.randomUUID());
                 gesuchFormular.getSteuererklaerung()
                     .add(steuererklaerungMapper.partialUpdate(item, new Steuererklaerung()));
             });
