@@ -42,6 +42,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -264,8 +265,13 @@ public class GesuchTrancheService {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
         removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         return gesuchTranche.getGesuchDokuments()
             .stream()
+            .filter(
+                gesuchDokument -> !IsDokumentOfVersteckterElternteilUtil
+                    .isVerstecktesDokument(versteckteEltern, gesuchDokument)
+            )
             .map(gesuchDokumentMapper::toDto)
             .toList();
     }
