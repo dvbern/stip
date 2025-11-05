@@ -221,7 +221,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
 
         final var einkommenPartner = antragssteller.getEinkommenPartner();
-        final var alimentePartner = antragssteller.getAlimentePartner() * 12;
+        final var alimentePartner = antragssteller.getAlimentePartner();
 
         final var anrechenbaresVermoegen = roundHalfUp(
             BigDecimal.valueOf(antragssteller.getVermoegen())
@@ -229,10 +229,10 @@ public class PersoenlichesBudgetCalculatorV1 {
                 .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
         );
 
-        final var alimente = antragssteller.getAlimente() * 12;
+        final var alimente = antragssteller.getAlimente();
         final var rente = antragssteller.getRente();
-        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen() * 12;
-        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraege() * 12;
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
+        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraege();
         final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
         final var leistungenEO = antragssteller.getLeistungenEO();
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
