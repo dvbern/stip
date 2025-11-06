@@ -222,6 +222,13 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         final var einkommenPartner = antragssteller.getEinkommenPartner();
         final var alimentePartner = antragssteller.getAlimentePartner();
+        final var rentePartner = antragssteller.getRentePartner();
+        final var ergaenzungsLeistungenPartner = antragssteller.getErgaenzungsleistungenPartner();
+        final var leistungenEOPartner = antragssteller.getLeistungenEOPartner();
+        final var zulagenPartner = antragssteller.getZulagenPartner();
+        final var andereEinnahmenPartner = antragssteller.getAndereEinnahmenPartner();
+        final var taggeldPartner = antragssteller.getTaggeldPartner();
+        final var einnahmenBGSAPartner = antragssteller.getEinnahmenBGSAPartner();
 
         final var anrechenbaresVermoegen = roundHalfUp(
             BigDecimal.valueOf(antragssteller.getVermoegen())
@@ -238,17 +245,25 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
         final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
         final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
+        final var zulagen = antragssteller.getZulagen();
+        final var andereEinnahmen = antragssteller.getAndereEinnahmen();
+        final var taggeld = antragssteller.getTaggeld();
+        final var einnahmenBGSA = antragssteller.getEinnahmenBGSA();
 
         final var einnahmen =
             einkommen
             + einkommenPartner
             + anrechenbaresVermoegen
             + alimente + alimentePartner
-            + rente
+            + rente + rentePartner
             + kinderAusbildungszulagen
             + kinderUnterhaltsbeitraege
-            + ergaenzungsleistungen
-            + leistungenEO
+            + ergaenzungsleistungen + ergaenzungsLeistungenPartner
+            + leistungenEO + leistungenEOPartner
+            + zulagen + zulagenPartner
+            + andereEinnahmen + andereEinnahmenPartner
+            + taggeld + taggeldPartner
+            + einnahmenBGSA + einnahmenBGSAPartner
             + gemeindeInstitutionen
             + elternbeitrag1
             + elternbeitrag2;

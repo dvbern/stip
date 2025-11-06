@@ -57,10 +57,13 @@ public class AntragsstellerV1 {
     int alimente;
     int alimentePartner;
     int rente;
+    int rentePartner;
     int kinderAusbildungszulagen;
     int kinderErhalteneUnterhaltsbeitraege;
     int ergaenzungsleistungen;
+    int ergaenzungsleistungenPartner;
     int leistungenEO;
+    int leistungenEOPartner;
     int gemeindeInstitutionen;
     int alter;
     int grundbedarf;
@@ -80,6 +83,14 @@ public class AntragsstellerV1 {
     boolean halbierungElternbeitrag;
     int anzahlPersonenImHaushalt;
     boolean verheiratetKonkubinat;
+    int taggeld;
+    int taggeldPartner;
+    int andereEinnahmen;
+    int andereEinnahmenPartner;
+    int zulagen;
+    int zulagenPartner;
+    int einnahmenBGSA;
+    int einnahmenBGSAPartner;
 
     public static AntragsstellerV1 buildFromDependants(
         final GesuchFormular gesuchFormular,
@@ -103,7 +114,8 @@ public class AntragsstellerV1 {
             .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
-            .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
+            .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0))
+            .einnahmenBGSA(Objects.requireNonNullElse(einnahmenKosten.getEinnahmenBGSA(), 0));
 
         int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         builder.alter(alter);
@@ -214,6 +226,9 @@ public class AntragsstellerV1 {
 
         if (partner != null) {
             final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
+            builder.zulagenPartner(Objects.requireNonNullElse(ekPartner.getZulagen(), 0));
+            builder.andereEinnahmenPartner(Objects.requireNonNullElse(ekPartner.getAndereEinnahmen(), 0));
+            builder.taggeldPartner(Objects.requireNonNullElse(ekPartner.getTaggelderAHVIV(), 0));
             builder.einkommenPartner(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0));
             builder.alimentePartner(toJahresWert(Objects.requireNonNullElse(ekPartner.getUnterhaltsbeitraege(), 0)));
             builder.steuernPartner(
@@ -225,6 +240,10 @@ public class AntragsstellerV1 {
             );
             builder.fahrkostenPartner(Objects.requireNonNullElse(ekPartner.getFahrkosten(), 0));
             builder.verpflegungPartner(Objects.requireNonNullElse(ekPartner.getVerpflegungskosten(), 0));
+            builder.rentePartner(Objects.requireNonNullElse(ekPartner.getRenten(), 0));
+            builder.ergaenzungsleistungenPartner(Objects.requireNonNullElse(ekPartner.getErgaenzungsleistungen(), 0));
+            builder.leistungenEOPartner(Objects.requireNonNullElse(ekPartner.getEoLeistungen(), 0));
+            builder.einnahmenBGSAPartner(Objects.requireNonNullElse(ekPartner.getEinnahmenBGSA(), 0));
         }
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)
