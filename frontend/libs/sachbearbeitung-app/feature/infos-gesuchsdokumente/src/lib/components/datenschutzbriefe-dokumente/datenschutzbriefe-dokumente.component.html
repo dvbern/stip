@@ -1,0 +1,92 @@
+<div class="tw:dv-table tw:my-3">
+  <div class="tw:relative tw:overflow-auto">
+    @if (viewSig().loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+    <table
+      mat-table
+      [dataSource]="paginatedDokumenteSig()"
+      data-testid="datenschutzbriefe-dokumente-table"
+      class="tw:w-full tw:!table-fixed"
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.description' | transloco
+        }}
+      </caption>
+
+      <!-- Datum -->
+      <ng-container matColumnDef="datum">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.table.datum' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.datum | date: 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <!-- Kategorie -->
+      <ng-container matColumnDef="kategorie">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.kategorie' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.kategorie }}
+        </td>
+      </ng-container>
+
+      <!-- Sachbearbeiter -->
+      <ng-container matColumnDef="sachbearbeiter">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.sachbearbeiter' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.sachbearbeiter }}
+        </td>
+      </ng-container>
+
+      <!-- Person -->
+      <ng-container matColumnDef="person">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.person' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.person }}
+        </td>
+      </ng-container>
+
+      <!-- Link zum Massendruck -->
+      <ng-container matColumnDef="massendruck">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument.massendruckJobId) {
+            <a [routerLink]="['/massendruck', 'druckauftrag', dokument.massendruckJobId]" class="btn btn-link tw:!p-0">
+              {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link' | transloco }}
+            </a>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+          {{ 'shared.table.noData' | transloco }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    [pageSize]="pageSizeSig()"
+    [pageIndex]="pageSig()"
+    [length]="viewSig().totalEntries"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
+</div>
