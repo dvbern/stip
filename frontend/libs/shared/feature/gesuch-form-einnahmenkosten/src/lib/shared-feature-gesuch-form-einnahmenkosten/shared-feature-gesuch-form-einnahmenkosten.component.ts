@@ -365,11 +365,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     'EK_PARTNER_BELEG_OV_ABONNEMENT',
   );
 
-  wohnkostenDocumentSig = this.createFieldDocumentSig(
-    'wohnkosten',
-    'EK_MIETVERTRAG',
-    'EK_PARTNER_MIETVERTRAG',
-  );
+  // Since Partner has no Wohnkosten, and the field is hidden, this works
+  wohnkostenChangeSig = toSignal(this.form.controls.wohnkosten.valueChanges);
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const value = fromFormatedNumber(
+      (this.wohnkostenChangeSig() ?? '0') as string,
+    );
+    return value > 0 ? DokumentTyp['EK_MIETVERTRAG'] : null;
+  });
 
   wgWohnendSig = toSignal(this.form.controls.wgWohnend.valueChanges);
 
