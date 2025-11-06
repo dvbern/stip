@@ -79,20 +79,9 @@ public class DatenschutzbriefPdfService {
         final UUID gesuchtrancheId
     ) {
         final var out = new ByteArrayOutputStream();
-        final FontProgram font;
-        final FontProgram fontBold;
 
-        try {
-            final byte[] fontBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_PATH));
-            final byte[] fontBoldBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_BOLD_PATH));
-            font = FontProgramFactory.createFont(fontBytes);
-            fontBold = FontProgramFactory.createFont(fontBoldBytes);
-        } catch (IOException e) {
-            throw new InternalServerErrorException(e);
-        }
-
-        pdfFont = PdfFontFactory.createFont(font);
-        pdfFontBold = PdfFontFactory.createFont(fontBold);
+        pdfFont = PdfUtils.createFont();
+        pdfFontBold = PdfUtils.createFontBold();
 
         ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 

@@ -40,7 +40,7 @@ import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
+import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import io.quarkus.test.InjectMock;

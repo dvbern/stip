@@ -105,7 +105,7 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
+import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;

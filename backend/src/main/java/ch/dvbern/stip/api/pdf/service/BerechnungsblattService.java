@@ -15,12 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.service;
+package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Map;
@@ -35,14 +34,12 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -55,8 +52,14 @@ import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.NUMBER_FORMAT;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -64,16 +67,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BerechnungsblattService {
     private final BerechnungService berechnungService;
     private final UnterschriftenblattService unterschriftenblattService;
-
-    private static final String FONT = StandardFonts.HELVETICA;
-    private static final String FONT_BOLD = StandardFonts.HELVETICA_BOLD;
-
-    private static final int FONT_SIZE = 10;
-    private static final int FONT_SIZE_SMALL = 8;
-
-    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
-
-    private static final PageSize PAGE_SIZE = PageSize.A4;
 
     private static final UnitValue[] TABLE_WIDTH_PERCENTAGES = UnitValue.createPercentArray(new float[] { 85, 15 });
 
@@ -93,20 +86,19 @@ public class BerechnungsblattService {
     public void addBerechnungsblattToDocument(
         final Gesuch gesuch,
         final Locale locale,
-        Document document,
+        final Document document,
         final boolean addAllBerechnungsblaetter
-    )
-    throws IOException {
-        pdfFont = PdfFontFactory.createFont(FONT);
-        pdfFontBold = PdfFontFactory.createFont(FONT_BOLD);
+    ) {
+        pdfFont = PdfUtils.createFont();
+        pdfFontBold = PdfUtils.createFontBold();
 
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(
                 AppLanguages.fromLocale(locale)
             );
-        PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
 
-        var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        final var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
         boolean firstTranche = true;
         for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
@@ -130,7 +122,7 @@ public class BerechnungsblattService {
             );
             document.add(getNewLineParagraph());
 
-            Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
+            final Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
                 tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
                 tranchenBerechnungsResultat.getBerechnungsStammdaten(),
                 translator
@@ -139,7 +131,7 @@ public class BerechnungsblattService {
             document.add(persoenlichesBudgetTableEinnahmen);
             document.add(getNewLineParagraph());
 
-            Table persoenlichesBudgetTableKosten =
+            final Table persoenlichesBudgetTableKosten =
                 getPersoenlichesBudgetTableKosten(
                     tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
                     translator
@@ -148,7 +140,7 @@ public class BerechnungsblattService {
             document.add(persoenlichesBudgetTableKosten);
             document.add(getNewLineParagraph());
 
-            var persoenlichTotalCell = new Cell();
+            final var persoenlichTotalCell = new Cell();
             persoenlichTotalCell.add(
                 getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
             );
@@ -167,7 +159,7 @@ public class BerechnungsblattService {
                 );
             }
 
-            Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+            final Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
             persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell).setBackgroundColor(ColorConstants.LIGHT_GRAY);
 
             persoenlichesBudgetTableTotal.addCell(
@@ -186,8 +178,8 @@ public class BerechnungsblattService {
                 unterschriftenblattService.getExistingUnterschriftenblattTypsForGesuch(gesuch.getId());
 
             for (var fammilienBudgetResultat : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
-                var steuerdatentyp = fammilienBudgetResultat.getFamilienBudgetTyp();
-                var requiredUnterschriftenblatttyp =
+                final var steuerdatentyp = fammilienBudgetResultat.getFamilienBudgetTyp();
+                final var requiredUnterschriftenblatttyp =
                     UNTERSCHRIFTENBLATT_DOKUMENT_TYP_STEUERDATEN_TYP_MAP.get(steuerdatentyp);
 
                 if (
@@ -198,7 +190,7 @@ public class BerechnungsblattService {
                 }
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                var budgetTypText = switch (fammilienBudgetResultat.getFamilienBudgetTyp()) {
+                final var budgetTypText = switch (fammilienBudgetResultat.getFamilienBudgetTyp()) {
                     case FAMILIE -> translator.translate("stip.berechnung.familien.typ.FAMILIE");
                     case VATER -> translator.translate("stip.berechnung.familien.typ.VATER");
                     case MUTTER -> translator.translate("stip.berechnung.familien.typ.MUTTER");
@@ -218,7 +210,7 @@ public class BerechnungsblattService {
                 );
                 document.add(getNewLineParagraph());
 
-                Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
+                final Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
                     fammilienBudgetResultat,
                     tranchenBerechnungsResultat.getBerechnungsStammdaten(),
                     translator
@@ -227,7 +219,7 @@ public class BerechnungsblattService {
                 document.add(familienBudgetTableEinnahmen);
                 document.add(getNewLineParagraph());
 
-                Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
+                final Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
                     fammilienBudgetResultat,
                     translator
                 );
@@ -239,29 +231,31 @@ public class BerechnungsblattService {
         }
     }
 
-    public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale)
-    throws IOException {
-        pdfFont = PdfFontFactory.createFont(FONT);
-        pdfFontBold = PdfFontFactory.createFont(FONT_BOLD);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(out);
-        PdfDocument pdfDocument = new PdfDocument(writer);
-        Document document = new Document(pdfDocument, PAGE_SIZE);
-        addBerechnungsblattToDocument(gesuch, locale, document, true);
-        PdfUtils.makePageNumberEven(document);
-        document.close();
-        pdfDocument.close();
-        writer.close();
+    public ByteArrayOutputStream getBerechnungsblattFromGesuch(final Gesuch gesuch, final Locale locale) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try (
+            final PdfWriter writer = new PdfWriter(out);
+            final PdfDocument pdfDocument = new PdfDocument(writer);
+            final Document document = new Document(pdfDocument, PAGE_SIZE);
+            ) {
+
+            addBerechnungsblattToDocument(gesuch, locale, document, true);
+            PdfUtils.makePageNumberEven(document);
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
+        }
+
         return out;
     }
 
     private void addHeaderParagraph(
-        Document document,
-        PersonInAusbildung pia,
-        String budgetTypeText,
-        LocalDate trancheVon,
-        LocalDate trancheBis,
-        TL tl
+        final Document document,
+        final PersonInAusbildung pia,
+        final String budgetTypeText,
+        final LocalDate trancheVon,
+        final LocalDate trancheBis,
+        final TL tl
     ) {
 
         float leftMargin = document.getLeftMargin();
@@ -327,9 +321,9 @@ public class BerechnungsblattService {
     }
 
     private void addFooterParagraph1(
-        Document document,
-        int verticalOffset,
-        TL tl
+        final Document document,
+        final int verticalOffset,
+        final TL tl
     ) {
         float leftMargin = document.getLeftMargin();
         document.add(
@@ -347,9 +341,9 @@ public class BerechnungsblattService {
     }
 
     private void addFooterParagraph2(
-        Document document,
-        int verticalOffset,
-        TL tl
+        final Document document,
+        final int verticalOffset,
+        final TL tl
     ) {
         float leftMargin = document.getLeftMargin();
         document.add(
@@ -387,11 +381,11 @@ public class BerechnungsblattService {
     }
 
     private Paragraph getDefaultParagraphSmall(final String text) {
-        return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE_SMALL).setFontColor(ColorConstants.GRAY);
+        return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE_MEDIUM).setFontColor(ColorConstants.GRAY);
     }
 
     private Paragraph getDefaultParagraph(final String text) {
-        return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE);
+        return new Paragraph(text).setFont(pdfFont).setFontSize(FONT_SIZE_BIG);
     }
 
     private Paragraph getNewLineParagraph() {
@@ -403,7 +397,7 @@ public class BerechnungsblattService {
         final BerechnungsStammdatenDto berechnungsStammdaten,
         final TL tl
     ) {
-        Table persoenlichesBudgetTableEinnahmen = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        final Table persoenlichesBudgetTableEinnahmen = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
         addPersoenlichesBudgetEinnahmenToTable(
             persoenlichesBudgetresultat,
             berechnungsStammdaten,
@@ -417,7 +411,7 @@ public class BerechnungsblattService {
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         final TL tl
     ) {
-        Table persoenlichesBudgetTableKosten = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        final Table persoenlichesBudgetTableKosten = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
         addPersoenlichesBudgetKostenToTable(persoenlichesBudgetresultat, persoenlichesBudgetTableKosten, tl);
         return persoenlichesBudgetTableKosten;
     }
@@ -425,7 +419,7 @@ public class BerechnungsblattService {
     private void addPersoenlichesBudgetEinnahmenToTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
         final BerechnungsStammdatenDto berechnungsStammdaten,
-        Table persoenlichesBudgetTableEinnahmen,
+        final Table persoenlichesBudgetTableEinnahmen,
         TL tl
     ) {
         // Einnahmen
@@ -492,7 +486,7 @@ public class BerechnungsblattService {
             )
         );
 
-        var anrechenbaresVermoegenCell = new Cell();
+        final var anrechenbaresVermoegenCell = new Cell();
         anrechenbaresVermoegenCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen", tl));
         anrechenbaresVermoegenCell.add(
@@ -528,13 +522,13 @@ public class BerechnungsblattService {
             )
         );
 
-        var persoenlichEinnahmenTitleTotalCell = new Cell();
+        final var persoenlichEinnahmenTitleTotalCell = new Cell();
         persoenlichEinnahmenTitleTotalCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.total", tl).setFont(pdfFontBold))
             .setBackgroundColor(ColorConstants.LIGHT_GRAY);
         persoenlichesBudgetTableEinnahmen.addCell(persoenlichEinnahmenTitleTotalCell);
 
-        var persoenlichEinnahmenTotalCell = new Cell();
+        final var persoenlichEinnahmenTotalCell = new Cell();
         persoenlichEinnahmenTotalCell.add(
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat.getEinnahmenPersoenlichesBudget()
@@ -545,8 +539,8 @@ public class BerechnungsblattService {
 
     private void addPersoenlichesBudgetKostenToTable(
         final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat,
-        Table persoenlichesBudgetTableKosten,
-        TL tl
+        final Table persoenlichesBudgetTableKosten,
+        final TL tl
     ) {
         // Kosten
         persoenlichesBudgetTableKosten.addCell(
@@ -554,7 +548,7 @@ public class BerechnungsblattService {
         );
         persoenlichesBudgetTableKosten.addCell(new Paragraph(""));
 
-        var mehrkostenVerpflegungCell = new Cell();
+        final var mehrkostenVerpflegungCell = new Cell();
         mehrkostenVerpflegungCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.mehrkostenVerpflegung", tl));
         mehrkostenVerpflegungCell
@@ -563,7 +557,7 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getVerpflegung()));
 
-        var fahrkostenCell = new Cell();
+        final var fahrkostenCell = new Cell();
         fahrkostenCell.add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.fahrkosten", tl));
         fahrkostenCell
             .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurElternWohnend.info", tl));
@@ -577,7 +571,7 @@ public class BerechnungsblattService {
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAusbildungskosten()));
 
         final String noPersonenTranslationReplaceKey = "anzahl";
-        var grundbedarfPersonenCell = new Cell();
+        final var grundbedarfPersonenCell = new Cell();
         grundbedarfPersonenCell.add(
             getDefaultParagraph(
                 tl.translate(
@@ -594,7 +588,7 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getGrundbedarf()));
 
-        var wohnkostenPersonenCell = new Cell();
+        final var wohnkostenPersonenCell = new Cell();
         wohnkostenPersonenCell.add(
             getDefaultParagraph(
                 tl.translate(
@@ -611,7 +605,7 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getWohnkosten()));
 
-        var medizinischeGrundversorgungPersonenCell = new Cell();
+        final var medizinischeGrundversorgungPersonenCell = new Cell();
         medizinischeGrundversorgungPersonenCell.add(
             getDefaultParagraph(
                 tl.translate(
@@ -630,7 +624,7 @@ public class BerechnungsblattService {
                 getDefaultParagraphNumber(persoenlichesBudgetresultat.getMedizinischeGrundversorgung())
             );
 
-        var fahrkostenPartnerCell = new Cell();
+        final var fahrkostenPartnerCell = new Cell();
         fahrkostenPartnerCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.fahrkostenPartner", tl));
         fahrkostenPartnerCell
@@ -639,7 +633,7 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getFahrkostenPartner()));
 
-        var verpflegungPartnerCell = new Cell();
+        final var verpflegungPartnerCell = new Cell();
         verpflegungPartnerCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.verpflegungPartner", tl));
         verpflegungPartnerCell
@@ -674,13 +668,13 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getAnteilLebenshaltungskosten()));
 
-        var persoenlichKostenTitleTotalCell = new Cell();
+        final var persoenlichKostenTitleTotalCell = new Cell();
         persoenlichKostenTitleTotalCell
             .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.total", tl).setFont(pdfFontBold))
             .setBackgroundColor(ColorConstants.LIGHT_GRAY);
         persoenlichesBudgetTableKosten.addCell(persoenlichKostenTitleTotalCell);
 
-        var persoenlichKostenTotalCell = new Cell();
+        final var persoenlichKostenTotalCell = new Cell();
         persoenlichKostenTotalCell.add(
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat.getAusgabenPersoenlichesBudget()
@@ -737,7 +731,7 @@ public class BerechnungsblattService {
         familienBudgetTableEinnahmen
             .addCell(getDefaultParagraphNumber(familienBudgetResultat.getAlimente()));
 
-        var beitraegeSaule3aCell = new Cell();
+        final var beitraegeSaule3aCell = new Cell();
         beitraegeSaule3aCell
             .add(getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.beitraegeSaule3a", tl));
         beitraegeSaule3aCell.add(
@@ -769,7 +763,7 @@ public class BerechnungsblattService {
         familienBudgetTableEinnahmen
             .addCell(getDefaultParagraphNumber(berechnungsStammdaten.getEinkommensfreibetrag()));
 
-        var anrechenbaresVermoegenCell = new Cell();
+        final var anrechenbaresVermoegenCell = new Cell();
         anrechenbaresVermoegenCell
             .add(getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.anrechenbaresVermoegen", tl));
         anrechenbaresVermoegenCell.add(
@@ -789,7 +783,7 @@ public class BerechnungsblattService {
         familienBudgetTableEinnahmen
             .addCell(getDefaultParagraphNumber(familienBudgetResultat.getAnrechenbaresVermoegen()));
 
-        var persoenlichKostenTitleTotalCell = new Cell();
+        final var persoenlichKostenTitleTotalCell = new Cell();
         persoenlichKostenTitleTotalCell
             .add(
                 getDefaultParagraphTranslated("stip.berechnung.familien.einnahmen.totalEinkuenfte", tl)
@@ -798,7 +792,7 @@ public class BerechnungsblattService {
             .setBackgroundColor(ColorConstants.LIGHT_GRAY);
         familienBudgetTableEinnahmen.addCell(persoenlichKostenTitleTotalCell);
 
-        var persoenlichKostenTotalCell = new Cell();
+        final var persoenlichKostenTotalCell = new Cell();
         persoenlichKostenTotalCell.add(
             getDefaultParagraphNumber(
                 familienBudgetResultat.getTotalEinkuenfte()
@@ -861,13 +855,13 @@ public class BerechnungsblattService {
         familienBudgetTableKosten
             .addCell(getDefaultParagraphNumber(familienBudgetResultat.getEssenskostenPerson2()));
 
-        var persoenlichKostenTitleTotalCell = new Cell();
+        final var persoenlichKostenTitleTotalCell = new Cell();
         persoenlichKostenTitleTotalCell
             .add(getDefaultParagraphTranslated("stip.berechnung.familien.kosten.total", tl).setFont(pdfFontBold))
             .setBackgroundColor(ColorConstants.LIGHT_GRAY);
         familienBudgetTableKosten.addCell(persoenlichKostenTitleTotalCell);
 
-        var persoenlichKostenTotalCell = new Cell();
+        final var persoenlichKostenTotalCell = new Cell();
         persoenlichKostenTotalCell.add(
             getDefaultParagraphNumber(
                 familienBudgetResultat.getTotalEinkuenfte()

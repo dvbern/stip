@@ -20,8 +20,12 @@ package ch.dvbern.stip.api.pdf.util;
 import com.itextpdf.kernel.geom.PageSize;
 import lombok.experimental.UtilityClass;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 @UtilityClass
 public class PdfConstants {
+    public static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
     public static final String FONT_PATH = "/fonts/arial.ttf";
     public static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
     public static final PageSize PAGE_SIZE = PageSize.A4;

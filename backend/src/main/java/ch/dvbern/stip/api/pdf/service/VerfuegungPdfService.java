@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.util.VerfuegungUtil;
-import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
@@ -112,20 +111,9 @@ public class VerfuegungPdfService {
     ) {
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final FontProgram font;
-        final FontProgram fontBold;
 
-        try {
-            final byte[] fontBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_PATH));
-            final byte[] fontBoldBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_BOLD_PATH));
-            font = FontProgramFactory.createFont(fontBytes);
-            fontBold = FontProgramFactory.createFont(fontBoldBytes);
-        } catch (IOException e) {
-            throw new InternalServerErrorException(e);
-        }
-
-        pdfFont = PdfFontFactory.createFont(font);
-        pdfFontBold = PdfFontFactory.createFont(fontBold);
+        pdfFont = PdfUtils.createFont();
+        pdfFontBold = PdfUtils.createFontBold();
 
         ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
@@ -156,8 +144,7 @@ public class VerfuegungPdfService {
                     section,
                     logo,
                     leftMargin,
-                    translator,
-                    false
+                    translator
                 );
 
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
@@ -165,7 +152,7 @@ public class VerfuegungPdfService {
                 PdfUtils.header(gesuch, document, leftMargin, translator, true, pdfFont, ausbildungsbeitraegeUri);
             }
 
-            addVerfuegung(verfuegung, document, section, logo, leftMargin, translator, addBerechnungsblaetter);
+            addVerfuegung(verfuegung, document, section, logo, leftMargin, translator);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -179,8 +166,7 @@ public class VerfuegungPdfService {
         final VerfuegungPdfSection section,
         final Image logo,
         final float leftMargin,
-        final TL translator,
-        final boolean addBerechnungsblaetter
+        final TL translator
     ) throws IOException {
         final var gesuch = verfuegung.getGesuch();
         document.add(logo);
@@ -191,11 +177,6 @@ public class VerfuegungPdfService {
         PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, true);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
         PdfUtils.makePageNumberEven(document);
-
-        if (addBerechnungsblaetter) {
-            PdfUtils.addBerechnungsblaetter(document, gesuch, berechnungsblattService);
-            PdfUtils.makePageNumberEven(document);
-        }
     }
 
     private void verfuegungOhneAnspruch(
