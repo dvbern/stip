@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -100,7 +98,8 @@ public class PdfUtils {
     private static PdfFont getPdfFont(String fontPath) {
         final FontProgram font;
         try {
-            final byte[] fontBytes = IOUtils.toByteArray(Objects.requireNonNull(PdfUtils.class.getResourceAsStream(fontPath)));
+            final byte[] fontBytes =
+                IOUtils.toByteArray(Objects.requireNonNull(PdfUtils.class.getResourceAsStream(fontPath)));
             font = FontProgramFactory.createFont(fontBytes);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -371,12 +370,7 @@ public class PdfUtils {
         headerTable.addCell(date);
 
         if (!isDeckblatt) {
-            final Locale locale = gesuch
-                .getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale();
+            final Locale locale = LocaleUtil.getLocale(gesuch);
 
             final var ausbildungsStaette = gesuch.getAusbildung().getAusbildungsstaetteOrAlternative(locale);
             final var ausbildungsGang = gesuch.getAusbildung().getAusbildungsgangOrAlternative(locale);
@@ -424,12 +418,7 @@ public class PdfUtils {
         final var sachbearbeiterBenutzer =
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
 
-        final var locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final var locale = LocaleUtil.getLocale(gesuch);
 
         signatureTable.addCell(
             PdfUtils.createCell(

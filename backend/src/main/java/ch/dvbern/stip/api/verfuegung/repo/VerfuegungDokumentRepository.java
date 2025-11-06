@@ -15,16 +15,30 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.verfuegung.resource;
+package ch.dvbern.stip.api.verfuegung.repo;
 
-import ch.dvbern.stip.api.common.interceptors.Validated;
-import jakarta.enterprise.context.RequestScoped;
+import java.util.Optional;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@RequestScoped
+@ApplicationScoped
 @RequiredArgsConstructor
-@Slf4j
-@Validated
-public class VerfuegungResourceImpl {
+public class VerfuegungDokumentRepository implements BaseRepository<VerfuegungDokument> {
+
+    // todo: review find method
+    public Optional<VerfuegungDokument> findByVerfuegungAndTyp(
+        final UUID verfuegungId,
+        final VerfuegungDokumentTyp typ
+    ) {
+        return find(
+            "verfuegung.id = ?1 AND dokumentTyp = ?2",
+            verfuegungId,
+            typ
+        ).firstResultOptional();
+    }
 }

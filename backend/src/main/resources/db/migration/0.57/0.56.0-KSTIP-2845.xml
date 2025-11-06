@@ -1,0 +1,91 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="luca.fondo (generated)" id="1762781212345-2">
+        <createTable tableName="verfuegung_dokument">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="verfuegung_dokumentPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_typ" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filename" type="VARCHAR(255)"/>
+            <column name="filepath" type="VARCHAR(255)"/>
+            <column name="filesize" type="VARCHAR(255)"/>
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="verfuegung_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-3">
+        <createTable tableName="verfuegung_dokument_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="dokument_typ" type="VARCHAR(255)"/>
+            <column name="filename" type="VARCHAR(255)"/>
+            <column name="filepath" type="VARCHAR(255)"/>
+            <column name="filesize" type="VARCHAR(255)"/>
+            <column name="object_id" type="VARCHAR(255)"/>
+            <column name="verfuegung_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-4">
+        <addPrimaryKey columnNames="rev, id" constraintName="verfuegung_dokument_audPK" tableName="verfuegung_dokument_aud"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-7">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="verfuegung_dokument_aud" constraintName="FK9hl9oxbal4a17k0i17w2056lk" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-8">
+        <addForeignKeyConstraint baseColumnNames="verfuegung_id" baseTableName="verfuegung_dokument" constraintName="FKmb1c9d874tpmbb4qawyla70xu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="verfuegung" validate="true"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-25">
+        <dropColumn columnName="filename" tableName="verfuegung"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-26">
+        <dropColumn columnName="filename" tableName="verfuegung_aud"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-27">
+        <dropColumn columnName="filepath" tableName="verfuegung"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-28">
+        <dropColumn columnName="filepath" tableName="verfuegung_aud"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-29">
+        <dropColumn columnName="filesize" tableName="verfuegung"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-30">
+        <dropColumn columnName="filesize" tableName="verfuegung_aud"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-31">
+        <dropColumn columnName="object_id" tableName="verfuegung"/>
+    </changeSet>
+    <changeSet author="luca.fondo (generated)" id="1762781212345-32">
+        <dropColumn columnName="object_id" tableName="verfuegung_aud"/>
+    </changeSet>
+</databaseChangeLog>

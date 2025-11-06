@@ -46,7 +46,7 @@ public class JuristischeAbklaerungDurchPruefungHandler implements GesuchStatusCh
 
         final var stipDecisionText = stipDecisionService.getTextForDecision(
             decision,
-            LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
+            LocaleUtil.getKorrespondenzSprache(gesuch)
         );
 
         gesuchNotizService.createJuristischeNotiz(gesuch, JURISTISCHE_NOTIZ_BETREFF, stipDecisionText);

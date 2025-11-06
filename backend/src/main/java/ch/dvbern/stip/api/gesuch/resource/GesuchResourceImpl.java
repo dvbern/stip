@@ -17,14 +17,11 @@
 
 package ch.dvbern.stip.api.gesuch.resource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.admindokumente.service.AdminDokumenteService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidAuthorizer;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
@@ -42,14 +39,11 @@ import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
-import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
@@ -70,19 +64,14 @@ import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.smallrye.common.annotation.Blocking;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.core.buffer.Buffer;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.ADMIN_GESUCH_DELETE;
@@ -105,21 +94,17 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchService gesuchService;
     private final GesuchTrancheService gesuchTrancheService;
     private final TenantService tenantService;
-    private final GesuchHistoryService gesuchHistoryService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final ConfigService configService;
-    private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
-    private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final StatusprotokollService statusprotokollService;
-    private final AdminDokumenteService adminDokumenteService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -272,13 +257,6 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public AdminDokumenteDto getAdminDokumente(UUID gesuchId) {
-        gesuchAuthorizer.sbCanRead();
-        return adminDokumenteService.getAdminDokumente(gesuchId);
-    }
-
-    @Override
     @RolesAllowed({ GS_GESUCH_UPDATE })
     public GesuchDto gesuchEinreichenGs(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
@@ -427,29 +405,6 @@ public class GesuchResourceImpl implements GesuchResource {
     public BerechnungsresultatDto getBerechnungForGesuch(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
         return gesuchService.getBerechnungsresultat(gesuchId);
-    }
-
-    @Override
-    @Blocking
-    @PermitAll
-    public RestMulti<Buffer> getBerechnungsBlattForGesuch(String token) {
-        final var gesuchId = DokumentDownloadUtil.getClaimId(
-            jwtParser,
-            token,
-            configService.getSecret(),
-            DokumentDownloadConstants.GESUCH_ID_CLAIM
-        );
-
-        ByteArrayOutputStream byteStream = null;
-        try {
-            byteStream = gesuchService.getBerechnungsblattByteStream(gesuchId);
-        } catch (IOException e) {
-            throw new InternalServerErrorException(e);
-        }
-
-        ByteArrayOutputStream finalByteStream = byteStream;
-        return DokumentDownloadUtil
-            .getWrapedDokument(gesuchService.getBerechnungsblattFileName(gesuchId), finalByteStream);
     }
 
     @Override

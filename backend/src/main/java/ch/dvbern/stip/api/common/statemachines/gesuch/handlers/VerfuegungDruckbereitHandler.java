@@ -17,15 +17,23 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
+import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,42 +41,76 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
-    private final ConfigService configService;
-    private final BerechnungService berechnungService;
-    private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
+    private final UnterschriftenblattService unterschriftenblattService;
+    private final VerfuegungPdfService verfuegungPdfService;
 
     @Override
     public void handle(Gesuch gesuch) {
-        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
-        );
+        final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
-        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
-            ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnung();
+        final VerfuegungDokument verfuegungstextDocument = getVerfuegungstextDocument(verfuegung);
+        final byte[] verfuegungstextBytes = verfuegungService.downloadVerfuegungDokument(verfuegungstextDocument);
+        final ByteArrayOutputStream verfuegungstext = new ByteArrayOutputStream();
+        try {
+            verfuegungstext.write(verfuegungstextBytes);
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Failed to process Verfuegungstext", e);
+        }
 
-        if (berechnungsresultat == 0) {
+        final List<ByteArrayOutputStream> berechnungsblaetter = new ArrayList<>();
+        final Set<UnterschriftenblattDokumentTyp> uploadedTyps =
+            unterschriftenblattService.getExistingUnterschriftenblattTypsForGesuch(gesuch.getId());
+
+        for (UnterschriftenblattDokumentTyp unterschriftenblattTyp : uploadedTyps) {
+            final VerfuegungDokumentTyp berechnungsblattTyp = mapToBerechnungsblattTyp(unterschriftenblattTyp);
+
             try {
-                verfuegungService.createPdfForVerfuegungOhneAnspruch(
-                    verfuegungService.getLatestVerfuegung(gesuch.getId())
+                final VerfuegungDokument berechnungsblatt =
+                    verfuegungService.getBerechnungsblattByType(verfuegung, berechnungsblattTyp);
+
+                final byte[] berechnungsblattBytes = verfuegungService.downloadVerfuegungDokument(berechnungsblatt);
+                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                baos.write(berechnungsblattBytes);
+                berechnungsblaetter.add(baos);
+            } catch (Exception e) {
+                final var message = String.format(
+                    "Berechnungsblatt %s not found for Gesuch %s, skipping",
+                    berechnungsblattTyp,
+                    gesuch.getId()
                 );
-            } catch (IOException e) {
-                throw new InternalServerErrorException(e);
+                throw new InternalServerErrorException(message, e);
             }
         }
 
-        if (berechnungsresultat > 0) {
-            buchhaltungService.createStipendiumBuchhaltungEntry(
-                gesuch,
-                berechnungsresultat
-            );
+        final ByteArrayOutputStream versendeteVerfuegung = verfuegungPdfService.createVersendeteVerfuegung(
+            verfuegungstext,
+            berechnungsblaetter
+        );
 
-            verfuegungService.createPdfForVerfuegungMitAnspruch(
-                verfuegungService.getLatestVerfuegung(gesuch.getId())
-            );
-        }
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
+            versendeteVerfuegung
+        );
+
+    }
+
+    private VerfuegungDokument getVerfuegungstextDocument(Verfuegung verfuegung) {
+        return verfuegung.getDokumente()
+            .stream()
+            .filter(
+                d -> VerfuegungDokumentTyp.VERFUEGUNGSBRIEF.contains(d.getDokumentTyp())
+            )
+            .findFirst()
+            .orElseThrow(() -> new NotFoundException("Verfuegungstext document not found"));
+    }
+
+    private VerfuegungDokumentTyp mapToBerechnungsblattTyp(UnterschriftenblattDokumentTyp typ) {
+        return switch (typ) {
+            case MUTTER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_MUTTER;
+            case VATER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_VATER;
+            case GEMEINSAM -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_FAMILIE;
+        };
     }
 }

@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.pdf.util;
 
-import com.itextpdf.kernel.geom.PageSize;
-import lombok.experimental.UtilityClass;
-
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import com.itextpdf.kernel.geom.PageSize;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class PdfConstants {

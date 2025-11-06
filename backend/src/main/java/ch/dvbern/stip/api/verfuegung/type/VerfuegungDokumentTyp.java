@@ -15,19 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.verfuegung.service;
+package ch.dvbern.stip.api.verfuegung.type;
 
-import java.util.List;
+import java.util.Set;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.massendruck.entity.MassendruckJob;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+public enum VerfuegungDokumentTyp {
+    BERECHNUNGSBLATT_PIA,
+    BERECHNUNGSBLATT_MUTTER,
+    BERECHNUNGSBLATT_VATER,
+    BERECHNUNGSBLATT_FAMILIE,
+    VERSENDETE_VERFUEGUNG,
+    VERFUEGUNG_MIT_ANSPRUCH,
+    VERFUEGUNG_OHNE_ANSPRUCH,
+    NEGATIVE_VERFUEGUNG;
 
-@Mapper(config = MappingConfig.class, uses = { VerfuegungMapper.class })
-public interface AdminDokumenteMapper {
-    @Mapping(source = "massendruckJob.id", target = "datenschutzbriefMassendruckJobId")
-    AdminDokumenteDto toDto(final List<Verfuegung> verfuegungen, final MassendruckJob massendruckJob);
+    public static final Set<VerfuegungDokumentTyp> VERFUEGUNGSBRIEF =
+        Set.of(VERFUEGUNG_MIT_ANSPRUCH, VERFUEGUNG_OHNE_ANSPRUCH, NEGATIVE_VERFUEGUNG);
 }

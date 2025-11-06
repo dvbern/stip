@@ -17,62 +17,65 @@
 
 package ch.dvbern.stip.api.verfuegung.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.type.StipDecision;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.stipdecision.type.Kanton;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+
+/**
+ * Represents a single document that is part of a Verfügung.
+ * A Verfügung can have multiple documents (e.g., separate Berechnungsblätter, final merged document).
+ */
 @Audited
 @Entity
 @Table(
-    name = "verfuegung", indexes = {
-        @Index(name = "IX_verfuegung_mandant", columnList = "mandant")
-    }
+    name = "verfuegung_dokument"
 )
 @Getter
 @Setter
-public class Verfuegung extends AbstractMandantEntity {
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    @Column(name = "stip_decision")
-    private StipDecision stipDecision;
+public class VerfuegungDokument extends AbstractMandantEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gesuch_id", nullable = false)
-    private Gesuch gesuch;
-
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    @Column(name = "wohnsitz_kanton")
-    private Kanton kanton;
-
-    @Column(name = "is_negative_verfuegung", nullable = false)
-    private boolean isNegativeVerfuegung = false;
+    @JoinColumn(name = "verfuegung_id", nullable = false)
+    private Verfuegung verfuegung;
 
     @NotNull
-    @Column(name = "is_versendet")
-    private boolean isVersendet = false;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dokument_typ", nullable = false)
+    private VerfuegungDokumentTyp dokumentTyp;
 
-    @OneToMany(mappedBy = "verfuegung", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<VerfuegungDokument> dokumente = new ArrayList<>();
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "filename")
+    private String filename;
+
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "filepath")
+    private String filepath;
+
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "filesize")
+    private String filesize;
+
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "object_id")
+    private String objectId;
 }

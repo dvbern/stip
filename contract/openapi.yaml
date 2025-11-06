@@ -2802,57 +2802,6 @@ paths:
           description: Datenschutzbrief File Download Token returned
       operationId: getDatenschutzbriefDownloadToken
       summary: get Token to downlaod Verfuegung
-  '/verfuegung/download':
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Verfuegung
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: File returned
-      operationId: getVerfuegung
-      summary: get Verfuegung
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  '/verfuegung/{verfuegungsId}/token':
-    parameters:
-      - name: verfuegungsId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Verfuegung
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileDownloadToken'
-          description: Token returned
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-          description: File returned
-      operationId: getVerfuegungsDownloadToken
-      summary: get Token to downlaod Verfuegung
   '/dokument/{dokumentArt}/download':
     parameters:
       - name: token
@@ -3009,33 +2958,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: gesuchManuellPruefenJur
       summary: Das Gesuch manuell pruefen als Jurist
-  '/gesuch/{gesuchId}/adminDokumente':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminDokumente'
-          description: Returns a List of all Verfuegungen for a Gesuch
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAdminDokumente
-      summary: All dokument information required for the Admin tab in Info of Gesuch
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -3281,27 +3203,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungsblattDownloadToken
       summary: get Berechnungsblatt Download Token
-  '/gesuch/berechnungsblatt':
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: Berechnungsblatt File returned
-      operationId: getBerechnungsBlattForGesuch
-      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumente':
     parameters:
       - name: gesuchTrancheId
@@ -8084,17 +7985,6 @@ components:
           type: string
         bezeichnungFr:
           type: string
-    AdminDokumente:
-      type: object
-      required:
-        - verfuegungen
-      properties:
-        verfuegungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/Verfuegung'
-        datenschutzbriefMassendruckJobId:
-          $ref: '#/components/schemas/UUID'
   responses:
     Unauthorized:
       content:

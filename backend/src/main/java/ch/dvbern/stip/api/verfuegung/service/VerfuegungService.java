@@ -19,28 +19,35 @@ package ch.dvbern.stip.api.verfuegung.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungDokumentRepository;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.type.Kanton;
 import io.quarkiverse.antivirus.runtime.Antivirus;
-import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -48,13 +55,19 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class VerfuegungService {
 
     private static final String VERFUEGUNG_DOKUMENT_PATH = "verfuegung/";
-    private static final String NEGATIVE_VERFUEGUNG_DOKUMENT_NAME = "Negative_Verfuegung.pdf";
-    private static final String VERFUEGUNG_DOKUMENT_NAME = "Verfuegung.pdf";
+    private static final String FILENAME_PREFIX_BERECHNUNGSBLATT_PIA = "Berechnungsblatt_PIA_";
+    private static final String FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER = "Berechnungsblatt_Mutter_";
+    private static final String FILENAME_PREFIX_BERECHNUNGSBLATT_VATER = "Berechnungsblatt_Vater_";
+    private static final String FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE = "Berechnungsblatt_Familie_";
+    private static final String FILENAME_PREFIX_VERFUEGUNG = "Verfügung_";
+    private static final String FILENAME_PREFIX_VERFUEGUNGSBRIEF = "Verfügungsbrief_";
+    private static final String FILENAME_EXTENSION_PDF = ".pdf";
 
     private final VerfuegungPdfService verfuegungPdfService;
     private final ConfigService configService;
     private final S3AsyncClient s3;
     private final VerfuegungRepository verfuegungRepository;
+    private final VerfuegungDokumentRepository verfuegungDokumentRepository;
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final Antivirus antivirus;
@@ -94,10 +107,19 @@ public class VerfuegungService {
                 final var verfuegung = new Verfuegung();
                 verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
                 verfuegung.setNegativeVerfuegung(true);
-                verfuegung.setObjectId(objectId);
-                verfuegung.setFilename(fileUpload.fileName());
-                verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+
+                final var verfuegungsDokument = new VerfuegungDokument();
+                verfuegungsDokument.setVerfuegung(verfuegung);
+                verfuegungsDokument.setDokumentTyp(VerfuegungDokumentTyp.NEGATIVE_VERFUEGUNG);
+                verfuegungsDokument.setObjectId(objectId);
+                verfuegungsDokument.setFilename(fileUpload.fileName());
+                verfuegungsDokument.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+                verfuegungsDokument.setFilesize(String.valueOf(fileUpload.size()));
+                verfuegung.getDokumente().add(verfuegungsDokument);
+
                 verfuegungRepository.persistAndFlush(verfuegung);
+                verfuegungDokumentRepository.persistAndFlush(verfuegungsDokument);
+
             }
         );
         response.await().indefinitely();
@@ -107,47 +129,33 @@ public class VerfuegungService {
     public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = verfuegungPdfService.createNegativeVerfuegungPdf(verfuegung);
 
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
-            out.toByteArray(),
-            NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
-            s3,
-            configService,
-            VERFUEGUNG_DOKUMENT_PATH
+        createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.NEGATIVE_VERFUEGUNG,
+            out
         );
-        verfuegung.setObjectId(objectId);
-        verfuegung.setFilename(NEGATIVE_VERFUEGUNG_DOKUMENT_NAME);
-        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
     @Transactional
     public void createPdfForVerfuegungMitAnspruch(final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = verfuegungPdfService.createVerfuegungMitAnspruchPdf(verfuegung);
 
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
-            out.toByteArray(),
-            VERFUEGUNG_DOKUMENT_NAME,
-            s3,
-            configService,
-            VERFUEGUNG_DOKUMENT_PATH
+        createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERFUEGUNG_MIT_ANSPRUCH,
+            out
         );
-        verfuegung.setObjectId(objectId);
-        verfuegung.setFilename(VERFUEGUNG_DOKUMENT_NAME);
-        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
     @Transactional
     public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) throws IOException {
-        final ByteArrayOutputStream verfuegungOut = verfuegungPdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
-            verfuegungOut.toByteArray(),
-            VERFUEGUNG_DOKUMENT_NAME,
-            s3,
-            configService,
-            VERFUEGUNG_DOKUMENT_PATH
+        final ByteArrayOutputStream out = verfuegungPdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
+
+        createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERFUEGUNG_OHNE_ANSPRUCH,
+            out
         );
-        verfuegung.setObjectId(objectId);
-        verfuegung.setFilename(VERFUEGUNG_DOKUMENT_NAME);
-        verfuegung.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
     }
 
     public Verfuegung getLatestVerfuegung(final UUID gesuchId) {
@@ -158,15 +166,78 @@ public class VerfuegungService {
             .orElseThrow();
     }
 
-    public RestMulti<Buffer> getVerfuegung(final UUID verfuegungId) {
-        final var verfuegung = verfuegungRepository.requireById(verfuegungId);
-
-        return DokumentDownloadUtil.getDokument(
+    @Transactional
+    public void createAndStoreVerfuegungDokument(
+        final Verfuegung verfuegung,
+        final VerfuegungDokumentTyp dokumentTyp,
+        final ByteArrayOutputStream pdfContent
+    ) {
+        final var pia = verfuegung.getGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var namePiA = pia.getNachname() + pia.getVorname();
+        final String filename = generateFilename(dokumentTyp, namePiA);
+        final String objectId = DokumentUploadUtil.executeUploadDocument(
+            pdfContent.toByteArray(),
+            filename,
             s3,
-            configService.getBucketName(),
-            verfuegung.getObjectId(),
-            verfuegung.getFilepath(),
-            verfuegung.getFilename()
+            configService,
+            VERFUEGUNG_DOKUMENT_PATH
         );
+
+        final VerfuegungDokument dokument = new VerfuegungDokument();
+        dokument.setVerfuegung(verfuegung);
+        dokument.setDokumentTyp(dokumentTyp);
+        dokument.setObjectId(objectId);
+        dokument.setFilename(filename);
+        dokument.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
+        dokument.setFilesize(String.valueOf(pdfContent.size()));
+
+        verfuegung.getDokumente().add(dokument);
+        verfuegungDokumentRepository.persistAndFlush(dokument);
+
+    }
+
+    public VerfuegungDokument getBerechnungsblattByType(
+        final Verfuegung verfuegung,
+        final VerfuegungDokumentTyp typ
+    ) {
+        return verfuegung.getDokumente()
+            .stream()
+            .filter(d -> d.getDokumentTyp() == typ)
+            .findFirst()
+            .orElseThrow(() -> new NotFoundException("Berechnungsblatt not found: " + typ));
+    }
+
+    private String generateFilename(VerfuegungDokumentTyp typ, String namePiA) {
+        final String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        return switch (typ) {
+            case BERECHNUNGSBLATT_PIA -> FILENAME_PREFIX_BERECHNUNGSBLATT_PIA + namePiA + "_" + formattedDate
+            + FILENAME_EXTENSION_PDF;
+            case BERECHNUNGSBLATT_MUTTER -> FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER + namePiA + "_" + formattedDate
+            + FILENAME_EXTENSION_PDF;
+            case BERECHNUNGSBLATT_VATER -> FILENAME_PREFIX_BERECHNUNGSBLATT_VATER + namePiA + "_" + formattedDate
+            + FILENAME_EXTENSION_PDF;
+            case BERECHNUNGSBLATT_FAMILIE -> FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE + namePiA + "_" + formattedDate
+            + FILENAME_EXTENSION_PDF;
+            case VERSENDETE_VERFUEGUNG -> FILENAME_PREFIX_VERFUEGUNG + namePiA + "_" + formattedDate
+            + FILENAME_EXTENSION_PDF;
+            case VERFUEGUNG_MIT_ANSPRUCH, VERFUEGUNG_OHNE_ANSPRUCH, NEGATIVE_VERFUEGUNG -> FILENAME_PREFIX_VERFUEGUNGSBRIEF
+            + namePiA + "_" + formattedDate + FILENAME_EXTENSION_PDF;
+        };
+    }
+
+    public byte[] downloadVerfuegungDokument(final VerfuegungDokument dokument) {
+        try {
+            final var bytes = s3.getObject(
+                GetObjectRequest.builder()
+                    .bucket(configService.getBucketName())
+                    .key(dokument.getFilepath() + dokument.getObjectId())
+                    .build(),
+                AsyncResponseTransformer.toBytes()
+            );
+            return bytes.get().asByteArray();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new InternalServerErrorException("Failed to download VerfuegungDokument", e);
+        }
     }
 }

@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -97,6 +95,7 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
+import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
@@ -105,7 +104,6 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -552,7 +550,7 @@ public class GesuchService {
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
                     decision,
-                    LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
+                    LocaleUtil.getKorrespondenzSprache(gesuch)
                 )
             );
         }
@@ -786,12 +784,7 @@ public class GesuchService {
         final String kommentar
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final Locale locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
 
         KommentarDto kommentarDto;
@@ -872,14 +865,6 @@ public class GesuchService {
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
-    }
-
-    public ByteArrayOutputStream getBerechnungsblattByteStream(final UUID gesuchId) throws IOException {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return berechnungsblattService.getBerechnungsblattFromGesuch(
-            gesuch,
-            LocaleUtil.getLocaleFromGesuch(gesuch)
-        );
     }
 
     public String getBerechnungsblattFileName(final UUID gesuchId) {

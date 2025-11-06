@@ -17,10 +17,12 @@
 
 package ch.dvbern.stip.api.pdf.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,6 +34,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -41,13 +44,12 @@ import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.util.VerfuegungUtil;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
-import com.itextpdf.io.font.FontProgram;
-import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
+import com.itextpdf.kernel.utils.PdfMerger;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Image;
@@ -58,12 +60,9 @@ import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
@@ -75,7 +74,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
 @Slf4j
 public class VerfuegungPdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
-    private final BerechnungsblattService berechnungsblattService;
     private final TenantConfigService tenantConfigService;
     private final BuchhaltungService buchhaltungService;
 
@@ -85,7 +83,7 @@ public class VerfuegungPdfService {
 
     public ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
         final VerfuegungPdfSection negativeVerfuegungSection = this::negativeVerfuegung;
-        return this.createPdf(verfuegung, negativeVerfuegungSection, false);
+        return this.createPdf(verfuegung, negativeVerfuegungSection);
     }
 
     public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(
@@ -93,7 +91,7 @@ public class VerfuegungPdfService {
     ) {
         final VerfuegungPdfSection negativeVerfuegungSection =
             this::verfuegungOhneAnspruch;
-        return this.createPdf(verfuegung, negativeVerfuegungSection, true);
+        return this.createPdf(verfuegung, negativeVerfuegungSection);
     }
 
     public ByteArrayOutputStream createVerfuegungMitAnspruchPdf(
@@ -101,13 +99,12 @@ public class VerfuegungPdfService {
     ) {
         final VerfuegungPdfSection negativeVerfuegungSection =
             this::verfuegungMitAnspruch;
-        return this.createPdf(verfuegung, negativeVerfuegungSection, true);
+        return this.createPdf(verfuegung, negativeVerfuegungSection);
     }
 
     private ByteArrayOutputStream createPdf(
         final Verfuegung verfuegung,
-        final VerfuegungPdfSection section,
-        final boolean addBerechnungsblaetter
+        final VerfuegungPdfSection section
     ) {
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -118,12 +115,7 @@ public class VerfuegungPdfService {
         ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
         final Gesuch gesuch = verfuegung.getGesuch();
-        final Locale locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
 
         try (
@@ -619,12 +611,7 @@ public class VerfuegungPdfService {
     ) {
         final var gesuch = verfuegung.getGesuch();
 
-        final Locale locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
 
         final LocalDate ausbildungsjahrVon = gesuch
             .getGesuchTranchen()
@@ -719,6 +706,81 @@ public class VerfuegungPdfService {
                 translator.translate("stip.pdf.verfuegung.glueckWunsch")
             ).setPaddingTop(SPACING_SMALL)
         );
+    }
+
+    /**
+     * Merge Verfügungstext + all merged (Berechnungsblatt + Unterschriftenblatt) PDFs into final document
+     */
+    public ByteArrayOutputStream createVersendeteVerfuegung(
+        final ByteArrayOutputStream verfuegungstext,
+        final List<ByteArrayOutputStream> mergedBerechnungsblaetter
+    ) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try (final PdfDocument targetPdf = new PdfDocument(new PdfWriter(out))) {
+            final PdfMerger merger = new PdfMerger(targetPdf);
+
+            try (
+                final PdfDocument verfuegungPdf = new PdfDocument(
+                    new PdfReader(new ByteArrayInputStream(verfuegungstext.toByteArray()))
+                )
+            ) {
+                merger.merge(verfuegungPdf, 1, verfuegungPdf.getNumberOfPages());
+            }
+
+            for (final ByteArrayOutputStream mergedBlatt : mergedBerechnungsblaetter) {
+                try (
+                    final PdfDocument blattPdf = new PdfDocument(
+                        new PdfReader(new ByteArrayInputStream(mergedBlatt.toByteArray()))
+                    )
+                ) {
+                    merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
+                }
+            }
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Failed to merge PDFs for Versendete Verfügung", e);
+        }
+
+        return out;
+    }
+
+    /**
+     * Merge a Berechnungsblatt PDF with an Unterschriftenblatt PDF
+     */
+    public ByteArrayOutputStream mergeBerechnungsblattWithUnterschriftenblatt(
+        final byte[] berechnungsblattPdf,
+        final byte[] unterschriftenblattPdf
+    ) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try (final PdfDocument targetPdf = new PdfDocument(new PdfWriter(out))) {
+            final PdfMerger merger = new PdfMerger(targetPdf);
+
+            // 1. Add Berechnungsblatt first
+            try (
+                final PdfDocument blattPdf = new PdfDocument(
+                    new PdfReader(new ByteArrayInputStream(berechnungsblattPdf))
+                )
+            ) {
+                merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
+            }
+
+            // 2. Add Unterschriftenblatt
+            try (
+                final PdfDocument unterschriftPdf = new PdfDocument(
+                    new PdfReader(new ByteArrayInputStream(unterschriftenblattPdf))
+                )
+            ) {
+                merger.merge(unterschriftPdf, 1, unterschriftPdf.getNumberOfPages());
+            }
+        } catch (IOException e) {
+            throw new InternalServerErrorException(
+                "Failed to merge Berechnungsblatt with Unterschriftenblatt",
+                e
+            );
+        }
+
+        return out;
     }
 
     @FunctionalInterface
