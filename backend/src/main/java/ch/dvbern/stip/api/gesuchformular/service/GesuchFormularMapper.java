@@ -347,7 +347,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> Objects.isNull(gesuchFormularUpdateDto.getPartner()),
             "Reset dependent partner data",
             () -> {
-                // // TODO KSTIP-2785: Update once einnahmenKosternPartner exists
                 if (gesuchFormularUpdateDto.getEinnahmenKostenPartner() != null) {
                     final var ek = gesuchFormularUpdateDto.getEinnahmenKostenPartner();
                     // Partner Steuern
