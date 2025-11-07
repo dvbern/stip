@@ -276,8 +276,15 @@ quarkus:
       client-id: '${keycloak.client-id}'
       application-type: service
     s3:
+      aws:
+        credentials:
+          static-provider:
+            access-key-id: 'test-key'
+            secret-access-key: 'test-secret'
+        region: 'eu-central-2'
       devservices:
         enabled: false
+        buckets: '${bucket.name}'
     keycloak:
       admin-client:
         server-url: ${keycloak.url}
