@@ -7513,13 +7513,31 @@ components:
         renteTotal:
           type: integer
         kinderAusbildungszulagen:
+          type: array
+          items:
+            type: integer
+        kinderAusbildungszulagenTotal:
           type: integer
         kinderUnterhaltsbeitraege:
+          type: array
+          items:
+            type: integer
+        kinderUnterhaltsbeitraegeTotal:
+          type: integer
+        kinderRenten:
+          type: array
+          items:
+            type: integer
+        kinderRentenTotal:
           type: integer
         ergaenzungsleistungen:
           type: integer
         ergaenzungsleistungenPartner:
           type: integer
+        ergaenzungsleistungenKinder:
+          type: array
+          items:
+            type: integer
         ergaenzungsleistungenTotal:
           type: integer
         gemeindeInstitutionen:
@@ -7582,6 +7600,10 @@ components:
           type: integer
         andereEinnahmenPartner:
           type: integer
+        andereEinnahmenKinder:
+          type: array
+          items:
+            type: integer
         andereEinnahmenTotal:
           type: integer
         taggelder:
