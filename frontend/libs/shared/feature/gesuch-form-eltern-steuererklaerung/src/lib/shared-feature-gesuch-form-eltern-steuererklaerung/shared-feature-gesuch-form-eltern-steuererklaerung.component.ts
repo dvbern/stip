@@ -107,8 +107,8 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
 
   form = this.formBuilder.group({
     steuererklaerungInBern: [<boolean | null>null, [Validators.required]],
-    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
-    renten: [<string | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | undefined>undefined],
+    renten: [<string | undefined>undefined],
     ergaenzungsleistungen: [<string | undefined>undefined],
     einnahmenBGSA: [<string | undefined>undefined],
     andereEinnahmen: [<string | undefined>undefined],

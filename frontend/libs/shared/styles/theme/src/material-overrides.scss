@@ -324,3 +324,13 @@ $dv-all-colors: (
     --mat-tab-active-hover-indicator-color: transparent;
   }
 }
+
+.mat-mdc-form-field-required-marker {
+  color: var(--dv-red);
+}
+
+form.readonly {
+  .mat-mdc-form-field-required-marker {
+    color: inherit;
+  }
+}
