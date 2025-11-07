@@ -96,7 +96,11 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
   isVerstecktSig = computed(() => {
     const { gesuchFormular } = this.viewSig();
     const typ = this.stepSig().type;
-    return typ !== 'FAMILIE' && gesuchFormular?.versteckteEltern?.includes(typ);
+    return (
+      this.config.isGesuchApp &&
+      typ !== 'FAMILIE' &&
+      gesuchFormular?.versteckteEltern?.includes(typ)
+    );
   });
   changesSig = computed<Partial<SteuererklaerungUpdate>>(() => {
     const view = this.viewSig();

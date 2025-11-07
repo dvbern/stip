@@ -110,7 +110,7 @@ export class SharedFeatureGesuchFormElternComponent {
     this.store.dispatch(SharedEventGesuchFormEltern.init());
 
     effect(() => {
-      const { loading, gesuch, gesuchFormular } = this.viewSig();
+      const { loading, gesuch, gesuchFormular, readonly } = this.viewSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const { trancheTyp } = this.cacheSig();
       const { permissions } = preparePermissions(
@@ -120,6 +120,11 @@ export class SharedFeatureGesuchFormElternComponent {
         rolesMap,
       );
       const versteckteEltern = gesuchFormular?.versteckteEltern;
+      if (readonly) {
+        this.sichtbareEltern.disable({ emitEvent: false });
+      } else {
+        this.sichtbareEltern.enable({ emitEvent: false });
+      }
       if (versteckteEltern) {
         this.sichtbareEltern.setValue(
           allEltern.filter((e) => !versteckteEltern.includes(e)),
