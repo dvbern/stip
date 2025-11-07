@@ -45,6 +45,13 @@ public class ElternRequiredDocumentsProducer {
         DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
     );
 
+    private static final Map<ElternTyp, DokumentTyp> LOHNABRECHNUNG_VERMOEGEN_MAP = Map.of(
+        ElternTyp.MUTTER,
+        DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER,
+        ElternTyp.VATER,
+        DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
+    );
+
     public Set<DokumentTyp> getForElternteil(final Eltern elternteil, final Familiensituation familiensituation) {
         if (elternteil == null) {
             return Set.of();
@@ -54,6 +61,10 @@ public class ElternRequiredDocumentsProducer {
 
         if (elternteil.isSozialhilfebeitraege()) {
             requiredDocs.add(SOZIALHILFEBUDGET_MAP.get(elternteil.getElternTyp()));
+        }
+
+        if (Boolean.TRUE.equals(elternteil.getAusweisbFluechtling())) {
+            requiredDocs.add(LOHNABRECHNUNG_VERMOEGEN_MAP.get(elternteil.getElternTyp()));
         }
 
         if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getWohnkosten())) {
