@@ -80,6 +80,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void sbCanChangeGesuchStatusToVerfuegungDruckbereit(final UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
+    }
+
+    @Transactional
     public void sbCanChangeGesuchStatusToVersendet(final UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_VERSENDET);
     }

@@ -280,7 +280,9 @@
                   *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
                   class="tw:w-48 tw:whitespace-nowrap"
                 >
-                  {{ gesuch.translationKey | transloco }}
+                  <span [dvTruncateTooltip]="gesuch.translationKey | transloco">
+                    {{ gesuch.translationKey | transloco }}
+                  </span>
                 </td>
               </ng-container>
 

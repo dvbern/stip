@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.auszahlung.resource;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -74,10 +75,10 @@ class SapServiceIntegrationTest {
     @Order(1)
     void createBusinessPartnerTest() {
         final var auszahlung = createAuszahlung();
-        deliveryid = SapEndpointService.generateDeliveryId();
+        deliveryid = SapEndpointService.generateDeliveryId(BigInteger.ZERO);
 
         final var businessPartnerCreateResponse =
-            sapEndpointService.createBusinessPartner(auszahlung.getZahlungsverbindung(), deliveryid);
+            sapEndpointService.createBusinessPartner(auszahlung.getBuchhaltung().getFall(), deliveryid);
 
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerCreateResponse.getRETURNCODE().get(0).getTYPE()),
@@ -89,11 +90,12 @@ class SapServiceIntegrationTest {
     @Order(2)
     void changeBusinessPartnerTest() {
         final var auszahlung = createAuszahlung();
-        auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
-        deliveryid = SapEndpointService.generateDeliveryId();
+        auszahlung.setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        auszahlung.getZahlungsverbindung();
+        deliveryid = SapEndpointService.generateDeliveryId(BigInteger.ZERO);
 
         final var businessPartnerChangeResponse =
-            sapEndpointService.changeBusinessPartner(auszahlung.getZahlungsverbindung(), deliveryid);
+            sapEndpointService.changeBusinessPartner(auszahlung.getBuchhaltung().getFall(), deliveryid);
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerChangeResponse.getRETURNCODE().get(0).getTYPE()),
             is(true)
@@ -104,11 +106,11 @@ class SapServiceIntegrationTest {
     // @Test
     @Order(3)
     void readBusinessPartnerTest() {
-        final var auszahlung = createAuszahlung();
-        auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        final var auszahlung = createAuszahlung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        auszahlung.getZahlungsverbindung();
 
         final var businessPartnerReadResponse =
-            sapEndpointService.readBusinessPartner(auszahlung.getZahlungsverbindung(), BigDecimal.ZERO);
+            sapEndpointService.readBusinessPartner(BigDecimal.ZERO);
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerReadResponse.getRETURNCODE().get(0).getTYPE()),
             is(false)
@@ -129,12 +131,12 @@ class SapServiceIntegrationTest {
     // @Test
     @Order(5)
     void createVendorPostingTest() {
-        final var auszahlung = createAuszahlung();
-        auszahlung.getZahlungsverbindung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
-        deliveryid = SapEndpointService.generateDeliveryId();
+        final var auszahlung = createAuszahlung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        auszahlung.getZahlungsverbindung();
+        deliveryid = SapEndpointService.generateDeliveryId(BigInteger.ZERO);
 
         final var vendorPostingCreateResponse = sapEndpointService.createVendorPosting(
-            auszahlung.getZahlungsverbindung(),
+            auszahlung.getBuchhaltung().getFall(),
             5,
             deliveryid,
             "",

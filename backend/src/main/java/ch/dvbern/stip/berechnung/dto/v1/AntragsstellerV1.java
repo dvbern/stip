@@ -199,17 +199,17 @@ public class AntragsstellerV1 {
         );
 
         if (partner != null) {
-            // TODO KSTIP-2779: Update once einnahmenKosternPartner exists
-            // builder.einkommenPartner(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0));
-            // builder.steuernPartner(
-            // EinnahmenKostenMappingUtil.calculateSteuern(
-            // einnahmenKosten
-            // .setNettoerwerbseinkommen(Objects.requireNonNullElse(partner.getJahreseinkommen(), 0)),
-            // false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
-            // )
-            // );
-            // builder.fahrkostenPartner(Objects.requireNonNullElse(partner.getFahrkosten(), 0));
-            // builder.verpflegungPartner(Objects.requireNonNullElse(partner.getVerpflegungskosten(), 0));
+            final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
+            builder.einkommenPartner(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0));
+            builder.steuernPartner(
+                EinnahmenKostenMappingUtil.calculateSteuern(
+                    ekPartner
+                        .setNettoerwerbseinkommen(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0)),
+                    false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
+                )
+            );
+            builder.fahrkostenPartner(Objects.requireNonNullElse(ekPartner.getFahrkosten(), 0));
+            builder.verpflegungPartner(Objects.requireNonNullElse(ekPartner.getVerpflegungskosten(), 0));
         }
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)

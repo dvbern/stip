@@ -633,7 +633,7 @@ export class DokumentsStore extends signalStore(
     pipe(
       switchMap(({ gesuchTrancheId, onSuccess }) => {
         return this.gesuchService
-          .changeGesuchStatusToVersandbereit$({
+          .changeGesuchStatusToVerfuegungDruckbereit$({
             gesuchTrancheId,
           })
           .pipe(

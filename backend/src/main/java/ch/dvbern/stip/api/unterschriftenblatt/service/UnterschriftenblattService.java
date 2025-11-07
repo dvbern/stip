@@ -173,8 +173,9 @@ public class UnterschriftenblattService {
     }
 
     @Transactional
-    public boolean requiredUnterschriftenblaetterExistOrIsVerfuegt(final Gesuch gesuch) {
-        if (gesuch.isVerfuegt()) {
+    public boolean requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(final Gesuch gesuch) {
+        if (!gesuch.isFirstVerfuegung()) {
+            // skip the execution, if the gesuch has already been verfuegt more than one time
             return true;
         }
 
@@ -182,6 +183,7 @@ public class UnterschriftenblattService {
         final var existing = unterschriftenblattRepository.findByGesuchAndDokumentTypes(gesuch.getId(), required);
 
         final var existingSet = existing.map(Unterschriftenblatt::getDokumentTyp).collect(Collectors.toSet());
+        // check if all required unterschriftenblaetter have already been uploaded
         return existingSet.containsAll(required);
     }
 
@@ -260,7 +262,7 @@ public class UnterschriftenblattService {
     }
 
     private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
-        if (gesuch.isVerfuegt()) {
+        if (!gesuch.isFirstVerfuegung()) {
             return gesuch.getUnterschriftenblaetter().stream().map(Unterschriftenblatt::getDokumentTyp);
         }
 

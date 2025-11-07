@@ -188,7 +188,7 @@ public class VerfuegungPdfService {
 
         // Add the main content and footer sections.
         section.render(verfuegung, document, leftMargin, translator);
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont);
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, true);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
         PdfUtils.makePageNumberEven(document);
 
@@ -250,8 +250,8 @@ public class VerfuegungPdfService {
         final String translateKey = personInAusbildung
             .getAnrede()
             .equals(Anrede.HERR)
-                ? "stip.pdf.verfuegung.begruessung.mann"
-                : "stip.pdf.verfuegung.begruessung.frau";
+                ? "stip.pdf.begruessung.mann"
+                : "stip.pdf.begruessung.frau";
 
         document.add(
             PdfUtils.createParagraph(
@@ -685,8 +685,8 @@ public class VerfuegungPdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
         final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.verfuegung.begruessung.mann"
-            : "stip.pdf.verfuegung.begruessung.frau";
+            ? "stip.pdf.begruessung.mann"
+            : "stip.pdf.begruessung.frau";
 
         document.add(
             PdfUtils.createParagraph(

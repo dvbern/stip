@@ -2,6 +2,8 @@ export type PersoenlicheBerechnung = {
   typ: 'persoenlich';
   name: string;
   total: number;
+  monate: number;
+  berechnung: number;
   totalEinnahmen: number;
   totalKosten: number;
   totalVorTeilung?: number;

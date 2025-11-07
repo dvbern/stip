@@ -53,15 +53,11 @@ public class EinnahmenKostenUpdateDtoSpecModel {
             model.setVermoegen(1000);
             model.setErgaenzungsleistungen(500);
             model.setBeitraege(Math.min(2500, 1));
-            model.setAusbildungskosten(2500);
             model.setFahrkosten(2500);
-            model.setWohnkosten(2500);
-            model.setWgWohnend(false);
             model.setVerpflegungskosten(3);
             model.setBetreuungskostenKinder(TestUtil.getRandomInt(1, 2500));
             model.setSteuerjahr(0);
             model.setVeranlagungsStatus("test");
-            model.setAlternativeWohnformWohnend(false);
         });
     }
 

@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -63,7 +62,6 @@ public class GesuchStatusConfigProducer {
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
     private final StatusprotokollService statusprotokollService;
-    private final DatenschutzDruckbereitHandler datenschutzbriefDruckbereitHandler;
     private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
@@ -176,10 +174,6 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT)
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT),
-                datenschutzbriefDruckbereitHandler::handle
-            )
             .permit(
                 GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN,
                 Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN

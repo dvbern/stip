@@ -824,6 +824,10 @@ class BerechnungTest {
             (Partner) new Partner()
                 .setGeburtsdatum(LocalDate.of(1990, 12, 1))
         );
+        var ekPartner = new EinnahmenKosten();
+        ekPartner.setNettoerwerbseinkommen(0);
+        ekPartner.setVermoegen(0);
+        gesuchFormular.setEinnahmenKostenPartner(ekPartner);
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()

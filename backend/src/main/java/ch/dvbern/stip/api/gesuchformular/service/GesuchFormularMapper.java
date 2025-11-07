@@ -497,7 +497,9 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             "Clear Partner because Zivilstand changed to one person",
             () -> {
                 targetFormular.setPartner(null);
+                targetFormular.setEinnahmenKostenPartner(null);
                 newFormular.setPartner(null);
+                newFormular.setEinnahmenKostenPartner(null);
             }
         );
     }

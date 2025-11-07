@@ -90,7 +90,7 @@ public class GesuchApiSpec {
                 changeGesuchStatusToInBearbeitung(),
                 changeGesuchStatusToNegativeVerfuegung(),
                 changeGesuchStatusToVerfuegt(),
-                changeGesuchStatusToVersandbereit(),
+                changeGesuchStatusToVerfuegungDruckbereit(),
                 changeGesuchStatusToVersendet(),
                 createBeschwerdeEntscheid(),
                 createBeschwerdeVerlaufEntry(),
@@ -155,8 +155,8 @@ public class GesuchApiSpec {
         return new ChangeGesuchStatusToVerfuegtOper(createReqSpec());
     }
 
-    public ChangeGesuchStatusToVersandbereitOper changeGesuchStatusToVersandbereit() {
-        return new ChangeGesuchStatusToVersandbereitOper(createReqSpec());
+    public ChangeGesuchStatusToVerfuegungDruckbereitOper changeGesuchStatusToVerfuegungDruckbereit() {
+        return new ChangeGesuchStatusToVerfuegungDruckbereitOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToVersendetOper changeGesuchStatusToVersendet() {
@@ -452,7 +452,6 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * @see #body  (optional)
      * return GesuchWithChangesDtoSpec
      */
     public static class ChangeGesuchStatusToBereitFuerBearbeitungOper implements Oper {
@@ -465,7 +464,6 @@ public class GesuchApiSpec {
 
         public ChangeGesuchStatusToBereitFuerBearbeitungOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -489,15 +487,6 @@ public class GesuchApiSpec {
         public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
-        }
-
-         /**
-         * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
-         * @return operation
-         */
-        public ChangeGesuchStatusToBereitFuerBearbeitungOper body(KommentarDtoSpec kommentarDtoSpec) {
-            reqSpec.setBody(kommentarDtoSpec);
-            return this;
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
@@ -536,6 +525,7 @@ public class GesuchApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
+     * @see #body  (required)
      * return GesuchWithChangesDtoSpec
      */
     public static class ChangeGesuchStatusToDatenschutzbriefDruckbereitOper implements Oper {
@@ -548,6 +538,7 @@ public class GesuchApiSpec {
 
         public ChangeGesuchStatusToDatenschutzbriefDruckbereitOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -571,6 +562,15 @@ public class GesuchApiSpec {
         public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToDatenschutzbriefDruckbereitOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
         }
 
         public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
@@ -841,7 +841,7 @@ public class GesuchApiSpec {
      * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
      * return GesuchDtoSpec
      */
-    public static class ChangeGesuchStatusToVersandbereitOper implements Oper {
+    public static class ChangeGesuchStatusToVerfuegungDruckbereitOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
         public static final String REQ_URI = "/gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}";
@@ -849,7 +849,7 @@ public class GesuchApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public ChangeGesuchStatusToVersandbereitOper(RequestSpecBuilder reqSpec) {
+        public ChangeGesuchStatusToVerfuegungDruckbereitOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -882,7 +882,7 @@ public class GesuchApiSpec {
          * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
          * @return operation
          */
-        public ChangeGesuchStatusToVersandbereitOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+        public ChangeGesuchStatusToVerfuegungDruckbereitOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
@@ -892,7 +892,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public ChangeGesuchStatusToVersandbereitOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public ChangeGesuchStatusToVerfuegungDruckbereitOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -902,7 +902,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public ChangeGesuchStatusToVersandbereitOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public ChangeGesuchStatusToVerfuegungDruckbereitOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

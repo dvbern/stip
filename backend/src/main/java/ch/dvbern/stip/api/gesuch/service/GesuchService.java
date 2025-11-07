@@ -652,12 +652,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToBereitFuerBearbeitung(UUID gesuchId) {
-        gesuchStatusToBereitFuerBearbeitung(gesuchId, null);
-    }
-
-    @Transactional
-    public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId, final KommentarDto kommentar) {
+    public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
@@ -666,28 +661,40 @@ public class GesuchService {
             changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
-        gesuchStatusService.triggerStateMachineEventWithComment(
+        gesuchStatusService.triggerStateMachineEvent(
             gesuch,
-            changeEvent,
-            kommentar,
-            false
+            changeEvent
         );
+
+        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
+        if (
+            changeEvent.equals(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT)
+            && gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()
+        ) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 
     @Transactional
-    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId) {
+    public void gesuchStatusToDatenschutzbriefDruckbereit(final UUID gesuchId, final KommentarDto kommentar) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(
+        gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
-            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT
+            GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT,
+            kommentar,
+            false
         );
+
+        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
+        if (gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()) {
+            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        }
     }
 
     @Transactional
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);
-        // todo kstip-2663: move setting of verfuegt flag to a statuschangehandler again
         gesuch.setVerfuegt(true);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
@@ -699,7 +706,7 @@ public class GesuchService {
             return;
         }
 
-        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrIsVerfuegt(gesuch)) {
+        if (unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(gesuch)) {
             gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT);
         } else {
             gesuchStatusService.triggerStateMachineEvent(

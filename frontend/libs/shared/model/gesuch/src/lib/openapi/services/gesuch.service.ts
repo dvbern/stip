@@ -59,11 +59,11 @@ export interface GesuchServiceCanEinreichedatumAendernRequestParams {
 
 export interface GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams {
     gesuchTrancheId: string;
-    kommentar?: Kommentar;
 }
 
 export interface GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams {
     gesuchTrancheId: string;
+    kommentar: Kommentar;
 }
 
 export interface GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams {
@@ -79,7 +79,7 @@ export interface GesuchServiceChangeGesuchStatusToVerfuegtRequestParams {
     gesuchTrancheId: string;
 }
 
-export interface GesuchServiceChangeGesuchStatusToVersandbereitRequestParams {
+export interface GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams {
     /** Die ID von der GesuchTranche */
     gesuchTrancheId: string;
 }
@@ -479,7 +479,82 @@ export class GesuchService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToBereitFuerBearbeitung$.');
         }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/gesuch/status/bereit-fuer-bearbeitung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<GesuchWithChanges>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchWithChanges>;
+     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchWithChanges>>;
+     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchWithChanges>>;
+     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToDatenschutzbriefDruckbereit$.');
+        }
         const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling changeGesuchStatusToDatenschutzbriefDruckbereit$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -535,83 +610,11 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/status/bereit-fuer-bearbeitung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<GesuchWithChanges>('post', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: kommentar,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: <any>observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchWithChanges>;
-     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchWithChanges>>;
-     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchWithChanges>>;
-     public changeGesuchStatusToDatenschutzbriefDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToDatenschutzbriefDruckbereit$.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (auth-uat-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        // authentication (auth-dev-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json',
-                'text/plain'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
         const localVarPath = `/gesuch/status/datenschutzbrief-druckbereit/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GesuchWithChanges>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: kommentar,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -856,13 +859,13 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
-     public changeGesuchStatusToVersandbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVersandbereitRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Gesuch>;
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Gesuch>>;
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Gesuch>>;
+     public changeGesuchStatusToVerfuegungDruckbereit$(requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVersandbereit$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVerfuegungDruckbereit$.');
         }
 
         let localVarHeaders = this.defaultHeaders;

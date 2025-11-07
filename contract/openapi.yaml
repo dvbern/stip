@@ -540,12 +540,6 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Kommentar'
       responses:
         200:
           content:
@@ -572,6 +566,12 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
       responses:
         200:
           content:
@@ -693,7 +693,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: changeGesuchStatusToVersandbereit
+      operationId: changeGesuchStatusToVerfuegungDruckbereit
   '/gesuch/{gesuchId}/notiz/all':
     parameters:
       - name: gesuchId
@@ -4893,7 +4893,6 @@ components:
         - EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
         - EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         - EK_PARTNER_BELEG_OV_ABONNEMENT
-        - EK_PARTNER_MIETVERTRAG
         - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_PARTNER_LOHNABRECHNUNG
         - EK_PARTNER_VERMOEGEN
@@ -4989,6 +4988,7 @@ components:
       enum:
         - ALLE_GESUCHE
         - MEINE_GESUCHE
+        - PENDENTE_GESUCHE
         - ALLE_BEARBEITBAR
         - MEINE_BEARBEITBAR
         - ALLE_JURISTISCHE_ABKLAERUNG
@@ -7405,6 +7405,7 @@ components:
           type: string
     GesuchNotizTyp:
       enum:
+        - PENDENZ_NOTIZ
         - GESUCH_NOTIZ
         - JURISTISCHE_NOTIZ
     NotificationType:
@@ -7778,6 +7779,8 @@ components:
           type: string
         text:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
     GesuchNotiz:
       required:
         - userErstellt
@@ -7801,6 +7804,8 @@ components:
           type: string
         antwort:
           type: string
+        pendenzAbgeschlossen:
+          type: boolean
       allOf:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'

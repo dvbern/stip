@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -26,11 +27,111 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class EinnahmeKostenRequiredDocumentsProducerUtil {
+    public enum EinnahmenKostenType {
+        PERSON_IN_AUSBILDUNG,
+        PARTNER
+    }
 
-    public Set<DokumentTyp> getRequiredDocumentsForPIA(
-        GesuchFormular formular
+    private static final Map<EinnahmenKostenType, DokumentTyp> NETTOERWERBSEINKOMMEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_LOHNABRECHNUNG,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_LOHNABRECHNUNG
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> BETREUUNGSKOSTENKINDER = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> FAHRKOSTEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_OV_ABONNEMENT,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> EOLEISTUNGEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> RENTEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> BEITRAEGE = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> ZULAGEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_KINDERZULAGEN,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_KINDERZULAGEN
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> UNTERHALTSBEITRAEGE = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> ERGAENZUNGSLEISTUNGEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> VERMOEGEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_VERMOEGEN,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_VERMOEGEN
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> EINNAHMENBGSA = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_EINNAHMEN_BGSA,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_EINNAHMEN_BGSA
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> TAGGELDERAHVIV = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_TAGGELDER_AHV_IV
+    );
+
+    private static final Map<EinnahmenKostenType, DokumentTyp> ANDEREEINNAHMEN = Map.of(
+        EinnahmenKostenType.PERSON_IN_AUSBILDUNG,
+        DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN,
+        EinnahmenKostenType.PARTNER,
+        DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN
+    );
+
+    public Set<DokumentTyp> getRequiredDocuments(
+        final GesuchFormular formular,
+        final EinnahmenKostenType einnahmenKostenType
     ) {
-        final var ek = formular.getEinnahmenKosten();
+        final var ek = switch (einnahmenKostenType) {
+            case PERSON_IN_AUSBILDUNG -> formular.getEinnahmenKosten();
+            case PARTNER -> formular.getEinnahmenKostenPartner();
+        };
+
         if (ek == null) {
             return Set.of();
         }
@@ -38,129 +139,65 @@ public class EinnahmeKostenRequiredDocumentsProducerUtil {
         final var requiredDocs = new HashSet<DokumentTyp>();
 
         if (greaterThanZero(ek.getNettoerwerbseinkommen())) {
-            requiredDocs.add(DokumentTyp.EK_LOHNABRECHNUNG);
+            requiredDocs.add(NETTOERWERBSEINKOMMEN.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getBetreuungskostenKinder())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
+            requiredDocs.add(BETREUUNGSKOSTENKINDER.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getWohnkosten())) {
+            if (einnahmenKostenType == EinnahmenKostenType.PARTNER) {
+                throw new IllegalStateException("Einnahmen Kosten of Partner cannot have Wohnkosten set");
+            }
+
             requiredDocs.add(DokumentTyp.EK_MIETVERTRAG);
         }
 
         if (greaterThanZero(ek.getFahrkosten())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_OV_ABONNEMENT);
+            requiredDocs.add(FAHRKOSTEN.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getEoLeistungen())) {
-            requiredDocs.add(DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO);
+            requiredDocs.add(EOLEISTUNGEN.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getRenten())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN);
+            requiredDocs.add(RENTEN.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getBeitraege())) {
-            requiredDocs.add(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION);
+            requiredDocs.add(BEITRAEGE.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getZulagen())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
+            requiredDocs.add(ZULAGEN.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getUnterhaltsbeitraege())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
+            requiredDocs.add(UNTERHALTSBEITRAEGE.get(einnahmenKostenType));
         }
 
         if (greaterThanZero(ek.getErgaenzungsleistungen())) {
-            requiredDocs.add(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
+            requiredDocs.add(ERGAENZUNGSLEISTUNGEN.get(einnahmenKostenType));
         }
         if (greaterThanZero(ek.getVermoegen())) {
-            requiredDocs.add(DokumentTyp.EK_VERMOEGEN);
+            requiredDocs.add(VERMOEGEN.get(einnahmenKostenType));
         }
         if (greaterThanZero(ek.getEinnahmenBGSA())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
+            requiredDocs.add(EINNAHMENBGSA.get(einnahmenKostenType));
         }
         if (greaterThanZero(ek.getTaggelderAHVIV())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
+            requiredDocs.add(TAGGELDERAHVIV.get(einnahmenKostenType));
         }
         if (greaterThanZero(ek.getAndereEinnahmen())) {
-            requiredDocs.add(DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
+            requiredDocs.add(ANDEREEINNAHMEN.get(einnahmenKostenType));
         }
 
         return requiredDocs;
 
     }
 
-    public Set<DokumentTyp> getRequiredDocumentsForPartner(
-        GesuchFormular formular
-    ) {
-        final var partner = formular.getPartner();
-        final var ekPartner = formular.getEinnahmenKostenPartner();
-        if (partner == null || ekPartner == null) {
-            return Set.of();
-        }
-
-        final var requiredDocs = new HashSet<DokumentTyp>();
-
-        if (greaterThanZero(ekPartner.getNettoerwerbseinkommen())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_LOHNABRECHNUNG);
-        }
-
-        if (greaterThanZero(ekPartner.getBetreuungskostenKinder())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER);
-        }
-
-        if (greaterThanZero(ekPartner.getWohnkosten())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_MIETVERTRAG);
-        }
-
-        if (greaterThanZero(ekPartner.getFahrkosten())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT);
-        }
-
-        if (greaterThanZero(ekPartner.getEoLeistungen())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO);
-        }
-
-        if (greaterThanZero(ekPartner.getRenten())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN);
-        }
-
-        if (greaterThanZero(ekPartner.getBeitraege())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION);
-        }
-
-        if (greaterThanZero(ekPartner.getZulagen())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_KINDERZULAGEN);
-        }
-
-        if (greaterThanZero(ekPartner.getUnterhaltsbeitraege())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE);
-        }
-
-        if (greaterThanZero(ekPartner.getErgaenzungsleistungen())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
-        }
-        if (greaterThanZero(ekPartner.getVermoegen())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_VERMOEGEN);
-        }
-        if (greaterThanZero(ekPartner.getEinnahmenBGSA())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_EINNAHMEN_BGSA);
-        }
-        if (greaterThanZero(ekPartner.getTaggelderAHVIV())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_TAGGELDER_AHV_IV);
-        }
-        if (greaterThanZero(ekPartner.getAndereEinnahmen())) {
-            requiredDocs.add(DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN);
-        }
-
-        return requiredDocs;
-
-    }
-
-    // todo kstip-2571: refactor & remove duplication
     private boolean greaterThanZero(final Integer base) {
         return base != null && base > 0;
     }

@@ -52,17 +52,19 @@ public class SteuerdatenService {
     private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
-    public Set<Steuerdaten> getSteuerdaten(UUID gesuchTrancheId) {
+    @Transactional
+    public List<SteuerdatenDto> getSteuerdaten(UUID gesuchTrancheId) {
         // query history if tranche does not exist anymore
         var gesuchTranche = trancheRepository.findById(gesuchTrancheId);
         if (gesuchTranche == null) {
             gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
         }
-        return gesuchTranche.getGesuchFormular().getSteuerdaten();
+        final var steuerdaten = gesuchTranche.getGesuchFormular().getSteuerdaten();
+        return steuerdaten.stream().map(steuerdatenMapper::toDto).toList();
     }
 
     @Transactional
-    public List<Steuerdaten> updateSteuerdaten(
+    public List<SteuerdatenDto> updateSteuerdaten(
         UUID gesuchTrancheId,
         List<SteuerdatenDto> steuerdatenDtos
     ) {
@@ -72,11 +74,13 @@ public class SteuerdatenService {
         ValidatorUtil.validate(validator, formular, SteuerdatenPageValidation.class);
 
         steuerdaten.forEach(steuerdatenRepository::persistAndFlush);
-        return steuerdaten;
+        return steuerdaten.stream()
+            .map(steuerdatenMapper::toDto)
+            .toList();
     }
 
     @Transactional
-    public Set<Steuerdaten> updateSteuerdatenFromNesko(
+    public List<SteuerdatenDto> updateSteuerdatenFromNesko(
         UUID gesuchTrancheId,
         SteuerdatenTyp steuerdatenTyp,
         int steuerjahr
@@ -121,7 +125,12 @@ public class SteuerdatenService {
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
         steuerdatenRepository.persistAndFlush(steuerdaten);
-        return trancheRepository.requireById(gesuchTrancheId).getGesuchFormular().getSteuerdaten();
+        return trancheRepository.requireById(gesuchTrancheId)
+            .getGesuchFormular()
+            .getSteuerdaten()
+            .stream()
+            .map(steuerdatenMapper::toDto)
+            .toList();
     }
 
     private void updateDependentDataInSteuerdaten(

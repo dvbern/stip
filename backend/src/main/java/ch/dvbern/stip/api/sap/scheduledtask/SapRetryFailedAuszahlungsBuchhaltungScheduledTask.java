@@ -35,6 +35,7 @@ public class SapRetryFailedAuszahlungsBuchhaltungScheduledTask {
 
     private void run() {
         try {
+            LOG.info("processRetryFailedAuszahlungsBuchhaltung from scheduled task");
             sapService.processRetryFailedAuszahlungsBuchhaltung();
         } catch (Exception e) {
             LOG.error(e.toString(), e);

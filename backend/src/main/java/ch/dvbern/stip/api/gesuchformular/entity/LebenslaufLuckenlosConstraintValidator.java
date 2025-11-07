@@ -53,7 +53,7 @@ public class LebenslaufLuckenlosConstraintValidator
         final LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin().withDayOfMonth(1);
 
         // If PIA is younger than 16 no items need to be present
-        if (stop.isBefore(start)) {
+        if (start.equals(stop) || stop.isBefore(start)) {
             return true;
         }
 
