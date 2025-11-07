@@ -22,7 +22,10 @@ import java.time.LocalDate;
 import ch.dvbern.stip.api.common.util.DateRange;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+@Execution(ExecutionMode.CONCURRENT)
 class DateRangeTest {
     private final LocalDate von = LocalDate.of(2022, 12, 1);
     private final LocalDate bis = LocalDate.of(2023, 8, 31);

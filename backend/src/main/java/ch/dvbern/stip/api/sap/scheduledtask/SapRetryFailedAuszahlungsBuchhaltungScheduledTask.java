@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.sap.scheduledtask;
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.sap.service.SapService;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 public class SapRetryFailedAuszahlungsBuchhaltungScheduledTask {
     private final SapService sapService;
 

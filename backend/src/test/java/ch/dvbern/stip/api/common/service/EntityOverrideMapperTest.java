@@ -25,6 +25,8 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mapstruct.factory.Mappers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
+@Execution(ExecutionMode.CONCURRENT)
 class EntityOverrideMapperTest {
     private final EntityOverrideMapper entityOverrideMapper = Mappers.getMapper(EntityOverrideMapper.class);
 

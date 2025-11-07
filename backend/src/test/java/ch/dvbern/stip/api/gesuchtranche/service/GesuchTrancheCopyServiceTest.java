@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.util.DateRange;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -30,6 +32,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 class GesuchTrancheCopyServiceTest {
     @ParameterizedTest
     @ArgumentsSource(ClampStartEndTestArgumentsProvider.class)

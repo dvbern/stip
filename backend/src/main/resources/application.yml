@@ -276,20 +276,16 @@ quarkus:
       client-id: '${keycloak.client-id}'
       application-type: service
     s3:
-      aws:
-        credentials:
-          static-provider:
-            access-key-id: 'test-key'
-            secret-access-key: 'test-secret'
-        region: 'eu-central-2'
       devservices:
-        buckets: '${bucket.name}'
+        enabled: false
     keycloak:
       admin-client:
         server-url: ${keycloak.url}
         grant-type: password
         username: "test"
         password: "test"
+    quartz:
+      clustered: false
   bucket:
     name: 'stip-usercontent-test'
   keycloak:

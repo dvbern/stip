@@ -23,11 +23,11 @@ import java.util.UUID;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -62,6 +62,8 @@ public class BeschwerdeEntscheidService {
     private final S3AsyncClient s3;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final GesuchStatusService gesuchStatusService;
+    private final DokumentUploadService dokumentUploadService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Transactional
     public Uni<Response> createBeschwerdeEntscheid(
@@ -82,7 +84,7 @@ public class BeschwerdeEntscheidService {
 
         createBeschwerdeverlaufEntry(beschwerdeEntscheid);
 
-        return DokumentUploadUtil.validateScanUploadDokument(
+        return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
@@ -128,7 +130,7 @@ public class BeschwerdeEntscheidService {
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
-        return DokumentDownloadUtil.getDokument(
+        return dokumentDownloadService.getDokument(
             s3,
             configService.getBucketName(),
             dokument.getObjectId(),

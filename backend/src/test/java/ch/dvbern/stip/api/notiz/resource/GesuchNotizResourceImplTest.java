@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.notiz.resource;
 
 import java.util.Arrays;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -28,10 +27,10 @@ import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -65,7 +64,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -73,6 +71,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class GesuchNotizResourceImplTest {
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final GesuchNotizApiSpec gesuchNotizApiSpec = GesuchNotizApiSpec.gesuchNotiz(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
@@ -88,7 +87,8 @@ class GesuchNotizResourceImplTest {
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        // TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     // create a notiz as SB
@@ -218,9 +218,9 @@ class GesuchNotizResourceImplTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiter
     @Order(7)
-    void shouldBeCascadeDeleted() {
+    void setToInBearbeitung() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -236,7 +236,12 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
+    }
 
+    @Test
+    @TestAsSuperUser
+    @Order(8)
+    void delete() {
         // delete gesuch
         gesuchApiSpec.deleteGesuch()
             .gesuchIdPath(gesuch.getId())
@@ -244,7 +249,12 @@ class GesuchNotizResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+    }
 
+    @Test
+    @TestAsSachbearbeiter
+    @Order(9)
+    void checkNoNotizRemaining() {
         gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -257,7 +267,7 @@ class GesuchNotizResourceImplTest {
     // create a notiz as SB
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(10)
     void neuesGesuchErstellenUndEinreichen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
@@ -271,7 +281,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(11)
     void neuesGesuchBearbeiten() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -292,7 +302,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(12)
     void juristischeNotizErstellen() {
         var gesuchCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchCreateDto.setGesuchId(gesuch.getId());
@@ -322,7 +332,7 @@ class GesuchNotizResourceImplTest {
     // get all notizen as SB
     @Test
     @TestAsJurist
-    @Order(11)
+    @Order(13)
     void getJuristischeNotizen() {
         final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
@@ -344,7 +354,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(12)
+    @Order(14)
     void updateJuristischeNotizAsSBShouldFail() {
         var update = new GesuchNotizUpdateDtoSpec();
         update.setId(juristischeAbklaerungNotizDto.getId());
@@ -361,7 +371,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsJurist
-    @Order(13)
+    @Order(15)
     void updateJuristischeNotizAsJuristShouldFail() {
         var update = new GesuchNotizUpdateDtoSpec();
         update.setId(juristischeAbklaerungNotizDto.getId());
@@ -378,7 +388,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsJurist
-    @Order(14)
+    @Order(16)
     void answerJuristischeNotiz() {
         var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
         antwort.setAntwort("Test antwort");
@@ -416,7 +426,7 @@ class GesuchNotizResourceImplTest {
     // get all notizen as SB
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(17)
     void getJuristischeNotizenWithAnswer() {
         final var notizen = gesuchNotizApiSpec.getNotizen()
             .gesuchIdPath(gesuch.getId())
@@ -434,7 +444,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(18)
     void anotherNotizErstellen() {
         var gesuchNotizCreateDto = new GesuchNotizCreateDtoSpec();
         gesuchNotizCreateDto.setGesuchId(gesuch.getId());
@@ -457,7 +467,7 @@ class GesuchNotizResourceImplTest {
      */
     @Test
     @TestAsJurist
-    @Order(17)
+    @Order(19)
     void answerJuristischeNotizShouldfail() {
         var antwort = new JuristischeAbklaerungNotizAntwortDtoSpec();
         antwort.setAntwort("Test antwort");
@@ -477,7 +487,7 @@ class GesuchNotizResourceImplTest {
      */
     @Test
     @TestAsSachbearbeiter
-    @Order(18)
+    @Order(20)
     void juristischeNotizDeleteShouldFail() {
         gesuchNotizApiSpec.deleteNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())
@@ -489,7 +499,7 @@ class GesuchNotizResourceImplTest {
 
     @Test
     @TestAsJurist
-    @Order(19)
+    @Order(21)
     void juristischeNotizDeleteAsJuristShouldFail() {
         gesuchNotizApiSpec.deleteNotiz()
             .notizIdPath(juristischeAbklaerungNotizDto.getId())

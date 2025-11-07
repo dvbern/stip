@@ -15,22 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
+import io.quarkus.test.Mock;
+import jakarta.enterprise.context.ApplicationScoped;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-@Execution(ExecutionMode.CONCURRENT)
-class NullDiffUtilTest {
-    @Test
-    void test() {
-        assertFalse(NullDiffUtil.hasNullChanged(new Object(), new Object()));
-        assertTrue(NullDiffUtil.hasNullChanged(new Object(), null));
-        assertTrue(NullDiffUtil.hasNullChanged(null, new Object()));
-        assertFalse(NullDiffUtil.hasNullChanged(null, null));
-    }
+@Mock
+@ApplicationScoped
+public class DokumentDeleteServiceMock extends DokumentDeleteService {
+    @Override
+    public void executeDeleteDokumentFromS3(
+        final S3AsyncClient s3,
+        final String bucketName,
+        final String objectId
+    ) {}
+
+    @Override
+    public void executeDeleteDokumentsFromS3(
+        final S3AsyncClient s3,
+        final String bucketName,
+        final List<String> objectIds
+    ) {}
 }
