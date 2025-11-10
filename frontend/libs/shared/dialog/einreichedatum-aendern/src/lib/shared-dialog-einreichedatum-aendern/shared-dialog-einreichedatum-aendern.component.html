@@ -13,9 +13,7 @@
 
   <form [formGroup]="form" (ngSubmit)="einreichedatumAendern()">
     <mat-form-field dvSharedUiFormField class="col-md-8 col-12">
-      <mat-label>
-        {{ 'shared.dialog.einreichedatum-aendern.einreichedatum.label' | transloco }}
-      </mat-label>
+      <mat-label>{{ 'shared.dialog.einreichedatum-aendern.einreichedatum.label' | transloco }}</mat-label>
       <input
         formControlName="einreichedatum"
         data-testid="form-einreichedatum"

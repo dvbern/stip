@@ -14,9 +14,9 @@
   <form [formGroup]="form" class="tw:mt-5" novalidate>
     <div class="tw:flex tw:w-full tw:flex-col tw:gap-4">
       <mat-form-field class="tw:w-full">
-        <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang' | transloco }}
-        </mat-label>
+        <mat-label>{{
+          'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang' | transloco
+        }}</mat-label>
         <input
           matInput
           [value]="ausbildungsgangNameSig() | translatedProp: 'name' : translate.getActiveLang()"

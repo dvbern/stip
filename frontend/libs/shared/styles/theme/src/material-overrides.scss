@@ -325,12 +325,6 @@ $dv-all-colors: (
   }
 }
 
-.mat-mdc-form-field-required-marker {
+form:not(.readonly) .mat-mdc-form-field-required-marker {
   color: var(--dv-red);
-}
-
-form.readonly {
-  .mat-mdc-form-field-required-marker {
-    color: inherit;
-  }
 }

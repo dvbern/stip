@@ -257,8 +257,6 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'steuererklaerungInBern',
-      'unterhaltsbeitraege',
-      'renten',
     ]);
 
     const steuererklaerung = {
