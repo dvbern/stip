@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -52,6 +53,7 @@ public class GesuchStatusConfigProducer {
     private final GesuchFehlendeDokumenteNichtEingereichtHandler gesuchFehlendeDokumenteNichtEingereichtHandler;
     private final GesuchZurueckweisenHandler gesuchZurueckweisenHandler;
     private final KomplettEingereichtHandler komplettEingereichtHandler;
+    private final DatenschutzbriefDruckbereitHandler datenschutzbriefDruckbereitHandler;
     private final FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandler;
     private final FehlendeDokumenteHandler fehlendeDokumenteHandler;
     private final VerfuegungDruckbereitHandler verfuegungDruckbereitHandler;
@@ -177,6 +179,10 @@ public class GesuchStatusConfigProducer {
             .permit(
                 GesuchStatusChangeEvent.DATENSCHUTZBRIEF_AM_GENERIEREN,
                 Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT),
+                datenschutzbriefDruckbereitHandler::handle
             );
 
         config.configure(Gesuchstatus.DATENSCHUTZBRIEF_AM_GENERIEREN)
@@ -274,7 +280,7 @@ public class GesuchStatusConfigProducer {
                 continue;
             }
 
-            state.addEntryAction(this::logTransition);
+            state.insertEntryAction(this::logTransition);
         }
 
         return config;

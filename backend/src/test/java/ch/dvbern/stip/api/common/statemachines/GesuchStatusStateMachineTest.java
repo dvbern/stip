@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDokumenteNichtEingereichtHandler;
@@ -54,6 +55,7 @@ class GesuchStatusStateMachineTest {
     private GesuchFehlendeDokumenteNichtEingereichtHandler gesuchFehlendeDokumenteNichtEingereichtHandlerSpy;
     private GesuchZurueckweisenHandler gesuchZurueckweisenHandlerSpy;
     private KomplettEingereichtHandler komplettEingereichtHandlerSpy;
+    private DatenschutzbriefDruckbereitHandler datenschutzbriefDruckbereitHandlerMock;
     private FehlendeDokumenteEinreichenHandler fehlendeDokumenteEinreichenHandlerSpy;
     private FehlendeDokumenteHandler fehlendeDokumenteHandlerSpy;
     private VerfuegungDruckbereitHandler verfuegungDruckbereitHandlerSpy;
@@ -73,6 +75,7 @@ class GesuchStatusStateMachineTest {
             Mockito.mock(GesuchFehlendeDokumenteNichtEingereichtHandler.class);
         gesuchZurueckweisenHandlerSpy = Mockito.mock(GesuchZurueckweisenHandler.class);
         komplettEingereichtHandlerSpy = Mockito.mock(KomplettEingereichtHandler.class);
+        datenschutzbriefDruckbereitHandlerMock = Mockito.mock(DatenschutzbriefDruckbereitHandler.class);
         fehlendeDokumenteEinreichenHandlerSpy = Mockito.mock(FehlendeDokumenteEinreichenHandler.class);
         fehlendeDokumenteHandlerSpy = Mockito.mock(FehlendeDokumenteHandler.class);
         verfuegungDruckbereitHandlerSpy = Mockito.mock(VerfuegungDruckbereitHandler.class);
@@ -90,6 +93,7 @@ class GesuchStatusStateMachineTest {
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
             gesuchZurueckweisenHandlerSpy,
             komplettEingereichtHandlerSpy,
+            datenschutzbriefDruckbereitHandlerMock,
             fehlendeDokumenteEinreichenHandlerSpy,
             fehlendeDokumenteHandlerSpy,
             verfuegungDruckbereitHandlerSpy,
