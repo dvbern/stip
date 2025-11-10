@@ -118,7 +118,8 @@ class BerechnungTest {
             "6, -27179",
             "7, -6669",
             "8, -266", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
-            "9, -23527"
+            "9, -23527",
+            "10, 11602"
         }
     )
     void testBerechnungFaelle(final int fall, final int expectedStipendien) {
