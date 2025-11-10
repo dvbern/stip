@@ -15,13 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.verfuegung.service;
 
-public final class DokumentDownloadConstants {
-    private DokumentDownloadConstants() {}
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
+import ch.dvbern.stip.generated.dto.VerfuegungDokumentDto;
+import org.mapstruct.Mapper;
 
-    public static final String GESUCH_ID_CLAIM = "gesuch_id";
-    public static final String DOKUMENT_ID_CLAIM = "dokument_id";
-    public static final String VERFUEGUN_DOKUMENT_ID_CLAIM = "verfuegung_dokument_id";
-    public static final String MASSENDRUCK_JOB_ID_CLAIM = "massendruck_id";
+@Mapper(config = MappingConfig.class)
+public interface VerfuegungDokumentMapper {
+    VerfuegungDokumentDto toDto(VerfuegungDokument verfuegung);
 }

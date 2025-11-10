@@ -95,7 +95,6 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
 import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
-import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
@@ -161,7 +160,6 @@ public class GesuchService {
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
-    private final BerechnungsblattService berechnungsblattService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheService gesuchTrancheService;
@@ -882,11 +880,7 @@ public class GesuchService {
     }
 
     public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return gesuch.getVerfuegungs()
-            .stream()
-            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-            .orElseThrow(NotFoundException::new);
+        return verfuegungService.getLatestVerfuegung(gesuchId);
     }
 
     @Transactional

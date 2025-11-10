@@ -15,12 +15,15 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.StipDecisionDtoSpec;
+import ch.dvbern.stip.generated.dto.VerfuegungDokumentDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -31,8 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   VerfuegungDtoSpec.JSON_PROPERTY_ID,
   VerfuegungDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
-  VerfuegungDtoSpec.JSON_PROPERTY_FILENAME,
-  VerfuegungDtoSpec.JSON_PROPERTY_STIP_DECISION
+  VerfuegungDtoSpec.JSON_PROPERTY_DOKUMENTE
 })
 @JsonTypeName("Verfuegung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,11 +45,8 @@ public class VerfuegungDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private String timestampErstellt;
 
-  public static final String JSON_PROPERTY_FILENAME = "filename";
-  private String filename;
-
-  public static final String JSON_PROPERTY_STIP_DECISION = "stipDecision";
-  private StipDecisionDtoSpec stipDecision;
+  public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
+  private List<VerfuegungDokumentDtoSpec> dokumente;
 
   public VerfuegungDtoSpec() {
   }
@@ -104,55 +103,37 @@ public class VerfuegungDtoSpec {
   }
 
 
-  public VerfuegungDtoSpec filename(String filename) {
+  public VerfuegungDtoSpec dokumente(List<VerfuegungDokumentDtoSpec> dokumente) {
     
-    this.filename = filename;
+    this.dokumente = dokumente;
+    return this;
+  }
+
+  public VerfuegungDtoSpec addDokumenteItem(VerfuegungDokumentDtoSpec dokumenteItem) {
+    if (this.dokumente == null) {
+      this.dokumente = new ArrayList<>();
+    }
+    this.dokumente.add(dokumenteItem);
     return this;
   }
 
    /**
-   * Get filename
-   * @return filename
+   * Get dokumente
+   * @return dokumente
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getFilename() {
-    return filename;
+  public List<VerfuegungDokumentDtoSpec> getDokumente() {
+    return dokumente;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFilename(String filename) {
-    this.filename = filename;
-  }
-
-
-  public VerfuegungDtoSpec stipDecision(StipDecisionDtoSpec stipDecision) {
-    
-    this.stipDecision = stipDecision;
-    return this;
-  }
-
-   /**
-   * Get stipDecision
-   * @return stipDecision
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_STIP_DECISION)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public StipDecisionDtoSpec getStipDecision() {
-    return stipDecision;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_STIP_DECISION)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStipDecision(StipDecisionDtoSpec stipDecision) {
-    this.stipDecision = stipDecision;
+  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDokumente(List<VerfuegungDokumentDtoSpec> dokumente) {
+    this.dokumente = dokumente;
   }
 
   @Override
@@ -166,13 +147,12 @@ public class VerfuegungDtoSpec {
     VerfuegungDtoSpec verfuegung = (VerfuegungDtoSpec) o;
     return Objects.equals(this.id, verfuegung.id) &&
         Objects.equals(this.timestampErstellt, verfuegung.timestampErstellt) &&
-        Objects.equals(this.filename, verfuegung.filename) &&
-        Objects.equals(this.stipDecision, verfuegung.stipDecision);
+        Objects.equals(this.dokumente, verfuegung.dokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, filename, stipDecision);
+    return Objects.hash(id, timestampErstellt, dokumente);
   }
 
   @Override
@@ -181,8 +161,7 @@ public class VerfuegungDtoSpec {
     sb.append("class VerfuegungDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
-    sb.append("    stipDecision: ").append(toIndentedString(stipDecision)).append("\n");
+    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

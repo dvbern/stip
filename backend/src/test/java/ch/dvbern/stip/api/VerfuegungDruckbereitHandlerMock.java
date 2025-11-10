@@ -15,13 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api;
 
-public final class DokumentDownloadConstants {
-    private DokumentDownloadConstants() {}
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import io.quarkus.test.Mock;
+import jakarta.enterprise.context.RequestScoped;
 
-    public static final String GESUCH_ID_CLAIM = "gesuch_id";
-    public static final String DOKUMENT_ID_CLAIM = "dokument_id";
-    public static final String VERFUEGUN_DOKUMENT_ID_CLAIM = "verfuegung_dokument_id";
-    public static final String MASSENDRUCK_JOB_ID_CLAIM = "massendruck_id";
+@Mock
+@RequestScoped
+public class VerfuegungDruckbereitHandlerMock extends VerfuegungDruckbereitHandler {
+
+    public VerfuegungDruckbereitHandlerMock() {
+        super(null, null, null);
+    }
+
+    @Override
+    public void handle(Gesuch gesuch) {}
 }

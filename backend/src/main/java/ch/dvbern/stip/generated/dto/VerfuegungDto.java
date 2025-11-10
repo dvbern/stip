@@ -1,6 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.VerfuegungDokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -22,8 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class VerfuegungDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String timestampErstellt;
-  private @Valid String filename;
-  private @Valid ch.dvbern.stip.api.common.type.StipDecision stipDecision;
+  private @Valid List<VerfuegungDokumentDto> dokumente;
 
   /**
    **/
@@ -65,42 +68,38 @@ public class VerfuegungDto  implements Serializable {
 
   /**
    **/
-  public VerfuegungDto filename(String filename) {
-    this.filename = filename;
+  public VerfuegungDto dokumente(List<VerfuegungDokumentDto> dokumente) {
+    this.dokumente = dokumente;
     return this;
   }
 
   
-  @JsonProperty("filename")
-  @NotNull
-  public String getFilename() {
-    return filename;
+  @JsonProperty("dokumente")
+  public List<VerfuegungDokumentDto> getDokumente() {
+    return dokumente;
   }
 
-  @JsonProperty("filename")
-  public void setFilename(String filename) {
-    this.filename = filename;
+  @JsonProperty("dokumente")
+  public void setDokumente(List<VerfuegungDokumentDto> dokumente) {
+    this.dokumente = dokumente;
   }
 
-  /**
-   **/
-  public VerfuegungDto stipDecision(ch.dvbern.stip.api.common.type.StipDecision stipDecision) {
-    this.stipDecision = stipDecision;
+  public VerfuegungDto addDokumenteItem(VerfuegungDokumentDto dokumenteItem) {
+    if (this.dokumente == null) {
+      this.dokumente = new ArrayList<>();
+    }
+
+    this.dokumente.add(dokumenteItem);
     return this;
   }
 
-  
-  @JsonProperty("stipDecision")
-  @NotNull
-  public ch.dvbern.stip.api.common.type.StipDecision getStipDecision() {
-    return stipDecision;
-  }
+  public VerfuegungDto removeDokumenteItem(VerfuegungDokumentDto dokumenteItem) {
+    if (dokumenteItem != null && this.dokumente != null) {
+      this.dokumente.remove(dokumenteItem);
+    }
 
-  @JsonProperty("stipDecision")
-  public void setStipDecision(ch.dvbern.stip.api.common.type.StipDecision stipDecision) {
-    this.stipDecision = stipDecision;
+    return this;
   }
-
 
   @Override
   public boolean equals(Object o) {
@@ -113,13 +112,12 @@ public class VerfuegungDto  implements Serializable {
     VerfuegungDto verfuegung = (VerfuegungDto) o;
     return Objects.equals(this.id, verfuegung.id) &&
         Objects.equals(this.timestampErstellt, verfuegung.timestampErstellt) &&
-        Objects.equals(this.filename, verfuegung.filename) &&
-        Objects.equals(this.stipDecision, verfuegung.stipDecision);
+        Objects.equals(this.dokumente, verfuegung.dokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, filename, stipDecision);
+    return Objects.hash(id, timestampErstellt, dokumente);
   }
 
   @Override
@@ -129,8 +127,7 @@ public class VerfuegungDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
-    sb.append("    stipDecision: ").append(toIndentedString(stipDecision)).append("\n");
+    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("}");
     return sb.toString();
   }

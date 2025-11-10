@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -64,6 +65,7 @@ class GesuchStatusStateMachineTest {
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
     private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
+    private VerfuegtHandler verfuegtHandler;
     private StatusprotokollService statusprotokollService;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
@@ -85,6 +87,7 @@ class GesuchStatusStateMachineTest {
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
         bereitFuerBearbeitungHandler = Mockito.mock(BereitFuerBearbeitungHandler.class);
+        verfuegtHandler = Mockito.mock(VerfuegtHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -100,7 +103,8 @@ class GesuchStatusStateMachineTest {
             stipendienAnspruchHandlerSpy,
             juristischeAbklaerungDurchPruefungHandlerSpy,
             statusprotokollService,
-            bereitFuerBearbeitungHandler
+            bereitFuerBearbeitungHandler,
+            verfuegtHandler
         ).createStateMachineConfig();
     }
 

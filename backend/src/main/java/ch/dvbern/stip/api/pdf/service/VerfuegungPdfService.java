@@ -708,11 +708,8 @@ public class VerfuegungPdfService {
         );
     }
 
-    /**
-     * Merge Verfügungstext + all merged (Berechnungsblatt + Unterschriftenblatt) PDFs into final document
-     */
     public ByteArrayOutputStream createVersendeteVerfuegung(
-        final ByteArrayOutputStream verfuegungstext,
+        final ByteArrayOutputStream verfuegungsbrief,
         final List<ByteArrayOutputStream> mergedBerechnungsblaetter
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -722,7 +719,7 @@ public class VerfuegungPdfService {
 
             try (
                 final PdfDocument verfuegungPdf = new PdfDocument(
-                    new PdfReader(new ByteArrayInputStream(verfuegungstext.toByteArray()))
+                    new PdfReader(new ByteArrayInputStream(verfuegungsbrief.toByteArray()))
                 )
             ) {
                 merger.merge(verfuegungPdf, 1, verfuegungPdf.getNumberOfPages());

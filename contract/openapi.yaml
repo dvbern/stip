@@ -99,7 +99,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerfuegungList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Verfuegung'
           description: Returns a list of all Verfuegungen for a Gesuch
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4589,17 +4591,6 @@ paths:
       summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
 components:
   schemas:
-    VerfuegungList:
-      type: object
-      required:
-        - verfuegungen
-      properties:
-        verfuegungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/Verfuegung'
-        datenschutzbriefMassendruckJobId:
-          $ref: '#/components/schemas/UUID'
     Verfuegung:
       type: object
       required:

@@ -25,6 +25,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -43,7 +44,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Entity
 @Table(
-    name = "verfuegung_dokument"
+    name = "verfuegung_dokument",
+    indexes = @Index(name = "IX_verfuegung_dokument_mandant", columnList = "mandant")
 )
 @Getter
 @Setter

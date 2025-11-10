@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -146,7 +145,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -1163,11 +1161,7 @@ class GesuchServiceTest {
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
-        try {
-            Mockito.doNothing().when(verfuegungService).createPdfForVerfuegungOhneAnspruch(any());
-        } catch (IOException e) {
-            fail();
-        }
+        Mockito.doNothing().when(verfuegungService).createPdfForVerfuegungOhneAnspruch(any());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(

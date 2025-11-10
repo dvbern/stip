@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -25,13 +24,11 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
-import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +41,6 @@ public class VerfuegtHandler implements GesuchStatusChangeHandler {
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
     private final BerechnungsblattService berechnungsblattService;
-    private final VerfuegungPdfService verfuegungPdfService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -67,6 +63,23 @@ public class VerfuegtHandler implements GesuchStatusChangeHandler {
             berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, locale)
         );
 
+        if (berechnungsresultat == 0) {
+            verfuegungService.createPdfForVerfuegungOhneAnspruch(
+                verfuegungService.getLatestVerfuegung(gesuch.getId())
+            );
+        }
+
+        if (berechnungsresultat > 0) {
+            buchhaltungService.createStipendiumBuchhaltungEntry(
+                gesuch,
+                berechnungsresultat
+            );
+
+            verfuegungService.createPdfForVerfuegungMitAnspruch(
+                verfuegungService.getLatestVerfuegung(gesuch.getId())
+            );
+        }
+
         for (var tranchenResultat : stipendien.getTranchenBerechnungsresultate()) {
             for (var familienBudget : tranchenResultat.getFamilienBudgetresultate()) {
                 final SteuerdatenTyp typ = familienBudget.getFamilienBudgetTyp();
@@ -82,27 +95,6 @@ public class VerfuegtHandler implements GesuchStatusChangeHandler {
                     berechnungsblattService.getBerechnungsblattFamilie(gesuch, locale, typ)
                 );
             }
-        }
-
-        if (berechnungsresultat == 0) {
-            try {
-                verfuegungService.createPdfForVerfuegungOhneAnspruch(
-                    verfuegungService.getLatestVerfuegung(gesuch.getId())
-                );
-            } catch (IOException e) {
-                throw new InternalServerErrorException(e);
-            }
-        }
-
-        if (berechnungsresultat > 0) {
-            buchhaltungService.createStipendiumBuchhaltungEntry(
-                gesuch,
-                berechnungsresultat
-            );
-
-            verfuegungService.createPdfForVerfuegungMitAnspruch(
-                verfuegungService.getLatestVerfuegung(gesuch.getId())
-            );
         }
     }
 }

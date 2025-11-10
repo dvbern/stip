@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.NotFoundException;
@@ -39,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
 @Slf4j
+@UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final VerfuegungService verfuegungService;
@@ -49,13 +51,13 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     public void handle(Gesuch gesuch) {
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
-        final VerfuegungDokument verfuegungstextDocument = getVerfuegungstextDocument(verfuegung);
-        final byte[] verfuegungstextBytes = verfuegungService.downloadVerfuegungDokument(verfuegungstextDocument);
-        final ByteArrayOutputStream verfuegungstext = new ByteArrayOutputStream();
+        final VerfuegungDokument verfuegungsbriefDocument = getVerfuegungsbriefDocument(verfuegung);
+        final byte[] verfuegungsbriefBytes = verfuegungService.getVerfuegungDokumentFromS3(verfuegungsbriefDocument);
+        final ByteArrayOutputStream verfuegungsbrief = new ByteArrayOutputStream();
         try {
-            verfuegungstext.write(verfuegungstextBytes);
+            verfuegungsbrief.write(verfuegungsbriefBytes);
         } catch (IOException e) {
-            throw new InternalServerErrorException("Failed to process Verfuegungstext", e);
+            throw new InternalServerErrorException("Failed to process Verfuegungsbrief", e);
         }
 
         final List<ByteArrayOutputStream> berechnungsblaetter = new ArrayList<>();
@@ -69,7 +71,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
                 final VerfuegungDokument berechnungsblatt =
                     verfuegungService.getBerechnungsblattByType(verfuegung, berechnungsblattTyp);
 
-                final byte[] berechnungsblattBytes = verfuegungService.downloadVerfuegungDokument(berechnungsblatt);
+                final byte[] berechnungsblattBytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblatt);
                 final ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 baos.write(berechnungsblattBytes);
                 berechnungsblaetter.add(baos);
@@ -84,7 +86,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         }
 
         final ByteArrayOutputStream versendeteVerfuegung = verfuegungPdfService.createVersendeteVerfuegung(
-            verfuegungstext,
+            verfuegungsbrief,
             berechnungsblaetter
         );
 
@@ -96,14 +98,14 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
     }
 
-    private VerfuegungDokument getVerfuegungstextDocument(Verfuegung verfuegung) {
+    private VerfuegungDokument getVerfuegungsbriefDocument(Verfuegung verfuegung) {
         return verfuegung.getDokumente()
             .stream()
             .filter(
-                d -> VerfuegungDokumentTyp.VERFUEGUNGSBRIEF.contains(d.getDokumentTyp())
+                d -> d.getDokumentTyp() == VerfuegungDokumentTyp.VERFUEGUNGSBRIEF
             )
             .findFirst()
-            .orElseThrow(() -> new NotFoundException("Verfuegungstext document not found"));
+            .orElseThrow(() -> new NotFoundException("Verfuegungsbrief document not found"));
     }
 
     private VerfuegungDokumentTyp mapToBerechnungsblattTyp(UnterschriftenblattDokumentTyp typ) {
