@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import ch.dvbern.stip.api.DokumentDeleteServiceMock;
 import ch.dvbern.stip.api.DokumentDownloadServiceMock;
 import ch.dvbern.stip.api.DokumentUploadServiceMock;
 import ch.dvbern.stip.api.adresse.service.MockAdresseMapperImpl;
@@ -38,7 +39,6 @@ import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.service.DarlehenMapperImpl;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
-import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -673,7 +673,7 @@ class GesuchFormularMapperTest {
         final var unterschriftenblattService = new UnterschriftenblattService(
             null, unterschriftenblattRepositoryMock, null, null, Mockito.mock(ConfigService.class), s3, null, null,
             null, null, null, new DokumentUploadServiceMock(), new DokumentDownloadServiceMock(),
-            new DokumentDeleteService()
+            new DokumentDeleteServiceMock()
         );
         final var unterschriftenblattServiceMock = Mockito.spy(unterschriftenblattService);
         Mockito.doReturn(List.of(UnterschriftenblattDokumentTyp.GEMEINSAM))
