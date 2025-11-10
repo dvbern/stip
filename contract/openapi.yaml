@@ -84,6 +84,80 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAuszahlungForGesuch
       summary: Get Auszahlung
+  /verfuegung/{gesuchId}/verfuegungen:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerfuegungList'
+          description: Returns a list of all Verfuegungen for a Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungen
+  /verfuegung/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        200:
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returns a file
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungDokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  /verfuegung/dokument/{verfuegungDokumentId}/token:
+    parameters:
+      - name: verfuegungDokumentId
+        schema:
+          $ref: "#/components/schemas/UUID"
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungDokumentDownloadToken
   /massendruck/{getMassendruckJobs}:
     get:
       tags:
@@ -4515,22 +4589,48 @@ paths:
       summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
 components:
   schemas:
+    VerfuegungList:
+      type: object
+      required:
+        - verfuegungen
+      properties:
+        verfuegungen:
+          type: array
+          items:
+            $ref: '#/components/schemas/Verfuegung'
+        datenschutzbriefMassendruckJobId:
+          $ref: '#/components/schemas/UUID'
     Verfuegung:
       type: object
       required:
         - id
         - timestampErstellt
-        - filename
-        - stipDecision
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         timestampErstellt:
           type: string
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerfuegungDokument'
+    VerfuegungDokument:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        typ:
+          $ref: '#/components/schemas/VerfuegungDokumentTyp'
         filename:
           type: string
-        stipDecision:
-          $ref: '#/components/schemas/StipDecision'
+    VerfuegungDokumentTyp:
+      enum:
+        - BERECHNUNGSBLATT_PIA
+        - BERECHNUNGSBLATT_MUTTER
+        - BERECHNUNGSBLATT_VATER
+        - BERECHNUNGSBLATT_FAMILIE
+        - VERSENDETE_VERFUEGUNG
+        - VERFUEGUNGSBRIEF
     MassendruckJob:
       type: object
       required:
