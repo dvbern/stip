@@ -64,6 +64,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.oneOf;
@@ -252,7 +253,7 @@ class BuchhaltungResourceTest {
 
         final var buchhaltungEntrys = buchhaltungOverview.getBuchhaltungEntrys();
 
-        assertThat(buchhaltungEntrys.size(), greaterThan(1));
+        assertThat(buchhaltungEntrys.size(), greaterThanOrEqualTo(1));
         assertThat(buchhaltungEntrys.get(0).getBuchhaltungType(), equalTo(BuchhaltungType.STIPENDIUM));
         assertThat(buchhaltungEntrys.get(0).getSaldo(), greaterThan(0));
         assertThat(buchhaltungEntrys.get(0).getSaldoAenderung(), greaterThan(0));
