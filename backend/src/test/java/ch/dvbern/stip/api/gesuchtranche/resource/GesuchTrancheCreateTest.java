@@ -414,15 +414,11 @@ class GesuchTrancheCreateTest {
     }
 
     private void removeDocumentSB(UUID trancheId) {
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
-        var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
-        geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.VORSCHULPFLICHTIG);
-        geschwisterUpdate.setNachname("test");
-        geschwisterUpdate.setVorname("test");
-        geschwisterUpdate.setGeburtsdatum(LocalDate.now().minusYears(18));
-        geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
-
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setNettoerwerbseinkommen(0);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
         gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
