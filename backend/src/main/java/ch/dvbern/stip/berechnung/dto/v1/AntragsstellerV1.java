@@ -58,8 +58,11 @@ public class AntragsstellerV1 {
     int alimentePartner;
     int rente;
     int rentePartner;
-    int kinderAusbildungszulagen;
-    int kinderErhalteneUnterhaltsbeitraege;
+    int kinderRentenTotal;
+    int kinderErgaenzungsleistungenTotal;
+    int kinderAndereEinnahmenTotal;
+    int kinderAusbildungszulagenTotal;
+    int kinderErhalteneUnterhaltsbeitraegeTotal;
     int ergaenzungsleistungen;
     int ergaenzungsleistungenPartner;
     int leistungenEO;
@@ -141,6 +144,10 @@ public class AntragsstellerV1 {
             }
             int totalKinderAusbildungsZulagen = 0;
             int totalKinderUnterhaltsbeitraege = 0;
+            int totalKinderRenten = 0;
+            int totalKinderAndereEinnahmen = 0;
+            int totalKinderErgaenzungsleistungen = 0;
+
             for (final var kind : gesuchFormular.getKinds()) {
                 // if child does still live with the parents/ a parent
                 if (kind.getWohnsitzAnteilPia() > 0) {
@@ -154,13 +161,21 @@ public class AntragsstellerV1 {
 
                 totalKinderAusbildungsZulagen += Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0);
                 totalKinderUnterhaltsbeitraege += Objects.requireNonNullElse(kind.getUnterhaltsbeitraege(), 0);
+                totalKinderRenten += Objects.requireNonNullElse(kind.getRenten(), 0);
+                totalKinderAndereEinnahmen += Objects.requireNonNullElse(kind.getAndereEinnahmen(), 0);
+                totalKinderErgaenzungsleistungen += Objects.requireNonNullElse(kind.getErgaenzungsleistungen(), 0);
             }
 
             builder
-                .kinderAusbildungszulagen(toJahresWert(Objects.requireNonNullElse(totalKinderAusbildungsZulagen, 0)));
-            builder.kinderErhalteneUnterhaltsbeitraege(
+                .kinderAusbildungszulagenTotal(
+                    toJahresWert(Objects.requireNonNullElse(totalKinderAusbildungsZulagen, 0))
+                );
+            builder.kinderErhalteneUnterhaltsbeitraegeTotal(
                 toJahresWert(Objects.requireNonNullElse(totalKinderUnterhaltsbeitraege, 0))
             );
+            builder.kinderRentenTotal(Objects.requireNonNullElse(totalKinderRenten, 0));
+            builder.kinderErgaenzungsleistungenTotal(Objects.requireNonNullElse(totalKinderErgaenzungsleistungen, 0));
+            builder.kinderAndereEinnahmenTotal(Objects.requireNonNullElse(totalKinderErgaenzungsleistungen, 0));
 
             final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
             final var isAlternativeWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend());
