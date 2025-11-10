@@ -429,7 +429,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
       this.formUtils.setRequired(
         this.form.controls.zulagen,
-        isEKPartner || hatKinder,
+        hatKinder && !isEKPartner,
       );
 
       this.setDisabledStateAndHide(

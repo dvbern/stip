@@ -102,7 +102,7 @@
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
               <mat-label>
                 {{ t('shared.form.einnahmenkosten.zulagen.label') }}
-                @if (!formStateSig().hatKinder) {
+                @if (einkommenTyp() === 'PARTNER' || !formStateSig().hatKinder) {
                   {{ t('shared.form.einnahmenkosten.optional.label') }}
                 }
               </mat-label>
