@@ -16,9 +16,7 @@
   <form [formGroup]="form" class="tw:mt-5" novalidate>
     <div class="tw:flex tw:w-full tw:flex-col tw:gap-4">
       <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco }}
-        </mat-label>
+        <mat-label>{{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco }}</mat-label>
         <mat-select
           [formControl]="form.controls.schuleNummerTyp"
           [aria-label]="'sachbearbeitung-app.feature.administration.ausbildungsstaette.schule' | transloco"
@@ -32,9 +30,7 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameDe' | transloco }}
-        </mat-label>
+        <mat-label>{{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameDe' | transloco }}</mat-label>
         <input matInput [formControl]="form.controls.nameDe" />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
@@ -44,9 +40,7 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>
-          {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameFr' | transloco }}
-        </mat-label>
+        <mat-label>{{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.nameFr' | transloco }}</mat-label>
         <input matInput [formControl]="form.controls.nameFr" />
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
@@ -58,11 +52,9 @@
       @let schuleNummerTyp = schuleNummerTypChangedSig();
       @if (schuleNummerTyp && schuleNummerTyp !== 'OHNE_NO') {
         <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>
-            {{
-              'sachbearbeitung-app.feature.administration.ausbildungsstaette.nummerTyp.' + schuleNummerTyp | transloco
-            }}
-          </mat-label>
+          <mat-label>{{
+            'sachbearbeitung-app.feature.administration.ausbildungsstaette.nummerTyp.' + schuleNummerTyp | transloco
+          }}</mat-label>
           <input matInput [maskito]="alphanumericMask" [formControl]="form.controls.nummer" />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}

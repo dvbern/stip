@@ -44,12 +44,7 @@
   <div class="row g-4 my-2">
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
-        <mat-label>
-          {{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}
-          @if (!svnIsRequiredSig()) {
-            {{ 'shared.form.einnahmenkosten.optional.label' | transloco }}
-          }
-        </mat-label>
+        <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
         <input
           matInput
           formControlName="sozialversicherungsnummer"
@@ -165,7 +160,7 @@
         >
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
-            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
             <input
               matInput
               [dvMaxLength]="'small'"
@@ -189,7 +184,7 @@
 
           <!-- Ort -->
           <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
-            <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }} </mat-label>
+            <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
             <input
               matInput
               dvMaxLength
