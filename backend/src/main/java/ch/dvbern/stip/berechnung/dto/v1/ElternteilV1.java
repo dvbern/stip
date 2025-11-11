@@ -62,6 +62,10 @@ public class ElternteilV1 {
     boolean selbststaendigErwerbend;
     int anzahlPersonenImHaushalt;
     int anzahlGeschwisterInAusbildung;
+    int einnahmenBGSA;
+    int andereEinnahmen;
+    int renten;
+
     SteuerdatenTyp steuerdatenTyp;
 
     public static ElternteilV1Builder builderWithDefaults() {
@@ -232,6 +236,9 @@ public class ElternteilV1 {
                 anzahlPersonenImHaushalt
             )
         );
+        builder.einnahmenBGSA(Objects.requireNonNullElse(steuererklaerung.getEinnahmenBGSA(), 0));
+        builder.andereEinnahmen(Objects.requireNonNullElse(steuererklaerung.getAndereEinnahmen(), 0));
+        builder.renten(Objects.requireNonNullElse(steuererklaerung.getRenten(), 0));
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
