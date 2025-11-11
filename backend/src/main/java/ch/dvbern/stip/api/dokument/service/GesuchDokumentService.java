@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -556,5 +557,15 @@ public class GesuchDokumentService {
             new GesuchDokument().setGesuchTranche(gesuchTranche).setCustomDokumentTyp(customDokumentTyp);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
+    }
+
+    public GesuchDokument copyGesuchDokument(final GesuchDokument sourceDokument, final GesuchTranche forTranche) {
+        final var newDokument = GesuchDokumentCopyUtil.createCopy(sourceDokument, forTranche);
+        gesuchDokumentRepository.persistAndFlush(newDokument);
+        return newDokument;
+    }
+
+    public List<Dokument> copyDokumente(final GesuchDokument targetGesuchDokument, List<Dokument> toCopy) {
+        return GesuchDokumentCopyUtil.copyDokumente(targetGesuchDokument, toCopy);
     }
 }

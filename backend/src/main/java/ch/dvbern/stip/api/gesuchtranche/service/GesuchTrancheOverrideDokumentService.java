@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchTrancheOverrideDokumentService {
+    private final GesuchDokumentService gesuchDokumentService;
+
     private static final Set<DokumentTyp> DOKUMENTE_ON_JAHRESWERTE = Set.of(
         DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE,
         DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER,
@@ -87,9 +89,14 @@ public class GesuchTrancheOverrideDokumentService {
 
         final BiConsumer<DokumentTyp, GesuchDokument> newDokumentFound = (jahreswertDokument, newDokument) -> {
             for (final var targetTranche : targetTranchen) {
-                final var oldDokument = targetTranchenLUT.get(targetTranche.getId()).get(jahreswertDokument);
-                oldDokument.getDokumente().clear();
-                GesuchDokumentCopyUtil.copyDokumente(oldDokument, newDokument.getDokumente());
+                var oldDokument = targetTranchenLUT.get(targetTranche.getId()).get(jahreswertDokument);
+                if (oldDokument == null) {
+                    oldDokument = gesuchDokumentService.copyGesuchDokument(newDokument, targetTranche);
+                } else {
+                    oldDokument.getDokumente().clear();
+                }
+
+                gesuchDokumentService.copyDokumente(oldDokument, newDokument.getDokumente());
             }
         };
 
