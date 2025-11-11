@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -44,14 +45,15 @@ public class DokumentHistoryRepository {
             .getSingleResult();
     }
 
-    public Dokument findFirstInHistoryById(UUID dokumentId) {
+    public List<Dokument> findFirstInHistoryByObjectId(final String objectId) {
         final var reader = AuditReaderFactory.get(em);
 
-        return (Dokument) reader.createQuery()
+        // This is OK but because of type erasure we can't check before casting
+        // noinspection unchecked
+        return (List<Dokument>) reader.createQuery()
             .forRevisionsOfEntity(Dokument.class, true, true)
-            .add(AuditEntity.id().eq(dokumentId))
+            .add(AuditEntity.property("objectId").eq(objectId))
             .addOrder(AuditEntity.revisionNumber().desc())
-            .setMaxResults(1)
-            .getSingleResult();
+            .getResultList();
     }
 }
