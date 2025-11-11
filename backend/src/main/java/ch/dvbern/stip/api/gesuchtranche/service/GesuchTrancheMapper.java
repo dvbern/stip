@@ -247,6 +247,8 @@ public abstract class GesuchTrancheMapper {
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
     ) {
-        JahreswertUtil.synchroniseJahreswerte(gesuchTranche);
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            JahreswertUtil.synchroniseJahreswerte(gesuchTranche);
+        }
     }
 }

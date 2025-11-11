@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
+import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -424,6 +425,7 @@ public class GesuchTrancheService {
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(aenderung, newTranche);
 
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
+        JahreswertUtil.synchroniseJahreswerte(newTranche);
     }
 
     @Transactional
