@@ -17,10 +17,12 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
@@ -34,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchTrancheOverrideDokumentService {
-    private static final List<DokumentTyp> DOKUMENTE_ON_JAHRESWERTE = List.of(
+    private static final Set<DokumentTyp> DOKUMENTE_ON_JAHRESWERTE = Set.of(
         DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE,
         DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER,
         DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER,
@@ -73,18 +75,21 @@ public class GesuchTrancheOverrideDokumentService {
             return;
         }
 
+        final var targetTranchenLUT = targetTranchen.stream()
+            .collect(
+                Collectors.toMap(
+                    AbstractEntity::getId,
+                    tranche -> tranche.getGesuchDokuments()
+                        .stream()
+                        .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument))
+                )
+            );
+
         final BiConsumer<DokumentTyp, GesuchDokument> newDokumentFound = (jahreswertDokument, newDokument) -> {
             for (final var targetTranche : targetTranchen) {
-                // TODO construct a map of this;
-                final var oldDokumente = targetTranche.getGesuchDokuments()
-                    .stream()
-                    .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() == jahreswertDokument)
-                    .toList();
-
-                for (final var oldDokument : oldDokumente) {
-                    oldDokument.getDokumente().clear();
-                    GesuchDokumentCopyUtil.copyDokumente(oldDokument, newDokument.getDokumente());
-                }
+                final var oldDokument = targetTranchenLUT.get(targetTranche.getId()).get(jahreswertDokument);
+                oldDokument.getDokumente().clear();
+                GesuchDokumentCopyUtil.copyDokumente(oldDokument, newDokument.getDokumente());
             }
         };
 
@@ -102,22 +107,16 @@ public class GesuchTrancheOverrideDokumentService {
             }
         };
 
+        final var newDokumente = newTranche.getGesuchDokuments()
+            .stream()
+            .filter(gesuchDokument -> DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokument.getDokumentTyp()))
+            .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument));
+
         for (final var jahreswertDokument : DOKUMENTE_ON_JAHRESWERTE) {
-            // TODO construct a map of this
-            final var newDokumente = newTranche.getGesuchDokuments()
-                .stream()
-                .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() == jahreswertDokument)
-                .toList();
-
-            if (newDokumente.size() > 1) {
-                LOG.error("Gesuch with ID {} has multiple GesuchDokumente with the same Dokument Typ", gesuch.getId());
-            }
-
-            if (newDokumente.isEmpty()) {
-                noNewDokument.accept(jahreswertDokument);
+            if (newDokumente.containsKey(jahreswertDokument)) {
+                newDokumentFound.accept(jahreswertDokument, newDokumente.get(jahreswertDokument));
             } else {
-                final var newDokument = newDokumente.getFirst();
-                newDokumentFound.accept(jahreswertDokument, newDokument);
+                noNewDokument.accept(jahreswertDokument);
             }
         }
     }
