@@ -71,6 +71,9 @@ class V1StructureTest {
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0,
+                        "einnahmenBGSA":0,
+                        "andereEinnahmen":0,
+                         "renten":0,
                         "steuerdatenTyp": "VATER"
                     }
                 },
@@ -96,6 +99,9 @@ class V1StructureTest {
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0,
+                        "einnahmenBGSA":0,
+                        "andereEinnahmen":0,
+                        "renten":0,
                         "steuerdatenTyp": "MUTTER"
                     }
                 },

@@ -1,6 +1,6 @@
 {
   "Stammdaten_V1": {
-    "maxSaeule3a": 7000,
+    "maxSaeule3a": 7056,
     "einkommensfreibetrag": 6000,
     "freibetragErwerbseinkommen": 6000,
     "freibetragVermoegen": 30000,
@@ -8,7 +8,7 @@
     "anzahlWochenLehre": 42,
     "anzahlWochenSchule": 38,
     "preisProMahlzeit": 10,
-    "stipLimiteMinimalstipendium": 0,
+    "stipLimiteMinimalstipendium": 500,
     "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
   },
   "InputFamilienbudget_1_V1": {
@@ -32,7 +32,10 @@
       "steuerbaresVermoegen": 0,
       "selbststaendigErwerbend": false,
       "anzahlPersonenImHaushalt": 1,
-      "anzahlGeschwisterInAusbildung": 0
+      "anzahlGeschwisterInAusbildung": 0,
+      "einnahmenBGSA": 0,
+      "andereEinnahmen": 0,
+      "renten": 0
     }
   },
   "InputFamilienbudget_2_V1": {
@@ -56,7 +59,10 @@
       "steuerbaresVermoegen": 0,
       "selbststaendigErwerbend": true,
       "anzahlPersonenImHaushalt": 0,
-      "anzahlGeschwisterInAusbildung": 0
+      "anzahlGeschwisterInAusbildung": 0,
+      "einnahmenBGSA": 0,
+      "andereEinnahmen": 0,
+      "renten": 0
     }
   },
   "InputPersoenlichesbudget_V1": {
@@ -69,13 +75,16 @@
       "alimente": 6000,
       "alimentePartner": 3000,
       "rente": 0,
+      "rentePartner": 0,
       "kinderRentenTotal":0,
       "kinderErgaenzungsleistungenTotal":0,
       "kinderAndereEinnahmenTotal":0,
       "kinderAusbildungszulagenTotal":0,
       "kinderErhalteneUnterhaltsbeitraegeTotal":0,
       "ergaenzungsleistungen": 0,
+      "ergaenzungsleistungenPartner": 0,
       "leistungenEO": 0,
+      "leistungenEOPartner": 0,
       "gemeindeInstitutionen": 0,
       "alter": 19,
       "grundbedarf": 18468,
@@ -83,6 +92,7 @@
       "medizinischeGrundversorgung": 10000,
       "ausbildungskosten": 1000,
       "steuern": 0,
+      "steuernPartner": 0,
       "fahrkosten": 1200,
       "fahrkostenPartner": 0,
       "anzahlPersonenImHaushalt": 2,
@@ -92,7 +102,15 @@
       "anteilFamilienbudget": 0,
       "lehre": false,
       "eigenerHaushalt": true,
-      "halbierungElternbeitrag": false
+      "halbierungElternbeitrag": false,
+      "zulagen" : 0,
+      "zulagenPartner" : 0,
+      "einnahmenBGSA": 0,
+      "einnahmenBGSAPartner": 0,
+      "andereEinnahmen": 0,
+      "andereEinnahmenPartner": 0,
+      "taggeld": 0,
+      "taggeldPartner": 0
     }
   }
 }
