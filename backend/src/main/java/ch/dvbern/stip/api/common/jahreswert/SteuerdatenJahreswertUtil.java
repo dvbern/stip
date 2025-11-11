@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.steuerdaten.util;
+package ch.dvbern.stip.api.common.jahreswert;
 
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class SteuerdatenJahreswertUtil {
     }
 
     public List<Steuerdaten> selectTargetSteuerdaten(
-        Steuerdaten steuerdaten,
-        List<GesuchTranche> gesuchTranchen
+        final Steuerdaten steuerdaten,
+        final List<GesuchTranche> gesuchTranchen
     ) {
         return gesuchTranchen.stream()
             .flatMap(targetTranche -> targetTranche.getGesuchFormular().getSteuerdaten().stream())

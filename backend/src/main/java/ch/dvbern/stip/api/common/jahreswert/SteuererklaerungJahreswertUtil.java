@@ -15,10 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.steuererklaerung.util;
+package ch.dvbern.stip.api.common.jahreswert;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import lombok.experimental.UtilityClass;
 
@@ -28,11 +29,23 @@ public class SteuererklaerungJahreswertUtil {
         final Steuererklaerung source,
         final List<Steuererklaerung> targets
     ) {
-        // TODO KSTIP-2781: Check that this works with Envers/ "Zuvor ..."
         for (final var target : targets) {
             target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());
             target.setEinnahmenBGSA(source.getEinnahmenBGSA());
             target.setAndereEinnahmen(source.getAndereEinnahmen());
         }
+    }
+
+    public List<Steuererklaerung> selectTargetSteuererklaerung(
+        final Steuererklaerung steuererklaerung,
+        final List<GesuchTranche> gesuchTranchen
+    ) {
+        return gesuchTranchen.stream()
+            .flatMap(targetTranche -> targetTranche.getGesuchFormular().getSteuererklaerung().stream())
+            .filter(
+                targetSteuererklaerung -> !targetSteuererklaerung.getId().equals(steuererklaerung.getId())
+                && targetSteuererklaerung.getSteuerdatenTyp().equals(steuererklaerung.getSteuerdatenTyp())
+            )
+            .toList();
     }
 }

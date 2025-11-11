@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.einnahmen_kosten.util;
+package ch.dvbern.stip.api.common.jahreswert;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class EinnahmenKostenJahreswertUtil {
 
         for (final var target : targets) {
             target.setNettoerwerbseinkommen(source.getNettoerwerbseinkommen());
-            target.setZulagen(source.getZulagen()); // TODO KSTIP-2781: Check if this field is correct
+            target.setZulagen(source.getZulagen());
             target.setEoLeistungen(source.getEoLeistungen());
             target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());
             target.setBeitraege(source.getBeitraege());
