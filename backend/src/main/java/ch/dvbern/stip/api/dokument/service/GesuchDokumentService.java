@@ -359,24 +359,28 @@ public class GesuchDokumentService {
     }
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
-        final var historicalDokument = dokumentHistoryRepository.findFirstInHistoryById(dokument.getId());
+        final var historicalDokumente = dokumentHistoryRepository.findFirstInHistoryByObjectId(dokument.getObjectId());
+        Boolean canDelete = null;
 
-        final var historicalTranche = historicalDokument.getGesuchDokument().getGesuchTranche();
-        if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
-            return false;
+        for (final var historicalDokument : historicalDokumente) {
+            final var historicalTranche = historicalDokument.getGesuchDokument().getGesuchTranche();
+            if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
+                return false;
+            }
+
+            if (trancheToBeDeletedFrom.getTyp() != historicalTranche.getTyp()) {
+                return false;
+            }
+
+            if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
+                canDelete = trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+            }
+            if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
+                canDelete = trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
+            }
         }
 
-        if (trancheToBeDeletedFrom.getTyp() != historicalTranche.getTyp()) {
-            return false;
-        }
-
-        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            return trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
-        }
-        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            return trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
-        }
-        return false;
+        return Boolean.TRUE.equals(canDelete);
     }
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
