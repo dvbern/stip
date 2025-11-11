@@ -59,9 +59,7 @@
 
     <!-- E-Mail Adresse -->
     <mat-form-field dvSharedUiFormField [class.readonly]="form.controls.email.disabled">
-      <mat-label>
-        {{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | transloco }}
-      </mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.benutzerverwaltung.email.label' | transloco }}</mat-label>
       <input
         data-testid="form-benutzerverwaltung-email"
         [formControl]="controls.email"

@@ -133,14 +133,6 @@ class AusbildungResourceTest {
     void gesuchStatusChangeToInBearbeitungSB() {
         var foundGesuch = TestUtil.executeAndExtract(
             GesuchWithChangesDtoSpec.class,
-            gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-        );
-
-        assertThat(foundGesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
-
-        foundGesuch = TestUtil.executeAndExtract(
-            GesuchWithChangesDtoSpec.class,
             gesuchApiSpec.changeGesuchStatusToInBearbeitung()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );

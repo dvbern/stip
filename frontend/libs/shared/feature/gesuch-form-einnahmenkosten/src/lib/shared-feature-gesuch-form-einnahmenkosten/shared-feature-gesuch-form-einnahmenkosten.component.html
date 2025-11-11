@@ -100,12 +100,7 @@
           <!-- ZULAGEN -->
           <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
             <mat-form-field dvSharedUiFormField class="flex-grow-1">
-              <mat-label>
-                {{ t('shared.form.einnahmenkosten.zulagen.label') }}
-                @if (einkommenTyp() === 'PARTNER' || !formStateSig().hatKinder) {
-                  {{ t('shared.form.einnahmenkosten.optional.label') }}
-                }
-              </mat-label>
+              <mat-label>{{ t('shared.form.einnahmenkosten.zulagen.label') }}</mat-label>
               <input
                 data-testid="form-einnahmen-kosten-zulagen"
                 [formControl]="form.controls.zulagen"
