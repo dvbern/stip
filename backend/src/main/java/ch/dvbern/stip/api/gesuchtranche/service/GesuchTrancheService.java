@@ -129,6 +129,7 @@ public class GesuchTrancheService {
     private final BenutzerService benutzerService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
+    private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -425,6 +426,7 @@ public class GesuchTrancheService {
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(aenderung, newTranche);
 
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
+        gesuchTrancheOverrideDokumentService.overrideJahreswertDokumente(gesuch, newTranche);
         JahreswertUtil.synchroniseJahreswerte(newTranche);
     }
 
