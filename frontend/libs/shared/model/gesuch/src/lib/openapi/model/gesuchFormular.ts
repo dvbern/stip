@@ -13,7 +13,6 @@ import { Eltern } from './eltern';
 import { PersonInAusbildung } from './personInAusbildung';
 import { Ausbildung } from './ausbildung';
 import { SteuerdatenTyp } from './steuerdatenTyp';
-import { Darlehen } from './darlehen';
 import { Geschwister } from './geschwister';
 import { EinnahmenKosten } from './einnahmenKosten';
 import { Kind } from './kind';
@@ -35,6 +34,5 @@ export interface GesuchFormular {
     einnahmenKostenPartner?: EinnahmenKosten;
     steuererklaerung?: Array<SteuererklaerungUpdate>;
     steuerdatenTabs?: Array<SteuerdatenTyp>;
-    darlehen?: Darlehen;
 }
 

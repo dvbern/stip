@@ -26,6 +26,14 @@ export const appRoutes: Route[] = [
             (m) => m.gesuchAppFeatureGesuchFormRoutes,
           ),
       },
+      // todo: revmove
+      // {
+      //   path: 'darlehen',
+      //   loadChildren: () =>
+      //     import('@dv/shared/feature/darlehen').then(
+      //       (m) => m.gesuchAppFeatureDarlehenRoutes,
+      //     ),
+      // },
       {
         path: 'auszahlung',
         loadChildren: () =>

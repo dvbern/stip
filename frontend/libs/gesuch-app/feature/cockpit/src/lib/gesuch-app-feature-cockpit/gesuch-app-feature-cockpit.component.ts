@@ -23,6 +23,7 @@ import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { SharedDialogCreateDarlehenDailogComponent } from '@dv/shared/dialog/create-darlehen-dailog';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
@@ -213,6 +214,14 @@ export class GesuchAppFeatureCockpitComponent {
             },
           });
         }
+      });
+  }
+
+  darlehenCreate(event: { gesuchId: string }) {
+    SharedDialogCreateDarlehenDailogComponent.open(this.dialog, event.gesuchId)
+      .afterClosed()
+      .subscribe(() => {
+        this.dashboardStore.loadDashboard$();
       });
   }
 

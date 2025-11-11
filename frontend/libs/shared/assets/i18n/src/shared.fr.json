@@ -239,6 +239,7 @@
   "shared.dashboard.gesuch.status.missingDocument": "1 document manquant",
   "shared.dashboard.gesuch.status.missingDocuments": "{{ count }} documents manquants",
   "shared.dashboard.gesuch.delegieren.success": "La demande a été déléguée avec succès au service social",
+  "shared.dashboard.gesuch.darlehen.create": "Demander un prêt",
 
   "shared.dashboard.aenderung.title": "Changement",
   "shared.dashboard.aenderung.status.title": "Statut de la demande",
@@ -898,7 +899,6 @@
 
   "shared.darlehen.title": "Prêt",
   "shared.form.darlehen.title": "Demande de prêt",
-  "shared.form.darlehen.willDarlehen.label": "Souhaitez-vous un prêt?",
   "shared.form.darlehen.betragDarlehen.label": "Montant souhaité",
   "shared.form.darlehen.betragBezogenKanton.label": "Déjà perçu du canton",
   "shared.form.darlehen.schulden.label": "Autres dettes",

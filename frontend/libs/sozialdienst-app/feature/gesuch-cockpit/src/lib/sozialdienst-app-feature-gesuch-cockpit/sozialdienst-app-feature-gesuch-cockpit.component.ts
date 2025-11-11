@@ -196,4 +196,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
         }
       });
   }
+
+  darlehenCreate(event: { gesuchId: string }) {
+    // TODO: Implement Darlehen creation flow
+  }
 }

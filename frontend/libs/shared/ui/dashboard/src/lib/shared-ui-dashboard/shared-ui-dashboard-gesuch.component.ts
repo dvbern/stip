@@ -28,6 +28,7 @@ export class SharedUiDashboardGesuchComponent {
   deleteGesuch = output<string>();
   deleteAenderung = output<string>();
   aenderungMelden = output<void>();
+  darlehenCreate = output<{ gesuchId: string }>();
 
   @HostBinding('class') defaultClasses =
     'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:px-6 tw:pt-4 tw:pb-6';

@@ -239,6 +239,7 @@
   "shared.dashboard.gesuch.status.missingDocument": "1 Dokument fehlt",
   "shared.dashboard.gesuch.status.missingDocuments": "{{ count }} Dokumente fehlen",
   "shared.dashboard.gesuch.delegieren.success": "Das Gesuch wurde erfolgreich delegiert",
+  "shared.dashboard.gesuch.darlehen.create": "Darlehen beantragen",
 
   "shared.dashboard.aenderung.title": "Änderung",
   "shared.dashboard.aenderung.status.title": "Status des Antrags",
@@ -898,7 +899,6 @@
 
   "shared.darlehen.title": "Darlehen",
   "shared.form.darlehen.title": "Darlehensantrag",
-  "shared.form.darlehen.willDarlehen.label": "Wünschen Sie ein Darlehen?",
   "shared.form.darlehen.betragDarlehen.label": "Gewünschter Betrag",
   "shared.form.darlehen.betragBezogenKanton.label": "Vom Kanton bereits bezogen",
   "shared.form.darlehen.schulden.label": "Andere Schulden",

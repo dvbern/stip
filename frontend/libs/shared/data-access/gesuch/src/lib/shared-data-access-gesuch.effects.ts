@@ -18,7 +18,6 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
-import { SharedEventGesuchFormDarlehen } from '@dv/shared/event/gesuch-form-darlehen';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
@@ -107,7 +106,6 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
         SharedEventGesuchFormAuszahlung.init,
-        SharedEventGesuchFormDarlehen.init,
         SharedEventGesuchFormGeschwister.init,
         SharedEventGesuchFormKinder.init,
         SharedEventGesuchFormLebenslauf.init,
@@ -251,7 +249,6 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormElternSteuerdaten.saveTriggered,
         SharedEventGesuchFormFamiliensituation.saveTriggered,
         SharedEventGesuchFormEinnahmenkosten.saveTriggered,
-        SharedEventGesuchFormDarlehen.saveTriggered,
       ),
       concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
         return gesuchService
@@ -366,7 +363,6 @@ export const redirectToGesuchFormNextStep = createEffect(
         SharedEventGesuchFormElternSteuerdaten.nextTriggered,
         SharedEventGesuchFormFamiliensituation.nextTriggered,
         SharedEventGesuchFormAuszahlung.nextTriggered,
-        SharedEventGesuchFormDarlehen.nextTriggered,
         SharedEventGesuchFormEinnahmenkosten.nextTriggered,
         SharedEventGesuchDokumente.nextTriggered,
       ),

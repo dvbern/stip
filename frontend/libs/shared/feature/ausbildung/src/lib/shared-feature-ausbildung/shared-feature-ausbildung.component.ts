@@ -150,6 +150,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   );
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
+  // If this input is set, the component is used in a dialog context
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
   languageSig = this.store.selectSignal(selectLanguage);

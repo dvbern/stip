@@ -5902,8 +5902,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SteuerdatenTyp'
-        darlehen:
-          $ref: '#/components/schemas/Darlehen'
     PersonInAusbildungUpdate:
       required:
         - adresse

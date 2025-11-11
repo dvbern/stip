@@ -4,8 +4,9 @@ import {
   Component,
   ElementRef,
   OnInit,
-  effect,
   inject,
+  input,
+  output,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -22,12 +23,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
-import { SharedEventGesuchFormDarlehen } from '@dv/shared/event/gesuch-form-darlehen';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
-import { DARLEHEN } from '@dv/shared/model/gesuch-form';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
@@ -35,21 +33,14 @@ import {
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
-  SharedUiFormReadonlyDirective,
-  SharedUiFormZuvorHintComponent,
-  SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
-import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import {
-  fromFormatedNumber,
-  maskitoNumber,
-} from '@dv/shared/util/maskito-util';
+import { maskitoNumber } from '@dv/shared/util/maskito-util';
 
 import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darlehen.selector';
 
@@ -66,12 +57,8 @@ import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darl
     MaskitoDirective,
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
-    SharedUiZuvorHintDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiFormMessageErrorDirective,
-    SharedUiTranslateChangePipe,
-    SharedUiFormZuvorHintComponent,
-    SharedUiFormReadonlyDirective,
     SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
@@ -84,12 +71,21 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   private einreichenStore = inject(EinreichenStore);
   private elementRef = inject(ElementRef);
 
+  // If this input is set, the component is used in a dialog context
+  gesuchIdSig = input.required<string | null>();
+
+  darlehenCreated = output<void>();
+
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormDarlehenView);
   maskitoNumber = maskitoNumber;
-  gotReenabled$ = new Subject<object>();
 
+  /* needs {
+      trancheId: string | undefined;
+      allowTypes: string | undefined;
+      permissions: PermissionMap;
+    }
+  */
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
-  private gotReenabledSig = toSignal(this.gotReenabled$);
 
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
@@ -99,7 +95,6 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   };
 
   form = this.formBuilder.group({
-    willDarlehen: [<boolean | undefined>undefined, [Validators.required]],
     betragDarlehen: [<string | null>null, [Validators.required]],
     betragBezogenKanton: [<string | null>null, [Validators.required]],
     schulden: [<string | null>null, [Validators.required]],
@@ -116,9 +111,6 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     ),
   });
 
-  willDarlehenChangedSig = toSignal(
-    this.form.controls.willDarlehen.valueChanges,
-  );
   grundNichtBerechtigtChangedSig = toSignal(
     this.form.controls.gruende.controls.grundNichtBerechtigt.valueChanges,
   );
@@ -130,6 +122,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
       .valueChanges,
   );
 
+  //todo: Falls dialog, das Dokumentenhandling besprechen!
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
     return DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG;
   });
@@ -154,141 +147,34 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.store.dispatch(SharedEventGesuchFormDarlehen.init());
+    // this.store.dispatch(SharedEventGesuchFormDarlehen.init());
   }
 
   constructor() {
-    this.formUtils.registerFormForUnsavedCheck(this);
     this.formUtils.observeInvalidFieldsAndMarkControls(
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-
-    // set disabled state
-    effect(() => {
-      this.gotReenabledSig();
-      const readonly = this.viewSig().readonly;
-      const willDarlehen = this.willDarlehenChangedSig() ?? false;
-
-      const disable = readonly || !willDarlehen;
-
-      this.formUtils.setDisabledState(
-        this.form.controls.betragDarlehen,
-        disable,
-        !willDarlehen,
-      );
-      this.formUtils.setDisabledState(
-        this.form.controls.betragBezogenKanton,
-        disable,
-        !willDarlehen,
-      );
-      this.formUtils.setDisabledState(
-        this.form.controls.schulden,
-        disable,
-        !willDarlehen,
-      );
-      this.formUtils.setDisabledState(
-        this.form.controls.anzahlBetreibungen,
-        disable,
-        !willDarlehen,
-      );
-      this.formUtils.setDisabledState(
-        this.form.controls.gruende,
-        disable,
-        !willDarlehen,
-      );
-    });
-
-    // fill form
-    effect(() => {
-      const { darlehen } = this.viewSig();
-      if (darlehen) {
-        this.form.patchValue({
-          willDarlehen: darlehen.willDarlehen,
-          betragDarlehen: darlehen.betragDarlehen?.toString(),
-          betragBezogenKanton: darlehen.betragBezogenKanton?.toString(),
-          schulden: darlehen.schulden?.toString(),
-          anzahlBetreibungen: darlehen.anzahlBetreibungen,
-          gruende: {
-            grundNichtBerechtigt: darlehen.grundNichtBerechtigt,
-            grundAusbildungZwoelfJahre: darlehen.grundAusbildungZwoelfJahre,
-            grundHoheGebuehren: darlehen.grundHoheGebuehren,
-            grundAnschaffungenFuerAusbildung:
-              darlehen.grundAnschaffungenFuerAusbildung,
-            grundZweitausbildung: darlehen.grundZweitausbildung,
-          },
-        });
-      } else {
-        this.form.reset();
-      }
-    });
   }
 
   private buildUpdatedGesuchFromForm() {
-    const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
-      'willDarlehen',
       'betragDarlehen',
       'betragBezogenKanton',
       'schulden',
       'anzahlBetreibungen',
     ]);
-
-    return {
-      gesuchId: gesuch?.id,
-      trancheId: gesuch?.gesuchTrancheToWorkWith.id,
-      gesuchFormular: {
-        ...gesuchFormular,
-        darlehen: {
-          willDarlehen: formValues.willDarlehen,
-          betragDarlehen: fromFormatedNumber(formValues.betragDarlehen),
-          betragBezogenKanton: fromFormatedNumber(
-            formValues.betragBezogenKanton,
-          ),
-          schulden: fromFormatedNumber(formValues.schulden),
-          anzahlBetreibungen: formValues.anzahlBetreibungen,
-          grundNichtBerechtigt: !!formValues.gruende.grundNichtBerechtigt,
-          grundAusbildungZwoelfJahre:
-            !!formValues.gruende.grundAusbildungZwoelfJahre,
-          grundHoheGebuehren: !!formValues.gruende.grundHoheGebuehren,
-          grundAnschaffungenFuerAusbildung:
-            !!formValues.gruende.grundAnschaffungenFuerAusbildung,
-          grundZweitausbildung: !!formValues.gruende.grundZweitausbildung,
-        },
-      },
-    };
   }
 
   handleSave(): void {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
 
-    const { gesuchId, trancheId, gesuchFormular } =
-      this.buildUpdatedGesuchFromForm();
+    // const { gesuchId, trancheId, gesuchFormular } =
+    //   this.buildUpdatedGesuchFromForm();
 
-    if (this.form.valid && gesuchId && trancheId) {
-      this.store.dispatch(
-        SharedEventGesuchFormDarlehen.saveTriggered({
-          gesuchId,
-          trancheId,
-          gesuchFormular,
-          origin: DARLEHEN,
-        }),
-      );
-      this.form.markAsPristine();
-    }
-  }
-
-  handleContinue() {
-    const { gesuch } = this.viewSig();
-    if (gesuch?.id) {
-      this.store.dispatch(
-        SharedEventGesuchFormDarlehen.nextTriggered({
-          id: gesuch.id,
-          trancheId: gesuch.gesuchTrancheToWorkWith.id,
-          origin: DARLEHEN,
-        }),
-      );
+    if (this.form.valid) {
+      // todo: dispatch save event
     }
   }
 }

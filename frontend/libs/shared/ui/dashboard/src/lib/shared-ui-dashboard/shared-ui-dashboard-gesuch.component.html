@@ -155,6 +155,15 @@
               </button>
             }
           }
+          <!-- todo: add conditions -->
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            data-testid="cockpit-gesuch-darlehen-create"
+            (click)="darlehenCreate.emit({ gesuchId: gesuch.id })"
+          >
+            {{ 'shared.dashboard.darlehen.create' | transloco }}
+          </button>
         }
       </div>
     </div>
