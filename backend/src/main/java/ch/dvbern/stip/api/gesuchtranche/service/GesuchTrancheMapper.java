@@ -20,13 +20,16 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.einnahmen_kosten.util.EinnahmenKostenJahreswertUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.steuerdaten.util.SteuerdatenJahreswertUtil;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
+import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungJahreswertUtil;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
@@ -102,14 +105,17 @@ public abstract class GesuchTrancheMapper {
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        qualifiedByName = "beforeMappingOverrideIncomingVersteckteEltern"
+        qualifiedByName = "centralMappingWithOverrideIncomingElternteile"
     )
     public abstract GesuchTranche partialUpdateOverrideIncomingVersteckteEltern(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        qualifiedByName = "centralMappingWithKeepIncomingElternteile"
+    )
     public abstract GesuchTranche partialUpdateAcceptIncomingVersteckteEltern(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
@@ -150,8 +156,33 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    @Named("beforeMappingOverrideIncomingVersteckteEltern")
+    @Named("centralMappingWithOverrideIncomingElternteile")
     @BeforeMapping
+    protected void centralBeforeMappingWithOverrideIncomingElternteile(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
+    }
+
+    @Named("centralMappingWithOverrideIncomingElternteile")
+    @AfterMapping
+    protected void centralAfterMappingWithOverrideIncomingElternteile(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        synchroniseJahresfelder(newTranche, gesuchTranche);
+    }
+
+    @Named("centralMappingWithKeepIncomingElternteile")
+    @AfterMapping
+    protected void centralAfterMappingWithKeepIncomingElternteile(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        synchroniseJahresfelder(newTranche, gesuchTranche);
+    }
+
     protected void beforeMappingOverrideIncomingVersteckteEltern(
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
@@ -211,6 +242,68 @@ public abstract class GesuchTrancheMapper {
                 );
 
             newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
+        }
+    }
+
+    protected void synchroniseJahresfelder(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        final var targetTranchen = gesuchTranche.getGesuch()
+            .getTranchenTranchen()
+            .filter(
+                tranche -> !tranche.getId()
+                    .equals(gesuchTranche.getId())
+            )
+            .toList();
+
+        if (targetTranchen.isEmpty()) {
+            return;
+        }
+
+        final var steuererklaerungen = gesuchFormular.getSteuererklaerung();
+        for (final var steuererklaerung : steuererklaerungen) {
+            final var targets = targetTranchen.stream()
+                .flatMap(targetTranche -> targetTranche.getGesuchFormular().getSteuererklaerung().stream())
+                .filter(
+                    targetSteuererklaerung -> !targetSteuererklaerung.getId().equals(steuererklaerung.getId())
+                    && targetSteuererklaerung.getSteuerdatenTyp().equals(steuererklaerung.getSteuerdatenTyp())
+                )
+                .toList();
+
+            SteuererklaerungJahreswertUtil.synchroniseJahresfelder(
+                steuererklaerung,
+                targets
+            );
+        }
+
+        final var einnahmenKosten = gesuchFormular.getEinnahmenKosten();
+        final var targetEinnahmenKosten = targetTranchen.stream()
+            .map(targetTranche -> targetTranche.getGesuchFormular().getEinnahmenKosten())
+            .toList();
+        EinnahmenKostenJahreswertUtil.synchroniseJahresfelder(
+            einnahmenKosten,
+            targetEinnahmenKosten
+        );
+
+        final var einnahmenKostenPartner = gesuchFormular.getEinnahmenKostenPartner();
+        final var targetEinnahmenPartner = targetTranchen.stream()
+            .map(targetTranche -> targetTranche.getGesuchFormular().getEinnahmenKostenPartner())
+            .toList();
+        EinnahmenKostenJahreswertUtil.synchroniseJahresfelder(
+            einnahmenKostenPartner,
+            targetEinnahmenPartner
+        );
+
+        final var steuerdatenTabs = gesuchFormular.getSteuerdaten();
+        for (final var steuerdaten : steuerdatenTabs) {
+            final var targets = SteuerdatenJahreswertUtil.selectTargetSteuerdaten(steuerdaten, targetTranchen);
+
+            SteuerdatenJahreswertUtil.synchroniseJahresfelder(
+                steuerdaten,
+                targets
+            );
         }
     }
 }
