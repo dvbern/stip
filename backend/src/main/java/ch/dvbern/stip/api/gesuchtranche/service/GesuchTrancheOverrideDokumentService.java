@@ -116,6 +116,7 @@ public class GesuchTrancheOverrideDokumentService {
 
         final var newDokumente = newTranche.getGesuchDokuments()
             .stream()
+            .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() != null)
             .filter(gesuchDokument -> DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokument.getDokumentTyp()))
             .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument));
 
