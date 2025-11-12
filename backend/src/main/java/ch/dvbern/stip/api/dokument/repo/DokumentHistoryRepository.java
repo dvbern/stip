@@ -45,7 +45,7 @@ public class DokumentHistoryRepository {
             .getSingleResult();
     }
 
-    public List<Dokument> findFirstInHistoryByObjectId(final String objectId) {
+    public List<Dokument> findInHistoryByObjectId(final String objectId) {
         final var reader = AuditReaderFactory.get(em);
 
         // This is OK but because of type erasure we can't check before casting
