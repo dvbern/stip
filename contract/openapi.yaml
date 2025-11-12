@@ -7519,23 +7519,23 @@ components:
           type: integer
         renteTotal:
           type: integer
-        kinderAusbildungszulagen:
+        ausbildungszulagenKinder:
           type: array
           items:
             $ref: '#/components/schemas/KindIntegerValueItem'
-        kinderAusbildungszulagenTotal:
+        ausbildungszulagenKinderTotal:
           type: integer
-        kinderUnterhaltsbeitraege:
+        unterhaltsbeitraegeKinder:
           type: array
           items:
             $ref: '#/components/schemas/KindIntegerValueItem'
-        kinderUnterhaltsbeitraegeTotal:
+        unterhaltsbeitraegeKinderTotal:
           type: integer
-        kinderRenten:
+        rentenKinder:
           type: array
           items:
             $ref: '#/components/schemas/KindIntegerValueItem'
-        kinderRentenTotal:
+        rentenKinderTotal:
           type: integer
         ergaenzungsleistungen:
           type: integer
