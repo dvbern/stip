@@ -46,6 +46,8 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid Integer essenskostenPerson2;
   private @Valid Integer ausgabenFamilienbudget;
   private @Valid Integer familienbudgetBerechnet;
+  private @Valid Integer einnahmenBGSA;
+  private @Valid Integer andereEinnahmen;
 
   /**
    **/
@@ -522,6 +524,42 @@ public class FamilienBudgetresultatDto  implements Serializable {
     this.familienbudgetBerechnet = familienbudgetBerechnet;
   }
 
+  /**
+   **/
+  public FamilienBudgetresultatDto einnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+    return this;
+  }
+
+  
+  @JsonProperty("einnahmenBGSA")
+  public Integer getEinnahmenBGSA() {
+    return einnahmenBGSA;
+  }
+
+  @JsonProperty("einnahmenBGSA")
+  public void setEinnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto andereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
+    return this;
+  }
+
+  
+  @JsonProperty("andereEinnahmen")
+  public Integer getAndereEinnahmen() {
+    return andereEinnahmen;
+  }
+
+  @JsonProperty("andereEinnahmen")
+  public void setAndereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -556,12 +594,14 @@ public class FamilienBudgetresultatDto  implements Serializable {
         Objects.equals(this.essenskostenPerson1, familienBudgetresultat.essenskostenPerson1) &&
         Objects.equals(this.essenskostenPerson2, familienBudgetresultat.essenskostenPerson2) &&
         Objects.equals(this.ausgabenFamilienbudget, familienBudgetresultat.ausgabenFamilienbudget) &&
-        Objects.equals(this.familienbudgetBerechnet, familienBudgetresultat.familienbudgetBerechnet);
+        Objects.equals(this.familienbudgetBerechnet, familienBudgetresultat.familienbudgetBerechnet) &&
+        Objects.equals(this.einnahmenBGSA, familienBudgetresultat.einnahmenBGSA) &&
+        Objects.equals(this.andereEinnahmen, familienBudgetresultat.andereEinnahmen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
@@ -594,6 +634,8 @@ public class FamilienBudgetresultatDto  implements Serializable {
     sb.append("    essenskostenPerson2: ").append(toIndentedString(essenskostenPerson2)).append("\n");
     sb.append("    ausgabenFamilienbudget: ").append(toIndentedString(ausgabenFamilienbudget)).append("\n");
     sb.append("    familienbudgetBerechnet: ").append(toIndentedString(familienbudgetBerechnet)).append("\n");
+    sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
+    sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

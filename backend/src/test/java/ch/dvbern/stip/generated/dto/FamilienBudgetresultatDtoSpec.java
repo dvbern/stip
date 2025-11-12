@@ -40,6 +40,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_SAEULE3A,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EIGENMIETWERT,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_ALIMENTE,
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN_B_G_S_A,
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_ANDERE_EINNAHMEN,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN_FAMILIENBUDGET,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_GRUNDBEDARF,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EFFEKTIVE_WOHNKOSTEN,
@@ -92,6 +94,12 @@ public class FamilienBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_ALIMENTE = "alimente";
   private Integer alimente;
+
+  public static final String JSON_PROPERTY_EINNAHMEN_B_G_S_A = "einnahmenBGSA";
+  private Integer einnahmenBGSA;
+
+  public static final String JSON_PROPERTY_ANDERE_EINNAHMEN = "andereEinnahmen";
+  private Integer andereEinnahmen;
 
   public static final String JSON_PROPERTY_EINNAHMEN_FAMILIENBUDGET = "einnahmenFamilienbudget";
   private Integer einnahmenFamilienbudget;
@@ -444,6 +452,58 @@ public class FamilienBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAlimente(Integer alimente) {
     this.alimente = alimente;
+  }
+
+
+  public FamilienBudgetresultatDtoSpec einnahmenBGSA(Integer einnahmenBGSA) {
+    
+    this.einnahmenBGSA = einnahmenBGSA;
+    return this;
+  }
+
+   /**
+   * Get einnahmenBGSA
+   * @return einnahmenBGSA
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getEinnahmenBGSA() {
+    return einnahmenBGSA;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+  }
+
+
+  public FamilienBudgetresultatDtoSpec andereEinnahmen(Integer andereEinnahmen) {
+    
+    this.andereEinnahmen = andereEinnahmen;
+    return this;
+  }
+
+   /**
+   * Get andereEinnahmen
+   * @return andereEinnahmen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAndereEinnahmen() {
+    return andereEinnahmen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANDERE_EINNAHMEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAndereEinnahmen(Integer andereEinnahmen) {
+    this.andereEinnahmen = andereEinnahmen;
   }
 
 
@@ -805,6 +865,8 @@ public class FamilienBudgetresultatDtoSpec {
         Objects.equals(this.saeule3a, familienBudgetresultat.saeule3a) &&
         Objects.equals(this.eigenmietwert, familienBudgetresultat.eigenmietwert) &&
         Objects.equals(this.alimente, familienBudgetresultat.alimente) &&
+        Objects.equals(this.einnahmenBGSA, familienBudgetresultat.einnahmenBGSA) &&
+        Objects.equals(this.andereEinnahmen, familienBudgetresultat.andereEinnahmen) &&
         Objects.equals(this.einnahmenFamilienbudget, familienBudgetresultat.einnahmenFamilienbudget) &&
         Objects.equals(this.grundbedarf, familienBudgetresultat.grundbedarf) &&
         Objects.equals(this.effektiveWohnkosten, familienBudgetresultat.effektiveWohnkosten) &&
@@ -822,7 +884,7 @@ public class FamilienBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenBGSA, andereEinnahmen, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
   }
 
   @Override
@@ -841,6 +903,8 @@ public class FamilienBudgetresultatDtoSpec {
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
+    sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
+    sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");
     sb.append("    einnahmenFamilienbudget: ").append(toIndentedString(einnahmenFamilienbudget)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    effektiveWohnkosten: ").append(toIndentedString(effektiveWohnkosten)).append("\n");

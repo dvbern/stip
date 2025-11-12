@@ -275,8 +275,8 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
         result.setAlimente(antragssteller.getAlimente());
         result.setRente(antragssteller.getRente());
-        result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen());
-        result.setKinderUnterhaltsbeitraege(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
+        result.setAusbildungszulagenKinderTotal(antragssteller.getKinderAusbildungszulagen());
+        result.setUnterhaltsbeitraegeKinderTotal(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
         result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
         result.setLeistungenEO(antragssteller.getLeistungenEO());
         result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());

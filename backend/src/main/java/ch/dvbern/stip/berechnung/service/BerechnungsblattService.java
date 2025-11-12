@@ -472,7 +472,7 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat
-                    .getKinderAusbildungszulagen()
+                    .getAusbildungszulagenKinderTotal()
 
             )
         );
