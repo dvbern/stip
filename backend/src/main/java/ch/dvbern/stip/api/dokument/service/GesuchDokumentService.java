@@ -362,7 +362,7 @@ public class GesuchDokumentService {
     }
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
-        final var historicalDokumente = dokumentHistoryRepository.findFirstInHistoryByObjectId(dokument.getObjectId());
+        final var historicalDokumente = dokumentHistoryRepository.findInHistoryByObjectId(dokument.getObjectId());
         Boolean canDelete = null;
 
         for (final var historicalDokument : historicalDokumente) {
