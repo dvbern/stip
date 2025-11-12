@@ -5851,6 +5851,13 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/KindUpdate'
+    KindIntegerValueItem:
+      type: object
+      properties:
+        vorname:
+          type: string
+        value:
+          type: integer
     LebenslaufItem:
       title: Root Type for Lebenslauf
       type: object
@@ -7515,19 +7522,19 @@ components:
         kinderAusbildungszulagen:
           type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/KindIntegerValueItem'
         kinderAusbildungszulagenTotal:
           type: integer
         kinderUnterhaltsbeitraege:
           type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/KindIntegerValueItem'
         kinderUnterhaltsbeitraegeTotal:
           type: integer
         kinderRenten:
           type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/KindIntegerValueItem'
         kinderRentenTotal:
           type: integer
         ergaenzungsleistungen:
@@ -7537,7 +7544,7 @@ components:
         ergaenzungsleistungenKinder:
           type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/KindIntegerValueItem'
         ergaenzungsleistungenTotal:
           type: integer
         gemeindeInstitutionen:
@@ -7603,7 +7610,7 @@ components:
         andereEinnahmenKinder:
           type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/KindIntegerValueItem'
         andereEinnahmenTotal:
           type: integer
         taggelder:
