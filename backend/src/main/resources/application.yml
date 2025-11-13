@@ -264,9 +264,9 @@ quarkus:
       test-port: 0
     log:
       ## Uncomment to enable DEBUG logging for WebApplicationException, this debugs every failing request in STDOUT
-      # category:
-      #   "WebApplicationException":
-      #     level: DEBUG
+      category:
+        "WebApplicationException":
+          level: DEBUG
       sentry:
         enabled: false
     antivirus:
