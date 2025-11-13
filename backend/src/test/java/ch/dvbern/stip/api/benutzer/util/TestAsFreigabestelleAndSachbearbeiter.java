@@ -28,7 +28,7 @@ import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
-import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE_ID;
+import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE_AND_SACHBEARBEITER_ID;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -77,9 +77,7 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = FREIGABESTELLE_ID),
-        @Claim(key = "family_name", value = "FreigabestelleAndSachbearbeiter"),
-        @Claim(key = "given_name", value = "Claudio")
+        @Claim(key = "sub", value = FREIGABESTELLE_AND_SACHBEARBEITER_ID)
     }
 )
 public @interface TestAsFreigabestelleAndSachbearbeiter {

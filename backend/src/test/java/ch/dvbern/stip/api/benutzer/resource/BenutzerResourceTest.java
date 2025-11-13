@@ -74,7 +74,7 @@ class BenutzerResourceTest {
 
         me = benutzerDto;
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
+        assertThat(benutzerDto.getVorname()).isEqualTo("");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
@@ -90,8 +90,8 @@ class BenutzerResourceTest {
             .extract()
             .as(BenutzerDtoSpec.class);
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
+        assertThat(benutzerDto.getVorname()).isEqualTo("");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
     @Test
@@ -106,8 +106,8 @@ class BenutzerResourceTest {
             .extract()
             .as(BenutzerDtoSpec.class);
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Freni");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 3");
+        assertThat(benutzerDto.getVorname()).isEqualTo("");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
     @Test

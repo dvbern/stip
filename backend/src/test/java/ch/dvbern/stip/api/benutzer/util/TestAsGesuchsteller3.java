@@ -66,9 +66,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_3_TEST_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = GESUCHSTELLER_3_TEST_ID),
-        @Claim(key = "family_name", value = "Gesuchstellerin 3"),
-        @Claim(key = "given_name", value = "Freni")
+        @Claim(key = "sub", value = GESUCHSTELLER_3_TEST_ID)
     }
 )
 public @interface TestAsGesuchsteller3 {

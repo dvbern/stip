@@ -29,6 +29,7 @@ public final class TestConstants {
     public static final String SACHBEARBEITER_ID = "e03a7b66-6f15-4ec9-8820-525576e61c7d";
     public static final String SACHBEARBEITER_ADMIN_ID = "82b08e35-296a-411d-9f50-2e82c324d0b3";
     public static final String FREIGABESTELLE_ID = "44494810-cbad-4dc0-818e-bcd5e652f8e7";
+    public static final String FREIGABESTELLE_AND_SACHBEARBEITER_ID = "d25bf1b7-75d3-44ec-a77e-9ceabf69c73f";
     public static final String JURIST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae4";
     public static final String SUPER_USER_ID = "322af9d2-ecc9-4f08-8c88-342b32671d44";
     public static final String SOZIALDIENST_ADMIN_ID = "a50c077a-6541-42be-9c81-d79ae1e89246";

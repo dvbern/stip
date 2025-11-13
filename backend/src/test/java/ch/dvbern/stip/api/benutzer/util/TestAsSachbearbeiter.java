@@ -68,9 +68,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SACHBEARBEITER_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = SACHBEARBEITER_ID),
-        @Claim(key = "family_name", value = "Sachbearbeiter"),
-        @Claim(key = "given_name", value = "Hans")
+        @Claim(key = "sub", value = SACHBEARBEITER_ID)
     }
 )
 public @interface TestAsSachbearbeiter {

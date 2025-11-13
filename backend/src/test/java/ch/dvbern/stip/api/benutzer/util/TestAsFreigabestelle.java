@@ -48,9 +48,7 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = FREIGABESTELLE_ID),
-        @Claim(key = "family_name", value = "Freigabestelle"),
-        @Claim(key = "given_name", value = "Claudio")
+        @Claim(key = "sub", value = FREIGABESTELLE_ID)
     }
 )
 public @interface TestAsFreigabestelle {
