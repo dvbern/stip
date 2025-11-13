@@ -4620,7 +4620,6 @@ components:
         - id
         - timestampErstellt
         - filename
-        - stipDecision
       properties:
         id:
           $ref: '#/components/schemas/UUID'

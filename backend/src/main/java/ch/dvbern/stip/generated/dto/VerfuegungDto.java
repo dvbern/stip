@@ -91,7 +91,6 @@ public class VerfuegungDto  implements Serializable {
 
   
   @JsonProperty("stipDecision")
-  @NotNull
   public ch.dvbern.stip.api.common.type.StipDecision getStipDecision() {
     return stipDecision;
   }
