@@ -274,7 +274,6 @@ quarkus:
         devservice:
           enabled: false
     hibernate-orm:
-      sql-load-script: 'db/test/init_test.sql'
       database:
         generation: 'drop-and-create'
     oidc:

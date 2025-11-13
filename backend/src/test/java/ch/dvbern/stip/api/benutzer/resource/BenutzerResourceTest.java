@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller3;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel;
@@ -91,6 +92,22 @@ class BenutzerResourceTest {
 
         assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
         assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
+    }
+
+    @Test
+    @TestAsGesuchsteller3
+    @Order(3)
+    void test_get_me3() {
+        final var benutzerDto = api.prepareCurrentBenutzer()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(BenutzerDtoSpec.class);
+
+        assertThat(benutzerDto.getVorname()).isEqualTo("Freni");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 3");
     }
 
     @Test
