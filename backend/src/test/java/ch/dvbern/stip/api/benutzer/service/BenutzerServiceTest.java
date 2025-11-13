@@ -22,8 +22,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsDeleteUser;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -61,7 +61,7 @@ class BenutzerServiceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Order(2)
     void testDeleteBenutzer() {
         benutzerService.deleteBenutzer(benutzerToDeleteKeycloakId);

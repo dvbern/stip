@@ -81,14 +81,7 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(2)
     void setupFillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(3)
-    void setupFillAuszahlung() {
-        TestUtil.fillAuszahlung(fall.getId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test

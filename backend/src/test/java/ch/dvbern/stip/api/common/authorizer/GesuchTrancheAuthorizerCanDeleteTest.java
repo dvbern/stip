@@ -167,7 +167,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         currentBenutzer.setRollen(
             Set.of(
                 new Rolle()
-                    .setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)
+                    .setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER_ADMIN)
             )
         );
         gesuch.getAusbildung().getFall().setGesuchsteller(otherBenutzer);

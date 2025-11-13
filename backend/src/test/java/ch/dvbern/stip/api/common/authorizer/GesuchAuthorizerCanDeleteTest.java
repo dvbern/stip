@@ -78,7 +78,7 @@ class GesuchAuthorizerCanDeleteTest {
         sbBenutzer.setId(UUID.randomUUID());
 
         adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
-        adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
+        adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
 
         gesuchTrancheHistoryService = Mockito.mock(GesuchTrancheHistoryService.class);
@@ -180,7 +180,7 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void adminCanDeleteTest() {
         // arrange
-        currentBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
+        currentBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER_ADMIN)));
         final var uuid = UUID.randomUUID();
 
         // assert

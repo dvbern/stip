@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.sozialdienst.service;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsSozialdienstAdmin;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
@@ -140,7 +140,7 @@ class SozialdienstBenutzerServiceTest {
 
     @Order(3)
     @Transactional
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Test
     void replaceSozialdienstAdmin() {
         SozialdienstAdminDto sozialdienstAdminDto = new SozialdienstAdminDto();

@@ -20,10 +20,10 @@ package ch.dvbern.stip.api.benutzer.resource;
 import java.util.Arrays;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -73,8 +73,8 @@ class BenutzerResourceTest {
 
         me = benutzerDto;
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Frédéric");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Nell");
+        assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
     @Test
@@ -110,7 +110,7 @@ class BenutzerResourceTest {
 
     @Test
     @Order(5)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createSachbearbeiterZuordnungStammdaten() {
         final var updateDto = SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpec();
         api.createOrUpdateSachbearbeiterStammdaten()
@@ -135,7 +135,7 @@ class BenutzerResourceTest {
 
     @Test
     @Order(6)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createSachbearbeiterZuordnungStammdatenList() throws InterruptedException {
         // This is bad, but currently the only way to avoid a 500 response
         // As the server may still be (background) processing the request from the

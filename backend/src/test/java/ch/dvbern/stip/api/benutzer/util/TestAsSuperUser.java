@@ -28,28 +28,31 @@ import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
+import static ch.dvbern.stip.api.util.TestConstants.SUPER_USER_ID;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @TestSecurity(
     user = "superuser",
     roles = {
-        OidcConstants.ROLE_ADMIN,
+        OidcConstants.ROLE_SACHBEARBEITER_ADMIN,
         OidcConstants.ROLE_SACHBEARBEITER,
         OidcConstants.ROLE_SUPER_USER,
         OidcPermissions.BENUTZER_DELETE,
         OidcPermissions.STAMMDATEN_DELETE,
         OidcPermissions.BUCHSTABENZUWEISUNG_CREATE,
         OidcPermissions.SOZIALDIENST_CREATE,
+        OidcPermissions.SOZIALDIENST_READ,
         OidcPermissions.SOZIALDIENST_UPDATE,
+        OidcPermissions.SOZIALDIENST_DELETE,
         OidcPermissions.BUCHSTABENZUWEISUNG_UPDATE,
         OidcPermissions.BUCHSTABENZUWEISUNG_READ,
-        OidcPermissions.SOZIALDIENSTBENUTZER_DELETE,
-        OidcPermissions.SOZIALDIENSTBENUTZER_READ,
-        OidcPermissions.SOZIALDIENST_DELETE,
         OidcPermissions.SOZIALDIENSTBENUTZER_CREATE,
+        OidcPermissions.SOZIALDIENSTBENUTZER_READ,
+        OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE,
+        OidcPermissions.SOZIALDIENSTBENUTZER_DELETE,
         OidcPermissions.SEND_EMAIL,
         OidcPermissions.STAMMDATEN_CREATE,
-        OidcPermissions.SOZIALDIENSTBENUTZER_UPDATE,
         OidcPermissions.STAMMDATEN_UPDATE,
         OidcPermissions.ADMIN_GESUCH_DELETE,
         OidcPermissions.NOTIZ_READ,
@@ -74,13 +77,12 @@ import io.quarkus.test.security.oidc.OidcSecurity;
         OidcPermissions.STAMMDATEN_READ,
         OidcPermissions.SB_GESUCH_UPDATE,
         OidcPermissions.CUSTOM_DOKUMENT_DELETE,
-        OidcPermissions.SOZIALDIENST_READ,
         "default-roles-bern"
     }
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = "c1dd0d38-0beb-4694-af37-10bb7da5b12a"),
+        @Claim(key = "sub", value = SUPER_USER_ID),
         @Claim(key = "family_name", value = "Admin"),
         @Claim(key = "given_name", value = "Hans")
     }

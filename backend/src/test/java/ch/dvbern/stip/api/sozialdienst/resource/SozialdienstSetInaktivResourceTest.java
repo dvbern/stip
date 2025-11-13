@@ -20,9 +20,9 @@ package ch.dvbern.stip.api.sozialdienst.resource;
 import java.util.Arrays;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -60,7 +60,7 @@ class SozialdienstSetInaktivResourceTest {
 
     @Order(1)
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createSozialdienst() {
         final var admin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
         final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin);
@@ -94,7 +94,7 @@ class SozialdienstSetInaktivResourceTest {
 
     @Order(3)
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void getAllForDashboardReturnsNewSozialdienst() {
         createdSozialdienstIsReturnedForDashboard();
     }
@@ -113,7 +113,7 @@ class SozialdienstSetInaktivResourceTest {
 
     @Order(5)
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void setSozialdienstToInaktiv() {
         final var sozialdienst = TestUtil.executeAndExtract(
             SozialdienstDtoSpec.class,
@@ -145,7 +145,7 @@ class SozialdienstSetInaktivResourceTest {
 
     @Order(7)
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void getAllForDashboardReturnsInaktivSozialdienst() {
         createdSozialdienstIsReturnedForDashboard();
     }

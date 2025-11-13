@@ -1084,7 +1084,8 @@ public class GesuchService {
     public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
+        return currentBenutzer
+            .hasOneOfRoles(Set.of(OidcConstants.ROLE_SACHBEARBEITER_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
         && Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus()) && !gesuch.isVerfuegt();
     }
 

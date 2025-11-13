@@ -117,7 +117,7 @@ class GesuchDokumentAuthorizerTest {
             Arguments
                 // Setup for SB
                 .of(
-                    OidcConstants.ROLE_ADMIN,
+                    OidcConstants.ROLE_SACHBEARBEITER_ADMIN,
                     GesuchTrancheTyp.TRANCHE,
                     // Gesuchstatus
                     IN_BEARBEITUNG_SB,
@@ -127,7 +127,7 @@ class GesuchDokumentAuthorizerTest {
             org.junit.jupiter.params.provider.Arguments
                 // Setup for SB
                 .of(
-                    OidcConstants.ROLE_ADMIN,
+                    OidcConstants.ROLE_SACHBEARBEITER_ADMIN,
                     GesuchTrancheTyp.AENDERUNG,
                     // setup to not throw (succeed)
                     VERFUEGUNG_VERSENDET,

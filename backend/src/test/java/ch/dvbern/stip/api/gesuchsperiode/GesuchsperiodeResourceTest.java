@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.gesuchsperiode;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.GesuchsperiodeTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestConstants;
@@ -58,7 +58,7 @@ class GesuchsperiodeResourceTest {
     private GesuchsperiodeWithDatenDtoSpec gesuchsperiode;
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Order(1)
     void createTest() {
         GesuchsperiodeCreateDtoSpec newPeriode;
@@ -117,7 +117,7 @@ class GesuchsperiodeResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Order(5)
     void updateTest() {
         final GesuchsperiodeUpdateDtoSpec updateDto;
@@ -147,7 +147,7 @@ class GesuchsperiodeResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Order(6)
     void publishTest() {
         final var updated = api.publishGesuchsperiode()
@@ -179,7 +179,7 @@ class GesuchsperiodeResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Order(8)
     void readonlyUpdateFailsTest() {
         final GesuchsperiodeUpdateDtoSpec updateDto;
@@ -204,7 +204,7 @@ class GesuchsperiodeResourceTest {
     }
 
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Order(9)
     void readonlyDeleteFailsTest() {
         api.deleteGesuchsperiode()

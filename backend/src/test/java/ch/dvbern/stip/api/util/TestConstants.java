@@ -23,12 +23,15 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.util.DateRange;
 
 public final class TestConstants {
-    public static final String FREIGABESTELLE = "9477487f-3ac4-4d02-b57c-e0cefb292a88";
-    public static final String SOZIALDIENST_ADMIN_ID = "9477487f-3ac4-4d02-b57c-e0cefb292a77";
-    public static final String SOZIALDIENST_MITARBEITER_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae1";
-    public static final String GESUCHSTELLER_TEST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae5";
-    public static final String GESUCHSTELLER_2_TEST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae3";
-    public static final String GESUCHSTELLER_3_TEST_ID = "9477487f-3ac4-4d02-b57c-e0cefb292ae1";
+    public static final String FREIGABESTELLE = "44494810-cbad-4dc0-818e-bcd5e652f8e7";
+    public static final String SACHBEARBEITER_ID = "e03a7b66-6f15-4ec9-8820-525576e61c7d";
+    public static final String SACHBEARBEITER_ADMIN_ID = "82b08e35-296a-411d-9f50-2e82c324d0b3";
+    public static final String SUPER_USER_ID = "322af9d2-ecc9-4f08-8c88-342b32671d44";
+    public static final String SOZIALDIENST_ADMIN_ID = "a50c077a-6541-42be-9c81-d79ae1e89246";
+    public static final String SOZIALDIENST_MITARBEITER_ID = "7bf69809-27a1-470c-ad1f-d4e06cab5660";
+    public static final String GESUCHSTELLER_TEST_ID = "588d2de0-488b-42df-94e8-573bbdc1d131";
+    public static final String GESUCHSTELLER_2_TEST_ID = "6c398d55-9bdd-4991-b9a8-eee149182bf1";
+    public static final String GESUCHSTELLER_3_TEST_ID = "69ba3a59-8a23-4540-b751-30f1ecf9998c";
 
     public static final String DELETE_USER_TEST_ID = "2432cf6c-15b3-4fdf-a660-c935f7011f00";
 
@@ -56,8 +59,6 @@ public final class TestConstants {
     public static final String VERANLAGUNGSSTATUS_EXAMPLE_VALUE = "AutomatischProvisorischVeranlagt";
 
     public static UUID TEST_AUSBILDUNGSGANG_ID;
-    public static UUID TEST_BILDUNGSKATEGORIE_ID;
-    public static UUID TEST_AUSBILDUNGSSTAETTE_ID;
     public static UUID TEST_GESUCHSPERIODE_ID;
     public static UUID TEST_GESUCHSJAHR_ID;
     public static UUID TEST_LAND_SCHWEIZ_ID;

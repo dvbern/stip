@@ -87,7 +87,6 @@ class GesuchNotizResourceImplTest {
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        // TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
         TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
