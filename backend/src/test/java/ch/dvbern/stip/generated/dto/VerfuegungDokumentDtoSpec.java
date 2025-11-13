@@ -58,9 +58,9 @@ public class VerfuegungDokumentDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -68,7 +68,7 @@ public class VerfuegungDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
   }
@@ -84,9 +84,9 @@ public class VerfuegungDokumentDtoSpec {
    * Get typ
    * @return typ
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public VerfuegungDokumentTypDtoSpec getTyp() {
     return typ;
@@ -94,7 +94,7 @@ public class VerfuegungDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTyp(VerfuegungDokumentTypDtoSpec typ) {
     this.typ = typ;
   }
@@ -110,9 +110,9 @@ public class VerfuegungDokumentDtoSpec {
    * Get filename
    * @return filename
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilename() {
     return filename;
@@ -120,7 +120,7 @@ public class VerfuegungDokumentDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFilename(String filename) {
     this.filename = filename;
   }

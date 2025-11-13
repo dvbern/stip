@@ -58,8 +58,8 @@ public class VerfuegungDokument extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "dokument_typ", nullable = false)
-    private VerfuegungDokumentTyp dokumentTyp;
+    @Column(name = "typ", nullable = false)
+    private VerfuegungDokumentTyp typ;
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

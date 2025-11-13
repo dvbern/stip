@@ -102,7 +102,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         return verfuegung.getDokumente()
             .stream()
             .filter(
-                d -> d.getDokumentTyp() == VerfuegungDokumentTyp.VERFUEGUNGSBRIEF
+                d -> d.getTyp() == VerfuegungDokumentTyp.VERFUEGUNGSBRIEF
             )
             .findFirst()
             .orElseThrow(() -> new NotFoundException("Verfuegungsbrief document not found"));

@@ -121,9 +121,9 @@ public class VerfuegungDtoSpec {
    * Get dokumente
    * @return dokumente
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_DOKUMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public List<VerfuegungDokumentDtoSpec> getDokumente() {
     return dokumente;
@@ -131,7 +131,7 @@ public class VerfuegungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_DOKUMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDokumente(List<VerfuegungDokumentDtoSpec> dokumente) {
     this.dokumente = dokumente;
   }

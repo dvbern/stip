@@ -107,7 +107,7 @@ public class VerfuegungService {
 
                 final var verfuegungsDokument = new VerfuegungDokument();
                 verfuegungsDokument.setVerfuegung(verfuegung);
-                verfuegungsDokument.setDokumentTyp(VerfuegungDokumentTyp.VERFUEGUNGSBRIEF);
+                verfuegungsDokument.setTyp(VerfuegungDokumentTyp.VERFUEGUNGSBRIEF);
                 verfuegungsDokument.setObjectId(objectId);
                 verfuegungsDokument.setFilename(fileUpload.fileName());
                 verfuegungsDokument.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
@@ -210,7 +210,7 @@ public class VerfuegungService {
 
         final VerfuegungDokument dokument = new VerfuegungDokument();
         dokument.setVerfuegung(verfuegung);
-        dokument.setDokumentTyp(dokumentTyp);
+        dokument.setTyp(dokumentTyp);
         dokument.setObjectId(objectId);
         dokument.setFilename(filename);
         dokument.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
@@ -226,7 +226,7 @@ public class VerfuegungService {
     ) {
         return verfuegung.getDokumente()
             .stream()
-            .filter(d -> d.getDokumentTyp() == typ)
+            .filter(d -> d.getTyp() == typ)
             .findFirst()
             .orElseThrow(() -> new NotFoundException("Berechnungsblatt not found: " + typ));
     }

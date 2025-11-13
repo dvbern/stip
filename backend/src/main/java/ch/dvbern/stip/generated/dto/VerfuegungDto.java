@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class VerfuegungDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String timestampErstellt;
-  private @Valid List<VerfuegungDokumentDto> dokumente;
+  private @Valid List<VerfuegungDokumentDto> dokumente = new ArrayList<>();
 
   /**
    **/
@@ -75,6 +75,7 @@ public class VerfuegungDto  implements Serializable {
 
   
   @JsonProperty("dokumente")
+  @NotNull
   public List<VerfuegungDokumentDto> getDokumente() {
     return dokumente;
   }

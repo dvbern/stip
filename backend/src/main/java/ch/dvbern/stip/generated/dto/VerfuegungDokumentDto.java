@@ -34,6 +34,7 @@ public class VerfuegungDokumentDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -52,6 +53,7 @@ public class VerfuegungDokumentDto  implements Serializable {
 
   
   @JsonProperty("typ")
+  @NotNull
   public VerfuegungDokumentTypDto getTyp() {
     return typ;
   }
@@ -70,6 +72,7 @@ public class VerfuegungDokumentDto  implements Serializable {
 
   
   @JsonProperty("filename")
+  @NotNull
   public String getFilename() {
     return filename;
   }

@@ -197,7 +197,7 @@ public class MassendruckJobPdfService {
                 final var dokument = verfuegung.getDokumente()
                     .stream()
                     .filter(
-                        verfuegungDokument -> verfuegungDokument.getDokumentTyp()
+                        verfuegungDokument -> verfuegungDokument.getTyp()
                             .equals(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG)
                     )
                     .findFirst()

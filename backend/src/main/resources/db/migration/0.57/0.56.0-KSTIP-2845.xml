@@ -21,7 +21,7 @@
             <column name="mandant" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="dokument_typ" type="VARCHAR(255)">
+            <column name="typ" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="filename" type="VARCHAR(255)"/>
@@ -47,7 +47,7 @@
             <column name="user_erstellt" type="VARCHAR(255)"/>
             <column name="user_mutiert" type="VARCHAR(255)"/>
             <column name="mandant" type="VARCHAR(255)"/>
-            <column name="dokument_typ" type="VARCHAR(255)"/>
+            <column name="typ" type="VARCHAR(255)"/>
             <column name="filename" type="VARCHAR(255)"/>
             <column name="filepath" type="VARCHAR(255)"/>
             <column name="filesize" type="VARCHAR(255)"/>

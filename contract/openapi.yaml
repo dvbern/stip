@@ -4596,6 +4596,7 @@ components:
       required:
         - id
         - timestampErstellt
+        - dokumente
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -4607,6 +4608,10 @@ components:
             $ref: '#/components/schemas/VerfuegungDokument'
     VerfuegungDokument:
       type: object
+      required:
+        - id
+        - typ
+        - filename
       properties:
         id:
           $ref: '#/components/schemas/UUID'
