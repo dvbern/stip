@@ -311,6 +311,13 @@
   "shared.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
   "shared.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
+  "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "In Überprüfung",
+  "sachbearbeitung-app.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
+  "sachbearbeitung-app.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
+  "sachbearbeitung-app.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
+  "sachbearbeitung-app.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
+  "sachbearbeitung-app.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Eingereicht",
   "sachbearbeitung-app.gesuch.status.contract.ANSPRUCH_PRUEFEN": "Anspruch prüfen",

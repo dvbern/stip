@@ -263,6 +263,9 @@
                       class="tw:!font-normal"
                       [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | transloco"
                       panelClass="table-select"
+                      [dvTruncateTooltip]="
+                        'sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status | transloco
+                      "
                     >
                       <mat-option [value]="null">
                         {{ 'sachbearbeitung-app.cockpit.no-status-filter' | transloco }}
