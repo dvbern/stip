@@ -18,7 +18,7 @@ describe('InfosGesuchsdokumenteStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.adminDokumente()).toEqual({
+    expect(store.verfuegungen()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

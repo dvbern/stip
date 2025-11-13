@@ -9,11 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { VerfuegungDokument } from './verfuegungDokument';
+import { VerfuegungDokumentTyp } from './verfuegungDokumentTyp';
 
-export interface Verfuegung { 
-    id: string;
-    timestampErstellt: string;
-    dokumente?: Array<VerfuegungDokument>;
+export interface VerfuegungDokument { 
+    id?: string;
+    typ?: VerfuegungDokumentTyp;
+    filename?: string;
 }
+
+
 

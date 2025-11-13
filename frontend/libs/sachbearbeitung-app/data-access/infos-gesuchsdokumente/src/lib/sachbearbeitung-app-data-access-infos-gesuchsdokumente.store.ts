@@ -3,25 +3,17 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { AdminDokumente, GesuchService } from '@dv/shared/model/gesuch';
+import { Verfuegung, VerfuegungService } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isPending,
 } from '@dv/shared/util/remote-data';
 
 // Dummy types until the contract is updated
-export interface StipendienDokument {
-  id: string;
-  datum: string;
-  versendetVerfuegung?: string;
-  verfuegungsbrief?: string;
-  berechnungsblaetter?: string;
-  gesetzlichesDarlehen?: string;
-}
-
 export interface DarlehenDokument {
   id: string;
   datum: string;
@@ -42,15 +34,13 @@ export interface DatenschutzbriefDokument {
 }
 
 type InfosAdminState = {
-  adminDokumente: CachedRemoteData<AdminDokumente>;
-  stipendienDokumente: CachedRemoteData<StipendienDokument[]>;
+  verfuegungen: CachedRemoteData<Verfuegung[]>;
   darlehenDokumente: CachedRemoteData<DarlehenDokument[]>;
   datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefDokument[]>;
 };
 
 const initialState: InfosAdminState = {
-  adminDokumente: initial(),
-  stipendienDokumente: initial(),
+  verfuegungen: initial(),
   darlehenDokumente: initial(),
   datenschutzbriefeDokumente: initial(),
 };
@@ -60,14 +50,13 @@ export class InfosGesuchsdokumenteStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
-  private gesuchService = inject(GesuchService);
+  private verfuegungService = inject(VerfuegungService);
 
-  adminDokumenteViewSig = computed(() => {
-    return fromCachedDataSig(this.adminDokumente);
-  });
-
-  stipendienDokumenteViewSig = computed(() => {
-    return fromCachedDataSig(this.stipendienDokumente);
+  verfuegungenViewSig = computed(() => {
+    return {
+      verfuegungen: fromCachedDataSig(this.verfuegungen),
+      loading: isPending(this.verfuegungen()),
+    };
   });
 
   darlehenDokumenteViewSig = computed(() => {
@@ -78,52 +67,24 @@ export class InfosGesuchsdokumenteStore extends signalStore(
     return fromCachedDataSig(this.datenschutzbriefeDokumente);
   });
 
-  loadAdminDokumente$ = rxMethod<{ gesuchId: string }>(
+  loadVerfuegungDokumente$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          adminDokumente: cachedPending(state.adminDokumente),
+          verfuegungen: cachedPending(state.verfuegungen),
         }));
       }),
       switchMap(({ gesuchId }) =>
-        this.gesuchService
-          .getAdminDokumente$({
+        this.verfuegungService
+          .getVerfuegungen$({
             gesuchId,
           })
           .pipe(
-            handleApiResponse((adminDokumente) =>
-              patchState(this, { adminDokumente }),
+            handleApiResponse((verfuegungen) =>
+              patchState(this, { verfuegungen }),
             ),
           ),
       ),
-    ),
-  );
-
-  // Dummy implementations for loading document lists
-  // TODO: Replace with actual API calls when contract is updated
-  loadStipendienDokumente$ = rxMethod<{ gesuchId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          stipendienDokumente: cachedPending(state.stipendienDokumente),
-        }));
-      }),
-      tap(() => {
-        // Dummy data - will be replaced with actual API call
-        const dummyData: StipendienDokument[] = [
-          {
-            id: '1',
-            datum: new Date().toISOString(),
-            versendetVerfuegung: 'verfuegung_1.pdf',
-            verfuegungsbrief: 'brief_1.pdf',
-            berechnungsblaetter: 'berechnung_1.pdf',
-            gesetzlichesDarlehen: 'darlehen_1.pdf',
-          },
-        ];
-        patchState(this, {
-          stipendienDokumente: { data: dummyData, type: 'success' },
-        });
-      }),
     ),
   );
 

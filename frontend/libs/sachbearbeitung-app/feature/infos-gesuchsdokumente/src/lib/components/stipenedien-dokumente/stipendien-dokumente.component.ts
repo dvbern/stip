@@ -7,18 +7,31 @@ import {
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
+import { VerfuegungDokument } from '@dv/shared/model/gesuch';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import {
+  TypeSafeMatCellDefDirective,
+  TypeSafeMatRowDefDirective,
+} from '@dv/shared/ui/table-helper';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-import { isPending } from '@dv/shared/util/remote-data';
 
 const PAGE_SIZE = 10;
+
+type DokumenteColumns = {
+  datum: string;
+  verfuegungsbrief?: VerfuegungDokument;
+  versendeteVerfuegung?: VerfuegungDokument;
+  berechnungsblaetter: VerfuegungDokument[];
+  // gesetzlichesDarlehen?: VerfuegungDokument;
+};
 
 @Component({
   selector: 'dv-stipendien-dokumente',
@@ -30,60 +43,85 @@ const PAGE_SIZE = 10;
     MatPaginatorModule,
     TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
+    TypeSafeMatCellDefDirective,
+    TypeSafeMatRowDefDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './stipendien-dokumente.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StipendienDokumenteComponent {
-  private infosStore = inject(InfosGesuchsdokumenteStore);
+  infosStore = inject(InfosGesuchsdokumenteStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchId = input.required<string>({ alias: 'id' });
 
-  displayedColumns = [
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
+
+  paginatorSig = viewChild(MatPaginator);
+
+  displayedColumns: (keyof DokumenteColumns)[] = [
     'datum',
-    'versendetVerfuegung',
+    'versendeteVerfuegung',
     'verfuegungsbrief',
     'berechnungsblaetter',
-    'gesetzlichesDarlehen',
+    // 'gesetzlichesDarlehen',
   ];
 
   pageSig = signal(0);
   pageSizeSig = signal(PAGE_SIZE);
 
-  viewSig = computed(() => {
-    const allDokumente = this.infosStore.stipendienDokumenteViewSig() ?? [];
-    const loading = isPending(this.infosStore.stipendienDokumente());
-
-    return {
-      loading,
-      allDokumente,
-      totalEntries: allDokumente.length,
-    };
-  });
-
   paginatedDokumenteSig = computed(() => {
-    const { allDokumente } = this.viewSig();
-    const page = this.pageSig();
-    const pageSize = this.pageSizeSig();
-    const startIndex = page * pageSize;
-    const endIndex = startIndex + pageSize;
+    const verfuegungen =
+      this.infosStore.verfuegungenViewSig().verfuegungen ?? [];
 
-    return allDokumente.slice(startIndex, endIndex);
+    const data = verfuegungen.map((v) => {
+      return v.dokumente?.reduce(
+        (acc, doc) => {
+          switch (doc.typ) {
+            case 'VERFUEGUNGSBRIEF':
+              acc.verfuegungsbrief = doc;
+              break;
+            case 'VERSENDETE_VERFUEGUNG':
+              acc.versendeteVerfuegung = doc;
+              break;
+            case 'BERECHNUNGSBLATT_PIA':
+            case 'BERECHNUNGSBLATT_MUTTER':
+            case 'BERECHNUNGSBLATT_VATER':
+            case 'BERECHNUNGSBLATT_FAMILIE':
+              acc.berechnungsblaetter.push(doc);
+              break;
+          }
+          return acc;
+        },
+        {
+          datum: v.timestampErstellt,
+          verfuegungsId: v.id,
+          verfuegungsbrief: undefined as VerfuegungDokument | undefined,
+          versendeteVerfuegung: undefined as VerfuegungDokument | undefined,
+          berechnungsblaetter: [] as VerfuegungDokument[],
+          // gesetzlichesDarlehen: undefined as VerfuegungDokument | undefined,
+        } satisfies DokumenteColumns & { verfuegungsId: string },
+      );
+    });
+
+    const datasource = new MatTableDataSource(data);
+    const paginator = this.paginatorSig();
+
+    if (paginator) {
+      datasource.paginator = paginator;
+    }
+
+    return datasource;
   });
 
   constructor() {
     effect(() => {
       const gesuchId = this.gesuchId();
       if (gesuchId) {
-        this.infosStore.loadStipendienDokumente$({ gesuchId });
+        this.infosStore.loadVerfuegungDokumente$({ gesuchId });
       }
     });
-  }
-
-  onPageChange(event: PageEvent) {
-    this.pageSig.set(event.pageIndex);
-    this.pageSizeSig.set(event.pageSize);
   }
 }
