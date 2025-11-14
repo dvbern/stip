@@ -128,12 +128,6 @@ paths:
                 format: binary
                 type: string
           description: Returns a file
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
       operationId: getVerfuegungDokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   /verfuegung/dokument/{verfuegungDokumentId}/token:

@@ -24,7 +24,7 @@ public interface VerfuegungResource {
 
     @GET
     @Path("/dokument/download")
-    @Produces({ "application/octet-stream", "text/plain" })
+    @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getVerfuegungDokument(@QueryParam("token") @NotNull   String token);
 
     @GET

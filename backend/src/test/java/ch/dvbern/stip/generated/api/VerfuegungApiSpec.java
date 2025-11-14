@@ -104,7 +104,7 @@ public class VerfuegungApiSpec {
 
         public GetVerfuegungDokumentOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/octet-stream,text/plain");
+            reqSpec.setAccept("application/octet-stream");
             this.respSpec = new ResponseSpecBuilder();
         }
 
