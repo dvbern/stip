@@ -133,10 +133,7 @@
         <!-- PENSUM -->
         @if (showAusbildungspensumSig()) {
           <mat-form-field dvSharedUiFormField class="col-12 col-xl-4">
-            <mat-label>
-              {{ 'shared.form.ausbildung.pensum.label' | transloco }}
-            </mat-label>
-
+            <mat-label>{{ 'shared.form.ausbildung.pensum.label' | transloco }}</mat-label>
             <mat-select
               formControlName="ausbildungspensum"
               data-testid="form-partner-ausbildungspensum"
