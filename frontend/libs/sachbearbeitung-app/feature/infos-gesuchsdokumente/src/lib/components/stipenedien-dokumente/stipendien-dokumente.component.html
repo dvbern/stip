@@ -28,16 +28,24 @@
       <!-- Versendete Verfügung -->
       <ng-container matColumnDef="versendeteVerfuegung">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco }}
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung.label' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument?.versendeteVerfuegung) {
             <button
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="dokument?.versendeteVerfuegung?.filename"
+              [attr.aria-label]="
+                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco
+              "
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.versendeteVerfuegung?.id ?? '',
+              }"
             >
-              <span class="tw:truncate tw:!text-sm/none">{{ dokument?.versendeteVerfuegung?.filename }}</span>
+              <span class="tw:truncate tw:!text-sm/none" [title]="dokument.versendeteVerfuegung?.filename">{{
+                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco
+              }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
               >
@@ -58,9 +66,17 @@
             <button
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="dokument?.verfuegungsbrief?.filename"
+              [attr.aria-label]="
+                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco
+              "
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.verfuegungsbrief?.id ?? '',
+              }"
             >
-              <span class="tw:truncate tw:!text-sm/none">{{ dokument?.verfuegungsbrief?.filename }}</span>
+              <span class="tw:truncate tw:!text-sm/none" [title]="dokument?.verfuegungsbrief?.filename">{{
+                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco
+              }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
               >
@@ -74,29 +90,38 @@
       <!-- Berechnungsblätter -->
       <ng-container matColumnDef="berechnungsblaetter">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter' | transloco }}
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter.label' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument?.berechnungsblaetter) {
-            @for (blatt of dokument?.berechnungsblaetter; track $index) {
-              <button
-                type="button"
-                class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-                [attr.aria-label]="blatt.filename"
-              >
-                <span class="tw:truncate tw:!text-sm/none">{{ blatt.filename }}</span>
-                <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
-                  >download</span
+            <div class="tw:flex tw:gap-4">
+              @for (blatt of dokument?.berechnungsblaetter; track $index) {
+                <button
+                  type="button"
+                  class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+                  [attr.aria-label]="blatt.filename"
+                  [dvDownloadButton]="{
+                    type: 'verfuegung',
+                    id: dokument.versendeteVerfuegung?.id ?? '',
+                  }"
                 >
-              </button>
-            }
+                  <span class="tw:truncate tw:!text-sm/none" [title]="blatt.filename">{{
+                    'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter.' + blatt.typ
+                      | transloco
+                  }}</span>
+                  <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
+                    >download</span
+                  >
+                </button>
+              }
+            </div>
           } @else {
             <span class="tw:text-gray-400">-</span>
           }
         </td>
       </ng-container>
 
-      <!-- Gesetzliches Darlehen -->
+      <!-- Todo KSTIP-2584 Gesetzliches Darlehen -->
       <!-- <ng-container matColumnDef="gesetzlichesDarlehen">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
           {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.gesetzlichesDarlehen' | transloco }}
@@ -107,8 +132,14 @@
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
               [attr.aria-label]="dokument.gesetzlichesDarlehen.filename"
+              [dvDownloadButton]="{
+                type: 'darlehensverfuegung',
+                id: dokument.gesetzlichesDarlehen?.id ?? '',
+              }"
             >
-              <span class="tw:truncate tw:!text-sm/none">{{ dokument.gesetzlichesDarlehen }}</span>
+              <span class="tw:truncate tw:!text-sm/none" [title]="dokument.gesetzlichesDarlehen.filename">
+                {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.gesetzlichesDarlehen' | transloco }}
+              </span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
               >

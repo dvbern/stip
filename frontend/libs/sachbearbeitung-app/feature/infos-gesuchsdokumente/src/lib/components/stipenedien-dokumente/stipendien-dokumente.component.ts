@@ -6,7 +6,6 @@ import {
   effect,
   inject,
   input,
-  signal,
   viewChild,
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -16,14 +15,13 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
 import { VerfuegungDokument } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   TypeSafeMatCellDefDirective,
   TypeSafeMatRowDefDirective,
 } from '@dv/shared/ui/table-helper';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-
-const PAGE_SIZE = 10;
 
 type DokumenteColumns = {
   datum: string;
@@ -45,6 +43,7 @@ type DokumenteColumns = {
     SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
+    SharedUiDownloadButtonDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './stipendien-dokumente.component.html',
@@ -69,15 +68,12 @@ export class StipendienDokumenteComponent {
     // 'gesetzlichesDarlehen',
   ];
 
-  pageSig = signal(0);
-  pageSizeSig = signal(PAGE_SIZE);
-
   paginatedDokumenteSig = computed(() => {
     const verfuegungen =
       this.infosStore.verfuegungenViewSig().verfuegungen ?? [];
 
     const data = verfuegungen.map((v) => {
-      return v.dokumente?.reduce(
+      return v.dokumente.reduce(
         (acc, doc) => {
           switch (doc.typ) {
             case 'VERFUEGUNGSBRIEF':

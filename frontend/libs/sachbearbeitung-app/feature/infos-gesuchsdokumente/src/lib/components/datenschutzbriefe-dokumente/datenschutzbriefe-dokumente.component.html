@@ -1,6 +1,6 @@
 <div class="tw:dv-table tw:my-3">
   <div class="tw:relative tw:overflow-auto">
-    @if (viewSig().loading) {
+    @if (infosStore.datenschutzbriefeDokumenteViewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
     }
     <table
@@ -62,7 +62,10 @@
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.massendruckJobId) {
-            <a [routerLink]="['/massendruck', 'druckauftrag', dokument.massendruckJobId]" class="btn btn-link tw:!p-0">
+            <!-- <a [routerLink]="['/massendruck', 'druckauftrag', dokument.massendruckJobId]" class="btn btn-link tw:!p-0">
+              {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link' | transloco }}
+            </a> -->
+            <a class="tw:text-gray-400 btn btn-link tw:!p-0">
               {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link' | transloco }}
             </a>
           } @else {
@@ -83,10 +86,8 @@
 
   <mat-paginator
     showFirstLastButtons
-    [pageSizeOptions]="[5, 10, 25, 50]"
-    [pageSize]="pageSizeSig()"
-    [pageIndex]="pageSig()"
-    [length]="viewSig().totalEntries"
-    (page)="onPageChange($event)"
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="defaultPageSize"
+    [length]="paginatedDokumenteSig().data.length"
   ></mat-paginator>
 </div>

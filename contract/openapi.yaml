@@ -140,7 +140,7 @@ paths:
     parameters:
       - name: verfuegungDokumentId
         schema:
-          $ref: "#/components/schemas/UUID"
+          $ref: '#/components/schemas/UUID'
         in: path
         required: true
     get:
@@ -3926,7 +3926,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':

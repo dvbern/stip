@@ -12,9 +12,9 @@
 import { VerfuegungDokumentTyp } from './verfuegungDokumentTyp';
 
 export interface VerfuegungDokument { 
-    id?: string;
-    typ?: VerfuegungDokumentTyp;
-    filename?: string;
+    id: string;
+    typ: VerfuegungDokumentTyp;
+    filename: string;
 }
 
 

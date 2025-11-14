@@ -60,11 +60,17 @@ export class InfosGesuchsdokumenteStore extends signalStore(
   });
 
   darlehenDokumenteViewSig = computed(() => {
-    return fromCachedDataSig(this.darlehenDokumente);
+    return {
+      darlehenDokumente: fromCachedDataSig(this.darlehenDokumente),
+      loading: isPending(this.darlehenDokumente()),
+    };
   });
 
   datenschutzbriefeDokumenteViewSig = computed(() => {
-    return fromCachedDataSig(this.datenschutzbriefeDokumente);
+    return {
+      datenschutzbriefe: fromCachedDataSig(this.datenschutzbriefeDokumente),
+      loading: isPending(this.datenschutzbriefeDokumente()),
+    };
   });
 
   loadVerfuegungDokumente$ = rxMethod<{ gesuchId: string }>(

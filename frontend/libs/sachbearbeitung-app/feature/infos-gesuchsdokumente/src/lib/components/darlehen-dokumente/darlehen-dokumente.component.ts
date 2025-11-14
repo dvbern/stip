@@ -6,19 +6,17 @@ import {
   effect,
   inject,
   input,
-  signal,
+  viewChild,
 } from '@angular/core';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
+import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-import { isPending } from '@dv/shared/util/remote-data';
-
-const PAGE_SIZE = 10;
 
 @Component({
   selector: 'dv-darlehen-dokumente',
@@ -36,10 +34,15 @@ const PAGE_SIZE = 10;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DarlehenDokumenteComponent {
-  private infosStore = inject(InfosGesuchsdokumenteStore);
+  infosStore = inject(InfosGesuchsdokumenteStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchId = input.required<string>({ alias: 'id' });
+
+  pageSizes = PAGE_SIZES;
+  defaultPageSize = DEFAULT_PAGE_SIZE;
+
+  paginatorSig = viewChild(MatPaginator);
 
   displayedColumns = [
     'datum',
@@ -50,28 +53,18 @@ export class DarlehenDokumenteComponent {
     'kommentar',
   ];
 
-  pageSig = signal(0);
-  pageSizeSig = signal(PAGE_SIZE);
-
-  viewSig = computed(() => {
-    const allDokumente = this.infosStore.darlehenDokumenteViewSig() ?? [];
-    const loading = isPending(this.infosStore.darlehenDokumente());
-
-    return {
-      loading,
-      allDokumente,
-      totalEntries: allDokumente.length,
-    };
-  });
-
   paginatedDokumenteSig = computed(() => {
-    const { allDokumente } = this.viewSig();
-    const page = this.pageSig();
-    const pageSize = this.pageSizeSig();
-    const startIndex = page * pageSize;
-    const endIndex = startIndex + pageSize;
+    const dokumente =
+      this.infosStore.darlehenDokumenteViewSig().darlehenDokumente ?? [];
 
-    return allDokumente.slice(startIndex, endIndex);
+    const datasource = new MatTableDataSource(dokumente);
+    const paginator = this.paginatorSig();
+
+    if (paginator) {
+      datasource.paginator = paginator;
+    }
+
+    return datasource;
   });
 
   constructor() {
@@ -81,10 +74,5 @@ export class DarlehenDokumenteComponent {
         this.infosStore.loadDarlehenDokumente$({ gesuchId });
       }
     });
-  }
-
-  onPageChange(event: PageEvent) {
-    this.pageSig.set(event.pageIndex);
-    this.pageSizeSig.set(event.pageSize);
   }
 }

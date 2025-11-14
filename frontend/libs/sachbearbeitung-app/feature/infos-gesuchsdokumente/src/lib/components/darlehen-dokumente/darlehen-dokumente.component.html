@@ -1,6 +1,6 @@
 <div class="tw:dv-table tw:my-3">
   <div class="tw:relative tw:overflow-auto">
-    @if (viewSig().loading) {
+    @if (infosStore.darlehenDokumenteViewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
     }
     <table
@@ -42,7 +42,9 @@
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.darlehensverfuegung) {
+            <!-- TODO KSTIP-2697 -->
             <button
+              disabled
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
               [attr.aria-label]="dokument.darlehensverfuegung"
@@ -66,6 +68,7 @@
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.gesetzlichesDarlehen) {
             <button
+              disabled
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
               [attr.aria-label]="dokument.gesetzlichesDarlehen"
@@ -89,6 +92,7 @@
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.freiwilligesDarlehen) {
             <button
+              disabled
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
               [attr.aria-label]="dokument.freiwilligesDarlehen"
@@ -126,10 +130,8 @@
 
   <mat-paginator
     showFirstLastButtons
-    [pageSizeOptions]="[5, 10, 25, 50]"
-    [pageSize]="pageSizeSig()"
-    [pageIndex]="pageSig()"
-    [length]="viewSig().totalEntries"
-    (page)="onPageChange($event)"
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="defaultPageSize"
+    [length]="paginatedDokumenteSig().data.length"
   ></mat-paginator>
 </div>
