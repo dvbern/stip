@@ -311,6 +311,13 @@
   "shared.gesuch.status.tranche.ABGELEHNT": "Rejeté",
   "shared.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Documents manquants",
 
+  "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "En cours de vérification",
+  "sachbearbeitung-app.gesuch.status.tranche.IN_BEARBEITUNG_GS": "En traitement par le requérant",
+  "sachbearbeitung-app.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
+  "sachbearbeitung-app.gesuch.status.tranche.AKZEPTIERT": "Accepté",
+  "sachbearbeitung-app.gesuch.status.tranche.ABGELEHNT": "Rejeté",
+  "sachbearbeitung-app.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Documents manquants",
+
   "sachbearbeitung-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "sachbearbeitung-app.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
   "sachbearbeitung-app.gesuch.status.contract.ANSPRUCH_PRUEFEN": "Vérification des droits",
