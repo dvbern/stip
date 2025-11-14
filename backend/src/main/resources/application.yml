@@ -267,8 +267,8 @@ quarkus:
       # category:
       #   "WebApplicationException":
       #     level: DEBUG
-      # sentry:
-      #   enabled: false
+      sentry:
+        enabled: false
     antivirus:
       clamav:
         devservice:
