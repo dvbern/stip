@@ -1,0 +1,36 @@
+<dv-shared-pattern-main-layout *transloco="let t">
+  <div class="tw:relative tw:my-12 tw:justify-between container">
+    <h1 class="tw:!mb-8">
+      {{ t('shared.darlehen.title') }}
+    </h1>
+    <dv-shared-feature-darlehen [gesuchIdSig]="null"></dv-shared-feature-darlehen>
+  </div>
+
+  <!-- MOBILE NAV -->
+  <div dvHeaderMobileAddons></div>
+  <div dvMobileNavContent></div>
+
+  <!-- DESKTOP HEADER (LEFT) -->
+  <div dvHeaderDesktopLeft class="tw:flex tw:grow tw:items-center tw:gap-4">
+    <a
+      [routerLink]="['/']"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="gesuch-step-nav-dashboard"
+    >
+      <i class="material-symbols-rounded me-2 text-white">dashboard</i>
+      <span>{{ t('shared.menu.dashboard') }}</span>
+    </a>
+
+    <a
+      [routerLink]="['/darlehen']"
+      class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
+      data-testid="gesuch-step-nav-darlehen"
+    >
+      <i class="material-symbols-rounded me-2 text-white">payments</i>
+      <span>{{ t('shared.menu.darlehen') }}</span>
+    </a>
+  </div>
+
+  <!-- DESKTOP HEADER (RIGHT) -->
+  <div dvHeaderDesktopRight class="d-flex align-items-center gap-4"></div>
+</dv-shared-pattern-main-layout>

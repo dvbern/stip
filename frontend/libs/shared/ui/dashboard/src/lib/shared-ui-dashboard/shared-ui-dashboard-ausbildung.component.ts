@@ -33,7 +33,6 @@ export class SharedUiDashboardAusbildungComponent {
   deleteGesuch = output<string>();
   deleteAenderung = output<string>();
   aenderungMelden = output<AenderungMelden>();
-  darlehenCreate = output<{ gesuchId: string }>();
 
   @HostBinding('class') defaultClasses =
     'tw:block tw:bg-white tw:p-6 tw:rounded-lg';

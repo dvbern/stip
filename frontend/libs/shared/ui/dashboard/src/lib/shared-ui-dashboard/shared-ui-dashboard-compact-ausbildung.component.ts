@@ -34,7 +34,6 @@ export class SharedUiDashboardCompactAusbildungComponent {
   deleteGesuch = output<string>();
   deleteAenderung = output<string>();
   aenderungMelden = output<AenderungMelden>();
-  darlehenCreate = output<{ gesuchId: string }>();
 
   @HostBinding('class') defaultClasses = 'tw:block';
 }

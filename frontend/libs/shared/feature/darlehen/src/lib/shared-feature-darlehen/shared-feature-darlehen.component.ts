@@ -7,6 +7,7 @@ import {
   inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -42,8 +43,6 @@ import {
 } from '@dv/shared/util/form';
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 
-import { selectSharedFeatureGesuchFormDarlehenView } from './shared-feature-darlehen.selector';
-
 @Component({
   selector: 'dv-shared-feature-darlehen',
   imports: [
@@ -74,10 +73,13 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   // If this input is set, the component is used in a dialog context
   gesuchIdSig = input.required<string | null>();
 
-  darlehenCreated = output<void>();
-
-  viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormDarlehenView);
   maskitoNumber = maskitoNumber;
+
+  dokumentDummySig = signal({
+    trancheId: 'dummy',
+    allowTypes: 'pdf',
+    permissions: {},
+  });
 
   /* needs {
       trancheId: string | undefined;
@@ -85,7 +87,9 @@ export class SharedFeatureDarlehenComponent implements OnInit {
       permissions: PermissionMap;
     }
   */
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+  private createUploadOptionsSig = createUploadOptionsFactory(
+    this.dokumentDummySig,
+  );
 
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,

@@ -156,14 +156,9 @@
             }
           }
           <!-- todo: add conditions -->
-          <button
-            type="button"
-            class="btn btn-outline-primary"
-            data-testid="cockpit-gesuch-darlehen-create"
-            (click)="darlehenCreate.emit({ gesuchId: gesuch.id })"
-          >
+          <a class="btn btn-outline-primary" data-testid="cockpit-gesuch-edit" [routerLink]="['/darlehen', gesuch.id]">
             {{ 'shared.dashboard.darlehen.create' | transloco }}
-          </button>
+          </a>
         }
       </div>
     </div>

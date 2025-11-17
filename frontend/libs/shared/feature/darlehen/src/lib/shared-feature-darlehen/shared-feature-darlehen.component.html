@@ -1,7 +1,5 @@
-@let view = viewSig();
-
 <!-- loading -->
-@if (view.loading) {
+@if (false) {
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
   <form [formGroup]="form" novalidate data-testid="form-darlehen-form" (ngSubmit)="handleSave()">
@@ -164,12 +162,12 @@
 
     <!-- Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:col-span-2">
-      @if (!view.readonly) {
+      @if (false) {
         <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | transloco }}
         </button>
       } @else {
-        <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
+        <button type="button" data-testid="button-next" class="btn btn-primary">
           {{ 'shared.form.gonext' | transloco }}
         </button>
       }

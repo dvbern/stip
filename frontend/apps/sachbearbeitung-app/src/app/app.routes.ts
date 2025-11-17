@@ -6,6 +6,14 @@ import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
+  // todo: put into right place later
+  // {
+  //   path: 'sachbearbeitung-app-feature-darlehen',
+  //   loadChildren: () =>
+  //     import('@dv/sachbearbeitung-app/feature/darlehen').then(
+  //       (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
+  //     ),
+  // },
   {
     path: 'unauthorized',
     loadChildren: () =>

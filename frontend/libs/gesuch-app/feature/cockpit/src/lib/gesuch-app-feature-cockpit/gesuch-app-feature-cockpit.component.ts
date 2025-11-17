@@ -217,14 +217,6 @@ export class GesuchAppFeatureCockpitComponent {
       });
   }
 
-  darlehenCreate(event: { gesuchId: string }) {
-    SharedDialogCreateDarlehenDailogComponent.open(this.dialog, event.gesuchId)
-      .afterClosed()
-      .subscribe(() => {
-        this.dashboardStore.loadDashboard$();
-      });
-  }
-
   delegiereSozialdienst(fallId: string, sozialdienst: Sozialdienst) {
     GesuchAppFeatureDelegierenDialogComponent.open(this.dialog)
       .afterClosed()

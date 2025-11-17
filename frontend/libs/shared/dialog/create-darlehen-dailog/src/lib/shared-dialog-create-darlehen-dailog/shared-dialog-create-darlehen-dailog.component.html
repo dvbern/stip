@@ -9,11 +9,8 @@
   </button>
 
   <h1 class="tw:!text-3xl">
-    {{ 'shared.ausbildung.dialog.title' | transloco }}
+    {{ 'shared.darlehen.dialog.title' | transloco }}
   </h1>
 
-  <dv-shared-feature-darlehen
-    [gesuchIdSig]="dialogData.gesuchId"
-    (darlehenCreated)="darlehenCreated()"
-  ></dv-shared-feature-darlehen>
+  <dv-shared-feature-darlehen [gesuchIdSig]="dialogData.gesuchId"></dv-shared-feature-darlehen>
 </section>

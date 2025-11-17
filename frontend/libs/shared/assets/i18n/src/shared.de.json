@@ -249,6 +249,7 @@
   "shared.dashboard.aenderung.delete": "Änderung löschen",
   "shared.dashboard.aenderung.delete.dialog.title": "Änderung löschen",
   "shared.dashboard.aenderung.delete.dialog.message": "Wollen sie wirklich die Änderung löschen? Sie werden alle Daten verlieren",
+  "shared.dashboard.darlehen.create": "Darlehen beantragen",
 
   "shared.nachrichten.title": "Nachrichten",
   "shared.nachricht.title": "Nachricht",
