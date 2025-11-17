@@ -31,8 +31,6 @@ public class AenderungFehlendeDokumenteZurueckweisenHandler implements GesuchSta
     @Override
     public void handle(Gesuch gesuch) {
         gesuch.getGesuchTranchen()
-            .stream()
-            .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
     }
 }
