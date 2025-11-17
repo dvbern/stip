@@ -15,33 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-public class OnlyOneTrancheInBearbeitungConstraintValidator
-    implements ConstraintValidator<OnlyOneTrancheInBearbeitungConstraint, Gesuch> {
+@ApplicationScoped
+@Slf4j
+@RequiredArgsConstructor
+public class AenderungFehlendeDokumenteZurueckweisenHandler implements GesuchStatusChangeHandler {
+
     @Override
-    public boolean isValid(Gesuch gesuch, ConstraintValidatorContext context) {
-        if (gesuch.getGesuchTranchen().size() <= 1) {
-            return true;
-        }
-
-        if (gesuch.getGesuchStatus() == Gesuchstatus.FEHLENDE_DOKUMENTE) {
-            return true;
-        }
-
-        if (gesuch.isVerfuegt() && gesuch.getGesuchStatus() == Gesuchstatus.BEREIT_FUER_BEARBEITUNG) {
-            return true;
-        }
-
-        // Only one Tranche with status IN_BEARBEITUNG_GS is allowed
-        return gesuch.getGesuchTranchen()
+    public void handle(Gesuch gesuch) {
+        gesuch.getGesuchTranchen()
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-            .count() <= 1;
+            .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
     }
 }
