@@ -1,59 +1,14 @@
 {
-  "name": "@kibon/stip-contract",
-  "version": "1.24.0",
-  "description": "OpenAPI Contract",
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.dvbern.ch:kibon/stip-contract"
+  "name": "stip-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "@redocly/cli": "2.11.1"
   },
-  "author": "DV Bern AG",
-  "license": "AGPL-3.0",
-  "files": [
-    "openapi.yaml",
-    "**/*.yaml"
-  ],
-  "devDependencies": {
-    "@dvblibs/maven-semantic-release-plugin": "^1.0.3",
-    "@semantic-release/gitlab": "^12.0.4",
-    "@semantic-release/git": "^10.0.1",
-    "semantic-release": "^21.0.7",
-    "semantic-release-maven": "^1.1.7"
-  },
-  "release": {
-    "branches": [
-      "main",
-      {
-        "name": "beta",
-        "prerelease": true
-      }
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      "@dvblibs/maven-semantic-release-plugin",
-      [
-        "@semantic-release/gitlab",
-        {
-          "gitlabUrl": "https://gitlab.dvbern.ch",
-          "assets": [
-            {
-              "path": "openapi.yaml",
-              "label": "OpenAPI Specification"
-            }
-          ]
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "package.json",
-            "package-lock.json"
-          ],
-          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-        }
-      ]
-    ]
+  "private": true,
+  "scripts": {
+    "start": "openapi preview",
+    "build": "openapi join openapi/*.yaml -o openapi.yaml --without-x-tag-groups",
+    "debug": "openapi bundle openapi/*.yaml -o openapi/generated",
+    "lint": "openapi lint openapi/*.yaml"
   }
 }

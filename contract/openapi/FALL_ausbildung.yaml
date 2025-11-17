@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /ausbildung:
+    post:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungCreateResponse'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createAusbildung
+      summary: Returniert die erstellte Ausbildung
+  /ausbildung/{ausbildungId}:
+    parameters:
+      - name: ausbildungId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAusbildung
+      summary: Returniert die Ausbildung
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildung'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateAusbildung
+      summary: Returniert die Ausbildung
+
+components:
+  schemas:
+    AusbildungBase:
+      required:
+        - fallId
+        - ausbildungBegin
+        - ausbildungEnd
+        - pensum
+      type: object
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        fallId:
+          $ref: './components/schemas.yaml#/UUID'
+        fachrichtungBerufsbezeichnung:
+          type: string
+        ausbildungNichtGefunden:
+          type: boolean
+        ausbildungBegin:
+          description: Datum im Format mm.YYYY
+          type: string
+        ausbildungEnd:
+          description: Datum im Format mm.YYYY
+          type: string
+        besuchtBMS:
+          description: Required wenn Abschluss.askForBerufsmaturitaet = true
+          type: boolean
+        pensum:
+          $ref: './components/schemas.yaml#/AusbildungsPensum'
+        alternativeAusbildungsstaette:
+          description: Required wenn andere ausbildungNichtGefunden = true
+          type: string
+        alternativeAusbildungsgang:
+          description: Required wenn andere ausbildungNichtGefunden = true
+          type: string
+        ausbildungsortPLZ:
+          description: Not required if isAusbildungAusland = true
+          type: string
+        ausbildungsort:
+          description: Not required if isAusbildungAusland = true
+          type: string
+        isAusbildungAusland:
+          type: boolean
+        landId:
+          description: Required if isAusbildungAusland = true
+          $ref: './components/schemas.yaml#/UUID'
+    AusbildungCreateResponse:
+      properties:
+        ausbildung:
+          $ref: './components/schemas.yaml#/Ausbildung'
+        error:
+          $ref: './components/schemas.yaml#/GesuchsperiodeSelectError'
+    AusbildungUpdate:
+      type: object
+      properties:
+        ausbildungsgangId:
+          $ref: './components/schemas.yaml#/UUID'
+          description: |
+            Required wenn andere ausbildungNichtGefunden = false
+      allOf:
+        - $ref: '#/components/schemas/AusbildungBase'
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

@@ -1,0 +1,646 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /abschluss:
+    post:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrueckenangebotCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Abschluss'
+          description: Create an Abschluss for a Brueckenangebot
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createAbschlussBrueckenangebot
+      summary: Create an Abschluss for a Brueckenangebot
+    get:
+      tags:
+        - Ausbildungsstaette
+      parameters:
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/AbschlussSortColumn'
+          in: query
+          required: false
+        - $ref: './components/parameters.yaml#/page'
+        - $ref: './components/parameters.yaml#/pageSize'
+        - $ref: './components/parameters.yaml#/sortOrder'
+        - $ref: '#/components/parameters/ausbildungskategorie'
+        - $ref: '#/components/parameters/bildungsrichtung'
+        - $ref: '#/components/parameters/bezeichnungDe'
+        - $ref: '#/components/parameters/bezeichnungFr'
+        - $ref: '#/components/parameters/aktiv'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAbschluss'
+          description: Returns all Abschluesse
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAbschlussForUebersicht
+      summary: Returns all Abschluesse
+  /abschluss/inaktiv/{abschlussId}:
+    parameters:
+      - $ref: '#/components/parameters/abschlussId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Abschluss'
+          description: Set an Abschluss to Inaktiv
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: setAbschlussInaktiv
+      summary: Set an Abschluss to Inaktiv
+  /abschluss/rename/{abschlussId}:
+    parameters:
+      - $ref: '#/components/parameters/abschlussId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameAbschluss'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Abschluss'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: renameAbschluss
+      summary: Renames a specified Abschluss
+  /ausbildungsstaette:
+    post:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungsstaetteCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildungsstaette'
+          description: Create an Ausbildungsstaette
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createAusbildungsstaette
+      summary: Create an Ausbildungsstaette
+    get:
+      tags:
+        - Ausbildungsstaette
+      parameters:
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/AusbildungsstaetteSortColumn'
+          in: query
+          required: false
+        - $ref: './components/parameters.yaml#/page'
+        - $ref: './components/parameters.yaml#/pageSize'
+        - $ref: './components/parameters.yaml#/sortOrder'
+        - $ref: '#/components/parameters/nameDe'
+        - $ref: '#/components/parameters/nameFr'
+        - $ref: '#/components/parameters/nummer'
+        - $ref: '#/components/parameters/nummerTyp'
+        - $ref: '#/components/parameters/aktiv'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAusbildungsstaette'
+          description: Returns all Ausbildungsstaette
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAusbildungsstaetteForUebersicht
+      summary: Returns all Ausbildungsstaette
+  /ausbildungsstaette/inaktiv/{ausbildungsstaetteId}:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungsstaetteId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildungsstaette'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: setAusbildungsstaetteInaktiv
+      summary: Set an Ausbildungsstaette to Inaktiv
+  /ausbildungsstaette/rename/{ausbildungsstaetteId}:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungsstaetteId'
+    patch:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameAusbildungsstaette'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildungsstaette'
+          description: Set an Ausbildungsstaette to Inaktiv
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: renameAusbildungsstaette
+      summary: Renames a specified Ausbildungsstaette
+  /ausbildungsstaette/slim:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AusbildungsstaetteSlim'
+          description: Returns all AusbildungsstaetteSlim
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAusbildungsstaetteForAuswahl
+      summary: Returns all AusbildungsstaetteSlim
+  /abschluss/slim:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbschlussSlim'
+          description: Returns all AbschlussSlim
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAbschluessForAuswahl
+      summary: Returns all AbschlussSlim
+  /ausbildungsgang/slim:
+    get:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AusbildungsgangSlim'
+          description: Returns all AusbildungsgaengeSlim
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAusbildungsgaengeForAuswahl
+      summary: Returns all AusbildungsgaengeSlim
+  /ausbildungsgang:
+    post:
+      tags:
+        - Ausbildungsstaette
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AusbildungsgangCreate'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildungsgang'
+          description: Create anAusbildungsgang
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createAusbildungsgang
+      summary: Create anAusbildungsgang
+    get:
+      tags:
+        - Ausbildungsstaette
+      parameters:
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/AusbildungsgangSortColumn'
+          in: query
+          required: false
+        - $ref: './components/parameters.yaml#/page'
+        - $ref: './components/parameters.yaml#/pageSize'
+        - $ref: './components/parameters.yaml#/sortOrder'
+        - $ref: '#/components/parameters/abschlussBezeichnungDe'
+        - $ref: '#/components/parameters/abschlussBezeichnungFr'
+        - $ref: '#/components/parameters/ausbildungskategorie'
+        - $ref: '#/components/parameters/ausbildungsstaetteNameDe'
+        - $ref: '#/components/parameters/ausbildungsstaetteNameFr'
+        - $ref: '#/components/parameters/aktiv'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAusbildungsgang'
+          description: Returns allAusbildungsgang
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAusbildungsgangForUebersicht
+      summary: Returns allAusbildungsgang
+  /ausbildungsgang/inaktiv/{ausbildungsgangId}:
+    parameters:
+      - name: ausbildungsgangId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Ausbildungsstaette
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Ausbildungsgang'
+          description: Set an Ausbildungsgang to Inaktiv
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: setAusbildungsgangInaktiv
+      summary: Set an Ausbildungsgang to Inaktiv
+components:
+  parameters:
+    bildungsrichtung:
+      name: bildungsrichtung
+      schema:
+        $ref: './components/schemas.yaml#/Bildungsrichtung'
+      in: query
+    bezeichnungDe:
+      name: bezeichnungDe
+      schema:
+        type: string
+      in: query
+    bezeichnungFr:
+      name: bezeichnungFr
+      schema:
+        type: string
+      in: query
+    aktiv:
+      name: aktiv
+      schema:
+        type: boolean
+      in: query
+    nameDe:
+      name: nameDe
+      schema:
+        type: string
+      in: query
+    nameFr:
+      name: nameFr
+      schema:
+        type: string
+      in: query
+    nummer:
+      name: nummer
+      schema:
+        type: string
+      in: query
+    nummerTyp:
+      name: nummerTyp
+      schema:
+        $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
+      in: query
+    ausbildungskategorie:
+      name: ausbildungskategorie
+      schema:
+        $ref: './components/schemas.yaml#/Ausbildungskategorie'
+      in: query
+    abschlussBezeichnungDe:
+      name: abschlussBezeichnungDe
+      schema:
+        type: string
+      in: query
+    abschlussBezeichnungFr:
+      name: abschlussBezeichnungFr
+      schema:
+        type: string
+      in: query
+    ausbildungsstaetteNameDe:
+      name: ausbildungsstaetteNameDe
+      schema:
+        type: string
+      in: query
+    ausbildungsstaetteNameFr:
+      name: ausbildungsstaetteNameFr
+      schema:
+        type: string
+      in: query
+    ausbildungsstaetteId:
+      name: ausbildungsstaetteId
+      schema:
+        $ref: './components/schemas.yaml#/UUID'
+      in: path
+      required: true
+    abschlussId:
+      name: abschlussId
+      schema:
+        $ref: './components/schemas.yaml#/UUID'
+      in: path
+      required: true
+  schemas:
+    AbschlussSortColumn:
+      enum:
+        - AUSBILDUNGSKATEGORIE
+        - BILDUNGSRICHTUNG
+        - BEZEICHNUNG_DE
+        - BEZEICHNUNG_FR
+        - AKTIV
+    PaginatedAbschluss:
+      allOf:
+        - $ref: './components/schemas.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: './components/schemas.yaml#/Abschluss'
+    BrueckenangebotCreate:
+      type: object
+      required:
+        - bildungsrichtung
+        - bezeichnungDe
+        - bezeichnungFr
+      properties:
+        bildungsrichtung:
+          $ref: './components/schemas.yaml#/Bildungsrichtung'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+    AusbildungsstaetteNummerTyp:
+      enum:
+        - CH_SHIS
+        - BUR_NO
+        - CT_NO
+        - OHNE_NO
+    AusbildungsstaetteSortColumn:
+      enum:
+        - NAME_DE
+        - NAME_FR
+        - NUMMER
+        - NUMMER_TYP
+        - AKTIV
+    PaginatedAusbildungsstaette:
+      allOf:
+        - $ref: './components/schemas.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: './components/schemas.yaml#/Ausbildungsstaette'
+    AusbildungsstaetteCreate:
+      type: object
+      required:
+        - nameDe
+        - nameFr
+        - nummerTyp
+      properties:
+        nameDe:
+          type: string
+        nameFr:
+          type: string
+        nummer:
+          type: string
+        nummerTyp:
+          $ref: '#/components/schemas/AusbildungsstaetteNummerTyp'
+    AusbildungsgangSortColumn:
+      enum:
+        - ABSCHLUSS_BEZEICHNUNG_DE
+        - ABSCHLUSS_BEZEICHNUNG_FR
+        - ABSCHLUSS_AUSBILDUNGSKATEGORIE
+        - AUSBILDUNGSSTAETTE_NAME_DE
+        - AUSBILDUNGSSTAETTE_NAME_FR
+        - AKTIV
+    AusbildungsgangSlim:
+      type: object
+      required:
+        - id
+        - abschlussId
+        - ausbildungsstaetteId
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        abschlussId:
+          $ref: './components/schemas.yaml#/UUID'
+        ausbildungsstaetteId:
+          $ref: './components/schemas.yaml#/UUID'
+    PaginatedAusbildungsgang:
+      allOf:
+        - $ref: './components/schemas.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: './components/schemas.yaml#/Ausbildungsgang'
+    AusbildungsgangCreate:
+      type: object
+      required:
+        - abschlussId
+        - ausbildungsstaetteId
+      properties:
+        abschlussId:
+          $ref: './components/schemas.yaml#/UUID'
+        ausbildungsstaetteId:
+          $ref: './components/schemas.yaml#/UUID'
+    AusbildungsgangData:
+      type: object
+      required:
+        - id
+        - bezeichnungDe
+        - bezeichnungFr
+        - bildungskategorie
+        - bildungsrichtung
+        - aktiv
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        bildungskategorie:
+          $ref: './components/schemas.yaml#/Bildungskategorie'
+        bildungsrichtung:
+          $ref: './components/schemas.yaml#/Bildungsrichtung'
+        zusatzfrage:
+          $ref: './components/schemas.yaml#/AbschlussZusatzfrage'
+        askForBerufsmaturitaet:
+          type: boolean
+        aktiv:
+          type: boolean
+    RenameAusbildungsstaette:
+      type: object
+      required:
+        - nameDe
+        - nameFr
+      properties:
+        nameDe:
+          type: string
+        nameFr:
+          type: string
+    RenameAbschluss:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+    AusbildungsstaetteSlim:
+      type: object
+      required:
+        - id
+        - nameDe
+        - nameFr
+        - ausbildungsgaenge
+        - aktiv
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        nameDe:
+          type: string
+        nameFr:
+          type: string
+        ausbildungsgaenge:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungsgangData'
+        aktiv:
+          type: boolean
+    AbschlussSlim:
+      type: object
+      required:
+        - id
+        - bezeichnungDe
+        - bezeichnungFr
+        - ausbildungskategorie
+        - bildungsrichtung
+        - aktiv
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        ausbildungskategorie:
+          $ref: './components/schemas.yaml#/Ausbildungskategorie'
+        bildungsrichtung:
+          $ref: './components/schemas.yaml#/Bildungsrichtung'
+        zusatzfrage:
+          $ref: './components/schemas.yaml#/AbschlussZusatzfrage'
+        aktiv:
+          type: boolean
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /gesuchsjahr:
+    get:
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned all Gesuchsjahre
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchsjahre
+      summary: Gets all Gesuchsjahre
+    post:
+      tags:
+        - Gesuchsjahr
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsjahrCreate'
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned new created Gesuchsjahr
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createGesuchsjahr
+      summary: Creates a new Gesuchsjahr
+  /gesuchsjahr/{gesuchsjahrId}:
+    parameters:
+      - name: gesuchsjahrId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned Gesuchsjahr
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchsjahr
+      summary: Returns a Gesuchsjahr with the given id
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsjahrUpdate'
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+          description: Returned updated Gesuchsjahr
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateGesuchsjahr
+      summary: Updates a Gesuchsjahr with the given id
+    delete:
+      tags:
+        - Gesuchsjahr
+      responses:
+        204:
+          description: Gesuchsjahr deleted
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteGesuchsjahr
+      summary: Deletes a Gesuchsjahr with the given id
+  /gesuchsjahr/publish/{gesuchsjahrId}:
+    parameters:
+      - name: gesuchsjahrId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuchsjahr
+      responses:
+        200:
+          description: Gesuchsjahr published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuchsjahr'
+      operationId: publishGesuchsjahr
+      summary: Publishes a Gesuchsjahr with the given id
+components:
+  schemas:
+    Gesuchsjahr:
+      type: object
+      required:
+        - id
+        - bezeichnungDe
+        - bezeichnungFr
+        - technischesJahr
+        - gueltigkeitStatus
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        technischesJahr:
+          type: integer
+        gueltigkeitStatus:
+          $ref: './components/schemas.yaml#/GueltigkeitStatus'
+    GesuchsjahrCreate:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+        - technischesJahr
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        technischesJahr:
+          type: integer
+    GesuchsjahrUpdate:
+      type: object
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        technischesJahr:
+          type: integer
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

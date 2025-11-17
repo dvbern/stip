@@ -1,0 +1,189 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /stip-decision/all:
+    get:
+      tags:
+        - StipDecision
+      responses:
+        '200':
+          description: 'Get all StipDecisionText entries'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StipDecisionText'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAll
+  /tenant/current:
+    get:
+      tags:
+        - Tenant
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantInfo'
+          description: Tenant
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getCurrentTenant
+      summary: Current Tenant
+      description: '`Tenant` based on the current Request'
+  /plz:
+    get:
+      tags:
+        - Plz
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/plz'
+          description: Returns all plzs
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getPlz
+      summary: Gets all PLZs
+  /notifications:
+    get:
+      tags:
+        - Notification
+      responses:
+        '200':
+          description: Returns all Notifications for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/schemas.yaml#/Notification'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getNotificationsForCurrentUser
+      summary: Gets all notifications for the User
+components:
+  schemas:
+    plz:
+      description: 'PLZ und ort für Type ahead funktionalitaet'
+      type: object
+      required:
+        - plz
+        - ort
+        - kantonskuerzel
+      properties:
+        plz:
+          type: string
+        ort:
+          type: string
+        kantonskuerzel:
+          type: string
+    TenantAuthConfig:
+      title: Root Type for TenantAuthConfig
+      required:
+        - authServerUrl
+        - realm
+      type: object
+      properties:
+        authServerUrl:
+          type: string
+        realm:
+          type: string
+      example:
+        authServerUrl: some text
+        realm: some text
+    TenantInfo:
+      title: Root Type for TenantInfo
+      description: Client Application Info about a `Tenant`
+      required:
+        - clientAuth
+        - identifier
+      type: object
+      properties:
+        identifier:
+          type: string
+        clientAuth:
+          $ref: '#/components/schemas/TenantAuthConfig'
+    StipDecisionText:
+      type: object
+      required:
+        - id
+        - stipDecision
+        - titleDe
+        - textDe
+        - textFr
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        stipDecision:
+          $ref: './components/schemas.yaml#/StipDecision'
+        titleDe:
+          type: string
+        textDe:
+          type: string
+        textFr:
+          type: string
+    WelcomeMail:
+      type: object
+      required:
+        - name
+        - vorname
+        - email
+        - redirectUri
+      properties:
+        name:
+          type: string
+        vorname:
+          type: string
+        email:
+          type: string
+        redirectUri:
+          type: string
+    NeskoError:
+      required:
+        - type
+        - neskoError
+        - userMessage
+      type: object
+      properties:
+        type:
+          type: string
+        neskoError:
+          type: string
+        userMessage:
+          type: string
+    ZustaendigerKanton:
+      enum:
+        - BERN
+        - ANDERER_KANTON
+      type: string
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

@@ -1,0 +1,241 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /buchhaltung/{gesuchId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchId'
+    get:
+      tags:
+        - Buchhaltung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuchhaltungOverview'
+          description: Returns all buchhaltungsentrys of a Fall with the given gesuchId
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getBuchhaltungEntrys
+      summary: Gets all buchhaltungsentrys
+    post:
+      tags:
+        - Buchhaltung
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuchhaltungSaldokorrektur'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuchhaltungEntry'
+          description: Create a buchhaltungsentry from a saldokorrektur
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createBuchhaltungSaldokorrektur
+      summary: Create a buchhaltungsentry from a saldokorrektur
+
+  /buchhaltung/retry/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Buchhaltung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuchhaltungEntry'
+          description: return BuchhaltungEntry for retry
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: retryFailedAuszahlungBuchhaltungForGesuch
+      summary: return BuchhaltungEntry for retry
+  /buchhaltung/failed:
+    summary: 'asdf'
+    get:
+      tags:
+        - Buchhaltung
+      parameters:
+        - $ref: './components/parameters.yaml#/page'
+        - $ref: './components/parameters.yaml#/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFailedAuszahlungBuchhaltung'
+          description: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getFailedAuszahlungBuchhaltungEntrys
+      summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
+components:
+  schemas:
+    FailedAuszahlungBuchhaltung:
+      required:
+        - fallId
+        - fallNummer
+        - gesuchId
+        - gesuchNummer
+        - name
+        - vorname
+        - lastTryDate
+      type: object
+      properties:
+        fallId:
+          $ref: './components/schemas.yaml#/UUID'
+        fallNummer:
+          type: string
+        gesuchId:
+          $ref: './components/schemas.yaml#/UUID'
+        gesuchNummer:
+          type: string
+        name:
+          type: string
+        vorname:
+          type: string
+        lastTryDate:
+          type: string
+          format: date-time
+    PaginatedFailedAuszahlungBuchhaltung:
+      allOf:
+        - $ref: './components/schemas.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedAuszahlungBuchhaltung'
+    BuchhaltungOverview:
+      type: object
+      required:
+        - canRetryAuszahlung
+        - buchhaltungEntrys
+      properties:
+        canRetryAuszahlung:
+          type: boolean
+        buchhaltungEntrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/BuchhaltungEntry'
+    BuchhaltungEntry:
+      type: object
+      required:
+        - userErstellt
+        - timestampErstellt
+        - buchhaltungType
+        - saldoAenderung
+        - saldo
+        - comment
+      properties:
+        userErstellt:
+          type: string
+        timestampErstellt:
+          type: string
+          format: date-time
+        buchhaltungType:
+          $ref: '#/components/schemas/BuchhaltungType'
+        stipendienBetrag:
+          type: integer
+        auszahlung:
+          type: integer
+        rueckforderung:
+          type: integer
+        saldoAenderung:
+          type: integer
+        saldo:
+          type: integer
+        businessPartnerId:
+          type: integer
+        comment:
+          type: string
+        verfuegungId:
+          $ref: './components/schemas.yaml#/UUID'
+        gesuchId:
+          $ref: './components/schemas.yaml#/UUID'
+        zahlungsverbindung:
+          $ref: './components/schemas.yaml#/Zahlungsverbindung'
+        sapStatus:
+          $ref: '#/components/schemas/SapStatus'
+        sapDeliverys:
+          type: array
+          items:
+            $ref: '#/components/schemas/SapDelivery'
+    BuchhaltungSaldokorrektur:
+      type: object
+      required:
+        - betrag
+        - comment
+      properties:
+        betrag:
+          type: integer
+        comment:
+          type: string
+    SapStatus:
+      enum:
+        - SUCCESS
+        - FAILURE
+        - IN_PROGRESS
+    BuchhaltungType:
+      enum:
+        - SALDOAENDERUNG
+        - AUSZAHLUNG
+        - STIPENDIUM
+    SapDelivery:
+      type: object
+      required:
+        - sapId
+        - timestampErstellt
+        - sapStatus
+      properties:
+        sapId:
+          type: string
+        timestampErstellt:
+          type: string
+          format: date-time
+        sapStatus:
+          $ref: '#/components/schemas/SapStatus'
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

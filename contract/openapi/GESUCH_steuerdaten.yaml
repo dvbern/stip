@@ -1,0 +1,172 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /steuerdaten/nesko/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
+        required: true
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateSteuerdatenFromNesko
+      summary: Updates the Steuerdaten from Nesko
+  /steuerdaten/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSteuerdaten
+      summary: Returniert die Steuerdaten der gegebenen gesuchTrancheId.
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Steuerdaten'
+        required: true
+      tags:
+        - Steuerdaten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Steuerdaten'
+          description: Steuerdaten updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateSteuerdaten
+      summary: Updates the Steuerdaten of the given gesuchTrancheId
+components:
+  schemas:
+    NeskoGetSteuerdatenRequest:
+      required:
+        - steuerdatenTyp
+        - steuerjahr
+      type: object
+      properties:
+        steuerdatenTyp:
+          $ref: './components/schemas.yaml#/SteuerdatenTyp'
+        steuerjahr:
+          type: integer
+    Steuerdaten:
+      title: Root Type for Steuerdaten
+      required:
+        - steuernKantonGemeinde
+        - steuernBund
+        - fahrkosten
+        - verpflegung
+        - totalEinkuenfte
+        - eigenmietwert
+        - isArbeitsverhaeltnisSelbstaendig
+        - vermoegen
+        - steuerdatenTyp
+      type: object
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        steuerdatenTyp:
+          $ref: './components/schemas.yaml#/SteuerdatenTyp'
+        steuernKantonGemeinde:
+          type: integer
+        steuernBund:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        steuerjahr:
+          type: integer
+        veranlagungsStatus:
+          type: string
+        totalEinkuenfte:
+          type: integer
+        eigenmietwert:
+          type: integer
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
+        saeule3a:
+          type: integer
+        saeule2:
+          type: integer
+        vermoegen:
+          type: integer
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

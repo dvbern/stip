@@ -1,0 +1,568 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumente':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchWithChanges'
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: aenderungFehlendeDokumenteUebermitteln
+      summary: Dem GS übermitteln das Dokumente auf dieser Änderung nicht akzeptiert wurden
+  '/gesuchtranche/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchTrancheId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Gesuch'
+          description: Fehlende Dokumente eingereicht
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: aenderungFehlendeDokumenteEinreichen
+      summary: Dem SB übermitteln das fehlende Dokumente auf dieser Änderung hochgeladen wurden
+  '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/gs':
+    get:
+      tags:
+        - GesuchTranche
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/schemas.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/ValidationReport'
+          description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchTrancheEinreichenValidierenGS
+      summary: Das Gesuch Einreichen Validation Report generieren
+  '/gesuchtranche/{gesuchTrancheId}/einreichen/validieren/sb':
+    get:
+      tags:
+        - GesuchTranche
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/schemas.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/ValidationReport'
+          description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchTrancheEinreichenValidierenSB
+      summary: Das Gesuch Einreichen Validation Report generieren
+  '/gesuchtranche/validatePages/{gesuchTrancheId}/gs':
+    get:
+      tags:
+        - GesuchTranche
+        - Validation
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/schemas.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/ValidationReport'
+          description: Die Validierung wurde erflogreich durchgeführt
+      operationId: validateGesuchTranchePagesGS
+  '/gesuchtranche/validatePages/{gesuchTrancheId}/sb':
+    get:
+      tags:
+        - GesuchTranche
+        - Validation
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/schemas.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/ValidationReport'
+          description: Die Validierung wurde erflogreich durchgeführt
+      operationId: validateGesuchTranchePagesSB
+  '/gesuchtranche/{gesuchTrancheId}/dokumente/gs':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: GesuchDokumente returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/schemas.yaml#/GesuchDokument'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchDokumenteGS
+  '/gesuchtranche/{gesuchTrancheId}/dokumente/sb':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: GesuchDokumente returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/schemas.yaml#/GesuchDokument'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchDokumenteSB
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload/gs':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Returns the documents that are to be uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumenteToUpload'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDocumentsToUploadGS
+  '/gesuchtranche/{gesuchTrancheId}/dokumenteToUpload/sb':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Returns the documents that are to be uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DokumenteToUpload'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDocumentsToUploadSB
+  '/gesuchtranche/gs/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTrancheList'
+          description: Alle GesuchTranchen fuer ein Gesuch
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllTranchenForGesuchGS
+  '/gesuchtranche/sb/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTrancheList'
+          description: Alle GesuchTranchen fuer ein Gesuch
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllTranchenForGesuchSB
+  '/gesuchtranche/{aenderungId}/patchAenderungInfo':
+    parameters:
+      - name: aenderungId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchAenderungsInfoRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/Gesuch'
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: patchAenderungInfo
+  '/gesuchtranche/{gesuchId}/aenderungsantrag':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAenderungsantragRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTranche'
+          description: Aenderungsantrag wurde erstellt
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createAenderungsantrag
+  '/gesuchtranche/{gesuchId}/tranche':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - GesuchTranche
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGesuchTrancheRequest'
+      responses:
+        '200':
+          description: 'GesuchTranche wurde erflogreich erstellt'
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTranche'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createGesuchTrancheCopy
+  '/gesuchtranche/{aenderungId}/aenderung/einreichen':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Eingereicht
+        '400':
+          description: Falsche Tranche eingereicht
+        '404':
+          description: Die Tranche gibt es nicht
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: aenderungEinreichen
+  '/gesuchtranche/{aenderungId}/aenderung/akzeptieren':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    post:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich akzeptiert'
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTranche'
+        '400':
+          description: Falsche Tranche akzeptiert
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: aenderungAkzeptieren
+  '/gesuchtranche/{aenderungId}/aenderung/manuelleAenderung':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich auf manuell gesetzt'
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTranche'
+        '400':
+          description: Falsche Tranche versucht auf manuell zu setzen
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: aenderungManuellAnpassen
+  '/gesuchtranche/{aenderungId}/aenderung/ablehnen':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    patch:
+      tags:
+        - GesuchTranche
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/schemas.yaml#/Kommentar'
+      responses:
+        '200':
+          description: 'Aenderung wurde erflogreich abgelehnt'
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/GesuchTranche'
+        '400':
+          description: Falsche Tranche abgelehnt
+        '404':
+          description: Die Aenderung gibt es nicht
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: aenderungAblehnen
+  '/gesuchtranche/{aenderungId}/aenderung/delete':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    delete:
+      tags:
+        - GesuchTranche
+      responses:
+        '200':
+          description: Geloescht
+        '400':
+          description: Tranche nicht gefunden
+        '404':
+          description: Tranche nicht gefunden
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteAenderung
+components:
+  parameters:
+    aenderungId:
+      name: aenderungId
+      in: path
+      required: true
+      description: Die ID der Aenderung
+      schema:
+        $ref: './components/schemas.yaml#/UUID'
+  schemas:
+    BaseTrancheRequest:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+        comment:
+          type: string
+    PatchAenderungsInfoRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    CreateGesuchTrancheRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    CreateAenderungsantragRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseTrancheRequest'
+        - type: object
+          required:
+            - start
+            - comment
+    DokumenteToUpload:
+      type: object
+      properties:
+        customDokumentTyps:
+          type: array
+          items:
+            $ref: './components/schemas.yaml#/CustomDokumentTyp'
+        required:
+          type: array
+          items:
+            $ref: './components/schemas.yaml#/DokumentTyp'
+        unterschriftenblaetter:
+          type: array
+          items:
+            $ref: './components/schemas.yaml#/UnterschriftenblattDokumentTyp'
+        sbCanFehlendeDokumenteUebermitteln:
+          type: boolean
+        gsCanDokumenteUebermitteln:
+          type: boolean
+        sbCanBearbeitungAbschliessen:
+          type: boolean
+        sbCanUploadUnterschriftenblatt:
+          type: boolean
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

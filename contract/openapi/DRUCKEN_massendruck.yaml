@@ -1,0 +1,392 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /massendruck/{getMassendruckJobs}:
+    get:
+      tags:
+        - Massendruck
+      parameters:
+        - name: getMassendruckJobs
+          schema:
+            $ref: '#/components/schemas/GetMassendruckJobQueryType'
+          in: path
+          required: true
+        - $ref: './components/parameters.yaml#/userErstellt'
+        - $ref: './components/parameters.yaml#/timestampErstellt'
+        - $ref: '#/components/parameters/MassendruckJobStatus'
+        - $ref: '#/components/parameters/MassendruckJobTyp'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/MassendruckJobSortColumn'
+          in: query
+          required: false
+        - $ref: './components/parameters.yaml#/sortOrder'
+        - $ref: './components/parameters.yaml#/page'
+        - $ref: './components/parameters.yaml#/pageSize'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMassendruckJob'
+          description: Returns the PDF document for the given GesuchTrancheId and DokumentTyp
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllMassendruckJobs
+      summary: Get all Massendruck Jobs
+  /massendruck/{getGesucheSBQueryType}/create:
+    parameters:
+      - name: getGesucheSBQueryType
+        schema:
+          $ref: './components/schemas.yaml#/GetGesucheSBQueryType'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJob'
+          description: The created Massendruck Job
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createMassendruckJobForQueryType
+      description: Create a Massendruck Job for the given query type
+  /massendruck/detail/{massendruckJobId}:
+    parameters:
+      - name: massendruckJobId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJobDetail'
+          description: The created Massendruck Job
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getMassendruckJobDetail
+      description: Create a Massendruck Job for the given query type
+  /massendruck/datenschutzbrief/versendet/{massendruckDatenschutzbriefId}:
+    parameters:
+      - name: massendruckDatenschutzbriefId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckDatenschutzbrief'
+          description: The updated Massendruck Datenschutzbrief
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: massendruckDatenschutzbriefVersenden
+      description: Send a Massendruck Datenschutzbrief
+  /massendruck/verfuegung/versendet/{massendruckVerfuegungId}:
+    parameters:
+      - name: massendruckVerfuegungId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckVerfuegung'
+          description: The updated Massendruck Datenschutzbrief
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: massendruckVerfuegungVersenden
+      description: Send a Massendruck Verfuegung
+  /massendruck/{massendruckId}/token:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/schemas.yaml#/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+          description: File returned
+      operationId: getMassendruckDownloadToken
+      summary: get Token to downlaod Verfuegung
+  /massendruck/{massendruckId}/delete:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '204':
+          description: Massendruck Job deleted
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteMassendruckJob
+      summary: Delete failed Massendruck Job
+  /massendruck/{massendruckId}/retry:
+    parameters:
+      - name: massendruckId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MassendruckJobDetail'
+          description: The retried Massendruck Job
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: retryMassendruckJob
+      summary: Delete failed Massendruck Job
+  /massendruck/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Massendruck
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadMassendruckDocument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+components:
+  parameters:
+    MassendruckJobTyp:
+      in: query
+      name: massendruckJobTyp
+      schema:
+        $ref: '#/components/schemas/MassendruckJobTyp'
+    MassendruckJobStatus:
+      in: query
+      name: massendruckJobStatus
+      schema:
+        $ref: '#/components/schemas/MassendruckJobStatus'
+  schemas:
+    MassendruckJobTyp:
+      enum:
+        - DATENSCHUTZBRIEF
+        - VERFUEGUNG
+    MassendruckJobStatus:
+      enum:
+        - IN_PROGRESS
+        - SUCCESS
+        - FAILED
+        - ARCHIVED
+    MassendruckJob:
+      type: object
+      required:
+        - id
+        - userErstellt
+        - timestampErstellt
+        - massendruckJobStatus
+        - massendruckJobTyp
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        userErstellt:
+          type: string
+        timestampErstellt:
+          type: string
+          format: date-time
+        massendruckJobStatus:
+          $ref: '#/components/schemas/MassendruckJobStatus'
+        massendruckJobTyp:
+          $ref: '#/components/schemas/MassendruckJobTyp'
+    MassendruckJobDetail:
+      type: object
+      allOf:
+        - type: object
+        - $ref: '#/components/schemas/MassendruckJob'
+      properties:
+        datenschutzbriefMassendrucks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckDatenschutzbrief'
+        verfuegungMassendrucks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckVerfuegung'
+    MassendruckEntry:
+      type: object
+      required:
+        - id
+        - isVersendet
+        - nachname
+        - vorname
+        - gesuchNummer
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        isVersendet:
+          type: boolean
+        nachname:
+          type: string
+        vorname:
+          type: string
+        gesuchNummer:
+          type: string
+        gesuchId:
+          $ref: './components/schemas.yaml#/UUID'
+        gesuchTrancheId:
+          $ref: './components/schemas.yaml#/UUID'
+    GetMassendruckJobQueryType:
+      enum:
+        - ALLE
+        - ALLE_AKTIV # includes status: IN_GENERIERUNG, VERSANDBEREIT, FEHLERHAFTE_GENERIERUNG
+        - ALLE_ARCHIVIERT
+        - ALLE_FEHLERHAFTE_GENERIERUNG
+      type: string
+    PaginatedMassendruckJob:
+      allOf:
+        - $ref: './components/schemas.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MassendruckJob'
+    MassendruckJobSortColumn:
+      enum:
+        - TIMESTAMP_ERSTELLT
+        - USER_ERSTELLT
+        - STATUS
+    MassendruckVerfuegung:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MassendruckEntry'
+    MassendruckDatenschutzbrief:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/MassendruckEntry'
+      required:
+        - elternTyp
+      properties:
+        elternTyp:
+          $ref: './components/schemas.yaml#/ElternTyp'
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

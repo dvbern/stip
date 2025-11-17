@@ -1,0 +1,363 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /benutzer/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          type: string
+        in: path
+        required: true
+    delete:
+      tags:
+        - Benutzer
+      responses:
+        204:
+          description: Benutzer deleted
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteBenutzer
+      summary: Deletes a benutzer with the given id
+  /benutzer/prepare/me:
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: Current Benutzer
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: prepareCurrentBenutzer
+      summary: Get or create and update current benutzer
+  /benutzer/sachbearbeiter:
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sachbearbeiter'
+          description: returns all Sachbearbeiters (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSachbearbeitersForManagement
+      summary: Get all existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterUpdate'
+        required: true
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sachbearbeiter'
+          description: New Sachbearbeiter is created (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createSachbearbeiter
+      summary: Creates a new Sachbearbeiter (Sb/Jurist/Sb-Admin)
+  /benutzer/sachbearbeiter/{sachbearbeiterId}:
+    parameters:
+      - name: sachbearbeiterId
+        schema:
+          $ref: './components/schemas.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sachbearbeiter'
+          description: returns Sachbearbeiter by given id (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSachbearbeiterForManagement
+      summary: Get an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterUpdate'
+        required: true
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sachbearbeiter'
+          description: Existing Sachbearbeiter is updated (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateSachbearbeiter
+      summary: Updates an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+    delete:
+      tags:
+        - Benutzer
+      responses:
+        '204':
+          description: Existing Sachbearbeiter is deleted (Sb/Jurist/Sb-Admin)
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteSachbearbeiter
+      summary: Deletes an existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
+  /benutzer/stammdaten/sachbearbeiter:
+    get:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Benutzer'
+          description: >-
+            Return a list of all Sachbearbeiter with their Sachbearbeiter Zuordnung Stammdaten
+            when exist
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSachbearbeitende
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdatenList'
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          description: Sachbearbeiter Stammdatenzuweisung updated
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createOrUpdateSachbearbeiterStammdatenList
+  '/benutzer/stammdaten/sachbearbeiter/{benutzerId}':
+    get:
+      tags:
+        - Benutzer
+      parameters:
+        - name: benutzerId
+          schema:
+            $ref: './components/schemas.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+          description: Return the Stammdaten for the given Benutzer when exist
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSachbearbeiterStammdaten
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+        required: true
+      tags:
+        - Benutzer
+      parameters:
+        - name: benutzerId
+          schema:
+            $ref: './components/schemas.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Sachbearbeiter Stammdaten created / updated
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createOrUpdateSachbearbeiterStammdaten
+components:
+  schemas:
+    Sachbearbeiter:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+      allOf:
+        - $ref: '#/components/schemas/SachbearbeiterUpdate'
+    SachbearbeiterUpdate:
+      type: object
+      required:
+        - telefonnummer
+        - email
+        - funktionDe
+        - funktionFr
+        - sachbearbeiterRollen
+      properties:
+        telefonnummer:
+          type: string
+        email:
+          type: string
+        funktionDe:
+          type: string
+        funktionFr:
+          type: string
+        sachbearbeiterRollen:
+          type: array
+          items:
+            type: string
+        redirectUri:
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/BenutzerUpdate'
+    Benutzereinstellungen:
+      type: object
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        digitaleKommunikation:
+          type: boolean
+    Benutzer:
+      type: object
+      allOf:
+        - required:
+            - id
+          type: object
+          properties:
+            id:
+              $ref: './components/schemas.yaml#/UUID'
+            sachbearbeiterZuordnungStammdaten:
+              $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+        - $ref: '#/components/schemas/BenutzerUpdate'
+    BenutzerUpdate:
+      required:
+        - nachname
+        - vorname
+      type: object
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        benutzereinstellungen:
+          $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+    SachbearbeiterZuordnungStammdaten:
+      type: object
+      properties:
+        buchstabenDe:
+          type: string
+        buchstabenFr:
+          type: string
+    SachbearbeiterZuordnungStammdatenList:
+      type: object
+      properties:
+        sachbearbeiter:
+          $ref: './components/schemas.yaml#/UUID'
+        zuordnung:
+          $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
+    BenutzereinstellungenUpdate:
+      type: object
+      properties:
+        id:
+          $ref: './components/schemas.yaml#/UUID'
+        digitaleKommunikation:
+          type: boolean
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []

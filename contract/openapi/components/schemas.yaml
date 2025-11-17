@@ -1,0 +1,962 @@
+Verfuegung:
+  type: object
+  required:
+    - id
+    - timestampErstellt
+    - filename
+  properties:
+    id:
+      $ref: '#/UUID'
+    timestampErstellt:
+      type: string
+    filename:
+      type: string
+    stipDecision:
+      $ref: '#/StipDecision'
+CustomDokumentTyp:
+  type: object
+  required:
+    - id
+    - type
+    - description
+  properties:
+    id:
+      $ref: '#/UUID'
+    type:
+      type: string
+    description:
+      type: string
+Anrede:
+  enum:
+    - HERR
+    - FRAU
+  type: string
+AusbildungsPensum:
+  enum:
+    - VOLLZEIT
+    - TEILZEIT
+  type: string
+DokumentTyp:
+  enum:
+    - AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+    - PERSON_NIEDERLASSUNGSSTATUS_C
+    - PERSON_NIEDERLASSUNGSSTATUS_B
+    - PERSON_NIEDERLASSUNGSSTATUS_SAISONARBEITEND_A
+    - PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI
+    - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+    - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+    - PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+    - PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G
+    - PERSON_NIEDERLASSUNGSSTATUS_KURZAUFENTHALT_L
+    - PERSON_NIEDERLASSUNGSSTATUS_ASYLSUCHEND_N
+    - PERSON_NIEDERLASSUNGSSTATUS_SCHUTZBEDUERFTIG_S
+    - PERSON_NIEDERLASSUNGSSTATUS_MELDEPFLICHTIG
+    - PERSON_NIEDERLASSUNGSSTATUS_DIPLOMATISCHE_FUNKTION
+    - PERSON_NIEDERLASSUNGSSTATUS_INTERNATIONALE_FUNKTION
+    - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
+    - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
+    - PERSON_KESB_ERNENNUNG
+    - PERSON_MIETVERTRAG
+    - PERSON_SOZIALHILFEBUDGET
+    - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
+    - PERSON_AUSWEIS
+    - FAMILIENSITUATION_GEBURTSSCHEIN
+    - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
+    - FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
+    - FAMILIENSITUATION_TRENNUNGSKONVENTION
+    - ELTERN_SOZIALHILFEBUDGET_VATER
+    - ELTERN_SOZIALHILFEBUDGET_MUTTER
+    - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
+    - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER
+    - ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
+    - ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
+    - ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
+    - GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE
+    - KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION
+    - KINDER_ALIMENTENVERORDUNG
+    - KINDER_ERGAENZUNGSLEISTUNGEN
+    - KINDER_UND_AUSBILDUNGSZULAGEN
+    - KINDER_RENTEN
+    - KINDER_ANDERE_EINNAHMEN
+    - EK_BELEG_UNTERHALTSBEITRAEGE
+    - EK_BELEG_EINNAHMEN_BGSA
+    - EK_BELEG_TAGGELDER_AHV_IV
+    - EK_BELEG_ANDERE_EINNAHMEN
+    - EK_BELEG_KINDERZULAGEN
+    - EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+    - EK_BELEG_BEZAHLTE_RENTEN
+    - EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+    - EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+    - EK_BELEG_OV_ABONNEMENT
+    - EK_MIETVERTRAG
+    - EK_BELEG_BETREUUNGSKOSTEN_KINDER
+    - EK_LOHNABRECHNUNG
+    - EK_VERMOEGEN
+    - EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE
+    - EK_PARTNER_BELEG_EINNAHMEN_BGSA
+    - EK_PARTNER_BELEG_TAGGELDER_AHV_IV
+    - EK_PARTNER_BELEG_ANDERE_EINNAHMEN
+    - EK_PARTNER_BELEG_KINDERZULAGEN
+    - EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION
+    - EK_PARTNER_BELEG_BEZAHLTE_RENTEN
+    - EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+    - EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+    - EK_PARTNER_BELEG_OV_ABONNEMENT
+    - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
+    - EK_PARTNER_LOHNABRECHNUNG
+    - EK_PARTNER_VERMOEGEN
+    - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
+    - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
+    - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
+    - DARLEHEN_BELEGE_ANSCHAFFUNGEN
+    - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
+    - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
+    - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
+    - STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_VATER
+    - STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_MUTTER
+    - STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_FAMILIE
+    - STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER
+    - STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER
+    - STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE
+    - STEUERERKLAERUNG_RENTEN_VATER
+    - STEUERERKLAERUNG_RENTEN_MUTTER
+    - STEUERERKLAERUNG_RENTEN_FAMILIE
+    - STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER
+    - STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER
+    - STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE
+    - STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER
+    - STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER
+    - STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE
+  type: string
+UnterschriftenblattDokumentTyp:
+  type: string
+  enum:
+    - GEMEINSAM
+    - MUTTER
+    - VATER
+Gesuchstatus:
+  enum:
+    - ABKLAERUNG_DURCH_RECHSTABTEILUNG
+    - VERFUEGT
+    - VERFUEGUNG_DRUCKBEREIT
+    - VERFUEGUNG_AM_GENERIEREN
+    - VERFUEGUNG_VERSANDBEREIT
+    - VERFUEGUNG_VERSENDET
+    - WARTEN_AUF_UNTERSCHRIFTENBLATT
+    - IN_BEARBEITUNG_SB
+    - IN_FREIGABE
+    - IN_BEARBEITUNG_GS
+    - ANSPRUCH_MANUELL_PRUEFEN
+    - ANSPRUCH_PRUEFEN
+    - BEREIT_FUER_BEARBEITUNG
+    - EINGEREICHT
+    - JURISTISCHE_ABKLAERUNG
+    - FEHLENDE_DOKUMENTE
+    - NICHT_ANSPRUCHSBERECHTIGT
+    - NICHT_BEITRAGSBERECHTIGT
+    - KEIN_STIPENDIENANSPRUCH
+    - STIPENDIENANSPRUCH
+    - GESUCH_ABGELEHNT
+    - NEGATIVE_VERFUEGUNG
+    - DATENSCHUTZBRIEF_DRUCKBEREIT
+    - DATENSCHUTZBRIEF_AM_GENERIEREN
+    - DATENSCHUTZBRIEF_VERSANDBEREIT
+  type: string
+GetGesucheSBQueryType:
+  enum:
+    - ALLE_GESUCHE
+    - MEINE_GESUCHE
+    - PENDENTE_GESUCHE
+    - ALLE_BEARBEITBAR
+    - MEINE_BEARBEITBAR
+    - ALLE_JURISTISCHE_ABKLAERUNG
+    - MEINE_JURISTISCHE_ABKLAERUNG
+    - ALLE_DRUCKBAR_VERFUEGUNGEN
+    - MEINE_DRUCKBAR_VERFUEGUNGEN
+    - ALLE_DRUCKBAR_DATENSCHUTZBRIEFE
+    - MEINE_DRUCKBAR_DATENSCHUTZBRIEFE
+  type: string
+GueltigkeitStatus:
+  enum:
+    - ENTWURF
+    - PUBLIZIERT
+    - ARCHIVIERT
+LocalDate:
+  format: date
+  type: string
+  example: '2022-03-10'
+SteuerdatenTyp:
+  enum:
+    - FAMILIE
+    - VATER
+    - MUTTER
+  type: string
+Adresse:
+  required:
+    - landId
+    - strasse
+    - plz
+    - ort
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    landId:
+      $ref: '#/UUID'
+    coAdresse:
+      type: string
+    strasse:
+      type: string
+    hausnummer:
+      type: string
+    plz:
+      type: string
+    ort:
+      type: string
+GesuchDokument:
+  required:
+    - id
+    - dokumente
+    - status
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    dokumentTyp:
+      $ref: '#/DokumentTyp'
+    customDokumentTyp:
+      $ref: '#/CustomDokumentTyp'
+    dokumente:
+      type: array
+      items:
+        $ref: '#/Dokument'
+    status:
+      $ref: '#/Dokumentstatus'
+Dokument:
+  required:
+    - id
+    - filename
+    - filepath
+    - filesize
+    - objectId
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    filename:
+      type: string
+    filepath:
+      type: string
+    filesize:
+      type: string
+    timestampErstellt:
+      type: string
+    objectId:
+      type: string
+Fall:
+  required:
+    - id
+    - fallNummer
+    - mandant
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    fallNummer:
+      type: string
+    mandant:
+      type: string
+Gesuchsjahr:
+  type: object
+  required:
+    - id
+    - bezeichnungDe
+    - bezeichnungFr
+    - technischesJahr
+    - gueltigkeitStatus
+  properties:
+    id:
+      $ref: '#/UUID'
+    bezeichnungDe:
+      type: string
+    bezeichnungFr:
+      type: string
+    technischesJahr:
+      type: integer
+    gueltigkeitStatus:
+      $ref: '#/GueltigkeitStatus'
+UUID:
+  format: uuid
+  type: string
+Zahlungsverbindung:
+  title: Root Type for Zahlungsverbindung
+  type: object
+  allOf:
+    - type: object
+    - $ref: '#/ZahlungsverbindungUpdate'
+ZahlungsverbindungUpdate:
+  title: Root Type for Zahlungsverbindung
+  required:
+    - adresse
+    - iban
+    - nachname
+    - vorname
+  type: object
+  properties:
+    vorname:
+      type: string
+    adresse:
+      $ref: '#/Adresse'
+    iban:
+      type: string
+    nachname:
+      type: string
+Gesuch:
+  required:
+    - fallId
+    - fallNummer
+    - ausbildungId
+    - gesuchsperiode
+    - gesuchStatus
+    - gesuchNummer
+    - id
+    - aenderungsdatum
+    - gesuchTrancheToWorkWith
+    - verfuegt
+  type: object
+  properties:
+    fallId:
+      $ref: '#/UUID'
+    fallNummer:
+      type: string
+    ausbildungId:
+      $ref: '#/UUID'
+    gesuchsperiode:
+      $ref: '#/Gesuchsperiode'
+    gesuchStatus:
+      $ref: '#/Gesuchstatus'
+    gesuchNummer:
+      type: string
+    id:
+      $ref: '#/UUID'
+    aenderungsdatum:
+      $ref: '#/LocalDate'
+      description: Datum wann das Gesuch zu letzt geändert wurde
+    bearbeiter:
+      description: Zuständiger Sachbearbeiter des Gesuchs
+      type: string
+    gesuchTrancheToWorkWith:
+      $ref: '#/GesuchTranche'
+    einreichedatum:
+      format: date
+      type: string
+    delegierung:
+      $ref: '#/DelegierungSlim'
+    nachfristDokumente:
+      $ref: '#/LocalDate'
+    verfuegt:
+      type: boolean
+PersoenlicheAngaben:
+  required:
+    - anrede
+    - nachname
+    - vorname
+    - geburtsdatum
+    - email
+    - sprache
+    - adresse
+  type: object
+  properties:
+    anrede:
+      $ref: '#/Anrede'
+    nachname:
+      type: string
+    vorname:
+      type: string
+    geburtsdatum:
+      $ref: '#/LocalDate'
+    email:
+      type: string
+    sprache:
+      $ref: '#/Sprache'
+    adresse:
+      $ref: '#/Adresse'
+DelegierungSlim:
+  type: object
+  properties:
+    delegierungAngenommen:
+      type: boolean
+    sozialdienst:
+      $ref: '#/SozialdienstSlim'
+GesuchWithChanges:
+  allOf:
+    - $ref: '#/Gesuch'
+  description: '1 or 2 Aenderungstranche in relation to another Tranche'
+  properties:
+    changes:
+      type: array
+      items:
+        $ref: '#/GesuchTranche'
+    isInitial:
+      type: boolean
+Land:
+  title: Is the country part of eu/efta
+  type: object
+  required:
+    - laendercodeBfs
+    - isEuEfta
+    - eintragGueltig
+    - deKurzform
+    - frKurzform
+    - itKurzform
+    - enKurzform
+  properties:
+    id:
+      $ref: '#/UUID'
+    laendercodeBfs:
+      type: string
+    isEuEfta:
+      type: boolean
+    iso2code:
+      type: string
+    iso3code:
+      type: string
+    eintragGueltig:
+      type: boolean
+    deKurzform:
+      type: string
+    frKurzform:
+      type: string
+    itKurzform:
+      type: string
+    enKurzform:
+      type: string
+Sprache:
+  enum:
+    - DEUTSCH
+    - FRANZOESISCH
+  type: string
+Kanton:
+  enum:
+    - AG
+    - AI
+    - AR
+    - BL
+    - BS
+    - BE
+    - FR
+    - GE
+    - GL
+    - GR
+    - JU
+    - LU
+    - NE
+    - NW
+    - OW
+    - SG
+    - SH
+    - SZ
+    - SO
+    - TI
+    - TG
+    - UR
+    - VD
+    - VS
+    - ZG
+    - ZH
+  type: string
+ElternTyp:
+  enum:
+    - VATER
+    - MUTTER
+  type: string
+FileUpload:
+  format: binary
+  type: string
+ValidationReport:
+  required:
+    - validationErrors
+    - validationWarnings
+  type: object
+  properties:
+    validationErrors:
+      type: array
+      items:
+        $ref: '#/ValidationError'
+    validationWarnings:
+      type: array
+      items:
+        $ref: '#/ValidationWarning'
+    hasDocuments:
+      description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
+      type: boolean
+ValidationMessage:
+  required:
+    - message
+    - messageTemplate
+  type: object
+  properties:
+    propertyPath:
+      type: string
+    messageTemplate:
+      type: string
+    message:
+      type: string
+ValidationWarning:
+  allOf:
+    - $ref: '#/ValidationMessage'
+ValidationError:
+  allOf:
+    - $ref: '#/ValidationMessage'
+AusbildungBase:
+  required:
+    - fallId
+    - ausbildungBegin
+    - ausbildungEnd
+    - pensum
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    fallId:
+      $ref: '#/UUID'
+    fachrichtungBerufsbezeichnung:
+      type: string
+    ausbildungNichtGefunden:
+      type: boolean
+    ausbildungBegin:
+      description: Datum im Format mm.YYYY
+      type: string
+    ausbildungEnd:
+      description: Datum im Format mm.YYYY
+      type: string
+    besuchtBMS:
+      description: Required wenn Abschluss.askForBerufsmaturitaet = true
+      type: boolean
+    pensum:
+      $ref: '#/AusbildungsPensum'
+    alternativeAusbildungsstaette:
+      description: Required wenn andere ausbildungNichtGefunden = true
+      type: string
+    alternativeAusbildungsgang:
+      description: Required wenn andere ausbildungNichtGefunden = true
+      type: string
+    ausbildungsortPLZ:
+      description: Not required if isAusbildungAusland = true
+      type: string
+    ausbildungsort:
+      description: Not required if isAusbildungAusland = true
+      type: string
+    isAusbildungAusland:
+      type: boolean
+    landId:
+      description: Required if isAusbildungAusland = true
+      $ref: '#/UUID'
+Ausbildung:
+  required:
+    - status
+    - editable
+  type: object
+  properties:
+    status:
+      $ref: '#/AusbildungsStatus'
+    ausbildungsgang:
+      $ref: '#/Ausbildungsgang'
+    editable:
+      type: boolean
+  allOf:
+    - $ref: '#/AusbildungBase'
+GesuchsperiodeSelectError:
+  type: object
+  required:
+    - type
+  properties:
+    type:
+      $ref: '#/GesuchsperiodeSelectErrorType'
+    context:
+      type: string
+      format: date
+GesuchsperiodeSelectErrorType:
+  enum:
+    - KEINE_AKTIVE_PERIODE_GEFUNDEN
+    - PERIODE_IN_ENTWURF_GEFUNDEN
+    - INAKTIVE_PERIODE_GEFUNDEN
+Ausbildungskategorie:
+  enum:
+    - UNIVERSITAET_ETH
+    - PAEDAGOGISCHE_HOCHSCHULE
+    - FACHHOCHSCHULE
+    - HOEHERE_FACHSCHULE
+    - BERUFS_UND_HOEHERE_FACHSCHULE
+    - EIDGENOESSISCHE_HOCHSCHULE_FUER_BERUFSBILDUNG
+    - GYMNASIUM
+    - BERUFSFACHSCHULEN
+    - FACHMITTELSCHULE
+    - BERUFSFACHSCHULEN_UEBERBETRIEBLICHE_KURSE
+    - BETRIEBE
+    - OBLIGATORISCHE_SCHULE
+    - BRUECKENANGEBOT
+    - HOEHERE_FACHPRUEFUNG
+    - BERUFSPRUEFUNG
+Bildungskategorie:
+  enum:
+    - TERTIAERSTUFE_A
+    - TERTIAERSTUFE_B
+    - SEKUNDARSTUFE_I
+    - SEKUNDARSTUFE_II
+Bildungsrichtung:
+  enum:
+    - BERUFLICHE_GRUNDBILDUNG
+    - ALLGEMEINBILDENDE_SCHULE
+    - HOEHERE_BERUFSBILDUNG
+    - HOCHSCHULE
+    - OBLIGATORISCHE_SCHULE
+FerienTyp:
+  enum:
+    - SCHULE
+    - LEHRE
+AbschlussZusatzfrage:
+  enum:
+    - BERUFSBEZEICHNUNG
+    - FACHRICHTUNG
+Abschluss:
+  type: object
+  required:
+    - id
+    - ausbildungskategorie
+    - bildungskategorie
+    - bildungsrichtung
+    - bfsKategorie
+    - berufsbefaehigenderAbschluss
+    - ferien
+    - askForBerufsmaturitaet
+    - bezeichnungDe
+    - bezeichnungFr
+    - aktiv
+  properties:
+    id:
+      $ref: '#/UUID'
+    ausbildungskategorie:
+      $ref: '#/Ausbildungskategorie'
+    bildungskategorie:
+      $ref: '#/Bildungskategorie'
+    bildungsrichtung:
+      $ref: '#/Bildungsrichtung'
+    bfsKategorie:
+      type: integer
+    berufsbefaehigenderAbschluss:
+      type: boolean
+    ferien:
+      $ref: '#/FerienTyp'
+    bezeichnungDe:
+      type: string
+    bezeichnungFr:
+      type: string
+    askForBerufsmaturitaet:
+      type: boolean
+    zusatzfrage:
+      $ref: '#/AbschlussZusatzfrage'
+    aktiv:
+      type: boolean
+AusbildungsstaetteNummerTyp:
+  enum:
+    - CH_SHIS
+    - BUR_NO
+    - CT_NO
+    - OHNE_NO
+Ausbildungsstaette:
+  type: object
+  required:
+    - id
+    - nameDe
+    - nameFr
+    - aktiv
+    - nummerTyp
+  properties:
+    id:
+      $ref: '#/UUID'
+    nameDe:
+      type: string
+    nameFr:
+      type: string
+    nummer:
+      type: string
+    nummerTyp:
+      $ref: '#/AusbildungsstaetteNummerTyp'
+    aktiv:
+      type: boolean
+Ausbildungsgang:
+  type: object
+  required:
+    - id
+    - abschluss
+    - ausbildungsstaette
+    - aktiv
+  properties:
+    id:
+      $ref: '#/UUID'
+    abschluss:
+      $ref: '#/Abschluss'
+    ausbildungsstaette:
+      $ref: '#/Ausbildungsstaette'
+    aktiv:
+      type: boolean
+Gesuchsperiode:
+  required:
+    - id
+    - bezeichnungDe
+    - bezeichnungFr
+    - gesuchsperiodeStart
+    - gesuchsperiodeStopp
+    - aufschaltterminStart
+    - einreichefristNormal
+    - einreichefristReduziert
+    - gueltigkeitStatus
+    - gesuchsjahr
+    - ausbKosten_SekII
+    - ausbKosten_Tertiaer
+    - fristNachreichenDokumente
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    bezeichnungDe:
+      type: string
+    bezeichnungFr:
+      type: string
+    gueltigkeitStatus:
+      $ref: '#/GueltigkeitStatus'
+    gesuchsperiodeStart:
+      $ref: '#/LocalDate'
+    gesuchsperiodeStopp:
+      $ref: '#/LocalDate'
+    aufschaltterminStart:
+      $ref: '#/LocalDate'
+    einreichefristNormal:
+      $ref: '#/LocalDate'
+    einreichefristReduziert:
+      $ref: '#/LocalDate'
+    gesuchsjahr:
+      $ref: '#/Gesuchsjahr'
+    ausbKosten_SekII:
+      type: integer
+    ausbKosten_Tertiaer:
+      type: integer
+    fristNachreichenDokumente:
+      type: integer
+AusbildungsStatus:
+  enum:
+    - AKTIV
+    - ABGEBROCHEN
+    - ABGESCHLOSSEN
+FileDownloadToken:
+  required:
+    - token
+  type: object
+  properties:
+    token:
+      type: string
+GesuchTrancheStatus:
+  enum:
+    - IN_BEARBEITUNG_GS
+    - UEBERPRUEFEN
+    - MANUELLE_AENDERUNG
+    - AKZEPTIERT
+    - ABGELEHNT
+    - FEHLENDE_DOKUMENTE
+GesuchTranche:
+  required:
+    - id
+    - gueltigAb
+    - gueltigBis
+    - status
+    - typ
+  type: object
+  properties:
+    id:
+      $ref: '#/UUID'
+    gueltigAb:
+      $ref: '#/LocalDate'
+    gueltigBis:
+      $ref: '#/LocalDate'
+    comment:
+      type: string
+    gesuchFormular:
+      $ref: './gesuch-formular.yaml#/GesuchFormular'
+    status:
+      $ref: '#/GesuchTrancheStatus'
+    typ:
+      $ref: '#/GesuchTrancheTyp'
+GesuchTrancheList:
+  type: object
+  properties:
+    tranchen:
+      type: array
+      items:
+        $ref: '#/GesuchTrancheSlim'
+    initialTranchen:
+      type: array
+      items:
+        $ref: '#/GesuchTrancheSlim'
+    aenderungen:
+      type: array
+      items:
+        $ref: '#/GesuchTrancheSlim'
+    abgelehnteAenderungen:
+      type: array
+      items:
+        $ref: '#/GesuchTrancheSlim'
+GesuchTrancheSlim:
+  type: object
+  required:
+    - id
+    - gueltigAb
+    - gueltigBis
+    - status
+    - typ
+  properties:
+    id:
+      $ref: '#/UUID'
+    gueltigAb:
+      $ref: '#/LocalDate'
+    gueltigBis:
+      $ref: '#/LocalDate'
+    status:
+      $ref: '#/GesuchTrancheStatus'
+    comment:
+      type: string
+    typ:
+      $ref: '#/GesuchTrancheTyp'
+    revision:
+      type: integer
+SozialdienstBenutzerBase:
+  required:
+    - vorname
+    - nachname
+    - email
+  properties:
+    vorname:
+      type: string
+    nachname:
+      type: string
+    email:
+      type: string
+SozialdienstBenutzer:
+  type: object
+  required:
+    - id
+  properties:
+    id:
+      $ref: '#/UUID'
+    isAdmin:
+      type: boolean
+  allOf:
+    - $ref: '#/SozialdienstBenutzerBase'
+SozialdienstSlim:
+  required:
+    - id
+    - name
+    - aktiv
+  properties:
+    id:
+      $ref: '#/UUID'
+    name:
+      type: string
+    aktiv:
+      type: boolean
+GesuchTrancheTyp:
+  enum:
+    - AENDERUNG
+    - TRANCHE
+Dokumentstatus:
+  enum:
+    - AUSSTEHEND
+    - ABGELEHNT
+    - AKZEPTIERT
+Notification:
+  description: Notification for a Gesuch
+  type: object
+  required:
+    - notificationType
+    - fallId
+    - timestampErstellt
+    - userErstellt
+    - absender
+  properties:
+    notificationText:
+      type: string
+    notificationType:
+      $ref: '#/NotificationType'
+    fallId:
+      $ref: '#/UUID'
+    contextId:
+      $ref: '#/UUID'
+    userErstellt:
+      type: string
+    timestampErstellt:
+      $ref: '#/LocalDate'
+    absender:
+      type: string
+NotificationType:
+  enum:
+    - GESUCH_EINGEREICHT
+    - GESUCH_STATUS_CHANGE_WITH_COMMENT
+    - FEHLENDE_DOKUMENTE_EINREICHEN
+    - FEHLENDE_DOKUMENTE
+    - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
+    - AENDERUNG_ABGELEHNT
+    - AENDERUNG_EINGEREICHT
+    - NACHFRIST_DOKUMENTE_CHANGED
+    - NEUE_VERFUEGUNG
+    - FAILED_AUSZAHLUNG
+    - DELEGIERUNG_ANGENOMMEN
+    - DELEGIERUNG_ABGELEHNT
+Kommentar:
+  type: object
+  required:
+    - text
+  properties:
+    text:
+      type: string
+PaginatedResult:
+  type: object
+  properties:
+    page:
+      type: integer
+    pageSize:
+      type: integer
+    totalEntries:
+      type: integer
+SortOrder:
+  enum:
+    - ASCENDING
+    - DESCENDING
+StipDecision:
+  enum:
+    - GESUCH_VALID
+    - EINGABEFRIST_ABGELAUFEN
+    - AUSBILDUNG_NICHT_ANERKANNT
+    - AUSBILDUNGEN_LAENGER_12_JAHRE
+    - AUSBILDUNG_IM_LEBENSLAUF
+    - PIA_AELTER_35_JAHRE
+    - KEIN_WOHNSITZ_KANTON_BE
+    - SCHULJAHR_9_SEKSTUFE_1
+    - AUSBILDUNG_PBI1
+    - ART_32_BBV
+    - ZWEITAUSBILDUNG
+    - AUSBILDUNG_2_GLEICHE_STUFE_BVS_ODER_VORBILDUNG
+    - EBA_LEHRE
+    - HOCHSCHULSTUDIUM_2
+    - MEHRERE_AUSBILDUNGSWECHSEL
+    - NICHT_BERECHTIGTE_PERSON
+    - ANSPRUCH_MANUELL_PRUEFEN
+    - ANSPRUCH_UNKLAR
+AusgewaehlterGrund:
+  type: object
+  required:
+    - decisionId
+  properties:
+    decisionId:
+      $ref: '#/UUID'
+    kanton:
+      $ref: '#/Kanton'

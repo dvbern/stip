@@ -1,0 +1,74 @@
+gesuchId:
+  name: gesuchId
+  in: path
+  required: true
+  description: Die ID vom Gesuch
+  schema:
+    $ref: './schemas.yaml#/UUID'
+gesuchTrancheId:
+  name: gesuchTrancheId
+  in: path
+  required: true
+  description: Die ID von der GesuchTranche
+  schema:
+    $ref: './schemas.yaml#/UUID'
+fallId:
+  name: fallId
+  in: path
+  required: true
+  description: Die ID vom Fall
+  schema:
+    $ref: './schemas.yaml#/UUID'
+fallNummer:
+  in: query
+  name: fallNummer
+  schema:
+    type: string
+
+page:
+  in: query
+  name: page
+  required: true
+  schema:
+    type: integer
+pageSize:
+  in: query
+  name: pageSize
+  required: true
+  schema:
+    type: integer
+sortOrder:
+  in: query
+  name: sortOrder
+  schema:
+    $ref: './schemas.yaml#/SortOrder'
+userErstellt:
+  in: query
+  name: userErstellt
+  schema:
+    type: string
+timestampErstellt:
+  in: query
+  name: timestampErstellt
+  schema:
+    type: string
+    format: date
+letzteAktivitaetFrom:
+  in: query
+  name: letzteAktivitaetFrom
+  schema:
+    type: string
+    format: date
+letzteAktivitaetTo:
+  in: query
+  name: letzteAktivitaetTo
+  schema:
+    type: string
+    format: date
+
+sozialdienstId:
+  name: sozialdienstId
+  schema:
+    $ref: './schemas.yaml#/UUID'
+  in: path
+  required: true
