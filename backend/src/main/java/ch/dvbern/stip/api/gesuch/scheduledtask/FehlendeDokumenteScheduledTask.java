@@ -20,8 +20,7 @@ package ch.dvbern.stip.api.gesuch.scheduledtask;
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import io.quarkus.scheduler.Scheduled;
-import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
+import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,9 @@ public class FehlendeDokumenteScheduledTask {
     private final GesuchService gesuchService;
 
     @Transactional
-    @Scheduled(cron = "{kstip.fehlendedokumente.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    // @Scheduled(cron = "{kstip.fehlendedokumente.cron}", concurrentExecution = ConcurrentExecution.SKIP)
     @RunForTenant(MandantIdentifier.BERN)
+    @Startup
     public void run() {
         try {
             LOG.info("Processing gesuchs in FEHLENDE_DOKUMENTE");

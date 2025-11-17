@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class AenderungFehlendeDokumenteZurueckweisenHandler implements GesuchSta
     @Override
     public void handle(Gesuch gesuch) {
         gesuch.getGesuchTranchen()
+            .stream()
+            .filter(gesuchTranche -> gesuchTranche.getTyp().equals(GesuchTrancheTyp.TRANCHE))
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
+        gesuch.setNachfristDokumente(null);
     }
 }
