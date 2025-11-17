@@ -1846,6 +1846,41 @@ class GesuchServiceTest {
         assertNull(gesuch.getEinreichedatum());
     }
 
+    @TestAsGesuchsteller
+    @Test
+    @Description("Check that verfuegt gesuch is moved to state BEREIT_FUER_BEARBEITUNG when the frist is done")
+    void checkForFehlendeDokumenteOnAllVerfuegtGesucheTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        gesuch.setVerfuegt(true);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchRepository.getAllFehlendeDokumente()).thenReturn(List.of(gesuch));
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
+        Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
+        QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
+
+        gesuch.setNachfristDokumente(LocalDate.now().minusDays(1));
+
+        gesuchService.checkForFehlendeDokumenteOnAllGesuche();
+        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
+        assertNull(gesuch.getEinreichedatum());
+    }
+
     @Test
     @TestAsJurist
     void gesuchShouldNotBeEingereichtAgainWhenAusbildungUpdatedByJurist() {
