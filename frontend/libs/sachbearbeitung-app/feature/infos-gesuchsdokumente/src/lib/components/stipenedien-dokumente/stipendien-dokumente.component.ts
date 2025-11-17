@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
@@ -28,7 +29,7 @@ type DokumenteColumns = {
   verfuegungsbrief?: VerfuegungDokument;
   versendeteVerfuegung?: VerfuegungDokument;
   berechnungsblaetter: VerfuegungDokument[];
-  // gesetzlichesDarlehen?: VerfuegungDokument;
+  // 'gesetzlichesDarlehen'?: VerfuegungDokument; Todo KSTIP-2584
 };
 
 @Component({
@@ -39,6 +40,7 @@ type DokumenteColumns = {
     TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
+    MatTooltip,
     TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
     TypeSafeMatCellDefDirective,
@@ -65,7 +67,7 @@ export class StipendienDokumenteComponent {
     'versendeteVerfuegung',
     'verfuegungsbrief',
     'berechnungsblaetter',
-    // 'gesetzlichesDarlehen',
+    // 'gesetzlichesDarlehen', Todo KSTIP-2584
   ];
 
   paginatedDokumenteSig = computed(() => {
@@ -97,7 +99,7 @@ export class StipendienDokumenteComponent {
           verfuegungsbrief: undefined as VerfuegungDokument | undefined,
           versendeteVerfuegung: undefined as VerfuegungDokument | undefined,
           berechnungsblaetter: [] as VerfuegungDokument[],
-          // gesetzlichesDarlehen: undefined as VerfuegungDokument | undefined,
+          // 'gesetzlichesDarlehen': undefined as VerfuegungDokument | undefined, Todo KSTIP-2584
         } satisfies DokumenteColumns & { verfuegungsId: string },
       );
     });

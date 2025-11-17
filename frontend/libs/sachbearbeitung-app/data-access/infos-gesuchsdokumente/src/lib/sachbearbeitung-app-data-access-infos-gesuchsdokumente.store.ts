@@ -13,7 +13,7 @@ import {
   isPending,
 } from '@dv/shared/util/remote-data';
 
-// Dummy types until the contract is updated
+// Todo KSTIP-2697 Dummy types until the contract is updated
 export interface DarlehenDokument {
   id: string;
   datum: string;
@@ -24,6 +24,7 @@ export interface DarlehenDokument {
   kommentar?: string;
 }
 
+// Todo: Dummy types until the contract is updated Task unkown
 export interface DatenschutzbriefDokument {
   id: string;
   datum: string;
@@ -102,7 +103,7 @@ export class InfosGesuchsdokumenteStore extends signalStore(
         }));
       }),
       tap(() => {
-        // Dummy data - will be replaced with actual API call
+        // Todo KSTIP-2697 : Dummy data - will be replaced with actual API call
         const dummyData: DarlehenDokument[] = [
           {
             id: '1',
@@ -130,7 +131,7 @@ export class InfosGesuchsdokumenteStore extends signalStore(
         }));
       }),
       tap(() => {
-        // Dummy data - will be replaced with actual API call
+        // Todo KSTIP-2697: Dummy data - will be replaced with actual API call
         const dummyData: DatenschutzbriefDokument[] = [
           {
             id: '1',

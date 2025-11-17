@@ -35,15 +35,12 @@
             <button
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="
-                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco
-              "
               [dvDownloadButton]="{
                 type: 'verfuegung',
                 id: dokument.versendeteVerfuegung?.id ?? '',
               }"
             >
-              <span class="tw:truncate tw:!text-sm/none" [title]="dokument.versendeteVerfuegung?.filename">{{
+              <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument.versendeteVerfuegung?.filename">{{
                 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco
               }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
@@ -66,15 +63,12 @@
             <button
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="
-                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco
-              "
               [dvDownloadButton]="{
                 type: 'verfuegung',
                 id: dokument.verfuegungsbrief?.id ?? '',
               }"
             >
-              <span class="tw:truncate tw:!text-sm/none" [title]="dokument?.verfuegungsbrief?.filename">{{
+              <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument?.verfuegungsbrief?.filename">{{
                 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco
               }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
@@ -99,13 +93,12 @@
                 <button
                   type="button"
                   class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-                  [attr.aria-label]="blatt.filename"
                   [dvDownloadButton]="{
                     type: 'verfuegung',
-                    id: dokument.versendeteVerfuegung?.id ?? '',
+                    id: blatt.id,
                   }"
                 >
-                  <span class="tw:truncate tw:!text-sm/none" [title]="blatt.filename">{{
+                  <span class="tw:truncate tw:!text-sm/none" [matTooltip]="blatt.filename">{{
                     'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter.' + blatt.typ
                       | transloco
                   }}</span>

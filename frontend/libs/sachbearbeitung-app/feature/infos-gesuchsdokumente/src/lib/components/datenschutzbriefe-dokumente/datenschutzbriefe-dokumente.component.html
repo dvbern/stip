@@ -62,9 +62,6 @@
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.massendruckJobId) {
-            <!-- <a [routerLink]="['/massendruck', 'druckauftrag', dokument.massendruckJobId]" class="btn btn-link tw:!p-0">
-              {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link' | transloco }}
-            </a> -->
             <a class="tw:text-gray-400 btn btn-link tw:!p-0">
               {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link' | transloco }}
             </a>

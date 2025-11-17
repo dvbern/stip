@@ -42,13 +42,8 @@
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.darlehensverfuegung) {
-            <!-- TODO KSTIP-2697 -->
-            <button
-              disabled
-              type="button"
-              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="dokument.darlehensverfuegung"
-            >
+            <!-- TODO KSTIP-2697 remove disabled -->
+            <button disabled type="button" class="btn btn-link tw:!flex tw:max-w-full tw:!p-0">
               <span class="tw:truncate tw:!text-sm/none">{{ dokument.darlehensverfuegung }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
@@ -66,13 +61,9 @@
           {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.gesetzlichesDarlehen' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          <!-- TODO KSTIP-2697 remove disabled -->
           @if (dokument.gesetzlichesDarlehen) {
-            <button
-              disabled
-              type="button"
-              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="dokument.gesetzlichesDarlehen"
-            >
+            <button disabled type="button" class="btn btn-link tw:!flex tw:max-w-full tw:!p-0">
               <span class="tw:truncate tw:!text-sm/none">{{ dokument.gesetzlichesDarlehen }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
