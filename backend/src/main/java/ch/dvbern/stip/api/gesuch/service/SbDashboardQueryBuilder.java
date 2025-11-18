@@ -80,7 +80,9 @@ public class SbDashboardQueryBuilder {
                                 .from(trancheSub)
                                 .where(trancheSub.gesuch.id.eq(gesuch.id))
                         )
-                    )
+                    ).or(
+                        trancheSub.gesuch.id.eq(gesuch.id).and(trancheSub.typ.eq(GesuchTrancheTyp.AENDERUNG))
+                        )
             );
 
         if (trancheType == GesuchTrancheTyp.AENDERUNG) {
