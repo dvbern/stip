@@ -198,7 +198,7 @@ public class VerfuegungService {
         final ByteArrayOutputStream pdfContent
     ) {
         final var pia = verfuegung.getGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
-        final var namePiA = pia.getNachname() + pia.getVorname();
+        final var namePiA = pia.getNachname() + "_" + pia.getVorname();
         final String filename = generateFilename(dokumentTyp, namePiA);
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             pdfContent.toByteArray(),
