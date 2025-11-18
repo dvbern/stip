@@ -23,10 +23,10 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -44,7 +44,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -52,6 +51,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 public class DeleteGesuchAsGSTest {
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
@@ -70,7 +70,7 @@ public class DeleteGesuchAsGSTest {
     @TestAsGesuchsteller
     @Order(2)
     void fillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test

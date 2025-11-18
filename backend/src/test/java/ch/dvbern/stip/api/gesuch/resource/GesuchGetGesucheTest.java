@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
@@ -71,7 +70,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -140,8 +138,7 @@ class GesuchGetGesucheTest {
     @TestAsGesuchsteller
     @Order(4)
     void fillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test
@@ -235,7 +232,7 @@ class GesuchGetGesucheTest {
     @Order(13)
     void prepareForJuristischAbklaeren() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

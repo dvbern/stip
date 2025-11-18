@@ -22,9 +22,12 @@ import ch.dvbern.stip.arch.util.ArchTestUtil;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
+@Execution(ExecutionMode.CONCURRENT)
 class RunForTenantAnnotationTest {
     @Test
     void test_run_for_tenant_annotation_only_with_scheduled() {

@@ -38,7 +38,7 @@ public class BaseAuthorizer {
     }
 
     protected boolean isAdmin(final Benutzer currentBenutzer) {
-        return currentBenutzer.hasRole(OidcConstants.ROLE_ADMIN);
+        return currentBenutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER_ADMIN);
     }
 
     protected boolean isSachbearbeiter(final Benutzer currentBenutzer) {

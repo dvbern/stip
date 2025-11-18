@@ -20,9 +20,12 @@ package ch.dvbern.stip.arch;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import jakarta.enterprise.context.RequestScoped;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+@Execution(ExecutionMode.CONCURRENT)
 class CdiTest {
 
     @Test

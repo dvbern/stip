@@ -20,13 +20,12 @@ package ch.dvbern.stip.api.land.resource;
 import java.util.Arrays;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.land.LandDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.LandApiSpec;
@@ -48,7 +47,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -61,7 +59,7 @@ class LandResourceImplTest {
 
     @Test
     @Order(1)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createLand() {
         final var landToCreate = LandDtoSpecModel.landDtoSpec();
         final var returned = TestUtil.executeAndExtract(LandDtoSpec.class, landApiSpec.createLand().body(landToCreate));
@@ -72,7 +70,7 @@ class LandResourceImplTest {
 
     @Test
     @Order(2)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createLandWitDuplicateIso2codeFails() {
         final var landToCreate = LandDtoSpecModel.landDtoSpec();
         landToCreate.setIso2code("ZZ");
@@ -84,7 +82,7 @@ class LandResourceImplTest {
 
     @Test
     @Order(3)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createLandWitDuplicateIso3codeFails() {
         final var landToCreate = LandDtoSpecModel.landDtoSpec();
         landToCreate.setIso3code("ZZZ");
@@ -96,7 +94,7 @@ class LandResourceImplTest {
 
     @Test
     @Order(4)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void getLaenderContainsNewLand() {
         final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
 
@@ -111,7 +109,7 @@ class LandResourceImplTest {
 
     @Test
     @Order(5)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void landInaktivSchalten() {
         final var update = LandDtoSpecModel.landDtoSpec();
         update.setEintragGueltig(false);
@@ -127,7 +125,7 @@ class LandResourceImplTest {
 
     @Test
     @Order(6)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void getLaenderContainsInaktivesLand() {
         final var laender = TestUtil.executeAndExtract(LandDtoSpec[].class, landApiSpec.getLaender());
 

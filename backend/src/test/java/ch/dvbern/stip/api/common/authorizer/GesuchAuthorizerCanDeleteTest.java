@@ -40,6 +40,8 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -47,6 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@Execution(ExecutionMode.CONCURRENT)
 class GesuchAuthorizerCanDeleteTest {
     private Benutzer currentBenutzer;
     private Benutzer otherBenutzer;
@@ -75,7 +78,7 @@ class GesuchAuthorizerCanDeleteTest {
         sbBenutzer.setId(UUID.randomUUID());
 
         adminBenutzer = new Benutzer().setKeycloakId(UUID.randomUUID().toString());
-        adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN));
+        adminBenutzer.getRollen().add(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER_ADMIN));
         adminBenutzer.setId(UUID.randomUUID());
 
         gesuchTrancheHistoryService = Mockito.mock(GesuchTrancheHistoryService.class);
@@ -177,7 +180,7 @@ class GesuchAuthorizerCanDeleteTest {
     @Test
     void adminCanDeleteTest() {
         // arrange
-        currentBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_ADMIN)));
+        currentBenutzer.setRollen(Set.of(new Rolle().setKeycloakIdentifier(OidcConstants.ROLE_SACHBEARBEITER_ADMIN)));
         final var uuid = UUID.randomUUID();
 
         // assert

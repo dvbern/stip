@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ZahlungsverbindungDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -53,7 +52,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import wiremock.org.eclipse.jetty.http.HttpStatus;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -83,14 +81,7 @@ class AuszahlungResourceTest {
     @TestAsGesuchsteller
     @Order(2)
     void setupFillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(3)
-    void setupFillAuszahlung() {
-        TestUtil.fillAuszahlung(fall.getId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test

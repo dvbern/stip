@@ -20,10 +20,13 @@ package ch.dvbern.stip.api.common.entity;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 class AbstractEntityTest {
 
     @Test
