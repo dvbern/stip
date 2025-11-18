@@ -53,7 +53,10 @@ public class SapMapperUtil {
     }
 
     public String getAhvNr(Fall fall) {
-        return getPia(fall).getSozialversicherungsnummer();
+        final var ahv = getPia(fall).getSozialversicherungsnummer();
+
+        // Remove the dots, as the SAP Endpoint won't accept it otherwise
+        return ahv.replace(".", "");
     }
 
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
