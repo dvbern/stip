@@ -13,6 +13,8 @@ Run `npm ci` in the `./contract` root.
 
 ## Usage
 
+- Use the `[CATEGORY_tag.template.yaml](./CATEGORY_tag.template.yaml)` File as reference
+  - The file naming should be a overarching category name in all uppercase + `_` + the tagname of the feature or a relevant name if multiple tags are present.
 - Add or change the contract values at the YAML files located at `[openapi/*.yaml]` and generate the joined file using `npm run build`.
 - If a schema or parameter is being used by multiple API definitions, share them using the `components` folder, by adding new files or using the existing ones.
 - For values that are only relevant to the given API, use the `components: -> (schemas/parameters):`.

@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Abschluss'
+                $ref: './components/common.yaml#/Abschluss'
           description: Create an Abschluss for a Brueckenangebot
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -79,7 +79,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Abschluss'
+                $ref: './components/common.yaml#/Abschluss'
           description: Set an Abschluss to Inaktiv
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -106,7 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Abschluss'
+                $ref: './components/common.yaml#/Abschluss'
           description: Set an Ausbildungsstaette to Inaktiv
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -131,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildungsstaette'
+                $ref: './components/common.yaml#/Ausbildungsstaette'
           description: Create an Ausbildungsstaette
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -184,7 +184,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildungsstaette'
+                $ref: './components/common.yaml#/Ausbildungsstaette'
           description: Set an Ausbildungsstaette to Inaktiv
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -211,7 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildungsstaette'
+                $ref: './components/common.yaml#/Ausbildungsstaette'
           description: Set an Ausbildungsstaette to Inaktiv
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -299,7 +299,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildungsgang'
+                $ref: './components/common.yaml#/Ausbildungsgang'
           description: Create anAusbildungsgang
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -346,7 +346,7 @@ paths:
     parameters:
       - name: ausbildungsgangId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -357,7 +357,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildungsgang'
+                $ref: './components/common.yaml#/Ausbildungsgang'
           description: Set an Ausbildungsgang to Inaktiv
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -368,11 +368,13 @@ paths:
       operationId: setAusbildungsgangInaktiv
       summary: Set an Ausbildungsgang to Inaktiv
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   parameters:
     bildungsrichtung:
       name: bildungsrichtung
       schema:
-        $ref: './components/schemas.yaml#/Bildungsrichtung'
+        $ref: './components/common.yaml#/Bildungsrichtung'
       in: query
     bezeichnungDe:
       name: bezeichnungDe
@@ -412,7 +414,7 @@ components:
     ausbildungskategorie:
       name: ausbildungskategorie
       schema:
-        $ref: './components/schemas.yaml#/Ausbildungskategorie'
+        $ref: './components/common.yaml#/Ausbildungskategorie'
       in: query
     abschlussBezeichnungDe:
       name: abschlussBezeichnungDe
@@ -437,13 +439,13 @@ components:
     ausbildungsstaetteId:
       name: ausbildungsstaetteId
       schema:
-        $ref: './components/schemas.yaml#/UUID'
+        $ref: './components/common.yaml#/UUID'
       in: path
       required: true
     abschlussId:
       name: abschlussId
       schema:
-        $ref: './components/schemas.yaml#/UUID'
+        $ref: './components/common.yaml#/UUID'
       in: path
       required: true
   schemas:
@@ -456,12 +458,12 @@ components:
         - AKTIV
     PaginatedAbschluss:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
           items:
-            $ref: './components/schemas.yaml#/Abschluss'
+            $ref: './components/common.yaml#/Abschluss'
     BrueckenangebotCreate:
       type: object
       required:
@@ -470,7 +472,7 @@ components:
         - bezeichnungFr
       properties:
         bildungsrichtung:
-          $ref: './components/schemas.yaml#/Bildungsrichtung'
+          $ref: './components/common.yaml#/Bildungsrichtung'
         bezeichnungDe:
           type: string
         bezeichnungFr:
@@ -490,12 +492,12 @@ components:
         - AKTIV
     PaginatedAusbildungsstaette:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
           items:
-            $ref: './components/schemas.yaml#/Ausbildungsstaette'
+            $ref: './components/common.yaml#/Ausbildungsstaette'
     AusbildungsstaetteCreate:
       type: object
       required:
@@ -527,19 +529,19 @@ components:
         - ausbildungsstaetteId
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         abschlussId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         ausbildungsstaetteId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     PaginatedAusbildungsgang:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
           items:
-            $ref: './components/schemas.yaml#/Ausbildungsgang'
+            $ref: './components/common.yaml#/Ausbildungsgang'
     AusbildungsgangCreate:
       type: object
       required:
@@ -547,9 +549,9 @@ components:
         - ausbildungsstaetteId
       properties:
         abschlussId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         ausbildungsstaetteId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     AusbildungsgangData:
       type: object
       required:
@@ -561,17 +563,17 @@ components:
         - aktiv
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         bezeichnungDe:
           type: string
         bezeichnungFr:
           type: string
         bildungskategorie:
-          $ref: './components/schemas.yaml#/Bildungskategorie'
+          $ref: './components/common.yaml#/Bildungskategorie'
         bildungsrichtung:
-          $ref: './components/schemas.yaml#/Bildungsrichtung'
+          $ref: './components/common.yaml#/Bildungsrichtung'
         zusatzfrage:
-          $ref: './components/schemas.yaml#/AbschlussZusatzfrage'
+          $ref: './components/common.yaml#/AbschlussZusatzfrage'
         askForBerufsmaturitaet:
           type: boolean
         aktiv:
@@ -606,7 +608,7 @@ components:
         - aktiv
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         nameDe:
           type: string
         nameFr:
@@ -628,19 +630,18 @@ components:
         - aktiv
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         bezeichnungDe:
           type: string
         bezeichnungFr:
           type: string
         ausbildungskategorie:
-          $ref: './components/schemas.yaml#/Ausbildungskategorie'
+          $ref: './components/common.yaml#/Ausbildungskategorie'
         bildungsrichtung:
-          $ref: './components/schemas.yaml#/Bildungsrichtung'
+          $ref: './components/common.yaml#/Bildungsrichtung'
         zusatzfrage:
-          $ref: './components/schemas.yaml#/AbschlussZusatzfrage'
+          $ref: './components/common.yaml#/AbschlussZusatzfrage'
         aktiv:
           type: boolean
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

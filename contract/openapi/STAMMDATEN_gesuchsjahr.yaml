@@ -60,7 +60,7 @@ paths:
     parameters:
       - name: gesuchsjahrId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -128,7 +128,7 @@ paths:
     parameters:
       - name: gesuchsjahrId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -144,6 +144,8 @@ paths:
       operationId: publishGesuchsjahr
       summary: Publishes a Gesuchsjahr with the given id
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     Gesuchsjahr:
       type: object
@@ -155,7 +157,7 @@ components:
         - gueltigkeitStatus
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         bezeichnungDe:
           type: string
         bezeichnungFr:
@@ -163,7 +165,7 @@ components:
         technischesJahr:
           type: integer
         gueltigkeitStatus:
-          $ref: './components/schemas.yaml#/GueltigkeitStatus'
+          $ref: './components/common.yaml#/GueltigkeitStatus'
     GesuchsjahrCreate:
       type: object
       required:
@@ -187,5 +189,4 @@ components:
         technischesJahr:
           type: integer
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

@@ -33,14 +33,7 @@ paths:
       description: Gibt zuerueck die Version und Stage aus das Backend
 components:
   securitySchemes:
-    auth-uat-bern:
-      type: openIdConnect
-      openIdConnectUrl: https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern
-      description: Bern (UAT)
-    auth-dev-bern:
-      type: openIdConnect
-      openIdConnectUrl: https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern
-      description: Bern (DEV)
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     DeploymentConfig:
       type: object
@@ -54,5 +47,4 @@ components:
           items:
             type: string
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

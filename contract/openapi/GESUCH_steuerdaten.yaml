@@ -15,7 +15,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -52,7 +52,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -110,6 +110,8 @@ paths:
       operationId: updateSteuerdaten
       summary: Updates the Steuerdaten of the given gesuchTrancheId
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     NeskoGetSteuerdatenRequest:
       required:
@@ -118,7 +120,7 @@ components:
       type: object
       properties:
         steuerdatenTyp:
-          $ref: './components/schemas.yaml#/SteuerdatenTyp'
+          $ref: './components/common.yaml#/SteuerdatenTyp'
         steuerjahr:
           type: integer
     Steuerdaten:
@@ -136,9 +138,9 @@ components:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         steuerdatenTyp:
-          $ref: './components/schemas.yaml#/SteuerdatenTyp'
+          $ref: './components/common.yaml#/SteuerdatenTyp'
         steuernKantonGemeinde:
           type: integer
         steuernBund:
@@ -168,5 +170,4 @@ components:
         vermoegen:
           type: integer
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

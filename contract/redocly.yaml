@@ -4,5 +4,4 @@ extends:
 
 rules:
   no-server-example.com: off
-  security-defined: off
   operation-summary: warn

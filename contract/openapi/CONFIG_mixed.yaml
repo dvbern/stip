@@ -82,7 +82,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/Notification'
+                  $ref: './components/common.yaml#/Notification'
         '404':
           $ref: './components/responses.yaml#/NotFound'
         '500':
@@ -90,6 +90,8 @@ paths:
       operationId: getNotificationsForCurrentUser
       summary: Gets all notifications for the User
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     plz:
       description: 'PLZ und ort für Type ahead funktionalitaet'
@@ -141,9 +143,9 @@ components:
         - textFr
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         stipDecision:
-          $ref: './components/schemas.yaml#/StipDecision'
+          $ref: './components/common.yaml#/StipDecision'
         titleDe:
           type: string
         textDe:
@@ -185,5 +187,4 @@ components:
         - ANDERER_KANTON
       type: string
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

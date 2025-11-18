@@ -104,7 +104,7 @@ paths:
     parameters:
       - name: sachbearbeiterId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -224,7 +224,7 @@ paths:
       parameters:
         - name: benutzerId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -255,7 +255,7 @@ paths:
       parameters:
         - name: benutzerId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -271,6 +271,8 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: createOrUpdateSachbearbeiterStammdaten
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     Sachbearbeiter:
       type: object
@@ -278,7 +280,7 @@ components:
         - id
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
       allOf:
         - $ref: '#/components/schemas/SachbearbeiterUpdate'
     SachbearbeiterUpdate:
@@ -310,7 +312,7 @@ components:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         digitaleKommunikation:
           type: boolean
     Benutzer:
@@ -321,7 +323,7 @@ components:
           type: object
           properties:
             id:
-              $ref: './components/schemas.yaml#/UUID'
+              $ref: './components/common.yaml#/UUID'
             sachbearbeiterZuordnungStammdaten:
               $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
         - $ref: '#/components/schemas/BenutzerUpdate'
@@ -348,16 +350,15 @@ components:
       type: object
       properties:
         sachbearbeiter:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         zuordnung:
           $ref: '#/components/schemas/SachbearbeiterZuordnungStammdaten'
     BenutzereinstellungenUpdate:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         digitaleKommunikation:
           type: boolean
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

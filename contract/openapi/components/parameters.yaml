@@ -4,21 +4,21 @@ gesuchId:
   required: true
   description: Die ID vom Gesuch
   schema:
-    $ref: './schemas.yaml#/UUID'
+    $ref: './common.yaml#/UUID'
 gesuchTrancheId:
   name: gesuchTrancheId
   in: path
   required: true
   description: Die ID von der GesuchTranche
   schema:
-    $ref: './schemas.yaml#/UUID'
+    $ref: './common.yaml#/UUID'
 fallId:
   name: fallId
   in: path
   required: true
   description: Die ID vom Fall
   schema:
-    $ref: './schemas.yaml#/UUID'
+    $ref: './common.yaml#/UUID'
 fallNummer:
   in: query
   name: fallNummer
@@ -41,7 +41,7 @@ sortOrder:
   in: query
   name: sortOrder
   schema:
-    $ref: './schemas.yaml#/SortOrder'
+    $ref: './common.yaml#/SortOrder'
 userErstellt:
   in: query
   name: userErstellt
@@ -69,6 +69,6 @@ letzteAktivitaetTo:
 sozialdienstId:
   name: sozialdienstId
   schema:
-    $ref: './schemas.yaml#/UUID'
+    $ref: './common.yaml#/UUID'
   in: path
   required: true

@@ -65,7 +65,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -112,6 +112,8 @@ paths:
       operationId: getFailedAuszahlungBuchhaltungEntrys
       summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     FailedAuszahlungBuchhaltung:
       required:
@@ -125,11 +127,11 @@ components:
       type: object
       properties:
         fallId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
         gesuchId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchNummer:
           type: string
         name:
@@ -141,7 +143,7 @@ components:
           format: date-time
     PaginatedFailedAuszahlungBuchhaltung:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
@@ -191,11 +193,11 @@ components:
         comment:
           type: string
         verfuegungId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         zahlungsverbindung:
-          $ref: './components/schemas.yaml#/Zahlungsverbindung'
+          $ref: './components/common.yaml#/Zahlungsverbindung'
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
         sapDeliverys:
@@ -237,5 +239,4 @@ components:
         sapStatus:
           $ref: '#/components/schemas/SapStatus'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

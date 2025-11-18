@@ -22,7 +22,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/Fall'
+                  $ref: './components/common.yaml#/Fall'
           description: Get all Faelle which are assigned to the currently logged in Sachbearbeiter
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -43,7 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Fall'
+                $ref: './components/common.yaml#/Fall'
           description: Get the current Fall for the currently logged in Gesuchsteller
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Fall'
+                $ref: './components/common.yaml#/Fall'
           description: Return des neu erstellten Falls für den GS
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -70,6 +70,8 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: createFallForGs
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

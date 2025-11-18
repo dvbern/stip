@@ -56,7 +56,7 @@ paths:
     parameters:
       - name: getGesucheSBQueryType
         schema:
-          $ref: './components/schemas.yaml#/GetGesucheSBQueryType'
+          $ref: './components/common.yaml#/GetGesucheSBQueryType'
         in: path
         required: true
     post:
@@ -85,7 +85,7 @@ paths:
     parameters:
       - name: massendruckJobId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -114,7 +114,7 @@ paths:
     parameters:
       - name: massendruckDatenschutzbriefId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -143,7 +143,7 @@ paths:
     parameters:
       - name: massendruckVerfuegungId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -172,7 +172,7 @@ paths:
     parameters:
       - name: massendruckId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -183,7 +183,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/FileDownloadToken'
+                $ref: './components/common.yaml#/FileDownloadToken'
           description: Token returned
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -202,7 +202,7 @@ paths:
     parameters:
       - name: massendruckId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -227,7 +227,7 @@ paths:
     parameters:
       - name: massendruckId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -273,6 +273,8 @@ paths:
       operationId: downloadMassendruckDocument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   parameters:
     MassendruckJobTyp:
       in: query
@@ -305,7 +307,7 @@ components:
         - massendruckJobTyp
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         userErstellt:
           type: string
         timestampErstellt:
@@ -341,7 +343,7 @@ components:
         - gesuchTrancheId
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         isVersendet:
           type: boolean
         nachname:
@@ -351,9 +353,9 @@ components:
         gesuchNummer:
           type: string
         gesuchId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchTrancheId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     GetMassendruckJobQueryType:
       enum:
         - ALLE
@@ -363,7 +365,7 @@ components:
       type: string
     PaginatedMassendruckJob:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
@@ -386,7 +388,6 @@ components:
         - elternTyp
       properties:
         elternTyp:
-          $ref: './components/schemas.yaml#/ElternTyp'
+          $ref: './components/common.yaml#/ElternTyp'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

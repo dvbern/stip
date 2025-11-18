@@ -15,7 +15,7 @@ paths:
     parameters:
       - name: fallId
         schema:
-          $ref: 'components/schemas.yaml#/UUID'
+          $ref: 'components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -85,6 +85,8 @@ paths:
       operationId: getAuszahlungForGesuch
       summary: Get Auszahlung
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     FallAuszahlung:
       type: object
@@ -104,7 +106,6 @@ components:
         auszahlungAnSozialdienst:
           type: boolean
         zahlungsverbindung:
-          $ref: 'components/schemas.yaml#/Zahlungsverbindung'
+          $ref: 'components/common.yaml#/Zahlungsverbindung'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

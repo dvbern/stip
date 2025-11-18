@@ -18,5 +18,5 @@ BadRequest:
   content:
     application/json:
       schema:
-        $ref: './schemas.yaml#/ValidationReport'
+        $ref: './common.yaml#/ValidationReport'
   description: Die Kunde Request Daten sind ungültig

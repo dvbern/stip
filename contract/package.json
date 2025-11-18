@@ -8,6 +8,7 @@
   "scripts": {
     "start": "openapi preview",
     "build": "openapi join openapi/*.yaml -o openapi.yaml --without-x-tag-groups",
+    "build:no-output": "openapi join openapi/*.yaml --without-x-tag-groups",
     "debug": "openapi bundle openapi/*.yaml -o openapi/generated",
     "lint": "openapi lint openapi/*.yaml"
   }

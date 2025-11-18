@@ -22,7 +22,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/Gesuchsperiode'
+                  $ref: './components/common.yaml#/Gesuchsperiode'
           description: Get `Gesuchsperiode`
         '500':
           $ref: './components/responses.yaml#/ServerError'
@@ -75,7 +75,7 @@ paths:
     parameters:
       - name: gesuchsperiodeId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -143,7 +143,7 @@ paths:
     parameters:
       - name: gesuchsperiodeId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -171,7 +171,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/Gesuchsperiode'
+                  $ref: './components/common.yaml#/Gesuchsperiode'
           description: OK
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -182,6 +182,8 @@ paths:
       operationId: getAllAssignableGesuchsperiode
       summary: Returns all assignable gesuchsperiode.
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     GesuchsperiodeWithDaten:
       required:
@@ -190,9 +192,9 @@ components:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gueltigkeitStatus:
-          $ref: './components/schemas.yaml#/GueltigkeitStatus'
+          $ref: './components/common.yaml#/GueltigkeitStatus'
       allOf:
         - $ref: '#/components/schemas/GesuchsperiodeDaten'
     NullableGesuchsperiodeWithDaten:
@@ -267,11 +269,11 @@ components:
         bezeichnungFr:
           type: string
         einreichfrist:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         fiskaljahr:
           type: integer
         gesuchsjahrId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchsperiodeStart:
           format: date
           description: dd.MM.yyyy
@@ -379,5 +381,4 @@ components:
           description: dd.MM.yyyy
           type: string
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

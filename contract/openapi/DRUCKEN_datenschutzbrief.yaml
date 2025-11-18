@@ -15,7 +15,7 @@ paths:
     parameters:
       - name: trancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
       - name: token
         schema:
@@ -40,7 +40,7 @@ paths:
     parameters:
       - name: elternId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -51,7 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/FileDownloadToken'
+                $ref: './components/common.yaml#/FileDownloadToken'
           description: Token returned
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -66,6 +66,8 @@ paths:
           description: Datenschutzbrief File Download Token returned
       operationId: getDatenschutzbriefDownloadToken
       summary: get Token to downlaod Verfuegung
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

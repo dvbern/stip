@@ -40,7 +40,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -88,7 +88,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -99,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: OK
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -115,7 +115,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -126,7 +126,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: OK
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -142,7 +142,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -153,7 +153,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: OK
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -169,7 +169,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -199,7 +199,7 @@ paths:
       parameters:
         - name: getGesucheSBQueryType
           schema:
-            $ref: './components/schemas.yaml#/GetGesucheSBQueryType'
+            $ref: './components/common.yaml#/GetGesucheSBQueryType'
           in: path
           required: true
         - $ref: './components/parameters.yaml#/fallNummer'
@@ -245,7 +245,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/Gesuch'
+                  $ref: './components/common.yaml#/Gesuch'
           description: Returns gesuche filtered by gs
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -281,7 +281,7 @@ paths:
       parameters:
         - name: fallId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -306,7 +306,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -314,7 +314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Gesuch geprueft
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -333,7 +333,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -341,7 +341,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -359,7 +359,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -367,7 +367,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -385,7 +385,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       requestBody:
@@ -393,13 +393,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/Kommentar'
+              $ref: './components/common.yaml#/Kommentar'
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -417,7 +417,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -425,7 +425,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -443,7 +443,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -451,7 +451,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -469,7 +469,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       requestBody:
@@ -477,13 +477,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/AusgewaehlterGrund'
+              $ref: './components/common.yaml#/AusgewaehlterGrund'
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -505,7 +505,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Returns gesuch in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -549,7 +549,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Aendert das Einreichedatum des Gesuch manuell
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -631,7 +631,7 @@ paths:
       - $ref: './components/parameters.yaml#/gesuchTrancheId'
       - name: gesuchsperiodeId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: query
         required: true
     patch:
@@ -642,7 +642,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Updated Gesuch
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -662,7 +662,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -670,7 +670,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Gesuch eingereicht
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -689,7 +689,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -697,7 +697,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Gesuch geprueft
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -713,7 +713,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -740,7 +740,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -768,7 +768,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -779,7 +779,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -802,7 +802,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Fehlende Dokumente eingereicht
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -818,7 +818,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -829,7 +829,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Bearbeitung des Gesuch Abschliessen
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -851,7 +851,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/Kommentar'
+              $ref: './components/common.yaml#/Kommentar'
       responses:
         '200':
           content:
@@ -885,7 +885,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Returns gesuch with changes in status
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -898,7 +898,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -927,7 +927,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -956,7 +956,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -967,7 +967,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/FileDownloadToken'
+                $ref: './components/common.yaml#/FileDownloadToken'
           description: File returned
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -1013,7 +1013,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Returns
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -1040,7 +1040,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Returns
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -1053,6 +1053,8 @@ paths:
       operationId: getSbAenderungChanges
 
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   parameters:
     piaVorname:
       in: query
@@ -1085,21 +1087,21 @@ components:
       name: typ
       required: true
       schema:
-        $ref: './components/schemas.yaml#/GesuchTrancheTyp'
+        $ref: './components/common.yaml#/GesuchTrancheTyp'
     aenderungId:
       name: aenderungId
       in: path
       required: true
       description: Die ID der Aenderung
       schema:
-        $ref: './components/schemas.yaml#/UUID'
+        $ref: './components/common.yaml#/UUID'
   schemas:
     GesuchCreateResponse:
       properties:
         gesuch:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         error:
-          $ref: './components/schemas.yaml#/GesuchsperiodeSelectError'
+          $ref: './components/common.yaml#/GesuchsperiodeSelectError'
     GesuchDashboardItem:
       required:
         - id
@@ -1111,17 +1113,17 @@ components:
       type: object
       properties:
         nachfristDokumente:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         gesuchsperiode:
-          $ref: './components/schemas.yaml#/Gesuchsperiode'
+          $ref: './components/common.yaml#/Gesuchsperiode'
         gesuchStatus:
-          $ref: './components/schemas.yaml#/Gesuchstatus'
+          $ref: './components/common.yaml#/Gesuchstatus'
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         currentTrancheId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         offeneAenderung:
-          $ref: './components/schemas.yaml#/GesuchTrancheSlim'
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
         startDate:
           type: string
           format: date
@@ -1135,7 +1137,7 @@ components:
           type: object
           properties:
             trancheId:
-              $ref: './components/schemas.yaml#/UUID'
+              $ref: './components/common.yaml#/UUID'
             count:
               type: integer
     FallDashboardItem:
@@ -1146,7 +1148,7 @@ components:
       type: object
       properties:
         fall:
-          $ref: './components/schemas.yaml#/Fall'
+          $ref: './components/common.yaml#/Fall'
         ausbildungDashboardItems:
           type: array
           items:
@@ -1154,9 +1156,9 @@ components:
         notifications:
           type: array
           items:
-            $ref: './components/schemas.yaml#/Notification'
+            $ref: './components/common.yaml#/Notification'
         delegierung:
-          $ref: './components/schemas.yaml#/DelegierungSlim'
+          $ref: './components/common.yaml#/DelegierungSlim'
     AusbildungDashboardItem:
       type: object
       properties:
@@ -1165,7 +1167,7 @@ components:
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
       allOf:
-        - $ref: './components/schemas.yaml#/Ausbildung'
+        - $ref: './components/common.yaml#/Ausbildung'
     SbDashboardColumn:
       enum:
         - FALLNUMMER
@@ -1178,7 +1180,7 @@ components:
         - LETZTE_AKTIVITAET
     PaginatedSbDashboard:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
@@ -1200,13 +1202,13 @@ components:
         - letzteAktivitaet
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchTrancheId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
         typ:
-          $ref: './components/schemas.yaml#/GesuchTrancheTyp'
+          $ref: './components/common.yaml#/GesuchTrancheTyp'
         piaNachname:
           type: string
         piaVorname:
@@ -1215,9 +1217,9 @@ components:
           type: string
           format: date
         gesuchStatus:
-          $ref: './components/schemas.yaml#/Gesuchstatus'
+          $ref: './components/common.yaml#/Gesuchstatus'
         trancheStatus:
-          $ref: './components/schemas.yaml#/GesuchTrancheStatus'
+          $ref: './components/common.yaml#/GesuchTrancheStatus'
         bearbeiter:
           type: string
         letzteAktivitaet:
@@ -1235,7 +1237,7 @@ components:
         beschwerdeErfolgreich:
           type: boolean
         fileUpload:
-          $ref: './components/schemas.yaml#/FileUpload'
+          $ref: './components/common.yaml#/FileUpload'
     BeschwerdeEntscheid:
       required:
         - kommentar
@@ -1250,7 +1252,7 @@ components:
         dokumente:
           type: array
           items:
-            $ref: './components/schemas.yaml#/Dokument'
+            $ref: './components/common.yaml#/Dokument'
     BeschwerdeVerlaufEntryCreate:
       type: object
       required:
@@ -1284,7 +1286,7 @@ components:
       type: object
       properties:
         ausbildungId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     GesuchUpdate:
       required:
         - gesuchTrancheToWorkWith
@@ -1303,7 +1305,7 @@ components:
         gesuchFormular:
           $ref: '#/components/schemas/GesuchFormularUpdate'
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     GesuchFormularUpdate:
       required: []
       type: object
@@ -1375,15 +1377,15 @@ components:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchNummer:
           type: string
         gesuchStatus:
-          $ref: './components/schemas.yaml#/Gesuchstatus'
+          $ref: './components/common.yaml#/Gesuchstatus'
         startDate:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         endDate:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         canGetBerechnung:
           type: boolean
         beschwerdeHaengig:
@@ -1400,9 +1402,9 @@ components:
         verfuegungen:
           type: array
           items:
-            $ref: './components/schemas.yaml#/Verfuegung'
+            $ref: './components/common.yaml#/Verfuegung'
         datenschutzbriefMassendruckJobId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     NachfristAendernRequest:
       type: object
       required:
@@ -1418,9 +1420,9 @@ components:
         - gesuchTrancheId
       properties:
         gesuchId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         gesuchTrancheId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     ManuelleVerfuegungCreate:
       required:
         - fileUpload
@@ -1429,7 +1431,7 @@ components:
         kommentar:
           type: string
         fileUpload:
-          $ref: './components/schemas.yaml#/FileUpload'
+          $ref: './components/common.yaml#/FileUpload'
     StatusprotokollEntryTyp:
       enum:
         - GESUCH
@@ -1504,14 +1506,14 @@ components:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
         gueltigAb:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         gueltigBis:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         gesuchTrancheId:
           description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
             Mehrere resultate mit der gleichen ID sind die berechnungen für
             getrennte eltern mit Kindern die eine Obhutsteilung haben'
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         berechnungsanteilKinder:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
             Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
@@ -1691,7 +1693,7 @@ components:
       type: object
       properties:
         familienBudgetTyp:
-          $ref: './components/schemas.yaml#/SteuerdatenTyp'
+          $ref: './components/common.yaml#/SteuerdatenTyp'
         selbststaendigErwerbend:
           type: boolean
         anzahlPersonenImHaushalt:
@@ -1741,5 +1743,4 @@ components:
         familienbudgetBerechnet:
           type: integer
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

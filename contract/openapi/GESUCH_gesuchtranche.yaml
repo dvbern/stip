@@ -15,7 +15,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchWithChanges'
+                $ref: './components/common.yaml#/GesuchWithChanges'
           description: Fehlende Dokumente übermittelt
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -49,7 +49,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Fehlende Dokumente eingereicht
         '400':
           $ref: './components/responses.yaml#/BadRequest'
@@ -68,7 +68,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -76,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/ValidationReport'
+                $ref: './components/common.yaml#/ValidationReport'
           description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -95,7 +95,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -103,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/ValidationReport'
+                $ref: './components/common.yaml#/ValidationReport'
           description: Returns an Array of Dokumente for a given GesuchId and a DokumentTyp
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -123,7 +123,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -131,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/ValidationReport'
+                $ref: './components/common.yaml#/ValidationReport'
           description: Die Validierung wurde erflogreich durchgeführt
       operationId: validateGesuchTranchePagesGS
   '/gesuchtranche/validatePages/{gesuchTrancheId}/sb':
@@ -142,7 +142,7 @@ paths:
       parameters:
         - name: gesuchTrancheId
           schema:
-            $ref: './components/schemas.yaml#/UUID'
+            $ref: './components/common.yaml#/UUID'
           in: path
           required: true
       responses:
@@ -150,14 +150,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/ValidationReport'
+                $ref: './components/common.yaml#/ValidationReport'
           description: Die Validierung wurde erflogreich durchgeführt
       operationId: validateGesuchTranchePagesSB
   '/gesuchtranche/{gesuchTrancheId}/dokumente/gs':
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -171,7 +171,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/GesuchDokument'
+                  $ref: './components/common.yaml#/GesuchDokument'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -183,7 +183,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -197,7 +197,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/GesuchDokument'
+                  $ref: './components/common.yaml#/GesuchDokument'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -209,7 +209,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -233,7 +233,7 @@ paths:
     parameters:
       - name: gesuchTrancheId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -257,7 +257,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -268,7 +268,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTrancheList'
+                $ref: './components/common.yaml#/GesuchTrancheList'
           description: Alle GesuchTranchen fuer ein Gesuch
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -283,7 +283,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -294,7 +294,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTrancheList'
+                $ref: './components/common.yaml#/GesuchTrancheList'
           description: Alle GesuchTranchen fuer ein Gesuch
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -309,7 +309,7 @@ paths:
     parameters:
       - name: aenderungId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -326,7 +326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Gesuch'
+                $ref: './components/common.yaml#/Gesuch'
           description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -341,7 +341,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -358,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTranche'
+                $ref: './components/common.yaml#/GesuchTranche'
           description: Aenderungsantrag wurde erstellt
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -373,7 +373,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -390,7 +390,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTranche'
+                $ref: './components/common.yaml#/GesuchTranche'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -428,7 +428,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTranche'
+                $ref: './components/common.yaml#/GesuchTranche'
         '400':
           description: Falsche Tranche akzeptiert
         '404':
@@ -448,7 +448,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTranche'
+                $ref: './components/common.yaml#/GesuchTranche'
         '400':
           description: Falsche Tranche versucht auf manuell zu setzen
         '404':
@@ -467,14 +467,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/Kommentar'
+              $ref: './components/common.yaml#/Kommentar'
       responses:
         '200':
           description: 'Aenderung wurde erflogreich abgelehnt'
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/GesuchTranche'
+                $ref: './components/common.yaml#/GesuchTranche'
         '400':
           description: Falsche Tranche abgelehnt
         '404':
@@ -499,6 +499,8 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: deleteAenderung
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   parameters:
     aenderungId:
       name: aenderungId
@@ -506,7 +508,7 @@ components:
       required: true
       description: Die ID der Aenderung
       schema:
-        $ref: './components/schemas.yaml#/UUID'
+        $ref: './components/common.yaml#/UUID'
   schemas:
     BaseTrancheRequest:
       type: object
@@ -546,15 +548,15 @@ components:
         customDokumentTyps:
           type: array
           items:
-            $ref: './components/schemas.yaml#/CustomDokumentTyp'
+            $ref: './components/common.yaml#/CustomDokumentTyp'
         required:
           type: array
           items:
-            $ref: './components/schemas.yaml#/DokumentTyp'
+            $ref: './components/common.yaml#/DokumentTyp'
         unterschriftenblaetter:
           type: array
           items:
-            $ref: './components/schemas.yaml#/UnterschriftenblattDokumentTyp'
+            $ref: './components/common.yaml#/UnterschriftenblattDokumentTyp'
         sbCanFehlendeDokumenteUebermitteln:
           type: boolean
         gsCanDokumenteUebermitteln:
@@ -564,5 +566,4 @@ components:
         sbCanUploadUnterschriftenblatt:
           type: boolean
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

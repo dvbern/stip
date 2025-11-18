@@ -15,7 +15,7 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -96,7 +96,7 @@ paths:
     parameters:
       - name: notizId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     patch:
@@ -131,7 +131,7 @@ paths:
     parameters:
       - name: notizId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -173,6 +173,8 @@ paths:
       operationId: deleteNotiz
       summary: delete a Notiz of a Gesuch with the given Notiz-Id
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     GesuchNotizTyp:
       enum:
@@ -195,7 +197,7 @@ components:
         - notizTyp
       properties:
         gesuchId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         betreff:
           maximum: 100
           type: string
@@ -211,7 +213,7 @@ components:
         - text
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         betreff:
           maximum: 100
           type: string
@@ -231,11 +233,11 @@ components:
         userErstellt:
           type: string
         timestampErstellt:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         userMutiert:
           type: string
         timestampMutiert:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         notizTyp:
           $ref: '#/components/schemas/GesuchNotizTyp'
         gesuchNummer:
@@ -248,5 +250,4 @@ components:
         - type: object
         - $ref: '#/components/schemas/GesuchNotizUpdate'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

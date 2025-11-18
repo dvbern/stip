@@ -42,7 +42,7 @@ paths:
     parameters:
       - name: ausbildungId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -53,7 +53,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildung'
+                $ref: './components/common.yaml#/Ausbildung'
           description: Returns the created Ausbildung
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -79,7 +79,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Ausbildung'
+                $ref: './components/common.yaml#/Ausbildung'
           description: Returns the created Ausbildung
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -93,6 +93,8 @@ paths:
       summary: Returniert die Ausbildung
 
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     AusbildungBase:
       required:
@@ -103,9 +105,9 @@ components:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         fallId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         fachrichtungBerufsbezeichnung:
           type: string
         ausbildungNichtGefunden:
@@ -120,7 +122,7 @@ components:
           description: Required wenn Abschluss.askForBerufsmaturitaet = true
           type: boolean
         pensum:
-          $ref: './components/schemas.yaml#/AusbildungsPensum'
+          $ref: './components/common.yaml#/AusbildungsPensum'
         alternativeAusbildungsstaette:
           description: Required wenn andere ausbildungNichtGefunden = true
           type: string
@@ -137,22 +139,21 @@ components:
           type: boolean
         landId:
           description: Required if isAusbildungAusland = true
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     AusbildungCreateResponse:
       properties:
         ausbildung:
-          $ref: './components/schemas.yaml#/Ausbildung'
+          $ref: './components/common.yaml#/Ausbildung'
         error:
-          $ref: './components/schemas.yaml#/GesuchsperiodeSelectError'
+          $ref: './components/common.yaml#/GesuchsperiodeSelectError'
     AusbildungUpdate:
       type: object
       properties:
         ausbildungsgangId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
           description: |
             Required wenn andere ausbildungNichtGefunden = false
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

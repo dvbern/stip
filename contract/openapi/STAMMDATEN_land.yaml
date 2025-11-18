@@ -23,7 +23,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/Land'
+                  $ref: './components/common.yaml#/Land'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -39,14 +39,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/Land'
+              $ref: './components/common.yaml#/Land'
       responses:
         '200':
           description: Returns all countries and whether they're part of eu/efta or not
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Land'
+                $ref: './components/common.yaml#/Land'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -60,7 +60,7 @@ paths:
         in: path
         required: true
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
     patch:
       tags:
         - Land
@@ -69,14 +69,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './components/schemas.yaml#/Land'
+              $ref: './components/common.yaml#/Land'
       responses:
         '200':
           description: 'EU/EFTA Länder wurden erflogreich gesetzt'
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/Land'
+                $ref: './components/common.yaml#/Land'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -86,6 +86,8 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: updateLand
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

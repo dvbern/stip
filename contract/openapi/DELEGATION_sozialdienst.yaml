@@ -95,7 +95,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/SozialdienstSlim'
+                  $ref: './components/common.yaml#/SozialdienstSlim'
           description: Returns all Sozialdienste
         401:
           $ref: './components/responses.yaml#/Unauthorized'
@@ -122,7 +122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
           description: Replaces a Sozialdienst admin by a new one
         401:
           $ref: './components/responses.yaml#/Unauthorized'
@@ -215,7 +215,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+                  $ref: './components/common.yaml#/SozialdienstBenutzer'
           description: Returns all SozialdienstBenutzers of the Sozialdienst of the logged in SozialdienstAdmin
         401:
           $ref: './components/responses.yaml#/Unauthorized'
@@ -240,7 +240,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
           description: Returns the created SozialdienstBenutzer
         409:
           description: A SozialdienstBenutzer with that identifier already exists in Keycloak
@@ -259,7 +259,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
           description: Returns the updated SozialdienstBenutzer
         401:
           $ref: './components/responses.yaml#/Unauthorized'
@@ -284,7 +284,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
           description: Updates data of a Sozialdienst admin
         401:
           $ref: './components/responses.yaml#/Unauthorized'
@@ -299,7 +299,7 @@ paths:
     parameters:
       - name: sozialdienstBenutzerId
         schema:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
@@ -310,7 +310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
           description: Returns the Sozialdienst Benutzer with the given ID
         401:
           $ref: './components/responses.yaml#/Unauthorized'
@@ -338,6 +338,8 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: deleteSozialdienstBenutzer
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     SozialdienstBenutzerCreate:
       required:
@@ -346,7 +348,7 @@ components:
         redirectUri:
           type: string
       allOf:
-        - $ref: './components/schemas.yaml#/SozialdienstBenutzerBase'
+        - $ref: './components/common.yaml#/SozialdienstBenutzerBase'
     SozialdienstBenutzerUpdate:
       required:
         - id
@@ -354,7 +356,7 @@ components:
         - nachname
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         vorname:
           type: string
         nachname:
@@ -380,7 +382,7 @@ components:
         name:
           type: string
         zahlungsverbindung:
-          $ref: './components/schemas.yaml#/Zahlungsverbindung'
+          $ref: './components/common.yaml#/Zahlungsverbindung'
         sozialdienstAdmin:
           $ref: '#/components/schemas/SozialdienstAdmin'
     SozialdienstUpdate:
@@ -390,14 +392,14 @@ components:
         - zahlungsverbindung
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         name:
           type: string
         zahlungsverbindung:
-          $ref: './components/schemas.yaml#/Zahlungsverbindung'
+          $ref: './components/common.yaml#/Zahlungsverbindung'
     Sozialdienst:
       allOf:
-        - $ref: './components/schemas.yaml#/SozialdienstSlim'
+        - $ref: './components/common.yaml#/SozialdienstSlim'
         - type: object
           required:
             - id
@@ -407,11 +409,10 @@ components:
             - aktiv
           properties:
             sozialdienstAdmin:
-              $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+              $ref: './components/common.yaml#/SozialdienstBenutzer'
             zahlungsverbindung:
-              $ref: './components/schemas.yaml#/Zahlungsverbindung'
+              $ref: './components/common.yaml#/Zahlungsverbindung'
             aktiv:
               type: boolean
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'

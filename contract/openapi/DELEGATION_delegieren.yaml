@@ -174,6 +174,8 @@ paths:
       operationId: getDelegierungsOfSozialdienstMitarbeiter
       summary: Returns a list of Faelle with Delegierung that are accepted
 components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
   parameters:
     fallNummer:
       in: query
@@ -212,7 +214,7 @@ components:
       required: true
       description: Die ID der Delegierung
       schema:
-        $ref: './components/schemas.yaml#/UUID'
+        $ref: './components/common.yaml#/UUID'
   schemas:
     Delegierung:
       type: object
@@ -220,15 +222,15 @@ components:
         - id
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         sozialdienst:
-          $ref: './components/schemas.yaml#/SozialdienstSlim'
+          $ref: './components/common.yaml#/SozialdienstSlim'
         delegierterMitarbeiter:
-          $ref: './components/schemas.yaml#/SozialdienstBenutzer'
+          $ref: './components/common.yaml#/SozialdienstBenutzer'
         delegierungAngenommen:
           type: boolean
         persoenlicheAngaben:
-          $ref: './components/schemas.yaml#/PersoenlicheAngaben'
+          $ref: './components/common.yaml#/PersoenlicheAngaben'
     FallWithDelegierung:
       required:
         - id
@@ -238,7 +240,7 @@ components:
       type: object
       properties:
         id:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
         mandant:
@@ -247,7 +249,7 @@ components:
           $ref: '#/components/schemas/Delegierung'
     PaginatedSozDashboard:
       allOf:
-        - $ref: './components/schemas.yaml#/PaginatedResult'
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
@@ -283,26 +285,25 @@ components:
       type: object
       properties:
         anrede:
-          $ref: './components/schemas.yaml#/Anrede'
+          $ref: './components/common.yaml#/Anrede'
         nachname:
           type: string
         vorname:
           type: string
         geburtsdatum:
-          $ref: './components/schemas.yaml#/LocalDate'
+          $ref: './components/common.yaml#/LocalDate'
         email:
           type: string
         sprache:
-          $ref: './components/schemas.yaml#/Sprache'
+          $ref: './components/common.yaml#/Sprache'
         adresse:
-          $ref: './components/schemas.yaml#/Adresse'
+          $ref: './components/common.yaml#/Adresse'
     DelegierterMitarbeiterAendern:
       required:
         - mitarbeiterId
       type: object
       properties:
         mitarbeiterId:
-          $ref: './components/schemas.yaml#/UUID'
+          $ref: './components/common.yaml#/UUID'
 security:
-  - auth-uat-bern: []
-  - auth-dev-bern: []
+  $ref: './components/security.yaml#/security'
