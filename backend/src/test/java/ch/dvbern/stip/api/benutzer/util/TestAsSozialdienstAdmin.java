@@ -71,9 +71,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_ADMIN_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = SOZIALDIENST_ADMIN_ID),
-        @Claim(key = "family_name", value = "Sozialdienst_Admin"),
-        @Claim(key = "given_name", value = "Maximilian")
+        @Claim(key = "sub", value = SOZIALDIENST_ADMIN_ID)
     }
 )
 public @interface TestAsSozialdienstAdmin {

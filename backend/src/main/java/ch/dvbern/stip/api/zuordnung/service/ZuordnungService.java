@@ -77,7 +77,7 @@ public class ZuordnungService {
 
         // Load the first admin to assign if no other SB is found
         final var admin = sachbearbeiterRepository
-            .findByRolle(OidcConstants.ROLE_ADMIN)
+            .findByRolle(OidcConstants.ROLE_SACHBEARBEITER_ADMIN)
             .findFirst()
             .orElseThrow(NotFoundException::new);
 

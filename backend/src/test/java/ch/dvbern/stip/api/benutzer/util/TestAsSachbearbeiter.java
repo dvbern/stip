@@ -28,6 +28,8 @@ import io.quarkus.test.security.TestSecurity;
 import io.quarkus.test.security.oidc.Claim;
 import io.quarkus.test.security.oidc.OidcSecurity;
 
+import static ch.dvbern.stip.api.util.TestConstants.SACHBEARBEITER_ID;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @TestSecurity(
@@ -66,9 +68,7 @@ import io.quarkus.test.security.oidc.OidcSecurity;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = "ea75c9be-35a0-4ae6-9383-a3459501596b"),
-        @Claim(key = "family_name", value = "Sachbearbeiter"),
-        @Claim(key = "given_name", value = "Hans")
+        @Claim(key = "sub", value = SACHBEARBEITER_ID)
     }
 )
 public @interface TestAsSachbearbeiter {

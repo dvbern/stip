@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.dokument.service;
 
 import java.io.ByteArrayOutputStream;
 import java.time.Duration;
@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
@@ -36,8 +37,8 @@ import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
-import lombok.experimental.UtilityClass;
 import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -47,8 +48,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
-@UtilityClass
-public class DokumentDownloadUtil {
+@ApplicationScoped
+@UnlessBuildProfile("test")
+public class DokumentDownloadService {
     public RestMulti<Buffer> getWrapedDokument(
         final String fileName,
         final ByteArrayOutputStream byteStream
