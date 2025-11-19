@@ -273,7 +273,6 @@ public class GesuchService {
         einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
     }
 
-    // TODO KSTIP-2784: Split this into 2 methods, one GS one SB/ override with a boolean whether or not to clear eltern
     @Transactional
     public void updateGesuch(
         final UUID gesuchId,
