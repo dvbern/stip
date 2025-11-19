@@ -361,24 +361,19 @@ public class GesuchDokumentService {
     }
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
-        final var historicalDokument = dokumentHistoryRepository.findFirstInHistoryById(dokument.getId());
+        // Count distinct historical Tranchen that reference the dokument
+        final var distinctHistoricalGesuchTranchenCount = dokumentHistoryRepository
+            .countDistinctTranchenThatReferenceDokumentByObjectId(dokument.getObjectId());
 
-        final var historicalTranche = historicalDokument.getGesuchDokument().getGesuchTranche();
-        if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
+        // If more than 1 distinct Tranche reference it, we cannot delete the dokument from S3
+        if (distinctHistoricalGesuchTranchenCount > 1) {
             return false;
         }
 
-        if (trancheToBeDeletedFrom.getTyp() != historicalTranche.getTyp()) {
-            return false;
-        }
-
-        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            return trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
-        }
-        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            return trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
-        }
-        return false;
+        return switch (trancheToBeDeletedFrom.getTyp()) {
+            case TRANCHE -> trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+            case AENDERUNG -> trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
+        };
     }
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
