@@ -59,7 +59,7 @@ include:
   # TODO KSTIP-2907: Make this build the demo app, once it's implemented
   - component: 'gitlab.dvbern.ch/components/package/buildah@1.3.0'
     inputs:
-      name: package:gesuch-app
+      name: package:demo-app
       context-dir: frontend
       image-name: 'demo-app'
       version: '$VERSION'
