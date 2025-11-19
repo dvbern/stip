@@ -156,21 +156,21 @@ public abstract class GesuchTrancheMapper {
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
     ) {
-        if (
-            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-            && !gesuchTranche.getGesuchFormular().getVersteckteEltern().isEmpty()
-        ) {
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
+        if (versteckteEltern.isEmpty()) {
+            return;
+        }
+
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
             // Override incoming Familiensituation for Aenderungen with versteckte Elternteile
             final var replacementFamiliensituation =
                 familiensituationMapper.toUpdateDto(gesuchTranche.getGesuchFormular().getFamiliensituation());
             newTranche.getGesuchFormular().setFamiliensituation(replacementFamiliensituation);
         }
 
-        if (newTranche.getGesuchFormular().getElterns() == null) {
+        if (gesuchTranche.getGesuchFormular().getElterns() == null) {
             return;
         }
-
-        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
 
         // Load and find Eltern to replace the incoming one(s) (i.e. ignoring incoming changes)
         final var replacementEltern = gesuchTranche.getGesuchFormular()
