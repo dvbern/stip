@@ -35,9 +35,12 @@ import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+@Execution(ExecutionMode.CONCURRENT)
 class AuthorizerAnnotationTest {
     private static final Set<String> ANONYMOUS_METHODS = new HashSet<>(
         List.of(

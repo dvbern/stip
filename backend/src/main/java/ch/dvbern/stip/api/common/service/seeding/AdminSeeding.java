@@ -43,9 +43,10 @@ public class AdminSeeding extends Seeder {
     @Override
     protected void seed() {
         LOG.info("Seeding Admin users");
-        final var foundAdmin = sachbearbeiterRepository.findByRolle(OidcConstants.ROLE_ADMIN).findFirst();
+        final var foundAdmin =
+            sachbearbeiterRepository.findByRolle(OidcConstants.ROLE_SACHBEARBEITER_ADMIN).findFirst();
         if (foundAdmin.isEmpty()) {
-            final var adminRolle = getOrCreateRolle(OidcConstants.ROLE_ADMIN);
+            final var adminRolle = getOrCreateRolle(OidcConstants.ROLE_SACHBEARBEITER_ADMIN);
             final var sachbearbeiterRolle = getOrCreateRolle(OidcConstants.ROLE_SACHBEARBEITER);
 
             final var sachbearbeiter = (Sachbearbeiter) new Sachbearbeiter()

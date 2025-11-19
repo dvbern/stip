@@ -101,7 +101,10 @@ class ZuordnungServiceTest {
         final var sachbearbeiterRepository = Mockito.mock(SachbearbeiterRepository.class);
         Mockito.when(sachbearbeiterRepository.findByRolle(Mockito.any()))
             .thenReturn(
-                Stream.of((Sachbearbeiter) new Sachbearbeiter().setRollen(TestRollen.getComposite(TestRollen.ADMIN)))
+                Stream.of(
+                    (Sachbearbeiter) new Sachbearbeiter()
+                        .setRollen(TestRollen.getComposite(TestRollen.SACHBEARBEITER_ADMIN))
+                )
             );
 
         final var pia = (PersonInAusbildung) new PersonInAusbildung()

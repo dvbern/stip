@@ -23,9 +23,9 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -58,6 +58,8 @@ public class VerfuegungService {
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final Antivirus antivirus;
+    private final DokumentUploadService dokumentUploadService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Transactional
     public void createVerfuegung(final UUID gesuchId) {
@@ -84,7 +86,7 @@ public class VerfuegungService {
 
     @Transactional
     public void createNegativeVerfuegungManuell(final UUID gesuchId, final FileUpload fileUpload) {
-        final var response = DokumentUploadUtil.validateScanUploadDokument(
+        final var response = dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
@@ -107,7 +109,7 @@ public class VerfuegungService {
     public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = verfuegungPdfService.createNegativeVerfuegungPdf(verfuegung);
 
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
+        final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
             NEGATIVE_VERFUEGUNG_DOKUMENT_NAME,
             s3,
@@ -123,7 +125,7 @@ public class VerfuegungService {
     public void createPdfForVerfuegungMitAnspruch(final Verfuegung verfuegung) {
         final ByteArrayOutputStream out = verfuegungPdfService.createVerfuegungMitAnspruchPdf(verfuegung);
 
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
+        final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
             VERFUEGUNG_DOKUMENT_NAME,
             s3,
@@ -138,7 +140,7 @@ public class VerfuegungService {
     @Transactional
     public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) throws IOException {
         final ByteArrayOutputStream verfuegungOut = verfuegungPdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
+        final String objectId = dokumentUploadService.executeUploadDocument(
             verfuegungOut.toByteArray(),
             VERFUEGUNG_DOKUMENT_NAME,
             s3,
@@ -161,7 +163,7 @@ public class VerfuegungService {
     public RestMulti<Buffer> getVerfuegung(final UUID verfuegungId) {
         final var verfuegung = verfuegungRepository.requireById(verfuegungId);
 
-        return DokumentDownloadUtil.getDokument(
+        return dokumentDownloadService.getDokument(
             s3,
             configService.getBucketName(),
             verfuegung.getObjectId(),

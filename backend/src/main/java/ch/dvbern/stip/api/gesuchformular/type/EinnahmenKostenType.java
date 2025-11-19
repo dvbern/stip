@@ -28,16 +28,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum EinnahmenKostenType {
     GESUCHSTELLER("gesuchsteller", (formular) -> {
-        if (formular.getEinnahmenKosten() == null) {
-            return null;
-        }
         return formular.getEinnahmenKosten();
     }),
     PARTNER("partner", formular -> {
-        if (formular.getPartner() == null) {
-            return null;
-        }
-
         return formular.getEinnahmenKostenPartner();
     });
 

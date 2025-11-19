@@ -23,12 +23,15 @@ import ch.dvbern.stip.api.common.util.providers.BetweenTestArgumentsProvider;
 import ch.dvbern.stip.api.common.util.providers.GetMonthsBetweenTestArgumentsProvider;
 import ch.dvbern.stip.api.common.util.providers.RoundToEndTestArgumentsProvider;
 import ch.dvbern.stip.api.common.util.providers.RoundToStartTestArgumentsProvider;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 class DateUtilTest {
     @ParameterizedTest
     @ArgumentsSource(RoundToStartTestArgumentsProvider.class)
