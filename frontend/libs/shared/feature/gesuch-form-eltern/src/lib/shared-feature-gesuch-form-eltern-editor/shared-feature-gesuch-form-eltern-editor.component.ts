@@ -32,6 +32,7 @@ import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
+  DokumentTyp,
   ElternTyp,
   ElternUpdate,
   GesuchFormularType,
@@ -225,6 +226,21 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     return wohnkosten > 0
       ? `ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_${elternTyp}`
       : null;
+  });
+
+  ausweisbFluechtlingSig = toSignal(
+    this.form.controls.ausweisbFluechtling.valueChanges,
+  );
+
+  lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteilSig().elternTyp;
+    const fluechtling = this.ausweisbFluechtlingSig();
+
+    if (fluechtling) {
+      return DokumentTyp[`ELTERN_LOHNABRECHNUNG_VERMOEGEN_${elternTyp}`];
+    }
+
+    return null;
   });
 
   constructor() {

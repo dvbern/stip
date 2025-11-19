@@ -35,8 +35,8 @@ import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
@@ -114,6 +114,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final StatusprotokollService statusprotokollService;
     private final AdminDokumenteService adminDokumenteService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -437,7 +438,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Blocking
     @PermitAll
     public RestMulti<Buffer> getBerechnungsBlattForGesuch(String token) {
-        final var gesuchId = DokumentDownloadUtil.getClaimId(
+        final var gesuchId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
@@ -452,7 +453,7 @@ public class GesuchResourceImpl implements GesuchResource {
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
-        return DokumentDownloadUtil
+        return dokumentDownloadService
             .getWrapedDokument(gesuchService.getBerechnungsblattFileName(gesuchId), finalByteStream);
     }
 
@@ -461,7 +462,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             gesuchId,
             DokumentDownloadConstants.GESUCH_ID_CLAIM,
             benutzerService,

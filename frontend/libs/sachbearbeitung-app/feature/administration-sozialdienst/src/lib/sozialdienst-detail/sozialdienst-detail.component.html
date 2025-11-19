@@ -79,9 +79,7 @@
         <!-- nachname -->
         <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>
-              {{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}
-            </mat-label>
+            <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
             <input
               [formControl]="zahlungsverbindungControls.nachname"
               data-testid="form-sozialdienst-nachname"
@@ -98,9 +96,7 @@
         <!-- vorname -->
         <div class="d-flex gap 2 align-content-center col-12 col-md-6 col-xl-4">
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>
-              {{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}
-            </mat-label>
+            <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
             <input
               [formControl]="zahlungsverbindungControls.vorname"
               data-testid="form-sozialdienst-vorname"
@@ -123,9 +119,7 @@
           [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
         >
           <mat-form-field dvSharedUiFormField class="flex-grow-1">
-            <mat-label>
-              {{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}
-            </mat-label>
+            <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}</mat-label>
             <input
               data-testid="form-sozialdienst-email"
               [formControl]="sozialdienstControls.email"

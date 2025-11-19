@@ -50,12 +50,7 @@
   <div class="row g-4 my-2">
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2">
       <mat-form-field dvSharedUiFormField class="flex-grow-1">
-        <mat-label>
-          {{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}
-          @if (!svnIsRequiredSig()) {
-            {{ 'shared.form.einnahmenkosten.optional.label' | transloco }}
-          }
-        </mat-label>
+        <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
         <input
           matInput
           formControlName="sozialversicherungsnummer"
@@ -171,7 +166,7 @@
         >
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-xl-3">
-            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
             <input
               matInput
               [dvMaxLength]="'small'"
@@ -195,7 +190,7 @@
 
           <!-- Ort -->
           <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-xl-9">
-            <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }} </mat-label>
+            <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
             <input
               matInput
               dvMaxLength
@@ -326,7 +321,7 @@
         </button>
       </div>
 
-      <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
+      <div class="d-flex gap-2 col-12">
         <div class="d-flex flex-column">
           <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | transloco
@@ -367,7 +362,7 @@
       dvSharedUiFormField
       class="col-12 col-md-6 col-xl-4"
     >
-      <div class="d-flex align-items-center pe-md-3 gap-2">
+      <div class="d-flex align-items-center col-12 gap-2">
         <label>{{
           'shared.form.eltern.ausweisbFluechtling.' +
             (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
@@ -382,13 +377,24 @@
           <span class="material-symbols-rounded"> info </span>
         </button>
       </div>
-      <div class="d-flex flex-column">
-        <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
-        <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
+
+      <div class="d-flex gap-2 col-12">
+        <div class="d-flex flex-column">
+          <mat-radio-button data-testid="yes" [value]="true">{{
+            'shared.form.radio.yes' | transloco
+          }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
+        </div>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="changes.ausweisbFluechtling | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+        ></dv-shared-ui-form-zuvor-hint>
+        @if (lohnabrechnungVermoegenDocumentSig(); as options) {
+          <dv-shared-pattern-document-upload
+            class="flex-shrink-1 ms-auto mt-2"
+            [optionsSig]="options"
+          ></dv-shared-pattern-document-upload>
+        }
       </div>
-      <dv-shared-ui-form-zuvor-hint
-        [changes]="changes.ausweisbFluechtling | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
-      ></dv-shared-ui-form-zuvor-hint>
       <div class="group-errors">
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}

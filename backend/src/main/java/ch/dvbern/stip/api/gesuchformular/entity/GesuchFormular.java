@@ -136,13 +136,7 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKostenPartner"
 )
-@EinnahmenKostenZulagenRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKostenPartner",
-    einnahmenKostenType = EinnahmenKostenType.PARTNER
-)
+
 @DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -168,13 +162,6 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKosten",
     einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
-)
-@EinnahmenKostenBetreuungskostenRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKostenPartner",
-    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @EinnahmenKostenSteuerjahrInPastOrCurrentConstraint(
     groups = {

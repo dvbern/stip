@@ -116,8 +116,8 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
 
   form = this.formBuilder.group({
     steuererklaerungInBern: [<boolean | null>null, [Validators.required]],
-    unterhaltsbeitraege: [<string | null>null, [Validators.required]],
-    renten: [<string | null>null, [Validators.required]],
+    unterhaltsbeitraege: [<string | undefined>undefined],
+    renten: [<string | undefined>undefined],
     ergaenzungsleistungen: [<string | undefined>undefined],
     einnahmenBGSA: [<string | undefined>undefined],
     andereEinnahmen: [<string | undefined>undefined],
@@ -266,8 +266,6 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const { gesuch, gesuchFormular } = this.viewSig();
     const formValues = convertTempFormToRealValues(this.form, [
       'steuererklaerungInBern',
-      'unterhaltsbeitraege',
-      'renten',
     ]);
 
     const steuererklaerung = {

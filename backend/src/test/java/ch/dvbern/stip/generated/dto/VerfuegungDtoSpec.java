@@ -140,9 +140,9 @@ public class VerfuegungDtoSpec {
    * Get stipDecision
    * @return stipDecision
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_STIP_DECISION)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public StipDecisionDtoSpec getStipDecision() {
     return stipDecision;
@@ -150,7 +150,7 @@ public class VerfuegungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STIP_DECISION)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setStipDecision(StipDecisionDtoSpec stipDecision) {
     this.stipDecision = stipDecision;
   }

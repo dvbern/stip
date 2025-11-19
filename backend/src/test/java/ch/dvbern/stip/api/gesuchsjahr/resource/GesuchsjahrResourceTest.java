@@ -17,12 +17,11 @@
 
 package ch.dvbern.stip.api.gesuchsjahr.resource;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.GesuchsjahrTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.GesuchsjahrApiSpec;
@@ -44,7 +43,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
@@ -68,7 +66,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(2)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createTest() {
         final var createDto = GesuchsjahrTestSpecGenerator.gesuchsjahrCreateDtoSpec;
         gesuchsjahr = apiSpec.createGesuchsjahr()
@@ -83,7 +81,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(3)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void readTest() {
         read();
     }
@@ -110,7 +108,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(4)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void readAllTest() {
         final var read = apiSpec.getGesuchsjahre()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -125,7 +123,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(5)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void updateTest() {
         final var updateDto = GesuchsjahrTestSpecGenerator.gesuchsjahrUpdateDtoSpec;
         final var updatedBezeichnungDe = gesuchsjahr.getBezeichnungDe() + "UPDATED";
@@ -146,7 +144,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(6)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void publishTest() {
         final var published = apiSpec.publishGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
@@ -162,7 +160,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(7)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void readonlyUpdateFailsTest() {
         final var updateDto = GesuchsjahrTestSpecGenerator.gesuchsjahrUpdateDtoSpec;
         final var updatedBezeichnungDe = gesuchsjahr.getBezeichnungDe() + "UPDATED";
@@ -178,7 +176,7 @@ class GesuchsjahrResourceTest {
 
     @Test
     @Order(8)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void readonlyDeleteFailsTest() {
         apiSpec.deleteGesuchsjahr()
             .gesuchsjahrIdPath(gesuchsjahr.getId())
