@@ -1,4 +1,5 @@
 #!/bin/sh
+contract="$(git rev-parse --show-toplevel)/contract"
 backend="$(git rev-parse --show-toplevel)/backend"
 frontend="$(git rev-parse --show-toplevel)/frontend"
 
@@ -7,6 +8,23 @@ export NX_TUI=false
 hasChanges() {
     ! git diff --quiet --stat HEAD -- $1
 }
+
+if hasChanges $contract; then
+    echo "[hooks] contract has unstaged changes, running linting"
+    cd $contract
+
+    npm run build:no-output -- -o .temp_openapi.yaml
+    SUM=$(md5sum < .temp_openapi.yaml)
+    SUM_GENERATED=$(md5sum < openapi.yaml)
+    rm .temp_openapi.yaml
+    if [ "$SUM" = "$SUM_GENERATED" ]; then
+        echo "[hooks] contract is up to date, running lint"
+    else
+        echo "[hooks] ERROR: contract build has not been generated, please run 'npm run build' to generate the contract"
+        exit 1
+    fi
+    npm run lint
+fi
 
 if hasChanges $frontend; then
     echo "[hooks] frontend has unstaged changes, linting, validating and running tests"
