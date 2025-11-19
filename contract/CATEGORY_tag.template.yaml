@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+
+  # Your Path definitions go here
+
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+
+  # Schema definitions that are only relevant for this file
+  # Definitions accessible by other files should be in components/common.yaml | components/{type}.yaml
+
+security:
+  $ref: './components/security.yaml#/security'

@@ -1,0 +1,665 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  '/gesuchDokument/customGesuchDokument':
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomDokumentTypCreate'
+        required: true
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchDokument'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createCustomDokumentTyp
+      summary: create CustomDokumentTyp
+  '/gesuchDokument/customGesuchDokument/{customDokumentTypId}':
+    parameters:
+      - name: customDokumentTypId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: |
+            Custom Dokument Typ deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteCustomDokumentTyp
+      summary: delete a customDokumentTyp
+  '/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: './components/common.yaml#/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns a Dokument for a given GesuchTrancheId and a DokumentTyp
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchDokumentForTypGS
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Historisiert für den GS
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: './components/common.yaml#/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createDokumentGS
+      summary: Upload a file for the given Typ to the Tranche; GS Endpoint
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: './components/common.yaml#/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns a Dokument for a given GesuchTrancheId and a DokumentTyp
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchDokumentForTypSB
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: dokumentTyp
+          schema:
+            $ref: './components/common.yaml#/DokumentTyp'
+          in: path
+          required: true
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createDokumentSB
+      summary: Upload a file for the given Typ to the Tranche; SB Endpoint
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/customGesuchDokument/sb/{customDokumentTypId}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns an Array of Dokumente for a given GesuchTrancheId and a CustomDokumentTyp
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getCustomGesuchDokumentForTypSB
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: uploadCustomGesuchDokumentSB
+      summary: Upload a file for the given customDokumentTyp to the Tranche; SB Endpoint
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/customGesuchDokument/gs/{customDokumentTypId}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchDokument'
+          description: Returns an Array of Dokumente for a given GesuchTrancheId and a CustomDokumentTyp
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getCustomGesuchDokumentForTypGS
+      summary: Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den GS
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+        required: true
+      tags:
+        - Dokument
+      parameters:
+        - name: customDokumentTypId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: uploadCustomGesuchDokumentGS
+      summary: Upload a file for the given customDokumentTyp to the Tranche; GS Endpoint
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/gesuchDokument/{gesuchDokumentId}/kommentare/gs':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: gesuchDokumentId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+          description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchDokumentKommentareGS
+      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+  '/gesuchDokument/{gesuchDokumentId}/kommentare/sb':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - name: gesuchDokumentId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GesuchDokumentKommentar'
+          description: Returns an Array of GesuchDokumentKommentar for a given GesuchDokuemntId
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchDokumentKommentareSB
+      summary: Returniert GesuchDokumentKommentare zu einem GesuchDokument.
+  '/gesuchDokument/{gesuchDokumentId}/akzeptieren':
+    parameters:
+      - name: gesuchDokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchDokumentAkzeptieren
+  '/gesuchDokument/{gesuchDokumentId}/ablehnen':
+    parameters:
+      - name: gesuchDokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchDokumentAblehnenRequest'
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchDokumentAblehnen
+  '/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}':
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnterschriftenblattCreate'
+      parameters:
+        - $ref: '#/components/parameters/unterschriftenblattTyp'
+        - $ref: './components/parameters.yaml#/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createUnterschriftenblatt
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/unterschriftenblatt/{gesuchId}':
+    get:
+      tags:
+        - Dokument
+      parameters:
+        - $ref: './components/parameters.yaml#/gesuchId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnterschriftenblattDokument'
+          description: Returns an Array of Unterschriftenblaetter
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getUnterschriftenblaetterForGesuch
+  '/unterschriftenblatt/dokument/{dokumentId}':
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteUnterschriftenblattDokument
+      summary: deletes a Dokument
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+  '/dokument/{dokumentArt}/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: dokumentArt
+        schema:
+          $ref: '#/components/schemas/DokumentArt'
+        in: path
+        required: true
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: getDokument
+      summary: get Dokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  '/dokument/gs/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteDokumentGS
+      summary: deletes a Dokument; GS Endpoint
+  '/dokument/sb/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteDokumentSB
+      summary: deletes a Dokument; SB Endpoint
+  '/dokument/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+          description: File returned
+      operationId: getDokumentDownloadToken
+      summary: get Dokument Download Token
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  parameters:
+    unterschriftenblattTyp:
+      name: unterschriftenblattTyp
+      schema:
+        $ref: './components/common.yaml#/UnterschriftenblattDokumentTyp'
+      in: path
+      required: true
+  schemas:
+    GesuchDokumentKommentar:
+      description: 'Kommentar zu einem (abgelehnten) GesuchDokument'
+      type: object
+      required:
+        - gesuchTrancheId
+        - gesuchDokumentId
+      properties:
+        gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
+        gesuchDokumentId:
+          $ref: './components/common.yaml#/UUID'
+        dokumentStatus:
+          $ref: './components/common.yaml#/Dokumentstatus'
+        kommentar:
+          type: string
+        user_erstellt:
+          type: string
+        timestampErstellt:
+          $ref: './components/common.yaml#/LocalDate'
+    GesuchDokumentAblehnenRequest:
+      description: 'Meta information um ein GesuchDokument abzulehnen'
+      type: object
+      properties:
+        kommentar:
+          $ref: '#/components/schemas/GesuchDokumentKommentar'
+    CustomDokumentTypCreate:
+      type: object
+      required:
+        - type
+        - description
+        - trancheId
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        trancheId:
+          $ref: './components/common.yaml#/UUID'
+    DokumentCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
+    UnterschriftenblattCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
+    UnterschriftenblattDokument:
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+      type: object
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        dokumentTyp:
+          $ref: './components/common.yaml#/UnterschriftenblattDokumentTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Dokument'
+    NullableGesuchDokument:
+      type: object
+      properties:
+        value:
+          $ref: './components/common.yaml#/GesuchDokument'
+    DokumentArt:
+      enum:
+        - GESUCH_DOKUMENT
+        - UNTERSCHRIFTENBLATT
+        - CUSTOM_DOKUMENT
+        - BESCHWERDE_ENTSCHEID
+      type: string
+security:
+  $ref: './components/security.yaml#/security'

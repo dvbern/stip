@@ -278,7 +278,7 @@ export class DokumentService {
             }
         }
 
-        const localVarPath = `/gesuchDokument/customGesuchDokument/`;
+        const localVarPath = `/gesuchDokument/customGesuchDokument`;
         return this.httpClient.request<GesuchDokument>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
