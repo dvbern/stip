@@ -92,6 +92,14 @@ kstip:
 quarkus:
 #  live-reload:
 #    instrumentation: true
+  hibernate-validator:
+    method-validation:
+      # Seems to be an issue with hibernate-validator < 9.0
+      # Currently we are using 8.0.2
+      # see:
+      # * https://github.com/quarkusio/quarkus/issues/35144
+      # * ^--- was closed by https://github.com/quarkusio/quarkus/pull/42292
+      allow-overriding-parameter-constraints: true
   log:
     sentry:
       enabled: true

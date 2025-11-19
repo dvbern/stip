@@ -18,16 +18,20 @@
 package ch.dvbern.stip.api.darlehen.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import jakarta.annotation.Nullable;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @DarlehenValidationConstraint
 @Audited
@@ -40,48 +44,51 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Darlehen extends AbstractMandantEntity {
     @NotNull
     @Column(name = "will_darlehen", nullable = false)
     private Boolean willDarlehen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Min(value = 0)
     @Column(name = "betrag_darlehen", nullable = true)
     private Integer betragDarlehen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Min(value = 0)
     @Column(name = "betrag_bezogen_kanton", nullable = true)
     private Integer betragBezogenKanton;
 
     @Min(value = 0)
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "schulden", nullable = true)
     private Integer schulden;
 
     @Min(value = 0)
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "anzahl_betreibungen", nullable = true)
     private Integer anzahlBetreibungen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "grund_nicht_berechtigt", nullable = true)
     private Boolean grundNichtBerechtigt;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "grund_ausbildung_zwoelf_jahre", nullable = true)
     private Boolean grundAusbildungZwoelfJahre;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "grund_hohe_gebuehren", nullable = true)
     private Boolean grundHoheGebuehren;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "grund_anschaffungen_fuer_ausbildung", nullable = true)
     private Boolean grundAnschaffungenFuerAusbildung;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "grund_zweitausbildung", nullable = true)
     private Boolean grundZweitausbildung;
 

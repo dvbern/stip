@@ -372,6 +372,12 @@
       <artifactId>svg</artifactId>
       <version>${itext.version}</version>
     </dependency>
+    <dependency>
+      <groupId>cc.jilt</groupId>
+      <artifactId>jilt</artifactId>
+      <version>1.8.4</version>
+      <scope>provided</scope> <!-- Jilt is not needed at runtime -->
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -437,10 +443,16 @@
               <artifactId>checker</artifactId>
               <version>${checkerframework.version}</version>
             </path>
+            <path>
+              <groupId>cc.jilt</groupId>
+              <artifactId>jilt</artifactId>
+              <version>1.8.4</version>
+            </path>
           </annotationProcessorPaths>
           <annotationProcessors>
             <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
             <annotationProcessor>org.mapstruct.ap.MappingProcessor</annotationProcessor>
+            <annotationProcessor>org.jilt.JiltAnnotationProcessor</annotationProcessor>
           </annotationProcessors>
         </configuration>
       </plugin>
