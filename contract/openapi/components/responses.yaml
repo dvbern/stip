@@ -1,0 +1,22 @@
+Unauthorized:
+  content:
+    text/plain: {}
+  description: Die Zugriffsdaten sind nicht gültig
+Forbidden:
+  content:
+    text/plain: {}
+  description: Der Zugriff wurde verweigert
+NotFound:
+  content:
+    text/plain: {}
+  description: Die angeforderte Ressource existiert nicht
+ServerError:
+  content:
+    text/plain: {}
+  description: Interner Server Fehler
+BadRequest:
+  content:
+    application/json:
+      schema:
+        $ref: './common.yaml#/ValidationReport'
+  description: Die Kunde Request Daten sind ungültig

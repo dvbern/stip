@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  '/fall/sb':
+    get:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Fall'
+          description: Get all Faelle which are assigned to the currently logged in Sachbearbeiter
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getFaelleForSb
+      summary: Get alle Faelle für den SB
+  '/fall/gs':
+    get:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Fall'
+          description: Get the current Fall for the currently logged in Gesuchsteller
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getFallForGs
+      summary: Get Fall für den GS
+    post:
+      tags:
+        - Fall
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Fall'
+          description: Return des neu erstellten Falls für den GS
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createFallForGs
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+security:
+  $ref: './components/security.yaml#/security'

@@ -3326,7 +3326,7 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Updates the Gesuch with the given Id for GS
+     * Updates the Gesuch with the given Id
      * 
      *
      * @see #gesuchIdPath  (required)
@@ -3399,7 +3399,7 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Updates the Gesuch with the given Id for SB
+     * Updates the Gesuch with the given Id
      * 
      *
      * @see #gesuchIdPath  (required)
