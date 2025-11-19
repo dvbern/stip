@@ -23,7 +23,7 @@ import java.util.Set;
 public final class OidcConstants {
     public static final String ROLE_GESUCHSTELLER = "V0_Gesuchsteller";
     public static final String ROLE_SACHBEARBEITER = "V0_Sachbearbeiter";
-    public static final String ROLE_ADMIN = "V0_Sachbearbeiter-Admin";
+    public static final String ROLE_SACHBEARBEITER_ADMIN = "V0_Sachbearbeiter-Admin";
     public static final String ROLE_JURIST = "V0_Jurist";
     public static final String ROLE_FREIGABESTELLE = "V0_Freigabestelle";
     public static final String ROLE_SOZIALDIENST_MITARBEITER = "V0_Sozialdienst-Mitarbeiter";
@@ -34,7 +34,7 @@ public final class OidcConstants {
     public static final Set<String> POSSIBLE_SB_ROLES = Collections.unmodifiableSet(
         Set.of(
             ROLE_SACHBEARBEITER,
-            ROLE_ADMIN,
+            ROLE_SACHBEARBEITER_ADMIN,
             ROLE_JURIST,
             ROLE_FREIGABESTELLE
         )
@@ -43,7 +43,7 @@ public final class OidcConstants {
     public static final Set<String> POSSIBLE_USER_ROLES = Collections.unmodifiableSet(
         Set.of(
             ROLE_SACHBEARBEITER,
-            ROLE_ADMIN,
+            ROLE_SACHBEARBEITER_ADMIN,
             ROLE_JURIST,
             ROLE_SOZIALDIENST_MITARBEITER,
             ROLE_SOZIALDIENST_ADMIN,

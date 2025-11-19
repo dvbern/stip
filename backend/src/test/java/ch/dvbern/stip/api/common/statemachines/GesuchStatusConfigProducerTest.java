@@ -36,6 +36,8 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersend
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -43,6 +45,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
+@Execution(ExecutionMode.CONCURRENT)
 class GesuchStatusConfigProducerTest {
     @Test
     void allGesuchstatusInConfig() {

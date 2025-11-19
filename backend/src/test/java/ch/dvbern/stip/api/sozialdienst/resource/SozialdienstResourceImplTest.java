@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.sozialdienst.resource;
 
 import java.util.Arrays;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstAdminCreateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.sozialdienst.SozialdienstCreateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -63,7 +63,7 @@ class SozialdienstResourceImplTest {
 
     @Order(1)
     @Test
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createSozialdienst() {
         final var admin = SozialdienstAdminCreateDtoSpecModel.sozialdienstAdminCreateDtoSpec();
         final var sozialdienst = SozialdienstCreateDtoSpecModel.sozialdienstCreateDtoSpec(admin);
@@ -80,7 +80,7 @@ class SozialdienstResourceImplTest {
     }
 
     @Order(2)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Test
     void getSozialdienstById() {
         dtoSpec = apiSpec.getSozialdienst()
@@ -99,7 +99,7 @@ class SozialdienstResourceImplTest {
     }
 
     @Order(3)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Test
     void getSozialdienste() {
         dtoSpec = Arrays.stream(
@@ -118,7 +118,7 @@ class SozialdienstResourceImplTest {
     }
 
     @Order(4)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     @Test
     void updateSozialdienst() {
         var updateDto = new SozialdienstUpdateDtoSpec();
