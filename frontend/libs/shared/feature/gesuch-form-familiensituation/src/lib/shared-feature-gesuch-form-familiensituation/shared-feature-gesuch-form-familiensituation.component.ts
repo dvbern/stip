@@ -14,6 +14,7 @@ import {
   ElementRef,
   OnInit,
   WritableSignal,
+  computed,
   effect,
   inject,
   signal,
@@ -35,6 +36,7 @@ import { Subject } from 'rxjs';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
   ElternAbwesenheitsGrund,
@@ -123,6 +125,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   private einreichenStore = inject(EinreichenStore);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private config = inject(SharedModelCompileTimeConfig);
 
   readonly ELTERNSCHAFTSTEILUNG = Elternschaftsteilung;
   readonly ELTERN_ABWESENHEITS_GRUND = ElternAbwesenheitsGrund;
@@ -167,7 +170,25 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   });
 
   duringAnimation: 'show' | 'hide' = 'show';
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  private storeViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchsView,
+  );
+  hasHiddenVersteckteElternSig = computed(() => {
+    const { gesuchFormular, trancheSetting } = this.storeViewSig();
+
+    return (
+      trancheSetting?.type === 'AENDERUNG' &&
+      !!gesuchFormular?.versteckteEltern?.length &&
+      this.config.isGesuchApp
+    );
+  });
+  viewSig = computed(() => {
+    const view = this.storeViewSig();
+    return {
+      ...view,
+      readonly: view.readonly || this.hasHiddenVersteckteElternSig(),
+    };
+  });
   updateValidity$ = new Subject<unknown>();
 
   stateSig: WritableSignal<FamSitStepMeta> = signal({
