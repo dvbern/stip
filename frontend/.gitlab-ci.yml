@@ -65,4 +65,4 @@ include:
       version: '$VERSION'
       build-latest: false
       build-args: |
-        APP=demo-app
+        APP=gesuch-app
