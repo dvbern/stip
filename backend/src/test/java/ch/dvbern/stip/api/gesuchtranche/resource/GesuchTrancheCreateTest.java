@@ -49,6 +49,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -340,8 +341,36 @@ class GesuchTrancheCreateTest {
     }
 
     @Test
-    @TestAsSachbearbeiter
     @Order(14)
+    @TestAsSachbearbeiter
+    void changeToFinalState() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
+            .satisfiesAnyOf(
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.STIPENDIENANSPRUCH),
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
+            );
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(15)
     void getInitialTrancheChangesAsSBInGesuchstatusEingereichtShouldThrow() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -362,7 +391,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(16)
     void getInitialTrancheChangesWithInvalidTrancheId() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -375,7 +404,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(16)
+    @Order(17)
     void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
         // the gesuch (tranchen) of state eingereicht should be returned to GS
         // so the total count of (visible) tranchen should be 1 instead of 2
