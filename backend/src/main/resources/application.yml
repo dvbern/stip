@@ -260,7 +260,13 @@ quarkus:
 
 '%test':
   quarkus:
+    http:
+      test-port: 0
     log:
+      ## Uncomment to enable DEBUG logging for WebApplicationException, this debugs every failing request in STDOUT
+      # category:
+      #   "WebApplicationException":
+      #     level: DEBUG
       sentry:
         enabled: false
     antivirus:
@@ -268,7 +274,6 @@ quarkus:
         devservice:
           enabled: false
     hibernate-orm:
-      sql-load-script: 'db/test/init_test.sql'
       database:
         generation: 'drop-and-create'
     oidc:
@@ -283,6 +288,7 @@ quarkus:
             secret-access-key: 'test-secret'
         region: 'eu-central-2'
       devservices:
+        enabled: false
         buckets: '${bucket.name}'
     keycloak:
       admin-client:
@@ -290,6 +296,8 @@ quarkus:
         grant-type: password
         username: "test"
         password: "test"
+    quartz:
+      clustered: false
   bucket:
     name: 'stip-usercontent-test'
   keycloak:

@@ -31,9 +31,12 @@ import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID;
 
+@Execution(ExecutionMode.CONCURRENT)
 class ElternMapperTest {
 
     ElternMapper elternMapper = new ElternMapperImpl(new MockAdresseMapperImpl());

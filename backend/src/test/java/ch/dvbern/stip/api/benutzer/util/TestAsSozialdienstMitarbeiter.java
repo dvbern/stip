@@ -64,9 +64,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SOZIALDIENST_MITARBEITER_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = SOZIALDIENST_MITARBEITER_ID),
-        @Claim(key = "family_name", value = "Sozialdienst_Mitarbeiter"),
-        @Claim(key = "given_name", value = "Max")
+        @Claim(key = "sub", value = SOZIALDIENST_MITARBEITER_ID)
     }
 )
 public @interface TestAsSozialdienstMitarbeiter {
