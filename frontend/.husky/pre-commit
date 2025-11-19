@@ -14,8 +14,8 @@ if hasChanges $contract; then
     cd $contract
 
     npm run build:no-output -- -o .temp_openapi.yaml
-    SUM=$(cat .temp_openapi.yaml | md5)
-    SUM_GENERATED=$(cat openapi.yaml | md5)
+    SUM=$(md5sum < .temp_openapi.yaml)
+    SUM_GENERATED=$(md5sum < openapi.yaml)
     rm .temp_openapi.yaml
     if [ "$SUM" = "$SUM_GENERATED" ]; then
         echo "[hooks] contract is up to date, running lint"
