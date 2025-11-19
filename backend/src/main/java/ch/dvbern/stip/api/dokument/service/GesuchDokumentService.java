@@ -362,28 +362,19 @@ public class GesuchDokumentService {
     }
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
-        final var historicalDokumente = dokumentHistoryRepository.findInHistoryByObjectId(dokument.getObjectId());
-        Boolean canDelete = null;
+        // Count distinct historical Tranchen that reference the dokument
+        final var distinctHistoricalGesuchTranchenCount = dokumentHistoryRepository
+            .countDistinctTranchenThatReferenceDokumentByObjectId(dokument.getObjectId());
 
-        for (final var historicalDokument : historicalDokumente) {
-            final var historicalTranche = historicalDokument.getGesuchDokument().getGesuchTranche();
-            if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
-                return false;
-            }
-
-            if (trancheToBeDeletedFrom.getTyp() != historicalTranche.getTyp()) {
-                return false;
-            }
-
-            if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
-                canDelete = trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
-            }
-            if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-                canDelete = trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
-            }
+        // If more than 1 distinct Tranche reference it, we cannot delete the dokument from S3
+        if (distinctHistoricalGesuchTranchenCount > 1) {
+            return false;
         }
 
-        return Boolean.TRUE.equals(canDelete);
+        return switch (trancheToBeDeletedFrom.getTyp()) {
+            case TRANCHE -> trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+            case AENDERUNG -> trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
+        };
     }
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {

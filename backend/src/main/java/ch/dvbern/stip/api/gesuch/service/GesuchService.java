@@ -1013,36 +1013,16 @@ public class GesuchService {
         final var toUpdateEingereicht = toUpdate.stream().filter(gesuch -> !gesuch.isVerfuegt()).toList();
         final var toUpdateVerfuegt = toUpdate.stream().filter(Gesuch::isVerfuegt).toList();
 
-        final var toUpdateStipendienAnspruch = new ArrayList<Gesuch>();
-        final var toUpdateKeinStipendienAnspruch = new ArrayList<Gesuch>();
-
-        for (var gesuch : toUpdateVerfuegt) {
-            var verfuegtGesuch = gesuchHistoryRepository
-                .getLatestWhereStatusChangedToOneOf(gesuch.getId(), Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
-                .orElseThrow(NotFoundException::new);
-            if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.STIPENDIENANSPRUCH) {
-                toUpdateStipendienAnspruch.add(gesuch);
-            } else if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH) {
-                toUpdateKeinStipendienAnspruch.add(gesuch);
-            }
-        }
-
         if (!toUpdateEingereicht.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateEingereicht,
                 GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
-        if (!toUpdateStipendienAnspruch.isEmpty()) {
+        if (!toUpdateVerfuegt.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
-            );
-        }
-        if (!toUpdateKeinStipendienAnspruch.isEmpty()) {
-            gesuchStatusService.bulkTriggerStateMachineEvent(
-                toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.AENDERUNG_FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
     }
