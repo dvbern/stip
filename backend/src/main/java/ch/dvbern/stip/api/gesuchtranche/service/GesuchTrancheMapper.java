@@ -22,8 +22,10 @@ import java.util.List;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
@@ -57,6 +59,9 @@ public abstract class GesuchTrancheMapper {
 
     @Inject
     SteuererklaerungMapper steuererklaerungMapper;
+
+    @Inject
+    FamiliensituationMapper familiensituationMapper;
 
     @ToDtoDefaultMapping
     public abstract GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
@@ -151,6 +156,16 @@ public abstract class GesuchTrancheMapper {
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
     ) {
+        if (
+            gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+            && !gesuchTranche.getGesuchFormular().getVersteckteEltern().isEmpty()
+        ) {
+            // Override incoming Familiensituation for Aenderungen with versteckte Elternteile
+            final var replacementFamiliensituation =
+                familiensituationMapper.toUpdateDto(gesuchTranche.getGesuchFormular().getFamiliensituation());
+            newTranche.getGesuchFormular().setFamiliensituation(replacementFamiliensituation);
+        }
+
         if (newTranche.getGesuchFormular().getElterns() == null) {
             return;
         }
