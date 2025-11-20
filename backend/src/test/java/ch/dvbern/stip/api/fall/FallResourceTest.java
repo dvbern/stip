@@ -17,10 +17,9 @@
 
 package ch.dvbern.stip.api.fall;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller3;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.FallApiSpec;
@@ -39,7 +38,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
@@ -49,7 +47,7 @@ class FallResourceTest {
     public final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
     @Test
-    @TestAsGesuchsteller2
+    @TestAsGesuchsteller3
     @Order(1)
     void testCreateFallForGs() {
         fallApiSpec.createFallForGs()
@@ -60,7 +58,7 @@ class FallResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller2
+    @TestAsGesuchsteller3
     @Order(2)
     void testGetFallForGs() {
         var fall = fallApiSpec.getFallForGs()

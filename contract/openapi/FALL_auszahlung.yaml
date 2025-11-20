@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /auszahlung/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: 'components/common.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuszahlungUpdate'
+        required: true
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallAuszahlung'
+          description: Created Auszahlung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createAuszahlungForGesuch
+      summary: Creates a new Auszahlung for a Gesuch
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuszahlungUpdate'
+        required: true
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallAuszahlung'
+          description: Updated Auszahlung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateAuszahlungForGesuch
+      summary: Updates Auszahlung
+    get:
+      tags:
+        - Auszahlung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallAuszahlung'
+          description: return Auszahlung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAuszahlungForGesuch
+      summary: Get Auszahlung
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  schemas:
+    FallAuszahlung:
+      type: object
+      required:
+        - isDelegated
+      properties:
+        auszahlung:
+          $ref: '#/components/schemas/AuszahlungUpdate'
+        isDelegated:
+          type: boolean
+    AuszahlungUpdate:
+      title: Root Type for Auszahlung
+      type: object
+      required:
+        - auszahlungAnSozialdienst
+      properties:
+        auszahlungAnSozialdienst:
+          type: boolean
+        zahlungsverbindung:
+          $ref: 'components/common.yaml#/Zahlungsverbindung'
+security:
+  $ref: './components/security.yaml#/security'

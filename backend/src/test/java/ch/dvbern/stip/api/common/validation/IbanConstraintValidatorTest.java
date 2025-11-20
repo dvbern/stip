@@ -19,6 +19,8 @@ package ch.dvbern.stip.api.common.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static ch.dvbern.stip.api.util.TestConstants.IBAN_AT_NUMMER_VALID;
 import static ch.dvbern.stip.api.util.TestConstants.IBAN_CH_NUMMER_INVALID;
@@ -31,6 +33,7 @@ import static ch.dvbern.stip.api.util.TestConstants.QR_IBAN_CH_VALID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 class IbanConstraintValidatorTest {
     private IbanConstraintValidator ibanValidator;
 

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchsperioden.scheduledtask;
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Singleton
 @Slf4j
+@UnlessBuildProfile("test")
 public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
     private final GesuchsperiodenService gesuchsperiodenService;
 

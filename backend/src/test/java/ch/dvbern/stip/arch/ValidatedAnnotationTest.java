@@ -20,9 +20,12 @@ package ch.dvbern.stip.arch;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.arch.util.ArchTestUtil;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+@Execution(ExecutionMode.CONCURRENT)
 class ValidatedAnnotationTest {
     @Test
     void test_resources_must_be_validated() {
