@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+
 import { SozialdienstAppFeatureDarlehenComponent } from './sozialdienst-app-feature-darlehen/sozialdienst-app-feature-darlehen.component';
 
 export const sozialdienstAppFeatureDarlehenRoutes: Route[] = [

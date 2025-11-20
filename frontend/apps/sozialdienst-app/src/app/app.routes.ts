@@ -46,6 +46,13 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'darlehen',
+        loadChildren: () =>
+          import('@dv/sozialdienst-app/feature/darlehen').then(
+            (m) => m.sozialdienstAppFeatureDarlehenRoutes,
+          ),
+      },
+      {
         path: 'administration',
         canActivate: [hasBenutzer, hasRoles(['V0_Sozialdienst-Admin'])],
         title: 'sachbearbeitung-app.admin.title',

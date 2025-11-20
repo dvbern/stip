@@ -942,6 +942,12 @@
   "shared.form.darlehen.ablehnen.dialog.message": "Voulez-vous refuser le prêt ? Après le refus, aucune modification ne sera possible.",
   "shared.form.darlehen.ablehnen.dialog.confirm": "Refuser le prêt",
   "shared.form.darlehen.ablehnen.success": "Le prêt a été refusé avec succès.",
+  "shared.form.darlehen.zurueckweisen": "Refuser le prêt",
+  "shared.form.darlehen.zurueckweisen.dialog.title": "Refuser le prêt",
+  "shared.form.darlehen.zurueckweisen.dialog.message": "Voulez-vous refuser le prêt ?",
+  "shared.form.darlehen.zurueckweisen.dialog.confirm": "Refuser le prêt",
+  "shared.form.darlehen.zurueckweisen.dialog.placeholder": "Raison du refus",
+  "shared.form.darlehen.zurueckweisen.success": "Le prêt a été refusé avec succès.",
 
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Désignation(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Désignation(FR)",

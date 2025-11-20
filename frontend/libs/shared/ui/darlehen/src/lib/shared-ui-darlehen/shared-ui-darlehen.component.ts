@@ -21,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 
@@ -35,6 +36,7 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -54,6 +56,7 @@ import { maskitoNumber } from '@dv/shared/util/maskito-util';
     MatCheckboxModule,
     MatRadioModule,
     MaskitoDirective,
+    RouterLink,
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
     SharedPatternDocumentUploadComponent,
@@ -169,9 +172,7 @@ export class SharedUiDarlehenComponent implements OnInit {
     ]);
   }
 
-  onCancel(): void {
-    // Implement cancel logic here, e.g., navigate away or reset the form
-  }
+  onCancel(): void {}
 
   darlehenCreate(): void {
     this.form.markAllAsTouched();
@@ -227,6 +228,22 @@ export class SharedUiDarlehenComponent implements OnInit {
       message: 'shared.form.darlehen.ablehnen.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.darlehen.ablehnen',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // this.zurueckweisenDarlehen();
+        }
+      });
+  }
+
+  darlehenZurueckweisen(): void {
+    SharedUiKommentarDialogComponent.open(this.dialog, {
+      entityId: this.gesuchIdSig()!,
+      titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
+      messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
+      placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',
+      confirmKey: 'shared.form.darlehen.zurueckweisen',
     })
       .afterClosed()
       .subscribe((result) => {

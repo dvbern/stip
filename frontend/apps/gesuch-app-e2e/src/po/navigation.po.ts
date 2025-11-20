@@ -12,7 +12,7 @@ export class GSNavigationPO {
   constructor(page: Page) {
     this.elems = {
       page,
-      navLinkDashboard: page.getByTestId('gesuch-step-nav-dashboard'),
+      navLinkDashboard: page.getByTestId('header-nav-dashboard'),
       buttonUserMenu: page.getByTestId('header-nav-user-menu'),
       buttonLogout: page.getByTestId('button-logout'),
       buttonProfile: page.getByTestId('button-profile'),

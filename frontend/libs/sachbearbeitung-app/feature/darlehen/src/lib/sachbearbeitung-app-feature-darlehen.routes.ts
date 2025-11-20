@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+
 import { SachbearbeitungAppFeatureDarlehenComponent } from './sachbearbeitung-app-feature-darlehen/sachbearbeitung-app-feature-darlehen.component';
 
 export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [

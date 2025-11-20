@@ -215,11 +215,11 @@
       </fieldset>
     </div>
 
-    <!-- Buttons -->
+    <!-- todo: show conditions Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:col-span-2">
-      <button type="button" data-testid="darlehen-cancel" (click)="onCancel()" class="btn btn-secondary">
-        {{ 'shared.cancel' | transloco }}
-      </button>
+      <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
+        <span>{{ 'shared.cancel' | transloco }}</span>
+      </a>
       <button type="submit" (click)="darlehenCreate()" class="btn btn-primary" data-testid="button-create-darlehen">
         {{ 'shared.form.darlehen.create' | transloco }}
       </button>
@@ -232,7 +232,7 @@
       >
         {{ 'shared.form.darlehen.freigeben' | transloco }}
       </button>
-      <!-- button akzeptieren (Freigabestelle ) was wenn sb auch freigabestelle hat? -->
+      <!-- button akzeptieren wenn freigabestelle und in Freigabe! -->
       <button
         type="button"
         data-testid="button-darlehen-akzeptieren"
@@ -240,6 +240,19 @@
         class="btn btn-primary"
       >
         {{ 'shared.form.darlehen.akzeptieren' | transloco }}
+      </button>
+      <!-- darlehen ablehnen  -->
+      <button type="button" data-testid="button-darlehen-ablehnen" (click)="darlehenAblehnen()" class="btn btn-primary">
+        {{ 'shared.form.darlehen.ablehnen' | transloco }}
+      </button>
+      <!-- dalehen zurückweisen -->
+      <button
+        type="button"
+        data-testid="button-darlehen-zurueckweisen"
+        (click)="darlehenZurueckweisen()"
+        class="btn btn-primary"
+      >
+        {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
       </button>
     </dv-shared-ui-step-form-buttons>
   </form>

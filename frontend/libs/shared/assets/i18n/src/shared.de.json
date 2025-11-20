@@ -942,6 +942,12 @@
   "shared.form.darlehen.ablehnen.dialog.message": "Möchten Sie das Darlehen ablehnen? Nach der Ablehnung sind keine Änderungen mehr möglich.",
   "shared.form.darlehen.ablehnen.dialog.confirm": "Darlehen ablehnen",
   "shared.form.darlehen.ablehnen.success": "Das Darlehen wurde erfolgreich abgelehnt.",
+  "shared.form.darlehen.zurueckweisen": "Darlehen zurückweisen",
+  "shared.form.darlehen.zurueckweisen.dialog.title": "Darlehen zurückweisen",
+  "shared.form.darlehen.zurueckweisen.dialog.message": "Möchten Sie das Darlehen zurückweisen?",
+  "shared.form.darlehen.zurueckweisen.dialog.confirm": "Darlehen zurückweisen",
+  "shared.form.darlehen.zurueckweisen.dialog.placeholder": "Grund für die Zurückweisung",
+  "shared.form.darlehen.zurueckweisen.success": "Das Darlehen wurde erfolgreich zurückgewiesen.",
 
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Bezeichnung(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Bezeichnung(FR)",

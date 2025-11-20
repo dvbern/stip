@@ -15,17 +15,18 @@
     <a
       [routerLink]="['/']"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="gesuch-step-nav-dashboard"
+      data-testid="header-nav-dashboard"
     >
       <i class="material-symbols-rounded me-2 text-white">dashboard</i>
       <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
 
+    <!-- todo: -->
     <!-- @let fallId = fallIdSig();
     <a
       [routerLink]="['/auszahlung', fallId]"
       class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
-      data-testid="gesuch-step-nav-auszahlung"
+      data-testid="header-nav-auszahlung"
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
@@ -35,7 +36,7 @@
     <a
       [routerLink]="['/darlehen']"
       class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
-      data-testid="gesuch-step-nav-darlehen"
+      data-testid="header-nav-darlehen"
     >
       <i class="material-symbols-rounded me-2 text-white">payments</i>
       <span>{{ t('shared.menu.darlehen') }}</span>
