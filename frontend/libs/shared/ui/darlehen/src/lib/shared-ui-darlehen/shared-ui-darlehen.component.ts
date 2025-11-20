@@ -6,7 +6,6 @@ import {
   OnInit,
   inject,
   input,
-  output,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -18,23 +17,24 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
-import { Store } from '@ngrx/store';
 
-import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { DokumentTyp } from '@dv/shared/model/gesuch';
 import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
@@ -44,7 +44,7 @@ import {
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 
 @Component({
-  selector: 'dv-shared-feature-darlehen',
+  selector: 'dv-shared-ui-darlehen',
   imports: [
     CommonModule,
     TranslocoPipe,
@@ -59,15 +59,16 @@ import { maskitoNumber } from '@dv/shared/util/maskito-util';
     SharedPatternDocumentUploadComponent,
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
+    SharedUiIfSachbearbeiterDirective,
   ],
-  templateUrl: './shared-feature-darlehen.component.html',
+  templateUrl: './shared-ui-darlehen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureDarlehenComponent implements OnInit {
-  private store = inject(Store);
+export class SharedUiDarlehenComponent implements OnInit {
+  // private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
-  private einreichenStore = inject(EinreichenStore);
+  private dialog = inject(MatDialog);
   private elementRef = inject(ElementRef);
 
   // If this input is set, the component is used in a dialog context
@@ -75,12 +76,14 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   maskitoNumber = maskitoNumber;
 
+  // todo: replace dummy signal with real data from store
   dokumentDummySig = signal({
     trancheId: 'dummy',
     allowTypes: 'pdf',
     permissions: {},
   });
 
+  // todo: this function will need to be updated
   /* needs {
       trancheId: string | undefined;
       allowTypes: string | undefined;
@@ -91,6 +94,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     this.dokumentDummySig,
   );
 
+  // Todo: error is not shown yet, or not anymore
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
   ) => {
@@ -99,7 +103,7 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   };
 
   form = this.formBuilder.group({
-    betragDarlehen: [<string | null>null, [Validators.required]],
+    betragDarlehenGewuenscht: [<string | null>null, [Validators.required]],
     betragBezogenKanton: [<string | null>null, [Validators.required]],
     schulden: [<string | null>null, [Validators.required]],
     anzahlBetreibungen: [<number | null>null, [Validators.required]],
@@ -154,31 +158,81 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     // this.store.dispatch(SharedEventGesuchFormDarlehen.init());
   }
 
-  constructor() {
-    this.formUtils.observeInvalidFieldsAndMarkControls(
-      this.einreichenStore.invalidFormularControlsSig,
-      this.form,
-    );
-  }
+  constructor() {}
 
   private buildUpdatedGesuchFromForm() {
     const formValues = convertTempFormToRealValues(this.form, [
-      'betragDarlehen',
+      'betragDarlehenGewuenscht',
       'betragBezogenKanton',
       'schulden',
       'anzahlBetreibungen',
     ]);
   }
 
-  handleSave(): void {
+  onCancel(): void {
+    // Implement cancel logic here, e.g., navigate away or reset the form
+  }
+
+  darlehenCreate(): void {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
 
-    // const { gesuchId, trancheId, gesuchFormular } =
-    //   this.buildUpdatedGesuchFromForm();
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.darlehen.create.dialog.title',
+      message: 'shared.form.darlehen.create.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.darlehen.create.dialog.confirm',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // this.createDarlehen();
+        }
+      });
+  }
 
-    if (this.form.valid) {
-      // todo: dispatch save event
-    }
+  darlehenFreigeben(): void {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.darlehen.freigeben.dialog.title',
+      message: 'shared.form.darlehen.freigeben.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.darlehen.freigeben',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // this.freigebenDarlehen();
+        }
+      });
+  }
+
+  darlehenAkzeptieren(): void {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.darlehen.akzeptieren.dialog.title',
+      message: 'shared.form.darlehen.akzeptieren.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.darlehen.akzeptieren',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // this.akzeptierenDarlehen();
+        }
+      });
+  }
+
+  darlehenAblehnen(): void {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.darlehen.ablehnen.dialog.title',
+      message: 'shared.form.darlehen.ablehnen.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.darlehen.ablehnen',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // this.zurueckweisenDarlehen();
+        }
+      });
   }
 }

@@ -8,7 +8,11 @@ export const gesuchAppFeatureDarlehenRoutes: Route[] = [
     pathMatch: 'prefix',
     providers: [],
     children: [
-      { path: ':fallId', component: GesuchAppFeatureDarlehenComponent },
+      {
+        path: ':fallId',
+        title: 'shared.darlehen.title',
+        component: GesuchAppFeatureDarlehenComponent,
+      },
     ],
   },
 ];

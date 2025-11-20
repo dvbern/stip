@@ -3,7 +3,7 @@
     <h1 class="tw:!mb-8">
       {{ t('shared.darlehen.title') }}
     </h1>
-    <dv-shared-feature-darlehen [gesuchIdSig]="null"></dv-shared-feature-darlehen>
+    <dv-shared-ui-darlehen [gesuchIdSig]="null"></dv-shared-ui-darlehen>
   </div>
 
   <!-- MOBILE NAV -->
@@ -20,6 +20,17 @@
       <i class="material-symbols-rounded me-2 text-white">dashboard</i>
       <span>{{ t('shared.menu.dashboard') }}</span>
     </a>
+
+    <!-- @let fallId = fallIdSig();
+    <a
+      [routerLink]="['/auszahlung', fallId]"
+      class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
+      data-testid="gesuch-step-nav-auszahlung"
+      [class.disabled]="!fallId"
+    >
+      <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
+      <span>{{ t('shared.menu.auszahlung') }}</span>
+    </a> -->
 
     <a
       [routerLink]="['/darlehen']"
