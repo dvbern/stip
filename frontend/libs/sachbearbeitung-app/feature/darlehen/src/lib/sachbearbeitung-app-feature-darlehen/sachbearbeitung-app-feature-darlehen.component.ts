@@ -1,20 +1,29 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { Store } from '@ngrx/store';
 
-import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
+import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
+import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiDarlehenComponent } from '@dv/shared/ui/darlehen';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-darlehen',
   imports: [
-    RouterLink,
-    TranslocoDirective,
-    SharedPatternMainLayoutComponent,
+    CommonModule,
+    MatSidenavModule,
+    SharedPatternMobileSidenavComponent,
+    SachbearbeitungAppPatternGesuchHeaderComponent,
     SharedUiDarlehenComponent,
+    TranslocoPipe,
   ],
   templateUrl: './sachbearbeitung-app-feature-darlehen.component.html',
   styleUrl: './sachbearbeitung-app-feature-darlehen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureDarlehenComponent {}
+export class SachbearbeitungAppFeatureDarlehenComponent {
+  private store = inject(Store);
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
+}

@@ -7,12 +7,7 @@
     <div class="tw:dv-form-half" *dvIfSachbearbeiter>
       <!-- darlehenGewaehren mat-radio-group -->
       <!-- todo: change to [formcontrol] -->
-      <mat-radio-group
-        class="tw:w-full"
-        formControlName="darlehenGewaehren"
-        data-testid="form-darlehen-darlehenGewaehren"
-        dvSharedUiFormField
-      >
+      <mat-radio-group class="tw:w-full" data-testid="form-darlehen-darlehenGewaehren" dvSharedUiFormField>
         <div class="tw:flex tw:w-full">
           <mat-label>{{ 'shared.form.darlehen.darlehenGewaehren.label' | transloco }}</mat-label>
         </div>
@@ -33,13 +28,7 @@
       <!-- darlehensBetrag  -->
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
-        <input
-          formControlName="betragDarlehen"
-          data-testid="form-darlehen-betragDarlehen"
-          matInput
-          type="text"
-          [maskito]="maskitoNumber"
-        />
+        <input data-testid="form-darlehen-betragDarlehen" matInput type="text" [maskito]="maskitoNumber" />
 
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
@@ -49,7 +38,7 @@
       <!-- kommentar  -->
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.form.darlehen.kommentar.label' | transloco }}</mat-label>
-        <textarea formControlName="kommentar" data-testid="form-darlehen-kommentar" matInput rows="4"></textarea>
+        <textarea data-testid="form-darlehen-kommentar" matInput rows="4"></textarea>
 
         <mat-error *dvSharedUiFormMessageError="'maxlength'">
           {{ 'shared.form.error.maxlength' | transloco: { max: 500 } }}

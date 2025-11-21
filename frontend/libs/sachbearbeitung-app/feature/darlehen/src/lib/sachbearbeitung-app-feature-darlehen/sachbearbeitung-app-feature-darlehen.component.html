@@ -1,36 +1,21 @@
-<dv-shared-pattern-main-layout *transloco="let t">
-  <div class="tw:relative tw:my-12 tw:justify-between container">
-    <h1 class="tw:!mb-8">
-      {{ t('shared.darlehen.title') }}
-    </h1>
-    <dv-shared-ui-darlehen [gesuchIdSig]="null"></dv-shared-ui-darlehen>
-  </div>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="over" position="end">
+    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
+    </dv-shared-pattern-mobile-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content class="d-flex flex-column">
+    <dv-sachbearbeitung-app-pattern-gesuch-header></dv-sachbearbeitung-app-pattern-gesuch-header>
 
-  <!-- MOBILE NAV -->
-  <div dvHeaderMobileAddons></div>
-  <div dvMobileNavContent></div>
-
-  <!-- DESKTOP HEADER (LEFT) -->
-  <div dvHeaderDesktopLeft class="tw:flex tw:grow tw:items-center tw:gap-4">
-    <a
-      [routerLink]="['/']"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="header-nav-dashboard"
-    >
-      <i class="material-symbols-rounded me-2 text-white">dashboard</i>
-      <span>{{ t('shared.menu.dashboard') }}</span>
-    </a>
-
-    <a
-      [routerLink]="['/darlehen']"
-      class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
-      data-testid="header-nav-darlehen"
-    >
-      <i class="material-symbols-rounded me-2 text-white">payments</i>
-      <span>{{ t('shared.menu.darlehen') }}</span>
-    </a>
-  </div>
-
-  <!-- DESKTOP HEADER (RIGHT) -->
-  <div dvHeaderDesktopRight class="d-flex align-items-center gap-4"></div>
-</dv-shared-pattern-main-layout>
+    <!-- MAIN CONTENT -->
+    <main class="page-body">
+      <div class="h-100 pt-lg-4 px-lg-4 tw:overflow-hidden container mb-5">
+        <h1 class="tw:!mb-8">
+          {{ 'shared.darlehen.title' | transloco }}
+        </h1>
+        <!-- todo: add proper id -->
+        <dv-shared-ui-darlehen [gesuchIdSig]="'bla'"></dv-shared-ui-darlehen>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

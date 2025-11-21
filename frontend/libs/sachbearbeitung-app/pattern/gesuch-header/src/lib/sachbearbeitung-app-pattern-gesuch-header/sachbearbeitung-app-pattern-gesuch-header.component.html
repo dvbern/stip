@@ -42,18 +42,6 @@
       </div>
     </mat-menu>
 
-    <!-- Verfuegung-->
-    <a
-      [routerLink]="['/', 'verfuegung', gesuchId]"
-      routerLinkActive="active"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="sb-gesuch-header-verfuegung-link"
-      [class.disabled]="!canViewBerechnungSig()"
-    >
-      <i class="material-symbols-rounded me-2 text-white">equal</i>
-      <span>{{ 'sachbearbeitung-app.header.verfuegung' | transloco }}</span>
-    </a>
-
     <!-- Änderungen -->
     @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
     <button
@@ -105,6 +93,20 @@
         }
       </div>
     </mat-menu>
+
+    <!-- todo: darlehen menu -->
+
+    <!-- Verfuegung-->
+    <a
+      [routerLink]="['/', 'verfuegung', gesuchId]"
+      routerLinkActive="active"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="sb-gesuch-header-verfuegung-link"
+      [class.disabled]="!canViewBerechnungSig()"
+    >
+      <i class="material-symbols-rounded me-2 text-white">equal</i>
+      <span>{{ 'sachbearbeitung-app.header.verfuegung' | transloco }}</span>
+    </a>
 
     <!-- Infos-->
     <a
