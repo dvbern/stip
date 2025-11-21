@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { SharedFeatureDarlehenComponent } from '@dv/shared/feature/darlehen';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
-import { SharedUiDarlehenComponent } from '@dv/shared/ui/darlehen';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-darlehen',
@@ -16,7 +16,7 @@ import { SharedUiDarlehenComponent } from '@dv/shared/ui/darlehen';
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
-    SharedUiDarlehenComponent,
+    SharedFeatureDarlehenComponent,
     TranslocoPipe,
   ],
   templateUrl: './sachbearbeitung-app-feature-darlehen.component.html',

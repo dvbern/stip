@@ -53,6 +53,7 @@
   "shared.datepicker.weekday.7": "Di",
   "shared.header.tranchenAuswahl": "Demande",
   "shared.header.aenderungen": "Modifications",
+  "shared.header.darlehen": "Prêts",
   "shared.header.tranche.item": "Tranche {{ index }} du {{ date }}",
   "shared.header.aenderung.item": "Modification {{ index }} du {{ date }}",
   "shared.header.aenderungen.completed": "Modifications acceptées",

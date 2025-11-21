@@ -4,7 +4,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
-import { SharedUiDarlehenComponent } from '@dv/shared/ui/darlehen';
+import { SharedFeatureDarlehenComponent } from 'libs/shared/feature/darlehen/src';
 
 @Component({
   selector: 'dv-gesuch-app-feature-darlehen',
@@ -12,7 +12,7 @@ import { SharedUiDarlehenComponent } from '@dv/shared/ui/darlehen';
     RouterLink,
     TranslocoDirective,
     SharedPatternMainLayoutComponent,
-    SharedUiDarlehenComponent,
+    SharedFeatureDarlehenComponent,
   ],
   templateUrl: './gesuch-app-feature-darlehen.component.html',
   styleUrl: './gesuch-app-feature-darlehen.component.scss',

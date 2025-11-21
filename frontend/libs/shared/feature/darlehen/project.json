@@ -1,15 +1,15 @@
 {
-  "name": "shared-ui-darlehen",
+  "name": "shared-feature-darlehen",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/ui/darlehen/src",
+  "sourceRoot": "libs/shared/feature/darlehen/src",
   "prefix": "dv",
   "projectType": "library",
-  "tags": ["type:ui", "scope:shared"],
+  "tags": ["type:feature", "scope:shared"],
   "targets": {
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/ui/darlehen/tsconfig.lib.json"
+        "tsConfig": "libs/shared/feature/darlehen/tsconfig.lib.json"
       }
     }
   }

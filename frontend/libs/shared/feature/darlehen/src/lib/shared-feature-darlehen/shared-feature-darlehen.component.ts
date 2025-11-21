@@ -64,10 +64,10 @@ import { maskitoNumber } from '@dv/shared/util/maskito-util';
     SharedUiStepFormButtonsComponent,
     SharedUiIfSachbearbeiterDirective,
   ],
-  templateUrl: './shared-ui-darlehen.component.html',
+  templateUrl: './shared-feature-darlehen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiDarlehenComponent implements OnInit {
+export class SharedFeatureDarlehenComponent implements OnInit {
   // private store = inject(Store);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
