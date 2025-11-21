@@ -77,6 +77,8 @@ public class GesuchTrancheOverrideDokumentService {
             return;
         }
 
+        // Create a Map<Tranche ID, Map<DokumentTyp, GesuchDokument>>
+        // to simplify lookup of GesuchDokumente by Tranche ID and Dokument Typ
         final var targetTranchenLUT = targetTranchen.stream()
             .collect(
                 Collectors.toMap(
@@ -87,6 +89,8 @@ public class GesuchTrancheOverrideDokumentService {
                 )
             );
 
+        // Called when a new dokument is found on a different Jahreswert field on a different Tranche
+        // This overrides the old GesuchDokument with the content of the new one
         final BiConsumer<DokumentTyp, GesuchDokument> newDokumentFound = (jahreswertDokument, newDokument) -> {
             for (final var targetTranche : targetTranchen) {
                 var oldDokument = targetTranchenLUT.get(targetTranche.getId()).get(jahreswertDokument);
@@ -100,9 +104,10 @@ public class GesuchTrancheOverrideDokumentService {
             }
         };
 
+        // Called when a Jahreswert field had no Dokument previously but now has one
+        // This syncs the new Dokument to all other Tranchen
         final Consumer<DokumentTyp> noNewDokument = (jahreswertDokument) -> {
             for (final var targetTranche : targetTranchen) {
-                // TODO construct a map of this;
                 final var oldDokumente = targetTranche.getGesuchDokuments()
                     .stream()
                     .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() == jahreswertDokument)
