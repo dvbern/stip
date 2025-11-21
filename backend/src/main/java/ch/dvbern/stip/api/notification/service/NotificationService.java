@@ -248,7 +248,8 @@ public class NotificationService {
             .stream()
             .filter(
                 d -> d.getTyp() == VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG
-            ).max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
+            )
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
         final var sprache = pia.getKorrespondenzSprache();
 
         final var msg = Templates.getNeueVerfuegungText(sprache).render();
