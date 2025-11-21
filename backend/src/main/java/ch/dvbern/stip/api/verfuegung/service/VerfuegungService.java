@@ -59,10 +59,10 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 public class VerfuegungService {
 
     static final String VERFUEGUNG_DOKUMENT_PATH = "verfuegung/";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_PIA = "Berechnungsblatt_PIA_";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER = "Berechnungsblatt_Mutter_";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_VATER = "Berechnungsblatt_Vater_";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE = "Berechnungsblatt_Familie_";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_PIA = "Berechnungsblatt_%s_PIA_";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER = "Berechnungsblatt_%s_Mutter_";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_VATER = "Berechnungsblatt_%s_Vater_";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE = "Berechnungsblatt_%s_Familie_";
     static final String FILENAME_PREFIX_VERFUEGUNG = "Verfügung_";
     static final String FILENAME_PREFIX_VERFUEGUNGSBRIEF = "Verfügungsbrief_";
     static final String FILENAME_EXTENSION_PDF = ".pdf";
@@ -197,9 +197,8 @@ public class VerfuegungService {
         final VerfuegungDokumentTyp dokumentTyp,
         final ByteArrayOutputStream pdfContent
     ) {
-        final var pia = verfuegung.getGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
-        final var namePiA = pia.getNachname() + "_" + pia.getVorname();
-        final String filename = generateFilename(dokumentTyp, namePiA);
+        final String filename =
+            generateFilename(dokumentTyp, verfuegung.getGesuch().getAusbildung().getFall().getFallNummer());
         final String objectId = DokumentUploadUtil.executeUploadDocument(
             pdfContent.toByteArray(),
             filename,
@@ -231,22 +230,26 @@ public class VerfuegungService {
             .orElseThrow(() -> new NotFoundException("Berechnungsblatt not found: " + typ));
     }
 
-    private String generateFilename(VerfuegungDokumentTyp typ, String namePiA) {
+    private String generateFilename(VerfuegungDokumentTyp typ, String fallNr) {
         final String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
+        // todo KSTIP-2845: also use correct format for darlehensverfuegung
         return switch (typ) {
-            case BERECHNUNGSBLATT_PIA -> FILENAME_PREFIX_BERECHNUNGSBLATT_PIA + namePiA + "_" + formattedDate
+            case BERECHNUNGSBLATT_PIA -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_PIA, fallNr) + "_"
+            + formattedDate
             + FILENAME_EXTENSION_PDF;
-            case BERECHNUNGSBLATT_MUTTER -> FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER + namePiA + "_" + formattedDate
+            case BERECHNUNGSBLATT_MUTTER -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER, fallNr) + "_"
+            + formattedDate
             + FILENAME_EXTENSION_PDF;
-            case BERECHNUNGSBLATT_VATER -> FILENAME_PREFIX_BERECHNUNGSBLATT_VATER + namePiA + "_" + formattedDate
+            case BERECHNUNGSBLATT_VATER -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_VATER, fallNr) + "_"
+            + formattedDate
             + FILENAME_EXTENSION_PDF;
-            case BERECHNUNGSBLATT_FAMILIE -> FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE + namePiA + "_" + formattedDate
+            case BERECHNUNGSBLATT_FAMILIE -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE, fallNr) + "_"
+            + formattedDate
             + FILENAME_EXTENSION_PDF;
-            case VERSENDETE_VERFUEGUNG -> FILENAME_PREFIX_VERFUEGUNG + namePiA + "_" + formattedDate
+            case VERSENDETE_VERFUEGUNG -> FILENAME_PREFIX_VERFUEGUNG + fallNr + "_" + formattedDate
             + FILENAME_EXTENSION_PDF;
             case VERFUEGUNGSBRIEF -> FILENAME_PREFIX_VERFUEGUNGSBRIEF
-            + namePiA + "_" + formattedDate + FILENAME_EXTENSION_PDF;
+            + fallNr + "_" + formattedDate + FILENAME_EXTENSION_PDF;
         };
     }
 
