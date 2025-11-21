@@ -58,7 +58,7 @@ public class GesuchHistoryService {
             return gesuch;
         }
 
-        if (gesuch.isVerfuegt()) {
+        if (Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(gesuch.getGesuchStatus())) {
             return gesuchHistoryRepository
                 .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
                 .orElseThrow(NotFoundException::new);
