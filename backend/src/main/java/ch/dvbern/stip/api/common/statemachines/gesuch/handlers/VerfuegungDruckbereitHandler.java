@@ -64,31 +64,33 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         final Set<UnterschriftenblattDokumentTyp> uploadedTyps =
             unterschriftenblattService.getExistingUnterschriftenblattTypsForGesuch(gesuch.getId());
 
-        for (UnterschriftenblattDokumentTyp unterschriftenblattTyp : uploadedTyps) {
-            final VerfuegungDokumentTyp berechnungsblattTyp = mapToBerechnungsblattTyp(unterschriftenblattTyp);
-
-            try {
-                final VerfuegungDokument berechnungsblatt =
-                    verfuegungService.getBerechnungsblattByType(verfuegung, berechnungsblattTyp);
-
-                final byte[] berechnungsblattBytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblatt);
-                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                baos.write(berechnungsblattBytes);
-                berechnungsblaetter.add(baos);
-            } catch (Exception e) {
-                final var message = String.format(
-                    "Berechnungsblatt %s not found for Gesuch %s, skipping",
-                    berechnungsblattTyp,
-                    gesuch.getId()
-                );
-                throw new InternalServerErrorException(message, e);
-            }
-        }
+        // for (UnterschriftenblattDokumentTyp unterschriftenblattTyp : uploadedTyps) {
+        // final VerfuegungDokumentTyp berechnungsblattTyp = mapToBerechnungsblattTyp(unterschriftenblattTyp);
+        //
+        // try {
+        // final VerfuegungDokument berechnungsblatt =
+        // verfuegungService.getBerechnungsblattByType(verfuegung, berechnungsblattTyp);
+        //
+        // final byte[] berechnungsblattBytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblatt);
+        // final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        // baos.write(berechnungsblattBytes);
+        // berechnungsblaetter.add(baos);
+        // } catch (Exception e) {
+        // final var message = String.format(
+        // "Berechnungsblatt %s not found for Gesuch %s, skipping",
+        // berechnungsblattTyp,
+        // gesuch.getId()
+        // );
+        // throw new InternalServerErrorException(message, e);
+        // }
+        // }
 
         try {
+            final var berechnungsblattAlle =
+                verfuegungService.getBerechnungsblattByType(verfuegung, VerfuegungDokumentTyp.BERECHNUNGSBLATT_ALLE);
             final var berechnungsblattPIA =
                 verfuegungService.getBerechnungsblattByType(verfuegung, VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA);
-            final byte[] berechnungsblattPIABytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblattPIA);
+            final byte[] berechnungsblattPIABytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblattAlle);
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             baos.write(berechnungsblattPIABytes);
             berechnungsblaetter.addFirst(baos);

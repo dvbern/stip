@@ -246,6 +246,7 @@ public class VerfuegungService {
                 .format(FILENAME_PREFIX_VERFUEGUNG, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
             case VERFUEGUNGSBRIEF -> String
                 .format(FILENAME_PREFIX_VERFUEGUNGSBRIEF, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case BERECHNUNGSBLATT_ALLE -> "alle.pdf";
         };
     }
 

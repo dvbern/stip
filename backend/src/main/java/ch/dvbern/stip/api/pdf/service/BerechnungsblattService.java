@@ -31,10 +31,12 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -68,6 +70,193 @@ public class BerechnungsblattService {
 
     PdfFont pdfFont = null;
     PdfFont pdfFontBold = null;
+
+    private void addBerechnungsblattFamilie(
+        Document document,
+        final PersonInAusbildung pia,
+        final SteuerdatenTyp typ,
+        final TranchenBerechnungsresultatDto tranchenBerechnungsResultat,
+        final TL translator
+    ) {
+        // Find the matching family budget for this type
+        var matchingBudget = tranchenBerechnungsResultat.getFamilienBudgetresultate()
+            .stream()
+            .filter(fb -> fb.getFamilienBudgetTyp() == typ)
+            .findFirst();
+
+        if (matchingBudget.isEmpty()) {
+            return;
+        }
+
+        final var familienBudgetResultat = matchingBudget.get();
+
+        final var budgetTypText = switch (familienBudgetResultat.getFamilienBudgetTyp()) {
+            case FAMILIE -> translator.translate("stip.berechnung.familien.typ.FAMILIE");
+            case VATER -> translator.translate("stip.berechnung.familien.typ.VATER");
+            case MUTTER -> translator.translate("stip.berechnung.familien.typ.MUTTER");
+        };
+
+        addHeaderParagraph(
+            document,
+            pia,
+            String.format(
+                "%s %s",
+                translator.translate("stip.berechnung.familien.title"),
+                budgetTypText
+            ),
+            tranchenBerechnungsResultat.getGueltigAb(),
+            tranchenBerechnungsResultat.getGueltigBis(),
+            translator
+        );
+        document.add(getNewLineParagraph());
+
+        final Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
+            familienBudgetResultat,
+            tranchenBerechnungsResultat.getBerechnungsStammdaten(),
+            translator
+        );
+
+        document.add(familienBudgetTableEinnahmen);
+        document.add(getNewLineParagraph());
+
+        final Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
+            familienBudgetResultat,
+            translator
+        );
+
+        document.add(familienBudgetTableKosten);
+        document.add(getNewLineParagraph());
+        addFooterParagraph1(document, 15, translator);
+    }
+
+    private void addBerechnungsblattPIA(
+        Document document,
+        final PersonInAusbildung pia,
+        final TranchenBerechnungsresultatDto tranchenBerechnungsResultat,
+        final TL translator
+    ) {
+        addHeaderParagraph(
+            document,
+            pia,
+            String.format(
+                "%s %s %s",
+                translator.translate("stip.berechnung.persoenlich.title"),
+                pia.getVorname(),
+                pia.getNachname()
+            ),
+            tranchenBerechnungsResultat.getGueltigAb(),
+            tranchenBerechnungsResultat.getGueltigBis(),
+            translator
+        );
+        document.add(getNewLineParagraph());
+
+        final Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
+            tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+            tranchenBerechnungsResultat.getBerechnungsStammdaten(),
+            translator
+        );
+
+        document.add(persoenlichesBudgetTableEinnahmen);
+        document.add(getNewLineParagraph());
+
+        final Table persoenlichesBudgetTableKosten =
+            getPersoenlichesBudgetTableKosten(
+                tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+                translator
+            );
+
+        document.add(persoenlichesBudgetTableKosten);
+        document.add(getNewLineParagraph());
+
+        final var persoenlichTotalCell = new Cell();
+        persoenlichTotalCell.add(
+            getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
+        );
+        if (
+            !(tranchenBerechnungsResultat.getBerechnungsanteilKinder() != null
+            && tranchenBerechnungsResultat.getBerechnungsanteilKinder().compareTo(BigDecimal.ONE) == 0)
+        ) {
+            persoenlichTotalCell.add(
+                getDefaultParagraphSmall(
+                    translator.translate(
+                        "stip.berechnung.persoenlich.geteilteBerechnung",
+                        "berechnungsanteilKinder",
+                        tranchenBerechnungsResultat.getBerechnungsanteilKinder()
+                    )
+                ).setFontColor(ColorConstants.WHITE)
+            );
+        }
+
+        final Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell)
+            .setBackgroundColor(ColorConstants.LIGHT_GRAY);
+
+        persoenlichesBudgetTableTotal.addCell(
+            getDefaultParagraphNumber(
+                tranchenBerechnungsResultat.getBerechnung()
+            ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
+        );
+
+        document.add(persoenlichesBudgetTableTotal);
+        document.add(getNewLineParagraph());
+
+        addFooterParagraph1(document, 40, translator);
+        addFooterParagraph2(document, 15, translator);
+    }
+
+    public ByteArrayOutputStream getAllBerechnungsblaetterOfGesuch(final Gesuch gesuch, final Locale locale) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        pdfFont = PdfUtils.createFont();
+        pdfFontBold = PdfUtils.createFontBold();
+
+        TL translator = TLProducer.defaultBundle()
+            .forAppLanguage(AppLanguages.fromLocale(locale));
+        final PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+
+        final var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        try (
+            final PdfWriter writer = new PdfWriter(out);
+            final PdfDocument pdfDocument = new PdfDocument(writer);
+            final Document document = new Document(pdfDocument, PAGE_SIZE);
+        ) {
+            boolean firstTranche = true;
+            for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
+                if (!firstTranche) {
+                    document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                }
+                firstTranche = false;
+                addBerechnungsblattPIA(document, pia, tranchenBerechnungsResultat, translator);
+                PdfUtils.makePageNumberEven(document);
+
+                gesuch.getUnterschriftenblaetter().forEach(unterschriftenblatt -> {
+                    final SteuerdatenTyp currentSteuerdatenTyp =
+                        mapToSteuerdatenTyp(unterschriftenblatt.getDokumentTyp());
+
+                    for (var familienBudget : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
+                        final SteuerdatenTyp typ = familienBudget.getFamilienBudgetTyp();
+                        if (currentSteuerdatenTyp.equals(typ)) {
+                            // if unterschriftenblatt is existing for the current type,
+                            // add it to final document
+                            addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
+                            PdfUtils.makePageNumberEven(document);
+                        }
+                    }
+                });
+            }
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
+        }
+
+        return out;
+    }
+
+    private SteuerdatenTyp mapToSteuerdatenTyp(final UnterschriftenblattDokumentTyp unterschriftenblattDokumentTyp) {
+        return switch (unterschriftenblattDokumentTyp) {
+            case MUTTER -> SteuerdatenTyp.MUTTER;
+            case VATER -> SteuerdatenTyp.VATER;
+            case GEMEINSAM -> SteuerdatenTyp.FAMILIE;
+        };
+    }
 
     public ByteArrayOutputStream getBerechnungsblattPersonInAusbildung(final Gesuch gesuch, final Locale locale) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
