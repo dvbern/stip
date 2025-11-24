@@ -85,6 +85,22 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             }
         }
 
+        try {
+            final var berechnungsblattPIA =
+                verfuegungService.getBerechnungsblattByType(verfuegung, VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA);
+            final byte[] berechnungsblattPIABytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblattPIA);
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            baos.write(berechnungsblattPIABytes);
+            berechnungsblaetter.addFirst(baos);
+        } catch (Exception e) {
+            final var message = String.format(
+                "Berechnungsblatt %s not found for Gesuch %s, skipping",
+                "PIA",
+                gesuch.getId()
+            );
+            throw new InternalServerErrorException(message, e);
+        }
+
         final ByteArrayOutputStream versendeteVerfuegung = verfuegungPdfService.createVersendeteVerfuegung(
             verfuegungsbrief,
             berechnungsblaetter
