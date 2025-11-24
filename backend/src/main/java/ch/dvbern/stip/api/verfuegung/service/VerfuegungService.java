@@ -59,12 +59,12 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 public class VerfuegungService {
 
     static final String VERFUEGUNG_DOKUMENT_PATH = "verfuegung/";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_PIA = "Berechnungsblatt_%s_PIA_";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER = "Berechnungsblatt_%s_Mutter_";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_VATER = "Berechnungsblatt_%s_Vater_";
-    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE = "Berechnungsblatt_%s_Familie_";
-    static final String FILENAME_PREFIX_VERFUEGUNG = "Verfügung_";
-    static final String FILENAME_PREFIX_VERFUEGUNGSBRIEF = "Verfügungsbrief_";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_PIA = "Berechnungsblatt_%s_PIA_%s%s";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER = "Berechnungsblatt_%s_Mutter_%s%s";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_VATER = "Berechnungsblatt_%s_Vater_%s%s";
+    static final String FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE = "Berechnungsblatt_%s_Familie_%s%s";
+    static final String FILENAME_PREFIX_VERFUEGUNG = "Verfügung_%s_%s%s";
+    static final String FILENAME_PREFIX_VERFUEGUNGSBRIEF = "Verfügungsbrief_%s_%s%s";
     static final String FILENAME_EXTENSION_PDF = ".pdf";
 
     private final VerfuegungRepository verfuegungRepository;
@@ -234,22 +234,18 @@ public class VerfuegungService {
         final String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         // todo KSTIP-2845: also use correct format for darlehensverfuegung
         return switch (typ) {
-            case BERECHNUNGSBLATT_PIA -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_PIA, fallNr) + "_"
-            + formattedDate
-            + FILENAME_EXTENSION_PDF;
-            case BERECHNUNGSBLATT_MUTTER -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER, fallNr) + "_"
-            + formattedDate
-            + FILENAME_EXTENSION_PDF;
-            case BERECHNUNGSBLATT_VATER -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_VATER, fallNr) + "_"
-            + formattedDate
-            + FILENAME_EXTENSION_PDF;
-            case BERECHNUNGSBLATT_FAMILIE -> String.format(FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE, fallNr) + "_"
-            + formattedDate
-            + FILENAME_EXTENSION_PDF;
-            case VERSENDETE_VERFUEGUNG -> FILENAME_PREFIX_VERFUEGUNG + fallNr + "_" + formattedDate
-            + FILENAME_EXTENSION_PDF;
-            case VERFUEGUNGSBRIEF -> FILENAME_PREFIX_VERFUEGUNGSBRIEF
-            + fallNr + "_" + formattedDate + FILENAME_EXTENSION_PDF;
+            case BERECHNUNGSBLATT_PIA -> String
+                .format(FILENAME_PREFIX_BERECHNUNGSBLATT_PIA, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case BERECHNUNGSBLATT_MUTTER -> String
+                .format(FILENAME_PREFIX_BERECHNUNGSBLATT_MUTTER, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case BERECHNUNGSBLATT_VATER -> String
+                .format(FILENAME_PREFIX_BERECHNUNGSBLATT_VATER, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case BERECHNUNGSBLATT_FAMILIE -> String
+                .format(FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case VERSENDETE_VERFUEGUNG -> String
+                .format(FILENAME_PREFIX_VERFUEGUNG, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
+            case VERFUEGUNGSBRIEF -> String
+                .format(FILENAME_PREFIX_VERFUEGUNGSBRIEF, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
         };
     }
 
