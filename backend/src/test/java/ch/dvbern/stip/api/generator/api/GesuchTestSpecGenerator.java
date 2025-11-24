@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.generator.api;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.generator.api.model.gesuch.DarlehenDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.ElternUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoSpecModel;
@@ -177,7 +176,6 @@ public class GesuchTestSpecGenerator {
             model.setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
-            model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
         });
     }
 
@@ -192,7 +190,6 @@ public class GesuchTestSpecGenerator {
             model.setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
             model.setKinds(KindUpdateDtoSpecModel.kindUpdateDtoSpecs());
             model.setEinnahmenKosten(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec());
-            model.setDarlehen(DarlehenDtoSpecModel.darlehenDtoSpec());
         });
     }
 

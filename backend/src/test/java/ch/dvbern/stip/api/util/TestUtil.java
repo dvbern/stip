@@ -1016,20 +1016,6 @@ public class TestUtil {
                     .setSapBusinessPartnerId(9887965)
             );
 
-        gesuchFormular.setDarlehen(
-            new Darlehen()
-                .setWillDarlehen(true)
-                .setBetragDarlehen(500)
-                .setBetragBezogenKanton(20)
-                .setSchulden(0)
-                .setAnzahlBetreibungen(0)
-                .setGrundNichtBerechtigt(false)
-                .setGrundAusbildungZwoelfJahre(true)
-                .setGrundHoheGebuehren(false)
-                .setGrundAnschaffungenFuerAusbildung(false)
-                .setGrundZweitausbildung(false)
-        );
-
         return gesuch;
     }
 

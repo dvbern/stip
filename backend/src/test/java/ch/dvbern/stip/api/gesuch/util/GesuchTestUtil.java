@@ -150,8 +150,7 @@ public class GesuchTestUtil {
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
             .setEinnahmenKosten(new EinnahmenKosten())
-            .setEinnahmenKostenPartner(new EinnahmenKosten())
-            .setDarlehen(new Darlehen().setWillDarlehen(false));
+            .setEinnahmenKostenPartner(new EinnahmenKosten());
         return formular;
     }
 }
