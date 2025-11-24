@@ -2,7 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.DarlehenGrundDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -15,72 +14,28 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("Darlehen")
+@JsonTypeName("DarlehenUpdateGs")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DarlehenDto  implements Serializable {
-  private @Valid UUID id;
-  private @Valid UUID gesuchId;
+public class DarlehenUpdateGsDto  implements Serializable {
   private @Valid Integer darlehenBetragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
   private @Valid org.jboss.resteasy.reactive.multipart.FileUpload betreibungsAuszug;
   private @Valid DarlehenGrundDto grund;
-  private @Valid Boolean darlehenGewaehren;
-  private @Valid Integer darlehenBetrag;
-  private @Valid String kommentar;
-
-  /**
-   **/
-  public DarlehenDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  @NotNull
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   **/
-  public DarlehenDto gesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
-    return gesuchId;
-  }
-
-  @JsonProperty("gesuchId")
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-  }
 
   /**
    * minimum: 0
    **/
-  public DarlehenDto darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
+  public DarlehenUpdateGsDto darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
     this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
     return this;
   }
 
   
   @JsonProperty("darlehenBetragGewuenscht")
-  @NotNull
  @Min(0)  public Integer getDarlehenBetragGewuenscht() {
     return darlehenBetragGewuenscht;
   }
@@ -93,14 +48,13 @@ public class DarlehenDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenDto schulden(Integer schulden) {
+  public DarlehenUpdateGsDto schulden(Integer schulden) {
     this.schulden = schulden;
     return this;
   }
 
   
   @JsonProperty("schulden")
-  @NotNull
  @Min(0)  public Integer getSchulden() {
     return schulden;
   }
@@ -113,14 +67,13 @@ public class DarlehenDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenDto anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public DarlehenUpdateGsDto anzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
   }
 
   
   @JsonProperty("anzahlBetreibungen")
-  @NotNull
  @Min(0)  public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
@@ -132,14 +85,13 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto betreibungsAuszug(org.jboss.resteasy.reactive.multipart.FileUpload betreibungsAuszug) {
+  public DarlehenUpdateGsDto betreibungsAuszug(org.jboss.resteasy.reactive.multipart.FileUpload betreibungsAuszug) {
     this.betreibungsAuszug = betreibungsAuszug;
     return this;
   }
 
   
   @JsonProperty("betreibungsAuszug")
-  @NotNull
   public org.jboss.resteasy.reactive.multipart.FileUpload getBetreibungsAuszug() {
     return betreibungsAuszug;
   }
@@ -151,14 +103,13 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto grund(DarlehenGrundDto grund) {
+  public DarlehenUpdateGsDto grund(DarlehenGrundDto grund) {
     this.grund = grund;
     return this;
   }
 
   
   @JsonProperty("grund")
-  @NotNull
   public DarlehenGrundDto getGrund() {
     return grund;
   }
@@ -166,61 +117,6 @@ public class DarlehenDto  implements Serializable {
   @JsonProperty("grund")
   public void setGrund(DarlehenGrundDto grund) {
     this.grund = grund;
-  }
-
-  /**
-   **/
-  public DarlehenDto darlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
-    return this;
-  }
-
-  
-  @JsonProperty("darlehenGewaehren")
-  public Boolean getDarlehenGewaehren() {
-    return darlehenGewaehren;
-  }
-
-  @JsonProperty("darlehenGewaehren")
-  public void setDarlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
-  }
-
-  /**
-   * minimum: 0
-   **/
-  public DarlehenDto darlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
-    return this;
-  }
-
-  
-  @JsonProperty("darlehenBetrag")
- @Min(0)  public Integer getDarlehenBetrag() {
-    return darlehenBetrag;
-  }
-
-  @JsonProperty("darlehenBetrag")
-  public void setDarlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
-  }
-
-  /**
-   **/
-  public DarlehenDto kommentar(String kommentar) {
-    this.kommentar = kommentar;
-    return this;
-  }
-
-  
-  @JsonProperty("kommentar")
-  public String getKommentar() {
-    return kommentar;
-  }
-
-  @JsonProperty("kommentar")
-  public void setKommentar(String kommentar) {
-    this.kommentar = kommentar;
   }
 
 
@@ -232,39 +128,29 @@ public class DarlehenDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenDto darlehen = (DarlehenDto) o;
-    return Objects.equals(this.id, darlehen.id) &&
-        Objects.equals(this.gesuchId, darlehen.gesuchId) &&
-        Objects.equals(this.darlehenBetragGewuenscht, darlehen.darlehenBetragGewuenscht) &&
-        Objects.equals(this.schulden, darlehen.schulden) &&
-        Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.betreibungsAuszug, darlehen.betreibungsAuszug) &&
-        Objects.equals(this.grund, darlehen.grund) &&
-        Objects.equals(this.darlehenGewaehren, darlehen.darlehenGewaehren) &&
-        Objects.equals(this.darlehenBetrag, darlehen.darlehenBetrag) &&
-        Objects.equals(this.kommentar, darlehen.kommentar);
+    DarlehenUpdateGsDto darlehenUpdateGs = (DarlehenUpdateGsDto) o;
+    return Objects.equals(this.darlehenBetragGewuenscht, darlehenUpdateGs.darlehenBetragGewuenscht) &&
+        Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
+        Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
+        Objects.equals(this.betreibungsAuszug, darlehenUpdateGs.betreibungsAuszug) &&
+        Objects.equals(this.grund, darlehenUpdateGs.grund);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchId, darlehenBetragGewuenscht, schulden, anzahlBetreibungen, betreibungsAuszug, grund, darlehenGewaehren, darlehenBetrag, kommentar);
+    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, betreibungsAuszug, grund);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenDto {\n");
+    sb.append("class DarlehenUpdateGsDto {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    betreibungsAuszug: ").append(toIndentedString(betreibungsAuszug)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
-    sb.append("    darlehenGewaehren: ").append(toIndentedString(darlehenGewaehren)).append("\n");
-    sb.append("    darlehenBetrag: ").append(toIndentedString(darlehenBetrag)).append("\n");
-    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -22,37 +22,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetGesucheSBQueryType
+ * Gets or Sets DarlehenStatus
  */
-public enum GetGesucheSBQueryTypeDtoSpec {
+public enum DarlehenStatusDtoSpec {
   
-  ALLE_GESUCHE("ALLE_GESUCHE"),
+  IN_BEARBEITUNG_GS("IN_BEARBEITUNG_GS"),
   
-  MEINE_GESUCHE("MEINE_GESUCHE"),
+  EINGEGEBEN("EINGEGEBEN"),
   
-  ALLE_PENDENTE_GESUCHE("ALLE_PENDENTE_GESUCHE"),
+  IN_FREIGABE("IN_FREIGABE"),
   
-  MEINE_PENDENTE_GESUCHE("MEINE_PENDENTE_GESUCHE"),
+  AKZEPTIERT("AKZEPTIERT"),
   
-  ALLE_BEARBEITBAR("ALLE_BEARBEITBAR"),
-  
-  MEINE_BEARBEITBAR("MEINE_BEARBEITBAR"),
-  
-  ALLE_JURISTISCHE_ABKLAERUNG("ALLE_JURISTISCHE_ABKLAERUNG"),
-  
-  MEINE_JURISTISCHE_ABKLAERUNG("MEINE_JURISTISCHE_ABKLAERUNG"),
-  
-  ALLE_DRUCKBAR_VERFUEGUNGEN("ALLE_DRUCKBAR_VERFUEGUNGEN"),
-  
-  MEINE_DRUCKBAR_VERFUEGUNGEN("MEINE_DRUCKBAR_VERFUEGUNGEN"),
-  
-  ALLE_DRUCKBAR_DATENSCHUTZBRIEFE("ALLE_DRUCKBAR_DATENSCHUTZBRIEFE"),
-  
-  MEINE_DRUCKBAR_DATENSCHUTZBRIEFE("MEINE_DRUCKBAR_DATENSCHUTZBRIEFE");
+  ABGELEHNT("ABGELEHNT");
 
   private String value;
 
-  GetGesucheSBQueryTypeDtoSpec(String value) {
+  DarlehenStatusDtoSpec(String value) {
     this.value = value;
   }
 
@@ -67,8 +53,8 @@ public enum GetGesucheSBQueryTypeDtoSpec {
   }
 
   @JsonCreator
-  public static GetGesucheSBQueryTypeDtoSpec fromValue(String value) {
-    for (GetGesucheSBQueryTypeDtoSpec b : GetGesucheSBQueryTypeDtoSpec.values()) {
+  public static DarlehenStatusDtoSpec fromValue(String value) {
+    for (DarlehenStatusDtoSpec b : DarlehenStatusDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

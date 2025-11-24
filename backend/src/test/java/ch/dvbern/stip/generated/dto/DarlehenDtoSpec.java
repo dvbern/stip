@@ -15,11 +15,14 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.io.File;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -27,28 +30,37 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DarlehenDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenDtoSpec.JSON_PROPERTY_WILL_DARLEHEN,
-  DarlehenDtoSpec.JSON_PROPERTY_BETRAG_DARLEHEN,
-  DarlehenDtoSpec.JSON_PROPERTY_BETRAG_BEZOGEN_KANTON,
+  DarlehenDtoSpec.JSON_PROPERTY_ID,
+  DarlehenDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  DarlehenDtoSpec.JSON_PROPERTY_DARLEHEN_GEWAEHREN,
+  DarlehenDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG,
+  DarlehenDtoSpec.JSON_PROPERTY_KOMMENTAR,
+  DarlehenDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT,
   DarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUND_NICHT_BERECHTIGT,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUND_HOHE_GEBUEHREN,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG
+  DarlehenDtoSpec.JSON_PROPERTY_BETREIBUNGS_AUSZUG,
+  DarlehenDtoSpec.JSON_PROPERTY_GRUND
 })
 @JsonTypeName("Darlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DarlehenDtoSpec {
-  public static final String JSON_PROPERTY_WILL_DARLEHEN = "willDarlehen";
-  private Boolean willDarlehen;
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
 
-  public static final String JSON_PROPERTY_BETRAG_DARLEHEN = "betragDarlehen";
-  private Integer betragDarlehen;
+  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  private UUID gesuchId;
 
-  public static final String JSON_PROPERTY_BETRAG_BEZOGEN_KANTON = "betragBezogenKanton";
-  private Integer betragBezogenKanton;
+  public static final String JSON_PROPERTY_DARLEHEN_GEWAEHREN = "darlehenGewaehren";
+  private Boolean darlehenGewaehren;
+
+  public static final String JSON_PROPERTY_DARLEHEN_BETRAG = "darlehenBetrag";
+  private Integer darlehenBetrag;
+
+  public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
+  private String kommentar;
+
+  public static final String JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT = "darlehenBetragGewuenscht";
+  private Integer darlehenBetragGewuenscht;
 
   public static final String JSON_PROPERTY_SCHULDEN = "schulden";
   private Integer schulden;
@@ -56,101 +68,170 @@ public class DarlehenDtoSpec {
   public static final String JSON_PROPERTY_ANZAHL_BETREIBUNGEN = "anzahlBetreibungen";
   private Integer anzahlBetreibungen;
 
-  public static final String JSON_PROPERTY_GRUND_NICHT_BERECHTIGT = "grundNichtBerechtigt";
-  private Boolean grundNichtBerechtigt;
+  public static final String JSON_PROPERTY_BETREIBUNGS_AUSZUG = "betreibungsAuszug";
+  private File betreibungsAuszug;
 
-  public static final String JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE = "grundAusbildungZwoelfJahre";
-  private Boolean grundAusbildungZwoelfJahre;
-
-  public static final String JSON_PROPERTY_GRUND_HOHE_GEBUEHREN = "grundHoheGebuehren";
-  private Boolean grundHoheGebuehren;
-
-  public static final String JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG = "grundAnschaffungenFuerAusbildung";
-  private Boolean grundAnschaffungenFuerAusbildung;
-
-  public static final String JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG = "grundZweitausbildung";
-  private Boolean grundZweitausbildung;
+  public static final String JSON_PROPERTY_GRUND = "grund";
+  private DarlehenGrundDtoSpec grund;
 
   public DarlehenDtoSpec() {
   }
 
-  public DarlehenDtoSpec willDarlehen(Boolean willDarlehen) {
+  public DarlehenDtoSpec id(UUID id) {
     
-    this.willDarlehen = willDarlehen;
+    this.id = id;
     return this;
   }
 
    /**
-   * Required wenn volljährig, sonst nicht moeglich!
-   * @return willDarlehen
+   * Get id
+   * @return id
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WILL_DARLEHEN)
+  @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getWillDarlehen() {
-    return willDarlehen;
+  public UUID getId() {
+    return id;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WILL_DARLEHEN)
+  @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWillDarlehen(Boolean willDarlehen) {
-    this.willDarlehen = willDarlehen;
+  public void setId(UUID id) {
+    this.id = id;
   }
 
 
-  public DarlehenDtoSpec betragDarlehen(Integer betragDarlehen) {
+  public DarlehenDtoSpec gesuchId(UUID gesuchId) {
     
-    this.betragDarlehen = betragDarlehen;
+    this.gesuchId = gesuchId;
     return this;
   }
 
    /**
-   * Required wenn willDarlehen &#x3D; true
-   * minimum: 0
-   * @return betragDarlehen
+   * Get gesuchId
+   * @return gesuchId
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getBetragDarlehen() {
-    return betragDarlehen;
+  public UUID getGesuchId() {
+    return gesuchId;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetragDarlehen(Integer betragDarlehen) {
-    this.betragDarlehen = betragDarlehen;
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
   }
 
 
-  public DarlehenDtoSpec betragBezogenKanton(Integer betragBezogenKanton) {
+  public DarlehenDtoSpec darlehenGewaehren(Boolean darlehenGewaehren) {
     
-    this.betragBezogenKanton = betragBezogenKanton;
+    this.darlehenGewaehren = darlehenGewaehren;
     return this;
   }
 
    /**
-   * Required wenn willDarlehen &#x3D; true
-   * minimum: 0
-   * @return betragBezogenKanton
+   * Get darlehenGewaehren
+   * @return darlehenGewaehren
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETRAG_BEZOGEN_KANTON)
+  @JsonProperty(JSON_PROPERTY_DARLEHEN_GEWAEHREN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getBetragBezogenKanton() {
-    return betragBezogenKanton;
+  public Boolean getDarlehenGewaehren() {
+    return darlehenGewaehren;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG_BEZOGEN_KANTON)
+  @JsonProperty(JSON_PROPERTY_DARLEHEN_GEWAEHREN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetragBezogenKanton(Integer betragBezogenKanton) {
-    this.betragBezogenKanton = betragBezogenKanton;
+  public void setDarlehenGewaehren(Boolean darlehenGewaehren) {
+    this.darlehenGewaehren = darlehenGewaehren;
+  }
+
+
+  public DarlehenDtoSpec darlehenBetrag(Integer darlehenBetrag) {
+    
+    this.darlehenBetrag = darlehenBetrag;
+    return this;
+  }
+
+   /**
+   * Get darlehenBetrag
+   * minimum: 0
+   * @return darlehenBetrag
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getDarlehenBetrag() {
+    return darlehenBetrag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDarlehenBetrag(Integer darlehenBetrag) {
+    this.darlehenBetrag = darlehenBetrag;
+  }
+
+
+  public DarlehenDtoSpec kommentar(String kommentar) {
+    
+    this.kommentar = kommentar;
+    return this;
+  }
+
+   /**
+   * Get kommentar
+   * @return kommentar
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getKommentar() {
+    return kommentar;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KOMMENTAR)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKommentar(String kommentar) {
+    this.kommentar = kommentar;
+  }
+
+
+  public DarlehenDtoSpec darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
+    
+    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+    return this;
+  }
+
+   /**
+   * Get darlehenBetragGewuenscht
+   * minimum: 0
+   * @return darlehenBetragGewuenscht
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getDarlehenBetragGewuenscht() {
+    return darlehenBetragGewuenscht;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setDarlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
+    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
   }
 
 
@@ -161,13 +242,13 @@ public class DarlehenDtoSpec {
   }
 
    /**
-   * Required wenn willDarlehen &#x3D; true
+   * Get schulden
    * minimum: 0
    * @return schulden
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SCHULDEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getSchulden() {
     return schulden;
@@ -175,7 +256,7 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SCHULDEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSchulden(Integer schulden) {
     this.schulden = schulden;
   }
@@ -188,13 +269,13 @@ public class DarlehenDtoSpec {
   }
 
    /**
-   * Required wenn willDarlehen &#x3D; true - mit Fileupload
+   * Get anzahlBetreibungen
    * minimum: 0
    * @return anzahlBetreibungen
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
@@ -202,139 +283,61 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
 
 
-  public DarlehenDtoSpec grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
+  public DarlehenDtoSpec betreibungsAuszug(File betreibungsAuszug) {
     
-    this.grundNichtBerechtigt = grundNichtBerechtigt;
+    this.betreibungsAuszug = betreibungsAuszug;
     return this;
   }
 
    /**
-   * Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
-   * @return grundNichtBerechtigt
+   * Get betreibungsAuszug
+   * @return betreibungsAuszug
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_NICHT_BERECHTIGT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BETREIBUNGS_AUSZUG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getGrundNichtBerechtigt() {
-    return grundNichtBerechtigt;
+  public File getBetreibungsAuszug() {
+    return betreibungsAuszug;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_NICHT_BERECHTIGT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundNichtBerechtigt(Boolean grundNichtBerechtigt) {
-    this.grundNichtBerechtigt = grundNichtBerechtigt;
+  @JsonProperty(JSON_PROPERTY_BETREIBUNGS_AUSZUG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBetreibungsAuszug(File betreibungsAuszug) {
+    this.betreibungsAuszug = betreibungsAuszug;
   }
 
 
-  public DarlehenDtoSpec grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
+  public DarlehenDtoSpec grund(DarlehenGrundDtoSpec grund) {
     
-    this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
+    this.grund = grund;
     return this;
   }
 
    /**
-   * Keine Stipendienberechtigung wegen Überschreitens der Ausbildungsdauer von 12 Jahren.
-   * @return grundAusbildungZwoelfJahre
+   * Get grund
+   * @return grund
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GRUND)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getGrundAusbildungZwoelfJahre() {
-    return grundAusbildungZwoelfJahre;
+  public DarlehenGrundDtoSpec getGrund() {
+    return grund;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
-    this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
-  }
-
-
-  public DarlehenDtoSpec grundHoheGebuehren(Boolean grundHoheGebuehren) {
-    
-    this.grundHoheGebuehren = grundHoheGebuehren;
-    return this;
-  }
-
-   /**
-   * Falls ja mit Fileupload
-   * @return grundHoheGebuehren
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_HOHE_GEBUEHREN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getGrundHoheGebuehren() {
-    return grundHoheGebuehren;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GRUND_HOHE_GEBUEHREN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundHoheGebuehren(Boolean grundHoheGebuehren) {
-    this.grundHoheGebuehren = grundHoheGebuehren;
-  }
-
-
-  public DarlehenDtoSpec grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
-    
-    this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
-    return this;
-  }
-
-   /**
-   * Falls ja mit Fileupload
-   * @return grundAnschaffungenFuerAusbildung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getGrundAnschaffungenFuerAusbildung() {
-    return grundAnschaffungenFuerAusbildung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
-    this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
-  }
-
-
-  public DarlehenDtoSpec grundZweitausbildung(Boolean grundZweitausbildung) {
-    
-    this.grundZweitausbildung = grundZweitausbildung;
-    return this;
-  }
-
-   /**
-   * Get grundZweitausbildung
-   * @return grundZweitausbildung
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getGrundZweitausbildung() {
-    return grundZweitausbildung;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrundZweitausbildung(Boolean grundZweitausbildung) {
-    this.grundZweitausbildung = grundZweitausbildung;
+  @JsonProperty(JSON_PROPERTY_GRUND)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGrund(DarlehenGrundDtoSpec grund) {
+    this.grund = grund;
   }
 
   @Override
@@ -346,37 +349,37 @@ public class DarlehenDtoSpec {
       return false;
     }
     DarlehenDtoSpec darlehen = (DarlehenDtoSpec) o;
-    return Objects.equals(this.willDarlehen, darlehen.willDarlehen) &&
-        Objects.equals(this.betragDarlehen, darlehen.betragDarlehen) &&
-        Objects.equals(this.betragBezogenKanton, darlehen.betragBezogenKanton) &&
+    return Objects.equals(this.id, darlehen.id) &&
+        Objects.equals(this.gesuchId, darlehen.gesuchId) &&
+        Objects.equals(this.darlehenGewaehren, darlehen.darlehenGewaehren) &&
+        Objects.equals(this.darlehenBetrag, darlehen.darlehenBetrag) &&
+        Objects.equals(this.kommentar, darlehen.kommentar) &&
+        Objects.equals(this.darlehenBetragGewuenscht, darlehen.darlehenBetragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.grundNichtBerechtigt, darlehen.grundNichtBerechtigt) &&
-        Objects.equals(this.grundAusbildungZwoelfJahre, darlehen.grundAusbildungZwoelfJahre) &&
-        Objects.equals(this.grundHoheGebuehren, darlehen.grundHoheGebuehren) &&
-        Objects.equals(this.grundAnschaffungenFuerAusbildung, darlehen.grundAnschaffungenFuerAusbildung) &&
-        Objects.equals(this.grundZweitausbildung, darlehen.grundZweitausbildung);
+        Objects.equals(this.betreibungsAuszug, darlehen.betreibungsAuszug) &&
+        Objects.equals(this.grund, darlehen.grund);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(willDarlehen, betragDarlehen, betragBezogenKanton, schulden, anzahlBetreibungen, grundNichtBerechtigt, grundAusbildungZwoelfJahre, grundHoheGebuehren, grundAnschaffungenFuerAusbildung, grundZweitausbildung);
+    return Objects.hash(id, gesuchId, darlehenGewaehren, darlehenBetrag, kommentar, darlehenBetragGewuenscht, schulden, anzahlBetreibungen, betreibungsAuszug, grund);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenDtoSpec {\n");
-    sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
-    sb.append("    betragDarlehen: ").append(toIndentedString(betragDarlehen)).append("\n");
-    sb.append("    betragBezogenKanton: ").append(toIndentedString(betragBezogenKanton)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    darlehenGewaehren: ").append(toIndentedString(darlehenGewaehren)).append("\n");
+    sb.append("    darlehenBetrag: ").append(toIndentedString(darlehenBetrag)).append("\n");
+    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    grundNichtBerechtigt: ").append(toIndentedString(grundNichtBerechtigt)).append("\n");
-    sb.append("    grundAusbildungZwoelfJahre: ").append(toIndentedString(grundAusbildungZwoelfJahre)).append("\n");
-    sb.append("    grundHoheGebuehren: ").append(toIndentedString(grundHoheGebuehren)).append("\n");
-    sb.append("    grundAnschaffungenFuerAusbildung: ").append(toIndentedString(grundAnschaffungenFuerAusbildung)).append("\n");
-    sb.append("    grundZweitausbildung: ").append(toIndentedString(grundZweitausbildung)).append("\n");
+    sb.append("    betreibungsAuszug: ").append(toIndentedString(betreibungsAuszug)).append("\n");
+    sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.auszahlung.service.AuszahlungMapper;
 import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.darlehen.service.DarlehenMapper;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -79,7 +78,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         KindMapper.class,
         EinnahmenKostenMapper.class,
         SteuererklaerungMapper.class,
-        DarlehenMapper.class,
     }
 )
 public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchFormularUpdateDto, GesuchFormular> {
@@ -239,7 +237,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         final GesuchFormularUpdateDto newFormular,
         final @MappingTarget GesuchFormular targetFormular
     ) {
-        resetDarlehen(targetFormular);
         resetUnterschriftenblaetterIfNotVerfuegt(targetFormular);
     }
 
@@ -326,16 +323,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> {
                 newFormular.getEinnahmenKostenPartner().setVermoegen(null);
             }
-        );
-    }
-
-    void resetDarlehen(
-        final GesuchFormular targetFormular
-    ) {
-        resetFieldIf(
-            () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(targetFormular),
-            "Set Darlehen to null because pia is not volljaehrig",
-            () -> targetFormular.setDarlehen(null)
         );
     }
 

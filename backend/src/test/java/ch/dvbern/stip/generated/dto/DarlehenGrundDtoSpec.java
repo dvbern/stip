@@ -22,37 +22,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetGesucheSBQueryType
+ * Gets or Sets DarlehenGrund
  */
-public enum GetGesucheSBQueryTypeDtoSpec {
+public enum DarlehenGrundDtoSpec {
   
-  ALLE_GESUCHE("ALLE_GESUCHE"),
+  NICHT_BERECHTIGT("NICHT_BERECHTIGT"),
   
-  MEINE_GESUCHE("MEINE_GESUCHE"),
+  AUSBILDUNG_ZWOELF_JAHRE("AUSBILDUNG_ZWOELF_JAHRE"),
   
-  ALLE_PENDENTE_GESUCHE("ALLE_PENDENTE_GESUCHE"),
+  HOHE_GEBUEHREN("HOHE_GEBUEHREN"),
   
-  MEINE_PENDENTE_GESUCHE("MEINE_PENDENTE_GESUCHE"),
+  ANSCHAFFUNGEN_FUER_AUSBILDUNG("ANSCHAFFUNGEN_FUER_AUSBILDUNG"),
   
-  ALLE_BEARBEITBAR("ALLE_BEARBEITBAR"),
-  
-  MEINE_BEARBEITBAR("MEINE_BEARBEITBAR"),
-  
-  ALLE_JURISTISCHE_ABKLAERUNG("ALLE_JURISTISCHE_ABKLAERUNG"),
-  
-  MEINE_JURISTISCHE_ABKLAERUNG("MEINE_JURISTISCHE_ABKLAERUNG"),
-  
-  ALLE_DRUCKBAR_VERFUEGUNGEN("ALLE_DRUCKBAR_VERFUEGUNGEN"),
-  
-  MEINE_DRUCKBAR_VERFUEGUNGEN("MEINE_DRUCKBAR_VERFUEGUNGEN"),
-  
-  ALLE_DRUCKBAR_DATENSCHUTZBRIEFE("ALLE_DRUCKBAR_DATENSCHUTZBRIEFE"),
-  
-  MEINE_DRUCKBAR_DATENSCHUTZBRIEFE("MEINE_DRUCKBAR_DATENSCHUTZBRIEFE");
+  ZWEITAUSBILDUNG("ZWEITAUSBILDUNG");
 
   private String value;
 
-  GetGesucheSBQueryTypeDtoSpec(String value) {
+  DarlehenGrundDtoSpec(String value) {
     this.value = value;
   }
 
@@ -67,8 +53,8 @@ public enum GetGesucheSBQueryTypeDtoSpec {
   }
 
   @JsonCreator
-  public static GetGesucheSBQueryTypeDtoSpec fromValue(String value) {
-    for (GetGesucheSBQueryTypeDtoSpec b : GetGesucheSBQueryTypeDtoSpec.values()) {
+  public static DarlehenGrundDtoSpec fromValue(String value) {
+    for (DarlehenGrundDtoSpec b : DarlehenGrundDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

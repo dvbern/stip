@@ -1338,8 +1338,6 @@ components:
           $ref: './components/gesuch-formular.yaml#/EinnahmenKostenUpdate'
         einnahmenKostenPartner:
           $ref: './components/gesuch-formular.yaml#/EinnahmenKostenUpdate'
-        darlehen:
-          $ref: './components/gesuch-formular.yaml#/Darlehen'
         steuererklaerung:
           type: array
           items:

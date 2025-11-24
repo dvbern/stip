@@ -54,6 +54,9 @@ public class ApiClient {
     public ConfigurationApiSpec _configuration() {
         return ConfigurationApiSpec._configuration(config.reqSpecSupplier);
     }
+    public DarlehenApiSpec darlehen() {
+        return DarlehenApiSpec.darlehen(config.reqSpecSupplier);
+    }
     public DatenschutzbriefApiSpec datenschutzbrief() {
         return DatenschutzbriefApiSpec.datenschutzbrief(config.reqSpecSupplier);
     }

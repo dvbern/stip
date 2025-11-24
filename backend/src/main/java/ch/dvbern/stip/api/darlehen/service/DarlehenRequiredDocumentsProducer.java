@@ -32,27 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class DarlehenRequiredDocumentsProducer implements RequiredDocumentsProducer {
     @Override
     public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        if (
-            Objects.isNull(formular.getDarlehen()) || Boolean.FALSE.equals(formular.getDarlehen().getWillDarlehen())
-        ) {
-            return ImmutablePair.of("", Set.of());
-        }
-        final var darlehen = formular.getDarlehen();
         final var requiredDocs = new HashSet<DokumentTyp>();
-
-        requiredDocs.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
-
-        if (Boolean.TRUE.equals(darlehen.getGrundNichtBerechtigt())) {
-            requiredDocs.add(DokumentTyp.DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN);
-        }
-        if (Boolean.TRUE.equals(darlehen.getGrundHoheGebuehren())) {
-            requiredDocs.add(DokumentTyp.DARLEHEN_KOPIE_SCHULGELDRECHNUNG);
-        }
-        if (
-            Boolean.TRUE.equals(darlehen.getGrundAnschaffungenFuerAusbildung())
-        ) {
-            requiredDocs.add(DokumentTyp.DARLEHEN_BELEGE_ANSCHAFFUNGEN);
-        }
 
         return ImmutablePair.of("darlehen", requiredDocs);
     }
