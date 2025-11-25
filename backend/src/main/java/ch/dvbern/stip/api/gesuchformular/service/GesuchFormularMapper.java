@@ -240,6 +240,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     ) {
         resetDarlehen(targetFormular);
         resetUnterschriftenblaetterIfNotVerfuegt(targetFormular);
+        resetVersteckteElternIfRemoved(targetFormular);
     }
 
     @AfterMapping
@@ -552,6 +553,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 steuerdaten.setSaeule3a(null);
             }
         });
+    }
+
+    void resetVersteckteElternIfRemoved(
+        final GesuchFormular targetFormular
+    ) {
+        final var eltern = targetFormular.getElterns();
+        if (eltern.size() < 2) {
+            targetFormular.getVersteckteEltern()
+                .removeIf(elternTyp -> eltern.stream().anyMatch(e -> e.getElternTyp() != elternTyp));
+        }
     }
 
     void removeElternOfTyp(final List<ElternUpdateDto> eltern, final ElternTyp typ) {
