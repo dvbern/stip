@@ -1,0 +1,50 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /config/deployment:
+    get:
+      tags:
+        - Configuration
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentConfig'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDeploymentConfig
+      summary: Returniert der Deployment Configuration.
+      description: Gibt zuerueck die Version und Stage aus das Backend
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  schemas:
+    DeploymentConfig:
+      type: object
+      properties:
+        environment:
+          type: string
+        version:
+          type: string
+        allowedMimeTypes:
+          type: array
+          items:
+            type: string
+security:
+  $ref: './components/security.yaml#/security'

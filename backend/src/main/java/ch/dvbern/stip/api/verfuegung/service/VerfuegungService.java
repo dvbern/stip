@@ -26,9 +26,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -76,6 +76,8 @@ public class VerfuegungService {
     private final ConfigService configService;
     private final S3AsyncClient s3;
     private final VerfuegungDokumentRepository verfuegungDokumentRepository;
+    private final DokumentUploadService dokumentUploadService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     public List<VerfuegungDto> getVerfuegungen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
@@ -94,7 +96,7 @@ public class VerfuegungService {
 
     @Transactional
     public void createNegativeVerfuegungManuell(final UUID gesuchId, final FileUpload fileUpload) {
-        final var response = DokumentUploadUtil.validateScanUploadDokument(
+        final var response = dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
@@ -182,7 +184,7 @@ public class VerfuegungService {
     public RestMulti<Buffer> getVerfuegungDokument(UUID verfuegungDokumentId) {
         final var verfuegungDokument = verfuegungDokumentRepository.requireById(verfuegungDokumentId);
 
-        return DokumentDownloadUtil.getDokument(
+        return dokumentDownloadService.getDokument(
             s3,
             configService.getBucketName(),
             verfuegungDokument.getObjectId(),
@@ -199,7 +201,7 @@ public class VerfuegungService {
     ) {
         final String filename =
             generateFilename(dokumentTyp, verfuegung.getGesuch().getAusbildung().getFall().getFallNummer());
-        final String objectId = DokumentUploadUtil.executeUploadDocument(
+        final String objectId = dokumentUploadService.executeUploadDocument(
             pdfContent.toByteArray(),
             filename,
             s3,

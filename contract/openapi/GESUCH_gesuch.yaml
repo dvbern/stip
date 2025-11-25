@@ -1,0 +1,1687 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /gesuch:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchCreate'
+        required: true
+      tags:
+        - Gesuch
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchCreateResponse'
+          description: New Gesuch is created
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createGesuch
+      summary: Creates a new Gesuch
+  '/gesuch/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
+      tags:
+        - Gesuch
+      responses:
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateGesuch
+      summary: Updates the Gesuch with the given Id
+    delete:
+      tags:
+        - Gesuch
+      responses:
+        '204':
+          description: |
+            Gesuch deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteGesuch
+      summary: delete a Gesuch
+  '/gesuch/changes/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getInitialTrancheChanges
+      summary: Returns the inital tranche changes by gesuchTrancheId
+  '/gesuch/gs/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchGS
+      summary: Returns the Gesuch with the given Id
+  '/gesuch/sb/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchSB
+      summary: Returns the Gesuch with the given Id
+  '/gesuch/{gesuchId}/info':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchInfo
+      summary: Returns the basic Gesuch info with the given Id
+  /gesuch/benutzer/me/sb/{getGesucheSBQueryType}:
+    get:
+      tags:
+        - Gesuch
+      parameters:
+        - name: getGesucheSBQueryType
+          schema:
+            $ref: './components/common.yaml#/GetGesucheSBQueryType'
+          in: path
+          required: true
+        - $ref: './components/parameters.yaml#/fallNummer'
+        - $ref: '#/components/parameters/piaNachname'
+        - $ref: '#/components/parameters/piaVorname'
+        - $ref: '#/components/parameters/piaGeburtsdatum'
+        - $ref: '#/components/parameters/status'
+        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: './components/parameters.yaml#/letzteAktivitaetFrom'
+        - $ref: './components/parameters.yaml#/letzteAktivitaetTo'
+        - $ref: '#/components/parameters/typ'
+        - $ref: './components/parameters.yaml#/page'
+        - $ref: './components/parameters.yaml#/pageSize'
+        - name: sortColumn
+          schema:
+            $ref: '#/components/schemas/SbDashboardColumn'
+          in: query
+          required: false
+        - $ref: './components/parameters.yaml#/sortOrder'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSbDashboard'
+          description: Returns gesuche filtered by status and sb
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesucheSb
+      summary: Returns gesuche filtered by status and sb
+  /gesuch/benutzer/me/gs:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Gesuch'
+          description: Returns gesuche filtered by gs
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesucheGs
+      summary: Returns gesuche filtered by gs
+  /gesuch/benutzer/me/gs-dashboard:
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallDashboardItem'
+          description: Returns gesuche for dashboard filtered by gs
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGsDashboard
+      summary: Returns gesuche for dashboard filtered by gs
+  /gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}:
+    get:
+      tags:
+        - Gesuch
+      parameters:
+        - name: fallId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallDashboardItem'
+          description: Returns gesuche for dashboard filtered by sozialdienst mitarbeiter
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSozialdienstMitarbeiterDashboard
+      summary: Returns gesuche for dashboard filtered by gs
+  '/gesuch/{gesuchTrancheId}/pruefen/sb':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Gesuch geprueft
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchManuellPruefenSB
+      summary: Das Gesuch manuell pruefen als Sachbearbeiter
+  /gesuch/status/in-bearbeitung/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToInBearbeitung
+  /gesuch/status/bereit-fuer-bearbeitung/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToBereitFuerBearbeitung
+  /gesuch/status/datenschutzbrief-druckbereit/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/Kommentar'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToDatenschutzbriefDruckbereit
+  /gesuch/status/verfuegt/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToVerfuegt
+  /gesuch/status/versendet/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToVersendet
+  /gesuch/status/negative-verfuegung/{gesuchTrancheId}:
+    post:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/AusgewaehlterGrund'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToNegativeVerfuegung
+  /gesuch/status/unterschriftenblatt-erhalten/{gesuchTrancheId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchTrancheId'
+    post:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToVerfuegungDruckbereit
+  '/gesuch/{gesuchId}/einreichedatum':
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EinreichedatumStatus'
+          description: Check ob einreichedatumManuellAendern aufrufbar ist oder nicht
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: canEinreichedatumAendern
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EinreichedatumAendernRequest'
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Aendert das Einreichedatum des Gesuch manuell
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: einreichedatumManuellAendern
+  '/gesuch/{gesuchId}/beschwerde':
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeschwerdeVerlaufEntry'
+          description: Returns all the BeschwerdeVerlaufEntrys for a given Gesuch
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllBeschwerdeVerlaufEntrys
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeschwerdeVerlaufEntry'
+          description: Creates a new BeschwerdeVerlaufEntry for a given Gesuch
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createBeschwerdeVerlaufEntry
+  '/gesuch/{gesuchId}/beschwerde-entscheid':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BeschwerdeEntscheidCreate'
+      parameters:
+        - $ref: './components/parameters.yaml#/gesuchId'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createBeschwerdeEntscheid
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  /gesuch/{gesuchTrancheId}/set-gesuchsperiode:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchTrancheId'
+      - name: gesuchsperiodeId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: query
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Updated Gesuch
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: setGesuchsperiodeForGesuch
+      summary: Set gesuchsperiode for gesuch
+
+  '/gesuch/{gesuchTrancheId}/einreichen/gs':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Gesuch eingereicht
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchEinreichenGs
+      summary: Das Gesuch einreichen als Gesuchsteller
+  '/gesuch/{gesuchTrancheId}/pruefen/jur':
+    patch:
+      tags:
+        - Gesuch
+      parameters:
+        - name: gesuchTrancheId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Gesuch geprueft
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchManuellPruefenJur
+      summary: Das Gesuch manuell pruefen als Jurist
+  '/gesuch/{gesuchId}/nachfristDokumente':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NachfristAendernRequest'
+      responses:
+        '204':
+          description: nachfrist updated successfully
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateNachfristDokumente
+      summary: Nachfrist der nachzureichenden Dokumente anpassen
+  '/gesuch/{gesuchTrancheId}/fehlendeDokumente':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Fehlende Dokumente übermittelt
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchFehlendeDokumenteUebermitteln
+      summary: Dem GS übermitteln das Dokumente nicht akzeptiert wurden
+  '/gesuch/{gesuchTrancheId}/fehlendeDokumenteEinreichen':
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchTrancheId'
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: Fehlende Dokumente eingereicht
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchTrancheFehlendeDokumenteEinreichen
+      summary: Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
+  '/gesuch/{gesuchTrancheId}/bearbeitungAbschliessen':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Bearbeitung des Gesuch Abschliessen
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: bearbeitungAbschliessen
+      summary: Die Bearbeitung des Gesuch durch den SB abschliessen
+  '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchTrancheId'
+    patch:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/Kommentar'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchZurueckweisenResponse'
+          description: Gesuch zurueckweisen and GS
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: gesuchZurueckweisen
+      summary: Gas Gesuch an den GS zurueckweisen
+  '/gesuch/{gesuchTrancheId}/manuelle-verfuegung':
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ManuelleVerfuegungCreate'
+      parameters:
+        - $ref: './components/parameters.yaml#/gesuchTrancheId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns gesuch with changes in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createManuelleVerfuegung
+  '/gesuch/{gesuchId}/statusprotokoll':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '201':
+          description: Gesuch eingereicht
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusprotokollEntry'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getStatusProtokoll
+      summary: Holt das Statusprotokoll für ein Gesuch
+  '/gesuch/{gesuchId}/berechnung':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Stipendien berechnet für Gesuch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getBerechnungForGesuch
+      summary: Berechnet und holt die Berechnung für ein Gesuch
+  '/gesuch/{gesuchId}/berechnungsblatt/token':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getBerechnungsblattDownloadToken
+      summary: get Berechnungsblatt Download Token
+  '/gesuch/{aenderungId}/aenderung/gs/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGsAenderungChangesInBearbeitung
+  '/gesuch/{aenderungId}/aenderung/sb/changes':
+    parameters:
+      - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSbAenderungChanges
+
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  parameters:
+    piaVorname:
+      in: query
+      name: piaVorname
+      schema:
+        type: string
+    piaNachname:
+      in: query
+      name: piaNachname
+      schema:
+        type: string
+    piaGeburtsdatum:
+      in: query
+      name: piaGeburtsdatum
+      schema:
+        type: string
+        format: date
+    bearbeiter:
+      in: query
+      name: bearbeiter
+      schema:
+        type: string
+    status:
+      in: query
+      name: status
+      schema:
+        type: string
+    typ:
+      in: query
+      name: typ
+      required: true
+      schema:
+        $ref: './components/common.yaml#/GesuchTrancheTyp'
+    aenderungId:
+      name: aenderungId
+      in: path
+      required: true
+      description: Die ID der Aenderung
+      schema:
+        $ref: './components/common.yaml#/UUID'
+  schemas:
+    GesuchCreateResponse:
+      properties:
+        gesuch:
+          $ref: './components/common.yaml#/UUID'
+        error:
+          $ref: './components/common.yaml#/GesuchsperiodeSelectError'
+    GesuchDashboardItem:
+      required:
+        - id
+        - currentTrancheId
+        - gesuchsperiode
+        - gesuchStatus
+        - startDate
+        - endDate
+      type: object
+      properties:
+        nachfristDokumente:
+          $ref: './components/common.yaml#/LocalDate'
+        gesuchsperiode:
+          $ref: './components/common.yaml#/Gesuchsperiode'
+        gesuchStatus:
+          $ref: './components/common.yaml#/Gesuchstatus'
+        id:
+          $ref: './components/common.yaml#/UUID'
+        currentTrancheId:
+          $ref: './components/common.yaml#/UUID'
+        offeneAenderung:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        missingDocuments:
+          required:
+            - trancheId
+            - count
+          type: object
+          properties:
+            trancheId:
+              $ref: './components/common.yaml#/UUID'
+            count:
+              type: integer
+    FallDashboardItem:
+      required:
+        - fall
+        - ausbildungDashboardItems
+        - notifications
+      type: object
+      properties:
+        fall:
+          $ref: './components/common.yaml#/Fall'
+        ausbildungDashboardItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AusbildungDashboardItem'
+        notifications:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Notification'
+        delegierung:
+          $ref: './components/common.yaml#/DelegierungSlim'
+    AusbildungDashboardItem:
+      type: object
+      properties:
+        gesuchs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDashboardItem'
+      allOf:
+        - $ref: './components/common.yaml#/Ausbildung'
+    SbDashboardColumn:
+      enum:
+        - FALLNUMMER
+        - TYP
+        - PIA_NACHNAME
+        - PIA_VORNAME
+        - PIA_GEBURTSDATUM
+        - STATUS
+        - BEARBEITER
+        - LETZTE_AKTIVITAET
+    PaginatedSbDashboard:
+      allOf:
+        - $ref: './components/common.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/SbDashboardGesuch'
+    SbDashboardGesuch:
+      type: object
+      required:
+        - id
+        - gesuchTrancheId
+        - fallNummer
+        - typ
+        - piaNachname
+        - piaVorname
+        - piaGeburtsdatum
+        - trancheStatus
+        - gesuchStatus
+        - bearbeiter
+        - letzteAktivitaet
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
+        fallNummer:
+          type: string
+        typ:
+          $ref: './components/common.yaml#/GesuchTrancheTyp'
+        piaNachname:
+          type: string
+        piaVorname:
+          type: string
+        piaGeburtsdatum:
+          type: string
+          format: date
+        gesuchStatus:
+          $ref: './components/common.yaml#/Gesuchstatus'
+        trancheStatus:
+          $ref: './components/common.yaml#/GesuchTrancheStatus'
+        bearbeiter:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date
+    BeschwerdeEntscheidCreate:
+      required:
+        - kommentar
+        - beschwerdeErfolgreich
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        beschwerdeErfolgreich:
+          type: boolean
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
+    BeschwerdeEntscheid:
+      required:
+        - kommentar
+        - beschwerdeErfolgreich
+        - dokumente
+      type: object
+      properties:
+        kommentar:
+          type: string
+        beschwerdeErfolgreich:
+          type: boolean
+        dokumente:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Dokument'
+    BeschwerdeVerlaufEntryCreate:
+      type: object
+      required:
+        - kommentar
+        - beschwerdeSetTo
+      properties:
+        kommentar:
+          type: string
+        beschwerdeSetTo:
+          type: boolean
+    BeschwerdeVerlaufEntry:
+      type: object
+      required:
+        - kommentar
+        - beschwerdeSetTo
+        - timestampErstellt
+        - userErstellt
+      allOf:
+        - $ref: '#/components/schemas/BeschwerdeVerlaufEntryCreate'
+      properties:
+        beschwerdeEntscheid:
+          $ref: '#/components/schemas/BeschwerdeEntscheid'
+        timestampErstellt:
+          type: string
+          format: date-time
+        userErstellt:
+          type: string
+    GesuchCreate:
+      required:
+        - ausbildungId
+      type: object
+      properties:
+        ausbildungId:
+          $ref: './components/common.yaml#/UUID'
+    GesuchUpdate:
+      required:
+        - gesuchTrancheToWorkWith
+      type: object
+      properties:
+        nachfristDokumente:
+          type: string
+        gesuchTrancheToWorkWith:
+          $ref: '#/components/schemas/GesuchTrancheUpdate'
+    GesuchTrancheUpdate:
+      required:
+        - gesuchFormular
+        - id
+      type: object
+      properties:
+        gesuchFormular:
+          $ref: '#/components/schemas/GesuchFormularUpdate'
+        id:
+          $ref: './components/common.yaml#/UUID'
+    GesuchFormularUpdate:
+      required: []
+      type: object
+      properties:
+        # ausbildung:
+        #   $ref: '#/components/schemas/AusbildungUpdate'
+        personInAusbildung:
+          $ref: './components/gesuch-formular.yaml#/PersonInAusbildungUpdate'
+        familiensituation:
+          $ref: './components/gesuch-formular.yaml#/FamiliensituationUpdate'
+        partner:
+          $ref: './components/gesuch-formular.yaml#/PartnerUpdate'
+        elterns:
+          type: array
+          items:
+            $ref: './components/gesuch-formular.yaml#/ElternUpdate'
+        geschwisters:
+          type: array
+          items:
+            $ref: './components/gesuch-formular.yaml#/GeschwisterUpdate'
+        lebenslaufItems:
+          type: array
+          items:
+            $ref: './components/gesuch-formular.yaml#/LebenslaufItemUpdate'
+        kinds:
+          type: array
+          items:
+            $ref: './components/gesuch-formular.yaml#/KindUpdate'
+        einnahmenKosten:
+          $ref: './components/gesuch-formular.yaml#/EinnahmenKostenUpdate'
+        einnahmenKostenPartner:
+          $ref: './components/gesuch-formular.yaml#/EinnahmenKostenUpdate'
+        darlehen:
+          $ref: './components/gesuch-formular.yaml#/Darlehen'
+        steuererklaerung:
+          type: array
+          items:
+            $ref: './components/gesuch-formular.yaml#/SteuererklaerungUpdate'
+    EinreichedatumAendernRequest:
+      type: object
+      required:
+        - newEinreichedatum
+      properties:
+        newEinreichedatum:
+          type: string
+          format: date
+        betreff:
+          type: string
+        text:
+          type: string
+    EinreichedatumStatus:
+      type: object
+      required:
+        - canAendern
+      properties:
+        canAendern:
+          type: boolean
+    GesuchInfo:
+      required:
+        - id
+        - gesuchNummer
+        - gesuchStatus
+        - startDate
+        - endDate
+        - canGetBerechnung
+        - beschwerdeHaengig
+        - canTriggerManuellPruefen
+        - canChangeGesuchsperiode
+      type: object
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        gesuchNummer:
+          type: string
+        gesuchStatus:
+          $ref: './components/common.yaml#/Gesuchstatus'
+        startDate:
+          $ref: './components/common.yaml#/LocalDate'
+        endDate:
+          $ref: './components/common.yaml#/LocalDate'
+        canGetBerechnung:
+          type: boolean
+        beschwerdeHaengig:
+          type: boolean
+        canTriggerManuellPruefen:
+          type: boolean
+        canChangeGesuchsperiode:
+          type: boolean
+    NachfristAendernRequest:
+      type: object
+      required:
+        - newNachfrist
+      properties:
+        newNachfrist:
+          type: string
+          format: date
+    GesuchZurueckweisenResponse:
+      type: object
+      required:
+        - gesuchId
+        - gesuchTrancheId
+      properties:
+        gesuchId:
+          $ref: './components/common.yaml#/UUID'
+        gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
+    ManuelleVerfuegungCreate:
+      required:
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
+    StatusprotokollEntryTyp:
+      enum:
+        - GESUCH
+        - AENDERUNG
+    StatusprotokollEntry:
+      description: 'Eintrag von dem Statusprotokoll'
+      type: object
+      required:
+        - timestamp
+        - statusTo
+        - typ
+        - benutzer
+        - kommentar
+      properties:
+        timestamp:
+          description: 'Datum und Zeit vom wechsel zu status, ISO 8601 formatiert'
+          type: string
+          format: date-time
+        statusFrom:
+          type: string
+        statusTo:
+          type: string
+        typ:
+          $ref: '#/components/schemas/StatusprotokollEntryTyp'
+        benutzer:
+          description: 'Der Benutzer welcher den Statuswechsel ausgelöst hat'
+          type: string
+        kommentar:
+          description: 'Kommentar vom SB über die Statusänderung'
+          type: string
+    Berechnungsresultat:
+      description: Resultat der Berechnung (gesamtes Gesuch)
+      required:
+        - year
+        - berechnung
+        - tranchenBerechnungsresultate
+      type: object
+      properties:
+        year:
+          type: integer
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch'
+          type: integer
+        berechnungReduziert:
+          description: 'Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens'
+          type: integer
+        tranchenBerechnungsresultate:
+          description: 'Resultate der Berechnung für die Tranchen des Gesuchs'
+          type: array
+          items:
+            $ref: '#/components/schemas/TranchenBerechnungsresultat'
+        verminderteBerechnungMonate:
+          description: 'Die Anzahl von Monaten für welche die Berechnung stattfand'
+          type: integer
+    TranchenBerechnungsresultat:
+      description: Resultat der Berechnung (eine Tranche)
+      required:
+        - nameGesuchsteller
+        - berechnung
+        - gueltigAb
+        - gueltigBis
+        - gesuchTrancheId
+        - berechnungsanteilKinder
+        - berechnungsStammdaten
+        - persoenlichesBudgetresultat
+        - familienBudgetresultate
+      type: object
+      properties:
+        nameGesuchsteller:
+          type: string
+        berechnung:
+          description: 'Berechneter Stpendiumsanspruch für diese Tranche'
+          type: integer
+        gueltigAb:
+          $ref: './components/common.yaml#/LocalDate'
+        gueltigBis:
+          $ref: './components/common.yaml#/LocalDate'
+        gesuchTrancheId:
+          description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
+            Mehrere resultate mit der gleichen ID sind die berechnungen für
+            getrennte eltern mit Kindern die eine Obhutsteilung haben'
+          $ref: './components/common.yaml#/UUID'
+        berechnungsanteilKinder:
+          description: 'Anteil dieser Berechnung am Berechnungstotal.
+            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+          type: number
+        berechnungsStammdaten:
+          description: 'Stammdaten für die Stipendienberechnung'
+          $ref: '#/components/schemas/BerechnungsStammdaten'
+        persoenlichesBudgetresultat:
+          description: 'Berechnungsdaten des persönlichen Budgets'
+          $ref: '#/components/schemas/PersoenlichesBudgetresultat'
+        familienBudgetresultate:
+          description: 'Berechnungsdaten der Familienbudgets'
+          type: array
+          items:
+            $ref: '#/components/schemas/FamilienBudgetresultat'
+    BerechnungsStammdaten:
+      description: Stammdaten used for the calculation of the stipendium
+      required:
+        - maxSaeule3a
+        - einkommensfreibetrag
+        - freibetragErwerbseinkommen
+        - abzugslimite
+        - freibetragVermoegen
+        - vermoegensanteilInProzent
+        - anzahlWochenLehre
+        - anzahlWochenSchule
+        - preisProMahlzeit
+        - stipLimiteMinimalstipendium
+        - limiteAlterAntragsstellerHalbierungElternbeitrag
+      type: object
+      properties:
+        maxSaeule3a:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        abzugslimite:
+          type: integer
+        freibetragErwerbseinkommen:
+          type: integer
+        freibetragVermoegen:
+          type: integer
+        vermoegensanteilInProzent:
+          type: integer
+        anzahlWochenLehre:
+          type: integer
+        anzahlWochenSchule:
+          type: integer
+        preisProMahlzeit:
+          type: integer
+        stipLimiteMinimalstipendium:
+          type: integer
+        limiteAlterAntragsstellerHalbierungElternbeitrag:
+          type: integer
+    PersoenlichesBudgetresultat:
+      description: Persoenliche Budget daten fuer und von der Berechnung
+      required:
+        - anzahlPersonenImHaushalt
+        - eigenerHaushalt
+        - anteilFamilienbudget
+        - einkommen
+        - alimente
+        - leistungenEO
+        - rente
+        - kinderAusbildungszulagen
+        - ergaenzungsleistungen
+        - gemeindeInstitutionen
+        - steuerbaresVermoegen
+        - anrechenbaresVermoegen
+        - einkommenPartner
+        - einnahmenPersoenlichesBudget
+        - anteilLebenshaltungskosten
+        - grundbedarf
+        - wohnkosten
+        - medizinischeGrundversorgung
+        - steuern
+        - steuernPartner
+        - fahrkosten
+        - fahrkostenPartner
+        - verpflegung
+        - verpflegungPartner
+        - fremdbetreuung
+        - ausbildungskosten
+        - ausgabenPersoenlichesBudget
+        - persoenlichesbudgetBerechnet
+      type: object
+      properties:
+        anzahlPersonenImHaushalt:
+          type: integer
+        totalVorTeilung:
+          type: integer
+        eigenerHaushalt:
+          type: boolean
+        anteilFamilienbudget:
+          type: integer
+        einkommen:
+          type: integer
+        alimente:
+          type: integer
+        leistungenEO:
+          type: integer
+        rente:
+          type: integer
+        kinderAusbildungszulagen:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        gemeindeInstitutionen:
+          type: integer
+        steuerbaresVermoegen:
+          type: integer
+        anrechenbaresVermoegen:
+          type: integer
+        einkommenPartner:
+          type: integer
+        einnahmenPersoenlichesBudget:
+          type: integer
+        anteilLebenshaltungskosten:
+          type: integer
+        grundbedarf:
+          type: integer
+        wohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: integer
+        steuern:
+          type: integer
+        steuernPartner:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        fremdbetreuung:
+          type: integer
+        ausbildungskosten:
+          type: integer
+        ausgabenPersoenlichesBudget:
+          type: integer
+        persoenlichesbudgetBerechnet:
+          type: integer
+        elternbeitrag1:
+          type: integer
+        elternbeitrag2:
+          type: integer
+    FamilienBudgetresultat:
+      description: Familien Budget daten fuer und von der Berechnung
+      required:
+        - familienBudgetTyp
+        - selbststaendigErwerbend
+        - anzahlPersonenImHaushalt
+        - anzahlGeschwisterInAusbildung
+        - totalEinkuenfte
+        - ergaenzungsleistungen
+        - steuerbaresVermoegen
+        - anrechenbaresVermoegen
+        - saeule2
+        - saeule3a
+        - eigenmietwert
+        - alimente
+        - einnahmenFamilienbudget
+        - grundbedarf
+        - effektiveWohnkosten
+        - medizinischeGrundversorgung
+        - integrationszulage
+        - steuernBund
+        - steuernKantonGemeinde
+        - fahrkostenPerson1
+        - fahrkostenPerson2
+        - essenskostenPerson1
+        - essenskostenPerson2
+        - ausgabenFamilienbudget
+        - familienbudgetBerechnet
+      type: object
+      properties:
+        familienBudgetTyp:
+          $ref: './components/common.yaml#/SteuerdatenTyp'
+        selbststaendigErwerbend:
+          type: boolean
+        anzahlPersonenImHaushalt:
+          type: integer
+        anzahlGeschwisterInAusbildung:
+          type: integer
+        totalEinkuenfte:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        steuerbaresVermoegen:
+          type: integer
+        anrechenbaresVermoegen:
+          type: integer
+        saeule2:
+          type: integer
+        saeule3a:
+          type: integer
+        eigenmietwert:
+          type: integer
+        alimente:
+          type: integer
+        einnahmenFamilienbudget:
+          type: integer
+        grundbedarf:
+          type: integer
+        effektiveWohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: integer
+        integrationszulage:
+          type: integer
+        steuernBund:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        fahrkostenPerson1:
+          type: integer
+        fahrkostenPerson2:
+          type: integer
+        essenskostenPerson1:
+          type: integer
+        essenskostenPerson2:
+          type: integer
+        ausgabenFamilienbudget:
+          type: integer
+        familienbudgetBerechnet:
+          type: integer
+security:
+  $ref: './components/security.yaml#/security'

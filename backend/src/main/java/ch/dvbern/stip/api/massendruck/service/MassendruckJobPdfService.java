@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
@@ -62,6 +62,7 @@ public class MassendruckJobPdfService {
     private final S3AsyncClient s3async;
     private final ConfigService configService;
     private final GesuchStatusService gesuchStatusService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     // TODO KSTIP-2294: Replace this with an impl on the service once 2709 is merged
     private final DatenschutzbriefPdfService datenschutzbriefPdfService;
@@ -155,7 +156,7 @@ public class MassendruckJobPdfService {
         final var massendruckJob = massendruckJobRepository.requireById(massendruckJobId);
         final var dokument = massendruckJob.getMergedPdf();
 
-        return DokumentDownloadUtil.getDokument(
+        return dokumentDownloadService.getDokument(
             s3async,
             configService.getBucketName(),
             dokument.getObjectId(),

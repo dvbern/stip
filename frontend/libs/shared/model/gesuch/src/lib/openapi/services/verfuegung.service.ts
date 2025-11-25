@@ -106,10 +106,10 @@ export class VerfuegungService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'text/plain', context?: HttpContext}): Observable<Blob>;
-     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Blob>>;
-     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Blob>>;
-     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<Blob>;
+     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpResponse<Blob>>;
+     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpEvent<Blob>>;
+     public getVerfuegungDokument$(requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<any> {
         const token = requestParameters.token;
         if (token === null || token === undefined) {
             throw new Error('Required parameter token was null or undefined when calling getVerfuegungDokument$.');
@@ -140,8 +140,7 @@ export class VerfuegungService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                'application/octet-stream',
-                'text/plain'
+                'application/octet-stream'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -170,6 +169,7 @@ export class VerfuegungService {
     }
 
     /**
+     * get Token to downlaod Verfuegung
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

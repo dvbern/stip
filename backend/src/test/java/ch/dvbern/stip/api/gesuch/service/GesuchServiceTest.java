@@ -91,7 +91,6 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -117,7 +116,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
 import jakarta.inject.Inject;
 import jdk.jfr.Description;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
@@ -152,10 +150,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 class GesuchServiceTest {
     @InjectMock
     StipDecisionService decisionService;
@@ -1837,6 +1833,41 @@ class GesuchServiceTest {
 
         gesuchService.checkForFehlendeDokumenteOnAllGesuche();
         assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.IN_BEARBEITUNG_GS));
+        assertNull(gesuch.getEinreichedatum());
+    }
+
+    @TestAsGesuchsteller
+    @Test
+    @Description("Check that verfuegt gesuch is moved to state BEREIT_FUER_BEARBEITUNG when the frist is done")
+    void checkForFehlendeDokumenteOnAllVerfuegtGesucheTest() {
+        // arrange
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
+                .setVorname("test")
+                .setNachname("test")
+        );
+        Fall fall = new Fall();
+        fall.setSachbearbeiterZuordnung(zuordnung);
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.FEHLENDE_DOKUMENTE);
+        gesuch.setVerfuegt(true);
+        gesuch.getAusbildung().setFall(fall);
+
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(gesuchRepository.getAllFehlendeDokumente()).thenReturn(List.of(gesuch));
+        when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        var gesuchTrancheValidatorServiceMock = Mockito.mock(GesuchTrancheValidatorService.class);
+        Mockito.doNothing().when(gesuchTrancheValidatorServiceMock).validateGesuchTrancheForEinreichen(any());
+        QuarkusMock.installMockForType(gesuchTrancheValidatorServiceMock, GesuchTrancheValidatorService.class);
+
+        gesuch.setNachfristDokumente(LocalDate.now().minusDays(1));
+
+        gesuchService.checkForFehlendeDokumenteOnAllGesuche();
+        assertThat(gesuch.getGesuchStatus(), is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG));
         assertNull(gesuch.getEinreichedatum());
     }
 

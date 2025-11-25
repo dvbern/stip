@@ -13,7 +13,7 @@ import { VerfuegungDokument } from './verfuegungDokument';
 
 export interface Verfuegung { 
     id: string;
-    timestampErstellt: string;
+    timestampErstellt?: string;
     dokumente: Array<VerfuegungDokument>;
 }
 

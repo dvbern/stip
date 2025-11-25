@@ -24,8 +24,8 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.VerfuegungResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
@@ -55,12 +55,16 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     private final JWTParser jwtParser;
     private final VerfuegungService verfuegungService;
     private final VerfuegungAuthorizer verfuegungAuthorizer;
+    private final BenutzerService benutzerService;
+    private final ConfigService configService;
+
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Blocking
     @Override
     @PermitAll
     public RestMulti<Buffer> getVerfuegungDokument(String token) {
-        final var verfuegungDokumentId = DokumentDownloadUtil.getClaimId(
+        final var verfuegungDokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
@@ -74,7 +78,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     public FileDownloadTokenDto getVerfuegungDokumentDownloadToken(UUID verfuegungDokumentId) {
         verfuegungAuthorizer.canGetVerfuegungDownloadToken(verfuegungDokumentId);
 
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             verfuegungDokumentId,
             DokumentDownloadConstants.VERFUEGUN_DOKUMENT_ID_CLAIM,
             benutzerService,

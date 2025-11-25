@@ -28,10 +28,13 @@ import lombok.RequiredArgsConstructor;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.core.Is.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 @RequiredArgsConstructor
 class DarlehenFieldsRequiredConstraintValidatorTest {
 

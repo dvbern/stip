@@ -32,8 +32,8 @@ import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
@@ -105,6 +105,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final StatusprotokollService statusprotokollService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -412,7 +413,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             gesuchId,
             DokumentDownloadConstants.GESUCH_ID_CLAIM,
             benutzerService,

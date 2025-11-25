@@ -21,6 +21,7 @@ import java.util.EnumMap;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
@@ -67,6 +68,7 @@ public class GesuchStatusConfigProducer {
     private final StatusprotokollService statusprotokollService;
     private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private final VerfuegtHandler verfuegtHandler;
+    private final AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -133,6 +135,10 @@ public class GesuchStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG),
                 bereitFuerBearbeitungHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.AENDERUNG_FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
+                aenderungFehlendeDokumenteZurueckweisenHandler::handle
             );
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
@@ -154,15 +160,11 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT, Gesuchstatus.IN_BEARBEITUNG_GS)
+            .permit(
+                GesuchStatusChangeEvent.AENDERUNG_FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT,
+                Gesuchstatus.BEREIT_FUER_BEARBEITUNG
+            )
             .permit(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-            .permit(
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH,
-                Gesuchstatus.KEIN_STIPENDIENANSPRUCH
-            )
-            .permit(
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH,
-                Gesuchstatus.STIPENDIENANSPRUCH
-            )
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE),
                 fehlendeDokumenteHandler::handle
