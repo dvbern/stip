@@ -161,7 +161,7 @@ public class VerfuegungApiSpec {
         }
     }
     /**
-     * 
+     * get Token to downlaod Verfuegung
      * 
      *
      * @see #verfuegungDokumentIdPath  (required)

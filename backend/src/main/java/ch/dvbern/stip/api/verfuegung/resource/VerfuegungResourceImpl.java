@@ -55,8 +55,6 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
     private final JWTParser jwtParser;
     private final VerfuegungService verfuegungService;
     private final VerfuegungAuthorizer verfuegungAuthorizer;
-    private final BenutzerService benutzerService;
-    private final ConfigService configService;
 
     private final DokumentDownloadService dokumentDownloadService;
 

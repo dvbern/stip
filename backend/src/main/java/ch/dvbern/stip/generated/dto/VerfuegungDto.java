@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class VerfuegungDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid String timestampErstellt;
   private @Valid List<VerfuegungDokumentDto> dokumente = new ArrayList<>();
+  private @Valid String timestampErstellt;
 
   /**
    **/
@@ -45,25 +45,6 @@ public class VerfuegungDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public VerfuegungDto timestampErstellt(String timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
-    return this;
-  }
-
-  
-  @JsonProperty("timestampErstellt")
-  @NotNull
-  public String getTimestampErstellt() {
-    return timestampErstellt;
-  }
-
-  @JsonProperty("timestampErstellt")
-  public void setTimestampErstellt(String timestampErstellt) {
-    this.timestampErstellt = timestampErstellt;
   }
 
   /**
@@ -101,6 +82,24 @@ public class VerfuegungDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public VerfuegungDto timestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  public String getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -112,13 +111,13 @@ public class VerfuegungDto  implements Serializable {
     }
     VerfuegungDto verfuegung = (VerfuegungDto) o;
     return Objects.equals(this.id, verfuegung.id) &&
-        Objects.equals(this.timestampErstellt, verfuegung.timestampErstellt) &&
-        Objects.equals(this.dokumente, verfuegung.dokumente);
+        Objects.equals(this.dokumente, verfuegung.dokumente) &&
+        Objects.equals(this.timestampErstellt, verfuegung.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, dokumente);
+    return Objects.hash(id, dokumente, timestampErstellt);
   }
 
   @Override
@@ -127,8 +126,8 @@ public class VerfuegungDto  implements Serializable {
     sb.append("class VerfuegungDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

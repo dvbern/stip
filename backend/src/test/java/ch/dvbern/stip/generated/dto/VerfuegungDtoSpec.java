@@ -87,9 +87,9 @@ public class VerfuegungDtoSpec {
    * Get timestampErstellt
    * @return timestampErstellt
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getTimestampErstellt() {
     return timestampErstellt;
@@ -97,7 +97,7 @@ public class VerfuegungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTimestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
   }
