@@ -94,7 +94,7 @@ export class StipendienDokumenteComponent {
           return acc;
         },
         {
-          datum: v.timestampErstellt,
+          datum: v.timestampErstellt ?? '',
           verfuegungsId: v.id,
           verfuegungsbrief: undefined as VerfuegungDokument | undefined,
           versendeteVerfuegung: undefined as VerfuegungDokument | undefined,
