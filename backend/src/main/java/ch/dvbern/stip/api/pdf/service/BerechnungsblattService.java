@@ -226,7 +226,8 @@ public class BerechnungsblattService {
                 }
                 firstTranche = false;
                 addBerechnungsblattPIA(document, pia, tranchenBerechnungsResultat, translator);
-                PdfUtils.makePageNumberEven(document);
+                document.getPdfDocument().addNewPage();
+                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                 gesuch.getUnterschriftenblaetter().forEach(unterschriftenblatt -> {
                     final SteuerdatenTyp currentSteuerdatenTyp =
@@ -238,10 +239,12 @@ public class BerechnungsblattService {
                             // if unterschriftenblatt is existing for the current type,
                             // add it to final document
                             addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
-                            PdfUtils.makePageNumberEven(document);
+                            document.getPdfDocument().addNewPage();
+                            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                         }
                     }
                 });
+                PdfUtils.makePageNumberEven(document);
             }
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
