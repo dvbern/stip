@@ -11,17 +11,12 @@
  */
 import { DarlehenGrund } from './darlehenGrund';
 
-export interface Darlehen { 
-    id: string;
-    gesuchId: string;
-    darlehenGewaehren?: boolean;
-    darlehenBetrag?: number;
-    kommentar?: string;
-    darlehenBetragGewuenscht: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    betreibungsAuszug: Blob;
-    grund: DarlehenGrund;
+export interface DarlehenUpdateGs { 
+    darlehenBetragGewuenscht?: number;
+    schulden?: number;
+    anzahlBetreibungen?: number;
+    betreibungsAuszug?: Blob;
+    grund?: DarlehenGrund;
 }
 
 

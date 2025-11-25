@@ -845,9 +845,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       trancheId: gesuch?.gesuchTrancheToWorkWith?.id,
       gesuchFormular: {
         ...gesuchFormular,
-        darlehen: {
-          willDarlehen: false,
-        },
         personInAusbildung: {
           ...values,
           adresse: {

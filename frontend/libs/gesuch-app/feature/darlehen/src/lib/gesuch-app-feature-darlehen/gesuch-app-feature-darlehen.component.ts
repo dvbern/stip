@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
+import { SharedFeatureDarlehenComponent } from '@dv/shared/feature/darlehen';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
-import { SharedFeatureDarlehenComponent } from 'libs/shared/feature/darlehen/src';
 
 @Component({
   selector: 'dv-gesuch-app-feature-darlehen',

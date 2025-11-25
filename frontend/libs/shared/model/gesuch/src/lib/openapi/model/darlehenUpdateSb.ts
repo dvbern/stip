@@ -9,20 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DarlehenGrund } from './darlehenGrund';
 
-export interface Darlehen { 
-    id: string;
-    gesuchId: string;
+export interface DarlehenUpdateSb { 
     darlehenGewaehren?: boolean;
     darlehenBetrag?: number;
     kommentar?: string;
-    darlehenBetragGewuenscht: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    betreibungsAuszug: Blob;
-    grund: DarlehenGrund;
 }
-
-
 
