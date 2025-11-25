@@ -60,17 +60,16 @@ public class SapMapperUtil {
     }
 
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
-        final var adresse = zahlungsverbindung.getAdresse();
-        return String.format(
-            "%s %s, %s %s, %s %s, %s",
+        // TODO KSTIP-2927: Change this here
+        final var accountHolder = String.format(
+            "%s %s",
             zahlungsverbindung.getVorname(),
-            zahlungsverbindung.getNachname(),
-            adresse.getStrasse(),
-            adresse.getHausnummer(),
-            adresse.getPlz(),
-            adresse.getOrt(),
-            adresse.getLand().getDeKurzform()
+            zahlungsverbindung.getNachname()
         );
+
+        // Truncate to a max length of 60, as the ACCOUNTHOLDER property in SAP is limited to that
+        final var end = Math.min(accountHolder.length(), 60);
+        return accountHolder.substring(0, end);
     }
 
     public ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery getBusinessPartnerSenderParmsDelivery(
