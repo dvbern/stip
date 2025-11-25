@@ -39,10 +39,11 @@
 
       @if (showVerfuegungUploadSig()) {
         <mat-form-field class="tw:mt-3 tw:w-full" dvSharedUiFormField>
-          <mat-label>
-            {{ 'sachbearbeitung-app.verfuegung.negativ.dialog.comment' | transloco }}
-            ({{ 'shared.form.optional.label' | transloco }})
-          </mat-label>
+          <mat-label
+            >{{ 'sachbearbeitung-app.verfuegung.negativ.dialog.comment' | transloco }} ({{
+              'shared.form.optional.label' | transloco
+            }})</mat-label
+          >
           <textarea
             formControlName="kommentar"
             maxlength="2000"

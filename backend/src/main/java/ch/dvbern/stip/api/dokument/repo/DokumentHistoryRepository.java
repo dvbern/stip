@@ -17,11 +17,15 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReaderFactory;
@@ -44,14 +48,21 @@ public class DokumentHistoryRepository {
             .getSingleResult();
     }
 
-    public Dokument findFirstInHistoryById(UUID dokumentId) {
+    public long countDistinctTranchenThatReferenceDokumentByObjectId(final String objectId) {
         final var reader = AuditReaderFactory.get(em);
 
-        return (Dokument) reader.createQuery()
-            .forRevisionsOfEntity(Dokument.class, true, true)
-            .add(AuditEntity.id().eq(dokumentId))
-            .addOrder(AuditEntity.revisionNumber().desc())
-            .setMaxResults(1)
-            .getSingleResult();
+        // This is OK but because of type erasure we can't check before casting
+        // noinspection unchecked
+        final var list = (List<GesuchTranche>) reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .traverseRelation("gesuchDokuments", JoinType.INNER)
+            .traverseRelation("dokumente", JoinType.INNER)
+            .add(AuditEntity.property("objectId").eq(objectId))
+            .getResultList();
+
+        return list.stream()
+            .map(AbstractEntity::getId)
+            .distinct()
+            .count();
     }
 }

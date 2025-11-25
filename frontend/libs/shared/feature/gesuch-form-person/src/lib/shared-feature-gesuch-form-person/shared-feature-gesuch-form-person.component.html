@@ -178,7 +178,7 @@
             >
               <!-- PLZ -->
               <mat-form-field dvSharedUiFormField class="col-md-4 col-xl-3 col-5 mt-3">
-                <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
+                <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
                 <input
                   type="text"
                   matInput
@@ -202,7 +202,7 @@
 
               <!-- Ort -->
               <mat-form-field dvSharedUiFormField class="col-md-8 col-xl-9 col-7 mt-3">
-                <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }} </mat-label>
+                <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
                 <input
                   type="text"
                   matInput
@@ -458,7 +458,7 @@
           >
             <!-- PLZ -->
             <mat-form-field dvSharedUiFormField class="tw:basis-auto">
-              <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
+              <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
               <input
                 type="text"
                 matInput
@@ -482,7 +482,7 @@
 
             <!-- Ort -->
             <mat-form-field dvSharedUiFormField class="tw:basis-11/12">
-              <mat-label>{{ 'shared.form.person.origin.label' | transloco }} </mat-label>
+              <mat-label>{{ 'shared.form.person.origin.label' | transloco }}</mat-label>
               <input
                 type="text"
                 matInput
@@ -797,13 +797,13 @@
       <div class="row g-4 mt-1">
         <div class="col-md-6 col-xl-4 col-12">
           <!-- KorrespondenzSprache -->
-          <label>{{ 'shared.form.person.korrespondenzSprache.label' | transloco }}</label>
           <mat-radio-group
             class="d-flex flex-column"
             [formControl]="form.controls.korrespondenzSprache"
             data-testid="form-person-korrespondenzSprache"
             dvSharedUiFormField
           >
+            <label>{{ 'shared.form.person.korrespondenzSprache.label' | transloco }}</label>
             @for (s of spracheValues; track $index) {
               <mat-radio-button [attr.data-testid]="s" [value]="s">{{
                 'shared.form.person.korrespondenzSprache.' + s | transloco

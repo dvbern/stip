@@ -1,0 +1,384 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /gesuchsperiode:
+    get:
+      tags:
+        - Gesuchsperiode
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Gesuchsperiode'
+          description: Get `Gesuchsperiode`
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchsperioden
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsperiodeCreate'
+        required: true
+      tags:
+        - Gesuchsperiode
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+          description: Gesuchsperiode created
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createGesuchsperiode
+  /gesuchsperiode/latest:
+    get:
+      tags:
+        - Gesuchsperiode
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableGesuchsperiodeWithDaten'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getLatest
+      summary: Returniert die neuste GesuchsperiodeWithDaten
+  '/gesuchsperiode/{gesuchsperiodeId}':
+    parameters:
+      - name: gesuchsperiodeId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuchsperiode
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchsperiode
+      summary: Returniert die GesuchsperiodeWithDaten mit der gegebene Id.
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchsperiodeUpdate'
+      tags:
+        - Gesuchsperiode
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+          description: Returned updated Gesuchsperiode
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateGesuchsperiode
+      summary: Updates a Gesuchperiode with the given id
+    delete:
+      tags:
+        - Gesuchsperiode
+      responses:
+        204:
+          description: Gesuchsperiode deleted
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteGesuchsperiode
+      summary: Deletes a Gesuchsperiode with the given id
+  /gesuchsperiode/publish/{gesuchsperiodeId}:
+    parameters:
+      - name: gesuchsperiodeId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      tags:
+        - Gesuchsperiode
+      responses:
+        200:
+          description: Gesuchsperiode published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+      operationId: publishGesuchsperiode
+      summary: Publishes a Gesuchsperiode with the given id
+  /gesuchsperiode/get-all-assignable/{gesuchId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchId'
+    get:
+      tags:
+        - Gesuchsperiode
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Gesuchsperiode'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllAssignableGesuchsperiode
+      summary: Returns all assignable gesuchsperiode.
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  schemas:
+    GesuchsperiodeWithDaten:
+      required:
+        - id
+        - gueltigkeitStatus
+      type: object
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        gueltigkeitStatus:
+          $ref: './components/common.yaml#/GueltigkeitStatus'
+      allOf:
+        - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    NullableGesuchsperiodeWithDaten:
+      properties:
+        value:
+          $ref: '#/components/schemas/GesuchsperiodeWithDaten'
+    GesuchsperiodeCreate:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    GesuchsperiodeUpdate:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/GesuchsperiodeDaten'
+    GesuchsperiodeDaten:
+      type: object
+      required:
+        - bezeichnungDe
+        - bezeichnungFr
+        - fiskaljahr
+        - gesuchsjahrId
+        - gesuchsperiodeStart
+        - gesuchsperiodeStopp
+        - aufschaltterminStart
+        - einreichefristNormal
+        - einreichefristReduziert
+        - ausbKosten_SekII
+        - ausbKosten_Tertiaer
+        - freibetrag_vermoegen
+        - freibetrag_erwerbseinkommen
+        - elternbeteiligungssatz
+        - einkommensfreibetrag
+        - vermogenSatzAngerechnet
+        - integrationszulage
+        - limite_EkFreibetrag_Integrationszulage
+        - stipLimite_Minimalstipendium
+        - person_1
+        - personen_2
+        - personen_3
+        - personen_4
+        - personen_5
+        - personen_6
+        - personen_7
+        - proWeiterePerson
+        - kinder_00_17
+        - jugendliche_erwachsene_18_24
+        - erwachsene_25_99
+        - wohnkosten_fam_1pers
+        - wohnkosten_fam_2pers
+        - wohnkosten_fam_3pers
+        - wohnkosten_fam_4pers
+        - wohnkosten_fam_5pluspers
+        - wohnkosten_persoenlich_1pers
+        - wohnkosten_persoenlich_2pers
+        - wohnkosten_persoenlich_3pers
+        - wohnkosten_persoenlich_4pers
+        - wohnkosten_persoenlich_5pluspers
+        - preisProMahlzeit
+        - maxSaeule3a
+        - anzahlWochenLehre
+        - anzahlWochenSchule
+        - vermoegensanteilInProzent
+        - reduzierungDesGrundbedarfs
+        - limiteAlterAntragsstellerHalbierungElternbeitrag
+        - zweiterAuszahlungsterminMonat
+        - zweiterAuszahlungsterminTag
+        - fristNachreichenDokumente
+        - stichtagVolljaehrigkeitMedizinischeGrundversorgung
+      properties:
+        bezeichnungDe:
+          type: string
+        bezeichnungFr:
+          type: string
+        einreichfrist:
+          $ref: './components/common.yaml#/LocalDate'
+        fiskaljahr:
+          type: integer
+        gesuchsjahrId:
+          $ref: './components/common.yaml#/UUID'
+        gesuchsperiodeStart:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        gesuchsperiodeStopp:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        aufschaltterminStart:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        einreichefristNormal:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        einreichefristReduziert:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        ausbKosten_SekII:
+          type: integer
+        ausbKosten_Tertiaer:
+          type: integer
+        freibetrag_vermoegen:
+          type: integer
+        freibetrag_erwerbseinkommen:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        elternbeteiligungssatz:
+          type: integer
+        vermogenSatzAngerechnet:
+          type: integer
+        integrationszulage:
+          type: integer
+        limite_EkFreibetrag_Integrationszulage:
+          type: integer
+        stipLimite_Minimalstipendium:
+          type: integer
+        person_1:
+          type: integer
+        personen_2:
+          type: integer
+        personen_3:
+          type: integer
+        personen_4:
+          type: integer
+        personen_5:
+          type: integer
+        personen_6:
+          type: integer
+        personen_7:
+          type: integer
+        proWeiterePerson:
+          type: integer
+        kinder_00_17:
+          type: integer
+        jugendliche_erwachsene_18_24:
+          type: integer
+        erwachsene_25_99:
+          type: integer
+        wohnkosten_fam_1pers:
+          type: integer
+        wohnkosten_fam_2pers:
+          type: integer
+        wohnkosten_fam_3pers:
+          type: integer
+        wohnkosten_fam_4pers:
+          type: integer
+        wohnkosten_fam_5pluspers:
+          type: integer
+        wohnkosten_persoenlich_1pers:
+          type: integer
+        wohnkosten_persoenlich_2pers:
+          type: integer
+        wohnkosten_persoenlich_3pers:
+          type: integer
+        wohnkosten_persoenlich_4pers:
+          type: integer
+        wohnkosten_persoenlich_5pluspers:
+          type: integer
+        preisProMahlzeit:
+          type: integer
+        maxSaeule3a:
+          type: integer
+        anzahlWochenLehre:
+          type: integer
+        anzahlWochenSchule:
+          type: integer
+        vermoegensanteilInProzent:
+          type: integer
+        reduzierungDesGrundbedarfs:
+          type: integer
+        limiteAlterAntragsstellerHalbierungElternbeitrag:
+          type: integer
+        zweiterAuszahlungsterminMonat:
+          type: integer
+        zweiterAuszahlungsterminTag:
+          type: integer
+        fristNachreichenDokumente:
+          type: integer
+        stichtagVolljaehrigkeitMedizinischeGrundversorgung:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+security:
+  $ref: './components/security.yaml#/security'

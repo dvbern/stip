@@ -34,9 +34,7 @@
       } @else {
         <!-- Alternative STAETTE -->
         <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>
-            {{ 'shared.form.ausbildung.ausbildungsstaette.label' | transloco }}
-          </mat-label>
+          <mat-label>{{ 'shared.form.ausbildung.ausbildungsstaette.label' | transloco }}</mat-label>
           <input
             matInput
             dvMaxLength
@@ -86,9 +84,7 @@
         </div>
       } @else {
         <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>
-            {{ 'shared.form.ausbildung.ausbildungsgang.label' | transloco }}
-          </mat-label>
+          <mat-label>{{ 'shared.form.ausbildung.ausbildungsgang.label' | transloco }}</mat-label>
           <!-- alternativer Ausbildungsgang -->
           <input
             type="text"
@@ -116,9 +112,7 @@
     <div class="testing-library-fix tw:flex tw:w-full tw:gap-2">
       @if (!hiddenFieldsSetSig().has(form.controls.fachrichtungBerufsbezeichnung) && zusatzfrageSig(); as zusatzfrage) {
         <mat-form-field class="tw:w-full" dvSharedUiFormField>
-          <mat-label>
-            {{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrage | transloco }}
-          </mat-label>
+          <mat-label>{{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrage | transloco }}</mat-label>
           <input
             type="text"
             matInput
@@ -190,7 +184,7 @@
         >
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="tw:max-w-26">
-            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }} </mat-label>
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
             <input
               type="text"
               matInput
@@ -213,7 +207,7 @@
 
           <!-- Ort -->
           <mat-form-field dvSharedUiFormField class="tw:basis-11/12">
-            <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | transloco }} </mat-label>
+            <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | transloco }}</mat-label>
             <input
               type="text"
               matInput
@@ -348,9 +342,7 @@
 
     <!-- PENSUM -->
     <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:mt-9">
-      <mat-label>
-        {{ 'shared.form.ausbildung.pensum.label' | transloco }}
-      </mat-label>
+      <mat-label>{{ 'shared.form.ausbildung.pensum.label' | transloco }}</mat-label>
 
       <mat-select
         formControlName="pensum"

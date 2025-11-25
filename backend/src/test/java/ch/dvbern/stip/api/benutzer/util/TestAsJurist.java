@@ -54,9 +54,7 @@ import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
 )
 @OidcSecurity(
     claims = {
-        @Claim(key = "sub", value = JURIST_ID),
-        @Claim(key = "family_name", value = "Gesuchsteller"),
-        @Claim(key = "given_name", value = "Hans")
+        @Claim(key = "sub", value = JURIST_ID)
     }
 )
 public @interface TestAsJurist {
