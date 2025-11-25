@@ -20,13 +20,13 @@ package ch.dvbern.stip.api.benutzer.resource;
 import java.util.Arrays;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsAdmin;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
+import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller3;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiterAdmin;
 import ch.dvbern.stip.api.generator.api.model.benutzer.SachbearbeiterZuordnungStammdatenDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.BenutzerApiSpec;
@@ -49,7 +49,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -75,8 +74,8 @@ class BenutzerResourceTest {
 
         me = benutzerDto;
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Frédéric");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Nell");
+        assertThat(benutzerDto.getVorname()).isEqualTo("");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
     @Test
@@ -91,8 +90,24 @@ class BenutzerResourceTest {
             .extract()
             .as(BenutzerDtoSpec.class);
 
-        assertThat(benutzerDto.getVorname()).isEqualTo("Hans");
-        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller 2");
+        assertThat(benutzerDto.getVorname()).isEqualTo("");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
+    }
+
+    @Test
+    @TestAsGesuchsteller3
+    @Order(3)
+    void test_get_me3() {
+        final var benutzerDto = api.prepareCurrentBenutzer()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(BenutzerDtoSpec.class);
+
+        assertThat(benutzerDto.getVorname()).isEqualTo("");
+        assertThat(benutzerDto.getNachname()).isEqualTo("Gesuchsteller");
     }
 
     @Test
@@ -112,7 +127,7 @@ class BenutzerResourceTest {
 
     @Test
     @Order(5)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createSachbearbeiterZuordnungStammdaten() {
         final var updateDto = SachbearbeiterZuordnungStammdatenDtoSpecModel.sachbearbeiterZuordnungStammdatenDtoSpec();
         api.createOrUpdateSachbearbeiterStammdaten()
@@ -137,7 +152,7 @@ class BenutzerResourceTest {
 
     @Test
     @Order(6)
-    @TestAsAdmin
+    @TestAsSachbearbeiterAdmin
     void createSachbearbeiterZuordnungStammdatenList() throws InterruptedException {
         // This is bad, but currently the only way to avoid a 500 response
         // As the server may still be (background) processing the request from the

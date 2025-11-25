@@ -28,12 +28,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
@@ -76,6 +76,9 @@ public class UnterschriftenblattService {
     private final UnterschriftenblattMapper unterschriftenblattMapper;
     private final GesuchStatusService gesuchStatusService;
     private final GesuchHistoryRepository gesuchHistoryRepository;
+    private final DokumentUploadService dokumentUploadService;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final DokumentDeleteService dokumentDeleteService;
 
     @Transactional
     public Uni<Response> getUploadUnterschriftenblattUni(
@@ -83,7 +86,7 @@ public class UnterschriftenblattService {
         final UUID gesuchId,
         final FileUpload fileUpload
     ) {
-        return DokumentUploadUtil.validateScanUploadDokument(
+        return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
@@ -207,7 +210,7 @@ public class UnterschriftenblattService {
         dokumentRepository.delete(dokument);
         unterschriftenblatt.getDokumente().remove(dokument);
 
-        DokumentDeleteUtil.executeDeleteDokumentFromS3(
+        dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
             configService.getBucketName(),
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH + dokument.getObjectId()
@@ -221,7 +224,7 @@ public class UnterschriftenblattService {
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
-        return DokumentDownloadUtil.getDokument(
+        return dokumentDownloadService.getDokument(
             s3,
             configService.getBucketName(),
             dokument.getObjectId(),
@@ -246,7 +249,7 @@ public class UnterschriftenblattService {
             unterschriftenblattRepository.delete(unterschriftenblatt);
         }
 
-        DokumentDeleteUtil.executeDeleteDokumentsFromS3(
+        dokumentDeleteService.executeDeleteDokumentsFromS3(
             s3,
             configService.getBucketName(),
             toRemoveFromS3

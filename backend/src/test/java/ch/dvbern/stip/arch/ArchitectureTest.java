@@ -23,12 +23,15 @@ import com.tngtech.archunit.library.Architectures;
 import com.tngtech.archunit.library.dependencies.Slice;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
+@Execution(ExecutionMode.CONCURRENT)
 class ArchitectureTest {
 
     public static Architectures.LayeredArchitecture LAYERS = layeredArchitecture()

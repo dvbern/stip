@@ -23,6 +23,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
@@ -45,12 +46,15 @@ import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.StateMachineConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@Execution(ExecutionMode.CONCURRENT)
 class GesuchStatusStateMachineTest {
     private GesuchFehlendeDokumenteNichtEingereichtHandler gesuchFehlendeDokumenteNichtEingereichtHandlerSpy;
     private GesuchZurueckweisenHandler gesuchZurueckweisenHandlerSpy;
@@ -63,6 +67,7 @@ class GesuchStatusStateMachineTest {
     private NegativeVerfuegungHandler negativeVerfuegungHandlerSpy;
     private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerSpy;
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
+    private AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandlerMock;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
     private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
@@ -88,6 +93,8 @@ class GesuchStatusStateMachineTest {
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
         bereitFuerBearbeitungHandler = Mockito.mock(BereitFuerBearbeitungHandler.class);
+        aenderungFehlendeDokumenteZurueckweisenHandlerMock =
+            Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -104,7 +111,8 @@ class GesuchStatusStateMachineTest {
             stipendienAnspruchHandlerSpy,
             juristischeAbklaerungDurchPruefungHandlerSpy,
             statusprotokollService,
-            bereitFuerBearbeitungHandler
+            bereitFuerBearbeitungHandler,
+            aenderungFehlendeDokumenteZurueckweisenHandlerMock
         ).createStateMachineConfig();
     }
 
