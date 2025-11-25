@@ -54,6 +54,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -93,6 +94,7 @@ const animationTime = 500;
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
     SharedUiInfoDialogDirective,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],
@@ -174,13 +176,9 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
     selectSharedDataAccessGesuchsView,
   );
   hasHiddenVersteckteElternSig = computed(() => {
-    const { gesuchFormular, trancheSetting } = this.storeViewSig();
+    const { gesuchFormular } = this.storeViewSig();
 
-    return (
-      trancheSetting?.type === 'AENDERUNG' &&
-      !!gesuchFormular?.versteckteEltern?.length &&
-      this.config.isGesuchApp
-    );
+    return !!gesuchFormular?.versteckteEltern?.length;
   });
   viewSig = computed(() => {
     const view = this.storeViewSig();

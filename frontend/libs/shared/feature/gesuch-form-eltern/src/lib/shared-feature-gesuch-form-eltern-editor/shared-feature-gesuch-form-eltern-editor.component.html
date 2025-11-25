@@ -7,12 +7,15 @@
 
     <div class="col-12 col-md-6 col-xl-4 d-flex gap-2 tw:md:justify-end tw:relative" *dvIfSachbearbeiter>
       <div class="tw:lg:absolute tw:top-0 tw:right-0 tw:text-right">
-        <mat-checkbox
-          class="tw:text-base tw:font-normal"
-          [checked]="sichtbar"
-          (change)="sichtbarChanged.emit($event.checked)"
-          >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
-        >
+        <div [matTooltip]="disableSichtbar ? ('shared.form.eltern.unableToHide' | transloco) : null">
+          <mat-checkbox
+            class="tw:text-base tw:font-normal"
+            [disabled]="disableSichtbar"
+            [checked]="sichtbar"
+            (change)="sichtbarChanged.emit($event.checked)"
+            >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
+          >
+        </div>
         @if (
           elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().trancheId;
           as gesuchTrancheId
