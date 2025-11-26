@@ -19,10 +19,11 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
@@ -43,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final VerfuegungService verfuegungService;
     private final VerfuegungPdfService verfuegungPdfService;
+    private final BerechnungsblattService berechnungsblattService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -56,30 +58,13 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to process Verfuegungsbrief", e);
         }
-
-        final List<ByteArrayOutputStream> berechnungsblaetter = new ArrayList<>();
-
-        try {
-            final var berechnungsblattAlle =
-                verfuegungService.getBerechnungsblattByType(verfuegung, VerfuegungDokumentTyp.BERECHNUNGSBLATT_ALLE);
-            final byte[] berechnungsblattPIABytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblattAlle);
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            baos.write(berechnungsblattPIABytes);
-            berechnungsblaetter.addFirst(baos);
-        } catch (Exception e) {
-            final var message = String.format(
-                "Berechnungsblatt %s not found for Gesuch %s, skipping",
-                "PIA",
-                gesuch.getId()
-            );
-            throw new InternalServerErrorException(message, e);
-        }
+        final Locale locale = LocaleUtil.getLocale(gesuch);
 
         final ByteArrayOutputStream versendeteVerfuegung = verfuegungPdfService.createVersendeteVerfuegung(
             verfuegungsbrief,
-            berechnungsblaetter
-        );
+            berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, locale)
 
+        );
         verfuegungService.createAndStoreVerfuegungDokument(
             verfuegung,
             VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,

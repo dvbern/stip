@@ -59,12 +59,6 @@ public class VerfuegtHandler implements GesuchStatusChangeHandler {
 
         verfuegungService.createAndStoreVerfuegungDokument(
             verfuegung,
-            VerfuegungDokumentTyp.BERECHNUNGSBLATT_ALLE,
-            berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, locale)
-        );
-
-        verfuegungService.createAndStoreVerfuegungDokument(
-            verfuegung,
             VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
             berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, locale)
         );

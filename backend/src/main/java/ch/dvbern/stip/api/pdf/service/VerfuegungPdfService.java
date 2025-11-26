@@ -22,7 +22,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -721,7 +720,7 @@ public class VerfuegungPdfService {
 
     public ByteArrayOutputStream createVersendeteVerfuegung(
         final ByteArrayOutputStream verfuegungsbrief,
-        final List<ByteArrayOutputStream> mergedBerechnungsblaetter
+        final ByteArrayOutputStream mergedBerechnungsblaetter
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -736,14 +735,12 @@ public class VerfuegungPdfService {
                 merger.merge(verfuegungPdf, 1, verfuegungPdf.getNumberOfPages());
             }
 
-            for (final ByteArrayOutputStream mergedBlatt : mergedBerechnungsblaetter) {
-                try (
-                    final PdfDocument blattPdf = new PdfDocument(
-                        new PdfReader(new ByteArrayInputStream(mergedBlatt.toByteArray()))
-                    )
-                ) {
-                    merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
-                }
+            try (
+                final PdfDocument blattPdf = new PdfDocument(
+                    new PdfReader(new ByteArrayInputStream(mergedBerechnungsblaetter.toByteArray()))
+                )
+            ) {
+                merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
             }
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to merge PDFs for Versendete Verfügung", e);
