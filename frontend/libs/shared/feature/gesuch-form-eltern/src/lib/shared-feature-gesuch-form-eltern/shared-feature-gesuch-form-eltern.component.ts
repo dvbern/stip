@@ -9,6 +9,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { debounceTime, map } from 'rxjs';
 
@@ -47,6 +48,7 @@ const allEltern = Object.values(ElternTyp);
     ReactiveFormsModule,
     CommonModule,
     MatListModule,
+    MatTooltipModule,
     ElternteilCardComponent,
     SharedFeatureGesuchFormElternEditorComponent,
     SharedUiStepFormButtonsComponent,
@@ -70,6 +72,12 @@ export class SharedFeatureGesuchFormElternComponent {
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  sichtbarReadonlySig = computed(() => {
+    const { gesuchFormular, readonly } = this.viewSig();
+    return (
+      readonly || !!gesuchFormular?.familiensituation?.elternVerheiratetZusammen
+    );
+  });
   sichtbareElternSig = computed(() => {
     const { gesuchFormular } = this.viewSig();
     const versteckteEltern = gesuchFormular?.versteckteEltern;
@@ -110,7 +118,7 @@ export class SharedFeatureGesuchFormElternComponent {
     this.store.dispatch(SharedEventGesuchFormEltern.init());
 
     effect(() => {
-      const { loading, gesuch, gesuchFormular, readonly } = this.viewSig();
+      const { loading, gesuch, gesuchFormular } = this.viewSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const { trancheTyp } = this.cacheSig();
       const { permissions } = preparePermissions(
@@ -119,12 +127,14 @@ export class SharedFeatureGesuchFormElternComponent {
         this.appType,
         rolesMap,
       );
-      const versteckteEltern = gesuchFormular?.versteckteEltern;
-      if (readonly) {
+      const sichtbarReadonly = this.sichtbarReadonlySig();
+
+      if (sichtbarReadonly) {
         this.sichtbareEltern.disable({ emitEvent: false });
       } else {
         this.sichtbareEltern.enable({ emitEvent: false });
       }
+      const versteckteEltern = gesuchFormular?.versteckteEltern;
       if (versteckteEltern) {
         this.sichtbareEltern.setValue(
           allEltern.filter((e) => !versteckteEltern.includes(e)),
@@ -147,14 +157,16 @@ export class SharedFeatureGesuchFormElternComponent {
     });
 
     effect(() => {
-      const gesuchTrancheId = this.viewSig().gesuch?.gesuchTrancheToWorkWith.id;
+      const { id: gesuchTrancheId, gesuchFormular } =
+        this.viewSig().gesuch?.gesuchTrancheToWorkWith ?? {};
       const sichtbareEltern = this.sichtbareElternChangedSig()?.value;
 
       if (gesuchTrancheId && sichtbareEltern) {
         // Convert visible eltern to hidden eltern (inverse)
-        const versteckteEltern = allEltern.filter(
-          (e) => !sichtbareEltern.includes(e),
-        );
+        const versteckteEltern =
+          gesuchFormular?.elterns
+            ?.map((e) => e.elternTyp)
+            ?.filter((e) => !sichtbareEltern.includes(e)) ?? [];
         this.versteckteElternStore.saveVersteckteEltern$({
           gesuchTrancheId,
           versteckteEltern: versteckteEltern,

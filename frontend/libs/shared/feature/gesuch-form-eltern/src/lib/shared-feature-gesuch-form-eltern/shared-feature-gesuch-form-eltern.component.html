@@ -13,6 +13,7 @@
       [gesuchFormularSig]="gesuchFormular"
       [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp] ?? {}"
       [sichtbar]="sichtbareElternSig()[editedElternteil.elternTyp]"
+      [disableSichtbar]="sichtbarReadonlySig()"
       (saveTriggered)="handleEditorSave($event)"
       (closeTriggered)="handleEditorClose()"
       (deleteTriggered)="handleDeleteElternteil($event)"
@@ -29,9 +30,12 @@
       <div class="row g-4 mt-4">
         @if (view.expectVater) {
           <div class="col-12 col-md-6 col-xl-4 position-relative">
-            <mat-list-option [value]="elternTyps.VATER" *dvIfSachbearbeiter>{{
-              t('shared.form.eltern.sichtbar')
-            }}</mat-list-option>
+            <mat-list-option
+              [value]="elternTyps.VATER"
+              *dvIfSachbearbeiter
+              [matTooltip]="sichtbareEltern.disabled ? t('shared.form.eltern.unableToHide') : null"
+              >{{ t('shared.form.eltern.sichtbar') }}</mat-list-option
+            >
             <dv-shared-feature-gesuch-form-eltern-card
               [elternteil]="view.vater"
               [elternTyp]="'VATER'"
@@ -47,9 +51,12 @@
         }
         @if (view.expectMutter) {
           <div class="col-12 col-md-6 col-xl-4 position-relative">
-            <mat-list-option [value]="elternTyps.MUTTER" *dvIfSachbearbeiter>{{
-              t('shared.form.eltern.sichtbar')
-            }}</mat-list-option>
+            <mat-list-option
+              [value]="elternTyps.MUTTER"
+              *dvIfSachbearbeiter
+              [matTooltip]="sichtbareEltern.disabled ? t('shared.form.eltern.unableToHide') : null"
+              >{{ t('shared.form.eltern.sichtbar') }}</mat-list-option
+            >
             <dv-shared-feature-gesuch-form-eltern-card
               [elternteil]="view.mutter"
               [elternTyp]="'MUTTER'"

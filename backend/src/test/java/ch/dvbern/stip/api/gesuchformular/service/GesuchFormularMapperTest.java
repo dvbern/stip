@@ -720,6 +720,7 @@ class GesuchFormularMapperTest {
         formularDto.setDarlehen(new DarlehenDto());
         formularDto.setPersonInAusbildung(new PersonInAusbildungDto());
         formularDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+        formularDto.setElterns(List.of());
 
         final var mapper = createMapper();
         var formular = mapper.toEntity(formularDto);
@@ -761,6 +762,7 @@ class GesuchFormularMapperTest {
         updateDto.setDarlehen(darlehen);
         updateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
         updateDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
+        updateDto.setElterns(List.of());
         darlehen.setWillDarlehen(false);
 
         final var updatedFormular = mapper.partialUpdate(updateDto, formular);

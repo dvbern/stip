@@ -109,8 +109,11 @@ import org.hibernate.envers.Audited;
         GeschwisterPageValidation.class
     }, property = "geschwisters"
 )
+@FamiliensituationNotVerheiratetIfElternteilVerstecktConstraint(
+    groups = GesuchEinreichenValidationGroup.class,
+    property = "familiensituation"
+)
 @EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
-
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -136,14 +139,12 @@ import org.hibernate.envers.Audited;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKostenPartner"
 )
-
 @DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         DarlehenPageValidation.class
     }, property = "darlehen"
 )
-
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,

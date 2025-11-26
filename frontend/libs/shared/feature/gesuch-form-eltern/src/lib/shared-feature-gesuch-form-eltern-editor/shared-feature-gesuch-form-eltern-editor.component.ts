@@ -22,6 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
@@ -99,6 +100,7 @@ const MEDIUM_AGE_ADULT = 40;
     MatAutocompleteModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatTooltipModule,
     SharedUiDownloadButtonDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
@@ -135,6 +137,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
 
   @Input({ required: true }) changes!: Partial<ElternUpdate>;
   @Input({ required: true }) sichtbar!: boolean;
+  @Input({ required: true }) disableSichtbar!: boolean;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();

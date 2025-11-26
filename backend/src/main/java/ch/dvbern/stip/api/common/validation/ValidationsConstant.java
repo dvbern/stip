@@ -241,6 +241,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.abschluss.notunique}";
     public static final String VALIDATOIN_MASSENDRUCK_DATENSCHUTZBRIEF_OR_VERFUEGUNG =
         "{jakarta.validation.constraints.massendruck.datenschutzbriefOrVerfuegung}";
+    public static final String VALIDATION_FAMILIENSITUATION_NOT_VERHEIRATET_IF_VERSTECKTER_ELTERNTEIL =
+        "{jakarta.validation.constraints.familiensituation.notVerheiratetIfVersteckterElternteil}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");
