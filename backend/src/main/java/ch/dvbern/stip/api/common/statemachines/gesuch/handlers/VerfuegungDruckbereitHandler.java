@@ -21,11 +21,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
-import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
@@ -44,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final VerfuegungService verfuegungService;
-    private final UnterschriftenblattService unterschriftenblattService;
     private final VerfuegungPdfService verfuegungPdfService;
 
     @Override
@@ -61,35 +58,10 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         }
 
         final List<ByteArrayOutputStream> berechnungsblaetter = new ArrayList<>();
-        final Set<UnterschriftenblattDokumentTyp> uploadedTyps =
-            unterschriftenblattService.getExistingUnterschriftenblattTypsForGesuch(gesuch.getId());
-
-        // for (UnterschriftenblattDokumentTyp unterschriftenblattTyp : uploadedTyps) {
-        // final VerfuegungDokumentTyp berechnungsblattTyp = mapToBerechnungsblattTyp(unterschriftenblattTyp);
-        //
-        // try {
-        // final VerfuegungDokument berechnungsblatt =
-        // verfuegungService.getBerechnungsblattByType(verfuegung, berechnungsblattTyp);
-        //
-        // final byte[] berechnungsblattBytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblatt);
-        // final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        // baos.write(berechnungsblattBytes);
-        // berechnungsblaetter.add(baos);
-        // } catch (Exception e) {
-        // final var message = String.format(
-        // "Berechnungsblatt %s not found for Gesuch %s, skipping",
-        // berechnungsblattTyp,
-        // gesuch.getId()
-        // );
-        // throw new InternalServerErrorException(message, e);
-        // }
-        // }
 
         try {
             final var berechnungsblattAlle =
                 verfuegungService.getBerechnungsblattByType(verfuegung, VerfuegungDokumentTyp.BERECHNUNGSBLATT_ALLE);
-            final var berechnungsblattPIA =
-                verfuegungService.getBerechnungsblattByType(verfuegung, VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA);
             final byte[] berechnungsblattPIABytes = verfuegungService.getVerfuegungDokumentFromS3(berechnungsblattAlle);
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             baos.write(berechnungsblattPIABytes);
