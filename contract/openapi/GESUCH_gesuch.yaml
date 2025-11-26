@@ -43,6 +43,30 @@ paths:
           $ref: './components/common.yaml#/UUID'
         in: path
         required: true
+    delete:
+      tags:
+        - Gesuch
+      responses:
+        '204':
+          description: |
+            Gesuch deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteGesuch
+      summary: delete a Gesuch
+  '/gesuch/{gesuchId}/gs':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
     patch:
       requestBody:
         content:
@@ -65,15 +89,29 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: updateGesuch
+      operationId: updateGesuchGS
       summary: Updates the Gesuch with the given Id
-    delete:
+  '/gesuch/{gesuchId}/sb':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
       tags:
         - Gesuch
       responses:
-        '204':
-          description: |
-            Gesuch deleted
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -82,8 +120,8 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: deleteGesuch
-      summary: delete a Gesuch
+      operationId: updateGesuchSB
+      summary: Updates the Gesuch with the given Id
   '/gesuch/changes/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId

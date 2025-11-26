@@ -12,6 +12,11 @@
     class="mt-4 family-form"
     (ngSubmit)="handleSave()"
   >
+    @if (hasHiddenVersteckteElternSig()) {
+      <div *dvIfSachbearbeiter class="tw:text-dv-red tw:text-lg">
+        {{ 'shared.form.familiensituation.hiddenEltern' | transloco }}
+      </div>
+    }
     <div class="col-12">
       @if (!readonly) {
         <dv-shared-ui-stepper-navigation

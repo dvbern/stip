@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -41,8 +42,10 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -262,8 +265,13 @@ public class GesuchTrancheService {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
         removeSuperfluousDokumentsForGesuch(gesuchTranche.getGesuchFormular());
 
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         return gesuchTranche.getGesuchDokuments()
             .stream()
+            .filter(
+                gesuchDokument -> !IsDokumentOfVersteckterElternteilUtil
+                    .isVerstecktesDokument(versteckteEltern, gesuchDokument)
+            )
             .map(gesuchDokumentMapper::toDto)
             .toList();
     }
@@ -376,7 +384,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDto(newTranche);
+        return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(newTranche);
     }
 
     @Transactional
@@ -401,7 +409,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDto(newTranche);
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche);
     }
 
     @Transactional
@@ -435,7 +443,7 @@ public class GesuchTrancheService {
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
         final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
-        return gesuchTrancheMapper.toDto(newTranche.orElseThrow(NotFoundException::new));
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche.orElseThrow(NotFoundException::new));
     }
 
     @Transactional
@@ -492,10 +500,10 @@ public class GesuchTrancheService {
         gesuchFormularUpdateDto.setSteuererklaerung(new ArrayList<>(List.of()));
         for (final var steuererklaerung : lastFreigegebenFormular.getSteuererklaerung()) {
             gesuchFormularUpdateDto.getSteuererklaerung()
-                .add(steuererklaerungMapper.toUpdateDto(steuererklaerung).id(null));
+                .add(steuererklaerungMapper.toUpdateDto(steuererklaerung));
         }
 
-        gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung);
+        gesuchTrancheMapper.partialUpdate(gesuchTrancheUpdateDto, aenderung, false);
         if (aenderung.getGesuchFormular().getPartner() != null) {
             aenderung.getGesuchFormular().getPartner().getAdresse().setId(null);
         }
@@ -518,7 +526,7 @@ public class GesuchTrancheService {
 
         notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDto(aenderung);
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
     }
 
     @Transactional
@@ -549,7 +557,7 @@ public class GesuchTrancheService {
         gesuchStatusService
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
-        return gesuchTrancheMapper.toDto(aenderung);
+        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
     }
 
     private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {
@@ -642,7 +650,7 @@ public class GesuchTrancheService {
         final var aenderungsTranche = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService
             .triggerStateMachineEvent(aenderungsTranche, GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche, false);
     }
 
     @Transactional
@@ -672,7 +680,14 @@ public class GesuchTrancheService {
 
         aenderungsTranche.setGueltigkeit(gueltigkeit);
         aenderungsTranche.setComment(patchAenderungsInfoRequestDto.getComment());
-        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(aenderungsTranche, true);
     }
 
+    @Transactional
+    public List<ElternTyp> setVersteckteEltern(final UUID gesuchTrancheId, final List<ElternTyp> elternTyps) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        gesuchTranche.getGesuchFormular().setVersteckteEltern(new LinkedHashSet<>(elternTyps));
+
+        return new ArrayList<>(gesuchTranche.getGesuchFormular().getVersteckteEltern());
+    }
 }

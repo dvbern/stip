@@ -14,6 +14,7 @@ import {
   ElementRef,
   OnInit,
   WritableSignal,
+  computed,
   effect,
   inject,
   signal,
@@ -35,6 +36,7 @@ import { Subject } from 'rxjs';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
 import { SharedEventGesuchFormFamiliensituation } from '@dv/shared/event/gesuch-form-familiensituation';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
   ElternAbwesenheitsGrund,
@@ -52,6 +54,7 @@ import {
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -91,6 +94,7 @@ const animationTime = 500;
     SharedPatternDocumentUploadComponent,
     SharedUiFormReadonlyDirective,
     SharedUiInfoDialogDirective,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-familiensituation.component.html',
   styleUrls: ['./shared-feature-gesuch-form-familiensituation.component.scss'],
@@ -123,6 +127,7 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   private einreichenStore = inject(EinreichenStore);
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private config = inject(SharedModelCompileTimeConfig);
 
   readonly ELTERNSCHAFTSTEILUNG = Elternschaftsteilung;
   readonly ELTERN_ABWESENHEITS_GRUND = ElternAbwesenheitsGrund;
@@ -167,7 +172,21 @@ export class SharedFeatureGesuchFormFamiliensituationComponent
   });
 
   duringAnimation: 'show' | 'hide' = 'show';
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  private storeViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchsView,
+  );
+  hasHiddenVersteckteElternSig = computed(() => {
+    const { gesuchFormular } = this.storeViewSig();
+
+    return !!gesuchFormular?.versteckteEltern?.length;
+  });
+  viewSig = computed(() => {
+    const view = this.storeViewSig();
+    return {
+      ...view,
+      readonly: view.readonly || this.hasHiddenVersteckteElternSig(),
+    };
+  });
   updateValidity$ = new Subject<unknown>();
 
   stateSig: WritableSignal<FamSitStepMeta> = signal({

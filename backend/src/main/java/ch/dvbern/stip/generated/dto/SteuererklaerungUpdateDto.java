@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class SteuererklaerungUpdateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
   private @Valid Boolean steuererklaerungInBern;
-  private @Valid UUID id;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer unterhaltsbeitraege;
   private @Valid Integer renten;
@@ -65,24 +63,6 @@ public class SteuererklaerungUpdateDto  implements Serializable {
   @JsonProperty("steuererklaerungInBern")
   public void setSteuererklaerungInBern(Boolean steuererklaerungInBern) {
     this.steuererklaerungInBern = steuererklaerungInBern;
-  }
-
-  /**
-   **/
-  public SteuererklaerungUpdateDto id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  
-  @JsonProperty("id")
-  public UUID getId() {
-    return id;
-  }
-
-  @JsonProperty("id")
-  public void setId(UUID id) {
-    this.id = id;
   }
 
   /**
@@ -187,7 +167,6 @@ public class SteuererklaerungUpdateDto  implements Serializable {
     SteuererklaerungUpdateDto steuererklaerungUpdate = (SteuererklaerungUpdateDto) o;
     return Objects.equals(this.steuerdatenTyp, steuererklaerungUpdate.steuerdatenTyp) &&
         Objects.equals(this.steuererklaerungInBern, steuererklaerungUpdate.steuererklaerungInBern) &&
-        Objects.equals(this.id, steuererklaerungUpdate.id) &&
         Objects.equals(this.ergaenzungsleistungen, steuererklaerungUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.unterhaltsbeitraege, steuererklaerungUpdate.unterhaltsbeitraege) &&
         Objects.equals(this.renten, steuererklaerungUpdate.renten) &&
@@ -197,7 +176,7 @@ public class SteuererklaerungUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, steuererklaerungInBern, id, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA, andereEinnahmen);
+    return Objects.hash(steuerdatenTyp, steuererklaerungInBern, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
@@ -207,7 +186,6 @@ public class SteuererklaerungUpdateDto  implements Serializable {
     
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuererklaerungInBern: ").append(toIndentedString(steuererklaerungInBern)).append("\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");

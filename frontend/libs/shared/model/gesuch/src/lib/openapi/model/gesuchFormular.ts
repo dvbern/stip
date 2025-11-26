@@ -9,24 +9,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Eltern } from './eltern';
+import { ElternTyp } from './elternTyp';
 import { PersonInAusbildung } from './personInAusbildung';
+import { Familiensituation } from './familiensituation';
+import { SteuererklaerungUpdate } from './steuererklaerungUpdate';
+import { LebenslaufItem } from './lebenslaufItem';
+import { Eltern } from './eltern';
 import { Ausbildung } from './ausbildung';
 import { SteuerdatenTyp } from './steuerdatenTyp';
 import { Darlehen } from './darlehen';
 import { Geschwister } from './geschwister';
 import { EinnahmenKosten } from './einnahmenKosten';
 import { Kind } from './kind';
-import { Familiensituation } from './familiensituation';
-import { SteuererklaerungUpdate } from './steuererklaerungUpdate';
 import { Partner } from './partner';
-import { LebenslaufItem } from './lebenslaufItem';
 
 export interface GesuchFormular { 
     ausbildung: Ausbildung;
     personInAusbildung?: PersonInAusbildung;
     familiensituation?: Familiensituation;
     partner?: Partner;
+    versteckteEltern?: Array<ElternTyp>;
     elterns?: Array<Eltern>;
     geschwisters?: Array<Geschwister>;
     lebenslaufItems?: Array<LebenslaufItem>;

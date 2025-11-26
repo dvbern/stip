@@ -183,14 +183,14 @@ public class TestUtil {
         }
     }
 
-    public static void updateGesuch(
+    public static void updateGesuchSB(
         final GesuchApiSpec gesuchApiSpec,
         final GesuchDtoSpec gesuch
     ) {
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -217,7 +217,7 @@ public class TestUtil {
         var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFullNoElterns();
         fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -252,7 +252,7 @@ public class TestUtil {
         final DokumentApiSpec dokumentApiSpec,
         final GesuchDtoSpec gesuch
     ) {
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)

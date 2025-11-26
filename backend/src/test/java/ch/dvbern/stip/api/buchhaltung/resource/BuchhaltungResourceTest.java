@@ -160,7 +160,7 @@ class BuchhaltungResourceTest {
                     .getEinnahmenKostenPartner()
             );
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
