@@ -1,0 +1,16 @@
+{
+  "name": "shared-data-access-versteckte-eltern",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/data-access/versteckte-eltern/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:shared"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/data-access/versteckte-eltern/tsconfig.lib.json"
+      }
+    }
+  }
+}

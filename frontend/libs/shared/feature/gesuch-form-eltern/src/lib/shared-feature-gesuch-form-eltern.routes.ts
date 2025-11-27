@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { VersteckteElternStore } from '@dv/shared/data-access/versteckte-eltern';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import { idAndTrancheIdRoutes } from '@dv/shared/util/gesuch';
 
@@ -9,10 +10,7 @@ export const gesuchAppFeatureGesuchFormElternRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'prefix',
-    providers: [
-      // feature specific services and other providers
-      // always remove { providedIn: 'root' } from the feature specific services
-    ],
+    providers: [VersteckteElternStore],
     children: [
       ...idAndTrancheIdRoutes(
         routeWithUnsavedChangesGuard({

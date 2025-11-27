@@ -23,7 +23,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { BuchhaltungStore } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
+import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { FailedAuszahlungBuchhaltung } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
@@ -70,7 +70,7 @@ import { restrictNumberParam } from '@dv/shared/util/table';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureFehlgeschlageneZahlungenComponent {
-  buchhaltungsStore = inject(BuchhaltungStore);
+  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
@@ -100,7 +100,8 @@ export class SachbearbeitungAppFeatureFehlgeschlageneZahlungenComponent {
 
   fehlgeschlageneZahlungenDataSourceSig = computed(() => {
     const fehlgeschlageneZahlungen =
-      this.buchhaltungsStore.fehlgeschlageneZahlungenView().data?.entries ?? [];
+      this.fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().data
+        ?.entries ?? [];
     const dataSource = new MatTableDataSource(fehlgeschlageneZahlungen);
     return dataSource;
   });
@@ -121,7 +122,7 @@ export class SachbearbeitungAppFeatureFehlgeschlageneZahlungenComponent {
     effect(() => {
       const { page, pageSize } = this.getInputs();
       const totalEntries =
-        this.buchhaltungsStore.fehlgeschlageneZahlungenView().data
+        this.fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().data
           ?.totalEntries ?? 0;
 
       if (page && pageSize && totalEntries && page * pageSize > totalEntries) {
@@ -139,7 +140,7 @@ export class SachbearbeitungAppFeatureFehlgeschlageneZahlungenComponent {
     effect(() => {
       const { page, pageSize } = this.getInputs();
 
-      this.buchhaltungsStore.getFehlgeschlageneZahlungen$({
+      this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
         page: page ?? 0,
         pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
       });

@@ -145,7 +145,7 @@ class GesuchAuthorizerCanDeleteTest {
         gesuchTranche.setGesuch(gesuch);
 
         // assert
-        assertDoesNotThrow(() -> trancheAuthorizer.canUpdateTranche(gesuchTranche));
+        assertDoesNotThrow(() -> trancheAuthorizer.canUpdateTrancheGS(gesuchTranche));
     }
 
     @Test

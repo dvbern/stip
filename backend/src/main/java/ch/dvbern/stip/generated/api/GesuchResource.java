@@ -228,10 +228,16 @@ public interface GesuchResource {
     GesuchDto setGesuchsperiodeForGesuch(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("gesuchsperiodeId") @NotNull   UUID gesuchsperiodeId);
 
     @PATCH
-    @Path("/{gesuchId}")
+    @Path("/{gesuchId}/gs")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    void updateGesuch(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
+    void updateGesuchGS(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
+
+    @PATCH
+    @Path("/{gesuchId}/sb")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    void updateGesuchSB(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull GesuchUpdateDto gesuchUpdateDto);
 
     @PATCH
     @Path("/{gesuchId}/nachfristDokumente")

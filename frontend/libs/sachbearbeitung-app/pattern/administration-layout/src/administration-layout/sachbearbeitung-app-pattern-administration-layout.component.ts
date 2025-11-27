@@ -11,6 +11,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { AdminOptions } from '@dv/sachbearbeitung-app/model/administration';
 import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
 import {
@@ -47,6 +48,7 @@ export class SachbearbeitungAppPatternAdministrationLayoutComponent {
   @Input() option?: AdminOption | ChildAdminOption;
   @Output() navClicked = new EventEmitter<{ value: boolean }>();
 
+  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
   route = inject(Router);
   headerService = inject(SharedUtilHeaderService);
   options = AdminOptions;

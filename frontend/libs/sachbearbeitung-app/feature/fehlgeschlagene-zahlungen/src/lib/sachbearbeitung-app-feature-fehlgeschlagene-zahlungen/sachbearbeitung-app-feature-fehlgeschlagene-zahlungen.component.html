@@ -5,7 +5,7 @@
     </h1>
     <div class="tw:my-6">
       <div class="tw:dv-table tw:relative">
-        <div [class.opacity-50]="buchhaltungsStore.fehlgeschlageneZahlungenView().loading">
+        <div [class.opacity-50]="fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().loading">
           <table
             mat-table
             [dvSharedUiFocusableList]="items"
@@ -111,11 +111,11 @@
             [pageSizeOptions]="pageSizes"
             [pageSize]="pageSize() ?? defaultPageSize"
             [pageIndex]="page() ?? 0"
-            [length]="buchhaltungsStore.fehlgeschlageneZahlungenView().data?.totalEntries"
+            [length]="fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().data?.totalEntries"
             (page)="paginate($event)"
           ></mat-paginator>
         </div>
-        @if (buchhaltungsStore.fehlgeschlageneZahlungenView().loading) {
+        @if (fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().loading) {
           <dv-shared-ui-loading
             class="position-absolute translate-middle start-50 top-50"
             [type]="'compact'"

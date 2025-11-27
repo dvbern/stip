@@ -224,7 +224,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetEltern(newFormular, targetFormular);
         resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
-        resetDependentPartnerData(newFormular, targetFormular);
 
         resetSteuererklaerungTabs(newFormular, targetFormular);
         resetSteuererdatenTabs(newFormular, targetFormular);
@@ -241,6 +240,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     ) {
         resetDarlehen(targetFormular);
         resetUnterschriftenblaetterIfNotVerfuegt(targetFormular);
+        resetVersteckteElternIfRemoved(targetFormular);
     }
 
     @AfterMapping
@@ -336,29 +336,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(targetFormular),
             "Set Darlehen to null because pia is not volljaehrig",
             () -> targetFormular.setDarlehen(null)
-        );
-    }
-
-    void resetDependentPartnerData(
-        final GesuchFormularUpdateDto gesuchFormularUpdateDto,
-        GesuchFormular targetFormular
-    ) {
-        resetFieldIf(
-            () -> Objects.isNull(gesuchFormularUpdateDto.getPartner()),
-            "Reset dependent partner data",
-            () -> {
-                if (gesuchFormularUpdateDto.getEinnahmenKostenPartner() != null) {
-                    final var ek = gesuchFormularUpdateDto.getEinnahmenKostenPartner();
-                    // Partner Steuern
-                    final var steuern =
-                        EinnahmenKostenMappingUtil.calculateSteuern(
-                            targetFormular.getEinnahmenKostenPartner(),
-                            false
-                        );
-                    ek.setSteuern(steuern);
-                }
-                targetFormular.setEinnahmenKostenPartner(null);
-            }
         );
     }
 
@@ -576,6 +553,16 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                 steuerdaten.setSaeule3a(null);
             }
         });
+    }
+
+    void resetVersteckteElternIfRemoved(
+        final GesuchFormular targetFormular
+    ) {
+        final var eltern = targetFormular.getElterns();
+        if (eltern.size() < 2) {
+            targetFormular.getVersteckteEltern()
+                .removeIf(elternTyp -> eltern.stream().anyMatch(e -> e.getElternTyp() != elternTyp));
+        }
     }
 
     void removeElternOfTyp(final List<ElternUpdateDto> eltern, final ElternTyp typ) {

@@ -61,6 +61,9 @@ public class GesuchHistoryService {
         if (gesuch.isVerfuegt()) {
             return gesuchHistoryRepository
                 .getLatestWhereStatusChangedToOneOf(gesuchId, Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
+                // There is a range where the gesuch is verfügt but did not reach GESUCH_VERFUEGUNG_ABGESCHLOSSEN yet
+                // return the eingereicht version instead in this case
+                .or(() -> gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuchId, Gesuchstatus.EINGEREICHT))
                 .orElseThrow(NotFoundException::new);
         }
 

@@ -31,6 +31,8 @@ tags:
     x-displayName: Massendruck
   - name: Verfuegung
     x-displayName: Verfuegung
+  - name: Eltern
+    x-displayName: Eltern
   - name: Ausbildung
     x-displayName: Ausbildung
   - name: Auszahlung
@@ -1160,6 +1162,46 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getVerfuegungDokumentDownloadToken
       summary: get Token to downlaod Verfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /setVersteckteEltern/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ElternTyp'
+        required: true
+      tags:
+        - Eltern
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ElternTyp'
+          description: Versteckte Eltern updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      operationId: setVersteckteEltern
+      summary: Set the list of versteckte Eltern for the given gesuchTrancheId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2667,6 +2709,33 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+    delete:
+      tags:
+        - Gesuch
+      responses:
+        '204':
+          description: |
+            Gesuch deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteGesuch
+      summary: delete a Gesuch
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/{gesuchId}/gs:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       requestBody:
         content:
@@ -2689,18 +2758,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: updateGesuch
+      operationId: updateGesuchGS
       summary: Updates the Gesuch with the given Id
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-    delete:
+  /gesuch/{gesuchId}/sb:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
       tags:
         - Gesuch
       responses:
-        '204':
-          description: |
-            Gesuch deleted
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2709,8 +2792,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: deleteGesuch
-      summary: delete a Gesuch
+      operationId: updateGesuchSB
+      summary: Updates the Gesuch with the given Id
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -7805,8 +7888,6 @@ components:
         - steuererklaerungInBern
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/UUID'
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
@@ -7971,6 +8052,10 @@ components:
           $ref: '#/components/schemas/Familiensituation'
         partner:
           $ref: '#/components/schemas/Partner'
+        versteckteEltern:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElternTyp'
         elterns:
           type: array
           items:
