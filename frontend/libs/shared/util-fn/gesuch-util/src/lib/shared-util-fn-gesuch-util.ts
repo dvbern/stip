@@ -392,7 +392,6 @@ export function prepareTranchenChanges(
   ).map((step) => `${step}.adresse.id`);
 
   const idFields = formularPropsContaining<{ id?: string }>({
-    steuererklaerung: null,
     lebenslaufItems: null,
     elterns: null,
     geschwisters: null,
