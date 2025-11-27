@@ -1,25 +1,36 @@
-import { Injectable, computed } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
+import {
+  Darlehen,
+  DarlehenService,
+  DarlehenServiceDarlehenAblehenRequestParams,
+  DarlehenServiceDarlehenAkzeptierenRequestParams,
+  DarlehenServiceDarlehenEingebenRequestParams,
+  DarlehenServiceDarlehenFreigebenRequestParams,
+  DarlehenServiceDarlehenUpdateGsRequestParams,
+  DarlehenServiceDarlehenUpdateSbRequestParams,
+  DarlehenServiceDarlehenZurueckweisenRequestParams,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
-  fromCachedDataSig,
+  handleApiResponse,
   initial,
   pending,
 } from '@dv/shared/util/remote-data';
 
 type DarlehenState = {
-  cachedDarlehen: CachedRemoteData<unknown>;
-  darlehen: RemoteData<unknown>;
+  getDarlehenRequest: RemoteData<Darlehen | null>;
+  cachedDarlehen: CachedRemoteData<Darlehen>;
 };
 
 const initialState: DarlehenState = {
+  getDarlehenRequest: initial(),
   cachedDarlehen: initial(),
-  darlehen: initial(),
 };
 
 @Injectable()
@@ -27,40 +38,13 @@ export class DarlehenStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
-  // private darlehenService = inject(DarlehenService);
+  private darlehenService = inject(DarlehenService);
 
-  cachedDarlehenListViewSig = computed(() => {
-    return fromCachedDataSig(this.cachedDarlehen);
-  });
-
-  darlehenViewSig = computed(() => {
-    return this.darlehen.data();
-  });
-
-  loadCachedDarlehen$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedDarlehen: cachedPending(state.cachedDarlehen),
-        }));
-      }),
-      // switchMap(() =>
-      //   this.darlehenService
-      //     .getDarlehen$()
-      //     .pipe(
-      //       handleApiResponse((cachedDarlehen) =>
-      //         patchState(this, { cachedDarlehen }),
-      //       ),
-      //     ),
-      // ),
-    ),
-  );
-
-  loadDarlehen$ = rxMethod<void>(
+  getDarlehen$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, () => ({
-          darlehen: pending(),
+          cachedDarlehen: pending(),
         }));
       }),
       // switchMap(() =>
@@ -73,35 +57,145 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  saveDarlehen$ = rxMethod<{
-    darlehenId: string;
-    values: unknown;
-  }>(
+  createDarlehen$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           cachedDarlehen: cachedPending(state.cachedDarlehen),
         }));
       }),
-      // switchMap(({ darlehenId, values }) =>
-      //   this.darlehenService
-      //     .updateDarlehen$({
-      //       darlehenId,
-      //       payload: values,
-      //     })
-      //     .pipe(
-      //       handleApiResponse(
-      //         (darlehen) => {
-      //           patchState(this, { darlehen });
-      //         },
-      //         {
-      //           onSuccess: (darlehen) => {
-      //             // Do something after save, like showing a notification
-      //           },
-      //         },
-      //       ),
-      //     ),
-      // ),
+      switchMap(() =>
+        this.darlehenService.createDarlehen$().pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  darlehenUpdateGS$ = rxMethod<DarlehenServiceDarlehenUpdateGsRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap((data) =>
+        this.darlehenService.darlehenUpdateGs$(data).pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  darlehenEingeben$ = rxMethod<DarlehenServiceDarlehenEingebenRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap((data) =>
+        this.darlehenService.darlehenEingeben$(data).pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  // SB Methoden
+
+  darlehenUpdateSb$ = rxMethod<DarlehenServiceDarlehenUpdateSbRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap((data) =>
+        this.darlehenService.darlehenUpdateSb$(data).pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  darlehenFreigeben$ = rxMethod<DarlehenServiceDarlehenFreigebenRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap((data) =>
+        this.darlehenService.darlehenFreigeben$(data).pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
+      ),
+    ),
+  );
+
+  darlehenZurueckweisen$ =
+    rxMethod<DarlehenServiceDarlehenZurueckweisenRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            cachedDarlehen: cachedPending(state.cachedDarlehen),
+          }));
+        }),
+        switchMap((data) =>
+          this.darlehenService.darlehenZurueckweisen$(data).pipe(
+            handleApiResponse((darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            }),
+          ),
+        ),
+      ),
+    );
+
+  // SB Freigabestelle Methoden
+
+  darlehenAkzeptieren$ =
+    rxMethod<DarlehenServiceDarlehenAkzeptierenRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            cachedDarlehen: cachedPending(state.cachedDarlehen),
+          }));
+        }),
+        switchMap((data) =>
+          this.darlehenService.darlehenAkzeptieren$(data).pipe(
+            handleApiResponse((darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            }),
+          ),
+        ),
+      ),
+    );
+
+  darlehenAblehen$ = rxMethod<DarlehenServiceDarlehenAblehenRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap((data) =>
+        this.darlehenService.darlehenAblehen$(data).pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
+      ),
     ),
   );
 }

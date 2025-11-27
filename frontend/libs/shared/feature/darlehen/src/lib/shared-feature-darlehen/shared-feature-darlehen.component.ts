@@ -172,11 +172,13 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     ]);
   }
 
-  onCancel(): void {}
-
   darlehenCreate(): void {
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
+
+    if (this.form.invalid) {
+      return;
+    }
 
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.create.dialog.title',
