@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Locale;
 
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -50,25 +49,25 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     public void handle(Gesuch gesuch) {
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
-        final VerfuegungDokument verfuegungsbriefDocument = getVerfuegungsbriefDocument(verfuegung);
-        final byte[] verfuegungsbriefBytes = verfuegungService.getVerfuegungDokumentFromS3(verfuegungsbriefDocument);
-        final ByteArrayOutputStream verfuegungsbrief = new ByteArrayOutputStream();
+        final var verfuegungsbriefDocument = getVerfuegungsbriefDocument(verfuegung);
+        final var verfuegungsbriefBytes = verfuegungService.getVerfuegungDokumentFromS3(verfuegungsbriefDocument);
+        final var verfuegungsbriefOutput = new ByteArrayOutputStream();
         try {
-            verfuegungsbrief.write(verfuegungsbriefBytes);
+            verfuegungsbriefOutput.write(verfuegungsbriefBytes);
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to process Verfuegungsbrief", e);
         }
-        final Locale locale = LocaleUtil.getLocale(gesuch);
+        final var locale = LocaleUtil.getLocale(gesuch);
 
-        final ByteArrayOutputStream versendeteVerfuegung = verfuegungPdfService.createVersendeteVerfuegung(
-            verfuegungsbrief,
+        final var versendeteVerfuegungOutput = verfuegungPdfService.createVersendeteVerfuegung(
+            verfuegungsbriefOutput,
             berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, locale)
 
         );
         verfuegungService.createAndStoreVerfuegungDokument(
             verfuegung,
             VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
-            versendeteVerfuegung
+            versendeteVerfuegungOutput
         );
 
     }
