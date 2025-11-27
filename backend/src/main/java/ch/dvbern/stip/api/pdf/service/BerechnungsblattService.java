@@ -219,33 +219,39 @@ public class BerechnungsblattService {
             final PdfDocument pdfDocument = new PdfDocument(writer);
             final Document document = new Document(pdfDocument, PAGE_SIZE);
         ) {
-            boolean firstTranche = true;
+            // iterate through all tranchen
             for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
-                if (!firstTranche) {
-                    document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                }
-                firstTranche = false;
+                // add berechnungsblatt for PIA for current tranche
                 addBerechnungsblattPIA(document, pia, tranchenBerechnungsResultat, translator);
-                document.getPdfDocument().addNewPage();
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                 gesuch.getUnterschriftenblaetter().forEach(unterschriftenblatt -> {
                     final SteuerdatenTyp currentSteuerdatenTyp =
                         mapToSteuerdatenTyp(unterschriftenblatt.getDokumentTyp());
 
+                    // calculate total number of (non-blanc) pages. +1 because of berechnungsblatt pia (which is always
+                    // present)
+                    final var totalNumberOfPages = berechnungsResultat.getTranchenBerechnungsresultate().size()
+                    * (tranchenBerechnungsResultat.getFamilienBudgetresultate().size() + 1);
+
+                    // add berechnungsblatt for Familie or both Elterns for current tranche
                     for (var familienBudget : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
                         final SteuerdatenTyp typ = familienBudget.getFamilienBudgetTyp();
                         if (currentSteuerdatenTyp.equals(typ)) {
                             // if unterschriftenblatt is existing for the current type,
                             // add it to final document
                             addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
-                            document.getPdfDocument().addNewPage();
-                            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                            var currentNumberOfPages = document.getPdfDocument().getNumberOfPages();
+
+                            // prevent empty extra pages at end of document
+                            if (currentNumberOfPages < totalNumberOfPages) {
+                                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                            }
                         }
                     }
                 });
-                PdfUtils.makePageNumberEven(document);
             }
+            PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }

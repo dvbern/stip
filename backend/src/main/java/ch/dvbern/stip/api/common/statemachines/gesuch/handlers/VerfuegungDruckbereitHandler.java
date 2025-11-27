@@ -62,14 +62,12 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         final var versendeteVerfuegungOutput = verfuegungPdfService.createVersendeteVerfuegung(
             verfuegungsbriefOutput,
             berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, locale)
-
         );
         verfuegungService.createAndStoreVerfuegungDokument(
             verfuegung,
             VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
             versendeteVerfuegungOutput
         );
-
     }
 
     private VerfuegungDokument getVerfuegungsbriefDocument(Verfuegung verfuegung) {
