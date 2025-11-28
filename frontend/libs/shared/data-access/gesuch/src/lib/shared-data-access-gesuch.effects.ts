@@ -518,17 +518,6 @@ const prepareFormularData = (
     }
   });
 
-  if (
-    'steuererklaerung' in formular &&
-    Array.isArray(formular.steuererklaerung)
-  ) {
-    formular.steuererklaerung = formular.steuererklaerung.map((item) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id: _, ...rest } = item;
-      return rest;
-    });
-  }
-
   return {
     gesuchTrancheToWorkWith: {
       id,
