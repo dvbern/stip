@@ -230,16 +230,16 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/{darlehenId}/{dokumentTyp}:
+  /darlehen/{darlehenId}/{dokumentType}:
     parameters:
       - name: darlehenId
         schema:
-          $ref: '#/components/schemas/Darlehen'
+          $ref: '#/components/schemas/UUID'
         in: path
         required: true
-      - name: dokumentTyp
+      - name: dokumentType
         schema:
-          $ref: '#/components/schemas/DarlehenDokumentTyp'
+          $ref: '#/components/schemas/DarlehenDokumentType'
         in: path
         required: true
     get:
@@ -282,6 +282,58 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDarlehenDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returns a file
+      operationId: downloadDarlehenDokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenDokumentDownloadToken
+      summary: get Token to downlaod darlehen dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -5802,14 +5854,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         absender:
           type: string
-    DarlehenStatus:
-      enum:
-        - IN_BEARBEITUNG_GS
-        - EINGEGEBEN
-        - IN_FREIGABE
-        - AKZEPTIERT
-        - ABGELEHNT
-    DarlehenDokumentTyp:
+    DarlehenDokumentType:
       enum:
         - BETREIBUNGS_AUSZUG
         - AUFSTELLUNG_KOSTEN_ELTERN
@@ -5843,13 +5888,13 @@ components:
       type: object
       required:
         - id
-        - dokumentTyp
+        - dokumentType
         - dokumente
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        dokumentTyp:
-          $ref: '#/components/schemas/DarlehenDokumentTyp'
+        dokumentType:
+          $ref: '#/components/schemas/DarlehenDokumentType'
         dokumente:
           type: array
           items:
@@ -5861,6 +5906,13 @@ components:
       properties:
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
+    DarlehenStatus:
+      enum:
+        - IN_BEARBEITUNG_GS
+        - EINGEGEBEN
+        - IN_FREIGABE
+        - AKZEPTIERT
+        - ABGELEHNT
     DarlehenGrund:
       enum:
         - NICHT_BERECHTIGT
@@ -5885,14 +5937,16 @@ components:
           $ref: '#/components/schemas/UUID'
         fallId:
           $ref: '#/components/schemas/UUID'
-        darlehenGewaehren:
+        status:
+          $ref: '#/components/schemas/DarlehenStatus'
+        gewaehren:
           type: boolean
-        darlehenBetrag:
+        betrag:
           type: integer
           minimum: 0
         kommentar:
           type: string
-        darlehenBetragGewuenscht:
+        betragGewuenscht:
           type: integer
           minimum: 0
         schulden:
@@ -5927,6 +5981,13 @@ components:
     FileUpload:
       format: binary
       type: string
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     Delegierung:
       type: object
       required:
@@ -6217,13 +6278,6 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
-    FileDownloadToken:
-      required:
-        - token
-      type: object
-      properties:
-        token:
-          type: string
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF

@@ -974,14 +974,16 @@ Darlehen:
       $ref: '#/UUID'
     fallId:
       $ref: '#/UUID'
-    darlehenGewaehren:
+    status:
+      $ref: '#/DarlehenStatus'
+    gewaehren:
       type: boolean
-    darlehenBetrag:
+    betrag:
       type: integer
       minimum: 0
     kommentar:
       type: string
-    darlehenBetragGewuenscht:
+    betragGewuenscht:
       type: integer
       minimum: 0
     schulden:
@@ -999,3 +1001,10 @@ DarlehenGrund:
     - HOHE_GEBUEHREN
     - ANSCHAFFUNGEN_FUER_AUSBILDUNG
     - ZWEITAUSBILDUNG
+DarlehenStatus:
+  enum:
+    - IN_BEARBEITUNG_GS
+    - EINGEGEBEN
+    - IN_FREIGABE
+    - AKZEPTIERT
+    - ABGELEHNT

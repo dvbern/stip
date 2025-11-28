@@ -59,16 +59,16 @@ paths:
       operationId: createDarlehen
       summary: Create a new Darlehen
 
-  /darlehen/{darlehenId}/{dokumentTyp}:
+  /darlehen/{darlehenId}/{dokumentType}:
     parameters:
       - name: darlehenId
         schema:
-          $ref: './components/common.yaml#/Darlehen'
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
-      - name: dokumentTyp
+      - name: dokumentType
         schema:
-          $ref: '#/components/schemas/DarlehenDokumentTyp'
+          $ref: '#/components/schemas/DarlehenDokumentType'
         in: path
         required: true
     get:
@@ -108,6 +108,54 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: createDarlehenDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+
+  /darlehen/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        200:
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returns a file
+      operationId: downloadDarlehenDokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+
+  /darlehen/dokument/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenDokumentDownloadToken
+      summary: get Token to downlaod darlehen dokument
+
   /darlehen/{darlehenId}/eingeben:
     parameters:
       - name: darlehenId
@@ -321,15 +369,7 @@ components:
     $ref: './components/security.yaml#/securitySchemes'
 
   schemas:
-    DarlehenStatus:
-      enum:
-        - IN_BEARBEITUNG_GS
-        - EINGEGEBEN
-        - IN_FREIGABE
-        - AKZEPTIERT
-        - ABGELEHNT
-
-    DarlehenDokumentTyp:
+    DarlehenDokumentType:
       enum:
         - BETREIBUNGS_AUSZUG
         - AUFSTELLUNG_KOSTEN_ELTERN
@@ -366,13 +406,13 @@ components:
       type: object
       required:
         - id
-        - dokumentTyp
+        - dokumentType
         - dokumente
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
-        dokumentTyp:
-          $ref: '#/components/schemas/DarlehenDokumentTyp'
+        dokumentType:
+          $ref: '#/components/schemas/DarlehenDokumentType'
         dokumente:
           type: array
           items:
