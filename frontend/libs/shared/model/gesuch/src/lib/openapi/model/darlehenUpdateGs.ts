@@ -15,7 +15,6 @@ export interface DarlehenUpdateGs {
     darlehenBetragGewuenscht?: number;
     schulden?: number;
     anzahlBetreibungen?: number;
-    betreibungsAuszug?: Blob;
     grund?: DarlehenGrund;
 }
 

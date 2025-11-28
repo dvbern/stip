@@ -53,6 +53,8 @@ export * from './createGesuchTrancheRequest';
 export * from './customDokumentTyp';
 export * from './customDokumentTypCreate';
 export * from './darlehen';
+export * from './darlehenDokument';
+export * from './darlehenDokumentTyp';
 export * from './darlehenGrund';
 export * from './darlehenStatus';
 export * from './darlehenUpdateGs';

@@ -9,18 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DarlehenGrund } from './darlehenGrund';
+import { DarlehenDokumentTyp } from './darlehenDokumentTyp';
+import { Dokument } from './dokument';
 
-export interface Darlehen { 
+export interface DarlehenDokument { 
     id: string;
-    fallId: string;
-    darlehenGewaehren: boolean;
-    darlehenBetrag: number;
-    kommentar: string;
-    darlehenBetragGewuenscht: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    grund: DarlehenGrund;
+    dokumentTyp: DarlehenDokumentTyp;
+    dokumente: Array<Dokument>;
 }
 
 

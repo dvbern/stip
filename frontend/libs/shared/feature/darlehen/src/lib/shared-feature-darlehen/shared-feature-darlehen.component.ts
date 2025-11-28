@@ -25,10 +25,10 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 
-import { DokumentTyp } from '@dv/shared/model/gesuch';
+import { DarlehenDokumentTyp } from '@dv/shared/model/gesuch';
 import {
   SharedPatternDocumentUploadComponent,
-  createUploadOptionsFactory,
+  createDarlehenUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -46,7 +46,7 @@ import {
 import { maskitoNumber } from '@dv/shared/util/maskito-util';
 
 @Component({
-  selector: 'dv-shared-ui-darlehen',
+  selector: 'dv-shared-feature-darlehen',
   imports: [
     CommonModule,
     TranslocoPipe,
@@ -81,19 +81,19 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   // todo: replace dummy signal with real data from store
   dokumentDummySig = signal({
-    trancheId: 'dummy',
+    darlehenId: 'dummy',
     allowTypes: 'pdf',
     permissions: {},
   });
 
   // todo: this function will need to be updated
   /* needs {
-      trancheId: string | undefined;
+      darlehenId: string | undefined;
       allowTypes: string | undefined;
       permissions: PermissionMap;
     }
   */
-  private createUploadOptionsSig = createUploadOptionsFactory(
+  private createUploadOptionsSig = createDarlehenUploadOptionsFactory(
     this.dokumentDummySig,
   );
 
@@ -135,25 +135,25 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   //todo: Falls dialog, das Dokumentenhandling besprechen!
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
-    return DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG;
+    return DarlehenDokumentTyp.BETREIBUNGS_AUSZUG;
   });
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
     return isGrundNichtBerechtigt
-      ? DokumentTyp.DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
+      ? DarlehenDokumentTyp.AUFSTELLUNG_KOSTEN_ELTERN
       : null;
   });
   grundHoheGebuehrenDocSig = this.createUploadOptionsSig(() => {
     const isGrundHoheGebuehren = this.grundHoheGebuehrenChangedSig();
     return isGrundHoheGebuehren
-      ? DokumentTyp.DARLEHEN_KOPIE_SCHULGELDRECHNUNG
+      ? DarlehenDokumentTyp.KOPIE_SCHULGELDRECHNUNG
       : null;
   });
   grundAnschaffungenFuerAusbildungDocSig = this.createUploadOptionsSig(() => {
     const isGrundAnschaffungenFuerAusbildung =
       this.grundAnschaffungenFuerAusbildungChangedSig();
     return isGrundAnschaffungenFuerAusbildung
-      ? DokumentTyp.DARLEHEN_BELEGE_ANSCHAFFUNGEN
+      ? DarlehenDokumentTyp.BELEGE_ANSCHAFFUNGEN
       : null;
   });
 

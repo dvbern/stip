@@ -3,11 +3,13 @@ import { Signal, computed } from '@angular/core';
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentOptions,
+  DarlehenDokumentOptions,
   DokumentOptions,
   StandardDokumentOptions,
 } from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
+  DarlehenDokumentTyp,
   Dokument,
   DokumentTyp,
   GesuchDokument,
@@ -15,6 +17,24 @@ import {
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
+
+export const DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
+  readonly [K in DarlehenDokumentTyp]: SharedTranslationKey;
+} & Partial<
+  Record<`${DarlehenDokumentTyp}_DESCRIPTION`, SharedTranslationKey>
+> = {
+  BETREIBUNGS_AUSZUG: 'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
+  AUFSTELLUNG_KOSTEN_ELTERN:
+    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN',
+  AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION:
+    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION',
+  KOPIE_SCHULGELDRECHNUNG: 'shared.form.darlehen.file.SCHULGELDRECHNUNG',
+  KOPIE_SCHULGELDRECHNUNG_DESCRIPTION:
+    'shared.form.darlehen.file.SCHULGELDRECHNUNG_DESCRIPTION',
+  BELEGE_ANSCHAFFUNGEN: 'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
+  BELEGE_ANSCHAFFUNGEN_DESCRIPTION:
+    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN_DESCRIPTION',
+};
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: SharedTranslationKey;
@@ -188,20 +208,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_VATER',
   ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER:
     'shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_MUTTER',
-  DARLEHEN_BETREIBUNGSREGISTERAUSZUG:
-    'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
-  DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN:
-    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN',
-  DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION:
-    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION',
-  DARLEHEN_KOPIE_SCHULGELDRECHNUNG:
-    'shared.form.darlehen.file.SCHULGELDRECHNUNG',
-  DARLEHEN_KOPIE_SCHULGELDRECHNUNG_DESCRIPTION:
-    'shared.form.darlehen.file.SCHULGELDRECHNUNG_DESCRIPTION',
-  DARLEHEN_BELEGE_ANSCHAFFUNGEN:
-    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
-  DARLEHEN_BELEGE_ANSCHAFFUNGEN_DESCRIPTION:
-    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN_DESCRIPTION',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE:
     'shared.form.eltern-steuererklaerung.file.AUSBILDUNGSBEITRAEGE_FAMILIE',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE_DESCRIPTION:
@@ -344,6 +350,44 @@ export function createUploadOptionsFactory<
               art: 'GESUCH_DOKUMENT',
             },
             initialDokumente: options?.initialDocuments,
+          }
+        : null;
+    });
+  };
+}
+
+export function createDarlehenUploadOptionsFactory<
+  T extends Signal<{
+    darlehenId: string | undefined;
+    allowTypes: string | undefined;
+    permissions: PermissionMap;
+  }>,
+>(view: T) {
+  return (
+    lazyDokumentTyp: (view: T) => DarlehenDokumentTyp | null | undefined,
+  ) => {
+    return computed<DokumentOptions | null>(() => {
+      const darlehenId = view().darlehenId;
+      const allowTypes = view().allowTypes;
+      const permissions = view().permissions;
+      const dokumentTyp = lazyDokumentTyp(view);
+      return dokumentTyp && darlehenId && allowTypes
+        ? {
+            allowTypes,
+            permissions,
+            info: {
+              type: 'TRANSLATABLE',
+              title: DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+              description:
+                DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[
+                  `${dokumentTyp}_DESCRIPTION`
+                ],
+            },
+            dokument: {
+              darlehenId,
+              dokumentTyp,
+              art: 'DARLEHEN_DOKUMENT',
+            },
           }
         : null;
     });

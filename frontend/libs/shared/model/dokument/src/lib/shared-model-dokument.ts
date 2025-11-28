@@ -1,6 +1,8 @@
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentTyp,
+  DarlehenDokument,
+  DarlehenDokumentTyp,
   Dokument,
   DokumentArt,
   DokumentTyp,
@@ -36,10 +38,42 @@ export type SharedModelCustomGesuchDokument = {
   gesuchDokument?: GesuchDokument;
 };
 
+export type SharedModelDarlehenDokument = {
+  art: Extends<DokumentArt, 'DARLEHEN_DOKUMENT'>;
+  dokumentTyp: DarlehenDokumentTyp;
+  darlehenId: string;
+  gesuchDokument?: DarlehenDokument;
+};
+
+export interface SharedModelTableRequiredDokument {
+  formStep: GesuchFormStep;
+  dokumentTyp: DokumentTyp;
+  gesuchDokument?: GesuchDokument;
+  dokumentOptions: StandardDokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
+}
+
+export interface SharedModelTableCustomDokument {
+  dokumentTyp: CustomDokumentTyp;
+  canDelete: boolean;
+  gesuchDokument?: GesuchDokument;
+  dokumentOptions: CustomDokumentOptions;
+  kommentare: GesuchDokumentKommentar[];
+  kommentarePending: boolean;
+}
+
+export type SharedModelTableAdditionalDokument = {
+  dokumentTyp: UnterschriftenblattDokumentTyp;
+  gesuchDokument?: UnterschriftenblattDokument;
+  dokumentOptions: StandardDokumentOptions;
+};
+
 export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
   | SharedModelAdditionalGesuchDokument
-  | SharedModelCustomGesuchDokument;
+  | SharedModelCustomGesuchDokument
+  | SharedModelDarlehenDokument;
 
 export type SharedModelTableDokument =
   | SharedModelTableRequiredDokument
@@ -68,35 +102,20 @@ export interface StandardDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoTranslatable;
 }
 
+export interface DarlehenDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoTranslatable;
+}
+
 export interface CustomDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoText;
 }
 
-export type DokumentOptions = StandardDokumentOptions | CustomDokumentOptions;
+export type DokumentOptions =
+  | StandardDokumentOptions
+  | CustomDokumentOptions
+  | DarlehenDokumentOptions;
 
-export interface SharedModelTableRequiredDokument {
-  formStep: GesuchFormStep;
-  dokumentTyp: DokumentTyp;
-  gesuchDokument?: GesuchDokument;
-  dokumentOptions: StandardDokumentOptions;
-  kommentare: GesuchDokumentKommentar[];
-  kommentarePending: boolean;
-}
-
-export interface SharedModelTableCustomDokument {
-  dokumentTyp: CustomDokumentTyp;
-  canDelete: boolean;
-  gesuchDokument?: GesuchDokument;
-  dokumentOptions: CustomDokumentOptions;
-  kommentare: GesuchDokumentKommentar[];
-  kommentarePending: boolean;
-}
-
-export type SharedModelTableAdditionalDokument = {
-  dokumentTyp: UnterschriftenblattDokumentTyp;
-  gesuchDokument?: UnterschriftenblattDokument;
-  dokumentOptions: StandardDokumentOptions;
-};
+// Darlehen Dokument
 
 export interface DokumentUpload {
   file: Dokument;

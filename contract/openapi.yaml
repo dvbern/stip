@@ -6937,6 +6937,7 @@ components:
         - UNTERSCHRIFTENBLATT
         - CUSTOM_DOKUMENT
         - BESCHWERDE_ENTSCHEID
+        - DARLEHEN_DOKUMENT
       type: string
     DokumentTyp:
       enum:
