@@ -177,7 +177,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen:
+  /darlehen/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return active darlehen darlehen if exists or else null
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getActiveDarlehen
+      summary: Return active darlehen darlehen if exists or else null
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
     post:
       tags:
         - Darlehen
@@ -198,6 +227,57 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDarlehen
       summary: Create a new Darlehen
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/{dokumentTyp}:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/Darlehen'
+        in: path
+        required: true
+      - name: dokumentTyp
+        schema:
+          $ref: '#/components/schemas/DarlehenDokumnetTyp'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenDokument
+      summary: Returns Darlehen dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DarlehenDokument'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createDarlehenDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -5725,48 +5805,12 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
-    DarlehenGrund:
+    DarlehenDokumnetTyp:
       enum:
-        - NICHT_BERECHTIGT
-        - AUSBILDUNG_ZWOELF_JAHRE
-        - HOHE_GEBUEHREN
-        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
-        - ZWEITAUSBILDUNG
-    Darlehen:
-      type: object
-      required:
-        - id
-        - gesuchId
-        - darlehenBetragGewuenscht
-        - schulden
-        - anzahlBetreibungen
-        - betreibungsAuszug
-        - grund
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        gesuchId:
-          $ref: '#/components/schemas/UUID'
-        darlehenGewaehren:
-          type: boolean
-        darlehenBetrag:
-          type: integer
-          minimum: 0
-        kommentar:
-          type: string
-        darlehenBetragGewuenscht:
-          type: integer
-          minimum: 0
-        schulden:
-          type: integer
-          minimum: 0
-        anzahlBetreibungen:
-          type: integer
-          minimum: 0
-        betreibungsAuszug:
-          $ref: '#/components/schemas/FileUpload'
-        grund:
-          $ref: '#/components/schemas/DarlehenGrund'
+        - BETREIBUNGS_AUSZUG
+        - AUFSTELLUNG_KOSTEN_ELTERN
+        - KOPIE_SCHULGELDRECHNUNG
+        - BELEGE_ANSCHAFFUNGEN
     DarlehenUpdateSb:
       type: object
       properties:
@@ -5789,10 +5833,93 @@ components:
         anzahlBetreibungen:
           type: integer
           minimum: 0
-        betreibungsAuszug:
-          $ref: '#/components/schemas/FileUpload'
         grund:
           $ref: '#/components/schemas/DarlehenGrund'
+    DarlehenDokument:
+      type: object
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DarlehenDokumnetTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
+    DarlehenDokumentCreate:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    DarlehenGrund:
+      enum:
+        - NICHT_BERECHTIGT
+        - AUSBILDUNG_ZWOELF_JAHRE
+        - HOHE_GEBUEHREN
+        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+        - ZWEITAUSBILDUNG
+    Darlehen:
+      type: object
+      required:
+        - id
+        - fallId
+        - darlehenGewaehren
+        - darlehenBetrag
+        - kommentar
+        - darlehenBetragGewuenscht
+        - schulden
+        - anzahlBetreibungen
+        - grund
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        darlehenGewaehren:
+          type: boolean
+        darlehenBetrag:
+          type: integer
+          minimum: 0
+        kommentar:
+          type: string
+        darlehenBetragGewuenscht:
+          type: integer
+          minimum: 0
+        schulden:
+          type: integer
+          minimum: 0
+        anzahlBetreibungen:
+          type: integer
+          minimum: 0
+        grund:
+          $ref: '#/components/schemas/DarlehenGrund'
+    Dokument:
+      required:
+        - id
+        - filename
+        - filepath
+        - filesize
+        - objectId
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: string
+        timestampErstellt:
+          type: string
+        objectId:
+          type: string
     FileUpload:
       format: binary
       type: string
@@ -6825,10 +6952,6 @@ components:
         - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_PARTNER_LOHNABRECHNUNG
         - EK_PARTNER_VERMOEGEN
-        - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
-        - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
-        - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
-        - DARLEHEN_BELEGE_ANSCHAFFUNGEN
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
@@ -6860,27 +6983,6 @@ components:
         type:
           type: string
         description:
-          type: string
-    Dokument:
-      required:
-        - id
-        - filename
-        - filepath
-        - filesize
-        - objectId
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        filename:
-          type: string
-        filepath:
-          type: string
-        filesize:
-          type: string
-        timestampErstellt:
-          type: string
-        objectId:
           type: string
     Dokumentstatus:
       enum:

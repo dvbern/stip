@@ -96,9 +96,9 @@ public class DeleteChangedDocumentsUtil {
             getDocumentsToDeleteForEinnahmenKosten(newFormular.getEinnahmenKosten(), oldFormular.getEinnahmenKosten())
         );
         // TODO: identify if needed
-//        documentTypesToDelete.addAll(
-//            getDocumentsToDeleteForDarlehen(newFormular.getDarlehen(), oldFormular.getDarlehen())
-//        );
+        // documentTypesToDelete.addAll(
+        // getDocumentsToDeleteForDarlehen(newFormular.getDarlehen(), oldFormular.getDarlehen())
+        // );
 
         return documentTypesToDelete;
     }

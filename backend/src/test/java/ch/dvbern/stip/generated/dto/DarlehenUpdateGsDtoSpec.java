@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.io.File;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -32,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_BETREIBUNGS_AUSZUG,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUND
 })
 @JsonTypeName("DarlehenUpdateGs")
@@ -46,9 +44,6 @@ public class DarlehenUpdateGsDtoSpec {
 
   public static final String JSON_PROPERTY_ANZAHL_BETREIBUNGEN = "anzahlBetreibungen";
   private Integer anzahlBetreibungen;
-
-  public static final String JSON_PROPERTY_BETREIBUNGS_AUSZUG = "betreibungsAuszug";
-  private File betreibungsAuszug;
 
   public static final String JSON_PROPERTY_GRUND = "grund";
   private DarlehenGrundDtoSpec grund;
@@ -137,32 +132,6 @@ public class DarlehenUpdateGsDtoSpec {
   }
 
 
-  public DarlehenUpdateGsDtoSpec betreibungsAuszug(File betreibungsAuszug) {
-    
-    this.betreibungsAuszug = betreibungsAuszug;
-    return this;
-  }
-
-   /**
-   * Get betreibungsAuszug
-   * @return betreibungsAuszug
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BETREIBUNGS_AUSZUG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public File getBetreibungsAuszug() {
-    return betreibungsAuszug;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BETREIBUNGS_AUSZUG)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBetreibungsAuszug(File betreibungsAuszug) {
-    this.betreibungsAuszug = betreibungsAuszug;
-  }
-
-
   public DarlehenUpdateGsDtoSpec grund(DarlehenGrundDtoSpec grund) {
     
     this.grund = grund;
@@ -200,13 +169,12 @@ public class DarlehenUpdateGsDtoSpec {
     return Objects.equals(this.darlehenBetragGewuenscht, darlehenUpdateGs.darlehenBetragGewuenscht) &&
         Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
-        Objects.equals(this.betreibungsAuszug, darlehenUpdateGs.betreibungsAuszug) &&
         Objects.equals(this.grund, darlehenUpdateGs.grund);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, betreibungsAuszug, grund);
+    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, grund);
   }
 
   @Override
@@ -216,7 +184,6 @@ public class DarlehenUpdateGsDtoSpec {
     sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    betreibungsAuszug: ").append(toIndentedString(betreibungsAuszug)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
     sb.append("}");
     return sb.toString();

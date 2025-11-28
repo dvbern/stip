@@ -23,7 +23,6 @@ public class DarlehenUpdateGsDto  implements Serializable {
   private @Valid Integer darlehenBetragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
-  private @Valid org.jboss.resteasy.reactive.multipart.FileUpload betreibungsAuszug;
   private @Valid DarlehenGrundDto grund;
 
   /**
@@ -85,24 +84,6 @@ public class DarlehenUpdateGsDto  implements Serializable {
 
   /**
    **/
-  public DarlehenUpdateGsDto betreibungsAuszug(org.jboss.resteasy.reactive.multipart.FileUpload betreibungsAuszug) {
-    this.betreibungsAuszug = betreibungsAuszug;
-    return this;
-  }
-
-  
-  @JsonProperty("betreibungsAuszug")
-  public org.jboss.resteasy.reactive.multipart.FileUpload getBetreibungsAuszug() {
-    return betreibungsAuszug;
-  }
-
-  @JsonProperty("betreibungsAuszug")
-  public void setBetreibungsAuszug(org.jboss.resteasy.reactive.multipart.FileUpload betreibungsAuszug) {
-    this.betreibungsAuszug = betreibungsAuszug;
-  }
-
-  /**
-   **/
   public DarlehenUpdateGsDto grund(DarlehenGrundDto grund) {
     this.grund = grund;
     return this;
@@ -132,13 +113,12 @@ public class DarlehenUpdateGsDto  implements Serializable {
     return Objects.equals(this.darlehenBetragGewuenscht, darlehenUpdateGs.darlehenBetragGewuenscht) &&
         Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
-        Objects.equals(this.betreibungsAuszug, darlehenUpdateGs.betreibungsAuszug) &&
         Objects.equals(this.grund, darlehenUpdateGs.grund);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, betreibungsAuszug, grund);
+    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, grund);
   }
 
   @Override
@@ -149,7 +129,6 @@ public class DarlehenUpdateGsDto  implements Serializable {
     sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    betreibungsAuszug: ").append(toIndentedString(betreibungsAuszug)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
     sb.append("}");
     return sb.toString();

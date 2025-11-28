@@ -105,10 +105,6 @@ DokumentTyp:
     - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
     - EK_PARTNER_LOHNABRECHNUNG
     - EK_PARTNER_VERMOEGEN
-    - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
-    - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
-    - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
-    - DARLEHEN_BELEGE_ANSCHAFFUNGEN
     - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
     - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
     - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
@@ -961,3 +957,45 @@ AusgewaehlterGrund:
       $ref: '#/UUID'
     kanton:
       $ref: '#/Kanton'
+Darlehen:
+  type: object
+  required:
+    - id
+    - fallId
+    - darlehenGewaehren
+    - darlehenBetrag
+    - kommentar
+    - darlehenBetragGewuenscht
+    - schulden
+    - anzahlBetreibungen
+    - grund
+  properties:
+    id:
+      $ref: '#/UUID'
+    fallId:
+      $ref: '#/UUID'
+    darlehenGewaehren:
+      type: boolean
+    darlehenBetrag:
+      type: integer
+      minimum: 0
+    kommentar:
+      type: string
+    darlehenBetragGewuenscht:
+      type: integer
+      minimum: 0
+    schulden:
+      type: integer
+      minimum: 0
+    anzahlBetreibungen:
+      type: integer
+      minimum: 0
+    grund:
+      $ref: '#/DarlehenGrund'
+DarlehenGrund:
+  enum:
+    - NICHT_BERECHTIGT
+    - AUSBILDUNG_ZWOELF_JAHRE
+    - HOHE_GEBUEHREN
+    - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+    - ZWEITAUSBILDUNG

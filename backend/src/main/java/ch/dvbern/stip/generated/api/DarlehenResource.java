@@ -1,8 +1,10 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DarlehenDokumnetTypDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.DokumentDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -24,8 +26,15 @@ import jakarta.validation.Valid;
 public interface DarlehenResource {
 
     @POST
+    @Path("/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto createDarlehen();
+    DarlehenDto createDarlehen(@PathParam("fallId") UUID fallId);
+
+    @POST
+    @Path("/{darlehenId}/{dokumentTyp}")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    io.smallrye.mutiny.Uni<Response> createDarlehenDokument(@PathParam("darlehenId") DarlehenDto darlehenId,@PathParam("dokumentTyp") DarlehenDokumnetTypDto dokumentTyp,@FormParam(value = "id")  UUID id,@FormParam(value = "dokumentTyp")  DarlehenDokumnetTypDto dokumentTyp2,@FormParam(value = "dokumente")  List<DokumentDto> dokumente);
 
     @POST
     @Path("/{darlehenId}/ablehnen")
@@ -63,4 +72,14 @@ public interface DarlehenResource {
     @Path("/{darlehenId}/zurueckweisen")
     @Produces({ "application/json", "text/plain" })
     DarlehenDto darlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId);
+
+    @GET
+    @Path("/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    DarlehenDto getActiveDarlehen(@PathParam("fallId") UUID fallId);
+
+    @GET
+    @Path("/{darlehenId}/{dokumentTyp}")
+    @Produces({ "text/plain" })
+    void getDarlehenDokument(@PathParam("darlehenId") DarlehenDto darlehenId,@PathParam("dokumentTyp") DarlehenDokumnetTypDto dokumentTyp);
 }

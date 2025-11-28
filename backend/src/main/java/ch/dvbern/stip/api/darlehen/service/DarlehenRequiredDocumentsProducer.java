@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;

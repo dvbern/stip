@@ -11,7 +11,33 @@ servers:
       port:
         default: '8080'
 paths:
-  /darlehen:
+  /darlehen/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return active darlehen darlehen if exists or else null
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Darlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getActiveDarlehen
+      summary: Return active darlehen darlehen if exists or else null
     post:
       tags:
         - Darlehen
@@ -21,7 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -33,6 +59,51 @@ paths:
       operationId: createDarlehen
       summary: Create a new Darlehen
 
+  /darlehen/{darlehenId}/{dokumentTyp}:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: './components/common.yaml#/Darlehen'
+        in: path
+        required: true
+      - name: dokumentTyp
+        schema:
+          $ref: '#/components/schemas/DarlehenDokumnetTyp'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenDokument
+      summary: Returns Darlehen dokument
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DarlehenDokument'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createDarlehenDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
   /darlehen/{darlehenId}/eingeben:
     parameters:
       - name: darlehenId
@@ -49,7 +120,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -77,7 +148,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -105,7 +176,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -133,7 +204,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -161,7 +232,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -195,7 +266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -229,7 +300,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: './components/common.yaml#/Darlehen'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -254,49 +325,12 @@ components:
         - AKZEPTIERT
         - ABGELEHNT
 
-    DarlehenGrund:
+    DarlehenDokumnetTyp:
       enum:
-        - NICHT_BERECHTIGT
-        - AUSBILDUNG_ZWOELF_JAHRE
-        - HOHE_GEBUEHREN
-        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
-        - ZWEITAUSBILDUNG
-
-    Darlehen:
-      type: object
-      required:
-        - id
-        - gesuchId
-        - darlehenBetragGewuenscht
-        - schulden
-        - anzahlBetreibungen
-        - betreibungsAuszug
-        - grund
-      properties:
-        id:
-          $ref: './components/common.yaml#/UUID'
-        gesuchId:
-          $ref: './components/common.yaml#/UUID'
-        darlehenGewaehren:
-          type: boolean
-        darlehenBetrag:
-          type: integer
-          minimum: 0
-        kommentar:
-          type: string
-        darlehenBetragGewuenscht:
-          type: integer
-          minimum: 0
-        schulden:
-          type: integer
-          minimum: 0
-        anzahlBetreibungen:
-          type: integer
-          minimum: 0
-        betreibungsAuszug:
-          $ref: './components/common.yaml#/FileUpload'
-        grund:
-          $ref: '#/components/schemas/DarlehenGrund'
+        - BETREIBUNGS_AUSZUG
+        - AUFSTELLUNG_KOSTEN_ELTERN
+        - KOPIE_SCHULGELDRECHNUNG
+        - BELEGE_ANSCHAFFUNGEN
 
     DarlehenUpdateSb:
       type: object
@@ -321,10 +355,32 @@ components:
         anzahlBetreibungen:
           type: integer
           minimum: 0
-        betreibungsAuszug:
-          $ref: './components/common.yaml#/FileUpload'
         grund:
-          $ref: '#/components/schemas/DarlehenGrund'
+          $ref: './components/common.yaml#/DarlehenGrund'
+
+    DarlehenDokument:
+      type: object
+      required:
+        - id
+        - dokumentTyp
+        - dokumente
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        dokumentTyp:
+          $ref: '#/components/schemas/DarlehenDokumnetTyp'
+        dokumente:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Dokument'
+
+    DarlehenDokumentCreate:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
 
 
 security:
