@@ -32,7 +32,7 @@ import ch.dvbern.stip.api.partner.entity.PartnerBuilders;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildungBuilders;
 
-public class DemoPersonEntity {
+public class DemoPerson {
     private static void applyBaseValues(
         final AbstractPerson person,
         final AbstractPersonBuilders.Optionals abstractPersonBuilders

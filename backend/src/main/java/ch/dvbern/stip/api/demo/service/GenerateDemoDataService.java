@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntityBuilder;
 import ch.dvbern.stip.api.common.entity.AbstractPersonBuilder;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuilder;
-import ch.dvbern.stip.api.demo.entity.DemoPersonEntity;
+import ch.dvbern.stip.api.demo.entity.DemoPerson;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenBuilder;
 import ch.dvbern.stip.api.eltern.entity.ElternBuilder;
 import ch.dvbern.stip.api.fall.entity.FallBuilder;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @ApplicationScoped
-public class GenerateDemoData {
+public class GenerateDemoDataService {
     private final BenutzerService benutzerService;
 
     public void createEingereicht() {
@@ -83,7 +83,7 @@ public class GenerateDemoData {
             .land(null)
             .status(null)
             .build();
-        final var pia = DemoPersonEntity.createPersonInAusbildung(
+        final var pia = DemoPerson.createPersonInAusbildung(
             PersonInAusbildungBuilder.personInAusbildung()
                 .adresse(
                     AdresseBuilder.adresse()
@@ -130,7 +130,7 @@ public class GenerateDemoData {
             .ausbildungAbgeschlossen(false)
             .wohnsitz(null)
             .build();
-        final var partner = DemoPersonEntity.createPartner(
+        final var partner = DemoPerson.createPartner(
             PartnerBuilder.partner()
                 .adresse(
                     AdresseBuilder.adresse()
@@ -150,7 +150,7 @@ public class GenerateDemoData {
                 .vorname(null)
                 .geburtsdatum(null)
         );
-        final var kind = DemoPersonEntity.createKind(
+        final var kind = DemoPerson.createKind(
             KindBuilder.kind()
                 .ausbildungssituation(null)
                 .unterhaltsbeitraege(null)
@@ -225,7 +225,7 @@ public class GenerateDemoData {
             .vaterWiederverheiratet(null)
             .werZahltAlimente(null)
             .build();
-        final var eltern = DemoPersonEntity.createEltern(
+        final var eltern = DemoPerson.createEltern(
             ElternBuilder.eltern()
                 .adresse(
                     AdresseBuilder.adresse()
@@ -260,7 +260,7 @@ public class GenerateDemoData {
             .einnahmenBGSA(null)
             .andereEinnahmen(null)
             .build();
-        final var geschwister = DemoPersonEntity.createGeschwister(
+        final var geschwister = DemoPerson.createGeschwister(
             GeschwisterBuilder.geschwister()
                 .ausbildungssituation(null),
             AbstractFamilieEntityBuilder.abstractFamilieEntity()
