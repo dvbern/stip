@@ -79,8 +79,12 @@ public class PdfUtils {
         return NUMBER_FORMAT.format(number);
     }
 
+    public boolean isPageNumberEven(final Document document) {
+        return document.getPdfDocument().getNumberOfPages() % 2 == 0;
+    }
+
     public void makePageNumberEven(Document document) {
-        if (document.getPdfDocument().getNumberOfPages() % 2 == 0) {
+        if (isPageNumberEven(document)) {
             return;
         }
         document.getPdfDocument().addNewPage();

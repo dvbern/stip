@@ -219,6 +219,7 @@ public class BerechnungsblattService {
             final PdfDocument pdfDocument = new PdfDocument(writer);
             final Document document = new Document(pdfDocument, PAGE_SIZE);
         ) {
+            // todo 1: make sure most recent verfuegung ist being used & visible in pdf!
             // iterate through all tranchen
             for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
                 // add berechnungsblatt for PIA for current tranche
@@ -229,29 +230,23 @@ public class BerechnungsblattService {
                     final SteuerdatenTyp currentSteuerdatenTyp =
                         mapToSteuerdatenTyp(unterschriftenblatt.getDokumentTyp());
 
-                    // calculate total number of (non-blanc) pages. +1 because of berechnungsblatt pia (which is always
-                    // present)
-                    final var totalNumberOfPages = berechnungsResultat.getTranchenBerechnungsresultate().size()
-                    * (tranchenBerechnungsResultat.getFamilienBudgetresultate().size() + 1);
-
-                    // add berechnungsblatt for Familie or both Elterns for current tranche
+                    // add berechnungsblatt for Familie/Elterns for current tranche
                     for (var familienBudget : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
                         final SteuerdatenTyp typ = familienBudget.getFamilienBudgetTyp();
                         if (currentSteuerdatenTyp.equals(typ)) {
                             // if unterschriftenblatt is existing for the current type,
                             // add it to final document
                             addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
-                            var currentNumberOfPages = document.getPdfDocument().getNumberOfPages();
-
-                            // prevent empty extra pages at end of document
-                            if (currentNumberOfPages < totalNumberOfPages) {
-                                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                            }
+                            // REQUIRED, so that pages content won't overlap
+                            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE)); // todo 2: probably causes bug of too
+                                                                                  // many pages at end of document
+                            // if uneven, add page
+                            PdfUtils.makePageNumberEven(document); // todo 3: probably gets ignored?!
                         }
                     }
                 });
             }
-            PdfUtils.makePageNumberEven(document);
+
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
