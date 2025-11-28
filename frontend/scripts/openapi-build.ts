@@ -37,6 +37,7 @@ const generatedApis = [
   'Configuration',
   'Datenschutzbrief',
   'Delegieren',
+  'DemoData',
   'Dokument',
   'Drucken',
   'Fall',

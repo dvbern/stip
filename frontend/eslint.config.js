@@ -73,6 +73,10 @@ module.exports = [
               ],
             },
             {
+              sourceTag: 'scope:demo-data-app',
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:demo-data-app'],
+            },
+            {
               sourceTag: 'scope:shared',
               onlyDependOnLibsWithTags: ['scope:shared'],
             },

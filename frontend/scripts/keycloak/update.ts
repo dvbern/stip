@@ -22,11 +22,15 @@ import {
   CURRENT_VERSION,
   CurrentRole,
   CurrentRoleOrPermission,
+  ENV_SPECIAL_PERMISSIONS,
+  KnownEnv,
+  KnownRealm,
   PERMISSIONS,
   ROLES,
   isDefined,
   isDefinedRoleOrPermission,
   isRoleOrPermission,
+  known,
 } from './types';
 config({ path: join(__dirname, '../../.env') });
 
@@ -37,11 +41,6 @@ const ADD_USER_PASSWORD_ENV = 'NEW_USER_PASSWORD';
 
 allowInsecure();
 const env = process.env;
-
-const known = {
-  envs: ['DEV', 'UAT'],
-  realms: ['bern', 'dv'],
-} as const;
 
 const program = new Command();
 program.name('update-keycloak');
@@ -136,7 +135,7 @@ Example call:
 /**
  * Initialize the Keycloak admin client.
  */
-async function initKc(target: (typeof known.envs)[number]) {
+async function initKc(target: KnownEnv) {
   const KEYCLOAK_ADMIN_URL = env[`${URL_ENV}_${target}`];
   const KEYCLOAK_ADMIN_USERNAME = env[`${USERNAME_ENV}_${target}`];
   const KEYCLOAK_ADMIN_PASSWORD = env[`${PASSWORD_ENV}_${target}`];
@@ -170,7 +169,11 @@ async function initKc(target: (typeof known.envs)[number]) {
 /**
  * Find missing roles and permissions in Keycloak.
  */
-async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
+async function findMissingRoles(
+  kcAdminClient: KcAdminClient,
+  realm: KnownRealm,
+  env: KnownEnv,
+) {
   const rawRolesOrPermissions = await kcAdminClient.roles.find({ realm });
   const allRolesOrPermissions =
     rawRolesOrPermissions.filter(isRoleOrPermission);
@@ -210,7 +213,8 @@ async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
     }),
   );
 
-  const missingPermissions = PERMISSIONS.filter(
+  const allPermissions = [...PERMISSIONS, ...ENV_SPECIAL_PERMISSIONS[env]];
+  const missingPermissions = allPermissions.filter(
     (role) => !allRolesOrPermissions.some((r) => r.name === role),
   );
   const superfluousPermissions = rawRolesOrPermissions.filter(
@@ -243,8 +247,8 @@ async function findMissingRoles(kcAdminClient: KcAdminClient, realm: string) {
  *
  * @param realm the realm to sync roles and permissions for
  */
-async function syncRoles(realm: string) {
-  const { env } = syncRolesCommand.opts();
+async function syncRoles(realm: KnownRealm) {
+  const { env } = syncRolesCommand.opts() as { env: KnownEnv };
   const kcAdminClient = await initKc(env);
   const {
     allRolesOrPermissionsMap,
@@ -254,7 +258,7 @@ async function syncRoles(realm: string) {
     superfluousPermissions,
     missingRoles,
   } = {
-    ...(await findMissingRoles(kcAdminClient, realm)),
+    ...(await findMissingRoles(kcAdminClient, realm, env)),
   };
 
   console.info('Current state of roles and permissions');
@@ -344,9 +348,9 @@ const runForRealms = async <R>(fn: (realm: string) => Promise<R>) => {
 
 syncRolesCommand.action(async () => {
   try {
-    const results = (await runForRealms((realm) => syncRoles(realm))).filter(
-      isDefined,
-    );
+    const results = (
+      await runForRealms((realm) => syncRoles(realm as KnownRealm))
+    ).filter(isDefined);
     if (results.length > 0) {
       console.info('Results:', results);
     }
@@ -367,10 +371,10 @@ addUsersCommand.action(async () => {
     roles: rawRoles,
     realm,
   } = addUsersCommand.opts() as {
-    env: (typeof known.envs)[number];
+    env: KnownEnv;
     user: string;
     roles: CurrentRole[];
-    realm: (typeof known.realms)[number];
+    realm: KnownRealm;
   };
 
   if (!userInfo || !rawRoles) {

@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalState } from '@ngrx/signals';
-import { Subject, merge, of } from 'rxjs';
+import { Subject, merge, of, throwError } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -125,6 +125,8 @@ export class UploadStore {
         this.documentService.getGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
         this.documentService.getGesuchDokumentForTypSB$(params),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -136,6 +138,8 @@ export class UploadStore {
         this.documentService.getCustomGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
         this.documentService.getCustomGesuchDokumentForTypSB$(params),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -154,6 +158,8 @@ export class UploadStore {
         this.documentService.deleteDokumentGS$(...deleteCallParams),
       'sachbearbeitung-app': () =>
         this.documentService.deleteDokumentSB$(...deleteCallParams),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -181,6 +187,8 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -206,6 +214,8 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 

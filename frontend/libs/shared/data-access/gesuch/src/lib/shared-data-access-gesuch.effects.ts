@@ -11,6 +11,7 @@ import {
   map,
   switchMap,
   tap,
+  throwError,
   withLatestFrom,
 } from 'rxjs';
 
@@ -182,6 +183,8 @@ export const loadGesuch = createEffect(
                 undefined,
                 handle404And401,
               ),
+            'demo-data-app': () =>
+              throwError(() => new Error('Not implemented for this AppType')),
           } satisfies Record<AppType, unknown>;
 
           const trancheServices$ = {
@@ -203,6 +206,8 @@ export const loadGesuch = createEffect(
                 undefined,
                 handle404And401,
               ),
+            'demo-data-app': () =>
+              throwError(() => new Error('Not implemented for this AppType')),
           } satisfies Record<AppType, unknown>;
 
           // Different services for different types of tranches

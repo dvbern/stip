@@ -2,7 +2,7 @@ import { Injectable, Signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { map, pipe, switchMap, tap } from 'rxjs';
+import { map, pipe, switchMap, tap, throwError } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -174,6 +174,8 @@ export class GesuchAenderungStore extends signalStore(
             this.gesuchTrancheService.getAllTranchenForGesuchGS$(...params),
           'sachbearbeitung-app': () =>
             this.gesuchTrancheService.getAllTranchenForGesuchSB$(...params),
+          'demo-data-app': () =>
+            throwError(() => new Error('Not implemented for this AppType')),
         });
         return serviceCall$.pipe().pipe(map((tranchen) => tranchen ?? []));
       }),

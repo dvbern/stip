@@ -1,6 +1,13 @@
 import RoleRepresentation from '@keycloak/keycloak-admin-client/lib/defs/roleRepresentation';
 
-import { PERMISSION_ROLE_LIST } from './roles-map';
+import { DEMO_DATA_PERMISSIONS, PERMISSION_ROLE_LIST } from './roles-map';
+
+export const known = {
+  envs: ['DEV', 'UAT'],
+  realms: ['bern', 'dv'],
+} as const;
+export type KnownEnv = (typeof known)['envs'][number];
+export type KnownRealm = (typeof known)['realms'][number];
 
 export const CURRENT_VERSION = 'V0' as const;
 export type CurrentVersion = typeof CURRENT_VERSION;
@@ -20,7 +27,9 @@ type PermissionRoleList = typeof PERMISSION_ROLE_LIST;
 type Remainder<T extends unknown[]> = T extends [unknown, ...infer R]
   ? R
   : never;
-type Permission = Remainder<PermissionRoleList[number]>[number];
+type Permission =
+  | Remainder<PermissionRoleList[number]>[number]
+  | (typeof DEMO_DATA_PERMISSIONS)[number];
 
 export type CurrentRole = `${CurrentVersion}_${Role}`;
 export type CurrentPermission = `${CurrentVersion}_${Permission}`;
@@ -46,6 +55,11 @@ export const ROLES = unique(
 export const PERMISSIONS = unique(
   PERMISSION_ROLE_LIST.flatMap(([, ...permissions]) => permissions),
 ).map(_v);
+export const ENV_SPECIAL_PERMISSIONS = {
+  DEV: DEMO_DATA_PERMISSIONS.map(_v),
+  UAT: DEMO_DATA_PERMISSIONS.map(_v),
+} satisfies Record<KnownEnv, string[]>;
+
 export const PERMISSIONS_BY_ROLES = PERMISSION_ROLE_LIST.reduce(
   (acc, [roles, ...permissions]) => {
     roles
@@ -64,7 +78,9 @@ export const ROLES_AND_PERMISSIONS = [...ROLES, ...PERMISSIONS] as const;
 export const isRoleOrPermission = <T extends { name?: string }>(
   obj: T,
 ): obj is T & { name: CurrentRoleOrPermission } => {
-  return ROLES_AND_PERMISSIONS.includes(obj.name as CurrentRoleOrPermission);
+  return [...DEMO_DATA_PERMISSIONS.map(_v), ...ROLES_AND_PERMISSIONS].includes(
+    obj.name as CurrentRoleOrPermission,
+  );
 };
 export const isDefinedRoleOrPermission = (
   role: RoleRepresentation,

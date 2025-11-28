@@ -91,7 +91,7 @@ export class SharedPatternAppHeaderComponent {
       });
   }
 
-  @HostListener('window:scroll', ['$event']) handleScroll() {
+  @HostListener('window:scroll') handleScroll() {
     this.isScroll = window.scrollY > 0;
   }
 

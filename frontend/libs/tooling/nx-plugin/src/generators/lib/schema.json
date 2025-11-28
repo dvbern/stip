@@ -82,6 +82,10 @@
           {
             "value": "sozialdienst-app",
             "label": "sozialdienst-app - used only by sozialdienst-app"
+          },
+          {
+            "value": "demo-data-app",
+            "label": "demo-data-app - used only by demo-data-app"
           }
         ]
       }
