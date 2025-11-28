@@ -157,7 +157,7 @@ public class DemoDataApiSpec {
      * Returns a list of available demo data
      * 
      *
-     * return DemoDataSlimDtoSpec
+     * return List&lt;DemoDataSlimDtoSpec&gt;
      */
     public static class GetAllDemoDataOper implements Oper {
 
@@ -187,10 +187,10 @@ public class DemoDataApiSpec {
         /**
          * GET /demo-data
          * @param handler handler
-         * @return DemoDataSlimDtoSpec
+         * @return List&lt;DemoDataSlimDtoSpec&gt;
          */
-        public DemoDataSlimDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DemoDataSlimDtoSpec> type = new TypeRef<DemoDataSlimDtoSpec>(){};
+        public List<DemoDataSlimDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DemoDataSlimDtoSpec>> type = new TypeRef<List<DemoDataSlimDtoSpec>>(){};
             return execute(handler).as(type);
         }
 

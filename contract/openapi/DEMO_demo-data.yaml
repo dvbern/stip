@@ -20,7 +20,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DemoDataSlim'
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemoDataSlim'
           description: Returns the created Ausbildung
         '401':
           $ref: './components/responses.yaml#/Unauthorized'

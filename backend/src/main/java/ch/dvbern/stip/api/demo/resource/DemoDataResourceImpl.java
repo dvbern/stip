@@ -1,5 +1,7 @@
 package ch.dvbern.stip.api.demo.resource;
 
+import java.util.List;
+
 import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
@@ -24,7 +26,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
     }
 
     @Override
-    public DemoDataSlimDto getAllDemoData() {
-        return null;
+    public List<DemoDataSlimDto> getAllDemoData() {
+        return List.of();
     }
 }

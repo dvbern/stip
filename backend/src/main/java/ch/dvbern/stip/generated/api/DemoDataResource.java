@@ -27,5 +27,5 @@ public interface DemoDataResource {
 
     @GET
     @Produces({ "application/json", "text/plain" })
-    DemoDataSlimDto getAllDemoData();
+    List<DemoDataSlimDto> getAllDemoData();
 }
