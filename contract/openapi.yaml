@@ -239,7 +239,7 @@ paths:
         required: true
       - name: dokumentTyp
         schema:
-          $ref: '#/components/schemas/DarlehenDokumnetTyp'
+          $ref: '#/components/schemas/DarlehenDokumentTyp'
         in: path
         required: true
     get:
@@ -5809,7 +5809,7 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
-    DarlehenDokumnetTyp:
+    DarlehenDokumentTyp:
       enum:
         - BETREIBUNGS_AUSZUG
         - AUFSTELLUNG_KOSTEN_ELTERN
@@ -5849,7 +5849,7 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         dokumentTyp:
-          $ref: '#/components/schemas/DarlehenDokumnetTyp'
+          $ref: '#/components/schemas/DarlehenDokumentTyp'
         dokumente:
           type: array
           items:
