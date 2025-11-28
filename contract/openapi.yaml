@@ -247,7 +247,11 @@ paths:
         - Darlehen
       responses:
         '200':
-          description: OK
+          description: Return Darlehen dokument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenDokument'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -266,7 +270,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DarlehenDokument'
+              $ref: '#/components/schemas/DarlehenDokumentCreate'
       responses:
         '200':
           description: OK
