@@ -12,7 +12,6 @@
 import { SteuerdatenTyp } from './steuerdatenTyp';
 
 export interface SteuererklaerungUpdate { 
-    id?: string;
     steuerdatenTyp: SteuerdatenTyp;
     steuererklaerungInBern: boolean;
     ergaenzungsleistungen?: number;

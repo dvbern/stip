@@ -6,7 +6,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { ElternTyp, ElternUpdate } from '@dv/shared/model/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -16,7 +16,7 @@ import { SharedUiTranslatedLandPipe } from '@dv/shared/ui/translated-land';
   selector: 'dv-shared-feature-gesuch-form-eltern-card',
   imports: [
     CommonModule,
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiIconChipComponent,
     SharedUiTranslatedLandPipe,
   ],
@@ -30,9 +30,9 @@ export class ElternteilCardComponent {
   @Input({ required: true })
   elternTyp!: ElternTyp;
   @Input({ required: true })
-  translationkey!: string;
-  @Input({ required: true })
   readonly!: boolean;
+  @Input()
+  hidden = false;
   @Output()
   editTriggered = new EventEmitter<ElternUpdate>();
   @Output()

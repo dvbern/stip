@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -83,6 +84,14 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         }
 
         final var dokument = dokumentOpt.get();
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        if (
+            IsDokumentOfVersteckterElternteilUtil
+                .isVerstecktesDokument(gesuchTranche.getGesuchFormular().getVersteckteEltern(), dokument)
+        ) {
+            forbidden();
+        }
+
         if (GesuchDokumentStatus.GESUCHSTELLER_CAN_UPLOAD_DOKUMENT.contains(dokument.getStatus())) {
             return;
         }

@@ -118,7 +118,8 @@ public class GesuchApiSpec {
                 getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
                 setGesuchsperiodeForGesuch(),
-                updateGesuch(),
+                updateGesuchGS(),
+                updateGesuchSB(),
                 updateNachfristDokumente()
         );
     }
@@ -267,8 +268,12 @@ public class GesuchApiSpec {
         return new SetGesuchsperiodeForGesuchOper(createReqSpec());
     }
 
-    public UpdateGesuchOper updateGesuch() {
-        return new UpdateGesuchOper(createReqSpec());
+    public UpdateGesuchGSOper updateGesuchGS() {
+        return new UpdateGesuchGSOper(createReqSpec());
+    }
+
+    public UpdateGesuchSBOper updateGesuchSB() {
+        return new UpdateGesuchSBOper(createReqSpec());
     }
 
     public UpdateNachfristDokumenteOper updateNachfristDokumente() {
@@ -3170,15 +3175,15 @@ public class GesuchApiSpec {
      * @see #gesuchIdPath  (required)
      * @see #body  (required)
      */
-    public static class UpdateGesuchOper implements Oper {
+    public static class UpdateGesuchGSOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchId}";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public UpdateGesuchOper(RequestSpecBuilder reqSpec) {
+        public UpdateGesuchGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -3186,7 +3191,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchId}
+         * PATCH /gesuch/{gesuchId}/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -3200,7 +3205,7 @@ public class GesuchApiSpec {
          * @param gesuchUpdateDtoSpec (GesuchUpdateDtoSpec)  (required)
          * @return operation
          */
-        public UpdateGesuchOper body(GesuchUpdateDtoSpec gesuchUpdateDtoSpec) {
+        public UpdateGesuchGSOper body(GesuchUpdateDtoSpec gesuchUpdateDtoSpec) {
             reqSpec.setBody(gesuchUpdateDtoSpec);
             return this;
         }
@@ -3211,7 +3216,7 @@ public class GesuchApiSpec {
          * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public UpdateGesuchOper gesuchIdPath(Object gesuchId) {
+        public UpdateGesuchGSOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -3221,7 +3226,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public UpdateGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public UpdateGesuchGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -3231,7 +3236,80 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public UpdateGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public UpdateGesuchGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Updates the Gesuch with the given Id
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * @see #body  (required)
+     */
+    public static class UpdateGesuchSBOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UpdateGesuchSBOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /gesuch/{gesuchId}/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+         /**
+         * @param gesuchUpdateDtoSpec (GesuchUpdateDtoSpec)  (required)
+         * @return operation
+         */
+        public UpdateGesuchSBOper body(GesuchUpdateDtoSpec gesuchUpdateDtoSpec) {
+            reqSpec.setBody(gesuchUpdateDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public UpdateGesuchSBOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UpdateGesuchSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UpdateGesuchSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

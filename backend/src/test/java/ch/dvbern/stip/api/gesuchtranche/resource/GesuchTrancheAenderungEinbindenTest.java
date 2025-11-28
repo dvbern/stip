@@ -154,7 +154,7 @@ class GesuchTrancheAenderungEinbindenTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .setEinnahmenKostenPartner(EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenPartnerUpdateDtoSpec());
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)

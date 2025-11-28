@@ -44,11 +44,11 @@ import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchFormularDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -97,13 +97,13 @@ class GesuchTrancheCreateTest {
     private UUID overwrittenTrancheId;
 
     private GesuchTrancheSlimDtoSpec trancheToOverwrite;
-    private GesuchUpdateDtoSpec gesuchUpdateDto;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        TestUtil.fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, TestUtil.getAuszahlungUpdateDtoSpec());
     }
 
     @Test
@@ -115,17 +115,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(3)
-    void prepareAddRequiredDocument() {
-        // preparation for the last few tests
-        gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        addDocument(gesuchUpdateDto, false);
-    }
-
-    @Test
-    @TestAsGesuchsteller
-    @Order(4)
+    @Order(5)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -137,7 +127,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(5)
+    @Order(6)
     void prepareSachbearbeiter() {
         benutzerApiSpec.prepareCurrentBenutzer()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -148,7 +138,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void createTrancheFail() {
         gesuchTrancheApiSpec.createGesuchTrancheCopy()
             .gesuchIdPath(gesuch.getId())
@@ -160,7 +150,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void setStatusInBearbeitungSb() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -181,7 +171,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(9)
     void createTrancheSuccess() {
         final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
         createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(2));
@@ -199,7 +189,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(10)
     void getTranchen() {
         var result = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -219,7 +209,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(11)
     void overwriteTranche() {
         final var createGesuchTrancheRequestDtoSpec = new CreateGesuchTrancheRequestDtoSpec();
         createGesuchTrancheRequestDtoSpec.setStart(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1));
@@ -249,7 +239,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(12)
     void testIfSuperflousDocumentOnlyGetsDeletedOnOneTranche() {
         var tranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -263,11 +253,16 @@ class GesuchTrancheCreateTest {
 
         // make the formlerly added document (by GS) superflous on tranche 2:
         // therefore, remove & re-add the document
-        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(tranchen.getTranchen().get(1).getId());
+        removeDocumentSB(tranchen.getTranchen().get(1).getId());
+        final var gesuchUpdateDTO = getAddDocumentDto(tranchen.getTranchen().get(1).getId());
 
-        removeDocument(gesuchUpdateDto, true);
-
-        addDocument(gesuchUpdateDto, true);
+        gesuchApiSpec.updateGesuchSB()
+            .gesuchIdPath(gesuch.getId())
+            .body(gesuchUpdateDTO)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
 
         var documentsToUploadOfTranche1 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
@@ -311,15 +306,14 @@ class GesuchTrancheCreateTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(12)
+    @Order(13)
     @Test
     void makeGesuchVerfuegt() {
-        gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+        TestUtil.executeAndAssert(
+            gesuchApiSpec.getInitialTrancheChanges()
+                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId()),
+            Status.INTERNAL_SERVER_ERROR.getStatusCode()
+        );
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -329,28 +323,52 @@ class GesuchTrancheCreateTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-        var gesuchWithChanges =
-            gesuchApiSpec.getInitialTrancheChanges()
+        TestUtil.executeAndAssertOk(
+            gesuchApiSpec.changeGesuchStatusToVerfuegt()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchWithChangesDtoSpec.class);
+        );
+
+        var gesuchWithChanges = TestUtil.executeAndExtract(
+            GesuchWithChangesDtoSpec.class,
+            gesuchApiSpec.getInitialTrancheChanges().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
+
         Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
         // make sure this flag is true whenever especially this endpoint is called
         Assertions.assertThat(gesuchWithChanges.getIsInitial()).isTrue();
     }
 
     @Test
+    @Order(14)
     @TestAsSachbearbeiter
-    @Order(13)
+    void changeToFinalState() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
+            .satisfiesAnyOf(
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.STIPENDIENANSPRUCH),
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
+            );
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(15)
     void getInitialTrancheChangesAsSBInGesuchstatusEingereichtShouldThrow() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -371,7 +389,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(16)
     void getInitialTrancheChangesWithInvalidTrancheId() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -384,7 +402,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(16)
+    @Order(17)
     void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
         // the gesuch (tranchen) of state eingereicht should be returned to GS
         // so the total count of (visible) tranchen should be 1 instead of 2
@@ -408,46 +426,8 @@ class GesuchTrancheCreateTest {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 
-    private void resetAdressen(GesuchUpdateDtoSpec gesuchUpdateDTO, final boolean runAsSB) {
-        GesuchFormularDtoSpec currentGesuchFormular;
-        if (runAsSB) {
-            final var currentGesuch = gesuchApiSpec.getGesuchSB()
-                .gesuchTrancheIdPath(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchWithChangesDtoSpec.class);
-            currentGesuchFormular = currentGesuch.getGesuchTrancheToWorkWith().getGesuchFormular();
-        } else {
-            final var currentGesuch = gesuchApiSpec.getGesuchGS()
-                .gesuchTrancheIdPath(gesuchUpdateDTO.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchDtoSpec.class);
-            currentGesuchFormular = currentGesuch.getGesuchTrancheToWorkWith().getGesuchFormular();
-        }
-
-        var gesuchFormularUpdate = gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular();
-
-        gesuchFormularUpdate.getPersonInAusbildung()
-            .getAdresse()
-            .setId(currentGesuchFormular.getPersonInAusbildung().getAdresse().getId());
-        gesuchFormularUpdate.getPartner().getAdresse().setId(currentGesuchFormular.getPartner().getAdresse().getId());
-        gesuchFormularUpdate.getElterns().forEach(eltern -> {
-            var elternteilOfCurrentGesuch = currentGesuchFormular.getElterns()
-                .stream()
-                .filter(el -> el.getElternTyp().equals(eltern.getElternTyp()))
-                .findFirst()
-                .orElse(null);
-            eltern.getAdresse().setId(elternteilOfCurrentGesuch.getAdresse().getId());
-        });
-    }
-
-    private void addDocument(GesuchUpdateDtoSpec gesuchUpdateDTO, final boolean runAsSB) {
-        resetAdressen(gesuchUpdateDTO, runAsSB);
+    private GesuchUpdateDtoSpec getAddDocumentDto(UUID trancheId) {
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
         var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
         geschwisterUpdate.setNachname("test");
@@ -456,27 +436,18 @@ class GesuchTrancheCreateTest {
         geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
 
-        gesuchApiSpec.updateGesuch()
-            .gesuchIdPath(gesuch.getId())
-            .body(gesuchUpdateDTO)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
+        return gesuchUpdateDTO;
     }
 
-    private void removeDocument(GesuchUpdateDtoSpec gesuchUpdateDTO, final boolean runAsSB) {
-        resetAdressen(gesuchUpdateDTO, runAsSB);
-        var geschwisterUpdate = new GeschwisterUpdateDtoSpec();
-        geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.VORSCHULPFLICHTIG);
-        geschwisterUpdate.setNachname("test");
-        geschwisterUpdate.setVorname("test");
-        geschwisterUpdate.setGeburtsdatum(LocalDate.now().minusYears(18));
-        geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
-
-        // gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
-        gesuchApiSpec.updateGesuch()
+    private void removeDocumentSB(UUID trancheId) {
+        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getGesuchFormular()
+            .getEinnahmenKosten()
+            .setNettoerwerbseinkommen(0);
+        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
