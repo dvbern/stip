@@ -122,6 +122,11 @@ export class SharedPatternDocumentUploadComponent {
     initialDokumente: Dokument[] | undefined,
     dokument: SharedModelGesuchDokument,
   ): void {
+    // todo: check if OK!
+    if (dokument.art === 'DARLEHEN_DOKUMENT') {
+      return;
+    }
+
     this.einreichStore.validateSteps$({
       gesuchTrancheId: dokument.trancheId,
     });

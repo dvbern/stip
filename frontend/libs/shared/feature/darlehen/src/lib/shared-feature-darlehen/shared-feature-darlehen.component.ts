@@ -25,7 +25,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 
-import { DarlehenDokumentTyp } from '@dv/shared/model/gesuch';
+import { DarlehenDokumentType } from '@dv/shared/model/gesuch';
 import {
   SharedPatternDocumentUploadComponent,
   createDarlehenUploadOptionsFactory,
@@ -135,25 +135,25 @@ export class SharedFeatureDarlehenComponent implements OnInit {
 
   //todo: Falls dialog, das Dokumentenhandling besprechen!
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
-    return DarlehenDokumentTyp.BETREIBUNGS_AUSZUG;
+    return DarlehenDokumentType.BETREIBUNGS_AUSZUG;
   });
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
     return isGrundNichtBerechtigt
-      ? DarlehenDokumentTyp.AUFSTELLUNG_KOSTEN_ELTERN
+      ? DarlehenDokumentType.AUFSTELLUNG_KOSTEN_ELTERN
       : null;
   });
   grundHoheGebuehrenDocSig = this.createUploadOptionsSig(() => {
     const isGrundHoheGebuehren = this.grundHoheGebuehrenChangedSig();
     return isGrundHoheGebuehren
-      ? DarlehenDokumentTyp.KOPIE_SCHULGELDRECHNUNG
+      ? DarlehenDokumentType.KOPIE_SCHULGELDRECHNUNG
       : null;
   });
   grundAnschaffungenFuerAusbildungDocSig = this.createUploadOptionsSig(() => {
     const isGrundAnschaffungenFuerAusbildung =
       this.grundAnschaffungenFuerAusbildungChangedSig();
     return isGrundAnschaffungenFuerAusbildung
-      ? DarlehenDokumentTyp.BELEGE_ANSCHAFFUNGEN
+      ? DarlehenDokumentType.BELEGE_ANSCHAFFUNGEN
       : null;
   });
 

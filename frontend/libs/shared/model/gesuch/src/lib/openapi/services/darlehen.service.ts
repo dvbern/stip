@@ -20,9 +20,10 @@ import { Observable }                                        from 'rxjs';
 
 import { Darlehen } from '../model/darlehen';
 import { DarlehenDokument } from '../model/darlehenDokument';
-import { DarlehenDokumentTyp } from '../model/darlehenDokumentTyp';
+import { DarlehenDokumentType } from '../model/darlehenDokumentType';
 import { DarlehenUpdateGs } from '../model/darlehenUpdateGs';
 import { DarlehenUpdateSb } from '../model/darlehenUpdateSb';
+import { FileDownloadToken } from '../model/fileDownloadToken';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -34,8 +35,8 @@ export interface DarlehenServiceCreateDarlehenRequestParams {
 }
 
 export interface DarlehenServiceCreateDarlehenDokumentRequestParams {
-    darlehenId: Darlehen;
-    dokumentTyp: DarlehenDokumentTyp;
+    darlehenId: string;
+    dokumentType: DarlehenDokumentType;
     fileUpload: Blob;
 }
 
@@ -69,13 +70,21 @@ export interface DarlehenServiceDarlehenZurueckweisenRequestParams {
     darlehenId: string;
 }
 
+export interface DarlehenServiceDownloadDarlehenDokumentRequestParams {
+    token: string;
+}
+
 export interface DarlehenServiceGetActiveDarlehenRequestParams {
     fallId: string;
 }
 
 export interface DarlehenServiceGetDarlehenDokumentRequestParams {
-    darlehenId: Darlehen;
-    dokumentTyp: DarlehenDokumentTyp;
+    darlehenId: string;
+    dokumentType: DarlehenDokumentType;
+}
+
+export interface DarlehenServiceGetDarlehenDokumentDownloadTokenRequestParams {
+    dokumentId: string;
 }
 
 
@@ -241,9 +250,9 @@ export class DarlehenService {
         if (darlehenId === null || darlehenId === undefined) {
             throw new Error('Required parameter darlehenId was null or undefined when calling createDarlehenDokument$.');
         }
-        const dokumentTyp = requestParameters.dokumentTyp;
-        if (dokumentTyp === null || dokumentTyp === undefined) {
-            throw new Error('Required parameter dokumentTyp was null or undefined when calling createDarlehenDokument$.');
+        const dokumentType = requestParameters.dokumentType;
+        if (dokumentType === null || dokumentType === undefined) {
+            throw new Error('Required parameter dokumentType was null or undefined when calling createDarlehenDokument$.');
         }
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
@@ -316,7 +325,7 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "Darlehen", dataFormat: undefined})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentTyp", dataFormat: undefined})}`;
+        const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -870,6 +879,73 @@ export class DarlehenService {
     }
 
     /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<Blob>;
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpResponse<Blob>>;
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpEvent<Blob>>;
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<any> {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadDarlehenDokument$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>token, 'token');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/octet-stream'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        const localVarPath = `/darlehen/dokument/download`;
+        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Return active darlehen darlehen if exists or else null
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -956,9 +1032,9 @@ export class DarlehenService {
         if (darlehenId === null || darlehenId === undefined) {
             throw new Error('Required parameter darlehenId was null or undefined when calling getDarlehenDokument$.');
         }
-        const dokumentTyp = requestParameters.dokumentTyp;
-        if (dokumentTyp === null || dokumentTyp === undefined) {
-            throw new Error('Required parameter dokumentTyp was null or undefined when calling getDarlehenDokument$.');
+        const dokumentType = requestParameters.dokumentType;
+        if (dokumentType === null || dokumentType === undefined) {
+            throw new Error('Required parameter dokumentType was null or undefined when calling getDarlehenDokument$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1006,8 +1082,81 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "Darlehen", dataFormat: undefined})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentTyp", dataFormat: undefined})}`;
+        const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
         return this.httpClient.request<DarlehenDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * get Token to downlaod darlehen dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getDarlehenDokumentDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDokumentDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getDarlehenDokumentDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getDarlehenDokumentDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getDarlehenDokumentDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDarlehenDokumentDownloadToken$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

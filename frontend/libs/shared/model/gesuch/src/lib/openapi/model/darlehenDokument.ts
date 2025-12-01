@@ -9,12 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DarlehenDokumentTyp } from './darlehenDokumentTyp';
+import { DarlehenDokumentType } from './darlehenDokumentType';
 import { Dokument } from './dokument';
 
 export interface DarlehenDokument { 
     id: string;
-    dokumentTyp: DarlehenDokumentTyp;
+    dokumentType: DarlehenDokumentType;
     dokumente: Array<Dokument>;
 }
 

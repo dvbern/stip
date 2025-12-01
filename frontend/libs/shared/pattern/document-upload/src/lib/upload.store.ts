@@ -22,9 +22,11 @@ import {
   DokumentState,
   SharedModelAdditionalGesuchDokument,
   SharedModelCustomGesuchDokument,
+  SharedModelDarlehenDokument,
   SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
 import {
+  DarlehenService,
   Dokument,
   DokumentService,
   DokumentTyp,
@@ -100,6 +102,7 @@ export class UploadStore {
   });
 
   private documentService = inject(DokumentService);
+  private darlehenService = inject(DarlehenService);
   private config = inject(SharedModelCompileTimeConfig);
   private loadDocuments$ = new Subject<DokumentOptions>();
   private removeDocument$ = new Subject<
@@ -216,6 +219,24 @@ export class UploadStore {
           (() => {
             const dokument = options.dokument;
             switch (dokument.art) {
+              case 'DARLEHEN_DOKUMENT': {
+                return this.darlehenService
+                  .getDarlehenDokument$({
+                    darlehenId: dokument.darlehenId,
+                    dokumentType: dokument.dokumentTyp,
+                  })
+                  .pipe(
+                    map(
+                      (gesuchDokument) =>
+                        ({
+                          art: 'DARLEHEN_DOKUMENT',
+                          gesuchDokument,
+                          dokumentTyp: dokument.dokumentTyp,
+                          darlehenId: dokument.darlehenId,
+                        }) satisfies SharedModelDarlehenDokument,
+                    ),
+                  );
+              }
               case 'GESUCH_DOKUMENT': {
                 return this.getRequiredGesuchDokumenteByAppType({
                   dokumentTyp: dokument.dokumentTyp,
@@ -316,6 +337,7 @@ export class UploadStore {
             switch (action.dokument.art) {
               case 'CUSTOM_DOKUMENT':
               case 'GESUCH_DOKUMENT':
+              case 'DARLEHEN_DOKUMENT':
                 return this.deleteDokumentByAppType$(
                   action.dokumentId,
                   !!dokumentToDelete?.error,
@@ -494,6 +516,15 @@ export class UploadStore {
 
     const uploadByType = () => {
       switch (dokument.art) {
+        case 'DARLEHEN_DOKUMENT':
+          return this.darlehenService.createDarlehenDokument$(
+            {
+              fileUpload,
+              darlehenId: dokument.darlehenId,
+              dokumentType: dokument.dokumentTyp,
+            },
+            ...serviceDefaultParams,
+          );
         case 'GESUCH_DOKUMENT':
           return this.createDokumentByAppType$(
             fileUpload,

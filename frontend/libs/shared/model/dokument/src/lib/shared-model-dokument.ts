@@ -2,7 +2,7 @@ import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentTyp,
   DarlehenDokument,
-  DarlehenDokumentTyp,
+  DarlehenDokumentType,
   Dokument,
   DokumentArt,
   DokumentTyp,
@@ -40,7 +40,7 @@ export type SharedModelCustomGesuchDokument = {
 
 export type SharedModelDarlehenDokument = {
   art: Extends<DokumentArt, 'DARLEHEN_DOKUMENT'>;
-  dokumentTyp: DarlehenDokumentTyp;
+  dokumentTyp: DarlehenDokumentType;
   darlehenId: string;
   gesuchDokument?: DarlehenDokument;
 };
@@ -167,6 +167,10 @@ export const isUploadable = (
     }
     case 'UNTERSCHRIFTENBLATT': {
       return permission.canUploadUnterschriftenblatt;
+    }
+    // todo: add logic
+    case 'DARLEHEN_DOKUMENT': {
+      return true;
     }
   }
 };

@@ -9,15 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DarlehenStatus } from './darlehenStatus';
 import { DarlehenGrund } from './darlehenGrund';
 
 export interface Darlehen { 
     id: string;
     fallId: string;
-    darlehenGewaehren: boolean;
-    darlehenBetrag: number;
+    status?: DarlehenStatus;
+    gewaehren?: boolean;
+    betrag?: number;
     kommentar: string;
-    darlehenBetragGewuenscht: number;
+    betragGewuenscht?: number;
     schulden: number;
     anzahlBetreibungen: number;
     grund: DarlehenGrund;

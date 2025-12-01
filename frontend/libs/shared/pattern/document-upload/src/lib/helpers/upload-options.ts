@@ -3,13 +3,12 @@ import { Signal, computed } from '@angular/core';
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentOptions,
-  DarlehenDokumentOptions,
   DokumentOptions,
   StandardDokumentOptions,
 } from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
-  DarlehenDokumentTyp,
+  DarlehenDokumentType,
   Dokument,
   DokumentTyp,
   GesuchDokument,
@@ -19,9 +18,9 @@ import {
 import { PermissionMap } from '@dv/shared/model/permission-state';
 
 export const DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
-  readonly [K in DarlehenDokumentTyp]: SharedTranslationKey;
+  readonly [K in DarlehenDokumentType]: SharedTranslationKey;
 } & Partial<
-  Record<`${DarlehenDokumentTyp}_DESCRIPTION`, SharedTranslationKey>
+  Record<`${DarlehenDokumentType}_DESCRIPTION`, SharedTranslationKey>
 > = {
   BETREIBUNGS_AUSZUG: 'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
   AUFSTELLUNG_KOSTEN_ELTERN:
@@ -364,7 +363,7 @@ export function createDarlehenUploadOptionsFactory<
   }>,
 >(view: T) {
   return (
-    lazyDokumentTyp: (view: T) => DarlehenDokumentTyp | null | undefined,
+    lazyDokumentTyp: (view: T) => DarlehenDokumentType | null | undefined,
   ) => {
     return computed<DokumentOptions | null>(() => {
       const darlehenId = view().darlehenId;
