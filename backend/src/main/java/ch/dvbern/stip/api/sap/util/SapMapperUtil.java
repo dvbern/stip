@@ -32,6 +32,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class SapMapperUtil {
+    private static int EXT_ID_UNIQUE_ID_NUM_DIGITS = 4;
+
     public PersonInAusbildung getPia(
         Fall fall
     ) {
@@ -50,6 +52,14 @@ public class SapMapperUtil {
         final var gesuchTranche =
             gesuch.getGesuchTrancheValidOnDate(LocalDate.now()).orElse(gesuch.getLatestGesuchTranche());
         return gesuchTranche.getGesuchFormular().getPersonInAusbildung();
+    }
+
+    public String getExtId(Fall fall) {
+        return String.format(
+            "%s.%d",
+            fall.getFallNummer(),
+            Math.abs(fall.getId().getMostSignificantBits()) % Math.round(Math.pow(10, EXT_ID_UNIQUE_ID_NUM_DIGITS))
+        );
     }
 
     public String getAhvNr(Fall fall) {
