@@ -319,6 +319,7 @@ public class GesuchTrancheService {
         );
 
         for (final var gesuchDokument : superfluousGesuchDokuments) {
+            gesuchDokument.getGesuchDokumentKommentare().clear();
             gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
             formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
         }
@@ -522,6 +523,7 @@ public class GesuchTrancheService {
                 gesuchDokument.getStatus() == GesuchDokumentStatus.AUSSTEHEND
             ) {
                 existingDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
+                existingDokument.getGesuchDokumentKommentare().clear();
                 gesuchDokumentKommentarService.deleteForGesuchDokument(existingDokument.getId());
             }
         }

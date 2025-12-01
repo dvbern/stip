@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheOverrideDokumentService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
@@ -88,6 +89,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final DokumentDownloadService dokumentDownloadService;
 
@@ -113,7 +115,10 @@ public class DokumentResourceImpl implements DokumentResource {
     public Uni<Response> createDokumentSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         gesuchDokumentAuthorizer.assertSbCanModifyDokumentOfTranche(gesuchTrancheId);
         gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp);
-        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload)
+            .invoke(() -> {
+                gesuchTrancheOverrideDokumentService.synchronizeByGesuchDokumentTyp(gesuchTrancheId, dokumentTyp);
+            });
     }
 
     @Override
@@ -181,8 +186,14 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_DELETE_SB)
     public void deleteDokumentSB(UUID dokumentId) {
         gesuchDokumentAuthorizer.assertSbCanDeleteDokumentOfTranche(dokumentId);
+        // Dokument will be deleted, but we still need a gesuchDokument reference for tranche sync
+        final var gesuchDokument = gesuchDokumentService.getGesuchDokumentOfDokument(dokumentId);
         gesuchDokumentService.setGesuchDokumentOfDokumentToAusstehend(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
+        gesuchTrancheOverrideDokumentService.synchronizeByGesuchDokumentTyp(
+            gesuchDokument.getGesuchTranche().getId(),
+            gesuchDokument.getDokumentTyp()
+        );
     }
 
     @Override
@@ -193,6 +204,8 @@ public class DokumentResourceImpl implements DokumentResource {
     ) {
         gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
+        gesuchTrancheOverrideDokumentService
+            .jahresfeldGesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
     @Override
@@ -200,6 +213,7 @@ public class DokumentResourceImpl implements DokumentResource {
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
+        gesuchTrancheOverrideDokumentService.jahresfeldGesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
     @Override

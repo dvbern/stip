@@ -50,7 +50,6 @@ import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -60,9 +59,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER_ADMIN;
 
 @Slf4j
 @RequestScoped
@@ -184,8 +180,7 @@ public class GesuchDokumentService {
             .setFilepath(GESUCH_DOKUMENT_PATH)
             .setObjectId(objectId);
 
-        dokument.setGesuchDokument(gesuchDokument);
-        gesuchDokument.getDokumente().add(dokument);
+        gesuchDokument.addDokument(dokument);
 
         dokumentRepository.persist(dokument);
     }
@@ -201,8 +196,7 @@ public class GesuchDokumentService {
                 .findByCustomDokumentTyp(customDokumentTypId)
                 .orElseThrow(NotFoundException::new);
         final var dokument = new Dokument();
-        dokument.setGesuchDokument(gesuchDokument);
-        gesuchDokument.getDokumente().add(dokument);
+        gesuchDokument.addDokument(dokument);
         dokument.setFilename(fileUpload.fileName());
         dokument.setObjectId(objectId);
         dokument.setFilesize(String.valueOf(fileUpload.size()));
@@ -325,10 +319,17 @@ public class GesuchDokumentService {
         }
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_SACHBEARBEITER_ADMIN })
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        gesuchDokumentAblehnen(gesuchDokument, dto);
+    }
+
+    @Transactional
+    public void gesuchDokumentAblehnen(
+        final GesuchDokument gesuchDokument,
+        final GesuchDokumentAblehnenRequestDto dto
+    ) {
         validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
         gesuchDokumentstatusService.triggerStatusChangeWithComment(
             gesuchDokument,
@@ -340,6 +341,11 @@ public class GesuchDokumentService {
     @Transactional
     public void gesuchDokumentAkzeptieren(final UUID gesuchDokumentId) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        gesuchDokumentAkzeptieren(gesuchDokument);
+    }
+
+    @Transactional
+    public void gesuchDokumentAkzeptieren(final GesuchDokument gesuchDokument) {
         validateGesuchAndTrancheAreInCorrectStateOrElseThrow(gesuchDokument);
         gesuchDokumentstatusService.triggerStatusChange(
             gesuchDokument,
@@ -474,6 +480,10 @@ public class GesuchDokumentService {
         if (!dokumentObjectIds.isEmpty()) {
             executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
+    }
+
+    public GesuchDokument getGesuchDokumentOfDokument(UUID dokumentId) {
+        return dokumentRepository.requireById(dokumentId).getGesuchDokument();
     }
 
     @Transactional

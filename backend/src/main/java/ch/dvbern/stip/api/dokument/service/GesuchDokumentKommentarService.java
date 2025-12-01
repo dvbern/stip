@@ -166,7 +166,7 @@ public class GesuchDokumentKommentarService {
         if (gesuchDokumentKommentarDto == null) {
             createEmptyKommentarForGesuchDokument(gesuchDokument);
         } else {
-            kommentar.setGesuchDokument(gesuchDokument);
+            gesuchDokument.addGesuchKommentar(kommentar);
             kommentar.setGesuchDokumentStatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
@@ -176,8 +176,8 @@ public class GesuchDokumentKommentarService {
     public void createEmptyKommentarForGesuchDokument(final GesuchDokument gesuchDokument) {
         final var kommentar = new GesuchDokumentKommentar()
             .setGesuchDokumentStatus(gesuchDokument.getStatus())
-            .setGesuchDokument(gesuchDokument)
             .setKommentar(null);
+        gesuchDokument.addGesuchKommentar(kommentar);
         gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
     }
 }

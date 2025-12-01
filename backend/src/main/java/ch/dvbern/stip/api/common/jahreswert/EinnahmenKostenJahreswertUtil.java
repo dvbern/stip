@@ -34,6 +34,7 @@ public class EinnahmenKostenJahreswertUtil {
 
         for (final var target : targets) {
             target.setNettoerwerbseinkommen(source.getNettoerwerbseinkommen());
+            target.setArbeitspensumProzent(source.getArbeitspensumProzent());
             target.setZulagen(source.getZulagen());
             target.setEoLeistungen(source.getEoLeistungen());
             target.setErgaenzungsleistungen(source.getErgaenzungsleistungen());

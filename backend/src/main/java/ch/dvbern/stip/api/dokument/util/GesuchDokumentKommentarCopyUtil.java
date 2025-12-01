@@ -29,13 +29,24 @@ public class GesuchDokumentKommentarCopyUtil {
     ) {
         final var copy = new GesuchDokumentKommentar();
 
-        copy.setGesuchDokument(destinationGesuchDokument);
         copy.setKommentar(source.getKommentar());
         copy.setGesuchDokumentStatus(source.getGesuchDokumentStatus());
         copy.setAutor(source.getAutor());
         copy.setTimestampErstellt(source.getTimestampErstellt());
         copy.setTimestampMutiert(source.getTimestampMutiert());
+        destinationGesuchDokument.addGesuchKommentar(copy);
 
         return copy;
+    }
+
+    public void overrideAll(
+        final GesuchDokument source,
+        final GesuchDokument destination
+    ) {
+        destination.getGesuchDokumentKommentare().clear();
+
+        for (var gesuchDokumentKommentar : source.getGesuchDokumentKommentare()) {
+            destination.addGesuchKommentar(gesuchDokumentKommentar);
+        }
     }
 }

@@ -17,18 +17,28 @@
 
 package ch.dvbern.stip.api.gesuchtranche.service;
 
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
+import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +46,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesuchTrancheOverrideDokumentService {
+    private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentService gesuchDokumentService;
 
     private static final Set<DokumentTyp> DOKUMENTE_ON_JAHRESWERTE = Set.of(
@@ -67,6 +79,7 @@ public class GesuchTrancheOverrideDokumentService {
         DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN,
         DokumentTyp.EK_PARTNER_VERMOEGEN
     );
+    private final DokumentRepository dokumentRepository;
 
     void overrideJahreswertDokumente(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var targetTranchen = gesuch.getTranchenTranchen()
@@ -132,5 +145,89 @@ public class GesuchTrancheOverrideDokumentService {
                 noNewDokument.accept(jahreswertDokument);
             }
         }
+    }
+
+    @Transactional
+    public void synchronizeByGesuchDokumentTyp(final UUID gesuchTrancheId, DokumentTyp gesuchDokumentTyp) {
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+
+        if (
+            gesuchDokumentTyp == null || !DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokumentTyp)
+            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+        ) {
+            return;
+        }
+
+        final var gesuchDokumentOpt = gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(
+            gesuchTrancheId,
+            gesuchDokumentTyp
+        );
+        final var otherTranchen = gesuchTranche.getGesuch()
+            .getTranchenTranchen()
+            .filter(tranche -> !tranche.getId().equals(gesuchTranche.getId()));
+
+        otherTranchen.forEach(otherTranche -> {
+            // Remove the gesuchDokumente and dokumente from other tranchen by given DokumentTyp
+            otherTranche.getGesuchDokuments().removeIf(dokument -> {
+                if (Objects.equals(dokument.getDokumentTyp(), gesuchDokumentTyp)) {
+                    dokument.getDokumente().clear();
+                    gesuchDokumentRepository.delete(dokument);
+                    return true;
+                }
+                return false;
+            });
+
+            // Copy the original gesuchDokument and its dokumente if present
+            gesuchDokumentOpt.ifPresent(gesuchDokument -> {
+                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(gesuchDokument, otherTranche);
+                GesuchDokumentCopyUtil.copyDokumente(newGesuchDokument, gesuchDokument.getDokumente());
+                GesuchDokumentKommentarCopyUtil.overrideAll(gesuchDokument, newGesuchDokument);
+                otherTranche.getGesuchDokuments().add(newGesuchDokument);
+            });
+        });
+    }
+
+    @Transactional
+    public void jahresfeldGesuchDokumentAblehnen(
+        UUID gesuchDokumentId,
+        GesuchDokumentAblehnenRequestDto gesuchDokumentAblehnenRequestDto
+    ) {
+        forEachOtherTrancheOfDokument(
+            gesuchDokumentId,
+            (otherGesuchDokument) -> gesuchDokumentService
+                .gesuchDokumentAblehnen(otherGesuchDokument, gesuchDokumentAblehnenRequestDto)
+        );
+    }
+
+    @Transactional
+    public void jahresfeldGesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
+        forEachOtherTrancheOfDokument(gesuchDokumentId, gesuchDokumentService::gesuchDokumentAkzeptieren);
+    }
+
+    private void forEachOtherTrancheOfDokument(UUID gesuchDokumentId, Consumer<GesuchDokument> withGesuchDokument) {
+        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
+        final var gesuchTranche = gesuchDokument.getGesuchTranche();
+
+        if (
+            Objects.isNull(gesuchDokument.getDokumentTyp())
+            || !DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokument.getDokumentTyp())
+            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
+        ) {
+            return;
+        }
+
+        final var otherTranchen = gesuchTranche.getGesuch()
+            .getTranchenTranchen()
+            .filter(tranche -> !tranche.getId().equals(gesuchTranche.getId()));
+
+        otherTranchen.forEach(otherTranche -> {
+            final var otherGesuchDokumentOpt = otherTranche
+                .getGesuchDokuments()
+                .stream()
+                .filter(d -> Objects.requireNonNull(d.getDokumentTyp()).equals(gesuchDokument.getDokumentTyp()))
+                .findFirst();
+
+            otherGesuchDokumentOpt.ifPresent(withGesuchDokument);
+        });
     }
 }
