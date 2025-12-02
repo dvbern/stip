@@ -177,6 +177,49 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /darlehen/dashboard/{getDarlehenSBQueryType}:
+    parameters:
+      - name: getDarlehenSBQueryType
+        schema:
+          $ref: '#/components/schemas/GetDarlehenSBQueryType'
+        in: path
+        required: true
+      - $ref: '#/components/parameters/fallNummer'
+      - $ref: '#/components/parameters/piaNachname'
+      - $ref: '#/components/parameters/piaVorname'
+      - $ref: '#/components/parameters/piaGeburtsdatum'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/bearbeiter'
+      - $ref: '#/components/parameters/letzteAktivitaetFrom'
+      - $ref: '#/components/parameters/letzteAktivitaetTo'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - name: sortColumn
+        schema:
+          $ref: '#/components/schemas/SbDarlehenDashboardColumn'
+        in: query
+      - $ref: '#/components/parameters/sortOrder'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSbDarlehenDashboard'
+          description: Returns gesuche filtered by status and sb
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenSb
+      summary: Returns darlehen filtered by status and sb
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /darlehen/{fallId}:
     parameters:
       - name: fallId
@@ -202,7 +245,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getActiveDarlehen
+      operationId: getDarlehenGs
       summary: Return active darlehen darlehen if exists or else null
       security:
         - auth-uat-bern: []
@@ -282,58 +325,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDarlehenDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /darlehen/dokument/download:
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: Returns a file
-      operationId: downloadDarlehenDokument
-      x-quarkus-response-type: >-
-        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /darlehen/dokument/{dokumentId}/token:
-    parameters:
-      - name: dokumentId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FileDownloadToken'
-          description: Returns a download token
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getDarlehenDokumentDownloadToken
-      summary: get Token to downlaod darlehen dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -3218,7 +3209,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SbDashboardColumn'
+            $ref: '#/components/schemas/SbGesucheDashboardColumn'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -3227,7 +3218,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedSbDashboard'
+                $ref: '#/components/schemas/PaginatedSbGesucheDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -5854,6 +5845,27 @@ components:
           $ref: '#/components/schemas/LocalDate'
         absender:
           type: string
+    SbDarlehenDashboardColumn:
+      enum:
+        - FALLNUMMER
+        - PIA_NACHNAME
+        - PIA_VORNAME
+        - PIA_GEBURTSDATUM
+        - STATUS
+        - BEARBEITER
+        - LETZTE_AKTIVITAET
+    GetDarlehenSBQueryType:
+      enum:
+        - ALLE_DARLEHEN
+        - MEINE_DARLEHEN
+    PaginatedSbDarlehenDashboard:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Darlehen'
     DarlehenDokumentType:
       enum:
         - BETREIBUNGS_AUSZUG
@@ -5906,6 +5918,19 @@ components:
       properties:
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
+    SortOrder:
+      enum:
+        - ASCENDING
+        - DESCENDING
+    PaginatedResult:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalEntries:
+          type: integer
     DarlehenStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -5981,13 +6006,6 @@ components:
     FileUpload:
       format: binary
       type: string
-    FileDownloadToken:
-      required:
-        - token
-      type: object
-      properties:
-        token:
-          type: string
     Delegierung:
       type: object
       required:
@@ -6109,19 +6127,6 @@ components:
           type: string
         ort:
           type: string
-    SortOrder:
-      enum:
-        - ASCENDING
-        - DESCENDING
-    PaginatedResult:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalEntries:
-          type: integer
     SozialdienstSlim:
       required:
         - id
@@ -6278,6 +6283,13 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -7218,7 +7230,7 @@ components:
             $ref: '#/components/schemas/GesuchDashboardItem'
       allOf:
         - $ref: '#/components/schemas/Ausbildung'
-    SbDashboardColumn:
+    SbGesucheDashboardColumn:
       enum:
         - FALLNUMMER
         - TYP
@@ -7228,7 +7240,7 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    PaginatedSbDashboard:
+    PaginatedSbGesucheDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
       properties:
@@ -9223,6 +9235,61 @@ components:
       name: fallNummer
       schema:
         type: string
+    piaNachname:
+      in: query
+      name: piaNachname
+      schema:
+        type: string
+    piaVorname:
+      in: query
+      name: piaVorname
+      schema:
+        type: string
+    piaGeburtsdatum:
+      in: query
+      name: piaGeburtsdatum
+      schema:
+        type: string
+        format: date
+    status:
+      in: query
+      name: status
+      schema:
+        type: string
+    bearbeiter:
+      in: query
+      name: bearbeiter
+      schema:
+        type: string
+    letzteAktivitaetFrom:
+      in: query
+      name: letzteAktivitaetFrom
+      schema:
+        type: string
+        format: date
+    letzteAktivitaetTo:
+      in: query
+      name: letzteAktivitaetTo
+      schema:
+        type: string
+        format: date
+    page:
+      in: query
+      name: page
+      required: true
+      schema:
+        type: integer
+    pageSize:
+      in: query
+      name: pageSize
+      required: true
+      schema:
+        type: integer
+    sortOrder:
+      in: query
+      name: sortOrder
+      schema:
+        $ref: '#/components/schemas/SortOrder'
     wohnort:
       in: query
       name: wohnort
@@ -9269,23 +9336,6 @@ components:
         $ref: '#/components/schemas/UUID'
       in: path
       required: true
-    page:
-      in: query
-      name: page
-      required: true
-      schema:
-        type: integer
-    pageSize:
-      in: query
-      name: pageSize
-      required: true
-      schema:
-        type: integer
-    sortOrder:
-      in: query
-      name: sortOrder
-      schema:
-        $ref: '#/components/schemas/SortOrder'
     MassendruckJobTyp:
       in: query
       name: massendruckJobTyp
@@ -9320,32 +9370,6 @@ components:
         $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
       in: path
       required: true
-    piaVorname:
-      in: query
-      name: piaVorname
-      schema:
-        type: string
-    piaNachname:
-      in: query
-      name: piaNachname
-      schema:
-        type: string
-    piaGeburtsdatum:
-      in: query
-      name: piaGeburtsdatum
-      schema:
-        type: string
-        format: date
-    bearbeiter:
-      in: query
-      name: bearbeiter
-      schema:
-        type: string
-    status:
-      in: query
-      name: status
-      schema:
-        type: string
     typ:
       in: query
       name: typ
@@ -9359,18 +9383,6 @@ components:
       description: Die ID der Aenderung
       schema:
         $ref: '#/components/schemas/UUID'
-    letzteAktivitaetFrom:
-      in: query
-      name: letzteAktivitaetFrom
-      schema:
-        type: string
-        format: date
-    letzteAktivitaetTo:
-      in: query
-      name: letzteAktivitaetTo
-      schema:
-        type: string
-        format: date
     gesuchTrancheId:
       name: gesuchTrancheId
       in: path

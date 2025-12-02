@@ -11,6 +11,46 @@ servers:
       port:
         default: '8080'
 paths:
+  /darlehen/dashboard/{getDarlehenSBQueryType}:
+    parameters:
+      - name: getDarlehenSBQueryType
+        schema:
+          $ref: '#/components/schemas/GetDarlehenSBQueryType'
+        in: path
+        required: true
+      - $ref: './components/parameters.yaml#/fallNummer'
+      - $ref: './components/parameters.yaml#/piaNachname'
+      - $ref: './components/parameters.yaml#/piaVorname'
+      - $ref: './components/parameters.yaml#/piaGeburtsdatum'
+      - $ref: './components/parameters.yaml#/status'
+      - $ref: './components/parameters.yaml#/bearbeiter'
+      - $ref: './components/parameters.yaml#/letzteAktivitaetFrom'
+      - $ref: './components/parameters.yaml#/letzteAktivitaetTo'
+      - $ref: './components/parameters.yaml#/page'
+      - $ref: './components/parameters.yaml#/pageSize'
+      - name: sortColumn
+        schema:
+          $ref: '#/components/schemas/SbDarlehenDashboardColumn'
+        in: query
+      - $ref: './components/parameters.yaml#/sortOrder'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSbDarlehenDashboard'
+          description: Returns gesuche filtered by status and sb
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenSb
+      summary: Returns darlehen filtered by status and sb
   /darlehen/{fallId}:
     parameters:
       - name: fallId
@@ -36,7 +76,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getActiveDarlehen
+      operationId: getDarlehenGs
       summary: Return active darlehen darlehen if exists or else null
     post:
       tags:
@@ -108,53 +148,6 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: createDarlehenDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-
-  /darlehen/dokument/download:
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        200:
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: Returns a file
-      operationId: downloadDarlehenDokument
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-
-  /darlehen/dokument/{dokumentId}/token:
-    parameters:
-      - name: dokumentId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: './components/common.yaml#/FileDownloadToken'
-          description: Returns a download token
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getDarlehenDokumentDownloadToken
-      summary: get Token to downlaod darlehen dokument
 
   /darlehen/{darlehenId}/eingeben:
     parameters:
@@ -369,6 +362,30 @@ components:
     $ref: './components/security.yaml#/securitySchemes'
 
   schemas:
+    SbDarlehenDashboardColumn:
+      enum:
+        - FALLNUMMER
+        - PIA_NACHNAME
+        - PIA_VORNAME
+        - PIA_GEBURTSDATUM
+        - STATUS
+        - BEARBEITER
+        - LETZTE_AKTIVITAET
+
+    GetDarlehenSBQueryType:
+      enum:
+        - ALLE_DARLEHEN
+        - MEINE_DARLEHEN
+
+    PaginatedSbDarlehenDashboard:
+      allOf:
+        - $ref: './components/common.yaml#/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Darlehen'
+
     DarlehenDokumentType:
       enum:
         - BETREIBUNGS_AUSZUG
