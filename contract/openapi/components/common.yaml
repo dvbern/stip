@@ -961,3 +961,10 @@ AusgewaehlterGrund:
       $ref: '#/UUID'
     kanton:
       $ref: '#/Kanton'
+KindIntegerValueItem:
+  type: object
+  properties:
+    vorname:
+      type: string
+    value:
+      type: integer

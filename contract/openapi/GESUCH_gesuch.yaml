@@ -1616,6 +1616,7 @@ components:
         - leistungenEO
         - rente
         - kinderAusbildungszulagen
+        - kinderUnterhaltsbeitraege
         - ergaenzungsleistungen
         - gemeindeInstitutionen
         - steuerbaresVermoegen
@@ -1650,13 +1651,49 @@ components:
           type: integer
         alimente:
           type: integer
+        alimentePartner:
+          type: integer
+        alimenteTotal:
+          type: integer
         leistungenEO:
+          type: integer
+        leistungenEOPartner:
+          type: integer
+        leistungenEOTotal:
           type: integer
         rente:
           type: integer
-        kinderAusbildungszulagen:
+        rentePartner:
+          type: integer
+        renteTotal:
+          type: integer
+        ausbildungszulagenKinder:
+          type: array
+          items:
+            $ref: './components/common.yaml#/KindIntegerValueItem'
+        ausbildungszulagenKinderTotal:
+          type: integer
+        unterhaltsbeitraegeKinder:
+          type: array
+          items:
+            $ref: './components/common.yaml#/KindIntegerValueItem'
+        unterhaltsbeitraegeKinderTotal:
+          type: integer
+        rentenKinder:
+          type: array
+          items:
+            $ref: './components/common.yaml#/KindIntegerValueItem'
+        rentenKinderTotal:
           type: integer
         ergaenzungsleistungen:
+          type: integer
+        ergaenzungsleistungenPartner:
+          type: integer
+        ergaenzungsleistungenKinder:
+          type: array
+          items:
+            $ref: './components/common.yaml#/KindIntegerValueItem'
+        ergaenzungsleistungenTotal:
           type: integer
         gemeindeInstitutionen:
           type: integer
@@ -1665,6 +1702,8 @@ components:
         anrechenbaresVermoegen:
           type: integer
         einkommenPartner:
+          type: integer
+        einkommenTotal:
           type: integer
         einnahmenPersoenlichesBudget:
           type: integer
@@ -1680,13 +1719,19 @@ components:
           type: integer
         steuernPartner:
           type: integer
+        steuernTotal:
+          type: integer
         fahrkosten:
           type: integer
         fahrkostenPartner:
           type: integer
+        fahrkostenTotal:
+          type: integer
         verpflegung:
           type: integer
         verpflegungPartner:
+          type: integer
+        verpflegungTotal:
           type: integer
         fremdbetreuung:
           type: integer
@@ -1699,6 +1744,28 @@ components:
         elternbeitrag1:
           type: integer
         elternbeitrag2:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        einnahmenBGSAPartner:
+          type: integer
+        einnahmenBGSATotal:
+          type: integer
+        andereEinnahmen:
+          type: integer
+        andereEinnahmenPartner:
+          type: integer
+        andereEinnahmenKinder:
+          type: array
+          items:
+            $ref: './components/common.yaml#/KindIntegerValueItem'
+        andereEinnahmenTotal:
+          type: integer
+        taggelder:
+          type: integer
+        taggelderPartner:
+          type: integer
+        taggelderTotal:
           type: integer
     FamilienBudgetresultat:
       description: Familien Budget daten fuer und von der Berechnung
@@ -1753,6 +1820,10 @@ components:
         eigenmietwert:
           type: integer
         alimente:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        andereEinnahmen:
           type: integer
         einnahmenFamilienbudget:
           type: integer
