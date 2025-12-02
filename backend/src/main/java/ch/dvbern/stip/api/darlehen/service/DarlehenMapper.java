@@ -15,24 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchformular.util;
+package ch.dvbern.stip.api.darlehen.service;
 
-import java.util.stream.Stream;
-
+import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
+import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
+import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-public class GetDocumentsForDarlehenArgumentsProvider implements ArgumentsProvider {
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-        return CreatePermutationUtil.createIntegerPermutations(
-            (val) -> new DarlehenDto().anzahlBetreibungen(val),
-            (val) -> new Darlehen().setAnzahlBetreibungen(val),
-            DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG
-        );
-    }
+@Mapper(config = MappingConfig.class, uses = DarlehenDokumentMapper.class)
+public abstract class DarlehenMapper {
+    public abstract DarlehenDto toDto(Darlehen darlehen);
+
+    public abstract Darlehen toEntity(DarlehenDto darlehenDto);
+
+    public abstract Darlehen partialUpdate(
+        DarlehenUpdateGsDto darlehenDto,
+        @MappingTarget Darlehen darlehen
+    );
+
+    public abstract Darlehen partialUpdate(
+        DarlehenUpdateSbDto darlehenDto,
+        @MappingTarget Darlehen darlehen
+    );
 }

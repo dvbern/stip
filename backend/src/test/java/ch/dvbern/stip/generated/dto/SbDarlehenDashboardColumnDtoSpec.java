@@ -22,21 +22,27 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets DarlehenDokumnetTyp
+ * Gets or Sets SbDarlehenDashboardColumn
  */
-public enum DarlehenDokumnetTypDtoSpec {
+public enum SbDarlehenDashboardColumnDtoSpec {
   
-  BETREIBUNGS_AUSZUG("BETREIBUNGS_AUSZUG"),
+  FALLNUMMER("FALLNUMMER"),
   
-  AUFSTELLUNG_KOSTEN_ELTERN("AUFSTELLUNG_KOSTEN_ELTERN"),
+  PIA_NACHNAME("PIA_NACHNAME"),
   
-  KOPIE_SCHULGELDRECHNUNG("KOPIE_SCHULGELDRECHNUNG"),
+  PIA_VORNAME("PIA_VORNAME"),
   
-  BELEGE_ANSCHAFFUNGEN("BELEGE_ANSCHAFFUNGEN");
+  PIA_GEBURTSDATUM("PIA_GEBURTSDATUM"),
+  
+  STATUS("STATUS"),
+  
+  BEARBEITER("BEARBEITER"),
+  
+  LETZTE_AKTIVITAET("LETZTE_AKTIVITAET");
 
   private String value;
 
-  DarlehenDokumnetTypDtoSpec(String value) {
+  SbDarlehenDashboardColumnDtoSpec(String value) {
     this.value = value;
   }
 
@@ -51,8 +57,8 @@ public enum DarlehenDokumnetTypDtoSpec {
   }
 
   @JsonCreator
-  public static DarlehenDokumnetTypDtoSpec fromValue(String value) {
-    for (DarlehenDokumnetTypDtoSpec b : DarlehenDokumnetTypDtoSpec.values()) {
+  public static SbDarlehenDashboardColumnDtoSpec fromValue(String value) {
+    for (SbDarlehenDashboardColumnDtoSpec b : SbDarlehenDashboardColumnDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

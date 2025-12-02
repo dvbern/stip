@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DarlehenGrundDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -23,13 +22,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DarlehenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID fallId;
-  private @Valid Boolean darlehenGewaehren;
-  private @Valid Integer darlehenBetrag;
   private @Valid String kommentar;
-  private @Valid Integer darlehenBetragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
-  private @Valid DarlehenGrundDto grund;
+  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund;
+  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
+  private @Valid Boolean gewaehren;
+  private @Valid Integer betrag;
+  private @Valid Integer betragGewuenscht;
 
   /**
    **/
@@ -71,45 +71,6 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto darlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
-    return this;
-  }
-
-  
-  @JsonProperty("darlehenGewaehren")
-  @NotNull
-  public Boolean getDarlehenGewaehren() {
-    return darlehenGewaehren;
-  }
-
-  @JsonProperty("darlehenGewaehren")
-  public void setDarlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
-  }
-
-  /**
-   * minimum: 0
-   **/
-  public DarlehenDto darlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
-    return this;
-  }
-
-  
-  @JsonProperty("darlehenBetrag")
-  @NotNull
- @Min(0)  public Integer getDarlehenBetrag() {
-    return darlehenBetrag;
-  }
-
-  @JsonProperty("darlehenBetrag")
-  public void setDarlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
-  }
-
-  /**
-   **/
   public DarlehenDto kommentar(String kommentar) {
     this.kommentar = kommentar;
     return this;
@@ -125,26 +86,6 @@ public class DarlehenDto  implements Serializable {
   @JsonProperty("kommentar")
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
-  }
-
-  /**
-   * minimum: 0
-   **/
-  public DarlehenDto darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
-    return this;
-  }
-
-  
-  @JsonProperty("darlehenBetragGewuenscht")
-  @NotNull
- @Min(0)  public Integer getDarlehenBetragGewuenscht() {
-    return darlehenBetragGewuenscht;
-  }
-
-  @JsonProperty("darlehenBetragGewuenscht")
-  public void setDarlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
   }
 
   /**
@@ -189,7 +130,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto grund(DarlehenGrundDto grund) {
+  public DarlehenDto grund(ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund) {
     this.grund = grund;
     return this;
   }
@@ -197,13 +138,87 @@ public class DarlehenDto  implements Serializable {
   
   @JsonProperty("grund")
   @NotNull
-  public DarlehenGrundDto getGrund() {
+  public ch.dvbern.stip.api.darlehen.type.DarlehenGrund getGrund() {
     return grund;
   }
 
   @JsonProperty("grund")
-  public void setGrund(DarlehenGrundDto grund) {
+  public void setGrund(ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund) {
     this.grund = grund;
+  }
+
+  /**
+   **/
+  public DarlehenDto status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+    this.status = status;
+    return this;
+  }
+
+  
+  @JsonProperty("status")
+  public ch.dvbern.stip.api.darlehen.type.DarlehenStatus getStatus() {
+    return status;
+  }
+
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+    this.status = status;
+  }
+
+  /**
+   **/
+  public DarlehenDto gewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
+    return this;
+  }
+
+  
+  @JsonProperty("gewaehren")
+  public Boolean getGewaehren() {
+    return gewaehren;
+  }
+
+  @JsonProperty("gewaehren")
+  public void setGewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
+  }
+
+  /**
+   * minimum: 0
+   **/
+  public DarlehenDto betrag(Integer betrag) {
+    this.betrag = betrag;
+    return this;
+  }
+
+  
+  @JsonProperty("betrag")
+ @Min(0)  public Integer getBetrag() {
+    return betrag;
+  }
+
+  @JsonProperty("betrag")
+  public void setBetrag(Integer betrag) {
+    this.betrag = betrag;
+  }
+
+  /**
+   * minimum: 0
+   **/
+  public DarlehenDto betragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
+    return this;
+  }
+
+  
+  @JsonProperty("betragGewuenscht")
+ @Min(0)  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
+  }
+
+  @JsonProperty("betragGewuenscht")
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
   }
 
 
@@ -218,18 +233,19 @@ public class DarlehenDto  implements Serializable {
     DarlehenDto darlehen = (DarlehenDto) o;
     return Objects.equals(this.id, darlehen.id) &&
         Objects.equals(this.fallId, darlehen.fallId) &&
-        Objects.equals(this.darlehenGewaehren, darlehen.darlehenGewaehren) &&
-        Objects.equals(this.darlehenBetrag, darlehen.darlehenBetrag) &&
         Objects.equals(this.kommentar, darlehen.kommentar) &&
-        Objects.equals(this.darlehenBetragGewuenscht, darlehen.darlehenBetragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.grund, darlehen.grund);
+        Objects.equals(this.grund, darlehen.grund) &&
+        Objects.equals(this.status, darlehen.status) &&
+        Objects.equals(this.gewaehren, darlehen.gewaehren) &&
+        Objects.equals(this.betrag, darlehen.betrag) &&
+        Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, darlehenGewaehren, darlehenBetrag, kommentar, darlehenBetragGewuenscht, schulden, anzahlBetreibungen, grund);
+    return Objects.hash(id, fallId, kommentar, schulden, anzahlBetreibungen, grund, status, gewaehren, betrag, betragGewuenscht);
   }
 
   @Override
@@ -239,13 +255,14 @@ public class DarlehenDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    darlehenGewaehren: ").append(toIndentedString(darlehenGewaehren)).append("\n");
-    sb.append("    darlehenBetrag: ").append(toIndentedString(darlehenBetrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("}");
     return sb.toString();
   }

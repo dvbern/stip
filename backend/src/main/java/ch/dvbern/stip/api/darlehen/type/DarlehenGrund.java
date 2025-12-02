@@ -15,15 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.type;
+package ch.dvbern.stip.api.darlehen.type;
 
-public enum SbDashboardColumn {
-    FALLNUMMER,
-    TYP,
-    PIA_NACHNAME,
-    PIA_VORNAME,
-    PIA_GEBURTSDATUM,
-    STATUS,
-    BEARBEITER,
-    LETZTE_AKTIVITAET
+public enum DarlehenGrund {
+    NICHT_BERECHTIGT,
+    AUSBILDUNG_ZWOELF_JAHRE,
+    HOHE_GEBUEHREN,
+    ANSCHAFFUNGEN_FUER_AUSBILDUNG,
+    ZWEITAUSBILDUNG,
 }

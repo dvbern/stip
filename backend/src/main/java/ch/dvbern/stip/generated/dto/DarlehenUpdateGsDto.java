@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DarlehenGrundDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -23,7 +22,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
   private @Valid Integer darlehenBetragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
-  private @Valid DarlehenGrundDto grund;
+  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund;
 
   /**
    * minimum: 0
@@ -84,19 +83,19 @@ public class DarlehenUpdateGsDto  implements Serializable {
 
   /**
    **/
-  public DarlehenUpdateGsDto grund(DarlehenGrundDto grund) {
+  public DarlehenUpdateGsDto grund(ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund) {
     this.grund = grund;
     return this;
   }
 
   
   @JsonProperty("grund")
-  public DarlehenGrundDto getGrund() {
+  public ch.dvbern.stip.api.darlehen.type.DarlehenGrund getGrund() {
     return grund;
   }
 
   @JsonProperty("grund")
-  public void setGrund(DarlehenGrundDto grund) {
+  public void setGrund(ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund) {
     this.grund = grund;
   }
 

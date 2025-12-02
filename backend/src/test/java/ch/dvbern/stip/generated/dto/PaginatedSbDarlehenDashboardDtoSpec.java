@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.SbDashboardGesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,19 +28,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * PaginatedSbDashboardDtoSpec
+ * PaginatedSbDarlehenDashboardDtoSpec
  */
 @JsonPropertyOrder({
-  PaginatedSbDashboardDtoSpec.JSON_PROPERTY_ENTRIES,
-  PaginatedSbDashboardDtoSpec.JSON_PROPERTY_PAGE,
-  PaginatedSbDashboardDtoSpec.JSON_PROPERTY_PAGE_SIZE,
-  PaginatedSbDashboardDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
+  PaginatedSbDarlehenDashboardDtoSpec.JSON_PROPERTY_ENTRIES,
+  PaginatedSbDarlehenDashboardDtoSpec.JSON_PROPERTY_PAGE,
+  PaginatedSbDarlehenDashboardDtoSpec.JSON_PROPERTY_PAGE_SIZE,
+  PaginatedSbDarlehenDashboardDtoSpec.JSON_PROPERTY_TOTAL_ENTRIES
 })
-@JsonTypeName("PaginatedSbDashboard")
+@JsonTypeName("PaginatedSbDarlehenDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class PaginatedSbDashboardDtoSpec {
+public class PaginatedSbDarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_ENTRIES = "entries";
-  private List<SbDashboardGesuchDtoSpec> entries;
+  private List<DarlehenDtoSpec> entries;
 
   public static final String JSON_PROPERTY_PAGE = "page";
   private Integer page;
@@ -51,16 +51,16 @@ public class PaginatedSbDashboardDtoSpec {
   public static final String JSON_PROPERTY_TOTAL_ENTRIES = "totalEntries";
   private Integer totalEntries;
 
-  public PaginatedSbDashboardDtoSpec() {
+  public PaginatedSbDarlehenDashboardDtoSpec() {
   }
 
-  public PaginatedSbDashboardDtoSpec entries(List<SbDashboardGesuchDtoSpec> entries) {
+  public PaginatedSbDarlehenDashboardDtoSpec entries(List<DarlehenDtoSpec> entries) {
     
     this.entries = entries;
     return this;
   }
 
-  public PaginatedSbDashboardDtoSpec addEntriesItem(SbDashboardGesuchDtoSpec entriesItem) {
+  public PaginatedSbDarlehenDashboardDtoSpec addEntriesItem(DarlehenDtoSpec entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -76,19 +76,19 @@ public class PaginatedSbDashboardDtoSpec {
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<SbDashboardGesuchDtoSpec> getEntries() {
+  public List<DarlehenDtoSpec> getEntries() {
     return entries;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntries(List<SbDashboardGesuchDtoSpec> entries) {
+  public void setEntries(List<DarlehenDtoSpec> entries) {
     this.entries = entries;
   }
 
 
-  public PaginatedSbDashboardDtoSpec page(Integer page) {
+  public PaginatedSbDarlehenDashboardDtoSpec page(Integer page) {
     
     this.page = page;
     return this;
@@ -114,7 +114,7 @@ public class PaginatedSbDashboardDtoSpec {
   }
 
 
-  public PaginatedSbDashboardDtoSpec pageSize(Integer pageSize) {
+  public PaginatedSbDarlehenDashboardDtoSpec pageSize(Integer pageSize) {
     
     this.pageSize = pageSize;
     return this;
@@ -140,7 +140,7 @@ public class PaginatedSbDashboardDtoSpec {
   }
 
 
-  public PaginatedSbDashboardDtoSpec totalEntries(Integer totalEntries) {
+  public PaginatedSbDarlehenDashboardDtoSpec totalEntries(Integer totalEntries) {
     
     this.totalEntries = totalEntries;
     return this;
@@ -173,11 +173,11 @@ public class PaginatedSbDashboardDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PaginatedSbDashboardDtoSpec paginatedSbDashboard = (PaginatedSbDashboardDtoSpec) o;
-    return Objects.equals(this.entries, paginatedSbDashboard.entries) &&
-        Objects.equals(this.page, paginatedSbDashboard.page) &&
-        Objects.equals(this.pageSize, paginatedSbDashboard.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedSbDashboard.totalEntries);
+    PaginatedSbDarlehenDashboardDtoSpec paginatedSbDarlehenDashboard = (PaginatedSbDarlehenDashboardDtoSpec) o;
+    return Objects.equals(this.entries, paginatedSbDarlehenDashboard.entries) &&
+        Objects.equals(this.page, paginatedSbDarlehenDashboard.page) &&
+        Objects.equals(this.pageSize, paginatedSbDarlehenDashboard.pageSize) &&
+        Objects.equals(this.totalEntries, paginatedSbDarlehenDashboard.totalEntries);
   }
 
   @Override
@@ -188,7 +188,7 @@ public class PaginatedSbDashboardDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PaginatedSbDashboardDtoSpec {\n");
+    sb.append("class PaginatedSbDarlehenDashboardDtoSpec {\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");

@@ -35,8 +35,8 @@ import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NachfristAendernRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
-import ch.dvbern.stip.generated.dto.SbDashboardColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDtoSpec;
+import ch.dvbern.stip.generated.dto.SbGesucheDashboardColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDtoSpec;
 import java.util.UUID;
@@ -2586,7 +2586,7 @@ public class GesuchApiSpec {
      * @see #letzteAktivitaetToQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
-     * return PaginatedSbDashboardDtoSpec
+     * return PaginatedSbGesucheDashboardDtoSpec
      */
     public static class GetGesucheSbOper implements Oper {
 
@@ -2616,10 +2616,10 @@ public class GesuchApiSpec {
         /**
          * GET /gesuch/benutzer/me/sb/{getGesucheSBQueryType}
          * @param handler handler
-         * @return PaginatedSbDashboardDtoSpec
+         * @return PaginatedSbGesucheDashboardDtoSpec
          */
-        public PaginatedSbDashboardDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<PaginatedSbDashboardDtoSpec> type = new TypeRef<PaginatedSbDashboardDtoSpec>(){};
+        public PaginatedSbGesucheDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSbGesucheDashboardDtoSpec> type = new TypeRef<PaginatedSbGesucheDashboardDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -2758,7 +2758,7 @@ public class GesuchApiSpec {
         public static final String SORT_COLUMN_QUERY = "sortColumn";
 
         /**
-         * @param sortColumn (SbDashboardColumnDtoSpec)  (optional)
+         * @param sortColumn (SbGesucheDashboardColumnDtoSpec)  (optional)
          * @return operation
          */
         public GetGesucheSbOper sortColumnQuery(Object... sortColumn) {

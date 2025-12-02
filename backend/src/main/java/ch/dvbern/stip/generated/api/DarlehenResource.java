@@ -1,10 +1,11 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DarlehenDokumnetTypDto;
+import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
-import ch.dvbern.stip.generated.dto.DokumentDto;
+import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -31,10 +32,10 @@ public interface DarlehenResource {
     DarlehenDto createDarlehen(@PathParam("fallId") UUID fallId);
 
     @POST
-    @Path("/{darlehenId}/{dokumentTyp}")
+    @Path("/{darlehenId}/{dokumentType}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createDarlehenDokument(@PathParam("darlehenId") DarlehenDto darlehenId,@PathParam("dokumentTyp") DarlehenDokumnetTypDto dokumentTyp,@FormParam(value = "id")  UUID id,@FormParam(value = "dokumentTyp")  DarlehenDokumnetTypDto dokumentTyp2,@FormParam(value = "dokumente")  List<DokumentDto> dokumente);
+    io.smallrye.mutiny.Uni<Response> createDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @POST
     @Path("/{darlehenId}/ablehnen")
@@ -74,12 +75,17 @@ public interface DarlehenResource {
     DarlehenDto darlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId);
 
     @GET
-    @Path("/{fallId}")
+    @Path("/{darlehenId}/{dokumentType}")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto getActiveDarlehen(@PathParam("fallId") UUID fallId);
+    DarlehenDokumentDto getDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType);
 
     @GET
-    @Path("/{darlehenId}/{dokumentTyp}")
-    @Produces({ "text/plain" })
-    void getDarlehenDokument(@PathParam("darlehenId") DarlehenDto darlehenId,@PathParam("dokumentTyp") DarlehenDokumnetTypDto dokumentTyp);
+    @Path("/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    DarlehenDto getDarlehenGs(@PathParam("fallId") UUID fallId);
+
+    @GET
+    @Path("/dashboard/{getDarlehenSBQueryType}")
+    @Produces({ "application/json", "text/plain" })
+    PaginatedSbDarlehenDashboardDto getDarlehenSb(@PathParam("getDarlehenSBQueryType") ch.dvbern.stip.api.darlehen.type.GetDarlehenSBQueryType getDarlehenSBQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 }

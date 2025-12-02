@@ -196,11 +196,11 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (
-            hasChangedAndNewIsGreaterThanZero(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())
-        ) {
-            toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
-        }
+        // if (
+        // hasChangedAndNewIsGreaterThanZero(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())
+        // ) {
+        // toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
+        // }
 
         return toDelete;
     }

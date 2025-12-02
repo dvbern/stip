@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenStatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,10 +32,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DarlehenDtoSpec.JSON_PROPERTY_ID,
   DarlehenDtoSpec.JSON_PROPERTY_FALL_ID,
-  DarlehenDtoSpec.JSON_PROPERTY_DARLEHEN_GEWAEHREN,
-  DarlehenDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG,
+  DarlehenDtoSpec.JSON_PROPERTY_STATUS,
+  DarlehenDtoSpec.JSON_PROPERTY_GEWAEHREN,
+  DarlehenDtoSpec.JSON_PROPERTY_BETRAG,
   DarlehenDtoSpec.JSON_PROPERTY_KOMMENTAR,
-  DarlehenDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT,
+  DarlehenDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
   DarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
   DarlehenDtoSpec.JSON_PROPERTY_GRUND
@@ -48,17 +50,20 @@ public class DarlehenDtoSpec {
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
 
-  public static final String JSON_PROPERTY_DARLEHEN_GEWAEHREN = "darlehenGewaehren";
-  private Boolean darlehenGewaehren;
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private DarlehenStatusDtoSpec status;
 
-  public static final String JSON_PROPERTY_DARLEHEN_BETRAG = "darlehenBetrag";
-  private Integer darlehenBetrag;
+  public static final String JSON_PROPERTY_GEWAEHREN = "gewaehren";
+  private Boolean gewaehren;
+
+  public static final String JSON_PROPERTY_BETRAG = "betrag";
+  private Integer betrag;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
 
-  public static final String JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT = "darlehenBetragGewuenscht";
-  private Integer darlehenBetragGewuenscht;
+  public static final String JSON_PROPERTY_BETRAG_GEWUENSCHT = "betragGewuenscht";
+  private Integer betragGewuenscht;
 
   public static final String JSON_PROPERTY_SCHULDEN = "schulden";
   private Integer schulden;
@@ -124,56 +129,82 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec darlehenGewaehren(Boolean darlehenGewaehren) {
+  public DarlehenDtoSpec status(DarlehenStatusDtoSpec status) {
     
-    this.darlehenGewaehren = darlehenGewaehren;
+    this.status = status;
     return this;
   }
 
    /**
-   * Get darlehenGewaehren
-   * @return darlehenGewaehren
+   * Get status
+   * @return status
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_GEWAEHREN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Boolean getDarlehenGewaehren() {
-    return darlehenGewaehren;
+  public DarlehenStatusDtoSpec getStatus() {
+    return status;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_GEWAEHREN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDarlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatus(DarlehenStatusDtoSpec status) {
+    this.status = status;
   }
 
 
-  public DarlehenDtoSpec darlehenBetrag(Integer darlehenBetrag) {
+  public DarlehenDtoSpec gewaehren(Boolean gewaehren) {
     
-    this.darlehenBetrag = darlehenBetrag;
+    this.gewaehren = gewaehren;
     return this;
   }
 
    /**
-   * Get darlehenBetrag
+   * Get gewaehren
+   * @return gewaehren
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GEWAEHREN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getGewaehren() {
+    return gewaehren;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GEWAEHREN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
+  }
+
+
+  public DarlehenDtoSpec betrag(Integer betrag) {
+    
+    this.betrag = betrag;
+    return this;
+  }
+
+   /**
+   * Get betrag
    * minimum: 0
-   * @return darlehenBetrag
+   * @return betrag
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETRAG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getDarlehenBetrag() {
-    return darlehenBetrag;
+  public Integer getBetrag() {
+    return betrag;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDarlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
+  @JsonProperty(JSON_PROPERTY_BETRAG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetrag(Integer betrag) {
+    this.betrag = betrag;
   }
 
 
@@ -203,30 +234,30 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
+  public DarlehenDtoSpec betragGewuenscht(Integer betragGewuenscht) {
     
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+    this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
    /**
-   * Get darlehenBetragGewuenscht
+   * Get betragGewuenscht
    * minimum: 0
-   * @return darlehenBetragGewuenscht
+   * @return betragGewuenscht
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getDarlehenBetragGewuenscht() {
-    return darlehenBetragGewuenscht;
+  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDarlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
   }
 
 
@@ -320,10 +351,11 @@ public class DarlehenDtoSpec {
     DarlehenDtoSpec darlehen = (DarlehenDtoSpec) o;
     return Objects.equals(this.id, darlehen.id) &&
         Objects.equals(this.fallId, darlehen.fallId) &&
-        Objects.equals(this.darlehenGewaehren, darlehen.darlehenGewaehren) &&
-        Objects.equals(this.darlehenBetrag, darlehen.darlehenBetrag) &&
+        Objects.equals(this.status, darlehen.status) &&
+        Objects.equals(this.gewaehren, darlehen.gewaehren) &&
+        Objects.equals(this.betrag, darlehen.betrag) &&
         Objects.equals(this.kommentar, darlehen.kommentar) &&
-        Objects.equals(this.darlehenBetragGewuenscht, darlehen.darlehenBetragGewuenscht) &&
+        Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
         Objects.equals(this.grund, darlehen.grund);
@@ -331,7 +363,7 @@ public class DarlehenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, darlehenGewaehren, darlehenBetrag, kommentar, darlehenBetragGewuenscht, schulden, anzahlBetreibungen, grund);
+    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, grund);
   }
 
   @Override
@@ -340,10 +372,11 @@ public class DarlehenDtoSpec {
     sb.append("class DarlehenDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
-    sb.append("    darlehenGewaehren: ").append(toIndentedString(darlehenGewaehren)).append("\n");
-    sb.append("    darlehenBetrag: ").append(toIndentedString(darlehenBetrag)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
-    sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");

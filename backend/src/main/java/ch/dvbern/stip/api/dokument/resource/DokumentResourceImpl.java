@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
@@ -90,6 +91,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final DokumentDownloadService dokumentDownloadService;
+    private final DarlehenService darlehenService;
 
     @Override
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
@@ -230,6 +232,7 @@ public class DokumentResourceImpl implements DokumentResource {
             case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
             case BESCHWERDE_ENTSCHEID -> beschwerdeEntscheidService.getDokument(dokumentId);
+            case DARLEHEN_DOKUMENT -> darlehenService.getDokument(dokumentId);
         };
     }
 

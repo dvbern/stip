@@ -15,12 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.type;
+package ch.dvbern.stip.api.darlehen.service;
 
-public enum DokumentArt {
-    GESUCH_DOKUMENT,
-    UNTERSCHRIFTENBLATT,
-    CUSTOM_DOKUMENT,
-    BESCHWERDE_ENTSCHEID,
-    DARLEHEN_DOKUMENT,
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
+import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
+import org.mapstruct.Mapper;
+
+@Mapper(config = MappingConfig.class)
+public interface DarlehenDokumentMapper {
+    DarlehenDokumentDto toDto(DarlehenDokument darlehenDokument);
 }

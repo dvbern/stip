@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets SbDashboardColumn
+ * Gets or Sets SbGesucheDashboardColumn
  */
-public enum SbDashboardColumnDtoSpec {
+public enum SbGesucheDashboardColumnDtoSpec {
   
   FALLNUMMER("FALLNUMMER"),
   
@@ -44,7 +44,7 @@ public enum SbDashboardColumnDtoSpec {
 
   private String value;
 
-  SbDashboardColumnDtoSpec(String value) {
+  SbGesucheDashboardColumnDtoSpec(String value) {
     this.value = value;
   }
 
@@ -59,8 +59,8 @@ public enum SbDashboardColumnDtoSpec {
   }
 
   @JsonCreator
-  public static SbDashboardColumnDtoSpec fromValue(String value) {
-    for (SbDashboardColumnDtoSpec b : SbDashboardColumnDtoSpec.values()) {
+  public static SbGesucheDashboardColumnDtoSpec fromValue(String value) {
+    for (SbGesucheDashboardColumnDtoSpec b : SbGesucheDashboardColumnDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

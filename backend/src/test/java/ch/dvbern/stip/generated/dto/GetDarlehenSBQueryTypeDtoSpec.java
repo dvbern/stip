@@ -22,23 +22,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets DokumentArt
+ * Gets or Sets GetDarlehenSBQueryType
  */
-public enum DokumentArtDtoSpec {
+public enum GetDarlehenSBQueryTypeDtoSpec {
   
-  GESUCH_DOKUMENT("GESUCH_DOKUMENT"),
+  ALLE_DARLEHEN("ALLE_DARLEHEN"),
   
-  UNTERSCHRIFTENBLATT("UNTERSCHRIFTENBLATT"),
-  
-  CUSTOM_DOKUMENT("CUSTOM_DOKUMENT"),
-  
-  BESCHWERDE_ENTSCHEID("BESCHWERDE_ENTSCHEID"),
-  
-  DARLEHEN_DOKUMENT("DARLEHEN_DOKUMENT");
+  MEINE_DARLEHEN("MEINE_DARLEHEN");
 
   private String value;
 
-  DokumentArtDtoSpec(String value) {
+  GetDarlehenSBQueryTypeDtoSpec(String value) {
     this.value = value;
   }
 
@@ -53,8 +47,8 @@ public enum DokumentArtDtoSpec {
   }
 
   @JsonCreator
-  public static DokumentArtDtoSpec fromValue(String value) {
-    for (DokumentArtDtoSpec b : DokumentArtDtoSpec.values()) {
+  public static GetDarlehenSBQueryTypeDtoSpec fromValue(String value) {
+    for (GetDarlehenSBQueryTypeDtoSpec b : GetDarlehenSBQueryTypeDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

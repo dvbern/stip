@@ -13,11 +13,17 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DarlehenDokumnetTypDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
-import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
+import java.io.File;
+import ch.dvbern.stip.generated.dto.GetDarlehenSBQueryTypeDtoSpec;
+import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDtoSpec;
+import ch.dvbern.stip.generated.dto.SbDarlehenDashboardColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 
@@ -71,8 +77,9 @@ public class DarlehenApiSpec {
                 darlehenUpdateGs(),
                 darlehenUpdateSb(),
                 darlehenZurueckweisen(),
-                getActiveDarlehen(),
-                getDarlehenDokument()
+                getDarlehenDokument(),
+                getDarlehenGs(),
+                getDarlehenSb()
         );
     }
 
@@ -112,12 +119,16 @@ public class DarlehenApiSpec {
         return new DarlehenZurueckweisenOper(createReqSpec());
     }
 
-    public GetActiveDarlehenOper getActiveDarlehen() {
-        return new GetActiveDarlehenOper(createReqSpec());
-    }
-
     public GetDarlehenDokumentOper getDarlehenDokument() {
         return new GetDarlehenDokumentOper(createReqSpec());
+    }
+
+    public GetDarlehenGsOper getDarlehenGs() {
+        return new GetDarlehenGsOper(createReqSpec());
+    }
+
+    public GetDarlehenSbOper getDarlehenSb() {
+        return new GetDarlehenSbOper(createReqSpec());
     }
 
     /**
@@ -208,15 +219,13 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #darlehenIdPath  (required)
-     * @see #dokumentTypPath  (required)
-     * @see #idForm  (required)
-     * @see #dokumentTyp2Form  (required)
-     * @see #dokumenteForm  (required)
+     * @see #dokumentTypePath  (required)
+     * @see #fileUploadMultiPart  (required)
      */
     public static class CreateDarlehenDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/{dokumentTyp}";
+        public static final String REQ_URI = "/darlehen/{darlehenId}/{dokumentType}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -229,7 +238,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * POST /darlehen/{darlehenId}/{dokumentTyp}
+         * POST /darlehen/{darlehenId}/{dokumentType}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -242,7 +251,7 @@ public class DarlehenApiSpec {
         public static final String DARLEHEN_ID_PATH = "darlehenId";
 
         /**
-         * @param darlehenId (DarlehenDtoSpec)  (required)
+         * @param darlehenId (UUID)  (required)
          * @return operation
          */
         public CreateDarlehenDokumentOper darlehenIdPath(Object darlehenId) {
@@ -250,47 +259,25 @@ public class DarlehenApiSpec {
             return this;
         }
 
-        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
+        public static final String DOKUMENT_TYPE_PATH = "dokumentType";
 
         /**
-         * @param dokumentTyp (DarlehenDokumnetTypDtoSpec)  (required)
+         * @param dokumentType (DarlehenDokumentTypeDtoSpec)  (required)
          * @return operation
          */
-        public CreateDarlehenDokumentOper dokumentTypPath(Object dokumentTyp) {
-            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+        public CreateDarlehenDokumentOper dokumentTypePath(Object dokumentType) {
+            reqSpec.addPathParam(DOKUMENT_TYPE_PATH, dokumentType);
             return this;
         }
 
-         public static final String ID_FORM = "id";
-
          /**
-         * @param id (UUID)  (required)
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
          * @return operation
          */
-         public CreateDarlehenDokumentOper idForm(Object... id) {
-            reqSpec.addFormParam(ID_FORM, id);
-            return this;
-         }
-
-         public static final String DOKUMENT_TYP2_FORM = "dokumentTyp";
-
-         /**
-         * @param dokumentTyp2 (DarlehenDokumnetTypDtoSpec)  (required)
-         * @return operation
-         */
-         public CreateDarlehenDokumentOper dokumentTyp2Form(Object... dokumentTyp2) {
-            reqSpec.addFormParam(DOKUMENT_TYP2_FORM, dokumentTyp2);
-            return this;
-         }
-
-         public static final String DOKUMENTE_FORM = "dokumente";
-
-         /**
-         * @param dokumente (List&lt;DokumentDtoSpec&gt;)  (required)
-         * @return operation
-         */
-         public CreateDarlehenDokumentOper dokumenteForm(Object... dokumente) {
-            reqSpec.addFormParam(DOKUMENTE_FORM, dokumente);
+         public CreateDarlehenDokumentOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
             return this;
          }
 
@@ -848,13 +835,98 @@ public class DarlehenApiSpec {
         }
     }
     /**
+     * Returns Darlehen dokument
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * @see #dokumentTypePath  (required)
+     * return DarlehenDokumentDtoSpec
+     */
+    public static class GetDarlehenDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/{dokumentType}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDarlehenDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/{darlehenId}/{dokumentType}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/{darlehenId}/{dokumentType}
+         * @param handler handler
+         * @return DarlehenDokumentDtoSpec
+         */
+        public DarlehenDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenDokumentDtoSpec> type = new TypeRef<DarlehenDokumentDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public GetDarlehenDokumentOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        public static final String DOKUMENT_TYPE_PATH = "dokumentType";
+
+        /**
+         * @param dokumentType (DarlehenDokumentTypeDtoSpec)  (required)
+         * @return operation
+         */
+        public GetDarlehenDokumentOper dokumentTypePath(Object dokumentType) {
+            reqSpec.addPathParam(DOKUMENT_TYPE_PATH, dokumentType);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Return active darlehen darlehen if exists or else null
      * 
      *
      * @see #fallIdPath  (required)
      * return DarlehenDtoSpec
      */
-    public static class GetActiveDarlehenOper implements Oper {
+    public static class GetDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/darlehen/{fallId}";
@@ -862,7 +934,7 @@ public class DarlehenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetActiveDarlehenOper(RequestSpecBuilder reqSpec) {
+        public GetDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -895,7 +967,7 @@ public class DarlehenApiSpec {
          * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetActiveDarlehenOper fallIdPath(Object fallId) {
+        public GetDarlehenGsOper fallIdPath(Object fallId) {
             reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
@@ -905,7 +977,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetActiveDarlehenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -915,34 +987,46 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetActiveDarlehenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
     }
     /**
-     * Returns Darlehen dokument
+     * Returns darlehen filtered by status and sb
      * 
      *
-     * @see #darlehenIdPath  (required)
-     * @see #dokumentTypPath  (required)
+     * @see #getDarlehenSBQueryTypePath  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #fallNummerQuery  (optional)
+     * @see #piaNachnameQuery  (optional)
+     * @see #piaVornameQuery  (optional)
+     * @see #piaGeburtsdatumQuery  (optional)
+     * @see #statusQuery  (optional)
+     * @see #bearbeiterQuery  (optional)
+     * @see #letzteAktivitaetFromQuery  (optional)
+     * @see #letzteAktivitaetToQuery  (optional)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * return PaginatedSbDarlehenDashboardDtoSpec
      */
-    public static class GetDarlehenDokumentOper implements Oper {
+    public static class GetDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/{dokumentTyp}";
+        public static final String REQ_URI = "/darlehen/dashboard/{getDarlehenSBQueryType}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetDarlehenDokumentOper(RequestSpecBuilder reqSpec) {
+        public GetDarlehenSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("text/plain");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /darlehen/{darlehenId}/{dokumentTyp}
+         * GET /darlehen/dashboard/{getDarlehenSBQueryType}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -952,25 +1036,156 @@ public class DarlehenApiSpec {
             return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
         }
 
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
+        /**
+         * GET /darlehen/dashboard/{getDarlehenSBQueryType}
+         * @param handler handler
+         * @return PaginatedSbDarlehenDashboardDtoSpec
+         */
+        public PaginatedSbDarlehenDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSbDarlehenDashboardDtoSpec> type = new TypeRef<PaginatedSbDarlehenDashboardDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GET_DARLEHEN_S_B_QUERY_TYPE_PATH = "getDarlehenSBQueryType";
 
         /**
-         * @param darlehenId (DarlehenDtoSpec)  (required)
+         * @param getDarlehenSBQueryType (GetDarlehenSBQueryTypeDtoSpec)  (required)
          * @return operation
          */
-        public GetDarlehenDokumentOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+        public GetDarlehenSbOper getDarlehenSBQueryTypePath(Object getDarlehenSBQueryType) {
+            reqSpec.addPathParam(GET_DARLEHEN_S_B_QUERY_TYPE_PATH, getDarlehenSBQueryType);
             return this;
         }
 
-        public static final String DOKUMENT_TYP_PATH = "dokumentTyp";
+        public static final String FALL_NUMMER_QUERY = "fallNummer";
 
         /**
-         * @param dokumentTyp (DarlehenDokumnetTypDtoSpec)  (required)
+         * @param fallNummer (String)  (optional)
          * @return operation
          */
-        public GetDarlehenDokumentOper dokumentTypPath(Object dokumentTyp) {
-            reqSpec.addPathParam(DOKUMENT_TYP_PATH, dokumentTyp);
+        public GetDarlehenSbOper fallNummerQuery(Object... fallNummer) {
+            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
+            return this;
+        }
+
+        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+
+        /**
+         * @param piaNachname (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper piaNachnameQuery(Object... piaNachname) {
+            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+            return this;
+        }
+
+        public static final String PIA_VORNAME_QUERY = "piaVorname";
+
+        /**
+         * @param piaVorname (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper piaVornameQuery(Object... piaVorname) {
+            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+            return this;
+        }
+
+        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+
+        /**
+         * @param piaGeburtsdatum (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
+            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+            return this;
+        }
+
+        public static final String STATUS_QUERY = "status";
+
+        /**
+         * @param status (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
+            return this;
+        }
+
+        public static final String BEARBEITER_QUERY = "bearbeiter";
+
+        /**
+         * @param bearbeiter (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper bearbeiterQuery(Object... bearbeiter) {
+            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
+
+        /**
+         * @param letzteAktivitaetFrom (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
+
+        /**
+         * @param letzteAktivitaetTo (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetDarlehenSbOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetDarlehenSbOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (SbDarlehenDashboardColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetDarlehenSbOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
             return this;
         }
 
@@ -979,7 +1194,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetDarlehenDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetDarlehenSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -989,7 +1204,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetDarlehenDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

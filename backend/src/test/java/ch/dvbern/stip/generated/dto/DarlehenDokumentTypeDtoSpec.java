@@ -22,23 +22,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets DokumentArt
+ * Gets or Sets DarlehenDokumentType
  */
-public enum DokumentArtDtoSpec {
+public enum DarlehenDokumentTypeDtoSpec {
   
-  GESUCH_DOKUMENT("GESUCH_DOKUMENT"),
+  BETREIBUNGS_AUSZUG("BETREIBUNGS_AUSZUG"),
   
-  UNTERSCHRIFTENBLATT("UNTERSCHRIFTENBLATT"),
+  AUFSTELLUNG_KOSTEN_ELTERN("AUFSTELLUNG_KOSTEN_ELTERN"),
   
-  CUSTOM_DOKUMENT("CUSTOM_DOKUMENT"),
+  KOPIE_SCHULGELDRECHNUNG("KOPIE_SCHULGELDRECHNUNG"),
   
-  BESCHWERDE_ENTSCHEID("BESCHWERDE_ENTSCHEID"),
-  
-  DARLEHEN_DOKUMENT("DARLEHEN_DOKUMENT");
+  BELEGE_ANSCHAFFUNGEN("BELEGE_ANSCHAFFUNGEN");
 
   private String value;
 
-  DokumentArtDtoSpec(String value) {
+  DarlehenDokumentTypeDtoSpec(String value) {
     this.value = value;
   }
 
@@ -53,8 +51,8 @@ public enum DokumentArtDtoSpec {
   }
 
   @JsonCreator
-  public static DokumentArtDtoSpec fromValue(String value) {
-    for (DokumentArtDtoSpec b : DokumentArtDtoSpec.values()) {
+  public static DarlehenDokumentTypeDtoSpec fromValue(String value) {
+    for (DarlehenDokumentTypeDtoSpec b : DarlehenDokumentTypeDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

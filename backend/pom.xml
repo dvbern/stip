@@ -687,6 +687,11 @@
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
                   <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
+                    DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
+                    DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
+                    DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
+                    GetDarlehenSBQueryType=ch.dvbern.stip.api.darlehen.type.GetDarlehenSBQueryType,
+                    SbDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn,
                     Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
@@ -708,7 +713,7 @@
                     Dokumentstatus=ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus,
                     GesuchTrancheStatus=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus,
                     GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
-                    SbDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbDashboardColumn,
+                    SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
                     SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
                     AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,

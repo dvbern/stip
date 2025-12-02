@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.SbDashboardGesuchDto;
+import ch.dvbern.stip.generated.dto.DarlehenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,20 +17,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("PaginatedSbDashboard")
+@JsonTypeName("PaginatedSbDarlehenDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class PaginatedSbDashboardDto  implements Serializable {
+public class PaginatedSbDarlehenDashboardDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
-  private @Valid List<SbDashboardGesuchDto> entries;
+  private @Valid List<DarlehenDto> entries;
 
   /**
    **/
-  public PaginatedSbDashboardDto page(Integer page) {
+  public PaginatedSbDarlehenDashboardDto page(Integer page) {
     this.page = page;
     return this;
   }
@@ -48,7 +48,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDashboardDto pageSize(Integer pageSize) {
+  public PaginatedSbDarlehenDashboardDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -66,7 +66,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDashboardDto totalEntries(Integer totalEntries) {
+  public PaginatedSbDarlehenDashboardDto totalEntries(Integer totalEntries) {
     this.totalEntries = totalEntries;
     return this;
   }
@@ -84,23 +84,23 @@ public class PaginatedSbDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDashboardDto entries(List<SbDashboardGesuchDto> entries) {
+  public PaginatedSbDarlehenDashboardDto entries(List<DarlehenDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<SbDashboardGesuchDto> getEntries() {
+  public List<DarlehenDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<SbDashboardGesuchDto> entries) {
+  public void setEntries(List<DarlehenDto> entries) {
     this.entries = entries;
   }
 
-  public PaginatedSbDashboardDto addEntriesItem(SbDashboardGesuchDto entriesItem) {
+  public PaginatedSbDarlehenDashboardDto addEntriesItem(DarlehenDto entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -109,7 +109,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
     return this;
   }
 
-  public PaginatedSbDashboardDto removeEntriesItem(SbDashboardGesuchDto entriesItem) {
+  public PaginatedSbDarlehenDashboardDto removeEntriesItem(DarlehenDto entriesItem) {
     if (entriesItem != null && this.entries != null) {
       this.entries.remove(entriesItem);
     }
@@ -125,11 +125,11 @@ public class PaginatedSbDashboardDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PaginatedSbDashboardDto paginatedSbDashboard = (PaginatedSbDashboardDto) o;
-    return Objects.equals(this.page, paginatedSbDashboard.page) &&
-        Objects.equals(this.pageSize, paginatedSbDashboard.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedSbDashboard.totalEntries) &&
-        Objects.equals(this.entries, paginatedSbDashboard.entries);
+    PaginatedSbDarlehenDashboardDto paginatedSbDarlehenDashboard = (PaginatedSbDarlehenDashboardDto) o;
+    return Objects.equals(this.page, paginatedSbDarlehenDashboard.page) &&
+        Objects.equals(this.pageSize, paginatedSbDarlehenDashboard.pageSize) &&
+        Objects.equals(this.totalEntries, paginatedSbDarlehenDashboard.totalEntries) &&
+        Objects.equals(this.entries, paginatedSbDarlehenDashboard.entries);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class PaginatedSbDashboardDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PaginatedSbDashboardDto {\n");
+    sb.append("class PaginatedSbDarlehenDashboardDto {\n");
     
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");

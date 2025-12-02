@@ -137,7 +137,6 @@ import org.hibernate.envers.Audited;
     }, property = "einnahmenKostenPartner",
     einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
-
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,

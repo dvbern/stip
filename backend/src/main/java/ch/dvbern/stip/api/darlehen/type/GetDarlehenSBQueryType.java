@@ -15,12 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.dokument.type;
+package ch.dvbern.stip.api.darlehen.type;
 
-public enum DokumentArt {
-    GESUCH_DOKUMENT,
-    UNTERSCHRIFTENBLATT,
-    CUSTOM_DOKUMENT,
-    BESCHWERDE_ENTSCHEID,
-    DARLEHEN_DOKUMENT,
+public enum GetDarlehenSBQueryType {
+    ALLE_DARLEHEN,
+    MEINE_DARLEHEN,
 }
