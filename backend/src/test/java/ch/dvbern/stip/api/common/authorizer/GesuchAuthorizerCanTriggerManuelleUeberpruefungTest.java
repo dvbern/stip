@@ -30,6 +30,8 @@ import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -37,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@Execution(ExecutionMode.CONCURRENT)
 class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
     private Gesuch gesuch;
     private GesuchAuthorizer gesuchAuthorizer;

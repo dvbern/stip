@@ -211,11 +211,14 @@ public class MassendruckJobService {
                     .filter(verfuegung -> !verfuegung.isVersendet())
             )
             .map(
-                verfuegung -> new VerfuegungMassendruck()
-                    .setVerfuegung(verfuegung)
-                    .setVorname("Foo")
-                    .setNachname("Bar")
-                    .setMassendruckJob(massendruckJob)
+                verfuegung -> {
+                    final var gesuchsteller = verfuegung.getGesuch().getAusbildung().getFall().getGesuchsteller();
+                    return new VerfuegungMassendruck()
+                        .setVerfuegung(verfuegung)
+                        .setVorname(gesuchsteller.getVorname())
+                        .setNachname(gesuchsteller.getNachname())
+                        .setMassendruckJob(massendruckJob);
+                }
             )
             .toList();
 

@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.util.DokumentDeleteUtil;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
-import ch.dvbern.stip.api.common.util.DokumentUploadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -49,6 +46,7 @@ import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryServi
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.RolesAllowed;
@@ -62,12 +60,13 @@ import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_ADMIN;
 import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER;
+import static ch.dvbern.stip.api.common.util.OidcConstants.ROLE_SACHBEARBEITER_ADMIN;
 
 @Slf4j
 @RequestScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 public class GesuchDokumentService {
     private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
 
@@ -85,6 +84,9 @@ public class GesuchDokumentService {
     private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
     private final DokumentHistoryRepository dokumentHistoryRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    private final DokumentUploadService dokumentUploadService;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final DokumentDeleteService dokumentDeleteService;
 
     @Transactional
     public void setGesuchDokumentOfDokumentTypToAusstehend(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
@@ -123,7 +125,7 @@ public class GesuchDokumentService {
     ) {
         final var customDokumentTyp = customDocumentTypRepository.findById(customDokumentTypId);
         customDokumentTyp.getGesuchDokument().getGesuchTranche();
-        return DokumentUploadUtil.validateScanUploadDokument(
+        return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
@@ -144,7 +146,7 @@ public class GesuchDokumentService {
         final UUID gesuchTrancheId,
         final FileUpload fileUpload
     ) {
-        return DokumentUploadUtil.validateScanUploadDokument(
+        return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
             configService,
@@ -322,7 +324,7 @@ public class GesuchDokumentService {
         }
     }
 
-    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_ADMIN })
+    @RolesAllowed({ ROLE_SACHBEARBEITER, ROLE_SACHBEARBEITER_ADMIN })
     @Transactional
     public void gesuchDokumentAblehnen(final UUID gesuchDokumentId, final GesuchDokumentAblehnenRequestDto dto) {
         final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
@@ -359,28 +361,23 @@ public class GesuchDokumentService {
     }
 
     public boolean canDeleteDokumentFromS3(final Dokument dokument, final GesuchTranche trancheToBeDeletedFrom) {
-        final var historicalDokument = dokumentHistoryRepository.findFirstInHistoryById(dokument.getId());
+        // Count distinct historical Tranchen that reference the dokument
+        final var distinctHistoricalGesuchTranchenCount = dokumentHistoryRepository
+            .countDistinctTranchenThatReferenceDokumentByObjectId(dokument.getObjectId());
 
-        final var historicalTranche = historicalDokument.getGesuchDokument().getGesuchTranche();
-        if (!trancheToBeDeletedFrom.getId().equals(historicalTranche.getId())) {
+        // If more than 1 distinct Tranche reference it, we cannot delete the dokument from S3
+        if (distinctHistoricalGesuchTranchenCount > 1) {
             return false;
         }
 
-        if (trancheToBeDeletedFrom.getTyp() != historicalTranche.getTyp()) {
-            return false;
-        }
-
-        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.TRANCHE) {
-            return trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
-        }
-        if (trancheToBeDeletedFrom.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            return trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
-        }
-        return false;
+        return switch (trancheToBeDeletedFrom.getTyp()) {
+            case TRANCHE -> trancheToBeDeletedFrom.getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS;
+            case AENDERUNG -> trancheToBeDeletedFrom.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS;
+        };
     }
 
     public void executeDeleteDokumentsFromS3(final List<String> objectIds) {
-        DokumentDeleteUtil.executeDeleteDokumentsFromS3(
+        dokumentDeleteService.executeDeleteDokumentsFromS3(
             s3,
             configService.getBucketName(),
             objectIds.stream()
@@ -515,7 +512,7 @@ public class GesuchDokumentService {
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentHistoryRepository.findInHistoryById(dokumentId);
 
-        return DokumentDownloadUtil.getDokument(
+        return dokumentDownloadService.getDokument(
             s3,
             configService.getBucketName(),
             dokument.getObjectId(),

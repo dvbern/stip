@@ -31,12 +31,15 @@ import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 class DocumentsRequiredFehlendeDokumenteConstraintValidatorTest {
     DokumentMapper dokumentMapper = new DokumentMapperImpl();
     CustomDocumentTypMapper customDocumentTypMapper = new CustomDocumentTypMapperImpl();

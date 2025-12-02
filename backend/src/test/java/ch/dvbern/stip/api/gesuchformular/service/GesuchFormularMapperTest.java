@@ -26,6 +26,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import ch.dvbern.stip.api.DokumentDeleteServiceMock;
+import ch.dvbern.stip.api.DokumentDownloadServiceMock;
+import ch.dvbern.stip.api.DokumentUploadServiceMock;
 import ch.dvbern.stip.api.adresse.service.MockAdresseMapperImpl;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
@@ -669,7 +672,8 @@ class GesuchFormularMapperTest {
         final var s3 = Mockito.mock(S3AsyncClient.class);
         final var unterschriftenblattService = new UnterschriftenblattService(
             null, unterschriftenblattRepositoryMock, null, null, Mockito.mock(ConfigService.class), s3, null, null,
-            null, null, null
+            null, null, null, new DokumentUploadServiceMock(), new DokumentDownloadServiceMock(),
+            new DokumentDeleteServiceMock()
         );
         final var unterschriftenblattServiceMock = Mockito.spy(unterschriftenblattService);
         Mockito.doReturn(List.of(UnterschriftenblattDokumentTyp.GEMEINSAM))
@@ -716,6 +720,7 @@ class GesuchFormularMapperTest {
         formularDto.setDarlehen(new DarlehenDto());
         formularDto.setPersonInAusbildung(new PersonInAusbildungDto());
         formularDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
+        formularDto.setElterns(List.of());
 
         final var mapper = createMapper();
         var formular = mapper.toEntity(formularDto);
@@ -757,6 +762,7 @@ class GesuchFormularMapperTest {
         updateDto.setDarlehen(darlehen);
         updateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
         updateDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
+        updateDto.setElterns(List.of());
         darlehen.setWillDarlehen(false);
 
         final var updatedFormular = mapper.partialUpdate(updateDto, formular);

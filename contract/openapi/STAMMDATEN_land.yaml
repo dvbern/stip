@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /land:
+    get:
+      tags:
+        - Land
+      responses:
+        '200':
+          description: Returns all countries and whether they're part of eu/efta or not
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Land'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getLaender
+    post:
+      tags:
+        - Land
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/Land'
+      responses:
+        '200':
+          description: Returns all countries and whether they're part of eu/efta or not
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Land'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createLand
+  /land/{landId}:
+    parameters:
+      - name: landId
+        in: path
+        required: true
+        schema:
+          $ref: './components/common.yaml#/UUID'
+    patch:
+      tags:
+        - Land
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/Land'
+      responses:
+        '200':
+          description: 'EU/EFTA Länder wurden erflogreich gesetzt'
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Land'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateLand
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+security:
+  $ref: './components/security.yaml#/security'

@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="Juri Furer (generated)" id="1761638283267-2">
+        <createTable tableName="gesuchformular_versteckteeltern">
+            <column name="gesuchformular_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuchformular_versteckteelternPK"/>
+            </column>
+            <column name="versteckte_eltern" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gesuchformular_versteckteelternPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Juri Furer (generated)" id="1761638283267-3">
+        <createTable tableName="gesuchformular_versteckteeltern_aud">
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchformular_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="versteckte_eltern" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Juri Furer (generated)" id="1761638283267-4">
+        <addPrimaryKey columnNames="gesuchformular_id, rev, versteckte_eltern" constraintName="gesuchformular_versteckteeltern_audPK" tableName="gesuchformular_versteckteeltern_aud"/>
+    </changeSet>
+    <changeSet author="Juri Furer (generated)" id="1761638283267-7">
+        <addForeignKeyConstraint baseColumnNames="gesuchformular_id" baseTableName="gesuchformular_versteckteeltern" constraintName="FK1syy6bxvc822cdd335l119pcy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_formular" validate="true"/>
+    </changeSet>
+    <changeSet author="Juri Furer (generated)" id="1761638283267-8">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="gesuchformular_versteckteeltern_aud" constraintName="FKkt4k0qbtlhwqm7bkb5pe7658d" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

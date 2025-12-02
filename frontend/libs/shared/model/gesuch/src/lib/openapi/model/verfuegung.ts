@@ -15,7 +15,7 @@ export interface Verfuegung {
     id: string;
     timestampErstellt: string;
     filename: string;
-    stipDecision: StipDecision;
+    stipDecision?: StipDecision;
 }
 
 

@@ -22,10 +22,10 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.generated.api.DatenschutzbriefResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
@@ -47,12 +47,13 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final JWTParser jwtParser;
     private final DatenschutzbriefAuthorizer authorizer;
     private final ElternService elternService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Blocking
     @PermitAll
     @Override
     public RestMulti<Buffer> getDatenschutzbrief(final String token, final UUID trancheId) {
-        final var elternId = DokumentDownloadUtil.getClaimId(
+        final var elternId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
@@ -63,14 +64,14 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
         final var filename = datenschutzbriefService.getDatenschutzbriefFileName(trancheId, elternTeil);
 
         final var buffer = datenschutzbriefService.getDateschutzbriefByteStream(trancheId, elternTeil);
-        return DokumentDownloadUtil.getWrapedDokument(filename, buffer);
+        return dokumentDownloadService.getWrapedDokument(filename, buffer);
     }
 
     @PermitAll
     @Override
     public FileDownloadTokenDto getDatenschutzbriefDownloadToken(UUID elternId) {
         authorizer.canGetDokumentDownloadToken();
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             elternId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
             benutzerService,

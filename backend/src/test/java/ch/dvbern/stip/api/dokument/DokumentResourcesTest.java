@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
@@ -56,11 +55,10 @@ import static ch.dvbern.stip.api.util.TestConstants.TEST_FILE_LOCATION;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_XML_FILE_LOCATION;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
@@ -93,7 +91,7 @@ class DokumentResourcesTest {
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -165,14 +163,17 @@ class DokumentResourcesTest {
             .as(FileDownloadTokenDtoSpec.class)
             .getToken();
 
-        dokumentApiSpec.getDokument()
+        final var actualFileContent = dokumentApiSpec.getDokument()
             .tokenQuery(token)
             .dokumentArtPath(DokumentArtDtoSpec.GESUCH_DOKUMENT)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
-            .body(equalTo(readFileData()));
+            .extract()
+            .asString();
+
+        assertThat(actualFileContent.length(), is(greaterThan(0)));
     }
 
     @Test

@@ -35,6 +35,8 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import jakarta.ws.rs.ForbiddenException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -48,6 +50,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
+@Execution(ExecutionMode.CONCURRENT)
 class GesuchDokumentAuthorizerTest {
     private GesuchDokumentAuthorizer authorizer;
 
@@ -114,7 +117,7 @@ class GesuchDokumentAuthorizerTest {
             Arguments
                 // Setup for SB
                 .of(
-                    OidcConstants.ROLE_ADMIN,
+                    OidcConstants.ROLE_SACHBEARBEITER_ADMIN,
                     GesuchTrancheTyp.TRANCHE,
                     // Gesuchstatus
                     IN_BEARBEITUNG_SB,
@@ -124,7 +127,7 @@ class GesuchDokumentAuthorizerTest {
             org.junit.jupiter.params.provider.Arguments
                 // Setup for SB
                 .of(
-                    OidcConstants.ROLE_ADMIN,
+                    OidcConstants.ROLE_SACHBEARBEITER_ADMIN,
                     GesuchTrancheTyp.AENDERUNG,
                     // setup to not throw (succeed)
                     VERFUEGUNG_VERSENDET,

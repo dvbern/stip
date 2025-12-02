@@ -23,16 +23,18 @@
           <span>{{ 'sachbearbeitung-app.header.massendruck' | transloco }}</span>
         </a>
         <!-- Fehlgeschlagene Zahlungen -->
-        <a
-          routerLink="/fehlgeschlagene-zahlungen"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-          data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
-        >
-          <i class="material-symbols-rounded me-2 text-white">error_outline</i>
-          <span>
-            {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | transloco }}
-          </span>
-        </a>
+        @if (fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
+          <a
+            routerLink="/fehlgeschlagene-zahlungen"
+            class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+            data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
+          >
+            <i class="material-symbols-rounded me-2 text-white">error_outline</i>
+            <span>
+              {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | transloco }}
+            </span>
+          </a>
+        }
         <div class="active btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none">
           <i class="material-symbols-rounded me-2 text-white">settings</i>
           <span>{{ 'sachbearbeitung-app.header.administration' | transloco }}</span>

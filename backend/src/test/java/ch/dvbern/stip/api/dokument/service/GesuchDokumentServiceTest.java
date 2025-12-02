@@ -45,7 +45,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
@@ -74,7 +73,6 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @RequiredArgsConstructor
 class GesuchDokumentServiceTest {
     @InjectMock
@@ -100,6 +98,15 @@ class GesuchDokumentServiceTest {
 
     @Inject
     CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
+
+    @Inject
+    DokumentUploadService dokumentUploadService;
+
+    @Inject
+    DokumentDownloadService dokumentDownloadService;
+
+    @Inject
+    DokumentDeleteService dokumentDeleteService;
 
     private final UUID id = UUID.randomUUID();
 
@@ -236,7 +243,10 @@ class GesuchDokumentServiceTest {
             null,
             null,
             null,
-            null
+            null,
+            dokumentUploadService,
+            dokumentDownloadService,
+            dokumentDeleteService
         );
 
         gesuchDokumente = new HashMap<>();
@@ -337,7 +347,10 @@ class GesuchDokumentServiceTest {
         GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository,
         RequiredDokumentService requiredDokumentService,
         DokumentHistoryRepository dokumentHistoryRepository,
-        GesuchTrancheHistoryService gesuchTrancheHistoryService
+        GesuchTrancheHistoryService gesuchTrancheHistoryService,
+        DokumentUploadService dokumentUploadService,
+        DokumentDownloadService dokumentDownloadService,
+        DokumentDeleteService dokumentDeleteService
         ) {
             super(
                 gesuchDokumentMapper,
@@ -353,7 +366,10 @@ class GesuchDokumentServiceTest {
                 antivirus,
                 gesuchDokumentKommentarRepository,
                 dokumentHistoryRepository,
-                gesuchTrancheHistoryService
+                gesuchTrancheHistoryService,
+                dokumentUploadService,
+                dokumentDownloadService,
+                dokumentDeleteService
             );
         }
 

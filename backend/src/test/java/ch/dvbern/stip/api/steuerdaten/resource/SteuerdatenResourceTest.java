@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpe
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -66,7 +65,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -173,7 +171,7 @@ class SteuerdatenResourceTest {
     void fillRequiredVeranlagungStatus() {
         var gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
         gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)

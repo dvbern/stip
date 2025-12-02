@@ -365,11 +365,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     'EK_PARTNER_BELEG_OV_ABONNEMENT',
   );
 
-  wohnkostenDocumentSig = this.createFieldDocumentSig(
-    'wohnkosten',
-    'EK_MIETVERTRAG',
-    'EK_PARTNER_MIETVERTRAG',
-  );
+  // Since Partner has no Wohnkosten, and the field is hidden, this works
+  wohnkostenChangeSig = toSignal(this.form.controls.wohnkosten.valueChanges);
+  wohnkostenDocumentSig = this.createUploadOptionsSig(() => {
+    const value = fromFormatedNumber(
+      (this.wohnkostenChangeSig() ?? '0') as string,
+    );
+    return value > 0 ? DokumentTyp['EK_MIETVERTRAG'] : null;
+  });
 
   wgWohnendSig = toSignal(this.form.controls.wgWohnend.valueChanges);
 
@@ -426,7 +429,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
       this.formUtils.setRequired(
         this.form.controls.zulagen,
-        isEKPartner || hatKinder,
+        hatKinder && !isEKPartner,
       );
 
       this.setDisabledStateAndHide(
@@ -454,10 +457,19 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.form.controls.alternativeWohnformWohnend,
         wgWohnend !== false,
       );
-      this.setDisabledStateAndHide(
-        this.form.controls.betreuungskostenKinder,
-        !(isEKPartner || hatKinder),
-      );
+
+      if (isEKPartner) {
+        this.formUtils.setRequired(
+          this.form.controls.betreuungskostenKinder,
+          false,
+        );
+      } else {
+        this.setDisabledStateAndHide(
+          this.form.controls.betreuungskostenKinder,
+          !hatKinder,
+        );
+      }
+
       this.setDisabledStateAndHide(
         this.form.controls.vermoegen,
         !(isEKPartner || warErwachsenSteuerJahr),
@@ -581,6 +593,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private buildUpdatedGesuchFromForm() {
     const { gesuch, gesuchFormular } = this.viewSig();
     const { hatKinder } = this.formStateSig();
+    const isEKPartner = this.einkommenTyp() === 'PARTNER';
+
     const formValues = convertTempFormToRealValues(this.form, [
       'nettoerwerbseinkommen',
       'arbeitspensumProzent',
@@ -591,10 +605,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'auswaertigeMittagessenProWoche',
       'steuerjahr',
       'veranlagungsStatus',
-      ...(hatKinder ? (['zulagen', 'betreuungskostenKinder'] as const) : []),
+      ...(hatKinder && !isEKPartner
+        ? (['zulagen', 'betreuungskostenKinder'] as const)
+        : []),
     ]);
-
-    const isEKPartner = this.einkommenTyp() === 'PARTNER';
 
     const update = {
       ...formValues,
