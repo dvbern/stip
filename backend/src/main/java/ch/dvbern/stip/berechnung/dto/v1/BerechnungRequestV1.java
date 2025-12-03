@@ -44,7 +44,6 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 import static ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1.getAlterForMedizinischeGrundversorgung;
 
 @Data
@@ -229,7 +228,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
     }
 
     public static int getEffektiveWohnkosten(
-        final int eingegebeneWohnkosten,
+        final int wohnkostenJahreswert,
         final Gesuchsperiode gesuchsperiode,
         int anzahlPersonenImHaushalt
     ) {
@@ -241,7 +240,8 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             case 4 -> gesuchsperiode.getWohnkostenFam4pers();
             default -> gesuchsperiode.getWohnkostenFam5pluspers();
         };
-        return toJahresWert(Integer.min(eingegebeneWohnkosten, maxWohnkosten));
+
+        return Integer.min(wohnkostenJahreswert, maxWohnkosten);
     }
 
     public static int getMedizinischeGrundversorgung(

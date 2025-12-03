@@ -1,7 +1,12 @@
 export type PersoenlicheBerechnung = {
   typ: 'persoenlich';
+  sozialversicherungsnummer: string;
   name: string;
+  geburtsdatum: string;
   total: number;
+  yearRange: string;
+  gueltigAb: string;
+  gueltigBis: string;
   monate: number;
   berechnung: number;
   totalEinnahmen: number;
@@ -16,25 +21,34 @@ export type PersoenlicheBerechnung = {
     unreducedTotal: number;
   };
   einnahmen: {
+    vornamePia: string;
+    vornamePartner: string;
     total: number;
     anzahlPersonenImHaushalt: number;
     eigenerHaushalt: boolean;
-    nettoerwerbseinkommen: number;
+    einkommen: number;
+    einkommenPartner: number;
+    einkommenTotal: number;
+    einnahmenBGSA: number;
     eoLeistungen: number;
     alimente: number;
     unterhaltsbeitraege: number;
     kinderUndAusbildungszulagen: number;
+    kinderUndAusbildungszulagenPartner: number;
+    kinderUndAusbildungszulagenKinder: { name: string; value: number }[];
+    kinderUndAusbildungszulagenTotal: number;
     ergaenzungsleistungen: number;
     beitraegeGemeindeInstitution: number;
     steuerbaresVermoegen: number;
     anrechenbaresVermoegen: number;
     elterlicheLeistung: number;
-    einkommenPartner: number;
     freibetragErwerbseinkommen: number;
     vermoegensanteilInProzent: number;
     limiteAlterAntragsstellerHalbierungElternbeitrag: number;
   };
   kosten: {
+    vornamePia: string;
+    vornamePartner: string;
     total: number;
     anzahlPersonenImHaushalt: number;
     anteilLebenshaltungskosten: number;
@@ -97,8 +111,5 @@ export type BerechnungsValue = keyof Pick<Berechnung, 'einnahmen' | 'kosten'>;
 export type GesamtBerechnung = {
   persoenlich: PersoenlicheBerechnung;
   familien: FamilienBerechnung[];
-  gueltigAb: string;
-  gueltigBis: string;
-  monate: number;
   total: number;
 };

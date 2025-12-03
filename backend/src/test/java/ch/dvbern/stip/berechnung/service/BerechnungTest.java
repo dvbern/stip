@@ -54,6 +54,8 @@ import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -118,13 +120,17 @@ class BerechnungTest {
             "6, -27179",
             "7, -6669",
             "8, -266", // muss noch angepasst werden, wenn fachliche Abklärungen gemacht wurden
-            "9, -23527"
+            "9, -23527",
+            "10, -23204", // Jahresfehlbetrag, da zivilstatus in diesem Test nicht gemappt wird (für pro kopf teilung)
+            "11, -28700" // same: jahresfehlbetrag
         }
     )
-    void testBerechnungFaelle(final int fall, final int expectedStipendien) {
+    void testBerechnungFaelle(final int fall, final int expectedStipendien) throws JsonProcessingException {
         // Load Fall resources/berechnung/fall_{fall}.json, deserialize to a BerechnungRequestV1
         // and calculate Stipendien for it
+        ObjectMapper objectMapper = new ObjectMapper();
         final var result = berechnungService.calculateStipendien(BerechnungUtil.getRequest(fall));
+        final var summary = objectMapper.writeValueAsString(result);
         assertThat(result.getStipendien(), is(expectedStipendien));
     }
 
@@ -358,7 +364,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(35710)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(10775)));
     }
 
     @Test
@@ -623,7 +629,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(55200)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(0)));
     }
 
     @Test
@@ -774,7 +780,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(57253)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(2367)));
     }
 
     @Test

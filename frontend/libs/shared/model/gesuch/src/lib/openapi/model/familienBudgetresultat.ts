@@ -27,6 +27,8 @@ export interface FamilienBudgetresultat {
     saeule3a: number;
     eigenmietwert: number;
     alimente: number;
+    einnahmenBGSA?: number;
+    andereEinnahmen?: number;
     einnahmenFamilienbudget: number;
     grundbedarf: number;
     effektiveWohnkosten: number;

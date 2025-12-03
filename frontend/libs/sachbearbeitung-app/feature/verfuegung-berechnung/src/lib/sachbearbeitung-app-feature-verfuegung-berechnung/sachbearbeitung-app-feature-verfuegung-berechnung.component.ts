@@ -73,10 +73,16 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     }
 
     const {
+      sozialversicherungsnummer,
+      geburtsdatum,
+      ausbildungAb,
+      ausbildungBis,
       berechnung,
       gueltigAb,
       gueltigBis,
-      nameGesuchsteller,
+      vornamePia,
+      nachnamePia,
+      vornamePartner,
       berechnungsStammdaten: sd,
       persoenlichesBudgetresultat: p,
       familienBudgetresultate,
@@ -90,14 +96,18 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       loading: false,
       berechnung: {
         total: view.totalBetragStipendium,
-        gueltigAb: gueltigAb,
-        gueltigBis: gueltigBis,
-        // Add 2 days as date-fns differenceInMonths does have issues with february
-        // 2024-07-01 to 2025-03-01 should be 8 months but is 7, with 2025-03-02 it is 8 months
-        monate,
         persoenlich: {
           typ: 'persoenlich' as const,
-          name: nameGesuchsteller,
+          sozialversicherungsnummer,
+          name: `${vornamePia} ${nachnamePia}`,
+          geburtsdatum,
+          yearRange: [ausbildungAb, ausbildungBis]
+            .map((d) => d.split('.')[1])
+            .join('/'),
+          gueltigAb: gueltigAb,
+          gueltigBis: gueltigBis,
+          // Add 2 days as date-fns differenceInMonths does have issues with february
+          // 2024-07-01 to 2025-03-01 should be 8 months but is 7, with 2025-03-02 it is 8 months
           monate,
           berechnung,
           total: p.persoenlichesbudgetBerechnet,
@@ -111,26 +121,41 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
               }
             : null,
           einnahmen: {
+            vornamePia,
+            vornamePartner,
             anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
             eigenerHaushalt: p.eigenerHaushalt,
             total: p.einnahmenPersoenlichesBudget,
+            einkommen: p.einkommen,
+            einkommenPartner: p.einkommenPartner,
+            einkommenTotal: p.einkommenTotal,
+            einnahmenBGSA: p.einnahmenBGSA,
             nettoerwerbseinkommen: p.einkommen,
             alimente: p.alimente,
             eoLeistungen: p.leistungenEO,
             unterhaltsbeitraege: p.rente,
             kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
+            kinderUndAusbildungszulagenKinder:
+              p.kinderAusbildungszulagenKinder.map((k) => ({
+                name: 'asdf',
+                value: k,
+              })),
+            kinderUndAusbildungszulagenPartner:
+              p.kinderAusbildungszulagenPartner,
+            kinderUndAusbildungszulagenTotal: p.kinderAusbildungszulagenTotal,
             ergaenzungsleistungen: p.ergaenzungsleistungen,
             beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
             steuerbaresVermoegen: p.steuerbaresVermoegen,
             anrechenbaresVermoegen: p.anrechenbaresVermoegen,
             elterlicheLeistung: p.anteilFamilienbudget,
-            einkommenPartner: p.einkommenPartner,
             freibetragErwerbseinkommen: sd.freibetragErwerbseinkommen,
             vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
             limiteAlterAntragsstellerHalbierungElternbeitrag:
               sd.limiteAlterAntragsstellerHalbierungElternbeitrag,
           },
           kosten: {
+            vornamePia,
+            vornamePartner,
             anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
             total: p.ausgabenPersoenlichesBudget,
             anteilLebenshaltungskosten: p.anteilLebenshaltungskosten,

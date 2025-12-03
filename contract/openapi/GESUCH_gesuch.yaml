@@ -1527,10 +1527,17 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - nameGesuchsteller
+        - sozialversicherungsnummer
+        - vornamePia
+        - nachnamePia
+        - vornamePartner
+        - nachnamePartner
+        - geburtsdatum
         - berechnung
         - gueltigAb
         - gueltigBis
+        - ausbildungAb
+        - ausbildungBis
         - gesuchTrancheId
         - berechnungsanteilKinder
         - berechnungsStammdaten
@@ -1538,7 +1545,19 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        nameGesuchsteller:
+        sozialversicherungsnummer:
+          type: string
+        vornamePia:
+          type: string
+        nachnamePia:
+          type: string
+        vornamePartner:
+          type: string
+        nachnamePartner:
+          type: string
+        geburtsdatum:
+          format: date
+          description: dd.MM.yyyy
           type: string
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
@@ -1547,6 +1566,10 @@ components:
           $ref: './components/common.yaml#/LocalDate'
         gueltigBis:
           $ref: './components/common.yaml#/LocalDate'
+        ausbildungAb:
+          type: string
+        ausbildungBis:
+          type: string
         gesuchTrancheId:
           description: 'ID der tranche für welche die Berechnung ausgeführt wurde.
             Mehrere resultate mit der gleichen ID sind die berechnungen für
@@ -1616,12 +1639,17 @@ components:
         - leistungenEO
         - rente
         - kinderAusbildungszulagen
+        - kinderAusbildungszulagenPartner
+        - kinderAusbildungszulagenKinder
+        - kinderAusbildungszulagenTotal
         - kinderUnterhaltsbeitraege
         - ergaenzungsleistungen
         - gemeindeInstitutionen
         - steuerbaresVermoegen
         - anrechenbaresVermoegen
         - einkommenPartner
+        - einkommenTotal
+        - einnahmenBGSA
         - einnahmenPersoenlichesBudget
         - anteilLebenshaltungskosten
         - grundbedarf
@@ -1666,6 +1694,28 @@ components:
         rentePartner:
           type: integer
         renteTotal:
+          type: integer
+        kinderAusbildungszulagen:
+          type: integer
+        kinderAusbildungszulagenPartner:
+          type: integer
+        kinderAusbildungszulagenKinder:
+          type: array
+          items:
+            type: integer
+        kinderAusbildungszulagenTotal:
+          type: integer
+        kinderUnterhaltsbeitraege:
+          type: array
+          items:
+            type: integer
+        kinderUnterhaltsbeitraegeTotal:
+          type: integer
+        kinderRenten:
+          type: array
+          items:
+            type: integer
+        kinderRentenTotal:
           type: integer
         ausbildungszulagenKinder:
           type: array

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import {
   SharedUiFormatChfPipe,
@@ -11,157 +11,212 @@ import { PersoenlicheBerechnung } from '../../../models';
 @Component({
   selector: 'dv-persoenliche-einnahmen',
   imports: [
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
   ],
   template: `
-    <!-- Nettoerwerbseinkommen -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
+    <ng-container *transloco="let t">
+      <!-- Nettoerwerbseinkommen -->
+      <div class="tw:flex tw:gap-2">
+        <div classs="tw:flex flex-column">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info'
-              | transloco
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
+            )
+          }}
+          <div class="tw:text-gray-500 tw:text-sm">
+            <div>
+              {{
+                t(
+                  'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info',
+                  {
+                    freibetragErwerbseinkommen:
+                      einnahmenSig().freibetragErwerbseinkommen | formatChf,
+                  }
+                )
+              }}
+            </div>
+            <div>
+              {{ einnahmenSig().vornamePia }}:
+              {{ einnahmenSig().einkommen | formatChf }} CHF,
+
+              {{ einnahmenSig().vornamePartner }}:
+              {{ einnahmenSig().einkommenPartner | formatChf }} CHF
+            </div>
+          </div>
+        </div>
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().einkommenTotal | formatChfPositive }}
+        </div>
+      </div>
+
+      <!-- BGSA -->
+      <div class="tw:flex tw:gap-2">
+        <div classs="tw:flex flex-column">
+          {{
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einnahmenBGSA'
+            )
+          }}
+          <a href="#1" class="tw:text-xs tw:align-text-top tw:no-underline!">
+            1)
+          </a>
+        </div>
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().einnahmenBGSA | formatChfPositive }}
+        </div>
+      </div>
+
+      <!-- Kinder- und Ausbildungszulagen -->
+      <div class="tw:flex tw:gap-2">
+        <div>
+          {{
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
+            )
+          }}
+          <div class="tw:text-gray-500 tw:text-sm">
+            <!-- TODO: Pia, Partner, Kinder  and other fields too-->
+            {{ einnahmenSig().kinderUndAusbildungszulagen }}
+          </div>
+        </div>
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{
+            einnahmenSig().kinderUndAusbildungszulagenTotal | formatChfPositive
           }}
         </div>
       </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().nettoerwerbseinkommen | formatChfPositive }}
-      </div>
-    </div>
 
-    <!-- EO -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
+      <!-- EO -->
+      <div class="tw:flex tw:gap-2">
+        <div classs="tw:flex flex-column">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen.info'
-              | transloco
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
+            )
           }}
+          <div class="tw:text-gray-500 tw:text-sm">
+            {{
+              t(
+                'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen.info'
+              )
+            }}
+          </div>
+        </div>
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().eoLeistungen | formatChfPositive }}
         </div>
       </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().eoLeistungen | formatChfPositive }}
-      </div>
-    </div>
 
-    <!-- Alimente -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().alimente | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Unterhaltsbeiträge -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Kinder- und Ausbildungszulagen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().kinderUndAusbildungszulagen | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Ergänzungsleistungen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Beiträge an Gemeindeinstitutionen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().beitraegeGemeindeInstitution | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Anrechenbares Vermögen -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
+      <!-- Alimente -->
+      <div class="tw:flex tw:gap-2">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen'
-            | transloco
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
+          )
         }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen.info'
-              | transloco: einnahmenSig()
-          }}
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().alimente | formatChfPositive }}
         </div>
       </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
-      </div>
-    </div>
 
-    <!-- Einkommen Partner -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().einkommenPartner | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Elterliche Leistung -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Total -->
-    <div class="d-flex mt-3 gap-2">
-      <div class="h4">
+      <!-- Unterhaltsbeiträge -->
+      <div class="tw:flex tw:gap-2">
         {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'
-            | transloco
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
+          )
         }}
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
+        </div>
       </div>
-      <div class="h4 flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().total | formatChf }}
+
+      <!-- Ergänzungsleistungen -->
+      <div class="tw:flex tw:gap-2">
+        {{
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
+          )
+        }}
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
+        </div>
       </div>
-    </div>
+
+      <!-- Beiträge an Gemeindeinstitutionen -->
+      <div class="tw:flex tw:gap-2">
+        {{
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
+          )
+        }}
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().beitraegeGemeindeInstitution | formatChfPositive }}
+        </div>
+      </div>
+
+      <!-- Anrechenbares Vermögen -->
+      <div class="tw:flex tw:gap-2">
+        <div classs="tw:flex flex-column">
+          {{
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen'
+            )
+          }}
+          <div class="tw:text-gray-500 tw:text-sm">
+            {{
+              t(
+                'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen.info',
+                einnahmenSig()
+              )
+            }}
+          </div>
+        </div>
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
+        </div>
+      </div>
+
+      <!-- Einkommen Partner -->
+      <div class="tw:flex tw:gap-2">
+        {{
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
+          )
+        }}
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().einkommenPartner | formatChfPositive }}
+        </div>
+      </div>
+
+      <!-- Elterliche Leistung -->
+      <div class="tw:flex tw:gap-2">
+        {{
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
+          )
+        }}
+        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().elterlicheLeistung | formatChfPositive }}
+        </div>
+      </div>
+
+      <!-- Total -->
+      <div class="tw:flex mt-3 tw:gap-2">
+        <div class="h4">
+          {{
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'
+            )
+          }}
+        </div>
+        <div class="h4 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().total | formatChf }}
+        </div>
+      </div>
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

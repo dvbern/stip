@@ -17,13 +17,23 @@ import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
  * Resultat der Berechnung (eine Tranche)
  */
 export interface TranchenBerechnungsresultat { 
-    nameGesuchsteller: string;
+    sozialversicherungsnummer: string;
+    vornamePia: string;
+    nachnamePia: string;
+    vornamePartner: string;
+    nachnamePartner: string;
+    /**
+     * dd.MM.yyyy
+     */
+    geburtsdatum: string;
     /**
      * Berechneter Stpendiumsanspruch für diese Tranche
      */
     berechnung: number;
     gueltigAb: string;
     gueltigBis: string;
+    ausbildungAb: string;
+    ausbildungBis: string;
     gesuchTrancheId: string;
     /**
      * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
