@@ -143,17 +143,25 @@ public class AntragsstellerV1 {
         }
         );
         final int kinderAusbildungszulagenTotal =
-            kindAusbildungszulagenIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
-        final int kinderUnterhaltsbeitraegeTotal = kindUnterhaltsbeitraegeIntegerValues.stream()
-            .map(KindIntegerValueItemDto::getValue)
-            .reduce(0, Integer::sum);
+            kindAusbildungszulagenIntegerValues.isEmpty() ? 0
+                : kindAusbildungszulagenIntegerValues.stream()
+                    .map(KindIntegerValueItemDto::getValue)
+                    .reduce(0, Integer::sum);
+        final int kinderUnterhaltsbeitraegeTotal = kindUnterhaltsbeitraegeIntegerValues.isEmpty() ? 0
+            : kindUnterhaltsbeitraegeIntegerValues.stream()
+                .map(KindIntegerValueItemDto::getValue)
+                .reduce(0, Integer::sum);
         final int kinderRentenTotal =
-            kindRenteIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
+            kindRenteIntegerValues.isEmpty() ? 0
+                : kindRenteIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
         final int kinderErgaenzungsleistungenTotal = kindErgaenzungsleistungenIntegerValues.stream()
             .map(KindIntegerValueItemDto::getValue)
             .reduce(0, Integer::sum);
         final int kinderAndereEinnahmenTotal =
-            kindAndereEinnahmenIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
+            kindAndereEinnahmenIntegerValues.isEmpty() ? 0
+                : kindAndereEinnahmenIntegerValues.stream()
+                    .map(KindIntegerValueItemDto::getValue)
+                    .reduce(0, Integer::sum);
 
         final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
         builder
