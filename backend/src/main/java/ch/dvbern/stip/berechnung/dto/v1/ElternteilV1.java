@@ -227,7 +227,7 @@ public class ElternteilV1 {
 
         builder.effektiveWohnkosten(
             BerechnungRequestV1.getEffektiveWohnkosten(
-                wohnkosten,
+                toJahresWert(wohnkosten),
                 gesuchsperiode,
                 anzahlPersonenImHaushalt
             )
@@ -235,7 +235,7 @@ public class ElternteilV1 {
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
-        builder.alimente(toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0) * 12));
+        builder.alimente(toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0)));
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
         builder.einzahlungSaeule3a(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0));
         builder.steuerbaresVermoegen(Objects.requireNonNullElse(steuerdaten.getVermoegen(), 0));
@@ -272,21 +272,5 @@ public class ElternteilV1 {
             familiensituation,
             ausbildungsBegin
         ).build();
-    }
-
-    public static int getEffektiveWohnkosten(
-        final int eingegebeneWohnkosten,
-        final Gesuchsperiode gesuchsperiode,
-        int anzahlPersonenImHaushalt
-    ) {
-        int maxWohnkosten = switch (anzahlPersonenImHaushalt) {
-            case 0 -> throw new IllegalStateException("0 Personen im Haushalt");
-            case 1 -> gesuchsperiode.getWohnkostenFam1pers();
-            case 2 -> gesuchsperiode.getWohnkostenFam2pers();
-            case 3 -> gesuchsperiode.getWohnkostenFam3pers();
-            case 4 -> gesuchsperiode.getWohnkostenFam4pers();
-            default -> gesuchsperiode.getWohnkostenFam5pluspers();
-        };
-        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 }
