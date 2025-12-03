@@ -39,11 +39,16 @@ public abstract class BusinessPartnerChangeMapper {
     @Mapping(source = "businessPartnerId", target = "BPARTNER")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER getHeader(Integer businessPartnerId);
 
-    @Mapping(source = "fallNummer", target = "EXTID")
+    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     @Mapping(source = ".", target = "AHVNR", qualifiedByName = "getAhvNr")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
         Fall fall
     );
+
+    @Named("getExtId")
+    public String getExtId(Fall fall) {
+        return SapMapperUtil.getExtId(fall);
+    }
 
     @Named("getAhvNr")
     public String getAhvNr(Fall fall) {

@@ -27,6 +27,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO2CODE_LENGTH;
@@ -38,6 +40,7 @@ import static com.tngtech.archunit.lang.SimpleConditionEvent.satisfied;
 import static com.tngtech.archunit.lang.SimpleConditionEvent.violated;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
+@Execution(ExecutionMode.CONCURRENT)
 class StringAnnotationTest {
     @Test
     void entity_string_fields_are_annotated_consistently() {

@@ -19,12 +19,15 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@Execution(ExecutionMode.CONCURRENT)
 class ValidateUpdateLegalityUtilTest {
     @CsvSource(
         {

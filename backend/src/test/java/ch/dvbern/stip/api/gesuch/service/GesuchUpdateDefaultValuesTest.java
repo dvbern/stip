@@ -30,7 +30,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -38,7 +37,6 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -47,10 +45,8 @@ import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTr
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@Slf4j
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchUpdateDefaultValuesTest {
 
@@ -211,7 +207,7 @@ class GesuchUpdateDefaultValuesTest {
 
     private GesuchTranche initTrancheFromGesuchUpdate(GesuchUpdateDto gesuchUpdateDto) {
         GesuchTranche tranche = prepareGesuchTrancheWithIds(gesuchUpdateDto.getGesuchTrancheToWorkWith());
-        return gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche);
+        return gesuchTrancheMapper.partialUpdate(gesuchUpdateDto.getGesuchTrancheToWorkWith(), tranche, false);
     }
 
     private GesuchTranche prepareGesuchTrancheWithIds(GesuchTrancheUpdateDto trancheUpdate) {

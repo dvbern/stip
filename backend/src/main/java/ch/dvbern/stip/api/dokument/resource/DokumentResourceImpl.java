@@ -28,9 +28,9 @@ import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
@@ -89,6 +89,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)
@@ -219,7 +220,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @PermitAll
     public RestMulti<Buffer> getDokument(String token, DokumentArt dokumentArt) {
-        final var dokumentId = DokumentDownloadUtil.getClaimId(
+        final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
@@ -238,7 +239,7 @@ public class DokumentResourceImpl implements DokumentResource {
         dokumentAuthorizer.canGetDokumentDownloadToken(dokumentId);
         gesuchDokumentService.checkIfDokumentExists(dokumentId);
 
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
             benutzerService,

@@ -269,7 +269,11 @@ export class SachbearbeitungAppFeatureCockpitComponent
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
       group: 'GESUCHE',
     },
-    PENDENTE_GESUCHE: {
+    MEINE_PENDENTE_GESUCHE: {
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'GESUCHE',
+    },
+    ALLE_PENDENTE_GESUCHE: {
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'GESUCHE',
     },

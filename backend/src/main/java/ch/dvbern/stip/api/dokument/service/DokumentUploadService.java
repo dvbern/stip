@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.dokument.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,15 +28,18 @@ import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
+import ch.dvbern.stip.api.common.util.FileUtil;
+import ch.dvbern.stip.api.common.util.StringUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -46,10 +49,11 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @Slf4j
-@UtilityClass
-public class DokumentUploadUtil {
+@ApplicationScoped
+@UnlessBuildProfile("test")
+public class DokumentUploadService {
 
-    private static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
+    protected static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
 
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
@@ -60,13 +64,13 @@ public class DokumentUploadUtil {
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
     ) {
-        if (!DokumentUploadUtil.checkFileUpload(fileUpload, configService)) {
+        if (!checkFileUpload(fileUpload, configService)) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
-        DokumentUploadUtil.scanDokument(antivirus, fileUpload);
+        scanDokument(antivirus, fileUpload);
 
-        return DokumentUploadUtil.uploadDokument(
+        return uploadDokument(
             fileUpload,
             s3,
             configService,
@@ -84,13 +88,13 @@ public class DokumentUploadUtil {
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
-        if (!DokumentUploadUtil.checkFileUpload(fileUpload, configService)) {
+        if (!checkFileUpload(fileUpload, configService)) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
-        DokumentUploadUtil.scanDokument(antivirus, fileUpload);
+        scanDokument(antivirus, fileUpload);
 
-        return DokumentUploadUtil.uploadDokument(
+        return uploadDokument(
             fileUpload,
             s3,
             configService,

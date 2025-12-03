@@ -28,9 +28,12 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Execution(ExecutionMode.CONCURRENT)
 class NeskoSteuerdatenMapperTest {
     GetSteuerdatenResponse getSteuerdatenResponse;
     Steuerdaten steuerdaten;

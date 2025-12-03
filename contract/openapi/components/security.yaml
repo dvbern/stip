@@ -1,0 +1,12 @@
+security:
+  - auth-uat-bern: []
+  - auth-dev-bern: []
+securitySchemes:
+  auth-uat-bern:
+    type: openIdConnect
+    openIdConnectUrl: https://uat-auth-stip.apps.apollo.ocp.dvbern.ch/realms/bern
+    description: Bern (UAT)
+  auth-dev-bern:
+    type: openIdConnect
+    openIdConnectUrl: https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/realms/bern
+    description: Bern (DEV)

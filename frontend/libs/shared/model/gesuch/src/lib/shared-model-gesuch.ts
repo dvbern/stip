@@ -39,7 +39,7 @@ export type GSSteuererklaerungSteps =
 
 export type FormPropsExcluded = Exclude<
   keyof GesuchFormularType,
-  'steuerdatenTabs' | 'steuererklaerung'
+  'steuerdatenTabs' | 'steuererklaerung' | 'versteckteEltern'
 >;
 
 export type GSFormStepProps =

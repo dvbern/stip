@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
@@ -49,7 +48,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
@@ -121,7 +119,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .setNettoerwerbseinkommen(10);
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -156,7 +154,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
         einnahmenKostenDto
             .setWgWohnend(wgWohnend);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -189,7 +187,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .getGesuchFormular()
             .getEinnahmenKosten()
             .setAlternativeWohnformWohnend(false);
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)

@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -63,7 +62,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(StepwiseExtension.class)
@@ -248,7 +246,7 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
             .setGeburtsdatum(LocalDate.of(1970, 1, 1));
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().setAdresse(adresse);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDTO)
             .execute(TestUtil.PEEK_IF_ENV_SET)

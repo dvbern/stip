@@ -34,6 +34,10 @@ public class OnlyOneTrancheInBearbeitungConstraintValidator
             return true;
         }
 
+        if (gesuch.isVerfuegt() && gesuch.getGesuchStatus() == Gesuchstatus.BEREIT_FUER_BEARBEITUNG) {
+            return true;
+        }
+
         // Only one Tranche with status IN_BEARBEITUNG_GS is allowed
         return gesuch.getGesuchTranchen()
             .stream()

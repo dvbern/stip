@@ -15,20 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.dokument.service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
-import lombok.experimental.UtilityClass;
+import jakarta.enterprise.context.ApplicationScoped;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 
-@UtilityClass
-public class DokumentDeleteUtil {
+@ApplicationScoped
+@UnlessBuildProfile("test")
+public class DokumentDeleteService {
     public void executeDeleteDokumentFromS3(
         final S3AsyncClient s3,
         final String bucketName,
@@ -48,7 +50,7 @@ public class DokumentDeleteUtil {
             .indefinitely();
     }
 
-    public CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(
+    private CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(
         final S3AsyncClient s3,
         final String bucketName,
         final List<String> objectIds

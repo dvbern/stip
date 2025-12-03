@@ -1,8 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  inject,
+} from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -28,4 +34,13 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 })
 export class SachbearbeitungAppPatternOverviewLayoutComponent {
   @Input() closeMenu: { value: boolean } | null = null;
+
+  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
+
+  constructor() {
+    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
+      page: 1,
+      pageSize: 10,
+    });
+  }
 }

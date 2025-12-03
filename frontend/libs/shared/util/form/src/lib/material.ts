@@ -26,7 +26,6 @@ export function provideMaterialDefaultOptions(
       useValue: {
         appearance: 'outline',
         floatLabel: 'always',
-        hideRequiredMarker: true,
         ...options,
       } as MatFormFieldDefaultOptions,
     },

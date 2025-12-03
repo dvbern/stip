@@ -1,0 +1,601 @@
+GesuchFormular:
+  required:
+    - ausbildung
+  type: object
+  properties:
+    ausbildung:
+      $ref: './common.yaml#/Ausbildung'
+    personInAusbildung:
+      $ref: '#/PersonInAusbildung'
+    familiensituation:
+      $ref: '#/Familiensituation'
+    partner:
+      $ref: '#/Partner'
+    versteckteEltern:
+      type: array
+      items:
+        $ref: './common.yaml#/ElternTyp'
+    elterns:
+      type: array
+      items:
+        $ref: '#/Eltern'
+    geschwisters:
+      type: array
+      items:
+        $ref: '#/Geschwister'
+    lebenslaufItems:
+      type: array
+      items:
+        $ref: '#/LebenslaufItem'
+    kinds:
+      type: array
+      items:
+        $ref: '#/Kind'
+    einnahmenKosten:
+      $ref: '#/EinnahmenKosten'
+    einnahmenKostenPartner:
+      $ref: '#/EinnahmenKosten'
+    steuererklaerung:
+      type: array
+      items:
+        $ref: '#/SteuererklaerungUpdate'
+    steuerdatenTabs:
+      type: array
+      items:
+        $ref: './common.yaml#/SteuerdatenTyp'
+    darlehen:
+      $ref: '#/Darlehen'
+
+PersonInAusbildung:
+  type: object
+  allOf:
+    - required:
+        - adresse.id
+      type: object
+    - $ref: '#/PersonInAusbildungUpdate'
+PersonInAusbildungUpdate:
+  required:
+    - adresse
+    - sozialversicherungsnummer
+    - nachname
+    - vorname
+    - anrede
+    - identischerZivilrechtlicherWohnsitz
+    - email
+    - telefonnummer
+    - geburtsdatum
+    - nationalitaetId
+    - wohnsitz
+    - sozialhilfebeitraege
+    - korrespondenzSprache
+  type: object
+  properties:
+    adresse:
+      $ref: './common.yaml#/Adresse'
+    sozialversicherungsnummer:
+      type: string
+    vorname:
+      type: string
+    anrede:
+      $ref: './common.yaml#/Anrede'
+    identischerZivilrechtlicherWohnsitz:
+      type: boolean
+    email:
+      type: string
+    telefonnummer:
+      type: string
+    geburtsdatum:
+      $ref: './common.yaml#/LocalDate'
+    nationalitaetId:
+      $ref: './common.yaml#/UUID'
+    heimatort:
+      description: Required nur wenn Land = CH
+      type: string
+    heimatortPLZ:
+      description: Required nur wenn Land = CH
+      type: string
+    niederlassungsstatus:
+      $ref: '#/Niederlassungsstatus'
+      description: Required wenn Nationalitaet != CH
+    einreisedatum:
+      description: Visible nur wenn niederlassungsstatus B
+      $ref: './common.yaml#/LocalDate'
+    zivilstand:
+      $ref: '#/Zivilstand'
+    wohnsitz:
+      $ref: '#/Wohnsitz'
+    wohnsitzAnteilMutter:
+      description: Required wenn Wohnsitz.MUTTER_VATER.
+      type: number
+    wohnsitzAnteilVater:
+      description: Required wenn Wohnsitz.MUTTER_VATER.
+      type: number
+    sozialhilfebeitraege:
+      type: boolean
+    vormundschaft:
+      description: Required nur wenn Land = CH
+      type: boolean
+    nachname:
+      type: string
+    identischerZivilrechtlicherWohnsitzOrt:
+      description: Required wenn identischerZivilrechtlicherWohnsitz = false
+      type: string
+    identischerZivilrechtlicherWohnsitzPLZ:
+      description: Required wenn identischerZivilrechtlicherWohnsitz = false
+      type: string
+    korrespondenzSprache:
+      $ref: './common.yaml#/Sprache'
+    zustaendigeKESB:
+      $ref: '#/ZustaendigeKESB'
+
+Familiensituation:
+  type: object
+  allOf:
+    - type: object
+    - $ref: '#/FamiliensituationUpdate'
+FamiliensituationUpdate:
+  required:
+    - elternVerheiratetZusammen
+  type: object
+  properties:
+    elternVerheiratetZusammen:
+      type: boolean
+    elternteilUnbekanntVerstorben:
+      type: boolean
+    gerichtlicheAlimentenregelung:
+      type: boolean
+    mutterUnbekanntVerstorben:
+      $ref: '#/ElternAbwesenheitsGrund'
+    mutterUnbekanntGrund:
+      $ref: '#/ElternUnbekanntheitsGrund'
+    mutterWiederverheiratet:
+      type: boolean
+    vaterUnbekanntVerstorben:
+      $ref: '#/ElternAbwesenheitsGrund'
+    vaterUnbekanntGrund:
+      $ref: '#/ElternUnbekanntheitsGrund'
+    vaterWiederverheiratet:
+      type: boolean
+    werZahltAlimente:
+      $ref: '#/Elternschaftsteilung'
+      description: Required nur wenn gerichtlicheAlimentenregelung = true
+
+Partner:
+  type: object
+  allOf:
+    - type: object
+    - $ref: '#/PartnerUpdate'
+PartnerUpdate:
+  required:
+    - adresse
+    - nachname
+    - vorname
+    - geburtsdatum
+    - sozialversicherungsnummer
+  type: object
+  properties:
+    adresse:
+      $ref: './common.yaml#/Adresse'
+    vorname:
+      type: string
+    geburtsdatum:
+      $ref: './common.yaml#/LocalDate'
+      description: dd.MM.yyyy
+    sozialversicherungsnummer:
+      type: string
+    nachname:
+      type: string
+    inAusbildung:
+      type: boolean
+    ausbildungspensum:
+      $ref: './common.yaml#/AusbildungsPensum'
+
+Eltern:
+  title: Root Type for Eltern
+  type: object
+  allOf:
+    - $ref: '#/ElternUpdate'
+ElternUpdate:
+  title: Root Type for Eltern
+  required:
+    - adresse
+    - ausweisbFluechtling
+    - geburtsdatum
+    - identischerZivilrechtlicherWohnsitz
+    - nachname
+    - telefonnummer
+    - vorname
+    - elternTyp
+    - sozialhilfebeitraege
+  type: object
+  properties:
+    vorname:
+      type: string
+    adresse:
+      $ref: './common.yaml#/Adresse'
+    identischerZivilrechtlicherWohnsitz:
+      type: boolean
+    identischerZivilrechtlicherWohnsitzOrt:
+      description: Required wenn identischerZivilrechtlicherWohnsitz = false
+      type: string
+    identischerZivilrechtlicherWohnsitzPLZ:
+      description: Required wenn identischerZivilrechtlicherWohnsitz = false
+      type: string
+    telefonnummer:
+      type: string
+    sozialversicherungsnummer:
+      type: string
+    geburtsdatum:
+      format: date
+      description: dd.MM.yyyy
+      type: string
+    ausweisbFluechtling:
+      type: boolean
+    id:
+      $ref: './common.yaml#/UUID'
+    elternTyp:
+      $ref: './common.yaml#/ElternTyp'
+    nachname:
+      type: string
+    sozialhilfebeitraege:
+      type: boolean
+    wohnkosten:
+      description: 'Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen'
+      type: integer
+
+Geschwister:
+  title: Root Type for Geschwister
+  type: object
+  allOf:
+    - $ref: '#/GeschwisterUpdate'
+GeschwisterUpdate:
+  title: Root Type for Geschwister
+  required:
+    - wohnsitz
+    - vorname
+    - nachname
+    - geburtsdatum
+    - ausbildungssituation
+  type: object
+  properties:
+    vorname:
+      type: string
+    geburtsdatum:
+      format: date
+      description: dd.MM.yyyy
+      type: string
+    wohnsitz:
+      $ref: '#/Wohnsitz'
+    ausbildungssituation:
+      $ref: '#/Ausbildungssituation'
+    id:
+      $ref: './common.yaml#/UUID'
+    wohnsitzAnteilMutter:
+      description: Required wenn Wohnsitz.MUTTER_VATER.
+      type: number
+    wohnsitzAnteilVater:
+      description: Required wenn Wohnsitz.MUTTER_VATER.
+      type: number
+    nachname:
+      type: string
+
+LebenslaufItem:
+  title: Root Type for Lebenslauf
+  type: object
+  allOf:
+    - $ref: '#/LebenslaufItemUpdate'
+LebenslaufItemUpdate:
+  title: Root Type for Lebenslauf
+  required:
+    - bis
+    - von
+    - wohnsitz
+  type: object
+  properties:
+    id:
+      $ref: './common.yaml#/UUID'
+    abschlussId:
+      $ref: './common.yaml#/UUID'
+      description: Required wenn taetigkeitsart = null
+    von:
+      description: Datum im Format mm.YYYY
+      type: string
+    bis:
+      description: Datum im Format mm.YYYY
+      type: string
+    wohnsitz:
+      $ref: '#/WohnsitzKanton'
+    ausbildungAbgeschlossen:
+      type: boolean
+    fachrichtungBerufsbezeichnung:
+      description: >-
+        Entweder fachrichtung oder berufsbezeichnung kommt auf die Zusatzfrage an
+      type: string
+    taetigkeitsart:
+      $ref: '#/Taetigkeitsart'
+      description: Required wenn abschluss != null
+    taetigkeitsBeschreibung:
+      description: Required wenn taetigkeitsart != null
+      type: string
+
+Kind:
+  title: Root Type for Geschwister
+  type: object
+  allOf:
+    - $ref: '#/KindUpdate'
+KindUpdate:
+  title: Root Type for Geschwister
+  required:
+    - vorname
+    - nachname
+    - geburtsdatum
+    - ausbildungssituation
+    - wohnsitzAnteilPia
+  type: object
+  properties:
+    vorname:
+      type: string
+    geburtsdatum:
+      format: date
+      description: dd.MM.yyyy
+      type: string
+    ausbildungssituation:
+      $ref: '#/Ausbildungssituation'
+    id:
+      $ref: './common.yaml#/UUID'
+    wohnsitzAnteilPia:
+      type: integer
+    nachname:
+      type: string
+    unterhaltsbeitraege:
+      type: integer
+    kinderUndAusbildungszulagen:
+      type: integer
+    renten:
+      type: integer
+    ergaenzungsleistungen:
+      type: integer
+    andereEinnahmen:
+      type: integer
+
+EinnahmenKosten:
+  type: object
+  allOf:
+    - type: object
+    - $ref: '#/EinnahmenKostenUpdate'
+EinnahmenKostenUpdate:
+  required:
+    - nettoerwerbseinkommen
+    - fahrkosten
+  type: object
+  properties:
+    nettoerwerbseinkommen:
+      type: integer
+    arbeitspensumProzent:
+      description: Required nur wenn nettoerwerbseinkommen > 0
+      type: integer
+    unterhaltsbeitraege:
+      description: Wird immer angezeigt, ist aber optional
+      type: integer
+    einnahmenBGSA:
+      description: Mit Dokument wenn > 0
+      type: integer
+    taggelderAHVIV:
+      description: Mit Dokument wenn > 0
+      type: integer
+    andereEinnahmen:
+      description: Mit Dokument wenn > 0
+      type: integer
+    zulagen:
+      description: Required nur wenn mind. ein Kind gibt
+      type: integer
+    renten:
+      description: Required nur wenn mind. ein Elternteil gestorben ist
+      type: integer
+    eoLeistungen:
+      type: integer
+    ergaenzungsleistungen:
+      type: integer
+    beitraege:
+      type: integer
+    ausbildungskosten:
+      description: The cost for the education calculated over the whole year
+      type: integer
+    fahrkosten:
+      type: integer
+    wohnkosten:
+      type: integer
+    wgWohnend:
+      description: Required nur wenn Person eigener Haushalt hat
+      type: boolean
+    wgAnzahlPersonen:
+      type: integer
+    alternativeWohnformWohnend:
+      type: boolean
+    auswaertigeMittagessenProWoche:
+      description: Required nur wenn die Person keinen eigenen Haushalt führt
+      type: integer
+    verpflegungskosten:
+      type: integer
+    betreuungskostenKinder:
+      description: Betreuungskosten eigener Kinder
+      type: integer
+    veranlagungsStatus:
+      description: Veranlagungsstatus
+      type: string
+    steuerjahr:
+      description: Aktuelles oder ein vergangenes Steuerjahr als 4-stellige Zahl. Default ist Vorjahr des Gesuchsjahrs
+      type: integer
+      minimum: 0
+      maximum: 99999
+    vermoegen:
+      description: Ganze Zahl, ohne Kommastellen
+      type: integer
+      minimum: 0
+      maximum: 2147483647
+    steuern:
+      description: transient and calculated readonly field
+      type: integer
+      minimum: 0
+      maximum: 2147483647
+
+Darlehen:
+  type: object
+  required:
+    - willDarlehen
+  properties:
+    willDarlehen:
+      description: Required wenn volljährig, sonst nicht moeglich!
+      type: boolean
+    betragDarlehen:
+      description: Required wenn willDarlehen = true
+      type: integer
+      minimum: 0
+    betragBezogenKanton:
+      description: Required wenn willDarlehen = true
+      type: integer
+      minimum: 0
+    schulden:
+      description: Required wenn willDarlehen = true
+      type: integer
+      minimum: 0
+    anzahlBetreibungen:
+      description: Required wenn willDarlehen = true - mit Fileupload
+      type: integer
+      minimum: 0
+    grundNichtBerechtigt:
+      description: Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
+      type: boolean
+    grundAusbildungZwoelfJahre:
+      description: Keine Stipendienberechtigung wegen Überschreitens der Ausbildungsdauer von 12 Jahren.
+      type: boolean
+    grundHoheGebuehren:
+      description: Falls ja mit Fileupload
+      type: boolean
+    grundAnschaffungenFuerAusbildung:
+      description: Falls ja mit Fileupload
+      type: boolean
+    grundZweitausbildung:
+      type: boolean
+
+SteuererklaerungUpdate:
+  title: Root Type for Steuererklaerung
+  required:
+    - steuerdatenTyp
+    - steuererklaerungInBern
+  type: object
+  properties:
+    steuerdatenTyp:
+      $ref: './common.yaml#/SteuerdatenTyp'
+    steuererklaerungInBern:
+      type: boolean
+    ergaenzungsleistungen:
+      type: integer
+    unterhaltsbeitraege:
+      type: integer
+    renten:
+      type: integer
+    einnahmenBGSA:
+      type: integer
+    andereEinnahmen:
+      type: integer
+
+Niederlassungsstatus:
+  enum:
+    - SAISONARBEITEND_A
+    - AUFENTHALTSBEWILLIGUNG_B
+    - NIEDERLASSUNGSBEWILLIGUNG_C
+    - PARTNER_ERWERBSTAETIG_UND_KIND_CI
+    - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+    - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+    - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+    - GRENZGAENGIG_G
+    - KURZAUFENTHALT_L
+    - ASYLSUCHEND_N
+    - SCHUTZBEDUERFTIG_S
+    - MELDEPFLICHTIG
+    - DIPLOMATISCHE_FUNKTION
+    - INTERNATIONALE_FUNKTION
+    - NICHT_ZUGETEILT
+  type: string
+Zivilstand:
+  enum:
+    - LEDIG
+    - VERHEIRATET
+    - KONKUBINAT
+    - EINGETRAGENE_PARTNERSCHAFT
+    - GESCHIEDEN_GERICHTLICH
+    - AUFGELOESTE_PARTNERSCHAFT
+    - VERWITWET
+  type: string
+Wohnsitz:
+  enum:
+    - FAMILIE
+    - MUTTER_VATER
+    - EIGENER_HAUSHALT
+  type: string
+Ausbildungssituation:
+  enum:
+    - VORSCHULPFLICHTIG
+    - SCHULPFLICHTIG
+    - IN_AUSBILDUNG
+    - KEINE
+  type: string
+ZustaendigeKESB:
+  enum:
+    - KESB_BERN
+    - KESB_ANDERER_KANTON
+  type: string
+ElternAbwesenheitsGrund:
+  enum:
+    - VERSTORBEN
+    - UNBEKANNT
+    - WEDER_NOCH
+  type: string
+ElternUnbekanntheitsGrund:
+  enum:
+    - UNBEKANNTER_AUFENTHALTSORT
+    - FEHLENDE_ANERKENNUNG
+  type: string
+Elternschaftsteilung:
+  enum:
+    - MUTTER
+    - VATER
+    - GEMEINSAM
+  type: string
+Taetigkeitsart:
+  enum:
+    - ERWERBSTAETIGKEIT
+    - ANDERE_TAETIGKEIT
+    - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
+  type: string
+WohnsitzKanton:
+  enum:
+    - AG
+    - AI
+    - AR
+    - BL
+    - BS
+    - BE
+    - FR
+    - GE
+    - GL
+    - GR
+    - JU
+    - LU
+    - NE
+    - NW
+    - OW
+    - SG
+    - SH
+    - SZ
+    - SO
+    - TI
+    - TG
+    - UR
+    - VD
+    - VS
+    - ZG
+    - ZH
+    - AUSLAND
+  type: string
