@@ -32,7 +32,7 @@ import jakarta.transaction.Transactional;
 public class VerfuegungDruckbereitHandlerMock extends VerfuegungDruckbereitHandler {
 
     public VerfuegungDruckbereitHandlerMock() {
-        super(null, null, null);
+        super(null, null, null, null, null, null);
     }
 
     @Transactional

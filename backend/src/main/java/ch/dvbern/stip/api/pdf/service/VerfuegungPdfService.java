@@ -105,7 +105,6 @@ public class VerfuegungPdfService {
         final Verfuegung verfuegung,
         final VerfuegungPdfSection section
     ) {
-
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         pdfFont = PdfUtils.createFont();
@@ -744,45 +743,6 @@ public class VerfuegungPdfService {
             }
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to merge PDFs for Versendete Verfügung", e);
-        }
-
-        return out;
-    }
-
-    /**
-     * Merge a Berechnungsblatt PDF with an Unterschriftenblatt PDF
-     */
-    public ByteArrayOutputStream mergeBerechnungsblattWithUnterschriftenblatt(
-        final byte[] berechnungsblattPdf,
-        final byte[] unterschriftenblattPdf
-    ) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        try (final PdfDocument targetPdf = new PdfDocument(new PdfWriter(out))) {
-            final PdfMerger merger = new PdfMerger(targetPdf);
-
-            // 1. Add Berechnungsblatt first
-            try (
-                final PdfDocument blattPdf = new PdfDocument(
-                    new PdfReader(new ByteArrayInputStream(berechnungsblattPdf))
-                )
-            ) {
-                merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
-            }
-
-            // 2. Add Unterschriftenblatt
-            try (
-                final PdfDocument unterschriftPdf = new PdfDocument(
-                    new PdfReader(new ByteArrayInputStream(unterschriftenblattPdf))
-                )
-            ) {
-                merger.merge(unterschriftPdf, 1, unterschriftPdf.getNumberOfPages());
-            }
-        } catch (IOException e) {
-            throw new InternalServerErrorException(
-                "Failed to merge Berechnungsblatt with Unterschriftenblatt",
-                e
-            );
         }
 
         return out;

@@ -32,8 +32,8 @@ import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
@@ -64,8 +64,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 @RequiredArgsConstructor
 @Slf4j
 public class BerechnungsblattService {
-    private final BerechnungService berechnungService;
-
     private static final UnitValue[] TABLE_WIDTH_PERCENTAGES = UnitValue.createPercentArray(new float[] { 85, 15 });
 
     PdfFont pdfFont = null;
@@ -204,7 +202,53 @@ public class BerechnungsblattService {
         addFooterParagraph2(document, 15, translator);
     }
 
-    public ByteArrayOutputStream getAllBerechnungsblaetterOfGesuch(final Gesuch gesuch, final Locale locale) {
+    public ByteArrayOutputStream getAllElternTypeBerechnungsblaetterOfGesuch(
+        final Gesuch gesuch,
+        final Locale locale,
+        final BerechnungsresultatDto berechnungsResultat,
+        final SteuerdatenTyp steuerdatenTyp
+    ) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        pdfFont = PdfUtils.createFont();
+        pdfFontBold = PdfUtils.createFontBold();
+
+        TL translator = TLProducer.defaultBundle()
+            .forAppLanguage(AppLanguages.fromLocale(locale));
+        final PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        boolean firstTranche = true;
+
+        try (
+            final PdfWriter writer = new PdfWriter(out);
+            final PdfDocument pdfDocument = new PdfDocument(writer);
+            final Document document = new Document(pdfDocument, PAGE_SIZE);
+        ) {
+            for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
+                for (var familienBudget : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
+                    final SteuerdatenTyp typ = familienBudget.getFamilienBudgetTyp();
+                    if (steuerdatenTyp.equals(typ)) {
+                        if (!firstTranche) {
+                            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                        }
+                        firstTranche = false;
+                        addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
+                    }
+                }
+                PdfUtils.makePageNumberEven(document); // todo 3: probably gets ignored?!
+            }
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
+        }
+        if (firstTranche) {
+            out = null;
+        }
+        return out;
+    }
+
+    public ByteArrayOutputStream getAllBerechnungsblaetterOfGesuch(
+        final Gesuch gesuch,
+        final Locale locale,
+        final BerechnungsresultatDto berechnungsResultat
+    ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         pdfFont = PdfUtils.createFont();
         pdfFontBold = PdfUtils.createFontBold();
@@ -212,19 +256,21 @@ public class BerechnungsblattService {
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.fromLocale(locale));
         final PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        boolean firstTranche = true;
 
-        final var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         try (
             final PdfWriter writer = new PdfWriter(out);
             final PdfDocument pdfDocument = new PdfDocument(writer);
             final Document document = new Document(pdfDocument, PAGE_SIZE);
         ) {
-            // todo 1: make sure most recent verfuegung ist being used & visible in pdf!
             // iterate through all tranchen
             for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
+                if (!firstTranche) {
+                    document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                }
+                firstTranche = false;
                 // add berechnungsblatt for PIA for current tranche
                 addBerechnungsblattPIA(document, pia, tranchenBerechnungsResultat, translator);
-                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                 gesuch.getUnterschriftenblaetter().forEach(unterschriftenblatt -> {
                     final SteuerdatenTyp currentSteuerdatenTyp =
@@ -236,15 +282,12 @@ public class BerechnungsblattService {
                         if (currentSteuerdatenTyp.equals(typ)) {
                             // if unterschriftenblatt is existing for the current type,
                             // add it to final document
+                            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                             addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
-                            // REQUIRED, so that pages content won't overlap
-                            document.add(new AreaBreak(AreaBreakType.NEXT_PAGE)); // todo 2: probably causes bug of too
-                                                                                  // many pages at end of document
-                            // if uneven, add page
-                            PdfUtils.makePageNumberEven(document); // todo 3: probably gets ignored?!
                         }
                     }
                 });
+                PdfUtils.makePageNumberEven(document);
             }
 
         } catch (IOException e) {
@@ -262,7 +305,11 @@ public class BerechnungsblattService {
         };
     }
 
-    public ByteArrayOutputStream getBerechnungsblattPersonInAusbildung(final Gesuch gesuch, final Locale locale) {
+    public ByteArrayOutputStream getBerechnungsblattPersonInAusbildung(
+        final Gesuch gesuch,
+        final Locale locale,
+        final BerechnungsresultatDto berechnungsResultat
+    ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         pdfFont = PdfUtils.createFont();
@@ -271,8 +318,6 @@ public class BerechnungsblattService {
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.fromLocale(locale));
         final PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
-
-        final var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
         try (
             final PdfWriter writer = new PdfWriter(out);
@@ -353,96 +398,8 @@ public class BerechnungsblattService {
 
                 addFooterParagraph1(document, 40, translator);
                 addFooterParagraph2(document, 15, translator);
+                PdfUtils.makePageNumberEven(document);
             }
-
-            PdfUtils.makePageNumberEven(document);
-        } catch (IOException e) {
-            throw new InternalServerErrorException(e);
-        }
-
-        return out;
-    }
-
-    public ByteArrayOutputStream getBerechnungsblattFamilie(
-        final Gesuch gesuch,
-        final Locale locale,
-        final SteuerdatenTyp typ
-    ) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        pdfFont = PdfUtils.createFont();
-        pdfFontBold = PdfUtils.createFontBold();
-
-        TL translator = TLProducer.defaultBundle()
-            .forAppLanguage(AppLanguages.fromLocale(locale));
-        final PersonInAusbildung pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
-
-        final var berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
-
-        try (
-            final PdfWriter writer = new PdfWriter(out);
-            final PdfDocument pdfDocument = new PdfDocument(writer);
-            final Document document = new Document(pdfDocument, PAGE_SIZE);
-        ) {
-            boolean firstTranche = true;
-            for (var tranchenBerechnungsResultat : berechnungsResultat.getTranchenBerechnungsresultate()) {
-                // Find the matching family budget for this type
-                var matchingBudget = tranchenBerechnungsResultat.getFamilienBudgetresultate()
-                    .stream()
-                    .filter(fb -> fb.getFamilienBudgetTyp() == typ)
-                    .findFirst();
-
-                if (matchingBudget.isEmpty()) {
-                    continue;
-                }
-
-                if (!firstTranche) {
-                    document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                }
-                firstTranche = false;
-
-                final var familienBudgetResultat = matchingBudget.get();
-
-                final var budgetTypText = switch (familienBudgetResultat.getFamilienBudgetTyp()) {
-                    case FAMILIE -> translator.translate("stip.berechnung.familien.typ.FAMILIE");
-                    case VATER -> translator.translate("stip.berechnung.familien.typ.VATER");
-                    case MUTTER -> translator.translate("stip.berechnung.familien.typ.MUTTER");
-                };
-
-                addHeaderParagraph(
-                    document,
-                    pia,
-                    String.format(
-                        "%s %s",
-                        translator.translate("stip.berechnung.familien.title"),
-                        budgetTypText
-                    ),
-                    tranchenBerechnungsResultat.getGueltigAb(),
-                    tranchenBerechnungsResultat.getGueltigBis(),
-                    translator
-                );
-                document.add(getNewLineParagraph());
-
-                final Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
-                    familienBudgetResultat,
-                    tranchenBerechnungsResultat.getBerechnungsStammdaten(),
-                    translator
-                );
-
-                document.add(familienBudgetTableEinnahmen);
-                document.add(getNewLineParagraph());
-
-                final Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
-                    familienBudgetResultat,
-                    translator
-                );
-
-                document.add(familienBudgetTableKosten);
-                document.add(getNewLineParagraph());
-                addFooterParagraph1(document, 15, translator);
-            }
-
-            PdfUtils.makePageNumberEven(document);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }

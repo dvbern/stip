@@ -18,21 +18,22 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.Locale;
 
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
-import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.InternalServerErrorException;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,27 +42,70 @@ import lombok.extern.slf4j.Slf4j;
 @UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
+    private final ConfigService configService;
+    private final BerechnungService berechnungService;
+    private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
     private final VerfuegungPdfService verfuegungPdfService;
     private final BerechnungsblattService berechnungsblattService;
 
     @Override
     public void handle(Gesuch gesuch) {
-        final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
 
-        final var verfuegungsbriefDocument = getVerfuegungsbriefDocument(verfuegung);
-        final var verfuegungsbriefBytes = verfuegungService.getVerfuegungDokumentFromS3(verfuegungsbriefDocument);
-        final var verfuegungsbriefOutput = new ByteArrayOutputStream();
-        try {
-            verfuegungsbriefOutput.write(verfuegungsbriefBytes);
-        } catch (IOException e) {
-            throw new InternalServerErrorException("Failed to process Verfuegungsbrief", e);
+        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
+            ? stipendien.getBerechnungReduziert()
+            : stipendien.getBerechnung();
+
+        final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
+        final Locale locale = LocaleUtil.getLocale(gesuch);
+
+        ByteArrayOutputStream verfuegungsBrief = new ByteArrayOutputStream();
+
+        if (berechnungsresultat == 0) {
+            verfuegungsBrief = verfuegungPdfService.createVerfuegungOhneAnspruchPdf(
+                verfuegungService.getLatestVerfuegung(gesuch.getId())
+            );
         }
-        final var locale = LocaleUtil.getLocale(gesuch);
+
+        if (berechnungsresultat > 0) {
+            buchhaltungService.createStipendiumBuchhaltungEntry(
+                gesuch,
+                berechnungsresultat
+            );
+
+            verfuegungsBrief = verfuegungPdfService
+                .createVerfuegungMitAnspruchPdf(verfuegungService.getLatestVerfuegung(gesuch.getId()));
+        }
+
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
+            verfuegungsBrief
+        );
+
+        createAndStoreBerechnungsblattPdf(gesuch, locale, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
+        createAndStoreBerechnungsblattPdf(gesuch, locale, verfuegung, stipendien, SteuerdatenTyp.VATER);
+        createAndStoreBerechnungsblattPdf(gesuch, locale, verfuegung, stipendien, SteuerdatenTyp.FAMILIE);
+
+        var berechnungsBlaetterPia =
+            berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, locale, stipendien);
+
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
+            berechnungsBlaetterPia
+        );
+
+        var berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, locale, stipendien);
 
         final var versendeteVerfuegungOutput = verfuegungPdfService.createVersendeteVerfuegung(
-            verfuegungsbriefOutput,
-            berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, locale)
+            verfuegungsBrief,
+            berechnungsBlaetter
         );
         verfuegungService.createAndStoreVerfuegungDokument(
             verfuegung,
@@ -70,21 +114,33 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         );
     }
 
-    private VerfuegungDokument getVerfuegungsbriefDocument(Verfuegung verfuegung) {
-        return verfuegung.getDokumente()
-            .stream()
-            .filter(
-                d -> d.getTyp() == VerfuegungDokumentTyp.VERFUEGUNGSBRIEF
-            )
-            .findFirst()
-            .orElseThrow(() -> new NotFoundException("Verfuegungsbrief document not found"));
+    private void createAndStoreBerechnungsblattPdf(
+        final Gesuch gesuch,
+        final Locale locale,
+        final Verfuegung verfuegung,
+        final BerechnungsresultatDto berechnungsResultat,
+        final SteuerdatenTyp steuerdatenTyp
+    ) {
+        ByteArrayOutputStream berechnungsBlaetter = berechnungsblattService.getAllElternTypeBerechnungsblaetterOfGesuch(
+            gesuch,
+            locale,
+            berechnungsResultat,
+            steuerdatenTyp
+        );
+        if (berechnungsBlaetter != null) {
+            verfuegungService.createAndStoreVerfuegungDokument(
+                verfuegung,
+                mapToVerfuegungDokumentTyp(steuerdatenTyp),
+                berechnungsBlaetter
+            );
+        }
     }
 
-    private VerfuegungDokumentTyp mapToBerechnungsblattTyp(UnterschriftenblattDokumentTyp typ) {
-        return switch (typ) {
+    private VerfuegungDokumentTyp mapToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {
+        return switch (steuerdatenTyp) {
             case MUTTER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_MUTTER;
             case VATER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_VATER;
-            case GEMEINSAM -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_FAMILIE;
+            case FAMILIE -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_FAMILIE;
         };
     }
 }
