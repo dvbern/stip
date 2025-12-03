@@ -71,6 +71,9 @@ class V1StructureTest {
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0,
+                        "einnahmenBGSA":0,
+                        "andereEinnahmen":0,
+                         "renten":0,
                         "steuerdatenTyp": "VATER"
                     }
                 },
@@ -96,6 +99,9 @@ class V1StructureTest {
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0,
+                        "einnahmenBGSA":0,
+                        "andereEinnahmen":0,
+                        "renten":0,
                         "steuerdatenTyp": "MUTTER"
                     }
                 },
@@ -109,10 +115,16 @@ class V1StructureTest {
                         "alimente": 0,
                         "alimentePartner":0,
                         "rente": 0,
-                        "kinderAusbildungszulagen": 0,
-                        "kinderErhalteneUnterhaltsbeitraege": 0,
+                        "rentePartner": 0,
+                         "kinderRentenTotal":0,
+                         "kinderErgaenzungsleistungenTotal":0,
+                         "kinderAndereEinnahmenTotal":0,
+                         "kinderAusbildungszulagenTotal":0,
+                         "kinderErhalteneUnterhaltsbeitraegeTotal":0,
                         "ergaenzungsleistungen": 1200,
+                        "ergaenzungsleistungenPartner": 1200,
                         "leistungenEO": 0,
+                        "leistungenEOPartner": 0,
                         "gemeindeInstitutionen": 0,
                         "alter": 18,
                         "grundbedarf": 17940,
@@ -131,7 +143,15 @@ class V1StructureTest {
                         "eigenerHaushalt": true,
                         "halbierungElternbeitrag": false,
                         "anzahlPersonenImHaushalt": 2,
-                        "verheiratetKonkubinat": true
+                        "verheiratetKonkubinat": true,
+                        "taggeld":0,
+                        "taggeldPartner":0,
+                        "andereEinnahmen":0,
+                        "andereEinnahmenPartner":0,
+                        "zulagen":0,
+                        "zulagenPartner":0,
+                        "einnahmenBGSA":0,
+                        "einnahmenBGSAPartner":0
                     }
                 }
             }

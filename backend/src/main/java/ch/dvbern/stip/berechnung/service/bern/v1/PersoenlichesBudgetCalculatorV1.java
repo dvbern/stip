@@ -222,6 +222,13 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         final var einkommenPartner = antragssteller.getEinkommenPartner();
         final var alimentePartner = antragssteller.getAlimentePartner();
+        final var rentePartner = antragssteller.getRentePartner();
+        final var ergaenzungsLeistungenPartner = antragssteller.getErgaenzungsleistungenPartner();
+        final var leistungenEOPartner = antragssteller.getLeistungenEOPartner();
+        final var zulagenPartner = antragssteller.getZulagenPartner();
+        final var andereEinnahmenPartner = antragssteller.getAndereEinnahmenPartner();
+        final var taggeldPartner = antragssteller.getTaggeldPartner();
+        final var einnahmenBGSAPartner = antragssteller.getEinnahmenBGSAPartner();
 
         final var anrechenbaresVermoegen = roundHalfUp(
             BigDecimal.valueOf(antragssteller.getVermoegen())
@@ -231,24 +238,38 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         final var alimente = antragssteller.getAlimente();
         final var rente = antragssteller.getRente();
-        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
-        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraege();
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagenTotal();
+        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal();
+        final var kinderErgaenzungsleistungen = antragssteller.getKinderErgaenzungsleistungenTotal();
+        final var kinderRenten = antragssteller.getKinderRentenTotal();
+        final var kinderAndereEinnahmen = antragssteller.getKinderAndereEinnahmenTotal();
         final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
         final var leistungenEO = antragssteller.getLeistungenEO();
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
         final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
         final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
+        final var zulagen = antragssteller.getZulagen();
+        final var andereEinnahmen = antragssteller.getAndereEinnahmen();
+        final var taggeld = antragssteller.getTaggeld();
+        final var einnahmenBGSA = antragssteller.getEinnahmenBGSA();
 
         final var einnahmen =
             einkommen
             + einkommenPartner
             + anrechenbaresVermoegen
             + alimente + alimentePartner
-            + rente
+            + rente + rentePartner
             + kinderAusbildungszulagen
             + kinderUnterhaltsbeitraege
-            + ergaenzungsleistungen
-            + leistungenEO
+            + kinderErgaenzungsleistungen
+            + kinderRenten
+            + kinderAndereEinnahmen
+            + ergaenzungsleistungen + ergaenzungsLeistungenPartner
+            + leistungenEO + leistungenEOPartner
+            + zulagen + zulagenPartner
+            + andereEinnahmen + andereEinnahmenPartner
+            + taggeld + taggeldPartner
+            + einnahmenBGSA + einnahmenBGSAPartner
             + gemeindeInstitutionen
             + elternbeitrag1
             + elternbeitrag2;
@@ -260,8 +281,8 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
         result.setAlimente(antragssteller.getAlimente());
         result.setRente(antragssteller.getRente());
-        result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen());
-        result.setKinderUnterhaltsbeitraege(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
+        result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagenTotal());
+        result.setKinderUnterhaltsbeitraege(antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal());
         result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
         result.setLeistungenEO(antragssteller.getLeistungenEO());
         result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());
