@@ -131,6 +131,7 @@ export * from './gueltigkeitStatus';
 export * from './juristischeAbklaerungNotizAntwort';
 export * from './kanton';
 export * from './kind';
+export * from './kindIntegerValueItem';
 export * from './kindUpdate';
 export * from './kommentar';
 export * from './land';
