@@ -106,14 +106,20 @@ public class FamilienbudgetCalculatorV1 {
         final var saeule3a = getSaeule3a(elternteil, stammdaten);
         final var saeule2 = getSaeule2(elternteil);
         final var anrechenbaresVermoegen = getAnrechenbaresVermoegen(elternteil, stammdaten);
+        final var einnahmenBGSA = elternteil.getEinnahmenBGSA();
+        final var andereEinnahmen = elternteil.getAndereEinnahmen();
+        final var renten = elternteil.getRenten();
 
         final var einnahmenBeforeVermoegen = max(
             totalEinkuenfte
             + ergaenzungsleistungen
+            + einnahmenBGSA
+            + andereEinnahmen
             - eigenmietwert
             - alimente
             - saeule3a
             - saeule2
+            - renten
             - stammdaten.getEinkommensfreibetrag(),
             0
         );

@@ -71,6 +71,9 @@ class V1StructureTest {
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0,
+                        "einnahmenBGSA":0,
+                        "andereEinnahmen":0,
+                         "renten":0,
                         "steuerdatenTyp": "VATER"
                     }
                 },
@@ -96,6 +99,9 @@ class V1StructureTest {
                         "selbststaendigErwerbend": false,
                         "anzahlPersonenImHaushalt": 3,
                         "anzahlGeschwisterInAusbildung": 0,
+                        "einnahmenBGSA":0,
+                        "andereEinnahmen":0,
+                        "renten":0,
                         "steuerdatenTyp": "MUTTER"
                     }
                 },
@@ -110,8 +116,11 @@ class V1StructureTest {
                         "alimentePartner":0,
                         "rente": 0,
                         "rentePartner": 0,
-                        "kinderAusbildungszulagen": 0,
-                        "kinderErhalteneUnterhaltsbeitraege": 0,
+                         "kinderRentenTotal":0,
+                         "kinderErgaenzungsleistungenTotal":0,
+                         "kinderAndereEinnahmenTotal":0,
+                         "kinderAusbildungszulagenTotal":0,
+                         "kinderErhalteneUnterhaltsbeitraegeTotal":0,
                         "ergaenzungsleistungen": 1200,
                         "ergaenzungsleistungenPartner": 1200,
                         "leistungenEO": 0,

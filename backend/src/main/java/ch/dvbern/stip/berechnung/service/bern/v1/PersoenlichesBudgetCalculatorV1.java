@@ -238,8 +238,11 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         final var alimente = antragssteller.getAlimente();
         final var rente = antragssteller.getRente();
-        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
-        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraege();
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagenTotal();
+        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal();
+        final var kinderErgaenzungsleistungen = antragssteller.getKinderErgaenzungsleistungenTotal();
+        final var kinderRenten = antragssteller.getKinderRentenTotal();
+        final var kinderAndereEinnahmen = antragssteller.getKinderAndereEinnahmenTotal();
         final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
         final var leistungenEO = antragssteller.getLeistungenEO();
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
@@ -258,6 +261,9 @@ public class PersoenlichesBudgetCalculatorV1 {
             + rente + rentePartner
             + kinderAusbildungszulagen
             + kinderUnterhaltsbeitraege
+            + kinderErgaenzungsleistungen
+            + kinderRenten
+            + kinderAndereEinnahmen
             + ergaenzungsleistungen + ergaenzungsLeistungenPartner
             + leistungenEO + leistungenEOPartner
             + zulagen + zulagenPartner
@@ -275,8 +281,10 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
         result.setAlimente(antragssteller.getAlimente());
         result.setRente(antragssteller.getRente());
-        result.setAusbildungszulagenKinderTotal(antragssteller.getKinderAusbildungszulagen());
-        result.setUnterhaltsbeitraegeKinderTotal(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
+        result.setKinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen());
+        result.setKinderAusbildungszulagenTotal(antragssteller.getKinderAusbildungszulagenTotal());
+        result.setKinderUnterhaltsbeitraege(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
+        result.setKinderUnterhaltsbeitraegeTotal(antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal());
         result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
         result.setLeistungenEO(antragssteller.getLeistungenEO());
         result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());
