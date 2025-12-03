@@ -9,7 +9,6 @@ import {
   BuchhaltungOverview,
   BuchhaltungSaldokorrektur,
   BuchhaltungService,
-  PaginatedFailedAuszahlungBuchhaltung,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -18,7 +17,6 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
-  isPending,
   isSuccess,
   mapCachedData,
   pending,
@@ -30,13 +28,11 @@ export type BuchhaltungEntryView =
 
 type BuchhaltungState = {
   buchhaltung: CachedRemoteData<BuchhaltungOverview>;
-  paginatedFailedAuszahlungBuchhaltung: CachedRemoteData<PaginatedFailedAuszahlungBuchhaltung>;
   retriedAuszahlung: RemoteData<BuchhaltungEntry>;
 };
 
 const initialState: BuchhaltungState = {
   buchhaltung: initial(),
-  paginatedFailedAuszahlungBuchhaltung: initial(),
   retriedAuszahlung: initial(),
 };
 
@@ -47,13 +43,6 @@ export class BuchhaltungStore extends signalStore(
 ) {
   private buchhaltungService = inject(BuchhaltungService);
   private globalNotificationStore = inject(GlobalNotificationStore);
-
-  fehlgeschlageneZahlungenView = computed(() => {
-    return {
-      data: fromCachedDataSig(this.paginatedFailedAuszahlungBuchhaltung),
-      loading: isPending(this.paginatedFailedAuszahlungBuchhaltung()),
-    };
-  });
 
   buchhaltungEntriesViewSig = computed(() => {
     const data = fromCachedDataSig(this.buchhaltung);
@@ -175,33 +164,6 @@ export class BuchhaltungStore extends signalStore(
                   return buchhaltung;
                 }),
               })),
-            ),
-          ),
-      ),
-    ),
-  );
-
-  getFehlgeschlageneZahlungen$ = rxMethod<{
-    page: number;
-    pageSize: number;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          paginatedFailedAuszahlungBuchhaltung: cachedPending(
-            state.paginatedFailedAuszahlungBuchhaltung,
-          ),
-        }));
-      }),
-      switchMap(({ page, pageSize }) =>
-        this.buchhaltungService
-          .getFailedAuszahlungBuchhaltungEntrys$({
-            page,
-            pageSize,
-          })
-          .pipe(
-            handleApiResponse((paginatedFailedAuszahlungBuchhaltung) =>
-              patchState(this, { paginatedFailedAuszahlungBuchhaltung }),
             ),
           ),
       ),

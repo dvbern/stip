@@ -20,7 +20,8 @@ package ch.dvbern.stip.api.gesuch.type;
 public enum GetGesucheSBQueryType {
     ALLE_GESUCHE,
     MEINE_GESUCHE,
-    PENDENTE_GESUCHE,
+    ALLE_PENDENTE_GESUCHE,
+    MEINE_PENDENTE_GESUCHE,
     ALLE_BEARBEITBAR,
     MEINE_BEARBEITBAR,
     ALLE_JURISTISCHE_ABKLAERUNG,

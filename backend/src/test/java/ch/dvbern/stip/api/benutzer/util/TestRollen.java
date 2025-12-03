@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 public final class TestRollen {
     private static final String[] ALL_ROLLEN;
 
-    public static final String ADMIN = "Admin";
+    public static final String SACHBEARBEITER_ADMIN = "Admin";
     public static final String[] ADMIN_COMPOSITE;
 
     public static final String SACHBEARBEITER = "Sachbearbeiter";
@@ -132,7 +132,7 @@ public final class TestRollen {
 
     public static Set<Rolle> getComposite(final String composite) {
         return switch (composite) {
-            case ADMIN -> createRollen(ADMIN_COMPOSITE);
+            case SACHBEARBEITER_ADMIN -> createRollen(ADMIN_COMPOSITE);
             case SACHBEARBEITER -> createRollen(SACHBEARBEITER_COMPOSITE);
             case GESUCHSTELLER -> createRollen(GESUCHSTELLER_COMPOSITE);
             default -> Set.of();

@@ -31,11 +31,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static ch.dvbern.stip.arch.util.ArchTestUtil.APP_CLASSES;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
+@Execution(ExecutionMode.CONCURRENT)
 class JpaTest {
 
     @Test

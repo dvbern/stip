@@ -38,7 +38,7 @@ public class ValidateUpdateLegalityUtil {
                 benutzerRollenIdentifiers,
                 Arrays.asList(
                     OidcConstants.ROLE_SACHBEARBEITER,
-                    OidcConstants.ROLE_ADMIN
+                    OidcConstants.ROLE_SACHBEARBEITER_ADMIN
                 )
             )
         ) {

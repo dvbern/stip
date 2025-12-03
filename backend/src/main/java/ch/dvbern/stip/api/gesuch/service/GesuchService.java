@@ -202,7 +202,7 @@ public class GesuchService {
     @Transactional
     public GesuchDto getGesuchGS(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
     }
 
     @Transactional
@@ -226,7 +226,8 @@ public class GesuchService {
         return gesuchMapperUtil.toWithChangesDto(
             actualGesuch,
             gesuchTrancheRepository.requireById(gesuchTrancheId),
-            changes.orElse(null)
+            changes.orElse(null),
+            true
         );
     }
 
@@ -273,8 +274,11 @@ public class GesuchService {
     }
 
     @Transactional
-    public void updateGesuch(final UUID gesuchId, final GesuchUpdateDto gesuchUpdateDto, final String tenantId)
-    throws ValidationsException {
+    public void updateGesuch(
+        final UUID gesuchId,
+        final GesuchUpdateDto gesuchUpdateDto,
+        final boolean overrideIncomingVersteckteEltern
+    ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
         var trancheToUpdate = gesuch
             .getGesuchTrancheById(gesuchUpdateDto.getGesuchTrancheToWorkWith().getId())
@@ -296,7 +300,11 @@ public class GesuchService {
             );
         }
 
-        updateGesuchTranche(gesuchUpdateDto.getGesuchTrancheToWorkWith(), trancheToUpdate);
+        updateGesuchTranche(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith(),
+            trancheToUpdate,
+            overrideIncomingVersteckteEltern
+        );
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
         gesuchTrancheService.removeSuperfluousDokumentsForGesuch(newFormular);
@@ -307,8 +315,12 @@ public class GesuchService {
         }
     }
 
-    private void updateGesuchTranche(final GesuchTrancheUpdateDto trancheUpdate, final GesuchTranche trancheToUpdate) {
-        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate);
+    private void updateGesuchTranche(
+        final GesuchTrancheUpdateDto trancheUpdate,
+        final GesuchTranche trancheToUpdate,
+        final boolean overrideIncomingVersteckteEltern
+    ) {
+        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, overrideIncomingVersteckteEltern);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
@@ -373,7 +385,8 @@ public class GesuchService {
         return Pair.of(
             gesuchMapperUtil.mapWithTranche(
                 gesuch,
-                gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new)
+                gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new),
+                false
             ),
             null
         );
@@ -481,7 +494,7 @@ public class GesuchService {
     public List<GesuchDto> findGesucheGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();
         return gesuchRepository.findForGs(benutzer.getId())
-            .map(gesuchMapperUtil::mapWithNewestTranche)
+            .map(gesuch -> gesuchMapperUtil.mapWithNewestTranche(gesuch, false))
             .toList();
     }
 
@@ -651,14 +664,6 @@ public class GesuchService {
             gesuch,
             changeEvent
         );
-
-        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
-        if (
-            changeEvent.equals(GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT)
-            && gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()
-        ) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
-        }
     }
 
     @Transactional
@@ -670,11 +675,6 @@ public class GesuchService {
             kommentar,
             false
         );
-
-        // automatic status change, if no Datenschutzblaetter required ( = no Elterns exist)
-        if (gesuch.getLatestGesuchTranche().getGesuchFormular().getElterns().isEmpty()) {
-            gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
-        }
     }
 
     @Transactional
@@ -933,6 +933,8 @@ public class GesuchService {
             // changes
             requestedTrancheFromGesuchInStatusEingereicht.orElse(null),
             // make sure this flag is true whenever especially this endpoint is called
+            true,
+            // this is the implementation of an SB Endpoint, send versteckte Eltern
             true
         );
     }
@@ -950,7 +952,7 @@ public class GesuchService {
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
-        return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision);
+        return gesuchMapperUtil.toWithChangesDto(aenderung.getGesuch(), aenderung, initialRevision, false);
     }
 
     @Transactional
@@ -986,7 +988,7 @@ public class GesuchService {
             gesuchTranche.getGesuch(),
             GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
         );
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
     }
 
     @Transactional
@@ -1011,36 +1013,16 @@ public class GesuchService {
         final var toUpdateEingereicht = toUpdate.stream().filter(gesuch -> !gesuch.isVerfuegt()).toList();
         final var toUpdateVerfuegt = toUpdate.stream().filter(Gesuch::isVerfuegt).toList();
 
-        final var toUpdateStipendienAnspruch = new ArrayList<Gesuch>();
-        final var toUpdateKeinStipendienAnspruch = new ArrayList<Gesuch>();
-
-        for (var gesuch : toUpdateVerfuegt) {
-            var verfuegtGesuch = gesuchHistoryRepository
-                .getLatestWhereStatusChangedToOneOf(gesuch.getId(), Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN)
-                .orElseThrow(NotFoundException::new);
-            if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.STIPENDIENANSPRUCH) {
-                toUpdateStipendienAnspruch.add(gesuch);
-            } else if (verfuegtGesuch.getGesuchStatus() == Gesuchstatus.KEIN_STIPENDIENANSPRUCH) {
-                toUpdateKeinStipendienAnspruch.add(gesuch);
-            }
-        }
-
         if (!toUpdateEingereicht.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateEingereicht,
                 GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
-        if (!toUpdateStipendienAnspruch.isEmpty()) {
+        if (!toUpdateVerfuegt.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_STIPENDIENANSPRUCH
-            );
-        }
-        if (!toUpdateKeinStipendienAnspruch.isEmpty()) {
-            gesuchStatusService.bulkTriggerStateMachineEvent(
-                toUpdateVerfuegt,
-                GesuchStatusChangeEvent.GESUCH_AENDERUNG_FEHLENDE_DOKUMENTE_KEIN_STIPENDIENANSPRUCH
+                GesuchStatusChangeEvent.AENDERUNG_FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
     }
@@ -1071,7 +1053,7 @@ public class GesuchService {
         gesuch.setEinreichedatum(dto.getNewEinreichedatum());
         gesuchNotizService.createGesuchNotiz(gesuch, dto.getBetreff(), dto.getText());
 
-        return gesuchMapperUtil.mapWithNewestTranche(gesuch);
+        return gesuchMapperUtil.mapWithNewestTranche(gesuch, true);
     }
 
     @Transactional
@@ -1084,7 +1066,8 @@ public class GesuchService {
     public boolean canUpdateEinreichedatum(final Gesuch gesuch) {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
-        return currentBenutzer.hasOneOfRoles(Set.of(OidcConstants.ROLE_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
+        return currentBenutzer
+            .hasOneOfRoles(Set.of(OidcConstants.ROLE_SACHBEARBEITER_ADMIN, OidcConstants.ROLE_SACHBEARBEITER))
         && Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus()) && !gesuch.isVerfuegt();
     }
 
@@ -1363,7 +1346,7 @@ public class GesuchService {
 
         gesuchRepository.persistAndFlush(gesuch);
 
-        return gesuchMapperUtil.mapWithTranche(gesuch, gesuchTranche);
+        return gesuchMapperUtil.mapWithTranche(gesuch, gesuchTranche, true);
     }
 
     public boolean haveAllDatenschutzbriefeBeenSent(final Gesuch gesuch) {

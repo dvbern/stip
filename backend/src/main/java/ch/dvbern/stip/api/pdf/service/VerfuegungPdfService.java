@@ -320,6 +320,17 @@ public class VerfuegungPdfService {
                 translator.translate(
                     "stip.pdf.verfuegungOhneAnspruch.textBlock.vier"
                 )
+            )
+        );
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(
+                    "stip.pdf.verfuegungOhneAnspruch.textBlock.fuenf"
+                )
             ).add(ausbildungsbeitraegeUri)
         );
     }

@@ -20,11 +20,14 @@ package ch.dvbern.stip.api.common.validation;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.EMAIL_VALIDATION_PATTERN;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class EmailPatternTest {
 
     public static boolean checkEmailPattern(String emailAddress) {

@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
@@ -66,7 +65,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
@@ -109,7 +107,7 @@ class DokumentHistoryResourceTest {
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setWohnkosten(0);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setWohnkosten(0);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -186,7 +184,7 @@ class DokumentHistoryResourceTest {
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).setSozialhilfebeitraege(false);
         fullGesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(1).setSozialhilfebeitraege(false);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)

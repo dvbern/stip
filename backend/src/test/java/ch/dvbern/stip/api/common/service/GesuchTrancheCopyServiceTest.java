@@ -90,10 +90,10 @@ class GesuchTrancheCopyServiceTest {
         tranche.setId(null);
         tranche.setTyp(null);
 
-        var trancheDto = gesuchTrancheMapper.toDto(tranche);
+        var trancheDto = gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
         var trancheCopy =
             gesuchTrancheCopyService.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
-        var copyDto = gesuchTrancheMapper.toDto(trancheCopy);
+        var copyDto = gesuchTrancheMapper.toDtoWithVersteckteEltern(trancheCopy);
 
         final var expected = "{\"templateJson\":" + new ObjectMapper().writeValueAsString(trancheDto) + '}';
         final var actual = new ObjectMapper().writeValueAsString(copyDto);

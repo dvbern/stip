@@ -24,8 +24,8 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.MassendruckJobAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.massendruck.service.MassendruckJobPdfService;
@@ -63,6 +63,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     private final JWTParser jwtParser;
     private final BenutzerService benutzerService;
     private final ConfigService configService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed({ SB_GESUCH_UPDATE })
@@ -104,7 +105,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @RolesAllowed({ SB_GESUCH_READ })
     public FileDownloadTokenDto getMassendruckDownloadToken(UUID massendruckId) {
         authorizer.permitAll();
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             massendruckId,
             DokumentDownloadConstants.MASSENDRUCK_JOB_ID_CLAIM,
             benutzerService,
@@ -116,7 +117,7 @@ public class MassendruckJobResourceImpl implements MassendruckResource {
     @Override
     @PermitAll
     public RestMulti<Buffer> downloadMassendruckDocument(String token) {
-        final var massendruckJobId = DokumentDownloadUtil.getClaimId(
+        final var massendruckJobId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),

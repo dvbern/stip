@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /setVersteckteEltern/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: './components/common.yaml#/ElternTyp'
+        required: true
+      tags:
+        - Eltern
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/ElternTyp'
+          description: Versteckte Eltern updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+      operationId: setVersteckteEltern
+      summary: Set the list of versteckte Eltern for the given gesuchTrancheId
+
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+
+  # Schema definitions that are only relevant for this file
+  # Definitions accessible by other files should be in components/common.yaml | components/{type}.yaml
+
+security:
+  $ref: './components/security.yaml#/security'

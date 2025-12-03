@@ -75,6 +75,38 @@ class ElternRequiredDocumentsProducerTest {
     }
 
     @Test
+    void mutterIfAusweisbFluechtling() {
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.MUTTER)
+                    .setAusweisbFluechtling(true)
+                    .setSozialhilfebeitraege(false)
+            )
+        );
+
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
+        );
+    }
+
+    @Test
+    void vaterIfAusweisbFluechtling() {
+        formular.setElterns(
+            Set.of(
+                new Eltern().setElternTyp(ElternTyp.VATER)
+                    .setAusweisbFluechtling(true)
+                    .setSozialhilfebeitraege(false)
+            )
+        );
+
+        RequiredDocsUtil.requiresOneOfManyAndType(
+            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
+        );
+    }
+
+    @Test
     void wohnkostenRequired() {
         formular.setElterns(
             Set.of(

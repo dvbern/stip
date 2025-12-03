@@ -283,6 +283,10 @@ $dv-all-colors: (
   color: mat.m2-get-color-from-palette($gesuch-app-caution, 500);
 }
 
+.mat-mdc-list-item {
+  --mat-list-list-item-focus-state-layer-color: transparent;
+}
+
 .info-dialog-columnar {
   &.cdk-overlay-pane.mat-mdc-dialog-panel {
     min-width: unset;
@@ -323,4 +327,8 @@ $dv-all-colors: (
     --mat-tab-active-hover-label-text-color: white;
     --mat-tab-active-hover-indicator-color: transparent;
   }
+}
+
+form:not(.readonly) .mat-mdc-form-field-required-marker {
+  color: var(--dv-red);
 }

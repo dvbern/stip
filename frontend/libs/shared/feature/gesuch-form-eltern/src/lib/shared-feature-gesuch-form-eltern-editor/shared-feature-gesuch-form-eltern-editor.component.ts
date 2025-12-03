@@ -22,6 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
@@ -32,6 +33,7 @@ import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { LandStore } from '@dv/shared/data-access/land';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import {
+  DokumentTyp,
   ElternTyp,
   ElternUpdate,
   GesuchFormularType,
@@ -98,6 +100,7 @@ const MEDIUM_AGE_ADULT = 40;
     MatAutocompleteModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatTooltipModule,
     SharedUiDownloadButtonDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
@@ -133,10 +136,13 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   >();
 
   @Input({ required: true }) changes!: Partial<ElternUpdate>;
+  @Input({ required: true }) sichtbar!: boolean;
+  @Input({ required: true }) disableSichtbar!: boolean;
   @Output() saveTriggered = new EventEmitter<ElternUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<string>();
   @Output() formIsUnsaved: Observable<boolean>;
+  @Output() sichtbarChanged = new EventEmitter<boolean>();
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
   gotReenabled$ = new Subject<object>();
@@ -223,6 +229,21 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     return wohnkosten > 0
       ? `ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_${elternTyp}`
       : null;
+  });
+
+  ausweisbFluechtlingSig = toSignal(
+    this.form.controls.ausweisbFluechtling.valueChanges,
+  );
+
+  lohnabrechnungVermoegenDocumentSig = this.createUploadOptionsSig(() => {
+    const elternTyp = this.elternteilSig().elternTyp;
+    const fluechtling = this.ausweisbFluechtlingSig();
+
+    if (fluechtling) {
+      return DokumentTyp[`ELTERN_LOHNABRECHNUNG_VERMOEGEN_${elternTyp}`];
+    }
+
+    return null;
   });
 
   constructor() {

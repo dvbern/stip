@@ -29,10 +29,10 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
-import ch.dvbern.stip.api.util.TestClamAVEnvironment;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
@@ -66,12 +66,12 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
-@QuarkusTestResource(TestClamAVEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
         GesuchTrancheApiSpec.gesuchTranche(RequestSpecUtil.quarkusSpec());
@@ -104,7 +104,7 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     @TestAsGesuchsteller
     @Order(14)
     void fillGesuch() {
-        TestUtil.fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
 
     @Test

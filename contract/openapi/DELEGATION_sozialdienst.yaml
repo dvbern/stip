@@ -1,0 +1,418 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /sozialdienst:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstCreate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns created Sozialdienst
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createSozialdienst
+      summary: Create a new Sozialdienst
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstUpdate'
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns updated Sozialdienst
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateSozialdienst
+      summary: Update a Sozialdienst
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sozialdienst'
+          description: Returns all Sozialdienste
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllSozialdienste
+      summary: Returns all Sozialdienste
+  /sozialdienst/delegation:
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/SozialdienstSlim'
+          description: Returns all Sozialdienste
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllSozialdiensteForDelegation
+  /sozialdienst/{sozialdienstId}/replaceSozialdienstAdmin:
+    parameters:
+      - $ref: './components/parameters.yaml#/sozialdienstId'
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstAdmin'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
+          description: Replaces a Sozialdienst admin by a new one
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: replaceSozialdienstAdmin
+  /sozialdienst/{sozialdienstId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/sozialdienstId'
+    delete:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Deletes a Sozialdienst by id
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteSozialdienst
+      summary: Delete a Sozialdienst by Id
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSozialdienst
+      summary: Get a Sozialdienst by Id
+  /sozialdienst/{sozialdienstId}/setSozialdienstAktivTo/{aktiv}:
+    parameters:
+      - $ref: './components/parameters.yaml#/sozialdienstId'
+      - name: aktiv
+        schema:
+          type: boolean
+        in: path
+        required: true
+    patch:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sozialdienst'
+          description: Returns a Sozialdienst by id
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: setSozialdienstAktivTo
+      summary: Changes a Sozialdienst's status to a given value
+  /sozialdienst/benutzer:
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/SozialdienstBenutzer'
+          description: Returns all SozialdienstBenutzers of the Sozialdienst of the logged in SozialdienstAdmin
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSozialdienstBenutzerList
+    post:
+      description: create a new SozialdienstBenutzer that is assigned to the Sozialdienst of the currently logged in SozialdienstAdmin
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerCreate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
+          description: Returns the created SozialdienstBenutzer
+        409:
+          description: A SozialdienstBenutzer with that identifier already exists in Keycloak
+      operationId: createSozialdienstBenutzer
+    patch:
+      description: update an existing SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
+          description: Returns the updated SozialdienstBenutzer
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateSozialdienstBenutzer
+  /sozialdienst/admin:
+    patch:
+      tags:
+        - Sozialdienst
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SozialdienstBenutzerUpdate'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
+          description: Updates data of a Sozialdienst admin
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateSozialdienstAdmin
+  /sozialdienst/benutzer/{sozialdienstBenutzerId}:
+    parameters:
+      - name: sozialdienstBenutzerId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/SozialdienstBenutzer'
+          description: Returns the Sozialdienst Benutzer with the given ID
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getSozialdienstBenutzer
+    delete:
+      description: update an existing SozialdienstBenutzer
+      tags:
+        - Sozialdienst
+      responses:
+        200:
+          description: Returns on successfull delete
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteSozialdienstBenutzer
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  schemas:
+    SozialdienstBenutzerCreate:
+      required:
+        - redirectUri
+      properties:
+        redirectUri:
+          type: string
+      allOf:
+        - $ref: './components/common.yaml#/SozialdienstBenutzerBase'
+    SozialdienstBenutzerUpdate:
+      required:
+        - id
+        - vorname
+        - nachname
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        vorname:
+          type: string
+        nachname:
+          type: string
+    SozialdienstAdmin:
+      required:
+        - vorname
+        - nachname
+        - email
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        email:
+          type: string
+    SozialdienstCreate:
+      required:
+        - name
+        - zahlungsverbindung
+        - sozialdienstAdmin
+      properties:
+        name:
+          type: string
+        zahlungsverbindung:
+          $ref: './components/common.yaml#/Zahlungsverbindung'
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstAdmin'
+    SozialdienstUpdate:
+      required:
+        - id
+        - name
+        - zahlungsverbindung
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        name:
+          type: string
+        zahlungsverbindung:
+          $ref: './components/common.yaml#/Zahlungsverbindung'
+    Sozialdienst:
+      allOf:
+        - $ref: './components/common.yaml#/SozialdienstSlim'
+        - type: object
+          required:
+            - id
+            - name
+            - sozialdienstAdmin
+            - zahlungsverbindung
+            - aktiv
+          properties:
+            sozialdienstAdmin:
+              $ref: './components/common.yaml#/SozialdienstBenutzer'
+            zahlungsverbindung:
+              $ref: './components/common.yaml#/Zahlungsverbindung'
+            aktiv:
+              type: boolean
+security:
+  $ref: './components/security.yaml#/security'

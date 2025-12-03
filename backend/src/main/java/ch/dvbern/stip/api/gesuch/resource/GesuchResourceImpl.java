@@ -35,19 +35,16 @@ import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.common.util.DokumentDownloadUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
 import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
-import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.GesuchResource;
 import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
@@ -104,8 +101,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     private final GesuchService gesuchService;
     private final GesuchTrancheService gesuchTrancheService;
-    private final TenantService tenantService;
-    private final GesuchHistoryService gesuchHistoryService;
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
     private final GesuchMapperUtil gesuchMapperUtil;
@@ -116,10 +111,10 @@ public class GesuchResourceImpl implements GesuchResource {
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final BeschwerdeEntscheidAuthorizer beschwerdeEntscheidAuthorizer;
-    private final VerfuegungService verfuegungService;
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final StatusprotokollService statusprotokollService;
     private final AdminDokumenteService adminDokumenteService;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
@@ -147,7 +142,7 @@ public class GesuchResourceImpl implements GesuchResource {
             ausgewaehlterGrundDto
         );
         gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Blocking
@@ -180,7 +175,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.gesuchStatusToVerfuegt(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -191,7 +186,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.sbCanChangeGesuchStatusToVerfuegungDruckbereit(gesuchId);
 
         gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -202,7 +197,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchAuthorizer.sbCanChangeGesuchStatusToVersendet(gesuchId);
 
         gesuchService.changeToVersendentAndAnspruchOrKeinAnspruch(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Blocking
@@ -288,7 +283,7 @@ public class GesuchResourceImpl implements GesuchResource {
         gesuchService.gesuchEinreichen(gesuchId);
         gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
     }
 
     @Override
@@ -300,7 +295,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -312,7 +307,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchService.setGesuchStatusToAnspruchPruefen(gesuchId);
         gesuchService.stipendienAnspruchPruefen(gesuchId);
-        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche);
+        return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, true);
     }
 
     @Override
@@ -406,13 +401,23 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_UPDATE, SB_GESUCH_UPDATE })
-    public void updateGesuch(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+    @RolesAllowed(GS_GESUCH_UPDATE)
+    public void updateGesuchGS(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(
             gesuchUpdateDto.getGesuchTrancheToWorkWith().getId()
         );
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
-        gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, tenantService.getCurrentTenant().getIdentifier());
+        gesuchTrancheAuthorizer.canUpdateTrancheGS(gesuchTranche);
+        gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, true);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public void updateGesuchSB(UUID gesuchId, GesuchUpdateDto gesuchUpdateDto) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(
+            gesuchUpdateDto.getGesuchTrancheToWorkWith().getId()
+        );
+        gesuchTrancheAuthorizer.canUpdateTrancheSB(gesuchTranche);
+        gesuchService.updateGesuch(gesuchId, gesuchUpdateDto, false);
     }
 
     @Override
@@ -433,7 +438,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Blocking
     @PermitAll
     public RestMulti<Buffer> getBerechnungsBlattForGesuch(String token) {
-        final var gesuchId = DokumentDownloadUtil.getClaimId(
+        final var gesuchId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
@@ -448,7 +453,7 @@ public class GesuchResourceImpl implements GesuchResource {
         }
 
         ByteArrayOutputStream finalByteStream = byteStream;
-        return DokumentDownloadUtil
+        return dokumentDownloadService
             .getWrapedDokument(gesuchService.getBerechnungsblattFileName(gesuchId), finalByteStream);
     }
 
@@ -457,7 +462,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
 
-        return DokumentDownloadUtil.getFileDownloadToken(
+        return dokumentDownloadService.getFileDownloadToken(
             gesuchId,
             DokumentDownloadConstants.GESUCH_ID_CLAIM,
             benutzerService,
@@ -507,7 +512,7 @@ public class GesuchResourceImpl implements GesuchResource {
     public GesuchWithChangesDto bearbeitungAbschliessen(UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-        gesuchTrancheAuthorizer.canUpdateTranche(gesuchTranche);
+        gesuchTrancheAuthorizer.canUpdateTrancheSB(gesuchTranche);
         gesuchAuthorizer.sbCanBearbeitungAbschliessen(gesuchId);
         gesuchService.bearbeitungAbschliessen(gesuchId);
         gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuchId);

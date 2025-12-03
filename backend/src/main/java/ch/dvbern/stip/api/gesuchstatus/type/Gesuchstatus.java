@@ -197,8 +197,6 @@ public enum Gesuchstatus {
         EnumSet.of(
             IN_BEARBEITUNG_GS,
             FEHLENDE_DOKUMENTE,
-            VERFUEGUNG_DRUCKBEREIT,
-            VERFUEGUNG_VERSENDET,
             STIPENDIENANSPRUCH,
             KEIN_STIPENDIENANSPRUCH
         )

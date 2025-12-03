@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -29,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * SteuererklaerungUpdateDtoSpec
  */
 @JsonPropertyOrder({
-  SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_ID,
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG_IN_BERN,
   SteuererklaerungUpdateDtoSpec.JSON_PROPERTY_ERGAENZUNGSLEISTUNGEN,
@@ -41,9 +39,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("SteuererklaerungUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class SteuererklaerungUpdateDtoSpec {
-  public static final String JSON_PROPERTY_ID = "id";
-  private UUID id;
-
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
@@ -67,32 +62,6 @@ public class SteuererklaerungUpdateDtoSpec {
 
   public SteuererklaerungUpdateDtoSpec() {
   }
-
-  public SteuererklaerungUpdateDtoSpec id(UUID id) {
-    
-    this.id = id;
-    return this;
-  }
-
-   /**
-   * Get id
-   * @return id
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public UUID getId() {
-    return id;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
 
   public SteuererklaerungUpdateDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
     
@@ -284,8 +253,7 @@ public class SteuererklaerungUpdateDtoSpec {
       return false;
     }
     SteuererklaerungUpdateDtoSpec steuererklaerungUpdate = (SteuererklaerungUpdateDtoSpec) o;
-    return Objects.equals(this.id, steuererklaerungUpdate.id) &&
-        Objects.equals(this.steuerdatenTyp, steuererklaerungUpdate.steuerdatenTyp) &&
+    return Objects.equals(this.steuerdatenTyp, steuererklaerungUpdate.steuerdatenTyp) &&
         Objects.equals(this.steuererklaerungInBern, steuererklaerungUpdate.steuererklaerungInBern) &&
         Objects.equals(this.ergaenzungsleistungen, steuererklaerungUpdate.ergaenzungsleistungen) &&
         Objects.equals(this.unterhaltsbeitraege, steuererklaerungUpdate.unterhaltsbeitraege) &&
@@ -296,14 +264,13 @@ public class SteuererklaerungUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, steuerdatenTyp, steuererklaerungInBern, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA, andereEinnahmen);
+    return Objects.hash(steuerdatenTyp, steuererklaerungInBern, ergaenzungsleistungen, unterhaltsbeitraege, renten, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SteuererklaerungUpdateDtoSpec {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuererklaerungInBern: ").append(toIndentedString(steuererklaerungInBern)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
