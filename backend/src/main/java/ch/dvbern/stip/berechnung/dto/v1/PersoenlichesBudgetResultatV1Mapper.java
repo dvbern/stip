@@ -122,7 +122,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .andereEinnahmenKinder(antragssteller.getKindAndereEinnahmenIntegerValues())
             .andereEinnahmenTotal(
                 antragssteller.getAndereEinnahmen() + antragssteller.getAndereEinnahmenPartner()
-                + antragssteller.getKindereAndrereEinnahmenTotal()
+                + antragssteller.getKinderAndereEinnahmenTotal()
             )
             .taggelderPartner(antragssteller.getTaggeldPartner())
             .taggelder(antragssteller.getTaggeld())

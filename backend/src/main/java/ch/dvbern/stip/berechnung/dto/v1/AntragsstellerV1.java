@@ -62,7 +62,7 @@ public class AntragsstellerV1 {
     int rentePartner;
     int kinderRentenTotal;
     int kinderErgaenzungsleistungenTotal;
-    int kindereAndrereEinnahmenTotal;
+    int kinderAndereEinnahmenTotal;
     int kinderAusbildungszulagenTotal;
     int kinderErhalteneUnterhaltsbeitraegeTotal;
     int ergaenzungsleistungen;
@@ -213,7 +213,7 @@ public class AntragsstellerV1 {
 
             builder.kinderRentenTotal(kinderRentenTotal);
             builder.kinderErgaenzungsleistungenTotal(kinderErgaenzungsleistungenTotal);
-            builder.kindereAndrereEinnahmenTotal(kinderAndereEinnahmenTotal);
+            builder.kinderAndereEinnahmenTotal(kinderAndereEinnahmenTotal);
             builder.kinderErhalteneUnterhaltsbeitraegeTotal(kinderErgaenzungsleistungenTotal);
             builder
                 .kinderAusbildungszulagenTotal(toJahresWert(kinderAusbildungszulagenTotal));

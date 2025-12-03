@@ -24,7 +24,6 @@ import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputPersoenlichesbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.StammdatenV1;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.KindIntegerValueItemDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import lombok.experimental.UtilityClass;
 
@@ -243,12 +242,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal();
         final var kinderErgaenzungsleistungen = antragssteller.getKinderErgaenzungsleistungenTotal();
         final var kinderRenten = antragssteller.getKinderRentenTotal();
-        final var kinderAndereEinnahmen = antragssteller.getKindAndereEinnahmenIntegerValues()
-            .stream()
-            .map(
-                KindIntegerValueItemDto::getValue
-            )
-            .reduce(0, Integer::sum);
+        final var kinderAndereEinnahmen = antragssteller.getKinderAndereEinnahmenTotal();
         final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
         final var leistungenEO = antragssteller.getLeistungenEO();
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
