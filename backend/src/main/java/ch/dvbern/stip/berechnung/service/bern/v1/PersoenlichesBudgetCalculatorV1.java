@@ -238,8 +238,8 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         final var alimente = antragssteller.getAlimente();
         final var rente = antragssteller.getRente();
-        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
-        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraege();
+        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagenTotal();
+        final var kinderUnterhaltsbeitraege = antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal();
         final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
         final var leistungenEO = antragssteller.getLeistungenEO();
         final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
@@ -275,8 +275,8 @@ public class PersoenlichesBudgetCalculatorV1 {
         result.setAnrechenbaresVermoegen(anrechenbaresVermoegen);
         result.setAlimente(antragssteller.getAlimente());
         result.setRente(antragssteller.getRente());
-        result.setAusbildungszulagenKinderTotal(antragssteller.getKinderAusbildungszulagen());
-        result.setUnterhaltsbeitraegeKinderTotal(antragssteller.getKinderErhalteneUnterhaltsbeitraege());
+        result.setAusbildungszulagenKinderTotal(antragssteller.getKinderAusbildungszulagenTotal());
+        result.setUnterhaltsbeitraegeKinderTotal(antragssteller.getKinderErhalteneUnterhaltsbeitraegeTotal());
         result.setErgaenzungsleistungen(antragssteller.getErgaenzungsleistungen());
         result.setLeistungenEO(antragssteller.getLeistungenEO());
         result.setGemeindeInstitutionen(antragssteller.getGemeindeInstitutionen());

@@ -19,6 +19,7 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -35,6 +36,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.generated.dto.KindIntegerValueItemDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -58,8 +60,11 @@ public class AntragsstellerV1 {
     int alimentePartner;
     int rente;
     int rentePartner;
-    int kinderAusbildungszulagen;
-    int kinderErhalteneUnterhaltsbeitraege;
+    int kinderRentenTotal;
+    int kinderErgaenzungsleistungenTotal;
+    int kindereAndrereEinnahmenTotal;
+    int kinderAusbildungszulagenTotal;
+    int kinderErhalteneUnterhaltsbeitraegeTotal;
     int ergaenzungsleistungen;
     int ergaenzungsleistungenPartner;
     int leistungenEO;
@@ -91,6 +96,11 @@ public class AntragsstellerV1 {
     int zulagenPartner;
     int einnahmenBGSA;
     int einnahmenBGSAPartner;
+    List<KindIntegerValueItemDto> kindAusbildungszulagenIntegerValues;
+    List<KindIntegerValueItemDto> kindUnterhaltsbeitraegeIntegerValues;
+    List<KindIntegerValueItemDto> kindRenteIntegerValues;
+    List<KindIntegerValueItemDto> kindErgaenzungsleistungenIntegerValues;
+    List<KindIntegerValueItemDto> kindAndereEinnahmenIntegerValues;
 
     public static AntragsstellerV1 buildFromDependants(
         final GesuchFormular gesuchFormular,
@@ -101,6 +111,49 @@ public class AntragsstellerV1 {
         final var einnahmenKosten = gesuchFormular.getEinnahmenKosten();
         final var gesuchsperiode = gesuchFormular.getTranche().getGesuch().getGesuchsperiode();
         final var ausbildung = gesuchFormular.getAusbildung();
+
+        List<KindIntegerValueItemDto> kindAusbildungszulagenIntegerValues = new ArrayList<>();
+        List<KindIntegerValueItemDto> kindUnterhaltsbeitraegeIntegerValues = new ArrayList<>();
+        List<KindIntegerValueItemDto> kindRenteIntegerValues = new ArrayList<>();
+        List<KindIntegerValueItemDto> kindErgaenzungsleistungenIntegerValues = new ArrayList<>();
+        List<KindIntegerValueItemDto> kindAndereEinnahmenIntegerValues = new ArrayList<>();
+        gesuchFormular.getKinds().forEach(kind -> {
+            kindAusbildungszulagenIntegerValues.add(
+                new KindIntegerValueItemDto(
+                    kind.getFullName(), Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0)
+                )
+            );
+            kindUnterhaltsbeitraegeIntegerValues.add(
+                new KindIntegerValueItemDto(
+                    kind.getFullName(), Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0)
+                )
+            );
+            kindRenteIntegerValues
+                .add(new KindIntegerValueItemDto(kind.getFullName(), Objects.requireNonNullElse(kind.getRenten(), 0)));
+            kindErgaenzungsleistungenIntegerValues.add(
+                new KindIntegerValueItemDto(
+                    kind.getFullName(), Objects.requireNonNullElse(kind.getErgaenzungsleistungen(), 0)
+                )
+            );
+            kindAndereEinnahmenIntegerValues.add(
+                new KindIntegerValueItemDto(
+                    kind.getFullName(), Objects.requireNonNullElse(kind.getAndereEinnahmen(), 0)
+                )
+            );
+        }
+        );
+        final int kinderAusbildungszulagenTotal =
+            kindAusbildungszulagenIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
+        final int kinderUnterhaltsbeitraegeTotal = kindUnterhaltsbeitraegeIntegerValues.stream()
+            .map(KindIntegerValueItemDto::getValue)
+            .reduce(0, Integer::sum);
+        final int kinderRentenTotal =
+            kindRenteIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
+        final int kinderErgaenzungsleistungenTotal = kindErgaenzungsleistungenIntegerValues.stream()
+            .map(KindIntegerValueItemDto::getValue)
+            .reduce(0, Integer::sum);
+        final int kinderAndereEinnahmenTotal =
+            kindAndereEinnahmenIntegerValues.stream().map(KindIntegerValueItemDto::getValue).reduce(0, Integer::sum);
 
         final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
         builder
@@ -139,8 +192,7 @@ public class AntragsstellerV1 {
                     gesuchsperiode
                 );
             }
-            int totalKinderAusbildungsZulagen = 0;
-            int totalKinderUnterhaltsbeitraege = 0;
+
             for (final var kind : gesuchFormular.getKinds()) {
                 // if child does still live with the parents/ a parent
                 if (kind.getWohnsitzAnteilPia() > 0) {
@@ -151,15 +203,22 @@ public class AntragsstellerV1 {
                         gesuchsperiode
                     );
                 }
-
-                totalKinderAusbildungsZulagen += Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0);
-                totalKinderUnterhaltsbeitraege += Objects.requireNonNullElse(kind.getUnterhaltsbeitraege(), 0);
             }
 
+            builder.kindAusbildungszulagenIntegerValues = kindAusbildungszulagenIntegerValues;
+            builder.kindUnterhaltsbeitraegeIntegerValues = kindUnterhaltsbeitraegeIntegerValues;
+            builder.kindRenteIntegerValues = kindRenteIntegerValues;
+            builder.kindErgaenzungsleistungenIntegerValues = kindErgaenzungsleistungenIntegerValues;
+            builder.kindAndereEinnahmenIntegerValues = kindAndereEinnahmenIntegerValues;
+
+            builder.kinderRentenTotal(kinderRentenTotal);
+            builder.kinderErgaenzungsleistungenTotal(kinderErgaenzungsleistungenTotal);
+            builder.kindereAndrereEinnahmenTotal(kinderAndereEinnahmenTotal);
+            builder.kinderErhalteneUnterhaltsbeitraegeTotal(kinderErgaenzungsleistungenTotal);
             builder
-                .kinderAusbildungszulagen(toJahresWert(Objects.requireNonNullElse(totalKinderAusbildungsZulagen, 0)));
-            builder.kinderErhalteneUnterhaltsbeitraege(
-                toJahresWert(Objects.requireNonNullElse(totalKinderUnterhaltsbeitraege, 0))
+                .kinderAusbildungszulagenTotal(toJahresWert(kinderAusbildungszulagenTotal));
+            builder.kinderErhalteneUnterhaltsbeitraegeTotal(
+                toJahresWert(kinderUnterhaltsbeitraegeTotal)
             );
 
             final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
