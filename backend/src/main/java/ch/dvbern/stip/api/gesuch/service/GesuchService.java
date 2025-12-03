@@ -705,13 +705,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToVerfuegungAmGenerieren(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        verfuegungService.createVerfuegung(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
-    }
-
-    @Transactional
     public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -734,13 +727,6 @@ public class GesuchService {
             }
         }
 
-        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
-    }
-
-    @Transactional
-    public void gesuchStatusToKeinStipendienanspruch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
         gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
