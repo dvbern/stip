@@ -23,6 +23,7 @@ export interface PersoenlichesBudgetresultat {
     leistungenEO: number;
     rente: number;
     kinderAusbildungszulagen: number;
+    kinderUnterhaltsbeitraege: number;
     ergaenzungsleistungen: number;
     gemeindeInstitutionen: number;
     steuerbaresVermoegen: number;
