@@ -32,11 +32,17 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer alimente;
   private @Valid Integer leistungenEO;
   private @Valid Integer rente;
+  private @Valid Integer kinderAusbildungszulagen;
+  private @Valid Integer kinderAusbildungszulagenPartner;
+  private @Valid List<Integer> kinderAusbildungszulagenKinder = new ArrayList<>();
+  private @Valid Integer kinderAusbildungszulagenTotal;
+  private @Valid List<Integer> kinderUnterhaltsbeitraege = new ArrayList<>();
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer gemeindeInstitutionen;
   private @Valid Integer steuerbaresVermoegen;
   private @Valid Integer anrechenbaresVermoegen;
   private @Valid Integer einkommenPartner;
+  private @Valid Integer einkommenTotal;
   private @Valid Integer einnahmenPersoenlichesBudget;
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer grundbedarf;
@@ -52,6 +58,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer ausbildungskosten;
   private @Valid Integer ausgabenPersoenlichesBudget;
   private @Valid Integer persoenlichesbudgetBerechnet;
+  private @Valid Integer einnahmenBGSA;
   private @Valid Integer totalVorTeilung;
   private @Valid Integer alimentePartner;
   private @Valid Integer alimenteTotal;
@@ -59,6 +66,9 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer leistungenEOTotal;
   private @Valid Integer rentePartner;
   private @Valid Integer renteTotal;
+  private @Valid Integer kinderUnterhaltsbeitraegeTotal;
+  private @Valid List<Integer> kinderRenten;
+  private @Valid Integer kinderRentenTotal;
   private @Valid List<KindIntegerValueItemDto> ausbildungszulagenKinder;
   private @Valid Integer ausbildungszulagenKinderTotal;
   private @Valid List<KindIntegerValueItemDto> unterhaltsbeitraegeKinder;
@@ -68,13 +78,11 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer ergaenzungsleistungenPartner;
   private @Valid List<KindIntegerValueItemDto> ergaenzungsleistungenKinder;
   private @Valid Integer ergaenzungsleistungenTotal;
-  private @Valid Integer einkommenTotal;
   private @Valid Integer steuernTotal;
   private @Valid Integer fahrkostenTotal;
   private @Valid Integer verpflegungTotal;
   private @Valid Integer elternbeitrag1;
   private @Valid Integer elternbeitrag2;
-  private @Valid Integer einnahmenBGSA;
   private @Valid Integer einnahmenBGSAPartner;
   private @Valid Integer einnahmenBGSATotal;
   private @Valid Integer andereEinnahmen;
@@ -220,6 +228,133 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   /**
    **/
+  public PersoenlichesBudgetresultatDto kinderAusbildungszulagen(Integer kinderAusbildungszulagen) {
+    this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderAusbildungszulagen")
+  @NotNull
+  public Integer getKinderAusbildungszulagen() {
+    return kinderAusbildungszulagen;
+  }
+
+  @JsonProperty("kinderAusbildungszulagen")
+  public void setKinderAusbildungszulagen(Integer kinderAusbildungszulagen) {
+    this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderAusbildungszulagenPartner(Integer kinderAusbildungszulagenPartner) {
+    this.kinderAusbildungszulagenPartner = kinderAusbildungszulagenPartner;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderAusbildungszulagenPartner")
+  @NotNull
+  public Integer getKinderAusbildungszulagenPartner() {
+    return kinderAusbildungszulagenPartner;
+  }
+
+  @JsonProperty("kinderAusbildungszulagenPartner")
+  public void setKinderAusbildungszulagenPartner(Integer kinderAusbildungszulagenPartner) {
+    this.kinderAusbildungszulagenPartner = kinderAusbildungszulagenPartner;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderAusbildungszulagenKinder(List<Integer> kinderAusbildungszulagenKinder) {
+    this.kinderAusbildungszulagenKinder = kinderAusbildungszulagenKinder;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderAusbildungszulagenKinder")
+  @NotNull
+  public List<Integer> getKinderAusbildungszulagenKinder() {
+    return kinderAusbildungszulagenKinder;
+  }
+
+  @JsonProperty("kinderAusbildungszulagenKinder")
+  public void setKinderAusbildungszulagenKinder(List<Integer> kinderAusbildungszulagenKinder) {
+    this.kinderAusbildungszulagenKinder = kinderAusbildungszulagenKinder;
+  }
+
+  public PersoenlichesBudgetresultatDto addKinderAusbildungszulagenKinderItem(Integer kinderAusbildungszulagenKinderItem) {
+    if (this.kinderAusbildungszulagenKinder == null) {
+      this.kinderAusbildungszulagenKinder = new ArrayList<>();
+    }
+
+    this.kinderAusbildungszulagenKinder.add(kinderAusbildungszulagenKinderItem);
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDto removeKinderAusbildungszulagenKinderItem(Integer kinderAusbildungszulagenKinderItem) {
+    if (kinderAusbildungszulagenKinderItem != null && this.kinderAusbildungszulagenKinder != null) {
+      this.kinderAusbildungszulagenKinder.remove(kinderAusbildungszulagenKinderItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderAusbildungszulagenTotal(Integer kinderAusbildungszulagenTotal) {
+    this.kinderAusbildungszulagenTotal = kinderAusbildungszulagenTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderAusbildungszulagenTotal")
+  @NotNull
+  public Integer getKinderAusbildungszulagenTotal() {
+    return kinderAusbildungszulagenTotal;
+  }
+
+  @JsonProperty("kinderAusbildungszulagenTotal")
+  public void setKinderAusbildungszulagenTotal(Integer kinderAusbildungszulagenTotal) {
+    this.kinderAusbildungszulagenTotal = kinderAusbildungszulagenTotal;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderUnterhaltsbeitraege(List<Integer> kinderUnterhaltsbeitraege) {
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderUnterhaltsbeitraege")
+  @NotNull
+  public List<Integer> getKinderUnterhaltsbeitraege() {
+    return kinderUnterhaltsbeitraege;
+  }
+
+  @JsonProperty("kinderUnterhaltsbeitraege")
+  public void setKinderUnterhaltsbeitraege(List<Integer> kinderUnterhaltsbeitraege) {
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
+  }
+
+  public PersoenlichesBudgetresultatDto addKinderUnterhaltsbeitraegeItem(Integer kinderUnterhaltsbeitraegeItem) {
+    if (this.kinderUnterhaltsbeitraege == null) {
+      this.kinderUnterhaltsbeitraege = new ArrayList<>();
+    }
+
+    this.kinderUnterhaltsbeitraege.add(kinderUnterhaltsbeitraegeItem);
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDto removeKinderUnterhaltsbeitraegeItem(Integer kinderUnterhaltsbeitraegeItem) {
+    if (kinderUnterhaltsbeitraegeItem != null && this.kinderUnterhaltsbeitraege != null) {
+      this.kinderUnterhaltsbeitraege.remove(kinderUnterhaltsbeitraegeItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
   public PersoenlichesBudgetresultatDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
     this.ergaenzungsleistungen = ergaenzungsleistungen;
     return this;
@@ -311,6 +446,25 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   @JsonProperty("einkommenPartner")
   public void setEinkommenPartner(Integer einkommenPartner) {
     this.einkommenPartner = einkommenPartner;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto einkommenTotal(Integer einkommenTotal) {
+    this.einkommenTotal = einkommenTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("einkommenTotal")
+  @NotNull
+  public Integer getEinkommenTotal() {
+    return einkommenTotal;
+  }
+
+  @JsonProperty("einkommenTotal")
+  public void setEinkommenTotal(Integer einkommenTotal) {
+    this.einkommenTotal = einkommenTotal;
   }
 
   /**
@@ -600,6 +754,25 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   /**
    **/
+  public PersoenlichesBudgetresultatDto einnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+    return this;
+  }
+
+  
+  @JsonProperty("einnahmenBGSA")
+  @NotNull
+  public Integer getEinnahmenBGSA() {
+    return einnahmenBGSA;
+  }
+
+  @JsonProperty("einnahmenBGSA")
+  public void setEinnahmenBGSA(Integer einnahmenBGSA) {
+    this.einnahmenBGSA = einnahmenBGSA;
+  }
+
+  /**
+   **/
   public PersoenlichesBudgetresultatDto totalVorTeilung(Integer totalVorTeilung) {
     this.totalVorTeilung = totalVorTeilung;
     return this;
@@ -722,6 +895,76 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   @JsonProperty("renteTotal")
   public void setRenteTotal(Integer renteTotal) {
     this.renteTotal = renteTotal;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderUnterhaltsbeitraegeTotal(Integer kinderUnterhaltsbeitraegeTotal) {
+    this.kinderUnterhaltsbeitraegeTotal = kinderUnterhaltsbeitraegeTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderUnterhaltsbeitraegeTotal")
+  public Integer getKinderUnterhaltsbeitraegeTotal() {
+    return kinderUnterhaltsbeitraegeTotal;
+  }
+
+  @JsonProperty("kinderUnterhaltsbeitraegeTotal")
+  public void setKinderUnterhaltsbeitraegeTotal(Integer kinderUnterhaltsbeitraegeTotal) {
+    this.kinderUnterhaltsbeitraegeTotal = kinderUnterhaltsbeitraegeTotal;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderRenten(List<Integer> kinderRenten) {
+    this.kinderRenten = kinderRenten;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderRenten")
+  public List<Integer> getKinderRenten() {
+    return kinderRenten;
+  }
+
+  @JsonProperty("kinderRenten")
+  public void setKinderRenten(List<Integer> kinderRenten) {
+    this.kinderRenten = kinderRenten;
+  }
+
+  public PersoenlichesBudgetresultatDto addKinderRentenItem(Integer kinderRentenItem) {
+    if (this.kinderRenten == null) {
+      this.kinderRenten = new ArrayList<>();
+    }
+
+    this.kinderRenten.add(kinderRentenItem);
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDto removeKinderRentenItem(Integer kinderRentenItem) {
+    if (kinderRentenItem != null && this.kinderRenten != null) {
+      this.kinderRenten.remove(kinderRentenItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderRentenTotal(Integer kinderRentenTotal) {
+    this.kinderRentenTotal = kinderRentenTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderRentenTotal")
+  public Integer getKinderRentenTotal() {
+    return kinderRentenTotal;
+  }
+
+  @JsonProperty("kinderRentenTotal")
+  public void setKinderRentenTotal(Integer kinderRentenTotal) {
+    this.kinderRentenTotal = kinderRentenTotal;
   }
 
   /**
@@ -952,24 +1195,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatDto einkommenTotal(Integer einkommenTotal) {
-    this.einkommenTotal = einkommenTotal;
-    return this;
-  }
-
-  
-  @JsonProperty("einkommenTotal")
-  public Integer getEinkommenTotal() {
-    return einkommenTotal;
-  }
-
-  @JsonProperty("einkommenTotal")
-  public void setEinkommenTotal(Integer einkommenTotal) {
-    this.einkommenTotal = einkommenTotal;
-  }
-
-  /**
-   **/
   public PersoenlichesBudgetresultatDto steuernTotal(Integer steuernTotal) {
     this.steuernTotal = steuernTotal;
     return this;
@@ -1056,24 +1281,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   @JsonProperty("elternbeitrag2")
   public void setElternbeitrag2(Integer elternbeitrag2) {
     this.elternbeitrag2 = elternbeitrag2;
-  }
-
-  /**
-   **/
-  public PersoenlichesBudgetresultatDto einnahmenBGSA(Integer einnahmenBGSA) {
-    this.einnahmenBGSA = einnahmenBGSA;
-    return this;
-  }
-
-  
-  @JsonProperty("einnahmenBGSA")
-  public Integer getEinnahmenBGSA() {
-    return einnahmenBGSA;
-  }
-
-  @JsonProperty("einnahmenBGSA")
-  public void setEinnahmenBGSA(Integer einnahmenBGSA) {
-    this.einnahmenBGSA = einnahmenBGSA;
   }
 
   /**
@@ -1271,11 +1478,17 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.alimente, persoenlichesBudgetresultat.alimente) &&
         Objects.equals(this.leistungenEO, persoenlichesBudgetresultat.leistungenEO) &&
         Objects.equals(this.rente, persoenlichesBudgetresultat.rente) &&
+        Objects.equals(this.kinderAusbildungszulagen, persoenlichesBudgetresultat.kinderAusbildungszulagen) &&
+        Objects.equals(this.kinderAusbildungszulagenPartner, persoenlichesBudgetresultat.kinderAusbildungszulagenPartner) &&
+        Objects.equals(this.kinderAusbildungszulagenKinder, persoenlichesBudgetresultat.kinderAusbildungszulagenKinder) &&
+        Objects.equals(this.kinderAusbildungszulagenTotal, persoenlichesBudgetresultat.kinderAusbildungszulagenTotal) &&
+        Objects.equals(this.kinderUnterhaltsbeitraege, persoenlichesBudgetresultat.kinderUnterhaltsbeitraege) &&
         Objects.equals(this.ergaenzungsleistungen, persoenlichesBudgetresultat.ergaenzungsleistungen) &&
         Objects.equals(this.gemeindeInstitutionen, persoenlichesBudgetresultat.gemeindeInstitutionen) &&
         Objects.equals(this.steuerbaresVermoegen, persoenlichesBudgetresultat.steuerbaresVermoegen) &&
         Objects.equals(this.anrechenbaresVermoegen, persoenlichesBudgetresultat.anrechenbaresVermoegen) &&
         Objects.equals(this.einkommenPartner, persoenlichesBudgetresultat.einkommenPartner) &&
+        Objects.equals(this.einkommenTotal, persoenlichesBudgetresultat.einkommenTotal) &&
         Objects.equals(this.einnahmenPersoenlichesBudget, persoenlichesBudgetresultat.einnahmenPersoenlichesBudget) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultat.anteilLebenshaltungskosten) &&
         Objects.equals(this.grundbedarf, persoenlichesBudgetresultat.grundbedarf) &&
@@ -1291,6 +1504,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.ausbildungskosten, persoenlichesBudgetresultat.ausbildungskosten) &&
         Objects.equals(this.ausgabenPersoenlichesBudget, persoenlichesBudgetresultat.ausgabenPersoenlichesBudget) &&
         Objects.equals(this.persoenlichesbudgetBerechnet, persoenlichesBudgetresultat.persoenlichesbudgetBerechnet) &&
+        Objects.equals(this.einnahmenBGSA, persoenlichesBudgetresultat.einnahmenBGSA) &&
         Objects.equals(this.totalVorTeilung, persoenlichesBudgetresultat.totalVorTeilung) &&
         Objects.equals(this.alimentePartner, persoenlichesBudgetresultat.alimentePartner) &&
         Objects.equals(this.alimenteTotal, persoenlichesBudgetresultat.alimenteTotal) &&
@@ -1298,6 +1512,9 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.leistungenEOTotal, persoenlichesBudgetresultat.leistungenEOTotal) &&
         Objects.equals(this.rentePartner, persoenlichesBudgetresultat.rentePartner) &&
         Objects.equals(this.renteTotal, persoenlichesBudgetresultat.renteTotal) &&
+        Objects.equals(this.kinderUnterhaltsbeitraegeTotal, persoenlichesBudgetresultat.kinderUnterhaltsbeitraegeTotal) &&
+        Objects.equals(this.kinderRenten, persoenlichesBudgetresultat.kinderRenten) &&
+        Objects.equals(this.kinderRentenTotal, persoenlichesBudgetresultat.kinderRentenTotal) &&
         Objects.equals(this.ausbildungszulagenKinder, persoenlichesBudgetresultat.ausbildungszulagenKinder) &&
         Objects.equals(this.ausbildungszulagenKinderTotal, persoenlichesBudgetresultat.ausbildungszulagenKinderTotal) &&
         Objects.equals(this.unterhaltsbeitraegeKinder, persoenlichesBudgetresultat.unterhaltsbeitraegeKinder) &&
@@ -1307,13 +1524,11 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.ergaenzungsleistungenPartner, persoenlichesBudgetresultat.ergaenzungsleistungenPartner) &&
         Objects.equals(this.ergaenzungsleistungenKinder, persoenlichesBudgetresultat.ergaenzungsleistungenKinder) &&
         Objects.equals(this.ergaenzungsleistungenTotal, persoenlichesBudgetresultat.ergaenzungsleistungenTotal) &&
-        Objects.equals(this.einkommenTotal, persoenlichesBudgetresultat.einkommenTotal) &&
         Objects.equals(this.steuernTotal, persoenlichesBudgetresultat.steuernTotal) &&
         Objects.equals(this.fahrkostenTotal, persoenlichesBudgetresultat.fahrkostenTotal) &&
         Objects.equals(this.verpflegungTotal, persoenlichesBudgetresultat.verpflegungTotal) &&
         Objects.equals(this.elternbeitrag1, persoenlichesBudgetresultat.elternbeitrag1) &&
         Objects.equals(this.elternbeitrag2, persoenlichesBudgetresultat.elternbeitrag2) &&
-        Objects.equals(this.einnahmenBGSA, persoenlichesBudgetresultat.einnahmenBGSA) &&
         Objects.equals(this.einnahmenBGSAPartner, persoenlichesBudgetresultat.einnahmenBGSAPartner) &&
         Objects.equals(this.einnahmenBGSATotal, persoenlichesBudgetresultat.einnahmenBGSATotal) &&
         Objects.equals(this.andereEinnahmen, persoenlichesBudgetresultat.andereEinnahmen) &&
@@ -1327,7 +1542,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, alimentePartner, alimenteTotal, leistungenEOPartner, leistungenEOTotal, rentePartner, renteTotal, ausbildungszulagenKinder, ausbildungszulagenKinderTotal, unterhaltsbeitraegeKinder, unterhaltsbeitraegeKinderTotal, rentenKinder, rentenKinderTotal, ergaenzungsleistungenPartner, ergaenzungsleistungenKinder, ergaenzungsleistungenTotal, einkommenTotal, steuernTotal, fahrkostenTotal, verpflegungTotal, elternbeitrag1, elternbeitrag2, einnahmenBGSA, einnahmenBGSAPartner, einnahmenBGSATotal, andereEinnahmen, andereEinnahmenPartner, andereEinnahmenKinder, andereEinnahmenTotal, taggelder, taggelderPartner, taggelderTotal);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, kinderAusbildungszulagenPartner, kinderAusbildungszulagenKinder, kinderAusbildungszulagenTotal, kinderUnterhaltsbeitraege, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einkommenTotal, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, einnahmenBGSA, totalVorTeilung, alimentePartner, alimenteTotal, leistungenEOPartner, leistungenEOTotal, rentePartner, renteTotal, kinderUnterhaltsbeitraegeTotal, kinderRenten, kinderRentenTotal, ausbildungszulagenKinder, ausbildungszulagenKinderTotal, unterhaltsbeitraegeKinder, unterhaltsbeitraegeKinderTotal, rentenKinder, rentenKinderTotal, ergaenzungsleistungenPartner, ergaenzungsleistungenKinder, ergaenzungsleistungenTotal, steuernTotal, fahrkostenTotal, verpflegungTotal, elternbeitrag1, elternbeitrag2, einnahmenBGSAPartner, einnahmenBGSATotal, andereEinnahmen, andereEinnahmenPartner, andereEinnahmenKinder, andereEinnahmenTotal, taggelder, taggelderPartner, taggelderTotal);
   }
 
   @Override
@@ -1342,11 +1557,17 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");
     sb.append("    rente: ").append(toIndentedString(rente)).append("\n");
+    sb.append("    kinderAusbildungszulagen: ").append(toIndentedString(kinderAusbildungszulagen)).append("\n");
+    sb.append("    kinderAusbildungszulagenPartner: ").append(toIndentedString(kinderAusbildungszulagenPartner)).append("\n");
+    sb.append("    kinderAusbildungszulagenKinder: ").append(toIndentedString(kinderAusbildungszulagenKinder)).append("\n");
+    sb.append("    kinderAusbildungszulagenTotal: ").append(toIndentedString(kinderAusbildungszulagenTotal)).append("\n");
+    sb.append("    kinderUnterhaltsbeitraege: ").append(toIndentedString(kinderUnterhaltsbeitraege)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    gemeindeInstitutionen: ").append(toIndentedString(gemeindeInstitutionen)).append("\n");
     sb.append("    steuerbaresVermoegen: ").append(toIndentedString(steuerbaresVermoegen)).append("\n");
     sb.append("    anrechenbaresVermoegen: ").append(toIndentedString(anrechenbaresVermoegen)).append("\n");
     sb.append("    einkommenPartner: ").append(toIndentedString(einkommenPartner)).append("\n");
+    sb.append("    einkommenTotal: ").append(toIndentedString(einkommenTotal)).append("\n");
     sb.append("    einnahmenPersoenlichesBudget: ").append(toIndentedString(einnahmenPersoenlichesBudget)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
@@ -1362,6 +1583,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    ausgabenPersoenlichesBudget: ").append(toIndentedString(ausgabenPersoenlichesBudget)).append("\n");
     sb.append("    persoenlichesbudgetBerechnet: ").append(toIndentedString(persoenlichesbudgetBerechnet)).append("\n");
+    sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
     sb.append("    totalVorTeilung: ").append(toIndentedString(totalVorTeilung)).append("\n");
     sb.append("    alimentePartner: ").append(toIndentedString(alimentePartner)).append("\n");
     sb.append("    alimenteTotal: ").append(toIndentedString(alimenteTotal)).append("\n");
@@ -1369,6 +1591,9 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    leistungenEOTotal: ").append(toIndentedString(leistungenEOTotal)).append("\n");
     sb.append("    rentePartner: ").append(toIndentedString(rentePartner)).append("\n");
     sb.append("    renteTotal: ").append(toIndentedString(renteTotal)).append("\n");
+    sb.append("    kinderUnterhaltsbeitraegeTotal: ").append(toIndentedString(kinderUnterhaltsbeitraegeTotal)).append("\n");
+    sb.append("    kinderRenten: ").append(toIndentedString(kinderRenten)).append("\n");
+    sb.append("    kinderRentenTotal: ").append(toIndentedString(kinderRentenTotal)).append("\n");
     sb.append("    ausbildungszulagenKinder: ").append(toIndentedString(ausbildungszulagenKinder)).append("\n");
     sb.append("    ausbildungszulagenKinderTotal: ").append(toIndentedString(ausbildungszulagenKinderTotal)).append("\n");
     sb.append("    unterhaltsbeitraegeKinder: ").append(toIndentedString(unterhaltsbeitraegeKinder)).append("\n");
@@ -1378,13 +1603,11 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    ergaenzungsleistungenPartner: ").append(toIndentedString(ergaenzungsleistungenPartner)).append("\n");
     sb.append("    ergaenzungsleistungenKinder: ").append(toIndentedString(ergaenzungsleistungenKinder)).append("\n");
     sb.append("    ergaenzungsleistungenTotal: ").append(toIndentedString(ergaenzungsleistungenTotal)).append("\n");
-    sb.append("    einkommenTotal: ").append(toIndentedString(einkommenTotal)).append("\n");
     sb.append("    steuernTotal: ").append(toIndentedString(steuernTotal)).append("\n");
     sb.append("    fahrkostenTotal: ").append(toIndentedString(fahrkostenTotal)).append("\n");
     sb.append("    verpflegungTotal: ").append(toIndentedString(verpflegungTotal)).append("\n");
     sb.append("    elternbeitrag1: ").append(toIndentedString(elternbeitrag1)).append("\n");
     sb.append("    elternbeitrag2: ").append(toIndentedString(elternbeitrag2)).append("\n");
-    sb.append("    einnahmenBGSA: ").append(toIndentedString(einnahmenBGSA)).append("\n");
     sb.append("    einnahmenBGSAPartner: ").append(toIndentedString(einnahmenBGSAPartner)).append("\n");
     sb.append("    einnahmenBGSATotal: ").append(toIndentedString(einnahmenBGSATotal)).append("\n");
     sb.append("    andereEinnahmen: ").append(toIndentedString(andereEinnahmen)).append("\n");

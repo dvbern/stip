@@ -36,10 +36,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Resultat der Berechnung (eine Tranche)
  */
 @JsonPropertyOrder({
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NAME_GESUCHSTELLER,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_VORNAME_PIA,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NACHNAME_PIA,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_VORNAME_PARTNER,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NACHNAME_PARTNER,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_AB,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_BIS,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
@@ -49,8 +56,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("TranchenBerechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TranchenBerechnungsresultatDtoSpec {
-  public static final String JSON_PROPERTY_NAME_GESUCHSTELLER = "nameGesuchsteller";
-  private String nameGesuchsteller;
+  public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
+  private String sozialversicherungsnummer;
+
+  public static final String JSON_PROPERTY_VORNAME_PIA = "vornamePia";
+  private String vornamePia;
+
+  public static final String JSON_PROPERTY_NACHNAME_PIA = "nachnamePia";
+  private String nachnamePia;
+
+  public static final String JSON_PROPERTY_VORNAME_PARTNER = "vornamePartner";
+  private String vornamePartner;
+
+  public static final String JSON_PROPERTY_NACHNAME_PARTNER = "nachnamePartner";
+  private String nachnamePartner;
+
+  public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
+  private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
@@ -60,6 +82,12 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
   private LocalDate gueltigBis;
+
+  public static final String JSON_PROPERTY_AUSBILDUNG_AB = "ausbildungAb";
+  private String ausbildungAb;
+
+  public static final String JSON_PROPERTY_AUSBILDUNG_BIS = "ausbildungBis";
+  private String ausbildungBis;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
   private UUID gesuchTrancheId;
@@ -79,29 +107,159 @@ public class TranchenBerechnungsresultatDtoSpec {
   public TranchenBerechnungsresultatDtoSpec() {
   }
 
-  public TranchenBerechnungsresultatDtoSpec nameGesuchsteller(String nameGesuchsteller) {
+  public TranchenBerechnungsresultatDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
     
-    this.nameGesuchsteller = nameGesuchsteller;
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
 
    /**
-   * Get nameGesuchsteller
-   * @return nameGesuchsteller
+   * Get sozialversicherungsnummer
+   * @return sozialversicherungsnummer
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_GESUCHSTELLER)
+  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getNameGesuchsteller() {
-    return nameGesuchsteller;
+  public String getSozialversicherungsnummer() {
+    return sozialversicherungsnummer;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NAME_GESUCHSTELLER)
+  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameGesuchsteller(String nameGesuchsteller) {
-    this.nameGesuchsteller = nameGesuchsteller;
+  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec vornamePia(String vornamePia) {
+    
+    this.vornamePia = vornamePia;
+    return this;
+  }
+
+   /**
+   * Get vornamePia
+   * @return vornamePia
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VORNAME_PIA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getVornamePia() {
+    return vornamePia;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VORNAME_PIA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVornamePia(String vornamePia) {
+    this.vornamePia = vornamePia;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec nachnamePia(String nachnamePia) {
+    
+    this.nachnamePia = nachnamePia;
+    return this;
+  }
+
+   /**
+   * Get nachnamePia
+   * @return nachnamePia
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NACHNAME_PIA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getNachnamePia() {
+    return nachnamePia;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NACHNAME_PIA)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNachnamePia(String nachnamePia) {
+    this.nachnamePia = nachnamePia;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec vornamePartner(String vornamePartner) {
+    
+    this.vornamePartner = vornamePartner;
+    return this;
+  }
+
+   /**
+   * Get vornamePartner
+   * @return vornamePartner
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VORNAME_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getVornamePartner() {
+    return vornamePartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VORNAME_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setVornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec nachnamePartner(String nachnamePartner) {
+    
+    this.nachnamePartner = nachnamePartner;
+    return this;
+  }
+
+   /**
+   * Get nachnamePartner
+   * @return nachnamePartner
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NACHNAME_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getNachnamePartner() {
+    return nachnamePartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NACHNAME_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+    
+    this.geburtsdatum = geburtsdatum;
+    return this;
+  }
+
+   /**
+   * dd.MM.yyyy
+   * @return geburtsdatum
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGeburtsdatum() {
+    return geburtsdatum;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
   }
 
 
@@ -180,6 +338,58 @@ public class TranchenBerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec ausbildungAb(String ausbildungAb) {
+    
+    this.ausbildungAb = ausbildungAb;
+    return this;
+  }
+
+   /**
+   * Get ausbildungAb
+   * @return ausbildungAb
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungAb() {
+    return ausbildungAb;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungAb(String ausbildungAb) {
+    this.ausbildungAb = ausbildungAb;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec ausbildungBis(String ausbildungBis) {
+    
+    this.ausbildungBis = ausbildungBis;
+    return this;
+  }
+
+   /**
+   * Get ausbildungBis
+   * @return ausbildungBis
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungBis() {
+    return ausbildungBis;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungBis(String ausbildungBis) {
+    this.ausbildungBis = ausbildungBis;
   }
 
 
@@ -329,10 +539,17 @@ public class TranchenBerechnungsresultatDtoSpec {
       return false;
     }
     TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultat = (TranchenBerechnungsresultatDtoSpec) o;
-    return Objects.equals(this.nameGesuchsteller, tranchenBerechnungsresultat.nameGesuchsteller) &&
+    return Objects.equals(this.sozialversicherungsnummer, tranchenBerechnungsresultat.sozialversicherungsnummer) &&
+        Objects.equals(this.vornamePia, tranchenBerechnungsresultat.vornamePia) &&
+        Objects.equals(this.nachnamePia, tranchenBerechnungsresultat.nachnamePia) &&
+        Objects.equals(this.vornamePartner, tranchenBerechnungsresultat.vornamePartner) &&
+        Objects.equals(this.nachnamePartner, tranchenBerechnungsresultat.nachnamePartner) &&
+        Objects.equals(this.geburtsdatum, tranchenBerechnungsresultat.geburtsdatum) &&
         Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
+        Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
+        Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
         Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
@@ -342,17 +559,24 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameGesuchsteller, berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(sozialversicherungsnummer, vornamePia, nachnamePia, vornamePartner, nachnamePartner, geburtsdatum, berechnung, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDtoSpec {\n");
-    sb.append("    nameGesuchsteller: ").append(toIndentedString(nameGesuchsteller)).append("\n");
+    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
+    sb.append("    vornamePia: ").append(toIndentedString(vornamePia)).append("\n");
+    sb.append("    nachnamePia: ").append(toIndentedString(nachnamePia)).append("\n");
+    sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
+    sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
+    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
+    sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");

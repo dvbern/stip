@@ -30,10 +30,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class TranchenBerechnungsresultatDto  implements Serializable {
-  private @Valid String nameGesuchsteller;
+  private @Valid String sozialversicherungsnummer;
+  private @Valid String vornamePia;
+  private @Valid String nachnamePia;
+  private @Valid String vornamePartner;
+  private @Valid String nachnamePartner;
+  private @Valid LocalDate geburtsdatum;
   private @Valid Integer berechnung;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
+  private @Valid String ausbildungAb;
+  private @Valid String ausbildungBis;
   private @Valid UUID gesuchTrancheId;
   private @Valid BigDecimal berechnungsanteilKinder;
   private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
@@ -42,21 +49,117 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   /**
    **/
-  public TranchenBerechnungsresultatDto nameGesuchsteller(String nameGesuchsteller) {
-    this.nameGesuchsteller = nameGesuchsteller;
+  public TranchenBerechnungsresultatDto sozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
 
   
-  @JsonProperty("nameGesuchsteller")
+  @JsonProperty("sozialversicherungsnummer")
   @NotNull
-  public String getNameGesuchsteller() {
-    return nameGesuchsteller;
+  public String getSozialversicherungsnummer() {
+    return sozialversicherungsnummer;
   }
 
-  @JsonProperty("nameGesuchsteller")
-  public void setNameGesuchsteller(String nameGesuchsteller) {
-    this.nameGesuchsteller = nameGesuchsteller;
+  @JsonProperty("sozialversicherungsnummer")
+  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+  }
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto vornamePia(String vornamePia) {
+    this.vornamePia = vornamePia;
+    return this;
+  }
+
+  
+  @JsonProperty("vornamePia")
+  @NotNull
+  public String getVornamePia() {
+    return vornamePia;
+  }
+
+  @JsonProperty("vornamePia")
+  public void setVornamePia(String vornamePia) {
+    this.vornamePia = vornamePia;
+  }
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto nachnamePia(String nachnamePia) {
+    this.nachnamePia = nachnamePia;
+    return this;
+  }
+
+  
+  @JsonProperty("nachnamePia")
+  @NotNull
+  public String getNachnamePia() {
+    return nachnamePia;
+  }
+
+  @JsonProperty("nachnamePia")
+  public void setNachnamePia(String nachnamePia) {
+    this.nachnamePia = nachnamePia;
+  }
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto vornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
+    return this;
+  }
+
+  
+  @JsonProperty("vornamePartner")
+  @NotNull
+  public String getVornamePartner() {
+    return vornamePartner;
+  }
+
+  @JsonProperty("vornamePartner")
+  public void setVornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
+  }
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto nachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
+    return this;
+  }
+
+  
+  @JsonProperty("nachnamePartner")
+  @NotNull
+  public String getNachnamePartner() {
+    return nachnamePartner;
+  }
+
+  @JsonProperty("nachnamePartner")
+  public void setNachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
+  }
+
+  /**
+   * dd.MM.yyyy
+   **/
+  public TranchenBerechnungsresultatDto geburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+    return this;
+  }
+
+  
+  @JsonProperty("geburtsdatum")
+  @NotNull
+  public LocalDate getGeburtsdatum() {
+    return geburtsdatum;
+  }
+
+  @JsonProperty("geburtsdatum")
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
   }
 
   /**
@@ -115,6 +218,44 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   @JsonProperty("gueltigBis")
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
+  }
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto ausbildungAb(String ausbildungAb) {
+    this.ausbildungAb = ausbildungAb;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungAb")
+  @NotNull
+  public String getAusbildungAb() {
+    return ausbildungAb;
+  }
+
+  @JsonProperty("ausbildungAb")
+  public void setAusbildungAb(String ausbildungAb) {
+    this.ausbildungAb = ausbildungAb;
+  }
+
+  /**
+   **/
+  public TranchenBerechnungsresultatDto ausbildungBis(String ausbildungBis) {
+    this.ausbildungBis = ausbildungBis;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungBis")
+  @NotNull
+  public String getAusbildungBis() {
+    return ausbildungBis;
+  }
+
+  @JsonProperty("ausbildungBis")
+  public void setAusbildungBis(String ausbildungBis) {
+    this.ausbildungBis = ausbildungBis;
   }
 
   /**
@@ -240,10 +381,17 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
       return false;
     }
     TranchenBerechnungsresultatDto tranchenBerechnungsresultat = (TranchenBerechnungsresultatDto) o;
-    return Objects.equals(this.nameGesuchsteller, tranchenBerechnungsresultat.nameGesuchsteller) &&
+    return Objects.equals(this.sozialversicherungsnummer, tranchenBerechnungsresultat.sozialversicherungsnummer) &&
+        Objects.equals(this.vornamePia, tranchenBerechnungsresultat.vornamePia) &&
+        Objects.equals(this.nachnamePia, tranchenBerechnungsresultat.nachnamePia) &&
+        Objects.equals(this.vornamePartner, tranchenBerechnungsresultat.vornamePartner) &&
+        Objects.equals(this.nachnamePartner, tranchenBerechnungsresultat.nachnamePartner) &&
+        Objects.equals(this.geburtsdatum, tranchenBerechnungsresultat.geburtsdatum) &&
         Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
+        Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
+        Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
         Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
@@ -253,7 +401,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameGesuchsteller, berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(sozialversicherungsnummer, vornamePia, nachnamePia, vornamePartner, nachnamePartner, geburtsdatum, berechnung, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -261,10 +409,17 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDto {\n");
     
-    sb.append("    nameGesuchsteller: ").append(toIndentedString(nameGesuchsteller)).append("\n");
+    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
+    sb.append("    vornamePia: ").append(toIndentedString(vornamePia)).append("\n");
+    sb.append("    nachnamePia: ").append(toIndentedString(nachnamePia)).append("\n");
+    sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
+    sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
+    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
+    sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");

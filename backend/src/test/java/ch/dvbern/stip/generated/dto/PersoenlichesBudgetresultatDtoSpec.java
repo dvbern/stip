@@ -45,6 +45,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_RENTE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_RENTE_PARTNER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_RENTE_TOTAL,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_PARTNER,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_KINDER,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_TOTAL,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE_TOTAL,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_RENTEN,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KINDER_RENTEN_TOTAL,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_AUSBILDUNGSZULAGEN_KINDER,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_AUSBILDUNGSZULAGEN_KINDER_TOTAL,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE_KINDER,
@@ -135,6 +143,30 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_RENTE_TOTAL = "renteTotal";
   private Integer renteTotal;
+
+  public static final String JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN = "kinderAusbildungszulagen";
+  private Integer kinderAusbildungszulagen;
+
+  public static final String JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_PARTNER = "kinderAusbildungszulagenPartner";
+  private Integer kinderAusbildungszulagenPartner;
+
+  public static final String JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_KINDER = "kinderAusbildungszulagenKinder";
+  private List<Integer> kinderAusbildungszulagenKinder;
+
+  public static final String JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_TOTAL = "kinderAusbildungszulagenTotal";
+  private Integer kinderAusbildungszulagenTotal;
+
+  public static final String JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE = "kinderUnterhaltsbeitraege";
+  private List<Integer> kinderUnterhaltsbeitraege;
+
+  public static final String JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE_TOTAL = "kinderUnterhaltsbeitraegeTotal";
+  private Integer kinderUnterhaltsbeitraegeTotal;
+
+  public static final String JSON_PROPERTY_KINDER_RENTEN = "kinderRenten";
+  private List<Integer> kinderRenten;
+
+  public static final String JSON_PROPERTY_KINDER_RENTEN_TOTAL = "kinderRentenTotal";
+  private Integer kinderRentenTotal;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSZULAGEN_KINDER = "ausbildungszulagenKinder";
   private List<KindIntegerValueItemDtoSpec> ausbildungszulagenKinder;
@@ -638,6 +670,238 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
+  public PersoenlichesBudgetresultatDtoSpec kinderAusbildungszulagen(Integer kinderAusbildungszulagen) {
+    
+    this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+    return this;
+  }
+
+   /**
+   * Get kinderAusbildungszulagen
+   * @return kinderAusbildungszulagen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getKinderAusbildungszulagen() {
+    return kinderAusbildungszulagen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinderAusbildungszulagen(Integer kinderAusbildungszulagen) {
+    this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderAusbildungszulagenPartner(Integer kinderAusbildungszulagenPartner) {
+    
+    this.kinderAusbildungszulagenPartner = kinderAusbildungszulagenPartner;
+    return this;
+  }
+
+   /**
+   * Get kinderAusbildungszulagenPartner
+   * @return kinderAusbildungszulagenPartner
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getKinderAusbildungszulagenPartner() {
+    return kinderAusbildungszulagenPartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinderAusbildungszulagenPartner(Integer kinderAusbildungszulagenPartner) {
+    this.kinderAusbildungszulagenPartner = kinderAusbildungszulagenPartner;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderAusbildungszulagenKinder(List<Integer> kinderAusbildungszulagenKinder) {
+    
+    this.kinderAusbildungszulagenKinder = kinderAusbildungszulagenKinder;
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDtoSpec addKinderAusbildungszulagenKinderItem(Integer kinderAusbildungszulagenKinderItem) {
+    if (this.kinderAusbildungszulagenKinder == null) {
+      this.kinderAusbildungszulagenKinder = new ArrayList<>();
+    }
+    this.kinderAusbildungszulagenKinder.add(kinderAusbildungszulagenKinderItem);
+    return this;
+  }
+
+   /**
+   * Get kinderAusbildungszulagenKinder
+   * @return kinderAusbildungszulagenKinder
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_KINDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<Integer> getKinderAusbildungszulagenKinder() {
+    return kinderAusbildungszulagenKinder;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_KINDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinderAusbildungszulagenKinder(List<Integer> kinderAusbildungszulagenKinder) {
+    this.kinderAusbildungszulagenKinder = kinderAusbildungszulagenKinder;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderAusbildungszulagenTotal(Integer kinderAusbildungszulagenTotal) {
+    
+    this.kinderAusbildungszulagenTotal = kinderAusbildungszulagenTotal;
+    return this;
+  }
+
+   /**
+   * Get kinderAusbildungszulagenTotal
+   * @return kinderAusbildungszulagenTotal
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getKinderAusbildungszulagenTotal() {
+    return kinderAusbildungszulagenTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_AUSBILDUNGSZULAGEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinderAusbildungszulagenTotal(Integer kinderAusbildungszulagenTotal) {
+    this.kinderAusbildungszulagenTotal = kinderAusbildungszulagenTotal;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderUnterhaltsbeitraege(List<Integer> kinderUnterhaltsbeitraege) {
+    
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDtoSpec addKinderUnterhaltsbeitraegeItem(Integer kinderUnterhaltsbeitraegeItem) {
+    if (this.kinderUnterhaltsbeitraege == null) {
+      this.kinderUnterhaltsbeitraege = new ArrayList<>();
+    }
+    this.kinderUnterhaltsbeitraege.add(kinderUnterhaltsbeitraegeItem);
+    return this;
+  }
+
+   /**
+   * Get kinderUnterhaltsbeitraege
+   * @return kinderUnterhaltsbeitraege
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<Integer> getKinderUnterhaltsbeitraege() {
+    return kinderUnterhaltsbeitraege;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setKinderUnterhaltsbeitraege(List<Integer> kinderUnterhaltsbeitraege) {
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderUnterhaltsbeitraegeTotal(Integer kinderUnterhaltsbeitraegeTotal) {
+    
+    this.kinderUnterhaltsbeitraegeTotal = kinderUnterhaltsbeitraegeTotal;
+    return this;
+  }
+
+   /**
+   * Get kinderUnterhaltsbeitraegeTotal
+   * @return kinderUnterhaltsbeitraegeTotal
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getKinderUnterhaltsbeitraegeTotal() {
+    return kinderUnterhaltsbeitraegeTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_UNTERHALTSBEITRAEGE_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKinderUnterhaltsbeitraegeTotal(Integer kinderUnterhaltsbeitraegeTotal) {
+    this.kinderUnterhaltsbeitraegeTotal = kinderUnterhaltsbeitraegeTotal;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderRenten(List<Integer> kinderRenten) {
+    
+    this.kinderRenten = kinderRenten;
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDtoSpec addKinderRentenItem(Integer kinderRentenItem) {
+    if (this.kinderRenten == null) {
+      this.kinderRenten = new ArrayList<>();
+    }
+    this.kinderRenten.add(kinderRentenItem);
+    return this;
+  }
+
+   /**
+   * Get kinderRenten
+   * @return kinderRenten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KINDER_RENTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<Integer> getKinderRenten() {
+    return kinderRenten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_RENTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKinderRenten(List<Integer> kinderRenten) {
+    this.kinderRenten = kinderRenten;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec kinderRentenTotal(Integer kinderRentenTotal) {
+    
+    this.kinderRentenTotal = kinderRentenTotal;
+    return this;
+  }
+
+   /**
+   * Get kinderRentenTotal
+   * @return kinderRentenTotal
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_KINDER_RENTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getKinderRentenTotal() {
+    return kinderRentenTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_KINDER_RENTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setKinderRentenTotal(Integer kinderRentenTotal) {
+    this.kinderRentenTotal = kinderRentenTotal;
+  }
+
+
   public PersoenlichesBudgetresultatDtoSpec ausbildungszulagenKinder(List<KindIntegerValueItemDtoSpec> ausbildungszulagenKinder) {
     
     this.ausbildungszulagenKinder = ausbildungszulagenKinder;
@@ -1044,9 +1308,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
    * Get einkommenTotal
    * @return einkommenTotal
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINKOMMEN_TOTAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinkommenTotal() {
     return einkommenTotal;
@@ -1054,7 +1318,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINKOMMEN_TOTAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinkommenTotal(Integer einkommenTotal) {
     this.einkommenTotal = einkommenTotal;
   }
@@ -1590,9 +1854,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
    * Get einnahmenBGSA
    * @return einnahmenBGSA
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getEinnahmenBGSA() {
     return einnahmenBGSA;
@@ -1600,7 +1864,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_EINNAHMEN_B_G_S_A)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEinnahmenBGSA(Integer einnahmenBGSA) {
     this.einnahmenBGSA = einnahmenBGSA;
   }
@@ -1870,6 +2134,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.rente, persoenlichesBudgetresultat.rente) &&
         Objects.equals(this.rentePartner, persoenlichesBudgetresultat.rentePartner) &&
         Objects.equals(this.renteTotal, persoenlichesBudgetresultat.renteTotal) &&
+        Objects.equals(this.kinderAusbildungszulagen, persoenlichesBudgetresultat.kinderAusbildungszulagen) &&
+        Objects.equals(this.kinderAusbildungszulagenPartner, persoenlichesBudgetresultat.kinderAusbildungszulagenPartner) &&
+        Objects.equals(this.kinderAusbildungszulagenKinder, persoenlichesBudgetresultat.kinderAusbildungszulagenKinder) &&
+        Objects.equals(this.kinderAusbildungszulagenTotal, persoenlichesBudgetresultat.kinderAusbildungszulagenTotal) &&
+        Objects.equals(this.kinderUnterhaltsbeitraege, persoenlichesBudgetresultat.kinderUnterhaltsbeitraege) &&
+        Objects.equals(this.kinderUnterhaltsbeitraegeTotal, persoenlichesBudgetresultat.kinderUnterhaltsbeitraegeTotal) &&
+        Objects.equals(this.kinderRenten, persoenlichesBudgetresultat.kinderRenten) &&
+        Objects.equals(this.kinderRentenTotal, persoenlichesBudgetresultat.kinderRentenTotal) &&
         Objects.equals(this.ausbildungszulagenKinder, persoenlichesBudgetresultat.ausbildungszulagenKinder) &&
         Objects.equals(this.ausbildungszulagenKinderTotal, persoenlichesBudgetresultat.ausbildungszulagenKinderTotal) &&
         Objects.equals(this.unterhaltsbeitraegeKinder, persoenlichesBudgetresultat.unterhaltsbeitraegeKinder) &&
@@ -1919,7 +2191,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, alimentePartner, alimenteTotal, leistungenEO, leistungenEOPartner, leistungenEOTotal, rente, rentePartner, renteTotal, ausbildungszulagenKinder, ausbildungszulagenKinderTotal, unterhaltsbeitraegeKinder, unterhaltsbeitraegeKinderTotal, rentenKinder, rentenKinderTotal, ergaenzungsleistungen, ergaenzungsleistungenPartner, ergaenzungsleistungenKinder, ergaenzungsleistungenTotal, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einkommenTotal, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, steuernTotal, fahrkosten, fahrkostenPartner, fahrkostenTotal, verpflegung, verpflegungPartner, verpflegungTotal, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2, einnahmenBGSA, einnahmenBGSAPartner, einnahmenBGSATotal, andereEinnahmen, andereEinnahmenPartner, andereEinnahmenKinder, andereEinnahmenTotal, taggelder, taggelderPartner, taggelderTotal);
+    return Objects.hash(anzahlPersonenImHaushalt, totalVorTeilung, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, alimentePartner, alimenteTotal, leistungenEO, leistungenEOPartner, leistungenEOTotal, rente, rentePartner, renteTotal, kinderAusbildungszulagen, kinderAusbildungszulagenPartner, kinderAusbildungszulagenKinder, kinderAusbildungszulagenTotal, kinderUnterhaltsbeitraege, kinderUnterhaltsbeitraegeTotal, kinderRenten, kinderRentenTotal, ausbildungszulagenKinder, ausbildungszulagenKinderTotal, unterhaltsbeitraegeKinder, unterhaltsbeitraegeKinderTotal, rentenKinder, rentenKinderTotal, ergaenzungsleistungen, ergaenzungsleistungenPartner, ergaenzungsleistungenKinder, ergaenzungsleistungenTotal, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einkommenTotal, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, steuernTotal, fahrkosten, fahrkostenPartner, fahrkostenTotal, verpflegung, verpflegungPartner, verpflegungTotal, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, elternbeitrag1, elternbeitrag2, einnahmenBGSA, einnahmenBGSAPartner, einnahmenBGSATotal, andereEinnahmen, andereEinnahmenPartner, andereEinnahmenKinder, andereEinnahmenTotal, taggelder, taggelderPartner, taggelderTotal);
   }
 
   @Override
@@ -1940,6 +2212,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    rente: ").append(toIndentedString(rente)).append("\n");
     sb.append("    rentePartner: ").append(toIndentedString(rentePartner)).append("\n");
     sb.append("    renteTotal: ").append(toIndentedString(renteTotal)).append("\n");
+    sb.append("    kinderAusbildungszulagen: ").append(toIndentedString(kinderAusbildungszulagen)).append("\n");
+    sb.append("    kinderAusbildungszulagenPartner: ").append(toIndentedString(kinderAusbildungszulagenPartner)).append("\n");
+    sb.append("    kinderAusbildungszulagenKinder: ").append(toIndentedString(kinderAusbildungszulagenKinder)).append("\n");
+    sb.append("    kinderAusbildungszulagenTotal: ").append(toIndentedString(kinderAusbildungszulagenTotal)).append("\n");
+    sb.append("    kinderUnterhaltsbeitraege: ").append(toIndentedString(kinderUnterhaltsbeitraege)).append("\n");
+    sb.append("    kinderUnterhaltsbeitraegeTotal: ").append(toIndentedString(kinderUnterhaltsbeitraegeTotal)).append("\n");
+    sb.append("    kinderRenten: ").append(toIndentedString(kinderRenten)).append("\n");
+    sb.append("    kinderRentenTotal: ").append(toIndentedString(kinderRentenTotal)).append("\n");
     sb.append("    ausbildungszulagenKinder: ").append(toIndentedString(ausbildungszulagenKinder)).append("\n");
     sb.append("    ausbildungszulagenKinderTotal: ").append(toIndentedString(ausbildungszulagenKinderTotal)).append("\n");
     sb.append("    unterhaltsbeitraegeKinder: ").append(toIndentedString(unterhaltsbeitraegeKinder)).append("\n");
