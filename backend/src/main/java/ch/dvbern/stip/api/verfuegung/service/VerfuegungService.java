@@ -24,7 +24,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -43,15 +42,11 @@ import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.InternalServerErrorException;
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
-import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -136,28 +131,6 @@ public class VerfuegungService {
     }
 
     @Transactional
-    public void createPdfForVerfuegungMitAnspruch(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = verfuegungPdfService.createVerfuegungMitAnspruchPdf(verfuegung);
-
-        createAndStoreVerfuegungDokument(
-            verfuegung,
-            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
-            out
-        );
-    }
-
-    @Transactional
-    public void createPdfForVerfuegungOhneAnspruch(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = verfuegungPdfService.createVerfuegungOhneAnspruchPdf(verfuegung);
-
-        createAndStoreVerfuegungDokument(
-            verfuegung,
-            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
-            out
-        );
-    }
-
-    @Transactional
     public void createNegativeVerfuegungWithDecision(
         final UUID gesuchId,
         final UUID stipDecisionId,
@@ -221,17 +194,6 @@ public class VerfuegungService {
         verfuegungDokumentRepository.persistAndFlush(dokument);
     }
 
-    public VerfuegungDokument getBerechnungsblattByType(
-        final Verfuegung verfuegung,
-        final VerfuegungDokumentTyp typ
-    ) {
-        return verfuegung.getDokumente()
-            .stream()
-            .filter(d -> d.getTyp() == typ)
-            .findFirst()
-            .orElseThrow(() -> new NotFoundException("Berechnungsblatt not found: " + typ));
-    }
-
     private String generateFilename(VerfuegungDokumentTyp typ, String fallNr) {
         final String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         // todo KSTIP-2845: also use correct format for darlehensverfuegung
@@ -249,20 +211,5 @@ public class VerfuegungService {
             case VERFUEGUNGSBRIEF -> String
                 .format(FILENAME_PREFIX_VERFUEGUNGSBRIEF, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
         };
-    }
-
-    public byte[] getVerfuegungDokumentFromS3(final VerfuegungDokument dokument) {
-        try {
-            final var bytes = s3.getObject(
-                GetObjectRequest.builder()
-                    .bucket(configService.getBucketName())
-                    .key(dokument.getFilepath() + dokument.getObjectId())
-                    .build(),
-                AsyncResponseTransformer.toBytes()
-            );
-            return bytes.get().asByteArray();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new InternalServerErrorException("Failed to download VerfuegungDokument", e);
-        }
     }
 }

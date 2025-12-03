@@ -865,20 +865,6 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
-    public String getBerechnungsblattFileName(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        GesuchFormular gesuchFormularToUse = gesuch
-            .getNewestGesuchTranche()
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular();
-        return String.format(
-            "%s_%s_%s.pdf",
-            gesuchFormularToUse.getPersonInAusbildung().getVorname(),
-            gesuchFormularToUse.getPersonInAusbildung().getNachname(),
-            gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
-        );
-    }
-
     public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
         return verfuegungService.getLatestVerfuegung(gesuchId);
     }

@@ -19,17 +19,29 @@ package ch.dvbern.stip.api;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 @Mock
 @RequestScoped
 public class VerfuegungDruckbereitHandlerMock extends VerfuegungDruckbereitHandler {
+    @Inject
+    VerfuegungService verfuegungService;
+
+    @Inject
+    BerechnungService berechnungService;
+
+    @Inject
+    BuchhaltungService buchhaltungService;
 
     public VerfuegungDruckbereitHandlerMock() {
         super(null, null, null, null, null, null);
@@ -40,6 +52,23 @@ public class VerfuegungDruckbereitHandlerMock extends VerfuegungDruckbereitHandl
     public void handle(Gesuch gesuch) {
         // KSTIP-2845: due to a requirement in NotificationService,
         // a dokument of type VERSENDETE_VERFUEGUNG must be created in order to execute the tests
+        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            1,
+            0
+        );
+
+        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
+            ? stipendien.getBerechnungReduziert()
+            : stipendien.getBerechnung();
+
+        if (berechnungsresultat > 0) {
+            buchhaltungService.createStipendiumBuchhaltungEntry(
+                gesuch,
+                berechnungsresultat
+            );
+        }
+
         var versendeteVerfuegung = new VerfuegungDokument();
         versendeteVerfuegung.setTyp(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG);
         versendeteVerfuegung.setObjectId(UUID.randomUUID().toString());

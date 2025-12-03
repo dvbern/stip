@@ -1156,7 +1156,6 @@ class GesuchServiceTest {
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
             .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
-        Mockito.doNothing().when(verfuegungService).createPdfForVerfuegungOhneAnspruch(any());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
