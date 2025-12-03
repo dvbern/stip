@@ -41,6 +41,8 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
+
 @Data
 @Builder
 @Jacksonized
@@ -53,8 +55,10 @@ public class AntragsstellerV1 {
     int einkommenPartner;
     int vermoegen;
     int alimente;
+    int alimentePartner;
     int rente;
     int kinderAusbildungszulagen;
+    int kinderErhalteneUnterhaltsbeitraege;
     int ergaenzungsleistungen;
     int leistungenEO;
     int gemeindeInstitutionen;
@@ -95,9 +99,8 @@ public class AntragsstellerV1 {
             )
             .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
             .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
-            .alimente(Objects.requireNonNullElse(einnahmenKosten.getUnterhaltsbeitraege(), 0))
+            .alimente(toJahresWert(Objects.requireNonNullElse(einnahmenKosten.getUnterhaltsbeitraege(), 0)))
             .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
-            .kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0))
             .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
             .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
             .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
@@ -124,6 +127,8 @@ public class AntragsstellerV1 {
                     gesuchsperiode
                 );
             }
+            int totalKinderAusbildungsZulagen = 0;
+            int totalKinderUnterhaltsbeitraege = 0;
             for (final var kind : gesuchFormular.getKinds()) {
                 // if child does still live with the parents/ a parent
                 if (kind.getWohnsitzAnteilPia() > 0) {
@@ -134,7 +139,16 @@ public class AntragsstellerV1 {
                         gesuchsperiode
                     );
                 }
+
+                totalKinderAusbildungsZulagen += Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0);
+                totalKinderUnterhaltsbeitraege += Objects.requireNonNullElse(kind.getUnterhaltsbeitraege(), 0);
             }
+
+            builder
+                .kinderAusbildungszulagen(toJahresWert(Objects.requireNonNullElse(totalKinderAusbildungsZulagen, 0)));
+            builder.kinderErhalteneUnterhaltsbeitraege(
+                toJahresWert(Objects.requireNonNullElse(totalKinderUnterhaltsbeitraege, 0))
+            );
 
             final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
             final var isAlternativeWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getAlternativeWohnformWohnend());
@@ -155,7 +169,7 @@ public class AntragsstellerV1 {
         if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
             builder.wohnkosten(
                 getEffektiveWohnkosten(
-                    einnahmenKosten.getWohnkosten(),
+                    toJahresWert(einnahmenKosten.getWohnkosten()),
                     gesuchsperiode,
                     anzahlPersonenImHaushalt
                 )
@@ -201,6 +215,7 @@ public class AntragsstellerV1 {
         if (partner != null) {
             final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
             builder.einkommenPartner(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0));
+            builder.alimentePartner(toJahresWert(Objects.requireNonNullElse(ekPartner.getUnterhaltsbeitraege(), 0)));
             builder.steuernPartner(
                 EinnahmenKostenMappingUtil.calculateSteuern(
                     ekPartner
@@ -318,4 +333,5 @@ public class AntragsstellerV1 {
         };
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
+
 }

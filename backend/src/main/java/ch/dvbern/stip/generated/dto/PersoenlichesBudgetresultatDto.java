@@ -29,6 +29,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer leistungenEO;
   private @Valid Integer rente;
   private @Valid Integer kinderAusbildungszulagen;
+  private @Valid Integer kinderUnterhaltsbeitraege;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer gemeindeInstitutionen;
   private @Valid Integer steuerbaresVermoegen;
@@ -203,6 +204,25 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   @JsonProperty("kinderAusbildungszulagen")
   public void setKinderAusbildungszulagen(Integer kinderAusbildungszulagen) {
     this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto kinderUnterhaltsbeitraege(Integer kinderUnterhaltsbeitraege) {
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
+    return this;
+  }
+
+  
+  @JsonProperty("kinderUnterhaltsbeitraege")
+  @NotNull
+  public Integer getKinderUnterhaltsbeitraege() {
+    return kinderUnterhaltsbeitraege;
+  }
+
+  @JsonProperty("kinderUnterhaltsbeitraege")
+  public void setKinderUnterhaltsbeitraege(Integer kinderUnterhaltsbeitraege) {
+    this.kinderUnterhaltsbeitraege = kinderUnterhaltsbeitraege;
   }
 
   /**
@@ -657,6 +677,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.leistungenEO, persoenlichesBudgetresultat.leistungenEO) &&
         Objects.equals(this.rente, persoenlichesBudgetresultat.rente) &&
         Objects.equals(this.kinderAusbildungszulagen, persoenlichesBudgetresultat.kinderAusbildungszulagen) &&
+        Objects.equals(this.kinderUnterhaltsbeitraege, persoenlichesBudgetresultat.kinderUnterhaltsbeitraege) &&
         Objects.equals(this.ergaenzungsleistungen, persoenlichesBudgetresultat.ergaenzungsleistungen) &&
         Objects.equals(this.gemeindeInstitutionen, persoenlichesBudgetresultat.gemeindeInstitutionen) &&
         Objects.equals(this.steuerbaresVermoegen, persoenlichesBudgetresultat.steuerbaresVermoegen) &&
@@ -684,7 +705,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
+    return Objects.hash(anzahlPersonenImHaushalt, eigenerHaushalt, anteilFamilienbudget, einkommen, alimente, leistungenEO, rente, kinderAusbildungszulagen, kinderUnterhaltsbeitraege, ergaenzungsleistungen, gemeindeInstitutionen, steuerbaresVermoegen, anrechenbaresVermoegen, einkommenPartner, einnahmenPersoenlichesBudget, anteilLebenshaltungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, steuern, steuernPartner, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, fremdbetreuung, ausbildungskosten, ausgabenPersoenlichesBudget, persoenlichesbudgetBerechnet, totalVorTeilung, elternbeitrag1, elternbeitrag2);
   }
 
   @Override
@@ -700,6 +721,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    leistungenEO: ").append(toIndentedString(leistungenEO)).append("\n");
     sb.append("    rente: ").append(toIndentedString(rente)).append("\n");
     sb.append("    kinderAusbildungszulagen: ").append(toIndentedString(kinderAusbildungszulagen)).append("\n");
+    sb.append("    kinderUnterhaltsbeitraege: ").append(toIndentedString(kinderUnterhaltsbeitraege)).append("\n");
     sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
     sb.append("    gemeindeInstitutionen: ").append(toIndentedString(gemeindeInstitutionen)).append("\n");
     sb.append("    steuerbaresVermoegen: ").append(toIndentedString(steuerbaresVermoegen)).append("\n");

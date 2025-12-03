@@ -85,6 +85,7 @@ public class PersoenlichesBudgetResultatV1Mapper implements PersoenlichesBudgetR
             .leistungenEO(antragssteller.getLeistungenEO())
             .rente(antragssteller.getRente())
             .kinderAusbildungszulagen(antragssteller.getKinderAusbildungszulagen())
+            .kinderUnterhaltsbeitraege(antragssteller.getKinderErhalteneUnterhaltsbeitraege())
             .ergaenzungsleistungen(antragssteller.getErgaenzungsleistungen())
             .gemeindeInstitutionen(antragssteller.getGemeindeInstitutionen())
             .steuerbaresVermoegen(antragssteller.getVermoegen())

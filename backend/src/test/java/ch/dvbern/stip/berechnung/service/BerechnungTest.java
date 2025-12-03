@@ -358,7 +358,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(7044)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(10775)));
     }
 
     @Test
@@ -464,7 +464,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(6669)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(10432)));
 
         // Arrange
         gesuch.getGesuchsperiode()
@@ -478,7 +478,7 @@ class BerechnungTest {
         final var berechnungsresultatDtoWG2Pers = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(berechnungsresultatDtoWG2Pers.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDtoWG2Pers.getBerechnung(), is(equalTo(3915)));
+        assertThat(berechnungsresultatDtoWG2Pers.getBerechnung(), is(equalTo(7678)));
 
         // Arrange
         gesuchFormular.getEinnahmenKosten().setWgWohnend(false);
@@ -490,7 +490,7 @@ class BerechnungTest {
             berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(berechnungsresultatDtoAlternativeWohnform.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDtoAlternativeWohnform.getBerechnung(), is(equalTo(3915)));
+        assertThat(berechnungsresultatDtoAlternativeWohnform.getBerechnung(), is(equalTo(7678)));
 
         // Arrange
         gesuchFormular.getEinnahmenKosten().setWgWohnend(true);
@@ -774,7 +774,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(2126)));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(2367)));
     }
 
     @Test
