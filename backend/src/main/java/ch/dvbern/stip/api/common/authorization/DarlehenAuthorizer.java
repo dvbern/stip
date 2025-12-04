@@ -50,6 +50,11 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         }
     }
 
+    public void canGetDarlehenSb() {
+        permitAll();
+
+    }
+
     @Transactional
     public void canCreateDarlehen(UUID fallId) {
         final var benutzer = benutzerService.getCurrentBenutzer();

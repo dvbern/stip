@@ -36,12 +36,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-@Audited
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+
 @Entity
+@Audited
 @Table(
     name = "darlehen",
     indexes = {
@@ -71,6 +74,7 @@ public class Darlehen extends AbstractMandantEntity {
     private Integer betrag;
 
     @Nullable
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "kommentar")
     private String kommentar;
 

@@ -133,6 +133,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         SbDarlehenDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
+        darlehenAuthorizer.canGetDarlehenSb();
         return null;
     }
 }

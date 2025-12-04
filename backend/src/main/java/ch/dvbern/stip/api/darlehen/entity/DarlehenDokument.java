@@ -34,8 +34,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 @Entity
+@Audited
 @Table(
     name = "darlehen_dokument",
     indexes = {
