@@ -75,7 +75,7 @@ public class Darlehen extends AbstractMandantEntity {
 
     @Nullable
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "kommentar")
+    @Column(name = "kommentar", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String kommentar;
 
     @Nullable
