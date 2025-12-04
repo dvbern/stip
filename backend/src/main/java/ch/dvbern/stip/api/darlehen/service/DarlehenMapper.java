@@ -35,10 +35,10 @@ public abstract class DarlehenMapper {
     public abstract DarlehenDto toDto(Darlehen darlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
-    @Mapping(target = "piaVorname", qualifiedByName = "getPiaVorname")
-    @Mapping(target = "piaNachname", qualifiedByName = "getPiaNachname")
-    @Mapping(target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")
-    @Mapping(target = "bearbeiter", qualifiedByName = "getBearbeiter")
+    @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
+    @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
+    @Mapping(source = ".", target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")
+    @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getBearbeiter")
     @Mapping(source = "timestampMutiert", target = "letzteAktivitaet")
     public abstract DarlehenDashboardDto toDashboardDto(Darlehen darlehen);
 

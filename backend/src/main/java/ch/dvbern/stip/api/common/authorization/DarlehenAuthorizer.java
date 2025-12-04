@@ -51,6 +51,10 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     public void canGetDarlehenSb() {
+
+    }
+
+    public void canGetDarlehenDashboardSb() {
         permitAll();
 
     }

@@ -75,17 +75,22 @@ public interface DarlehenResource {
     DarlehenDto darlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId);
 
     @GET
+    @Path("/dashboard/{getDarlehenSbQueryType}")
+    @Produces({ "application/json", "text/plain" })
+    PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(@PathParam("getDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType getDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+
+    @GET
     @Path("/{darlehenId}/{dokumentType}")
     @Produces({ "application/json", "text/plain" })
     DarlehenDokumentDto getDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType);
 
     @GET
-    @Path("/{fallId}")
+    @Path("/{darlehenId}/gs")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto getDarlehenGs(@PathParam("fallId") UUID fallId);
+    DarlehenDto getDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
 
     @GET
-    @Path("/dashboard/{getDarlehenSbQueryType}")
+    @Path("/{darlehenId}/sb")
     @Produces({ "application/json", "text/plain" })
-    PaginatedSbDarlehenDashboardDto getDarlehenSb(@PathParam("getDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType getDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    DarlehenDto getDarlehenSb(@PathParam("darlehenId") UUID darlehenId);
 }

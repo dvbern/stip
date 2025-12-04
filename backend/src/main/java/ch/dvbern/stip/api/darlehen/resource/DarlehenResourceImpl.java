@@ -64,7 +64,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Override
     @RolesAllowed(SB_GESUCH_READ)
-    public PaginatedSbDarlehenDashboardDto getDarlehenSb(
+    public DarlehenDto getDarlehenSb(UUID darlehenId) {
+        darlehenAuthorizer.canGetDarlehenSb();
+        return null;
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(
         GetDarlehenSbQueryType getDarlehenSbQueryType,
         Integer page,
         Integer pageSize,
@@ -79,7 +86,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         SbDarlehenDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
-        darlehenAuthorizer.canGetDarlehenSb();
+        darlehenAuthorizer.canGetDarlehenDashboardSb();
         return null;
     }
 

@@ -77,6 +77,7 @@ public class DarlehenApiSpec {
                 darlehenUpdateGs(),
                 darlehenUpdateSb(),
                 darlehenZurueckweisen(),
+                getDarlehenDashboardSb(),
                 getDarlehenDokument(),
                 getDarlehenGs(),
                 getDarlehenSb()
@@ -117,6 +118,10 @@ public class DarlehenApiSpec {
 
     public DarlehenZurueckweisenOper darlehenZurueckweisen() {
         return new DarlehenZurueckweisenOper(createReqSpec());
+    }
+
+    public GetDarlehenDashboardSbOper getDarlehenDashboardSb() {
+        return new GetDarlehenDashboardSbOper(createReqSpec());
     }
 
     public GetDarlehenDokumentOper getDarlehenDokument() {
@@ -835,6 +840,223 @@ public class DarlehenApiSpec {
         }
     }
     /**
+     * Returns darlehen filtered by status and sb
+     * 
+     *
+     * @see #getDarlehenSbQueryTypePath  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #fallNummerQuery  (optional)
+     * @see #piaNachnameQuery  (optional)
+     * @see #piaVornameQuery  (optional)
+     * @see #piaGeburtsdatumQuery  (optional)
+     * @see #statusQuery  (optional)
+     * @see #bearbeiterQuery  (optional)
+     * @see #letzteAktivitaetFromQuery  (optional)
+     * @see #letzteAktivitaetToQuery  (optional)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * return PaginatedSbDarlehenDashboardDtoSpec
+     */
+    public static class GetDarlehenDashboardSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/dashboard/{getDarlehenSbQueryType}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDarlehenDashboardSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
+         * @param handler handler
+         * @return PaginatedSbDarlehenDashboardDtoSpec
+         */
+        public PaginatedSbDarlehenDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSbDarlehenDashboardDtoSpec> type = new TypeRef<PaginatedSbDarlehenDashboardDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GET_DARLEHEN_SB_QUERY_TYPE_PATH = "getDarlehenSbQueryType";
+
+        /**
+         * @param getDarlehenSbQueryType (GetDarlehenSbQueryTypeDtoSpec)  (required)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper getDarlehenSbQueryTypePath(Object getDarlehenSbQueryType) {
+            reqSpec.addPathParam(GET_DARLEHEN_SB_QUERY_TYPE_PATH, getDarlehenSbQueryType);
+            return this;
+        }
+
+        public static final String FALL_NUMMER_QUERY = "fallNummer";
+
+        /**
+         * @param fallNummer (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper fallNummerQuery(Object... fallNummer) {
+            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
+            return this;
+        }
+
+        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+
+        /**
+         * @param piaNachname (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper piaNachnameQuery(Object... piaNachname) {
+            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+            return this;
+        }
+
+        public static final String PIA_VORNAME_QUERY = "piaVorname";
+
+        /**
+         * @param piaVorname (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper piaVornameQuery(Object... piaVorname) {
+            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+            return this;
+        }
+
+        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+
+        /**
+         * @param piaGeburtsdatum (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
+            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+            return this;
+        }
+
+        public static final String STATUS_QUERY = "status";
+
+        /**
+         * @param status (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
+            return this;
+        }
+
+        public static final String BEARBEITER_QUERY = "bearbeiter";
+
+        /**
+         * @param bearbeiter (String)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper bearbeiterQuery(Object... bearbeiter) {
+            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
+
+        /**
+         * @param letzteAktivitaetFrom (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
+
+        /**
+         * @param letzteAktivitaetTo (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (SbDarlehenDashboardColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenDashboardSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Returns Darlehen dokument
      * 
      *
@@ -923,13 +1145,13 @@ public class DarlehenApiSpec {
      * Return active darlehen darlehen if exists or else null
      * 
      *
-     * @see #fallIdPath  (required)
+     * @see #darlehenIdPath  (required)
      * return DarlehenDtoSpec
      */
     public static class GetDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/{fallId}";
+        public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -941,7 +1163,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/{fallId}
+         * GET /darlehen/{darlehenId}/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -952,7 +1174,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/{fallId}
+         * GET /darlehen/{darlehenId}/gs
          * @param handler handler
          * @return DarlehenDtoSpec
          */
@@ -961,14 +1183,14 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String FALL_ID_PATH = "fallId";
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
 
         /**
-         * @param fallId (UUID)  (required)
+         * @param darlehenId (UUID)  (required)
          * @return operation
          */
-        public GetDarlehenGsOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+        public GetDarlehenGsOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
 
@@ -993,28 +1215,16 @@ public class DarlehenApiSpec {
         }
     }
     /**
-     * Returns darlehen filtered by status and sb
+     * Return darlehen
      * 
      *
-     * @see #getDarlehenSbQueryTypePath  (required)
-     * @see #pageQuery  (required)
-     * @see #pageSizeQuery  (required)
-     * @see #fallNummerQuery  (optional)
-     * @see #piaNachnameQuery  (optional)
-     * @see #piaVornameQuery  (optional)
-     * @see #piaGeburtsdatumQuery  (optional)
-     * @see #statusQuery  (optional)
-     * @see #bearbeiterQuery  (optional)
-     * @see #letzteAktivitaetFromQuery  (optional)
-     * @see #letzteAktivitaetToQuery  (optional)
-     * @see #sortColumnQuery  (optional)
-     * @see #sortOrderQuery  (optional)
-     * return PaginatedSbDarlehenDashboardDtoSpec
+     * @see #darlehenIdPath  (required)
+     * return DarlehenDtoSpec
      */
     public static class GetDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/dashboard/{getDarlehenSbQueryType}";
+        public static final String REQ_URI = "/darlehen/{darlehenId}/sb";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1026,7 +1236,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
+         * GET /darlehen/{darlehenId}/sb
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1037,155 +1247,23 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
+         * GET /darlehen/{darlehenId}/sb
          * @param handler handler
-         * @return PaginatedSbDarlehenDashboardDtoSpec
+         * @return DarlehenDtoSpec
          */
-        public PaginatedSbDarlehenDashboardDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<PaginatedSbDarlehenDashboardDtoSpec> type = new TypeRef<PaginatedSbDarlehenDashboardDtoSpec>(){};
+        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
             return execute(handler).as(type);
         }
 
-        public static final String GET_DARLEHEN_SB_QUERY_TYPE_PATH = "getDarlehenSbQueryType";
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
 
         /**
-         * @param getDarlehenSbQueryType (GetDarlehenSbQueryTypeDtoSpec)  (required)
+         * @param darlehenId (UUID)  (required)
          * @return operation
          */
-        public GetDarlehenSbOper getDarlehenSbQueryTypePath(Object getDarlehenSbQueryType) {
-            reqSpec.addPathParam(GET_DARLEHEN_SB_QUERY_TYPE_PATH, getDarlehenSbQueryType);
-            return this;
-        }
-
-        public static final String FALL_NUMMER_QUERY = "fallNummer";
-
-        /**
-         * @param fallNummer (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper fallNummerQuery(Object... fallNummer) {
-            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
-            return this;
-        }
-
-        public static final String PIA_NACHNAME_QUERY = "piaNachname";
-
-        /**
-         * @param piaNachname (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper piaNachnameQuery(Object... piaNachname) {
-            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
-            return this;
-        }
-
-        public static final String PIA_VORNAME_QUERY = "piaVorname";
-
-        /**
-         * @param piaVorname (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper piaVornameQuery(Object... piaVorname) {
-            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
-            return this;
-        }
-
-        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
-
-        /**
-         * @param piaGeburtsdatum (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
-            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
-            return this;
-        }
-
-        public static final String STATUS_QUERY = "status";
-
-        /**
-         * @param status (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper statusQuery(Object... status) {
-            reqSpec.addQueryParam(STATUS_QUERY, status);
-            return this;
-        }
-
-        public static final String BEARBEITER_QUERY = "bearbeiter";
-
-        /**
-         * @param bearbeiter (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper bearbeiterQuery(Object... bearbeiter) {
-            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
-            return this;
-        }
-
-        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
-
-        /**
-         * @param letzteAktivitaetFrom (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
-            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
-            return this;
-        }
-
-        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
-
-        /**
-         * @param letzteAktivitaetTo (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
-            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
-            return this;
-        }
-
-        public static final String PAGE_QUERY = "page";
-
-        /**
-         * @param page (Integer)  (required)
-         * @return operation
-         */
-        public GetDarlehenSbOper pageQuery(Object... page) {
-            reqSpec.addQueryParam(PAGE_QUERY, page);
-            return this;
-        }
-
-        public static final String PAGE_SIZE_QUERY = "pageSize";
-
-        /**
-         * @param pageSize (Integer)  (required)
-         * @return operation
-         */
-        public GetDarlehenSbOper pageSizeQuery(Object... pageSize) {
-            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
-            return this;
-        }
-
-        public static final String SORT_COLUMN_QUERY = "sortColumn";
-
-        /**
-         * @param sortColumn (SbDarlehenDashboardColumnDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper sortColumnQuery(Object... sortColumn) {
-            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
-            return this;
-        }
-
-        public static final String SORT_ORDER_QUERY = "sortOrder";
-
-        /**
-         * @param sortOrder (SortOrderDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetDarlehenSbOper sortOrderQuery(Object... sortOrder) {
-            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+        public GetDarlehenSbOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
 
