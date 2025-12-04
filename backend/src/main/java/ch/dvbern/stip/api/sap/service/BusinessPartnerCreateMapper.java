@@ -42,11 +42,16 @@ public abstract class BusinessPartnerCreateMapper {
         return header;
     }
 
-    @Mapping(source = "fallNummer", target = "EXTID")
+    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     @Mapping(source = ".", target = "AHVNR", qualifiedByName = "getAhvNr")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
         Fall fall
     );
+
+    @Named("getExtId")
+    public String getExtId(Fall fall) {
+        return SapMapperUtil.getExtId(fall);
+    }
 
     @Named("getAhvNr")
     public String getAhvNr(Fall fall) {
