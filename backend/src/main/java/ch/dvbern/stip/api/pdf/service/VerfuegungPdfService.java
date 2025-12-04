@@ -39,9 +39,13 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.util.VerfuegungUtil;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -56,7 +60,9 @@ import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.TextAlignment;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.spi.InternalServerErrorException;
@@ -70,17 +76,20 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
 
 @RequestScoped
 @RequiredArgsConstructor
+@UnlessBuildProfile("test")
 @Slf4j
 public class VerfuegungPdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final TenantConfigService tenantConfigService;
     private final BuchhaltungService buchhaltungService;
+    private final VerfuegungService verfuegungService;
+    private final BerechnungsblattService berechnungsblattService;
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    public ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
+    private ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
         final VerfuegungPdfSection negativeVerfuegungSection = this::negativeVerfuegung;
         return this.createPdf(verfuegung, negativeVerfuegungSection);
     }
@@ -93,7 +102,7 @@ public class VerfuegungPdfService {
         return this.createPdf(verfuegung, negativeVerfuegungSection);
     }
 
-    public ByteArrayOutputStream createVerfuegungMitAnspruchPdf(
+    private ByteArrayOutputStream createVerfuegungMitAnspruchPdf(
         final Verfuegung verfuegung
     ) {
         final VerfuegungPdfSection negativeVerfuegungSection =
@@ -717,7 +726,97 @@ public class VerfuegungPdfService {
         );
     }
 
-    public ByteArrayOutputStream createVersendeteVerfuegung(
+    public void createVerfuegungsDocuments(final Gesuch gesuch, final BerechnungsresultatDto stipendien) {
+        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
+            ? stipendien.getBerechnungReduziert()
+            : stipendien.getBerechnung();
+
+        final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
+
+        ByteArrayOutputStream verfuegungsBrief = new ByteArrayOutputStream();
+
+        if (berechnungsresultat == 0) {
+            verfuegungsBrief = createVerfuegungOhneAnspruchPdf(
+                verfuegungService.getLatestVerfuegung(gesuch.getId())
+            );
+        }
+
+        if (berechnungsresultat > 0) {
+            verfuegungsBrief = createVerfuegungMitAnspruchPdf(verfuegungService.getLatestVerfuegung(gesuch.getId()));
+        }
+
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
+            verfuegungsBrief
+        );
+
+        createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
+        createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.VATER);
+        createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.FAMILIE);
+
+        var berechnungsBlaetterPia =
+            berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, stipendien);
+
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
+            berechnungsBlaetterPia
+        );
+
+        var berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, stipendien);
+
+        final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
+            verfuegungsBrief,
+            berechnungsBlaetter
+        );
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
+            versendeteVerfuegungOutput
+        );
+    }
+
+    private void createAndStoreBerechnungsblattPdf(
+        final Gesuch gesuch,
+        final Verfuegung verfuegung,
+        final BerechnungsresultatDto berechnungsResultat,
+        final SteuerdatenTyp steuerdatenTyp
+    ) {
+        ByteArrayOutputStream berechnungsBlaetter = berechnungsblattService.getAllElternTypeBerechnungsblaetterOfGesuch(
+            gesuch,
+            berechnungsResultat,
+            steuerdatenTyp
+        );
+        if (berechnungsBlaetter != null) {
+            verfuegungService.createAndStoreVerfuegungDokument(
+                verfuegung,
+                mapToVerfuegungDokumentTyp(steuerdatenTyp),
+                berechnungsBlaetter
+            );
+        }
+    }
+
+    @Transactional
+    public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
+        final ByteArrayOutputStream out = createNegativeVerfuegungPdf(verfuegung);
+
+        verfuegungService.createAndStoreVerfuegungDokument(
+            verfuegung,
+            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
+            out
+        );
+    }
+
+    private VerfuegungDokumentTyp mapToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {
+        return switch (steuerdatenTyp) {
+            case MUTTER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_MUTTER;
+            case VATER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_VATER;
+            case FAMILIE -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_FAMILIE;
+        };
+    }
+
+    private ByteArrayOutputStream createVersendeteVerfuegung(
         final ByteArrayOutputStream verfuegungsbrief,
         final ByteArrayOutputStream mergedBerechnungsblaetter
     ) {

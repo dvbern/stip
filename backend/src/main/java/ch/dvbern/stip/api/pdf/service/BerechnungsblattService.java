@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -204,13 +205,13 @@ public class BerechnungsblattService {
 
     public ByteArrayOutputStream getAllElternTypeBerechnungsblaetterOfGesuch(
         final Gesuch gesuch,
-        final Locale locale,
         final BerechnungsresultatDto berechnungsResultat,
         final SteuerdatenTyp steuerdatenTyp
     ) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         pdfFont = PdfUtils.createFont();
         pdfFontBold = PdfUtils.createFontBold();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
 
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.fromLocale(locale));
@@ -233,7 +234,7 @@ public class BerechnungsblattService {
                         addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
                     }
                 }
-                PdfUtils.makePageNumberEven(document); // todo 3: probably gets ignored?!
+                PdfUtils.makePageNumberEven(document);
             }
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -246,12 +247,12 @@ public class BerechnungsblattService {
 
     public ByteArrayOutputStream getAllBerechnungsblaetterOfGesuch(
         final Gesuch gesuch,
-        final Locale locale,
         final BerechnungsresultatDto berechnungsResultat
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         pdfFont = PdfUtils.createFont();
         pdfFontBold = PdfUtils.createFontBold();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
 
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.fromLocale(locale));
@@ -307,13 +308,13 @@ public class BerechnungsblattService {
 
     public ByteArrayOutputStream getBerechnungsblattPersonInAusbildung(
         final Gesuch gesuch,
-        final Locale locale,
         final BerechnungsresultatDto berechnungsResultat
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         pdfFont = PdfUtils.createFont();
         pdfFontBold = PdfUtils.createFontBold();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
 
         TL translator = TLProducer.defaultBundle()
             .forAppLanguage(AppLanguages.fromLocale(locale));

@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungDokumentRepository;
@@ -66,7 +65,6 @@ public class VerfuegungService {
     private final GesuchRepository gesuchRepository;
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final VerfuegungMapper verfuegungMapper;
-    private final VerfuegungPdfService verfuegungPdfService;
     private final Antivirus antivirus;
     private final ConfigService configService;
     private final S3AsyncClient s3;
@@ -117,17 +115,6 @@ public class VerfuegungService {
             }
         );
         response.await().indefinitely();
-    }
-
-    @Transactional
-    public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = verfuegungPdfService.createNegativeVerfuegungPdf(verfuegung);
-
-        createAndStoreVerfuegungDokument(
-            verfuegung,
-            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
-            out
-        );
     }
 
     @Transactional
