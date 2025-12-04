@@ -19,7 +19,7 @@ import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
 import java.io.File;
-import ch.dvbern.stip.generated.dto.GetDarlehenSBQueryTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.GetDarlehenSbQueryTypeDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDarlehenDashboardColumnDtoSpec;
@@ -996,7 +996,7 @@ public class DarlehenApiSpec {
      * Returns darlehen filtered by status and sb
      * 
      *
-     * @see #getDarlehenSBQueryTypePath  (required)
+     * @see #getDarlehenSbQueryTypePath  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
      * @see #fallNummerQuery  (optional)
@@ -1014,7 +1014,7 @@ public class DarlehenApiSpec {
     public static class GetDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/dashboard/{getDarlehenSBQueryType}";
+        public static final String REQ_URI = "/darlehen/dashboard/{getDarlehenSbQueryType}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1026,7 +1026,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getDarlehenSBQueryType}
+         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1037,7 +1037,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getDarlehenSBQueryType}
+         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
          * @param handler handler
          * @return PaginatedSbDarlehenDashboardDtoSpec
          */
@@ -1046,14 +1046,14 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GET_DARLEHEN_S_B_QUERY_TYPE_PATH = "getDarlehenSBQueryType";
+        public static final String GET_DARLEHEN_SB_QUERY_TYPE_PATH = "getDarlehenSbQueryType";
 
         /**
-         * @param getDarlehenSBQueryType (GetDarlehenSBQueryTypeDtoSpec)  (required)
+         * @param getDarlehenSbQueryType (GetDarlehenSbQueryTypeDtoSpec)  (required)
          * @return operation
          */
-        public GetDarlehenSbOper getDarlehenSBQueryTypePath(Object getDarlehenSBQueryType) {
-            reqSpec.addPathParam(GET_DARLEHEN_S_B_QUERY_TYPE_PATH, getDarlehenSBQueryType);
+        public GetDarlehenSbOper getDarlehenSbQueryTypePath(Object getDarlehenSbQueryType) {
+            reqSpec.addPathParam(GET_DARLEHEN_SB_QUERY_TYPE_PATH, getDarlehenSbQueryType);
             return this;
         }
 

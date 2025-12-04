@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -27,15 +28,19 @@ import ch.dvbern.stip.api.darlehen.repo.DarlehenDokumentRepository;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
+import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
+import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
@@ -65,6 +70,7 @@ public class DarlehenService {
     private final DokumentDownloadService dokumentDownloadService;
     private final BenutzerService benutzerService;
     private final JWTParser jwtParser;
+    private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
 
     public DarlehenDto createDarlehen(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
@@ -87,6 +93,76 @@ public class DarlehenService {
             .orElse(null);
 
         return darlehenMapper.toDto(darlehenActive);
+    }
+
+    public PaginatedSbDarlehenDashboardDto getDarlehenSb(
+        final GetDarlehenSbQueryType getDarlehenSbQueryType,
+        final Integer page,
+        final Integer pageSize,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final SbDarlehenDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        if (pageSize > configService.getMaxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
+
+        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery(getDarlehenSbQueryType);
+
+        if (fallNummer != null) {
+            darlehenDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
+        }
+
+        if (piaNachname != null) {
+            darlehenDashboardQueryBuilder.piaNachname(baseQuery, piaNachname);
+        }
+
+        if (piaVorname != null) {
+            darlehenDashboardQueryBuilder.piaVorname(baseQuery, piaVorname);
+        }
+
+        if (piaGeburtsdatum != null) {
+            darlehenDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
+        }
+
+        if (status != null) {
+            darlehenDashboardQueryBuilder.status(baseQuery, status);
+        }
+
+        if (bearbeiter != null) {
+            darlehenDashboardQueryBuilder.bearbeiter(baseQuery, bearbeiter);
+        }
+
+        if (letzteAktivitaetFrom != null && letzteAktivitaetTo != null) {
+            darlehenDashboardQueryBuilder.letzteAktivitaet(baseQuery, letzteAktivitaetFrom, letzteAktivitaetTo);
+        }
+
+        final var countQuery = darlehenDashboardQueryBuilder.getCountQuery(baseQuery);
+
+        if (sortColumn != null && sortOrder != null) {
+            darlehenDashboardQueryBuilder.orderBy(baseQuery, sortColumn, sortOrder);
+        } else {
+            darlehenDashboardQueryBuilder.defaultOrder(baseQuery);
+        }
+
+        darlehenDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
+        final var results = baseQuery.stream()
+            .map(darlehenMapper::toDashboardDto)
+            .toList();
+
+        return new PaginatedSbDarlehenDashboardDto(
+            page,
+            results.size(),
+            Math.toIntExact(countQuery.fetchFirst()),
+            results
+        );
     }
 
     public DarlehenDto darlehenAblehen(UUID darlehenId) {

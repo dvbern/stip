@@ -24,7 +24,7 @@ import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
-import ch.dvbern.stip.api.darlehen.type.GetDarlehenSBQueryType;
+import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DarlehenResource;
@@ -61,6 +61,26 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
+    public PaginatedSbDarlehenDashboardDto getDarlehenSb(
+        GetDarlehenSbQueryType getDarlehenSbQueryType,
+        Integer page,
+        Integer pageSize,
+        String fallNummer,
+        String piaNachname,
+        String piaVorname,
+        LocalDate piaGeburtsdatum,
+        String status,
+        String bearbeiter,
+        LocalDate letzteAktivitaetFrom,
+        LocalDate letzteAktivitaetTo,
+        SbDarlehenDashboardColumn sortColumn,
+        SortOrder sortOrder
+    ) {
+        darlehenAuthorizer.canGetDarlehenSb();
+        return null;
+    }
+
+    @Override
     @RolesAllowed(GS_GESUCH_READ)
     public DarlehenDto createDarlehen(UUID fallId) {
         darlehenAuthorizer.canCreateDarlehen(fallId);
@@ -68,14 +88,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed({SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE})
+    @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
     public DarlehenDto darlehenAblehen(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAblehenen(darlehenId);
         return darlehenService.darlehenAblehen(darlehenId);
     }
 
     @Override
-    @RolesAllowed({SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE})
+    @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
     public DarlehenDto darlehenAkzeptieren(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAkzeptieren(darlehenId);
         return darlehenService.darlehenAkzeptieren(darlehenId);
@@ -132,25 +152,5 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public DarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
         darlehenAuthorizer.canGetDarlehenDokument();
         return darlehenService.getDarlehenDokument(darlehenId, dokumentTyp);
-    }
-
-    @Override
-    public PaginatedSbDarlehenDashboardDto getDarlehenSb(
-        GetDarlehenSBQueryType SbDarlehenDashboardColumn,
-        Integer page,
-        Integer pageSize,
-        String fallNummer,
-        String piaNachname,
-        String piaVorname,
-        LocalDate piaGeburtsdatum,
-        String status,
-        String bearbeiter,
-        LocalDate letzteAktivitaetFrom,
-        LocalDate letzteAktivitaetTo,
-        SbDarlehenDashboardColumn sortColumn,
-        SortOrder sortOrder
-    ) {
-        darlehenAuthorizer.canGetDarlehenSb();
-        return null;
     }
 }

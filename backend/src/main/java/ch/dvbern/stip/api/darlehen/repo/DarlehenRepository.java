@@ -23,6 +23,9 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.QDarlehen;
+import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
+import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -31,9 +34,12 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DarlehenRepository implements BaseRepository<Darlehen> {
+    private static final QDarlehen darlehen = QDarlehen.darlehen;
+    private static final QGesuchFormular gesuchFormular = QGesuchFormular.gesuchFormular;
+
     private final EntityManager entityManager;
 
-    public List<Darlehen> findByFallId(UUID fallId) {
+    public List<Darlehen> findByFallId(final UUID fallId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var darlehen = QDarlehen.darlehen;
         var query = queryFactory
@@ -42,5 +48,23 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
                 darlehen.fall.id.eq(fallId)
             );
         return query.stream().toList();
+    }
+
+    public JPAQuery<Darlehen> getAlleQuery() {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(darlehen);
+    }
+
+    public JPAQuery<Darlehen> getMeineQuery(final UUID benutzerId) {
+        return getAlleQuery()
+            .where(darlehen.fall.sachbearbeiterZuordnung.sachbearbeiter.id.eq(benutzerId));
+    }
+
+    public JPAQuery<Darlehen> getAlleBearbeitbarQuery() {
+        return getAlleQuery().where(darlehen.status.eq(DarlehenStatus.EINGEGEBEN));
+    }
+
+    public JPAQuery<Darlehen> getMeineBearbeitbarQuery(final UUID benutzerId) {
+        return getMeineQuery(benutzerId).where(darlehen.status.eq(DarlehenStatus.EINGEGEBEN));
     }
 }

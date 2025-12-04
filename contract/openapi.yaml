@@ -177,11 +177,11 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/dashboard/{getDarlehenSBQueryType}:
+  /darlehen/dashboard/{getDarlehenSbQueryType}:
     parameters:
-      - name: getDarlehenSBQueryType
+      - name: getDarlehenSbQueryType
         schema:
-          $ref: '#/components/schemas/GetDarlehenSBQueryType'
+          $ref: '#/components/schemas/GetDarlehenSbQueryType'
         in: path
         required: true
       - $ref: '#/components/parameters/fallNummer'
@@ -5854,10 +5854,12 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    GetDarlehenSBQueryType:
+    GetDarlehenSbQueryType:
       enum:
         - ALLE_DARLEHEN
         - MEINE_DARLEHEN
+        - ALLE_BEARBEITBAR
+        - MEINE_BEARBEITBAR
     PaginatedSbDarlehenDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -5865,7 +5867,26 @@ components:
         entries:
           type: array
           items:
-            $ref: '#/components/schemas/Darlehen'
+            $ref: '#/components/schemas/DarlehenDashboard'
+    DarlehenDashboard:
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        piaVorname:
+          type: string
+        piaNachname:
+          type: string
+        piaGeburtsdatum:
+          type: string
+        status:
+          $ref: '#/components/schemas/DarlehenStatus'
+        bearbeiter:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date
     DarlehenDokumentType:
       enum:
         - BETREIBUNGS_AUSZUG

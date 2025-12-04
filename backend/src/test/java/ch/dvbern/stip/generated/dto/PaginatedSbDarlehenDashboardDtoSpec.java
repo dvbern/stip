@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenDashboardDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class PaginatedSbDarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_ENTRIES = "entries";
-  private List<DarlehenDtoSpec> entries;
+  private List<DarlehenDashboardDtoSpec> entries;
 
   public static final String JSON_PROPERTY_PAGE = "page";
   private Integer page;
@@ -54,13 +54,13 @@ public class PaginatedSbDarlehenDashboardDtoSpec {
   public PaginatedSbDarlehenDashboardDtoSpec() {
   }
 
-  public PaginatedSbDarlehenDashboardDtoSpec entries(List<DarlehenDtoSpec> entries) {
+  public PaginatedSbDarlehenDashboardDtoSpec entries(List<DarlehenDashboardDtoSpec> entries) {
     
     this.entries = entries;
     return this;
   }
 
-  public PaginatedSbDarlehenDashboardDtoSpec addEntriesItem(DarlehenDtoSpec entriesItem) {
+  public PaginatedSbDarlehenDashboardDtoSpec addEntriesItem(DarlehenDashboardDtoSpec entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -76,14 +76,14 @@ public class PaginatedSbDarlehenDashboardDtoSpec {
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<DarlehenDtoSpec> getEntries() {
+  public List<DarlehenDashboardDtoSpec> getEntries() {
     return entries;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntries(List<DarlehenDtoSpec> entries) {
+  public void setEntries(List<DarlehenDashboardDtoSpec> entries) {
     this.entries = entries;
   }
 

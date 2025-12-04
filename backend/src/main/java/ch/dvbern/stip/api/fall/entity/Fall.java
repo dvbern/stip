@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.fall.entity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import jakarta.annotation.Nullable;
@@ -117,5 +119,15 @@ public class Fall extends AbstractMandantEntity {
     @Transient
     public boolean isDelegiert() {
         return Optional.ofNullable(getDelegierung()).map(Delegierung::getDelegierterMitarbeiter).isPresent();
+    }
+
+    public Gesuch getLatestGesuch() {
+        return ausbildungs.stream()
+            .max(Comparator.comparing(Ausbildung::getAusbildungEnd))
+            .orElseThrow()
+            .getGesuchs()
+            .stream()
+            .max(Comparator.comparing(gesuch -> gesuch.getGesuchsperiode().getGesuchsperiodeStopp()))
+            .orElseThrow();
     }
 }

@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DarlehenDto;
+import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
-  private @Valid List<DarlehenDto> entries;
+  private @Valid List<DarlehenDashboardDto> entries;
 
   /**
    **/
@@ -84,23 +84,23 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDarlehenDashboardDto entries(List<DarlehenDto> entries) {
+  public PaginatedSbDarlehenDashboardDto entries(List<DarlehenDashboardDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<DarlehenDto> getEntries() {
+  public List<DarlehenDashboardDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<DarlehenDto> entries) {
+  public void setEntries(List<DarlehenDashboardDto> entries) {
     this.entries = entries;
   }
 
-  public PaginatedSbDarlehenDashboardDto addEntriesItem(DarlehenDto entriesItem) {
+  public PaginatedSbDarlehenDashboardDto addEntriesItem(DarlehenDashboardDto entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -109,7 +109,7 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
     return this;
   }
 
-  public PaginatedSbDarlehenDashboardDto removeEntriesItem(DarlehenDto entriesItem) {
+  public PaginatedSbDarlehenDashboardDto removeEntriesItem(DarlehenDashboardDto entriesItem) {
     if (entriesItem != null && this.entries != null) {
       this.entries.remove(entriesItem);
     }

@@ -22,17 +22,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetDarlehenSBQueryType
+ * Gets or Sets GetDarlehenSbQueryType
  */
-public enum GetDarlehenSBQueryTypeDtoSpec {
+public enum GetDarlehenSbQueryTypeDtoSpec {
   
   ALLE_DARLEHEN("ALLE_DARLEHEN"),
   
-  MEINE_DARLEHEN("MEINE_DARLEHEN");
+  MEINE_DARLEHEN("MEINE_DARLEHEN"),
+  
+  ALLE_BEARBEITBAR("ALLE_BEARBEITBAR"),
+  
+  MEINE_BEARBEITBAR("MEINE_BEARBEITBAR");
 
   private String value;
 
-  GetDarlehenSBQueryTypeDtoSpec(String value) {
+  GetDarlehenSbQueryTypeDtoSpec(String value) {
     this.value = value;
   }
 
@@ -47,8 +51,8 @@ public enum GetDarlehenSBQueryTypeDtoSpec {
   }
 
   @JsonCreator
-  public static GetDarlehenSBQueryTypeDtoSpec fromValue(String value) {
-    for (GetDarlehenSBQueryTypeDtoSpec b : GetDarlehenSBQueryTypeDtoSpec.values()) {
+  public static GetDarlehenSbQueryTypeDtoSpec fromValue(String value) {
+    for (GetDarlehenSbQueryTypeDtoSpec b : GetDarlehenSbQueryTypeDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

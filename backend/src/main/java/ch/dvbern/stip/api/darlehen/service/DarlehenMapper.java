@@ -17,17 +17,30 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class, uses = DarlehenDokumentMapper.class)
 public abstract class DarlehenMapper {
     public abstract DarlehenDto toDto(Darlehen darlehen);
+
+    @Mapping(source = "fall.fallNummer", target = "fallNummer")
+    @Mapping(target = "piaVorname", qualifiedByName = "getPiaVorname")
+    @Mapping(target = "piaNachname", qualifiedByName = "getPiaNachname")
+    @Mapping(target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")
+    @Mapping(target = "bearbeiter", qualifiedByName = "getBearbeiter")
+    @Mapping(source = "timestampMutiert", target = "letzteAktivitaet")
+    public abstract DarlehenDashboardDto toDashboardDto(Darlehen darlehen);
 
     public abstract Darlehen toEntity(DarlehenDto darlehenDto);
 
@@ -40,4 +53,42 @@ public abstract class DarlehenMapper {
         DarlehenUpdateSbDto darlehenDto,
         @MappingTarget Darlehen darlehen
     );
+
+    @Named("getPiaNachname")
+    public String getPiaNachname(Darlehen darlehen) {
+        return darlehen.getFall()
+            .getLatestGesuch()
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getNachname();
+    }
+
+    @Named("getPiaVorname")
+    public String getPiaVorname(Darlehen darlehen) {
+        return darlehen.getFall()
+            .getLatestGesuch()
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getVorname();
+    }
+
+    @Named("getPiaGeburtsdatum")
+    public LocalDate getPiaGeburtsdatum(Darlehen darlehen) {
+        return darlehen.getFall()
+            .getLatestGesuch()
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getGeburtsdatum();
+    }
+
+    @Named("getBearbeiter")
+    public String getBearbeiter(Darlehen darlehen) {
+        return darlehen.getFall()
+            .getSachbearbeiterZuordnung()
+            .getSachbearbeiter()
+            .getFullName();
+    }
 }
