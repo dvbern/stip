@@ -279,7 +279,7 @@ public class BerechnungsblattService {
                     // add berechnungsblatt for Familie/Elterns for current tranche
                     for (var familienBudget : tranchenBerechnungsResultat.getFamilienBudgetresultate()) {
                         final SteuerdatenTyp typ = familienBudget.getFamilienBudgetTyp();
-                        if (currentSteuerdatenTyp.equals(typ)) {
+                        if (currentSteuerdatenTyp.equals(SteuerdatenTyp.FAMILIE) || currentSteuerdatenTyp.equals(typ)) {
                             // if unterschriftenblatt is existing for the current type,
                             // add it to final document
                             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
