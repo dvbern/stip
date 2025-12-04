@@ -44,6 +44,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIGABESTELLE_GESU
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
 @RequestScoped
@@ -55,12 +56,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     private final DarlehenAuthorizer darlehenAuthorizer;
 
     @Override
+    @RolesAllowed(GS_GESUCH_CREATE)
     public DarlehenDto getDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenGs(fallId);
         return darlehenService.getDarlehenGs(fallId);
     }
 
     @Override
+    @RolesAllowed(SB_GESUCH_READ)
     public PaginatedSbDarlehenDashboardDto getDarlehenSb(
         GetDarlehenSbQueryType getDarlehenSbQueryType,
         Integer page,
