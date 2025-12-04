@@ -8,11 +8,11 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { Darlehen } from '@dv/shared/model/gesuch';
-import { isSuccess } from '@dv/shared/util/remote-data';
+import { isFailure, isSuccess } from '@dv/shared/util/remote-data';
 
 import { GesuchAppFeatureDarlehenComponent } from './gesuch-app-feature-darlehen/gesuch-app-feature-darlehen.component';
 
@@ -29,9 +29,8 @@ const darlehenResolver: ResolveFn<Darlehen> = (
     return new RedirectCommand(route);
   }
 
-  darlehenStore.getDarlehen$();
-
   const obs = toObservable(darlehenStore.getDarlehenRequest).pipe(
+    filter((rd) => isSuccess(rd) || isFailure(rd)),
     map((requestRd) => {
       if (isSuccess(requestRd) && requestRd.data) {
         return requestRd.data;
@@ -43,21 +42,23 @@ const darlehenResolver: ResolveFn<Darlehen> = (
     }),
   );
 
+  darlehenStore.getDarlehenGs$({ fallId });
+
   return obs;
 };
 
 export const gesuchAppFeatureDarlehenRoutes: Route[] = [
   {
-    path: '',
+    path: ':fallId',
     pathMatch: 'prefix',
     providers: [DarlehenStore],
     resolve: { darlehen: darlehenResolver },
-    children: [
-      {
-        path: ':fallId',
-        title: 'shared.darlehen.title',
-        component: GesuchAppFeatureDarlehenComponent,
-      },
-    ],
+    component: GesuchAppFeatureDarlehenComponent,
+    title: 'shared.darlehen.title',
+    // children: [
+    //   {
+    //     path: ':fallId',
+    //   },
+    // ],
   },
 ];

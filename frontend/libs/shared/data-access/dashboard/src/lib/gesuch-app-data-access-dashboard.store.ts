@@ -225,6 +225,7 @@ const toGesuchDashboardItemView =
 
     return {
       ...gesuch,
+      fallId: fallItem.fall.id,
       isActive: isAusbildungActive && isLastGesuch,
       isErstgesuch,
       canEdit,

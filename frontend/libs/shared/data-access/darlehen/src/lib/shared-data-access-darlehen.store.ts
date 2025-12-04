@@ -14,6 +14,8 @@ import {
   DarlehenServiceDarlehenUpdateGsRequestParams,
   DarlehenServiceDarlehenUpdateSbRequestParams,
   DarlehenServiceDarlehenZurueckweisenRequestParams,
+  DarlehenServiceGetDarlehenGsRequestParams,
+  DarlehenServiceGetDarlehenSbRequestParams,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -41,20 +43,22 @@ export class DarlehenStore extends signalStore(
 ) {
   private darlehenService = inject(DarlehenService);
 
-  getDarlehen$ = rxMethod<void>(
+  getDarlehenGs$ = rxMethod<DarlehenServiceGetDarlehenGsRequestParams>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           cachedDarlehen: pending(),
         }));
       }),
-      // switchMap(() =>
-      //   this.darlehenService
-      //     .getDarlehen$()
-      //     .pipe(
-      //       handleApiResponse((darlehen) => patchState(this, { darlehen })),
-      //     ),
-      // ),
+      switchMap((req) =>
+        this.darlehenService
+          .getDarlehenGs$(req)
+          .pipe(
+            handleApiResponse((darlehen) =>
+              patchState(this, { cachedDarlehen: darlehen }),
+            ),
+          ),
+      ),
     ),
   );
 
@@ -110,6 +114,25 @@ export class DarlehenStore extends signalStore(
   );
 
   // SB Methoden
+
+  // getDarlehenSb$ = rxMethod<DarlehenServiceGetDarlehenSbRequestParams>(
+  //   pipe(
+  //     tap(() => {
+  //       patchState(this, () => ({
+  //         cachedDarlehen: pending(),
+  //       }));
+  //     }),
+  //     switchMap((req) =>
+  //       this.darlehenService
+  //         .getDarlehenSb$(req)
+  //         .pipe(
+  //           handleApiResponse((darlehen) =>
+  //             patchState(this, { cachedDarlehen: darlehen }),
+  //           ),
+  //         ),
+  //     ),
+  //   ),
+  // );
 
   darlehenUpdateSb$ = rxMethod<DarlehenServiceDarlehenUpdateSbRequestParams>(
     pipe(
