@@ -227,6 +227,29 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return active darlehen if exists or else null
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenGs
+      summary: Return active darlehen darlehen if exists or else null
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
     post:
       tags:
         - Darlehen
@@ -462,29 +485,6 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          description: Return active darlehen if exists or else null
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Darlehen'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getDarlehenGs
-      summary: Return active darlehen darlehen if exists or else null
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
     patch:
       tags:
         - Darlehen

@@ -85,9 +85,9 @@ public interface DarlehenResource {
     DarlehenDokumentDto getDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType);
 
     @GET
-    @Path("/{darlehenId}/gs")
+    @Path("/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto getDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
+    DarlehenDto getDarlehenGs(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/{darlehenId}/sb")

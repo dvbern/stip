@@ -1145,13 +1145,13 @@ public class DarlehenApiSpec {
      * Return active darlehen darlehen if exists or else null
      * 
      *
-     * @see #darlehenIdPath  (required)
+     * @see #fallIdPath  (required)
      * return DarlehenDtoSpec
      */
     public static class GetDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
+        public static final String REQ_URI = "/darlehen/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1163,7 +1163,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/{darlehenId}/gs
+         * GET /darlehen/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1174,7 +1174,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/{darlehenId}/gs
+         * GET /darlehen/{fallId}
          * @param handler handler
          * @return DarlehenDtoSpec
          */
@@ -1183,14 +1183,14 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param darlehenId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetDarlehenGsOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+        public GetDarlehenGsOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 
