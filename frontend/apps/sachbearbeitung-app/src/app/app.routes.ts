@@ -107,14 +107,22 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'darlehen',
-        canActivate: [hasBenutzer],
-        title: 'sachbearbeitung-app.darlehen.title',
+        path: 'darlehen-dashboard',
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/darlehen').then(
-            (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
+          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
+            (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
           ),
       },
+      // todo: create darlehen detail routing, propbably not here, similar route params as gesuch
+      // {
+      //   path: 'darlehen',
+      //   canActivate: [hasBenutzer],
+      //   title: 'sachbearbeitung-app.darlehen.title',
+      //   loadChildren: () =>
+      //     import('@dv/sachbearbeitung-app/feature/darlehen').then(
+      //       (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
+      //     ),
+      // },
       {
         path: 'infos',
         canActivate: [hasBenutzer],

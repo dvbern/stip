@@ -56,6 +56,7 @@
       "@dv/sachbearbeitung-app/feature/administration-sozialdienst": ["libs/sachbearbeitung-app/feature/administration-sozialdienst/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/cockpit": ["libs/sachbearbeitung-app/feature/cockpit/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/darlehen": ["libs/sachbearbeitung-app/feature/darlehen/src/index.ts"],
+      "@dv/sachbearbeitung-app/feature/darlehen-dashboard": ["libs/sachbearbeitung-app/feature/darlehen-dashboard/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen": ["libs/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form": ["libs/sachbearbeitung-app/feature/gesuch-form/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten": ["libs/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten/src/index.ts"],

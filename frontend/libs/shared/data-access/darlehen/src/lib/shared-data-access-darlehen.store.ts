@@ -6,6 +6,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 import {
   Darlehen,
   DarlehenService,
+  DarlehenServiceCreateDarlehenRequestParams,
   DarlehenServiceDarlehenAblehenRequestParams,
   DarlehenServiceDarlehenAkzeptierenRequestParams,
   DarlehenServiceDarlehenEingebenRequestParams,
@@ -57,15 +58,15 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  createDarlehen$ = rxMethod<void>(
+  createDarlehen$ = rxMethod<DarlehenServiceCreateDarlehenRequestParams>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           cachedDarlehen: cachedPending(state.cachedDarlehen),
         }));
       }),
-      switchMap(() =>
-        this.darlehenService.createDarlehen$().pipe(
+      switchMap((req) =>
+        this.darlehenService.createDarlehen$(req).pipe(
           handleApiResponse((darlehen) => {
             patchState(this, { cachedDarlehen: darlehen });
           }),

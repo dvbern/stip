@@ -18,7 +18,7 @@ describe('DarlehenStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.darlehen()).toEqual({
+    expect(store.cachedDarlehen()).toEqual({
       type: 'initial',
       data: undefined,
       error: undefined,

@@ -11,7 +11,10 @@
  */
 import { SbDashboardGesuch } from './sbDashboardGesuch';
 
-export interface PaginatedSbDashboardAllOf { 
+export interface PaginatedSbGesucheDashboard { 
+    page?: number;
+    pageSize?: number;
+    totalEntries?: number;
     entries?: Array<SbDashboardGesuch>;
 }
 

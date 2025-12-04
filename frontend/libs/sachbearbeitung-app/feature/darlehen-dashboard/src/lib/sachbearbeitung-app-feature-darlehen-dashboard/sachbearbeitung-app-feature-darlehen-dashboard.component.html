@@ -1,0 +1,384 @@
+<!-- <dv-sachbearbeitung-app-pattern-overview-layout>
+  <div class="container">
+    <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
+      @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
+        <dv-shared-ui-filter-menu-button
+          [activeFilter]="show()"
+          [defaultFilter]="quickFilterGroup.filters[0].typ"
+          (filterChange)="handleQuickFilterClick($event)"
+          [filters]="quickFilterGroup.filters"
+        ></dv-shared-ui-filter-menu-button>
+      }
+    </div>
+
+    <div class="tw:flex tw:justify-between tw:mt-6! tw:mt-8!">
+      <h1 class="tw:text-2xl!" data-testid="cockpit-title">
+        {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
+      </h1>
+    </div>
+
+    <div class="tw:my-6">
+      <div class="tw:dv-table">
+        <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
+          <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading">
+            <table
+              [dvSharedUiFocusableList]="items"
+              [dataSource]="gesucheDataSourceSig()"
+              data-testid="cockpit-table"
+              mat-table
+              matSort
+              (matSortChange)="sortList($event)"
+              tabindex="0"
+            >
+              <caption class="cdk-visually-hidden">
+                {{
+                  'sachbearbeitung-app.cockpit.table.description' | transloco
+                }}
+              </caption>
+
+              <ng-container matColumnDef="FALLNUMMER">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+                  <label class="pe-none" for="fallNummer">{{
+                    'sachbearbeitung-app.cockpit.table.fall' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="fallNummer"
+                        matInput
+                        [dvMaxLength]="'small'"
+                        class="tw:w-full"
+                        formControlName="fallNummer"
+                        data-testid="cockpit-filter-fall"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.fallNummer.reset()"
+                      [valueSig]="filterForm.controls.fallNummer.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                >
+                  <a
+                    [routerLink]="
+                      gesuch.typ === 'AENDERUNG'
+                        ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
+                        : ['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]
+                    "
+                    (click)="$event.stopPropagation()"
+                  >
+                    {{ gesuch.fallNummer }}
+                  </a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="PIA_NACHNAME">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
+                  <label class="pe-none" for="piaNachname">{{
+                    'sachbearbeitung-app.cockpit.table.nachname' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="piaNachname"
+                        class="tw:w-full"
+                        matInput
+                        dvMaxLength
+                        formControlName="piaNachname"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.piaNachname.reset()"
+                      [valueSig]="filterForm.controls.piaNachname.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="gesuch.piaNachname"
+                >
+                  {{ gesuch.piaNachname }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="PIA_VORNAME">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
+                  <label class="pe-none" for="piaVorname">{{
+                    'sachbearbeitung-app.cockpit.table.vorname' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="piaVorname"
+                        class="tw:w-full"
+                        matInput
+                        dvMaxLength
+                        formControlName="piaVorname"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.piaVorname.reset()"
+                      [valueSig]="filterForm.controls.piaVorname.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:max-w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="gesuch.piaVorname"
+                >
+                  {{ gesuch.piaVorname }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="PIA_GEBURTSDATUM">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  [start]="'desc'"
+                  class="filtered tw:w-40 tw:whitespace-nowrap"
+                  example="01.01.2000"
+                >
+                  <label class="pe-none" for="piaGeburtsdatum">{{
+                    'sachbearbeitung-app.cockpit.table.geburtsdatum' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="piaGeburtsdatum"
+                        class="tw:w-full"
+                        matInput
+                        [dvMaxLength]="'small'"
+                        formControlName="piaGeburtsdatum"
+                        [matDatepicker]="geburtsdatumDatepicker"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                      <button
+                        matIconSuffix
+                        type="button"
+                        class="btn btn-link text-muted tw:!p-1"
+                        [attr.aria-label]="'shared.ui.open-date-picker'"
+                        (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
+                      >
+                        <dv-shared-ui-icon-chip class="fs-8">
+                          <i class="icon material-symbols-rounded fs-5">event</i>
+                        </dv-shared-ui-icon-chip>
+                      </button>
+                      <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.piaGeburtsdatum.reset()"
+                      [valueSig]="filterForm.controls.piaGeburtsdatum.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                >
+                  {{ gesuch.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="STATUS">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
+                  {{ 'sachbearbeitung-app.cockpit.table.status' | transloco }}
+                  <mat-form-field class="tw:w-full">
+                    <mat-select
+                      [aria-label]="'sachbearbeitung-app.cockpit.table.status' | transloco"
+                      formControlName="status"
+                      (click)="$event.stopPropagation()"
+                      class="tw:!font-normal"
+                      [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | transloco"
+                      panelClass="table-select"
+                    >
+                      <mat-option [value]="null">
+                        {{ 'sachbearbeitung-app.cockpit.no-status-filter' | transloco }}
+                      </mat-option>
+                      @for (status of statusValuesSig()?.status; track status) {
+                        <mat-option [value]="status">
+                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status | transloco }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:w-48 tw:whitespace-nowrap"
+                >
+                  <span [dvTruncateTooltip]="gesuch.translationKey | transloco">
+                    {{ gesuch.translationKey | transloco }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="BEARBEITER">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
+                  <label class="pe-none" for="bearbeiter">{{
+                    'sachbearbeitung-app.cockpit.table.bearbeiter' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="bearbeiter"
+                        class="tw:w-full"
+                        matInput
+                        dvMaxLength
+                        formControlName="bearbeiter"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="filterForm.controls.bearbeiter.reset()"
+                      [valueSig]="filterForm.controls.bearbeiter.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="gesuch.bearbeiter"
+                >
+                  {{ gesuch.bearbeiter }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="LETZTE_AKTIVITAET">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  [start]="'desc'"
+                  class="filtered tw:w-40 tw:whitespace-nowrap"
+                >
+                  <label class="pe-none" for="letzteAktivitaet">{{
+                    'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | transloco
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="letzteAktivitaet"
+                        class="range"
+                        matInput
+                        dvMaxLength
+                        [value]="letzteAktivitaetRangeSig()"
+                        disabled
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                      <button
+                        matIconSuffix
+                        type="button"
+                        class="btn btn-link text-muted tw:!p-1"
+                        [attr.aria-label]="'shared.ui.open-date-picker'"
+                        (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
+                      >
+                        <dv-shared-ui-icon-chip class="fs-8">
+                          <i class="icon material-symbols-rounded fs-5">event</i>
+                        </dv-shared-ui-icon-chip>
+                      </button>
+                      <mat-date-range-input
+                        class="d-none w-100"
+                        [rangePicker]="letzteAktivitaetRangePicker"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <input
+                          [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
+                          matStartDate
+                          [placeholder]="'shared.label.von' | transloco"
+                        />
+                        <input
+                          [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
+                          matEndDate
+                          [placeholder]="'shared.label.bis' | transloco"
+                        />
+                      </mat-date-range-input>
+                      <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                      (clear)="
+                        filterStartEndForm.controls.letzteAktivitaetFrom.reset();
+                        filterStartEndForm.controls.letzteAktivitaetTo.reset()
+                      "
+                      [valueSig]="[
+                        filterStartEndForm.controls.letzteAktivitaetFrom.value,
+                        filterStartEndForm.controls.letzteAktivitaetTo.value,
+                      ]"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                >
+                  {{ gesuch.letzteAktivitaet | date: 'dd.MM.yyyy' }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                dvSharedUiFocusableListItem
+                mat-row
+                tabindex="-1"
+                *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedColumns"
+                [routerLink]="
+                  gesuch.typ === 'AENDERUNG'
+                    ? ['/gesuch', 'info', gesuch.id, 'aenderung', gesuch.trancheId]
+                    : ['/gesuch', 'info', gesuch.id, 'tranche', gesuch.trancheId]
+                "
+                class="highlightable"
+              ></tr>
+              <tr class="mat-mdc-row" *matNoDataRow>
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+                  {{ 'shared.table.noData' | transloco }}
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              showFirstLastButtons
+              [pageSizeOptions]="pageSizes"
+              [pageSize]="pageSize() ?? defaultPageSize"
+              [pageIndex]="page() ?? 0"
+              [length]="gesuchStore.cockpitViewSig().gesuche?.totalEntries"
+              (page)="paginateList($event)"
+            ></mat-paginator>
+          </div>
+          @if (gesuchStore.cockpitViewSig().loading) {
+            <dv-shared-ui-loading
+              class="position-absolute translate-middle start-50 top-50"
+              [type]="'compact'"
+            ></dv-shared-ui-loading>
+          }
+        </form>
+      </div>
+    </div>
+  </div>
+</dv-sachbearbeitung-app-pattern-overview-layout> -->

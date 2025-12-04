@@ -38,8 +38,8 @@ import { GesuchZurueckweisenResponse } from '../model/gesuchZurueckweisenRespons
 import { GetGesucheSBQueryType } from '../model/getGesucheSBQueryType';
 import { Kommentar } from '../model/kommentar';
 import { NachfristAendernRequest } from '../model/nachfristAendernRequest';
-import { PaginatedSbDashboard } from '../model/paginatedSbDashboard';
-import { SbDashboardColumn } from '../model/sbDashboardColumn';
+import { PaginatedSbGesucheDashboard } from '../model/paginatedSbGesucheDashboard';
+import { SbGesucheDashboardColumn } from '../model/sbGesucheDashboardColumn';
 import { SortOrder } from '../model/sortOrder';
 import { StatusprotokollEntry } from '../model/statusprotokollEntry';
 import { ValidationReport } from '../model/validationReport';
@@ -196,7 +196,7 @@ export interface GesuchServiceGetGesucheSbRequestParams {
     typ: GesuchTrancheTyp;
     page: number;
     pageSize: number;
-    sortColumn?: SbDashboardColumn;
+    sortColumn?: SbGesucheDashboardColumn;
     sortOrder?: SortOrder;
 }
 
@@ -2630,9 +2630,9 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSbDashboard>;
-     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSbDashboard>>;
-     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSbDashboard>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<PaginatedSbGesucheDashboard>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<PaginatedSbGesucheDashboard>>;
+     public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<PaginatedSbGesucheDashboard>>;
      public getGesucheSb$(requestParameters: GesuchServiceGetGesucheSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const getGesucheSBQueryType = requestParameters.getGesucheSBQueryType;
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
@@ -2761,7 +2761,7 @@ export class GesuchService {
         }
 
         const localVarPath = `/gesuch/benutzer/me/sb/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}`;
-        return this.httpClient.request<PaginatedSbDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PaginatedSbGesucheDashboard>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
