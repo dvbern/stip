@@ -74,7 +74,5 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     }
 
     @Override
-    public void createPdfForNegtativeVerfuegung(Verfuegung verfuegung) {
-        //
-    }
+    public void createPdfForNegtativeVerfuegung(Verfuegung verfuegung) {}
 }

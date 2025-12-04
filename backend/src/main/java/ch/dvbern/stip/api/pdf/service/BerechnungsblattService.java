@@ -234,7 +234,6 @@ public class BerechnungsblattService {
                         addBerechnungsblattFamilie(document, pia, typ, tranchenBerechnungsResultat, translator);
                     }
                 }
-                PdfUtils.makePageNumberEven(document);
             }
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -399,7 +398,6 @@ public class BerechnungsblattService {
 
                 addFooterParagraph1(document, 40, translator);
                 addFooterParagraph2(document, 15, translator);
-                PdfUtils.makePageNumberEven(document);
             }
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
