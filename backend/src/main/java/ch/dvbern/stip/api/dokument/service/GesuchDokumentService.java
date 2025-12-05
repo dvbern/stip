@@ -627,36 +627,35 @@ public class GesuchDokumentService {
 
         final var targetTranchen = sourceTranche.getGesuch()
             .getTranchenTranchen()
-            .filter(gesuchTranche -> !gesuchTranche.getId().equals(sourceTranche.getId()));
+            .filter(gesuchTranche -> !gesuchTranche.getId().equals(sourceTranche.getId()))
+            .toList();
 
         final var sourceGesuchDokumentOpt = gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(
             gesuchTrancheId,
             dokumentTyp
         );
 
-        targetTranchen.forEach(targetTranche -> {
-            targetTranche.getGesuchDokuments().removeIf(gesuchDokument -> {
-                // Remove the old documents from the other Tranchen
-                if (gesuchDokument.getDokumentTyp() == dokumentTyp) {
-                    gesuchDokument.getDokumente().forEach(this::removeDokument);
-                    return true;
-                }
+        for (final var targetTranche : targetTranchen) {
+            final var targetGesuchDokument = targetTranche.getGesuchDokuments()
+                .stream()
+                .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() == dokumentTyp)
+                .findFirst();
 
-                return false;
+            targetGesuchDokument.ifPresent(gesuchDokument -> {
+                // This is needed, otherwise we're modifying the same list during iteration
+                final var dokumente = gesuchDokument.getDokumente().stream().toList();
+                dokumente.forEach(this::removeDokument);
             });
 
             sourceGesuchDokumentOpt.ifPresent(sourceGesuchDokument -> {
                 // Find GesuchDokument for this type on targetTranche, if none exists create a new one
-                final var newGesuchDokument = targetTranche.getGesuchDokuments()
-                    .stream()
-                    .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() == dokumentTyp)
-                    .findFirst()
+                final var newGesuchDokument = targetGesuchDokument
                     .orElseGet(() -> GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, targetTranche));
 
                 GesuchDokumentCopyUtil.copyDokumente(newGesuchDokument, sourceGesuchDokument.getDokumente());
                 targetTranche.getGesuchDokuments().add(newGesuchDokument);
             });
-        });
+        }
     }
 
     public GesuchDokument copyGesuchDokument(final GesuchDokument sourceDokument, final GesuchTranche forTranche) {
