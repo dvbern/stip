@@ -20,6 +20,7 @@ import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.GetDarlehenSbQueryTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDarlehenDashboardColumnDtoSpec;
@@ -771,6 +772,7 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #darlehenIdPath  (required)
+     * @see #body  (required)
      * return DarlehenDtoSpec
      */
     public static class DarlehenZurueckweisenOper implements Oper {
@@ -783,6 +785,7 @@ public class DarlehenApiSpec {
 
         public DarlehenZurueckweisenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -806,6 +809,15 @@ public class DarlehenApiSpec {
         public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
+         * @return operation
+         */
+        public DarlehenZurueckweisenOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
         }
 
         public static final String DARLEHEN_ID_PATH = "darlehenId";

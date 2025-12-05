@@ -32,6 +32,7 @@ import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -115,7 +116,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
     public DarlehenDto darlehenAblehen(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAblehenen(darlehenId);
-        return darlehenService.darlehenAblehen(darlehenId);
+        return darlehenService.darlehenAblehnen(darlehenId);
     }
 
     @Override
@@ -141,9 +142,9 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
-    public DarlehenDto darlehenZurueckweisen(UUID darlehenId) {
+    public DarlehenDto darlehenZurueckweisen(UUID darlehenId, KommentarDto kommentar) {
         darlehenAuthorizer.canDarlehenZurueckweisen(darlehenId);
-        return darlehenService.darlehenZurueckweisen(darlehenId);
+        return darlehenService.darlehenZurueckweisen(darlehenId, kommentar);
     }
 
     @Override

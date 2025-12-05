@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.darlehen.service;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
@@ -36,16 +35,18 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
-import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -55,7 +56,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @RequestScoped
 @RequiredArgsConstructor
 public class DarlehenService {
-    public static final String DARLEHEN_DOKUMENT_PATH = "unterschriftenblatt/";
+    public static final String DARLEHEN_DOKUMENT_PATH = "darlehen/";
 
     private final FallRepository fallRepository;
     private final DarlehenRepository darlehenRepository;
@@ -68,14 +69,14 @@ public class DarlehenService {
     private final DarlehenDokumentRepository darlehenDokumentRepository;
     private final DokumentRepository dokumentRepository;
     private final DokumentDownloadService dokumentDownloadService;
-    private final BenutzerService benutzerService;
-    private final JWTParser jwtParser;
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
+    private final NotificationService notificationService;
 
-    public DarlehenDto createDarlehen(UUID fallId) {
+    @Transactional
+    public DarlehenDto createDarlehen(final UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
 
-        var darlehen = new Darlehen();
+        final var darlehen = new Darlehen();
         darlehen.setFall(fall);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
 
@@ -83,9 +84,10 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto getDarlehenGs(UUID fallId) {
-        var darlehenList = darlehenRepository.findByFallId(fallId);
-        var darlehenActive = darlehenList.stream()
+    @Transactional
+    public DarlehenDto getDarlehenGs(final UUID fallId) {
+        final var darlehenList = darlehenRepository.findByFallId(fallId);
+        final var darlehenActive = darlehenList.stream()
             .filter(
                 d -> !d.getStatus().equals(DarlehenStatus.AKZEPTIERT) && !d.getStatus().equals(DarlehenStatus.ABGELEHNT)
             )
@@ -95,6 +97,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehenActive);
     }
 
+    @Transactional
     public PaginatedSbDarlehenDashboardDto getDarlehenSb(
         final GetDarlehenSbQueryType getDarlehenSbQueryType,
         final Integer page,
@@ -165,48 +168,62 @@ public class DarlehenService {
         );
     }
 
-    public DarlehenDto darlehenAblehen(UUID darlehenId) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    @Transactional
+    public DarlehenDto darlehenAblehnen(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
 
         darlehenRepository.persistAndFlush(darlehen);
+
+        notificationService.createDarlehenAbgelehntNotification(darlehen);
+
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto darlehenAkzeptieren(UUID darlehenId) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    @Transactional
+    public DarlehenDto darlehenAkzeptieren(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
 
         darlehenRepository.persistAndFlush(darlehen);
+
+        notificationService.createDarlehenAkzeptiertNotification(darlehen);
+
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto darlehenEingeben(UUID darlehenId) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    public DarlehenDto darlehenEingeben(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
 
         darlehenRepository.persistAndFlush(darlehen);
+
+        notificationService.createDarlehenEingegebenNotification(darlehen);
+
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto darlehenFreigeben(UUID darlehenId) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    public DarlehenDto darlehenFreigeben(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.IN_FREIGABE);
 
         darlehenRepository.persistAndFlush(darlehen);
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto darlehenZurueckweisen(UUID darlehenId) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    public DarlehenDto darlehenZurueckweisen(final UUID darlehenId, final KommentarDto kommentar) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
 
         darlehenRepository.persistAndFlush(darlehen);
+
+        notificationService.createDarlehenZurueckgewiesenNotification(darlehen, kommentar.getText());
+
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto darlehenUpdateGs(UUID darlehenId, DarlehenUpdateGsDto darlehenUpdateGsDto) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    public DarlehenDto darlehenUpdateGs(final UUID darlehenId, final DarlehenUpdateGsDto darlehenUpdateGsDto) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
 
         darlehenMapper.partialUpdate(darlehenUpdateGsDto, darlehen);
 
@@ -214,8 +231,8 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
-    public DarlehenDto darlehenUpdateSb(UUID darlehenId, DarlehenUpdateSbDto darlehenUpdateSbDto) {
-        var darlehen = darlehenRepository.requireById(darlehenId);
+    public DarlehenDto darlehenUpdateSb(final UUID darlehenId, final DarlehenUpdateSbDto darlehenUpdateSbDto) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
 
         darlehenMapper.partialUpdate(darlehenUpdateSbDto, darlehen);
 
@@ -224,9 +241,9 @@ public class DarlehenService {
     }
 
     public Uni<Response> uploadDarlehenDokument(
-        UUID darlehenId,
-        DarlehenDokumentType dokumentTyp,
-        FileUpload fileUpload
+        final UUID darlehenId,
+        final DarlehenDokumentType dokumentTyp,
+        final FileUpload fileUpload
     ) {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
@@ -275,12 +292,12 @@ public class DarlehenService {
         return darlehenDokument;
     }
 
-    public DarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
+    public DarlehenDokumentDto getDarlehenDokument(final UUID darlehenId, final DarlehenDokumentType dokumentTyp) {
         final var dokument = darlehenDokumentRepository.findByDarlehenIdAndType(darlehenId, dokumentTyp).orElseThrow();
         return darlehenDokumentMapper.toDto(dokument);
     }
 
-    public RestMulti<Buffer> getDokument(UUID dokumentId) {
+    public RestMulti<Buffer> getDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
 
         return dokumentDownloadService.getDokument(

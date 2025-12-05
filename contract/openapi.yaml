@@ -398,6 +398,12 @@ paths:
     post:
       tags:
         - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
       responses:
         '200':
           description: Ok
@@ -5840,6 +5846,11 @@ components:
         - FAILED_AUSZAHLUNG
         - DELEGIERUNG_ANGENOMMEN
         - DELEGIERUNG_ABGELEHNT
+        - DELEGIERUNG_AUFGELOEST
+        - DARLEHEN_EINGEGEBEN
+        - DARLEHEN_ZURUECKGEWIESEN
+        - DARLEHEN_AKZEPTIERT
+        - DARLEHEN_ABGELEHNT
     LocalDate:
       format: date
       type: string
@@ -6050,6 +6061,13 @@ components:
     FileUpload:
       format: binary
       type: string
+    Kommentar:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
     Delegierung:
       type: object
       required:
@@ -8623,13 +8641,6 @@ components:
           $ref: '#/components/schemas/GesuchTrancheTyp'
         revision:
           type: integer
-    Kommentar:
-      type: object
-      required:
-        - text
-      properties:
-        text:
-          type: string
     Kanton:
       enum:
         - AG

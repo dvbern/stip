@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import java.util.UUID;
@@ -71,8 +72,9 @@ public interface DarlehenResource {
 
     @POST
     @Path("/{darlehenId}/zurueckweisen")
+    @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId);
+    DarlehenDto darlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull KommentarDto kommentarDto);
 
     @GET
     @Path("/dashboard/{getDarlehenSbQueryType}")

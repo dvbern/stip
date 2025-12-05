@@ -215,6 +215,12 @@ paths:
     post:
       tags:
         - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/Kommentar'
       responses:
         '200':
           description: Ok
