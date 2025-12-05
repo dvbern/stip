@@ -57,10 +57,10 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;

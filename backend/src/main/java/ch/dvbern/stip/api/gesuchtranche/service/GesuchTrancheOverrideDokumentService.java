@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -49,37 +47,6 @@ public class GesuchTrancheOverrideDokumentService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentService gesuchDokumentService;
-
-    private static final Set<DokumentTyp> DOKUMENTE_ON_JAHRESWERTE = Set.of(
-        DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE,
-        DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER,
-        DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER,
-        DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE,
-        DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER,
-        DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER,
-        DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE,
-        DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER,
-        DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER,
-        DokumentTyp.EK_LOHNABRECHNUNG,
-        DokumentTyp.EK_BELEG_KINDERZULAGEN,
-        DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
-        DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
-        DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION,
-        DokumentTyp.EK_BELEG_EINNAHMEN_BGSA,
-        DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV,
-        DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN,
-        DokumentTyp.EK_VERMOEGEN,
-        DokumentTyp.EK_PARTNER_LOHNABRECHNUNG,
-        DokumentTyp.EK_PARTNER_BELEG_KINDERZULAGEN,
-        DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
-        DokumentTyp.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
-        DokumentTyp.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION,
-        DokumentTyp.EK_PARTNER_BELEG_EINNAHMEN_BGSA,
-        DokumentTyp.EK_PARTNER_BELEG_TAGGELDER_AHV_IV,
-        DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN,
-        DokumentTyp.EK_PARTNER_VERMOEGEN
-    );
-    private final DokumentRepository dokumentRepository;
 
     void overrideJahreswertDokumente(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var targetTranchen = gesuch.getTranchenTranchen()
@@ -135,10 +102,10 @@ public class GesuchTrancheOverrideDokumentService {
         final var newDokumente = newTranche.getGesuchDokuments()
             .stream()
             .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() != null)
-            .filter(gesuchDokument -> DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokument.getDokumentTyp()))
+            .filter(gesuchDokument -> gesuchDokumentService.isDokumentOfJahreswert(gesuchDokument.getDokumentTyp()))
             .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument));
 
-        for (final var jahreswertDokument : DOKUMENTE_ON_JAHRESWERTE) {
+        for (final var jahreswertDokument : gesuchDokumentService.getDokumentTypsOfJahreswerte()) {
             if (newDokumente.containsKey(jahreswertDokument)) {
                 newDokumentFound.accept(jahreswertDokument, newDokumente.get(jahreswertDokument));
             } else {
@@ -152,7 +119,7 @@ public class GesuchTrancheOverrideDokumentService {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
         if (
-            gesuchDokumentTyp == null || !DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokumentTyp)
+            gesuchDokumentTyp == null || !gesuchDokumentService.isDokumentOfJahreswert(gesuchDokumentTyp)
             || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
         ) {
             return;
@@ -210,7 +177,7 @@ public class GesuchTrancheOverrideDokumentService {
 
         if (
             Objects.isNull(gesuchDokument.getDokumentTyp())
-            || !DOKUMENTE_ON_JAHRESWERTE.contains(gesuchDokument.getDokumentTyp())
+            || !gesuchDokumentService.isDokumentOfJahreswert(gesuchDokument.getDokumentTyp())
             || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
         ) {
             return;
