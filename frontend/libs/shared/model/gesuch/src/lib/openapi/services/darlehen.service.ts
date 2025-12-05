@@ -24,6 +24,7 @@ import { DarlehenDokumentType } from '../model/darlehenDokumentType';
 import { DarlehenUpdateGs } from '../model/darlehenUpdateGs';
 import { DarlehenUpdateSb } from '../model/darlehenUpdateSb';
 import { GetDarlehenSbQueryType } from '../model/getDarlehenSbQueryType';
+import { Kommentar } from '../model/kommentar';
 import { PaginatedSbDarlehenDashboard } from '../model/paginatedSbDarlehenDashboard';
 import { SbDarlehenDashboardColumn } from '../model/sbDarlehenDashboardColumn';
 import { SortOrder } from '../model/sortOrder';
@@ -71,6 +72,7 @@ export interface DarlehenServiceDarlehenUpdateSbRequestParams {
 
 export interface DarlehenServiceDarlehenZurueckweisenRequestParams {
     darlehenId: string;
+    kommentar: Kommentar;
 }
 
 export interface DarlehenServiceGetDarlehenDashboardSbRequestParams {
@@ -834,6 +836,10 @@ export class DarlehenService {
         if (darlehenId === null || darlehenId === undefined) {
             throw new Error('Required parameter darlehenId was null or undefined when calling darlehenZurueckweisen$.');
         }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling darlehenZurueckweisen$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -869,6 +875,15 @@ export class DarlehenService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -884,6 +899,7 @@ export class DarlehenService {
         return this.httpClient.request<Darlehen>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: kommentar,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

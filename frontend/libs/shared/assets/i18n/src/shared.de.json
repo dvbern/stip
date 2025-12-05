@@ -272,6 +272,10 @@
   "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Delegierung Angenommen",
   "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Delegierung Abgelehnt",
   "shared.nachrichten.type.DELEGIERUNG_AUFGELOEST": "Delegierung aufgelöst",
+  "shared.nachrichten.type.DARLEHEN_EINGEGEBEN": "Darlehen eingegeben",
+  "shared.nachrichten.type.DARLEHEN_ZURUECKGEWIESEN": "Darlehen zurückgewiesen",
+  "shared.nachrichten.type.DARLEHEN_AKZEPTIERT": "Darlehen akzeptiert",
+  "shared.nachrichten.type.DARLEHEN_ABGELEHNT": "Darlehen abgelehnt",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
