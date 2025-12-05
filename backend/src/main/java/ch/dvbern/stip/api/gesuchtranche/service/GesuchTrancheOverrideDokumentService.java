@@ -28,8 +28,6 @@ import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
-import ch.dvbern.stip.api.dokument.util.GesuchDokumentKommentarCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -112,46 +110,6 @@ public class GesuchTrancheOverrideDokumentService {
                 noNewDokument.accept(jahreswertDokument);
             }
         }
-    }
-
-    @Transactional
-    public void synchronizeByGesuchDokumentTyp(final UUID gesuchTrancheId, DokumentTyp gesuchDokumentTyp) {
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-
-        if (
-            gesuchDokumentTyp == null || !gesuchDokumentService.isDokumentOfJahreswert(gesuchDokumentTyp)
-            || gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-        ) {
-            return;
-        }
-
-        final var gesuchDokumentOpt = gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(
-            gesuchTrancheId,
-            gesuchDokumentTyp
-        );
-        final var otherTranchen = gesuchTranche.getGesuch()
-            .getTranchenTranchen()
-            .filter(tranche -> !tranche.getId().equals(gesuchTranche.getId()));
-
-        otherTranchen.forEach(otherTranche -> {
-            // Remove the gesuchDokumente and dokumente from other tranchen by given DokumentTyp
-            otherTranche.getGesuchDokuments().removeIf(dokument -> {
-                if (Objects.equals(dokument.getDokumentTyp(), gesuchDokumentTyp)) {
-                    dokument.getDokumente().clear();
-                    gesuchDokumentRepository.delete(dokument);
-                    return true;
-                }
-                return false;
-            });
-
-            // Copy the original gesuchDokument and its dokumente if present
-            gesuchDokumentOpt.ifPresent(gesuchDokument -> {
-                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(gesuchDokument, otherTranche);
-                GesuchDokumentCopyUtil.copyDokumente(newGesuchDokument, gesuchDokument.getDokumente());
-                GesuchDokumentKommentarCopyUtil.overrideAll(gesuchDokument, newGesuchDokument);
-                otherTranche.getGesuchDokuments().add(newGesuchDokument);
-            });
-        });
     }
 
     @Transactional

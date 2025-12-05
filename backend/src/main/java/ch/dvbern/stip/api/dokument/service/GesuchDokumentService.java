@@ -135,29 +135,7 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public Uni<Response> getUploadDokumentUniGs(
-        final DokumentTyp dokumentTyp,
-        final UUID gesuchTrancheId,
-        final FileUpload fileUpload
-    ) {
-        return dokumentUploadService.validateScanUploadDokument(
-            fileUpload,
-            s3,
-            configService,
-            antivirus,
-            GESUCH_DOKUMENT_PATH,
-            objectId -> uploadDokument(
-                gesuchTrancheId,
-                dokumentTyp,
-                fileUpload,
-                objectId
-            ),
-            throwable -> LOG.error(throwable.getMessage())
-        );
-    }
-
-    @Transactional
-    public Uni<Response> getUploadDokumentUniSb(
+    public Uni<Response> getUploadDokumentUni(
         final DokumentTyp dokumentTyp,
         final UUID gesuchTrancheId,
         final FileUpload fileUpload
@@ -463,13 +441,7 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void removeDokumentGs(final UUID dokumentId) {
-        final var dokument = dokumentRepository.findByIdOptional(dokumentId).orElseThrow(NotFoundException::new);
-        removeDokument(dokument);
-    }
-
-    @Transactional
-    public void removeDokumentSb(final UUID dokumentId) {
+    public void removeDokument(final UUID dokumentId) {
         // Set GesuchDokument to ausstehend
         final var dokument = dokumentRepository.requireById(dokumentId);
         dokument.getGesuchDokument().setStatus(GesuchDokumentStatus.AUSSTEHEND);

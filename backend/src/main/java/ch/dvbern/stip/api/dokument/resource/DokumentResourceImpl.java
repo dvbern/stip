@@ -106,7 +106,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_UPLOAD_GS)
     public Uni<Response> createDokumentGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         gesuchDokumentAuthorizer.canGsUploadDokument(gesuchTrancheId, dokumentTyp);
-        return gesuchDokumentService.getUploadDokumentUniGs(dokumentTyp, gesuchTrancheId, fileUpload);
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
     @Blocking
@@ -115,7 +115,7 @@ public class DokumentResourceImpl implements DokumentResource {
     public Uni<Response> createDokumentSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
         gesuchDokumentAuthorizer.assertSbCanModifyDokumentOfTranche(gesuchTrancheId);
         gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp);
-        return gesuchDokumentService.getUploadDokumentUniSb(dokumentTyp, gesuchTrancheId, fileUpload);
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_DELETE_GS)
     public void deleteDokumentGS(UUID dokumentId) {
         gesuchDokumentAuthorizer.assertGsCanDeleteDokumentOfTranche(dokumentId);
-        gesuchDokumentService.removeDokumentGs(dokumentId);
+        gesuchDokumentService.removeDokument(dokumentId);
     }
 
     @Blocking
@@ -183,7 +183,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_DELETE_SB)
     public void deleteDokumentSB(UUID dokumentId) {
         gesuchDokumentAuthorizer.assertSbCanDeleteDokumentOfTranche(dokumentId);
-        gesuchDokumentService.removeDokumentSb(dokumentId);
+        gesuchDokumentService.removeDokument(dokumentId);
     }
 
     @Override
