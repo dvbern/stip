@@ -155,14 +155,16 @@
               </button>
             }
           }
-          <!-- todo: add conditions -->
-          <a
-            class="btn btn-outline-primary"
-            data-testid="cockpit-gesuch-edit"
-            [routerLink]="['/darlehen', gesuch.fallId]"
-          >
-            {{ 'shared.dashboard.darlehen.create' | transloco }}
-          </a>
+          <!-- todo: add conditions via matrix -->
+          @if (gesuch.gesuchStatus === 'EINGEREICHT') {
+            <a
+              class="btn btn-outline-primary"
+              data-testid="cockpit-gesuch-edit"
+              [routerLink]="['/darlehen', gesuch.fallId]"
+            >
+              {{ 'shared.dashboard.darlehen.create' | transloco }}
+            </a>
+          }
         }
       </div>
     </div>

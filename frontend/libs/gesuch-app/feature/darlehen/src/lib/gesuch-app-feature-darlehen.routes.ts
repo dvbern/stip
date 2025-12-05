@@ -1,5 +1,4 @@
 import { inject } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
 import {
   ActivatedRouteSnapshot,
   RedirectCommand,
@@ -8,43 +7,61 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { Darlehen } from '@dv/shared/model/gesuch';
-import { isFailure, isSuccess } from '@dv/shared/util/remote-data';
+import { Darlehen, DarlehenService } from '@dv/shared/model/gesuch';
+import {
+  failure,
+  isFailure,
+  isSuccess,
+  success,
+} from '@dv/shared/util/remote-data';
 
 import { GesuchAppFeatureDarlehenComponent } from './gesuch-app-feature-darlehen/gesuch-app-feature-darlehen.component';
 
 const darlehenResolver: ResolveFn<Darlehen> = (
   route: ActivatedRouteSnapshot,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   state: RouterStateSnapshot,
 ) => {
   const darlehenStore = inject(DarlehenStore);
+  const darlehenService = inject(DarlehenService);
   const fallId = route.paramMap.get('fallId');
   const router = inject(Router);
+  const redirectToRoot = new RedirectCommand(router.parseUrl('/'));
 
   if (!fallId) {
-    const route = router.parseUrl('/');
-    return new RedirectCommand(route);
+    return redirectToRoot;
   }
 
-  const obs = toObservable(darlehenStore.getDarlehenRequest).pipe(
-    filter((rd) => isSuccess(rd) || isFailure(rd)),
-    map((requestRd) => {
-      if (isSuccess(requestRd) && requestRd.data) {
-        return requestRd.data;
-      } else {
-        // Handle error or missing data case
-        const route = router.parseUrl('/');
-        return new RedirectCommand(route);
+  return darlehenService.getDarlehenGs$({ fallId }).pipe(
+    map((data) => success(data)),
+    catchError((err) => of(failure(err))),
+    switchMap((rd) => {
+      if (isFailure(rd)) {
+        darlehenStore.setDarlehen(rd);
+        return of(redirectToRoot);
       }
+
+      if (isSuccess(rd) && rd.data) {
+        darlehenStore.setDarlehen(rd);
+        return of(rd.data);
+      }
+
+      // No Darlehen found (response data is null, status 204) --> create new Darlehen
+      return darlehenService.createDarlehen$({ fallId }).pipe(
+        map((data) => {
+          darlehenStore.setDarlehen(success(data));
+          return data;
+        }),
+        catchError((err) => {
+          darlehenStore.setDarlehen(failure(err));
+          return of(redirectToRoot);
+        }),
+      );
     }),
   );
-
-  darlehenStore.getDarlehenGs$({ fallId });
-
-  return obs;
 };
 
 export const gesuchAppFeatureDarlehenRoutes: Route[] = [
@@ -55,10 +72,5 @@ export const gesuchAppFeatureDarlehenRoutes: Route[] = [
     resolve: { darlehen: darlehenResolver },
     component: GesuchAppFeatureDarlehenComponent,
     title: 'shared.darlehen.title',
-    // children: [
-    //   {
-    //     path: ':fallId',
-    //   },
-    // ],
   },
 ];

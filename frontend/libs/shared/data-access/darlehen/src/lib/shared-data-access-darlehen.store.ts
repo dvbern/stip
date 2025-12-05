@@ -43,6 +43,10 @@ export class DarlehenStore extends signalStore(
 ) {
   private darlehenService = inject(DarlehenService);
 
+  setDarlehen(rd: CachedRemoteData<Darlehen>) {
+    patchState(this, { cachedDarlehen: rd });
+  }
+
   getDarlehenGs$ = rxMethod<DarlehenServiceGetDarlehenGsRequestParams>(
     pipe(
       tap(() => {

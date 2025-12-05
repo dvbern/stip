@@ -9,9 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Darlehen } from './darlehen';
+import { DarlehenDashboard } from './darlehenDashboard';
 
 export interface PaginatedSbDarlehenDashboardAllOf { 
-    entries?: Array<Darlehen>;
+    entries?: Array<DarlehenDashboard>;
 }
 
