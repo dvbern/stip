@@ -113,9 +113,9 @@ public class DarlehenDtoSpec {
    * Get fallId
    * @return fallId
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_FALL_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public UUID getFallId() {
     return fallId;
@@ -123,7 +123,7 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FALL_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
   }
@@ -218,9 +218,9 @@ public class DarlehenDtoSpec {
    * Get kommentar
    * @return kommentar
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public String getKommentar() {
     return kommentar;
@@ -228,7 +228,7 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_KOMMENTAR)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setKommentar(String kommentar) {
     this.kommentar = kommentar;
   }
@@ -272,9 +272,9 @@ public class DarlehenDtoSpec {
    * minimum: 0
    * @return schulden
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_SCHULDEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getSchulden() {
     return schulden;
@@ -282,7 +282,7 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SCHULDEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setSchulden(Integer schulden) {
     this.schulden = schulden;
   }
@@ -299,9 +299,9 @@ public class DarlehenDtoSpec {
    * minimum: 0
    * @return anzahlBetreibungen
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
@@ -309,7 +309,7 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
@@ -325,9 +325,9 @@ public class DarlehenDtoSpec {
    * Get grund
    * @return grund
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_GRUND)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DarlehenGrundDtoSpec getGrund() {
     return grund;
@@ -335,7 +335,7 @@ public class DarlehenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GRUND)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setGrund(DarlehenGrundDtoSpec grund) {
     this.grund = grund;
   }

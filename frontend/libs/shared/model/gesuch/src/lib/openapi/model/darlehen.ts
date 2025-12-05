@@ -14,15 +14,15 @@ import { DarlehenGrund } from './darlehenGrund';
 
 export interface Darlehen { 
     id: string;
-    fallId: string;
+    fallId?: string;
     status?: DarlehenStatus;
     gewaehren?: boolean;
     betrag?: number;
-    kommentar: string;
+    kommentar?: string;
     betragGewuenscht?: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    grund: DarlehenGrund;
+    schulden?: number;
+    anzahlBetreibungen?: number;
+    grund?: DarlehenGrund;
 }
 
 

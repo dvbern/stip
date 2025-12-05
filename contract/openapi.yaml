@@ -6004,14 +6004,6 @@ components:
       type: object
       required:
         - id
-        - fallId
-        - darlehenGewaehren
-        - darlehenBetrag
-        - kommentar
-        - darlehenBetragGewuenscht
-        - schulden
-        - anzahlBetreibungen
-        - grund
       properties:
         id:
           $ref: '#/components/schemas/UUID'

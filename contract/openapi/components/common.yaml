@@ -966,14 +966,6 @@ Darlehen:
   type: object
   required:
     - id
-    - fallId
-    - darlehenGewaehren
-    - darlehenBetrag
-    - kommentar
-    - darlehenBetragGewuenscht
-    - schulden
-    - anzahlBetreibungen
-    - grund
   properties:
     id:
       $ref: '#/UUID'
