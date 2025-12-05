@@ -28,11 +28,11 @@ import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DarlehenResource;
-import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
@@ -174,7 +174,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public DarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
+    public NullableDarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
         darlehenAuthorizer.canGetDarlehenDokument();
         return darlehenService.getDarlehenDokument(darlehenId, dokumentTyp);
     }

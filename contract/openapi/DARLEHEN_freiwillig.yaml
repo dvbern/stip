@@ -51,6 +51,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getDarlehenDashboardSb
       summary: Returns darlehen filtered by status and sb
+
   /darlehen/{fallId}:
     parameters:
       - name: fallId
@@ -120,7 +121,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DarlehenDokument'
+                $ref: '#/components/schemas/NullableDarlehenDokument'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -466,6 +467,12 @@ components:
           minimum: 0
         grund:
           $ref: './components/common.yaml#/DarlehenGrund'
+
+    NullableDarlehenDokument:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/DarlehenDokument'
 
     DarlehenDokument:
       type: object

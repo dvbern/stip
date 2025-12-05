@@ -1,11 +1,11 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -84,7 +84,7 @@ public interface DarlehenResource {
     @GET
     @Path("/{darlehenId}/{dokumentType}")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDokumentDto getDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType);
+    NullableDarlehenDokumentDto getDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType);
 
     @GET
     @Path("/{fallId}")

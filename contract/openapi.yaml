@@ -294,7 +294,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DarlehenDokument'
+                $ref: '#/components/schemas/NullableDarlehenDokument'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5951,6 +5951,11 @@ components:
           minimum: 0
         grund:
           $ref: '#/components/schemas/DarlehenGrund'
+    NullableDarlehenDokument:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/DarlehenDokument'
     DarlehenDokument:
       type: object
       required:

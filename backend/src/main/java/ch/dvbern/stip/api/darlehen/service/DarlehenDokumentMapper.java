@@ -19,10 +19,10 @@ package ch.dvbern.stip.api.darlehen.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
-import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
+import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import org.mapstruct.Mapper;
 
 @Mapper(config = MappingConfig.class)
 public interface DarlehenDokumentMapper {
-    DarlehenDokumentDto toDto(DarlehenDokument darlehenDokument);
+    NullableDarlehenDokumentDto toDto(DarlehenDokument darlehenDokument);
 }

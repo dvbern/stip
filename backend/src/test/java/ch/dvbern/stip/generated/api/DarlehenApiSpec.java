@@ -13,7 +13,6 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DarlehenDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
@@ -22,6 +21,7 @@ import java.io.File;
 import ch.dvbern.stip.generated.dto.GetDarlehenSbQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
+import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDarlehenDashboardColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
@@ -1074,7 +1074,7 @@ public class DarlehenApiSpec {
      *
      * @see #darlehenIdPath  (required)
      * @see #dokumentTypePath  (required)
-     * return DarlehenDokumentDtoSpec
+     * return NullableDarlehenDokumentDtoSpec
      */
     public static class GetDarlehenDokumentOper implements Oper {
 
@@ -1104,10 +1104,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/{darlehenId}/{dokumentType}
          * @param handler handler
-         * @return DarlehenDokumentDtoSpec
+         * @return NullableDarlehenDokumentDtoSpec
          */
-        public DarlehenDokumentDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDokumentDtoSpec> type = new TypeRef<DarlehenDokumentDtoSpec>(){};
+        public NullableDarlehenDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<NullableDarlehenDokumentDtoSpec> type = new TypeRef<NullableDarlehenDokumentDtoSpec>(){};
             return execute(handler).as(type);
         }
 

@@ -36,11 +36,11 @@ import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.generated.dto.DarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
@@ -292,8 +292,11 @@ public class DarlehenService {
         return darlehenDokument;
     }
 
-    public DarlehenDokumentDto getDarlehenDokument(final UUID darlehenId, final DarlehenDokumentType dokumentTyp) {
-        final var dokument = darlehenDokumentRepository.findByDarlehenIdAndType(darlehenId, dokumentTyp).orElseThrow();
+    public NullableDarlehenDokumentDto getDarlehenDokument(
+        final UUID darlehenId,
+        final DarlehenDokumentType dokumentTyp
+    ) {
+        final var dokument = darlehenDokumentRepository.findByDarlehenIdAndType(darlehenId, dokumentTyp).orElse(null);
         return darlehenDokumentMapper.toDto(dokument);
     }
 
