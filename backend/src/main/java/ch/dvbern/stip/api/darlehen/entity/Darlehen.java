@@ -65,7 +65,7 @@ public class Darlehen extends AbstractMandantEntity {
     private DarlehenStatus status = DarlehenStatus.IN_BEARBEITUNG_GS;
 
     @Nullable
-    @Column(name = "gewaehren", nullable = false)
+    @Column(name = "gewaehren")
     private Boolean gewaehren;
 
     @Nullable

@@ -101,9 +101,7 @@
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1764832806397-12">
         <addColumn tableName="darlehen">
-            <column name="gewaehren" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
+            <column name="gewaehren" type="BOOLEAN"/>
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1764832806397-13">
