@@ -87,7 +87,21 @@ public class DarlehenResourceImpl implements DarlehenResource {
         SortOrder sortOrder
     ) {
         darlehenAuthorizer.canGetDarlehenDashboardSb();
-        return null;
+        return darlehenService.getDarlehenSb(
+            getDarlehenSbQueryType,
+            page,
+            pageSize,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            status,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            sortColumn,
+            sortOrder
+        );
     }
 
     @Override
