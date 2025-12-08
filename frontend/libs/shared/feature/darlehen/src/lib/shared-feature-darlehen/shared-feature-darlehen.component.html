@@ -2,9 +2,16 @@
 @if (false) {
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
-  <form [formGroup]="form" novalidate data-testid="form-darlehen-form">
+  <form [formGroup]="formSb" novalidate data-testid="form-darlehen-sb-form" *dvIfSachbearbeiter>
     <!-- sachbearbeiter fields -->
-    <div class="tw:dv-form-half" *dvIfSachbearbeiter>
+    <div class="tw:dv-form-half">
+      <!-- info betragBezogenKanton -->
+      <div>
+        <span>
+          {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }}
+        </span>
+        <span>0</span>
+      </div>
       <!-- darlehenGewaehren mat-radio-group -->
       <!-- todo: change to [formcontrol] -->
       <mat-radio-group class="tw:w-full" data-testid="form-darlehen-darlehenGewaehren" dvSharedUiFormField>
@@ -38,38 +45,27 @@
       <!-- kommentar  -->
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.form.darlehen.kommentar.label' | transloco }}</mat-label>
-        <textarea data-testid="form-darlehen-kommentar" matInput rows="4"></textarea>
+        <textarea data-testid="form-darlehen-kommentar" dvMaxLength="large" matInput rows="4"></textarea>
 
-        <mat-error *dvSharedUiFormMessageError="'maxlength'">
-          {{ 'shared.form.error.maxlength' | transloco: { max: 500 } }}
-        </mat-error>
-      </mat-form-field>
-      <hr class="tw:my-6 tw:border-t tw:border-gray-400" />
-    </div>
-
-    <div class="tw:mt-10 tw:dv-form-half">
-      <!-- Darlehensbetrag -->
-      <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>{{ 'shared.form.darlehen.betragDarlehenGewuenscht.label' | transloco }}</mat-label>
-        <input
-          formControlName="betragDarlehenGewuenscht"
-          data-testid="form-darlehen-betragDarlehenGewuenscht"
-          matInput
-          type="text"
-          [maskito]="maskitoNumber"
-        />
-
+        <!-- <mat-error *dvSharedUiFormMessageError="'maxlength'">
+          {{ 'shared.form.error.maxlength' | transloco: { max: 2000 } }}
+        </mat-error> -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
+      <hr class="tw:my-6 tw:border-t tw:border-gray-400" />
+    </div>
+  </form>
 
-      <!-- betragBezogenKanton -->
+  <form [formGroup]="formGs" novalidate data-testid="form-darlehen-gs-form">
+    <div class="tw:mt-10 tw:dv-form-half">
+      <!-- Darlehensbetrag -->
       <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | transloco }}</mat-label>
+        <mat-label>{{ 'shared.form.darlehen.betragGewuenscht.label' | transloco }}</mat-label>
         <input
-          formControlName="betragBezogenKanton"
-          data-testid="form-darlehen-betragBezogenKanton"
+          [formControl]="formGs.controls.betragGewuenscht"
+          data-testid="form-darlehen-betragGewuenscht"
           matInput
           type="text"
           [maskito]="maskitoNumber"
@@ -84,7 +80,7 @@
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.form.darlehen.schulden.label' | transloco }}</mat-label>
         <input
-          formControlName="schulden"
+          [formControl]="formGs.controls.schulden"
           data-testid="form-darlehen-schulden"
           matInput
           type="text"
@@ -101,7 +97,7 @@
         <mat-form-field dvSharedUiFormField class="tw:w-full">
           <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | transloco }}</mat-label>
           <input
-            formControlName="anzahlBetreibungen"
+            [formControl]="formGs.controls.anzahlBetreibungen"
             data-testid="form-darlehen-anzahlBetreibungen"
             matInput
             type="number"
@@ -133,7 +129,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            formControlName="grundNichtBerechtigt"
+            [formControl]="formGs.controls.gruende.controls.grundNichtBerechtigt"
             data-testid="form-darlehen-grundNichtBerechtigt"
           >
             {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | transloco }}
@@ -150,7 +146,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            formControlName="grundAusbildungZwoelfJahre"
+            [formControl]="formGs.controls.gruende.controls.grundAusbildungZwoelfJahre"
             data-testid="form-darlehen-grundAusbildungZwoelfJahre"
           >
             {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | transloco }}
@@ -161,7 +157,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            formControlName="grundHoheGebuehren"
+            [formControl]="formGs.controls.gruende.controls.grundHoheGebuehren"
             data-testid="form-darlehen-grundHoheGebuehren"
           >
             {{ 'shared.form.darlehen.grundHoheGebuehren.label' | transloco }}
@@ -178,7 +174,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            formControlName="grundAnschaffungenFuerAusbildung"
+            [formControl]="formGs.controls.gruende.controls.grundAnschaffungenFuerAusbildung"
             data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
           >
             {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | transloco }}
@@ -195,7 +191,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            formControlName="grundZweitausbildung"
+            [formControl]="formGs.controls.gruende.controls.grundZweitausbildung"
             data-testid="form-darlehen-grundZweitausbildung"
           >
             {{ 'shared.form.darlehen.grundZweitausbildung.label' | transloco }}
@@ -209,40 +205,55 @@
       <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
-      <button type="submit" (click)="darlehenCreate()" class="btn btn-primary" data-testid="button-create-darlehen">
-        {{ 'shared.form.darlehen.create' | transloco }}
-      </button>
-      <!-- sachbearbeiter -->
-      <button
-        type="button"
-        data-testid="button-darlehen-freigeben"
-        (click)="darlehenFreigeben()"
-        class="btn btn-primary"
-      >
-        {{ 'shared.form.darlehen.freigeben' | transloco }}
-      </button>
-      <!-- button akzeptieren wenn freigabestelle und in Freigabe! -->
-      <button
-        type="button"
-        data-testid="button-darlehen-akzeptieren"
-        (click)="darlehenAkzeptieren()"
-        class="btn btn-primary"
-      >
-        {{ 'shared.form.darlehen.akzeptieren' | transloco }}
-      </button>
-      <!-- darlehen ablehnen  -->
-      <button type="button" data-testid="button-darlehen-ablehnen" (click)="darlehenAblehnen()" class="btn btn-primary">
-        {{ 'shared.form.darlehen.ablehnen' | transloco }}
-      </button>
-      <!-- dalehen zurückweisen -->
-      <button
-        type="button"
-        data-testid="button-darlehen-zurueckweisen"
-        (click)="darlehenZurueckweisen()"
-        class="btn btn-primary"
-      >
-        {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
-      </button>
+      <div *dvIfGesuchsteller>
+        <button type="submit" (click)="darlehenEingeben()" class="btn btn-primary" data-testid="button-create-darlehen">
+          {{ 'shared.form.darlehen.create' | transloco }}
+        </button>
+      </div>
+      <div *dvIfSachbearbeiter>
+        <button type="submit" (click)="darlehenUpdateSb()" class="btn btn-primary" data-testid="button-create-darlehen">
+          {{ 'shared.form.darlehen.create' | transloco }}
+        </button>
+        <!-- darlehen Freigeben -->
+        <button
+          type="button"
+          data-testid="button-darlehen-freigeben"
+          (click)="darlehenFreigeben()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.freigeben' | transloco }}
+        </button>
+        <!-- dalehen zurückweisen -->
+        <button
+          type="button"
+          data-testid="button-darlehen-zurueckweisen"
+          (click)="darlehenZurueckweisen()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
+        </button>
+      </div>
+      <!-- todo: freigabestelle -->
+      @if (false) {
+        <!-- button akzeptieren wenn freigabestelle und in Freigabe! -->
+        <button
+          type="button"
+          data-testid="button-darlehen-akzeptieren"
+          (click)="darlehenAkzeptieren()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.akzeptieren' | transloco }}
+        </button>
+        <!-- darlehen ablehnen  -->
+        <button
+          type="button"
+          data-testid="button-darlehen-ablehnen"
+          (click)="darlehenAblehnen()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.ablehnen' | transloco }}
+        </button>
+      }
     </dv-shared-ui-step-form-buttons>
   </form>
 }

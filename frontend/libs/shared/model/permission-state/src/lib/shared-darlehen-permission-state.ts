@@ -1,0 +1,122 @@
+import { RolesMap } from '@dv/shared/model/benutzer';
+import { AppType } from '@dv/shared/model/config';
+import { DarlehenStatus, DelegierungSlim } from '@dv/shared/model/gesuch';
+import { capitalized } from '@dv/shared/model/type-util';
+
+import {
+  ShortRole,
+  isNotReadonly,
+  shortRoleMap,
+} from './shared-model-permission-state';
+
+const DarlehenPermissions = {
+  W: { index: 0, name: 'write' },
+  K: { index: 1, name: 'kommentieren' },
+  D: { index: 2, name: 'uploadDocuments' },
+  E: { index: 3, name: 'eingeben' },
+  F: { index: 4, name: 'freigeben' },
+  A: { index: 5, name: 'approveDarlehen' },
+} as const;
+type DarlehenPermissions = typeof DarlehenPermissions;
+type DarlehenPermissionFlag = keyof DarlehenPermissions;
+type P<T extends DarlehenPermissionFlag> = T | ' ';
+
+type DarlehenPermissionFlags =
+  `${P<'W'>}${P<'K'>}${P<'D'>}${P<'E'>}${P<'F'>}${P<'A'>}`;
+
+export type DarlehenPermission =
+  DarlehenPermissions[DarlehenPermissionFlag]['name'];
+
+const hasPermission = (
+  p: DarlehenPermissionFlags,
+  perm: keyof typeof DarlehenPermissions,
+) => p.charAt(DarlehenPermissions[perm].index) === perm;
+
+const GS_APP = 'gesuch-app' satisfies AppType;
+const SB_APP = 'sachbearbeitung-app' satisfies AppType;
+
+const perm = (flags: DarlehenPermissionFlags, roles: ShortRole[]) => {
+  return (rolesMap: RolesMap): DarlehenPermissionFlags =>
+    roles.some((shortRole) => !!rolesMap[shortRoleMap[shortRole]])
+      ? flags
+      : '      ';
+};
+type PermissionCheck = ReturnType<typeof perm>;
+
+const parsePermissions = (permission: DarlehenPermissionFlags) => {
+  return (Object.keys(DarlehenPermissions) as DarlehenPermissionFlag[]).reduce(
+    (acc, perm) => {
+      acc[`can${capitalized(DarlehenPermissions[perm].name)}`] = hasPermission(
+        permission,
+        perm,
+      );
+      return acc;
+    },
+    {} as Record<`can${Capitalize<DarlehenPermission>}`, boolean>,
+  );
+};
+export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
+
+// prettier-ignore
+export const darlehenPermissionTableByAppType = {
+  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W DE  ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  EINGEGEBEN                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm(' K  F ', ['sb']) },
+  IN_FREIGABE                     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('     A', ['fe']) },
+  AKZEPTIERT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['fe']) },
+  ABGELEHNT                       : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['fe']) },
+} as const satisfies Record<
+  DarlehenStatus,
+  Record<AppType, PermissionCheck>
+>;
+
+const applyDelegatedDarlehenPermissions = (
+  permissions: DarlehenPermissionMap,
+  appType: AppType,
+  rolesMap: RolesMap,
+  delegierung?: DelegierungSlim,
+): DarlehenPermissionMap => {
+  if (isNotReadonly(appType, rolesMap, delegierung)) {
+    return permissions;
+  }
+
+  return {
+    ...permissions,
+    canWrite: false,
+    canUploadDocuments: false,
+    canEingeben: false,
+  };
+};
+
+export const getDarlehenPermissions = (
+  status: DarlehenStatus,
+  appType: AppType,
+  rolesMap: RolesMap,
+  delegierung?: DelegierungSlim,
+) => {
+  const state = darlehenPermissionTableByAppType[status][appType](rolesMap);
+  const permissions = parsePermissions(state);
+
+  return {
+    permissions: applyDelegatedDarlehenPermissions(
+      permissions,
+      appType,
+      rolesMap,
+      delegierung,
+    ),
+    status,
+  };
+};
+
+// todo: needed?
+// export const prepareDarlehenPermissions = (
+//   status: DarlehenStatus,
+//   appType: AppType,
+//   rolesMap: RolesMap,
+// ) => {
+//   const { permissions } = getDarlehenPermissions(status, appType, rolesMap);
+
+//   return {
+//     readonly: !permissions.canWrite,
+//     permissions,
+//   };
+// };

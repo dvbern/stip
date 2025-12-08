@@ -3,10 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnInit,
+  computed,
+  effect,
   inject,
-  input,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -21,11 +20,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
+import { Store } from '@ngrx/store';
 
-import { DarlehenDokumentType } from '@dv/shared/model/gesuch';
+import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
+import { PermissionStore } from '@dv/shared/global/permission';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import {
+  DarlehenDokumentType,
+  DarlehenUpdateGs,
+  DarlehenUpdateSb,
+} from '@dv/shared/model/gesuch';
+import { getDarlehenPermissions } from '@dv/shared/model/permission-state';
 import {
   SharedPatternDocumentUploadComponent,
   createDarlehenUploadOptionsFactory,
@@ -35,15 +44,22 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import {
+  SharedUiIfGesuchstellerDirective,
+  SharedUiIfSachbearbeiterDirective,
+} from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
+import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { maskitoNumber } from '@dv/shared/util/maskito-util';
+import {
+  fromFormatedNumber,
+  maskitoNumber,
+} from '@dv/shared/util/maskito-util';
 
 @Component({
   selector: 'dv-shared-feature-darlehen',
@@ -63,39 +79,45 @@ import { maskitoNumber } from '@dv/shared/util/maskito-util';
     SharedUiFormMessageErrorDirective,
     SharedUiStepFormButtonsComponent,
     SharedUiIfSachbearbeiterDirective,
+    SharedUiIfGesuchstellerDirective,
+    SharedUiMaxLengthDirective,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureDarlehenComponent implements OnInit {
-  // private store = inject(Store);
+export class SharedFeatureDarlehenComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private dialog = inject(MatDialog);
   private elementRef = inject(ElementRef);
+  private route = inject(ActivatedRoute);
+  private compileTimeConfig = inject(SharedModelCompileTimeConfig);
+  private permissionStore = inject(PermissionStore);
 
-  // If this input is set, the component is used in a dialog context
-  gesuchIdSig = input.required<string | null>();
+  private store = inject(Store);
+  private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
+
+  darlehenStore = inject(DarlehenStore);
+  darlehenSig = computed(() => {
+    const darlehen = this.darlehenStore.darlehenViewSig().darlehen;
+    if (!darlehen) {
+      throw new Error('Darlehen Component: No Darlehen present');
+    }
+    return darlehen;
+  });
 
   maskitoNumber = maskitoNumber;
 
-  // todo: replace dummy signal with real data from store
-  dokumentDummySig = signal({
-    darlehenId: 'dummy',
-    allowTypes: 'pdf',
-    permissions: {},
+  // todo: add delegation as well
+  private createUploadOptionsSig = createDarlehenUploadOptionsFactory({
+    darlehenId: this.darlehenSig().id,
+    allowTypes: this.config().deploymentConfig?.allowedMimeTypes?.join(','),
+    permissions: getDarlehenPermissions(
+      this.darlehenSig().status!,
+      this.compileTimeConfig.appType,
+      this.permissionStore.rolesMapSig(),
+    ).permissions,
   });
-
-  // todo: this function will need to be updated
-  /* needs {
-      darlehenId: string | undefined;
-      allowTypes: string | undefined;
-      permissions: PermissionMap;
-    }
-  */
-  private createUploadOptionsSig = createDarlehenUploadOptionsFactory(
-    this.dokumentDummySig,
-  );
 
   // Todo: error is not shown yet, or not anymore
   private atLeastOneCheckboxChecked: ValidatorFn = (
@@ -105,9 +127,15 @@ export class SharedFeatureDarlehenComponent implements OnInit {
     return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
-  form = this.formBuilder.group({
-    betragDarlehenGewuenscht: [<string | null>null, [Validators.required]],
-    betragBezogenKanton: [<string | null>null, [Validators.required]],
+  formSb = this.formBuilder.group({
+    betrag: [<string | null>null, [Validators.required]],
+    kommentar: [<string | null>null, [Validators.required]],
+    gewaehren: [<boolean | null>null, [Validators.required]],
+  });
+
+  // todo: how to handle new field betragBezogenKanton?
+  formGs = this.formBuilder.group({
+    betragGewuenscht: [<string | null>null, [Validators.required]],
     schulden: [<string | null>null, [Validators.required]],
     anzahlBetreibungen: [<number | null>null, [Validators.required]],
     gruende: this.formBuilder.group(
@@ -123,17 +151,16 @@ export class SharedFeatureDarlehenComponent implements OnInit {
   });
 
   grundNichtBerechtigtChangedSig = toSignal(
-    this.form.controls.gruende.controls.grundNichtBerechtigt.valueChanges,
+    this.formGs.controls.gruende.controls.grundNichtBerechtigt.valueChanges,
   );
   grundHoheGebuehrenChangedSig = toSignal(
-    this.form.controls.gruende.controls.grundHoheGebuehren.valueChanges,
+    this.formGs.controls.gruende.controls.grundHoheGebuehren.valueChanges,
   );
   grundAnschaffungenFuerAusbildungChangedSig = toSignal(
-    this.form.controls.gruende.controls.grundAnschaffungenFuerAusbildung
+    this.formGs.controls.gruende.controls.grundAnschaffungenFuerAusbildung
       .valueChanges,
   );
 
-  //todo: Falls dialog, das Dokumentenhandling besprechen!
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
     return DarlehenDokumentType.BETREIBUNGS_AUSZUG;
   });
@@ -157,26 +184,59 @@ export class SharedFeatureDarlehenComponent implements OnInit {
       : null;
   });
 
-  ngOnInit() {
-    // this.store.dispatch(SharedEventGesuchFormDarlehen.init());
+  constructor() {
+    // patch form value
+    effect(() => {
+      const darlehen = this.darlehenSig();
+
+      this.formGs.patchValue({
+        betragGewuenscht: darlehen.betragGewuenscht?.toString(),
+        schulden: darlehen.schulden?.toString(),
+        anzahlBetreibungen: darlehen.anzahlBetreibungen,
+        // todo: gruende
+      });
+    });
   }
 
-  constructor() {}
-
-  private buildUpdatedGesuchFromForm() {
-    const formValues = convertTempFormToRealValues(this.form, [
-      'betragDarlehenGewuenscht',
-      'betragBezogenKanton',
+  private buildUpdatedGsFrom() {
+    const realValues = convertTempFormToRealValues(this.formGs, [
+      'betragGewuenscht',
       'schulden',
       'anzahlBetreibungen',
     ]);
+
+    const darlehen: DarlehenUpdateGs = {
+      darlehenBetragGewuenscht: fromFormatedNumber(realValues.betragGewuenscht),
+      schulden: fromFormatedNumber(realValues.schulden),
+      anzahlBetreibungen: realValues.anzahlBetreibungen,
+      grund: undefined,
+    };
+
+    return darlehen;
   }
 
-  darlehenCreate(): void {
-    this.form.markAllAsTouched();
+  // Gesuchsteller Actions
+  darlehenUpdateGs(): void {
+    this.formGs.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
 
-    if (this.form.invalid) {
+    if (this.formGs.invalid) {
+      return;
+    }
+
+    const darlehen = this.buildUpdatedGsFrom();
+
+    this.darlehenStore.darlehenUpdateGs$({
+      darlehenId: this.darlehenSig().id,
+      darlehenUpdateGs: darlehen,
+    });
+  }
+
+  darlehenEingeben(): void {
+    this.formGs.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
+
+    if (this.formGs.invalid) {
       return;
     }
 
@@ -194,6 +254,36 @@ export class SharedFeatureDarlehenComponent implements OnInit {
       });
   }
 
+  // Sachbearbeiter Actions
+  private buildUpdatedSbFrom(): DarlehenUpdateSb {
+    const realValues = convertTempFormToRealValues(this.formSb, [
+      'betrag',
+      'kommentar',
+      'gewaehren',
+    ]);
+    return {
+      darlehenBetrag: fromFormatedNumber(realValues.betrag),
+      kommentar: realValues.kommentar,
+      darlehenGewaehren: realValues.gewaehren,
+    };
+  }
+
+  darlehenUpdateSb(): void {
+    this.formSb.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
+
+    if (this.formSb.invalid) {
+      return;
+    }
+
+    const darlehen = this.buildUpdatedSbFrom();
+
+    this.darlehenStore.darlehenUpdateSb$({
+      darlehenId: this.darlehenSig().id,
+      darlehenUpdateSb: darlehen,
+    });
+  }
+
   darlehenFreigeben(): void {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.freigeben.dialog.title',
@@ -208,6 +298,24 @@ export class SharedFeatureDarlehenComponent implements OnInit {
         }
       });
   }
+
+  darlehenZurueckweisen(): void {
+    SharedUiKommentarDialogComponent.open(this.dialog, {
+      entityId: this.darlehenSig().id,
+      titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
+      messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
+      placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',
+      confirmKey: 'shared.form.darlehen.zurueckweisen',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // this.zurueckweisenDarlehen();
+        }
+      });
+  }
+
+  // Freigabestellen Actions
 
   darlehenAkzeptieren(): void {
     SharedUiConfirmDialogComponent.open(this.dialog, {
@@ -230,22 +338,6 @@ export class SharedFeatureDarlehenComponent implements OnInit {
       message: 'shared.form.darlehen.ablehnen.dialog.message',
       cancelText: 'shared.cancel',
       confirmText: 'shared.form.darlehen.ablehnen',
-    })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          // this.zurueckweisenDarlehen();
-        }
-      });
-  }
-
-  darlehenZurueckweisen(): void {
-    SharedUiKommentarDialogComponent.open(this.dialog, {
-      entityId: this.gesuchIdSig()!,
-      titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
-      messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
-      placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',
-      confirmKey: 'shared.form.darlehen.zurueckweisen',
     })
       .afterClosed()
       .subscribe((result) => {

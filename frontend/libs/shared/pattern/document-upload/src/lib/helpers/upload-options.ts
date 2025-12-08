@@ -15,7 +15,10 @@ import {
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
-import { PermissionMap } from '@dv/shared/model/permission-state';
+import {
+  DarlehenPermissionMap,
+  PermissionMap,
+} from '@dv/shared/model/permission-state';
 
 export const DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DarlehenDokumentType]: SharedTranslationKey;
@@ -356,24 +359,21 @@ export function createUploadOptionsFactory<
 }
 
 export function createDarlehenUploadOptionsFactory<
-  T extends Signal<{
+  T extends {
     darlehenId: string | undefined;
     allowTypes: string | undefined;
-    permissions: PermissionMap;
-  }>,
+    permissions: DarlehenPermissionMap;
+  },
 >(view: T) {
   return (
     lazyDokumentTyp: (view: T) => DarlehenDokumentType | null | undefined,
   ) => {
     return computed<DokumentOptions | null>(() => {
-      const darlehenId = view().darlehenId;
-      const allowTypes = view().allowTypes;
-      const permissions = view().permissions;
       const dokumentTyp = lazyDokumentTyp(view);
-      return dokumentTyp && darlehenId && allowTypes
+      return dokumentTyp && view.darlehenId && view.allowTypes
         ? {
-            allowTypes,
-            permissions,
+            allowTypes: view.allowTypes,
+            permissions: view.permissions,
             info: {
               type: 'TRANSLATABLE',
               title: DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -383,7 +383,7 @@ export function createDarlehenUploadOptionsFactory<
                 ],
             },
             dokument: {
-              darlehenId,
+              darlehenId: view.darlehenId,
               dokumentTyp,
               art: 'DARLEHEN_DOKUMENT',
             },
