@@ -21,10 +21,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.auszahlung.service.AuszahlungValidatorService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.exception.CombinedValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
@@ -128,6 +131,7 @@ public class GesuchTrancheService {
     private final BenutzerService benutzerService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
+    private final AuszahlungValidatorService auszahlungValidatorService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -580,6 +584,14 @@ public class GesuchTrancheService {
         final var documents = gesuchTranche.getGesuchDokuments();
         final var hasDocuments = documents != null && !documents.isEmpty();
 
+        CustomValidationsException _auszahlungValidationException = null;
+
+        try {
+            auszahlungValidatorService.validateAuszahlung(gesuchTranche.getGesuch());
+        } catch (CustomValidationsException auszahlungValidationException) {
+            _auszahlungValidationException = auszahlungValidationException;
+        }
+
         try {
             if (
                 gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
@@ -590,9 +602,15 @@ public class GesuchTrancheService {
                 gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
             }
         } catch (ValidationsException e) {
-            return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+            if (Objects.isNull(_auszahlungValidationException)) {
+                return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+            }
+            return CombinedValidationsExceptionMapper.toDto(e, _auszahlungValidationException);
         } catch (CustomValidationsException e) {
-            return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+            if (Objects.isNull(_auszahlungValidationException)) {
+                return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+            }
+            return CombinedValidationsExceptionMapper.toDto(e, _auszahlungValidationException);
         }
 
         return new ValidationReportDto().hasDocuments(hasDocuments);
