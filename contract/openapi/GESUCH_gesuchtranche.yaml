@@ -327,7 +327,7 @@ paths:
             application/json:
               schema:
                 $ref: './components/common.yaml#/Gesuch'
-          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':

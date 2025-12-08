@@ -17,8 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -105,7 +103,6 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -163,7 +160,6 @@ public class GesuchService {
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final NotificationService notificationService;
     private final BerechnungService berechnungService;
-    private final BerechnungsblattService berechnungsblattService;
     private final GesuchMapperUtil gesuchMapperUtil;
     private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final GesuchTrancheService gesuchTrancheService;
@@ -565,7 +561,7 @@ public class GesuchService {
             kommentarDto.setText(
                 stipDecisionService.getTextForDecision(
                     decision,
-                    LocaleUtil.getKorrespondenzSpracheFomGesuch(gesuch)
+                    LocaleUtil.getKorrespondenzSprache(gesuch)
                 )
             );
         }
@@ -709,13 +705,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void changeGesuchStatusToVerfuegungAmGenerieren(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        verfuegungService.createVerfuegung(gesuchId);
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
-    }
-
-    @Transactional
     public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
@@ -738,13 +727,6 @@ public class GesuchService {
             }
         }
 
-        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
-    }
-
-    @Transactional
-    public void gesuchStatusToKeinStipendienanspruch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
         gesuchStatusService.triggerStateMachineEvent(gesuch, status);
     }
 
@@ -786,12 +768,7 @@ public class GesuchService {
         final String kommentar
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final Locale locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final Locale locale = LocaleUtil.getLocale(gesuch);
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
 
         KommentarDto kommentarDto;
@@ -874,34 +851,8 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
-    public ByteArrayOutputStream getBerechnungsblattByteStream(final UUID gesuchId) throws IOException {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return berechnungsblattService.getBerechnungsblattFromGesuch(
-            gesuch,
-            LocaleUtil.getLocaleFromGesuch(gesuch)
-        );
-    }
-
-    public String getBerechnungsblattFileName(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        GesuchFormular gesuchFormularToUse = gesuch
-            .getNewestGesuchTranche()
-            .orElseThrow(NotFoundException::new)
-            .getGesuchFormular();
-        return String.format(
-            "%s_%s_%s.pdf",
-            gesuchFormularToUse.getPersonInAusbildung().getVorname(),
-            gesuchFormularToUse.getPersonInAusbildung().getNachname(),
-            gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()
-        );
-    }
-
     public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return gesuch.getVerfuegungs()
-            .stream()
-            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-            .orElseThrow(NotFoundException::new);
+        return verfuegungService.getLatestVerfuegung(gesuchId);
     }
 
     @Transactional

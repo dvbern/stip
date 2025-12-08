@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AdminDokumenteDto;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDto;
@@ -8,7 +7,6 @@ import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumAendernRequestDto;
 import ch.dvbern.stip.generated.dto.EinreichedatumStatusDto;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
-import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
@@ -155,11 +153,6 @@ public interface GesuchResource {
     GesuchZurueckweisenResponseDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
-    @Path("/{gesuchId}/adminDokumente")
-    @Produces({ "application/json", "text/plain" })
-    AdminDokumenteDto getAdminDokumente(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
@@ -168,11 +161,6 @@ public interface GesuchResource {
     @Path("/{gesuchId}/berechnung")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/berechnungsblatt")
-    @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getBerechnungsBlattForGesuch(@QueryParam("token") @NotNull   String token);
 
     @GET
     @Path("/{gesuchId}/berechnungsblatt/token")
