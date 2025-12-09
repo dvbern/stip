@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.darlehen.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.QDarlehen;
@@ -43,6 +44,7 @@ public class DarlehenDashboardQueryBuilder {
     private static final QGesuch gesuch = QGesuch.gesuch;
     private static final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
+    private static final QAusbildung ausbildung = QAusbildung.ausbildung;
 
     private final DarlehenRepository darlehenRepository;
     private final BenutzerService benutzerService;
@@ -65,18 +67,23 @@ public class DarlehenDashboardQueryBuilder {
                         .where(
                             gesuch.gesuchsperiode.gesuchsperiodeStopp.eq(
                                 JPAExpressions.select(gesuch.gesuchsperiode.gesuchsperiodeStopp.max())
+                                    .from(gesuch)
                             )
                         )
                 )
                     .and(
                         tranche.gueltigkeit.gueltigBis.eq(
                             JPAExpressions.select(tranche.gueltigkeit.gueltigBis.max())
+                                .from(tranche)
                         )
                     )
             );
 
-        query.join(tranche)
-            .on(tranche.gesuch.ausbildung.fall.id.eq(darlehen.fall.id))
+        query
+            .join(ausbildung)
+            .on(ausbildung.fall.id.eq(darlehen.fall.id))
+            .join(tranche)
+            .on(tranche.gesuch.ausbildung.id.eq(ausbildung.id))
             .where(tranche.id.in(joinSubselect));
 
         return query;

@@ -20,11 +20,12 @@ package ch.dvbern.stip.api.darlehen.repo;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.entity.QSachbearbeiter;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.QDarlehen;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
-import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
+import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,7 +36,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DarlehenRepository implements BaseRepository<Darlehen> {
     private static final QDarlehen darlehen = QDarlehen.darlehen;
-    private static final QGesuchFormular gesuchFormular = QGesuchFormular.gesuchFormular;
+    private static final QSachbearbeiter sachbearbeiter = QSachbearbeiter.sachbearbeiter;
+    private static final QZuordnung zuordnung = QZuordnung.zuordnung;
 
     private final EntityManager entityManager;
 
@@ -57,7 +59,9 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
 
     public JPAQuery<Darlehen> getMeineQuery(final UUID benutzerId) {
         return getAlleQuery()
-            .where(darlehen.fall.sachbearbeiterZuordnung.sachbearbeiter.id.eq(benutzerId));
+            .join(zuordnung)
+            .on(darlehen.fall.sachbearbeiterZuordnung.id.eq(zuordnung.id))
+            .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
     }
 
     public JPAQuery<Darlehen> getAlleBearbeitbarQuery() {
