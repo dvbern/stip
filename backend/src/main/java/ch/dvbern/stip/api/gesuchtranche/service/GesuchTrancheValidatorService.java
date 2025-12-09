@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -54,6 +55,10 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class GesuchTrancheValidatorService {
     private static final Map<GesuchTrancheStatus, List<Class<?>>> statusToValidationGroups =
         new EnumMap<>(GesuchTrancheStatus.class);
+    private static final List<Class<?>> VALIDATION_GROUPS_FOR_GESUCHSTATUS_ABKLAERUNG_DURCH_RECHTSABTEILUNG = List.of(
+        GesuchNachInBearbeitungSBValidationGroup.class,
+        GesuchDokumentsAcceptedValidationGroup.class
+    );
 
     static {
         statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
@@ -83,10 +88,18 @@ public class GesuchTrancheValidatorService {
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        final var validationGroups = Stream.concat(
+        var validationGroups = Stream.concat(
             Stream.of(Default.class),
             statusToValidationGroups.getOrDefault(status, List.of()).stream()
         ).toList();
+        if (toValidate.getGesuch().getGesuchStatus().equals(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)) {
+            ValidatorUtil.validate(
+                validator,
+                toValidate.getGesuchFormular(),
+                VALIDATION_GROUPS_FOR_GESUCHSTATUS_ABKLAERUNG_DURCH_RECHTSABTEILUNG
+            );
+            return;
+        }
         ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
     }
 
