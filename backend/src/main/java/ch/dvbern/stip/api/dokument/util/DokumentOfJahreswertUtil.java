@@ -55,6 +55,10 @@ public class DokumentOfJahreswertUtil {
     );
 
     public boolean isDokumentOfJahreswert(final DokumentTyp dokumentTyp) {
+        if (dokumentTyp == null) {
+            return false;
+        }
+
         return DOKUMENTE_ON_JAHRESWERTE.contains(dokumentTyp);
     }
 
