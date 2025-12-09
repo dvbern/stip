@@ -34,6 +34,7 @@ import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
+import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -161,6 +162,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         return darlehenService.darlehenUpdateSb(darlehenId, darlehenUpdateSbDto);
     }
 
+    @Blocking
     @Override
     @RolesAllowed(GS_GESUCH_CREATE)
     public Uni<Response> createDarlehenDokument(

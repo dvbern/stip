@@ -192,6 +192,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public DarlehenDto darlehenEingeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
@@ -203,6 +204,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public DarlehenDto darlehenFreigeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.IN_FREIGABE);
@@ -211,6 +213,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public DarlehenDto darlehenZurueckweisen(final UUID darlehenId, final KommentarDto kommentar) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
@@ -222,6 +225,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public DarlehenDto darlehenUpdateGs(final UUID darlehenId, final DarlehenUpdateGsDto darlehenUpdateGsDto) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
@@ -240,11 +244,18 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public Uni<Response> uploadDarlehenDokument(
         final UUID darlehenId,
         final DarlehenDokumentType dokumentTyp,
         final FileUpload fileUpload
     ) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var darlehenDokument = getDarlehenDokument(darlehenId, dokumentTyp);
+        if (darlehenDokument == null) {
+            createDarlehenDokument(darlehen, dokumentTyp);
+        }
+
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
@@ -292,6 +303,7 @@ public class DarlehenService {
         return darlehenDokument;
     }
 
+    @Transactional
     public NullableDarlehenDokumentDto getDarlehenDokument(
         final UUID darlehenId,
         final DarlehenDokumentType dokumentTyp

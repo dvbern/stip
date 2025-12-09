@@ -113,11 +113,15 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDarlehenUpdateGs(UUID darlehenId) {
-        final var fall = fallRepository.requireById(darlehenId);
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
-            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, benutzer, sozialdienstService)
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                darlehen.getFall(),
+                benutzer,
+                sozialdienstService
+            )
         ) {
             forbidden();
         }
@@ -138,11 +142,15 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canCreateDarlehenDokument(UUID darlehenId) {
-        final var fall = fallRepository.requireById(darlehenId);
+        final var darlehen = darlehenRepository.requireById(darlehenId);
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
-            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, benutzer, sozialdienstService)
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                darlehen.getFall(),
+                benutzer,
+                sozialdienstService
+            )
         ) {
             forbidden();
         }
