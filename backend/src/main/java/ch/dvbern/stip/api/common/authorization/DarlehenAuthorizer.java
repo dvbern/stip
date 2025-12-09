@@ -88,27 +88,51 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDarlehenAblehenen(UUID darlehenId) {
-        assertStatusChnage(darlehenId, DarlehenStatus.IN_FREIGABE);
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
+
+        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
     public void canDarlehenAkzeptieren(UUID darlehenId) {
-        assertStatusChnage(darlehenId, DarlehenStatus.IN_FREIGABE);
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
+
+        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
     public void canDarlehenEingeben(UUID darlehenId) {
-        assertStatusChnage(darlehenId, DarlehenStatus.IN_BEARBEITUNG_GS);
+        assertStatus(darlehenId, DarlehenStatus.IN_BEARBEITUNG_GS);
     }
 
     @Transactional
     public void canDarlehenFreigeben(UUID darlehenId) {
-        assertStatusChnage(darlehenId, DarlehenStatus.EINGEGEBEN);
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
+
+        assertStatus(darlehenId, DarlehenStatus.EINGEGEBEN);
     }
 
     @Transactional
     public void canDarlehenZurueckweisen(UUID darlehenId) {
-        assertStatusChnage(darlehenId, DarlehenStatus.EINGEGEBEN);
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
+
+        assertStatus(darlehenId, DarlehenStatus.EINGEGEBEN);
     }
 
     @Transactional
@@ -162,20 +186,10 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
-    public void assertStatusChnage(UUID darlehenId, DarlehenStatus targetStatus) {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-
-        if (!isSachbearbeiter(benutzer)) {
-            forbidden();
-        }
-
-        assertStatus(darlehenId, targetStatus);
-    }
-
-    public void assertStatus(UUID darlehenId, DarlehenStatus targetStatus) {
+    public void assertStatus(UUID darlehenId, DarlehenStatus darlehenStatus) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
-        if (!darlehen.getStatus().equals(targetStatus)) {
+        if (!darlehen.getStatus().equals(darlehenStatus)) {
             forbidden();
         }
     }
