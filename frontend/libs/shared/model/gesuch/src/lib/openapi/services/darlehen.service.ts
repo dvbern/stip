@@ -19,12 +19,12 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Darlehen } from '../model/darlehen';
-import { DarlehenDokument } from '../model/darlehenDokument';
 import { DarlehenDokumentType } from '../model/darlehenDokumentType';
 import { DarlehenUpdateGs } from '../model/darlehenUpdateGs';
 import { DarlehenUpdateSb } from '../model/darlehenUpdateSb';
 import { GetDarlehenSbQueryType } from '../model/getDarlehenSbQueryType';
 import { Kommentar } from '../model/kommentar';
+import { NullableDarlehenDokument } from '../model/nullableDarlehenDokument';
 import { PaginatedSbDarlehenDashboard } from '../model/paginatedSbDarlehenDashboard';
 import { SbDarlehenDashboardColumn } from '../model/sbDarlehenDashboardColumn';
 import { SortOrder } from '../model/sortOrder';
@@ -1057,9 +1057,9 @@ export class DarlehenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<DarlehenDokument>;
-     public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<DarlehenDokument>>;
-     public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<DarlehenDokument>>;
+     public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<NullableDarlehenDokument>;
+     public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<NullableDarlehenDokument>>;
+     public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<NullableDarlehenDokument>>;
      public getDarlehenDokument$(requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const darlehenId = requestParameters.darlehenId;
         if (darlehenId === null || darlehenId === undefined) {
@@ -1116,7 +1116,7 @@ export class DarlehenService {
         }
 
         const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
-        return this.httpClient.request<DarlehenDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<NullableDarlehenDokument>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

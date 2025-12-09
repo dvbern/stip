@@ -227,10 +227,10 @@ export class UploadStore {
                   })
                   .pipe(
                     map(
-                      (gesuchDokument) =>
+                      ({ value }) =>
                         ({
                           art: 'DARLEHEN_DOKUMENT',
-                          gesuchDokument,
+                          gesuchDokument: value,
                           dokumentTyp: dokument.dokumentTyp,
                           darlehenId: dokument.darlehenId,
                         }) satisfies SharedModelDarlehenDokument,

@@ -160,6 +160,7 @@ export * from './neskoGetSteuerdatenRequest';
 export * from './niederlassungsstatus';
 export * from './notification';
 export * from './notificationType';
+export * from './nullableDarlehenDokument';
 export * from './nullableGesuchDokument';
 export * from './nullableGesuchsperiodeWithDaten';
 export * from './paginatedAbschluss';

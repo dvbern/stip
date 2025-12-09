@@ -169,7 +169,7 @@ export class SharedFeatureDarlehenComponent {
         { validators: [this.atLeastOneCheckboxChecked] },
       ),
     },
-    { validators: [this.allDocumentsValidator] },
+    // { validators: [this.allDocumentsValidator] },
   ); // to avoid TS error
 
   grundNichtBerechtigtChangedSig = toSignal(
