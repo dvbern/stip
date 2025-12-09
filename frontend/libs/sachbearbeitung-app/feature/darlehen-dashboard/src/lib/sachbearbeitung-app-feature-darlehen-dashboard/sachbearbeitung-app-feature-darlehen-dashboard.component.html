@@ -1,4 +1,4 @@
-<!-- <dv-sachbearbeitung-app-pattern-overview-layout>
+<dv-sachbearbeitung-app-pattern-overview-layout>
   <div class="container">
     <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
       @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
@@ -23,7 +23,7 @@
           <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading">
             <table
               [dvSharedUiFocusableList]="items"
-              [dataSource]="gesucheDataSourceSig()"
+              [dataSource]="darlehenDataSourceSig()"
               data-testid="cockpit-table"
               mat-table
               matSort
@@ -63,18 +63,15 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
+                  <!-- todo: fix links -->
                   <a
-                    [routerLink]="
-                      gesuch.typ === 'AENDERUNG'
-                        ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
-                        : ['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]
-                    "
+                    [routerLink]="['/gesuch/info', darlehen.id, 'tranche', darlehen.trancheId]"
                     (click)="$event.stopPropagation()"
                   >
-                    {{ gesuch.fallNummer }}
+                    {{ darlehen.fallNummer }}
                   </a>
                 </td>
               </ng-container>
@@ -105,11 +102,11 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="gesuch.piaNachname"
+                  [dvTruncateTooltip]="darlehen.piaNachname"
                 >
-                  {{ gesuch.piaNachname }}
+                  {{ darlehen.piaNachname }}
                 </td>
               </ng-container>
 
@@ -139,11 +136,11 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:max-w-32 tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="gesuch.piaVorname"
+                  [dvTruncateTooltip]="darlehen.piaVorname"
                 >
-                  {{ gesuch.piaVorname }}
+                  {{ darlehen.piaVorname }}
                 </td>
               </ng-container>
 
@@ -193,10 +190,10 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:whitespace-nowrap"
                 >
-                  {{ gesuch.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
+                  {{ darlehen.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
                 </td>
               </ng-container>
 
@@ -215,9 +212,10 @@
                       <mat-option [value]="null">
                         {{ 'sachbearbeitung-app.cockpit.no-status-filter' | transloco }}
                       </mat-option>
-                      @for (status of statusValuesSig()?.status; track status) {
+                      <!-- todo: test if working -->
+                      @for (status of statusValuesSig(); track status) {
                         <mat-option [value]="status">
-                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status | transloco }}
+                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig() + '.' + status | transloco }}
                         </mat-option>
                       }
                     </mat-select>
@@ -225,11 +223,11 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:w-48 tw:whitespace-nowrap"
                 >
-                  <span [dvTruncateTooltip]="gesuch.translationKey | transloco">
-                    {{ gesuch.translationKey | transloco }}
+                  <span [dvTruncateTooltip]="darlehen.translationKey | transloco">
+                    {{ darlehen.translationKey | transloco }}
                   </span>
                 </td>
               </ng-container>
@@ -260,11 +258,11 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:whitespace-nowrap"
-                  [dvTruncateTooltip]="gesuch.bearbeiter"
+                  [dvTruncateTooltip]="darlehen.bearbeiter"
                 >
-                  {{ gesuch.bearbeiter }}
+                  {{ darlehen.bearbeiter }}
                 </td>
               </ng-container>
 
@@ -335,24 +333,21 @@
                 </th>
                 <td
                   mat-cell
-                  *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()"
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:whitespace-nowrap"
                 >
-                  {{ gesuch.letzteAktivitaet | date: 'dd.MM.yyyy' }}
+                  {{ darlehen.letzteAktivitaet | date: 'dd.MM.yyyy' }}
                 </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <!-- todo: fix and test link -->
               <tr
                 dvSharedUiFocusableListItem
                 mat-row
                 tabindex="-1"
-                *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedColumns"
-                [routerLink]="
-                  gesuch.typ === 'AENDERUNG'
-                    ? ['/gesuch', 'info', gesuch.id, 'aenderung', gesuch.trancheId]
-                    : ['/gesuch', 'info', gesuch.id, 'tranche', gesuch.trancheId]
-                "
+                *dvMatRowDef="let darlehen; dataSource: darlehenDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/gesuch', 'info', darlehen.id, 'tranche', darlehen.trancheId]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
@@ -381,4 +376,4 @@
       </div>
     </div>
   </div>
-</dv-sachbearbeitung-app-pattern-overview-layout> -->
+</dv-sachbearbeitung-app-pattern-overview-layout>

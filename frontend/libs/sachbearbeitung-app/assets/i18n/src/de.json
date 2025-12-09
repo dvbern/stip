@@ -1,6 +1,7 @@
 {
   "app-name": "Stipendien Online",
   "sachbearbeitung-app.header.antraege": "Anträge",
+  "sachbearbeitung-app.header.darlehen": "Darlehen",
   "sachbearbeitung-app.header.administration": "Administration",
   "sachbearbeitung-app.header.fehlgeschlageneZahlungen": "Fehlgeschlagene Zahlungen",
   "sachbearbeitung-app.header.verfuegung": "Verfügung",
