@@ -605,12 +605,14 @@ public class GesuchTrancheService {
             if (Objects.isNull(auszahlungValidationException)) {
                 return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
             }
-            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException);
+            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException)
+                .hasDocuments(hasDocuments);
         } catch (CustomValidationsException e) {
             if (Objects.isNull(auszahlungValidationException)) {
                 return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
             }
-            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException);
+            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException)
+                .hasDocuments(hasDocuments);
         }
 
         return new ValidationReportDto().hasDocuments(hasDocuments);
