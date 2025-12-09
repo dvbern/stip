@@ -588,8 +588,8 @@ public class GesuchTrancheService {
 
         try {
             auszahlungValidatorService.validateAuszahlung(gesuchTranche.getGesuch());
-        } catch (CustomValidationsException customAustzahlungValidationException) {
-            auszahlungValidationException = customAustzahlungValidationException;
+        } catch (CustomValidationsException customAuszahlungValidationException) {
+            auszahlungValidationException = customAuszahlungValidationException;
         }
 
         try {
