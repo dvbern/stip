@@ -1,0 +1,162 @@
+<div class="tw:dv-table tw:my-3">
+  <div class="tw:relative tw:overflow-auto">
+    @if (infosStore.verfuegungenViewSig().loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+    <table
+      mat-table
+      [dataSource]="paginatedDokumenteSig()"
+      data-testid="stipendien-dokumente-table"
+      class="tw:w-full tw:!table-fixed"
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.description' | transloco
+        }}
+      </caption>
+
+      <!-- Datum -->
+      <ng-container matColumnDef="datum">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.table.datum' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument?.datum | date: 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <!-- Versendete Verfügung -->
+      <ng-container matColumnDef="versendeteVerfuegung">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung.label' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument?.versendeteVerfuegung) {
+            <button
+              type="button"
+              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.versendeteVerfuegung?.id ?? '',
+              }"
+            >
+              <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument.versendeteVerfuegung?.filename">{{
+                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco
+              }}</span>
+              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
+                >download</span
+              >
+            </button>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Verfügungsbrief -->
+      <ng-container matColumnDef="verfuegungsbrief">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument?.verfuegungsbrief) {
+            <button
+              type="button"
+              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.verfuegungsbrief?.id ?? '',
+              }"
+            >
+              <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument?.verfuegungsbrief?.filename">{{
+                'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco
+              }}</span>
+              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
+                >download</span
+              >
+            </button>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Berechnungsblätter -->
+      <ng-container matColumnDef="berechnungsblaetter">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter.label' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument?.berechnungsblaetter) {
+            <div class="tw:flex tw:gap-4">
+              @for (blatt of dokument?.berechnungsblaetter; track $index) {
+                <button
+                  type="button"
+                  class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+                  [dvDownloadButton]="{
+                    type: 'verfuegung',
+                    id: blatt.id,
+                  }"
+                >
+                  <span class="tw:truncate tw:!text-sm/none" [matTooltip]="blatt.filename">{{
+                    'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter.' + blatt.typ
+                      | transloco
+                  }}</span>
+                  <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
+                    >download</span
+                  >
+                </button>
+              }
+            </div>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Todo KSTIP-2584 Gesetzliches Darlehen -->
+      <!-- <ng-container matColumnDef="gesetzlichesDarlehen">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.gesetzlichesDarlehen' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument?.gesetzlichesDarlehen) {
+            <button
+              type="button"
+              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+              [attr.aria-label]="dokument.gesetzlichesDarlehen.filename"
+              [dvDownloadButton]="{
+                type: 'darlehensverfuegung',
+                id: dokument.gesetzlichesDarlehen?.id ?? '',
+              }"
+            >
+              <span class="tw:truncate tw:!text-sm/none" [title]="dokument.gesetzlichesDarlehen.filename">
+                {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.gesetzlichesDarlehen' | transloco }}
+              </span>
+              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
+                >download</span
+              >
+            </button>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container> -->
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *dvMatRowDef="let row; dataSource: paginatedDokumenteSig(); columns: displayedColumns"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+          {{ 'shared.table.noData' | transloco }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="defaultPageSize"
+    [length]="paginatedDokumenteSig().data.length"
+  ></mat-paginator>
+</div>

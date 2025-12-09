@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
+import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefDownload;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefDownloadLogRepository;
@@ -55,11 +56,7 @@ public class DatenschutzbriefService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
 
     public String getDatenschutzbriefFileName(final UUID trancheId, final Eltern elternTeil) {
-        final Locale locale = gesuchTrancheRepository.requireById(trancheId)
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final Locale locale = LocaleUtil.getLocale(gesuchTrancheRepository.requireById(trancheId));
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
         final var filenameTitle = switch (elternTeil.getElternTyp()) {
             case MUTTER -> translator.translate("stip.pdf.datenschutzbrief.MUTTER");

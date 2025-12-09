@@ -2,17 +2,37 @@ Verfuegung:
   type: object
   required:
     - id
-    - timestampErstellt
-    - filename
+    - dokumente
   properties:
     id:
       $ref: '#/UUID'
     timestampErstellt:
       type: string
+    dokumente:
+      type: array
+      items:
+        $ref: '#/VerfuegungDokument'
+VerfuegungDokument:
+  type: object
+  required:
+    - id
+    - typ
+    - filename
+  properties:
+    id:
+      $ref: '#/UUID'
+    typ:
+      $ref: '#/VerfuegungDokumentTyp'
     filename:
       type: string
-    stipDecision:
-      $ref: '#/StipDecision'
+VerfuegungDokumentTyp:
+  enum:
+    - BERECHNUNGSBLATT_PIA
+    - BERECHNUNGSBLATT_MUTTER
+    - BERECHNUNGSBLATT_VATER
+    - BERECHNUNGSBLATT_FAMILIE
+    - VERSENDETE_VERFUEGUNG
+    - VERFUEGUNGSBRIEF
 CustomDokumentTyp:
   type: object
   required:

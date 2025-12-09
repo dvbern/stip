@@ -3,7 +3,7 @@ package ch.dvbern.stip.generated.api;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDto;
+import ch.dvbern.stip.generated.dto.VerfuegungDto;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -23,12 +23,17 @@ import jakarta.validation.Valid;
 public interface VerfuegungResource {
 
     @GET
-    @Path("/download")
+    @Path("/dokument/download")
     @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getVerfuegung(@QueryParam("token") @NotNull   String token);
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getVerfuegungDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
-    @Path("/{verfuegungsId}/token")
+    @Path("/dokument/{verfuegungDokumentId}/token")
     @Produces({ "application/json", "text/plain" })
-    FileDownloadTokenDto getVerfuegungsDownloadToken(@PathParam("verfuegungsId") UUID verfuegungsId);
+    FileDownloadTokenDto getVerfuegungDokumentDownloadToken(@PathParam("verfuegungDokumentId") UUID verfuegungDokumentId);
+
+    @GET
+    @Path("/{gesuchId}/verfuegungen")
+    @Produces({ "application/json", "text/plain" })
+    List<VerfuegungDto> getVerfuegungen(@PathParam("gesuchId") UUID gesuchId);
 }

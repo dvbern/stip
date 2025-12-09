@@ -13,7 +13,6 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.AdminDokumenteDtoSpec;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.BeschwerdeVerlaufEntryCreateDtoSpec;
@@ -104,10 +103,8 @@ public class GesuchApiSpec {
                 gesuchManuellPruefenSB(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisen(),
-                getAdminDokumente(),
                 getAllBeschwerdeVerlaufEntrys(),
                 getBerechnungForGesuch(),
-                getBerechnungsBlattForGesuch(),
                 getBerechnungsblattDownloadToken(),
                 getGesuchGS(),
                 getGesuchInfo(),
@@ -211,20 +208,12 @@ public class GesuchApiSpec {
         return new GesuchZurueckweisenOper(createReqSpec());
     }
 
-    public GetAdminDokumenteOper getAdminDokumente() {
-        return new GetAdminDokumenteOper(createReqSpec());
-    }
-
     public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
         return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchOper getBerechnungForGesuch() {
         return new GetBerechnungForGesuchOper(createReqSpec());
-    }
-
-    public GetBerechnungsBlattForGesuchOper getBerechnungsBlattForGesuch() {
-        return new GetBerechnungsBlattForGesuchOper(createReqSpec());
     }
 
     public GetBerechnungsblattDownloadTokenOper getBerechnungsblattDownloadToken() {
@@ -1929,79 +1918,6 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * All dokument information required for the Admin tab in Info of Gesuch
-     * 
-     *
-     * @see #gesuchIdPath  (required)
-     * return AdminDokumenteDtoSpec
-     */
-    public static class GetAdminDokumenteOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/adminDokumente";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAdminDokumenteOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/{gesuchId}/adminDokumente
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/{gesuchId}/adminDokumente
-         * @param handler handler
-         * @return AdminDokumenteDtoSpec
-         */
-        public AdminDokumenteDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<AdminDokumenteDtoSpec> type = new TypeRef<AdminDokumenteDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetAdminDokumenteOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAdminDokumenteOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAdminDokumenteOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * 
      * 
      *
@@ -2143,79 +2059,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetBerechnungForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Berechnet und generiert das Berechnungsblatt für ein Gesuch
-     * 
-     *
-     * @see #tokenQuery  (required)
-     * return File
-     */
-    public static class GetBerechnungsBlattForGesuchOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/berechnungsblatt";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetBerechnungsBlattForGesuchOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/octet-stream");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/berechnungsblatt
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/berechnungsblatt
-         * @param handler handler
-         * @return File
-         */
-        public File executeAs(Function<Response, Response> handler) {
-            TypeRef<File> type = new TypeRef<File>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String TOKEN_QUERY = "token";
-
-        /**
-         * @param token (String)  (required)
-         * @return operation
-         */
-        public GetBerechnungsBlattForGesuchOper tokenQuery(Object... token) {
-            reqSpec.addQueryParam(TOKEN_QUERY, token);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetBerechnungsBlattForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetBerechnungsBlattForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

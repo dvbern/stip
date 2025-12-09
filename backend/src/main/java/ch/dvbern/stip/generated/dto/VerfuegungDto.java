@@ -1,6 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.VerfuegungDokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -21,9 +25,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class VerfuegungDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid List<VerfuegungDokumentDto> dokumente = new ArrayList<>();
   private @Valid String timestampErstellt;
-  private @Valid String filename;
-  private @Valid ch.dvbern.stip.api.common.type.StipDecision stipDecision;
 
   /**
    **/
@@ -46,6 +49,41 @@ public class VerfuegungDto  implements Serializable {
 
   /**
    **/
+  public VerfuegungDto dokumente(List<VerfuegungDokumentDto> dokumente) {
+    this.dokumente = dokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("dokumente")
+  @NotNull
+  public List<VerfuegungDokumentDto> getDokumente() {
+    return dokumente;
+  }
+
+  @JsonProperty("dokumente")
+  public void setDokumente(List<VerfuegungDokumentDto> dokumente) {
+    this.dokumente = dokumente;
+  }
+
+  public VerfuegungDto addDokumenteItem(VerfuegungDokumentDto dokumenteItem) {
+    if (this.dokumente == null) {
+      this.dokumente = new ArrayList<>();
+    }
+
+    this.dokumente.add(dokumenteItem);
+    return this;
+  }
+
+  public VerfuegungDto removeDokumenteItem(VerfuegungDokumentDto dokumenteItem) {
+    if (dokumenteItem != null && this.dokumente != null) {
+      this.dokumente.remove(dokumenteItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
   public VerfuegungDto timestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
@@ -53,7 +91,6 @@ public class VerfuegungDto  implements Serializable {
 
   
   @JsonProperty("timestampErstellt")
-  @NotNull
   public String getTimestampErstellt() {
     return timestampErstellt;
   }
@@ -61,43 +98,6 @@ public class VerfuegungDto  implements Serializable {
   @JsonProperty("timestampErstellt")
   public void setTimestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
-  }
-
-  /**
-   **/
-  public VerfuegungDto filename(String filename) {
-    this.filename = filename;
-    return this;
-  }
-
-  
-  @JsonProperty("filename")
-  @NotNull
-  public String getFilename() {
-    return filename;
-  }
-
-  @JsonProperty("filename")
-  public void setFilename(String filename) {
-    this.filename = filename;
-  }
-
-  /**
-   **/
-  public VerfuegungDto stipDecision(ch.dvbern.stip.api.common.type.StipDecision stipDecision) {
-    this.stipDecision = stipDecision;
-    return this;
-  }
-
-  
-  @JsonProperty("stipDecision")
-  public ch.dvbern.stip.api.common.type.StipDecision getStipDecision() {
-    return stipDecision;
-  }
-
-  @JsonProperty("stipDecision")
-  public void setStipDecision(ch.dvbern.stip.api.common.type.StipDecision stipDecision) {
-    this.stipDecision = stipDecision;
   }
 
 
@@ -111,14 +111,13 @@ public class VerfuegungDto  implements Serializable {
     }
     VerfuegungDto verfuegung = (VerfuegungDto) o;
     return Objects.equals(this.id, verfuegung.id) &&
-        Objects.equals(this.timestampErstellt, verfuegung.timestampErstellt) &&
-        Objects.equals(this.filename, verfuegung.filename) &&
-        Objects.equals(this.stipDecision, verfuegung.stipDecision);
+        Objects.equals(this.dokumente, verfuegung.dokumente) &&
+        Objects.equals(this.timestampErstellt, verfuegung.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, filename, stipDecision);
+    return Objects.hash(id, dokumente, timestampErstellt);
   }
 
   @Override
@@ -127,9 +126,8 @@ public class VerfuegungDto  implements Serializable {
     sb.append("class VerfuegungDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
-    sb.append("    stipDecision: ").append(toIndentedString(stipDecision)).append("\n");
     sb.append("}");
     return sb.toString();
   }
