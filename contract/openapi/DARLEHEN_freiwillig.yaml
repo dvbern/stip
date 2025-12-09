@@ -445,9 +445,9 @@ components:
     DarlehenUpdateSb:
       type: object
       properties:
-        darlehenGewaehren:
+        gewaehren:
           type: boolean
-        darlehenBetrag:
+        betrag:
           type: integer
           minimum: 0
         kommentar:
@@ -456,7 +456,7 @@ components:
     DarlehenUpdateGs:
       type: object
       properties:
-        darlehenBetragGewuenscht:
+        betragGewuenscht:
           type: integer
           minimum: 0
         schulden:

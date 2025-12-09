@@ -19,45 +19,45 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DarlehenUpdateSbDto  implements Serializable {
-  private @Valid Boolean darlehenGewaehren;
-  private @Valid Integer darlehenBetrag;
+  private @Valid Boolean gewaehren;
+  private @Valid Integer betrag;
   private @Valid String kommentar;
 
   /**
    **/
-  public DarlehenUpdateSbDto darlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
+  public DarlehenUpdateSbDto gewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
     return this;
   }
 
   
-  @JsonProperty("darlehenGewaehren")
-  public Boolean getDarlehenGewaehren() {
-    return darlehenGewaehren;
+  @JsonProperty("gewaehren")
+  public Boolean getGewaehren() {
+    return gewaehren;
   }
 
-  @JsonProperty("darlehenGewaehren")
-  public void setDarlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
+  @JsonProperty("gewaehren")
+  public void setGewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
   }
 
   /**
    * minimum: 0
    **/
-  public DarlehenUpdateSbDto darlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
+  public DarlehenUpdateSbDto betrag(Integer betrag) {
+    this.betrag = betrag;
     return this;
   }
 
   
-  @JsonProperty("darlehenBetrag")
- @Min(0)  public Integer getDarlehenBetrag() {
-    return darlehenBetrag;
+  @JsonProperty("betrag")
+ @Min(0)  public Integer getBetrag() {
+    return betrag;
   }
 
-  @JsonProperty("darlehenBetrag")
-  public void setDarlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
+  @JsonProperty("betrag")
+  public void setBetrag(Integer betrag) {
+    this.betrag = betrag;
   }
 
   /**
@@ -88,14 +88,14 @@ public class DarlehenUpdateSbDto  implements Serializable {
       return false;
     }
     DarlehenUpdateSbDto darlehenUpdateSb = (DarlehenUpdateSbDto) o;
-    return Objects.equals(this.darlehenGewaehren, darlehenUpdateSb.darlehenGewaehren) &&
-        Objects.equals(this.darlehenBetrag, darlehenUpdateSb.darlehenBetrag) &&
+    return Objects.equals(this.gewaehren, darlehenUpdateSb.gewaehren) &&
+        Objects.equals(this.betrag, darlehenUpdateSb.betrag) &&
         Objects.equals(this.kommentar, darlehenUpdateSb.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(darlehenGewaehren, darlehenBetrag, kommentar);
+    return Objects.hash(gewaehren, betrag, kommentar);
   }
 
   @Override
@@ -103,8 +103,8 @@ public class DarlehenUpdateSbDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenUpdateSbDto {\n");
     
-    sb.append("    darlehenGewaehren: ").append(toIndentedString(darlehenGewaehren)).append("\n");
-    sb.append("    darlehenBetrag: ").append(toIndentedString(darlehenBetrag)).append("\n");
+    sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();

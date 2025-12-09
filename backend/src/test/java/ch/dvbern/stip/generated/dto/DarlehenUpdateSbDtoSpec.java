@@ -27,18 +27,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DarlehenUpdateSbDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_DARLEHEN_GEWAEHREN,
-  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG,
+  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_GEWAEHREN,
+  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_BETRAG,
   DarlehenUpdateSbDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
 @JsonTypeName("DarlehenUpdateSb")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DarlehenUpdateSbDtoSpec {
-  public static final String JSON_PROPERTY_DARLEHEN_GEWAEHREN = "darlehenGewaehren";
-  private Boolean darlehenGewaehren;
+  public static final String JSON_PROPERTY_GEWAEHREN = "gewaehren";
+  private Boolean gewaehren;
 
-  public static final String JSON_PROPERTY_DARLEHEN_BETRAG = "darlehenBetrag";
-  private Integer darlehenBetrag;
+  public static final String JSON_PROPERTY_BETRAG = "betrag";
+  private Integer betrag;
 
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
@@ -46,56 +46,56 @@ public class DarlehenUpdateSbDtoSpec {
   public DarlehenUpdateSbDtoSpec() {
   }
 
-  public DarlehenUpdateSbDtoSpec darlehenGewaehren(Boolean darlehenGewaehren) {
+  public DarlehenUpdateSbDtoSpec gewaehren(Boolean gewaehren) {
     
-    this.darlehenGewaehren = darlehenGewaehren;
+    this.gewaehren = gewaehren;
     return this;
   }
 
    /**
-   * Get darlehenGewaehren
-   * @return darlehenGewaehren
+   * Get gewaehren
+   * @return gewaehren
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_GEWAEHREN)
+  @JsonProperty(JSON_PROPERTY_GEWAEHREN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Boolean getDarlehenGewaehren() {
-    return darlehenGewaehren;
+  public Boolean getGewaehren() {
+    return gewaehren;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_GEWAEHREN)
+  @JsonProperty(JSON_PROPERTY_GEWAEHREN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDarlehenGewaehren(Boolean darlehenGewaehren) {
-    this.darlehenGewaehren = darlehenGewaehren;
+  public void setGewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
   }
 
 
-  public DarlehenUpdateSbDtoSpec darlehenBetrag(Integer darlehenBetrag) {
+  public DarlehenUpdateSbDtoSpec betrag(Integer betrag) {
     
-    this.darlehenBetrag = darlehenBetrag;
+    this.betrag = betrag;
     return this;
   }
 
    /**
-   * Get darlehenBetrag
+   * Get betrag
    * minimum: 0
-   * @return darlehenBetrag
+   * @return betrag
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG)
+  @JsonProperty(JSON_PROPERTY_BETRAG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getDarlehenBetrag() {
-    return darlehenBetrag;
+  public Integer getBetrag() {
+    return betrag;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG)
+  @JsonProperty(JSON_PROPERTY_BETRAG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDarlehenBetrag(Integer darlehenBetrag) {
-    this.darlehenBetrag = darlehenBetrag;
+  public void setBetrag(Integer betrag) {
+    this.betrag = betrag;
   }
 
 
@@ -133,22 +133,22 @@ public class DarlehenUpdateSbDtoSpec {
       return false;
     }
     DarlehenUpdateSbDtoSpec darlehenUpdateSb = (DarlehenUpdateSbDtoSpec) o;
-    return Objects.equals(this.darlehenGewaehren, darlehenUpdateSb.darlehenGewaehren) &&
-        Objects.equals(this.darlehenBetrag, darlehenUpdateSb.darlehenBetrag) &&
+    return Objects.equals(this.gewaehren, darlehenUpdateSb.gewaehren) &&
+        Objects.equals(this.betrag, darlehenUpdateSb.betrag) &&
         Objects.equals(this.kommentar, darlehenUpdateSb.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(darlehenGewaehren, darlehenBetrag, kommentar);
+    return Objects.hash(gewaehren, betrag, kommentar);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenUpdateSbDtoSpec {\n");
-    sb.append("    darlehenGewaehren: ").append(toIndentedString(darlehenGewaehren)).append("\n");
-    sb.append("    darlehenBetrag: ").append(toIndentedString(darlehenBetrag)).append("\n");
+    sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");
     return sb.toString();

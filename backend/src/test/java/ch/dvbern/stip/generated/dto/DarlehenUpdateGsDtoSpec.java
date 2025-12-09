@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DarlehenUpdateGsDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT,
+  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUND
@@ -36,8 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("DarlehenUpdateGs")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DarlehenUpdateGsDtoSpec {
-  public static final String JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT = "darlehenBetragGewuenscht";
-  private Integer darlehenBetragGewuenscht;
+  public static final String JSON_PROPERTY_BETRAG_GEWUENSCHT = "betragGewuenscht";
+  private Integer betragGewuenscht;
 
   public static final String JSON_PROPERTY_SCHULDEN = "schulden";
   private Integer schulden;
@@ -51,30 +51,30 @@ public class DarlehenUpdateGsDtoSpec {
   public DarlehenUpdateGsDtoSpec() {
   }
 
-  public DarlehenUpdateGsDtoSpec darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
+  public DarlehenUpdateGsDtoSpec betragGewuenscht(Integer betragGewuenscht) {
     
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+    this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
    /**
-   * Get darlehenBetragGewuenscht
+   * Get betragGewuenscht
    * minimum: 0
-   * @return darlehenBetragGewuenscht
+   * @return betragGewuenscht
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT)
+  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getDarlehenBetragGewuenscht() {
-    return darlehenBetragGewuenscht;
+  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DARLEHEN_BETRAG_GEWUENSCHT)
+  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDarlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
   }
 
 
@@ -166,7 +166,7 @@ public class DarlehenUpdateGsDtoSpec {
       return false;
     }
     DarlehenUpdateGsDtoSpec darlehenUpdateGs = (DarlehenUpdateGsDtoSpec) o;
-    return Objects.equals(this.darlehenBetragGewuenscht, darlehenUpdateGs.darlehenBetragGewuenscht) &&
+    return Objects.equals(this.betragGewuenscht, darlehenUpdateGs.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
         Objects.equals(this.grund, darlehenUpdateGs.grund);
@@ -174,14 +174,14 @@ public class DarlehenUpdateGsDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, grund);
+    return Objects.hash(betragGewuenscht, schulden, anzahlBetreibungen, grund);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenUpdateGsDtoSpec {\n");
-    sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");

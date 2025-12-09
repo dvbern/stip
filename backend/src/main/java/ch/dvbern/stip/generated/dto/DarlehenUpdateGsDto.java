@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DarlehenUpdateGsDto  implements Serializable {
-  private @Valid Integer darlehenBetragGewuenscht;
+  private @Valid Integer betragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund;
@@ -27,20 +27,20 @@ public class DarlehenUpdateGsDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenUpdateGsDto darlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+  public DarlehenUpdateGsDto betragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
   
-  @JsonProperty("darlehenBetragGewuenscht")
- @Min(0)  public Integer getDarlehenBetragGewuenscht() {
-    return darlehenBetragGewuenscht;
+  @JsonProperty("betragGewuenscht")
+ @Min(0)  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
   }
 
-  @JsonProperty("darlehenBetragGewuenscht")
-  public void setDarlehenBetragGewuenscht(Integer darlehenBetragGewuenscht) {
-    this.darlehenBetragGewuenscht = darlehenBetragGewuenscht;
+  @JsonProperty("betragGewuenscht")
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
   }
 
   /**
@@ -109,7 +109,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
       return false;
     }
     DarlehenUpdateGsDto darlehenUpdateGs = (DarlehenUpdateGsDto) o;
-    return Objects.equals(this.darlehenBetragGewuenscht, darlehenUpdateGs.darlehenBetragGewuenscht) &&
+    return Objects.equals(this.betragGewuenscht, darlehenUpdateGs.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
         Objects.equals(this.grund, darlehenUpdateGs.grund);
@@ -117,7 +117,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(darlehenBetragGewuenscht, schulden, anzahlBetreibungen, grund);
+    return Objects.hash(betragGewuenscht, schulden, anzahlBetreibungen, grund);
   }
 
   @Override
@@ -125,7 +125,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenUpdateGsDto {\n");
     
-    sb.append("    darlehenBetragGewuenscht: ").append(toIndentedString(darlehenBetragGewuenscht)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
