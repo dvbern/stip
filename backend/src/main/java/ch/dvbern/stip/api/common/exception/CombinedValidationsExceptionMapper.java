@@ -23,9 +23,8 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.common.validation.Severity;
-import ch.dvbern.stip.generated.dto.ValidationErrorDto;
+import ch.dvbern.stip.generated.dto.ValidationMessageDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
-import ch.dvbern.stip.generated.dto.ValidationWarningDto;
 import jakarta.validation.ConstraintViolation;
 
 public final class CombinedValidationsExceptionMapper {
@@ -46,8 +45,8 @@ public final class CombinedValidationsExceptionMapper {
         CustomConstraintViolation additionalConstraintViolation
     ) {
         ValidationReportDto validationsReportDto = new ValidationReportDto();
-        final var warnings = new ArrayList<ValidationWarningDto>();
-        final var errors = new ArrayList<ValidationErrorDto>();
+        final var warnings = new ArrayList<ValidationMessageDto>();
+        final var errors = new ArrayList<ValidationMessageDto>();
 
         constraintViolations.forEach(constraintViolation -> {
             final var payload = constraintViolation.getConstraintDescriptor().getPayload();
@@ -87,35 +86,35 @@ public final class CombinedValidationsExceptionMapper {
         return validationsReportDto;
     }
 
-    private static ValidationWarningDto toWarningDto(ConstraintViolation<?> constraintViolation) {
+    private static ValidationMessageDto toWarningDto(ConstraintViolation<?> constraintViolation) {
         final var propertyPath = constraintViolation.getPropertyPath();
-        var validationWarningDto = new ValidationWarningDto();
+        var validationWarningDto = new ValidationMessageDto();
         validationWarningDto.setMessage(constraintViolation.getMessage());
         validationWarningDto.setMessageTemplate(constraintViolation.getMessageTemplate());
         validationWarningDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
         return validationWarningDto;
     }
 
-    private static ValidationErrorDto toErrorDto(ConstraintViolation<?> constraintViolation) {
+    private static ValidationMessageDto toErrorDto(ConstraintViolation<?> constraintViolation) {
         final var propertyPath = constraintViolation.getPropertyPath();
-        var validationErrorDto = new ValidationErrorDto();
+        var validationErrorDto = new ValidationMessageDto();
         validationErrorDto.setMessage(constraintViolation.getMessage());
         validationErrorDto.setMessageTemplate(constraintViolation.getMessageTemplate());
         validationErrorDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
         return validationErrorDto;
     }
 
-    private static ValidationErrorDto toErrorDto(CustomConstraintViolation additionalConstraintViolation) {
+    private static ValidationMessageDto toErrorDto(CustomConstraintViolation additionalConstraintViolation) {
         final var propertyPath = additionalConstraintViolation.getPropertyPath();
-        final var additionalErrorDto = new ValidationErrorDto();
+        final var additionalErrorDto = new ValidationMessageDto();
         additionalErrorDto.setMessage(additionalConstraintViolation.getMessage());
         additionalErrorDto.setMessageTemplate(additionalConstraintViolation.getMessageTemplate());
         additionalErrorDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
         return additionalErrorDto;
     }
 
-    private static ValidationErrorDto toErrorDto(CustomValidationsException validationsException) {
-        var validationErrorDto = new ValidationErrorDto();
+    private static ValidationMessageDto toErrorDto(CustomValidationsException validationsException) {
+        var validationErrorDto = new ValidationMessageDto();
         validationErrorDto.setMessage(validationsException.getConstraintViolation().getMessage());
         validationErrorDto.setMessageTemplate(validationsException.getConstraintViolation().getMessageTemplate());
         validationErrorDto.setPropertyPath(validationsException.getConstraintViolation().getPropertyPath());

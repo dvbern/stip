@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.common.exception;
 
 import java.util.List;
 
-import ch.dvbern.stip.generated.dto.ValidationErrorDto;
+import ch.dvbern.stip.generated.dto.ValidationMessageDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 public final class CustomValidationsExceptionMapper {
@@ -32,7 +32,7 @@ public final class CustomValidationsExceptionMapper {
             return validationsReportDto;
         }
 
-        ValidationErrorDto validationErrorDto = new ValidationErrorDto();
+        var validationErrorDto = new ValidationMessageDto();
         validationErrorDto.setMessage(validationsException.getConstraintViolation().getMessage());
         validationErrorDto.setMessageTemplate(validationsException.getConstraintViolation().getMessageTemplate());
         validationErrorDto.setPropertyPath(validationsException.getConstraintViolation().getPropertyPath());

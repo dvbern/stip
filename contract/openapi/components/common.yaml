@@ -503,11 +503,11 @@ ValidationReport:
     validationErrors:
       type: array
       items:
-        $ref: '#/ValidationError'
+        $ref: '#/ValidationMessage'
     validationWarnings:
       type: array
       items:
-        $ref: '#/ValidationWarning'
+        $ref: '#/ValidationMessage'
     hasDocuments:
       description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
       type: boolean
@@ -523,12 +523,6 @@ ValidationMessage:
       type: string
     message:
       type: string
-ValidationWarning:
-  allOf:
-    - $ref: '#/ValidationMessage'
-ValidationError:
-  allOf:
-    - $ref: '#/ValidationMessage'
 AusbildungBase:
   required:
     - fallId

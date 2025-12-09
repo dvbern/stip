@@ -5454,12 +5454,6 @@ components:
           type: string
         message:
           type: string
-    ValidationError:
-      allOf:
-        - $ref: '#/components/schemas/ValidationMessage'
-    ValidationWarning:
-      allOf:
-        - $ref: '#/components/schemas/ValidationMessage'
     ValidationReport:
       required:
         - validationErrors
@@ -5469,11 +5463,11 @@ components:
         validationErrors:
           type: array
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/ValidationMessage'
         validationWarnings:
           type: array
           items:
-            $ref: '#/components/schemas/ValidationWarning'
+            $ref: '#/components/schemas/ValidationMessage'
         hasDocuments:
           description: >-
             Whether or not the Gesuch validated has one or more GesuchDokument
