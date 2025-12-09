@@ -584,12 +584,12 @@ public class GesuchTrancheService {
         final var documents = gesuchTranche.getGesuchDokuments();
         final var hasDocuments = documents != null && !documents.isEmpty();
 
-        CustomValidationsException _auszahlungValidationException = null;
+        CustomValidationsException auszahlungValidationException = null;
 
         try {
             auszahlungValidatorService.validateAuszahlung(gesuchTranche.getGesuch());
-        } catch (CustomValidationsException auszahlungValidationException) {
-            _auszahlungValidationException = auszahlungValidationException;
+        } catch (CustomValidationsException customAustzahlungValidationException) {
+            auszahlungValidationException = customAustzahlungValidationException;
         }
 
         try {
@@ -602,15 +602,15 @@ public class GesuchTrancheService {
                 gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
             }
         } catch (ValidationsException e) {
-            if (Objects.isNull(_auszahlungValidationException)) {
+            if (Objects.isNull(auszahlungValidationException)) {
                 return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
             }
-            return CombinedValidationsExceptionMapper.toDto(e, _auszahlungValidationException);
+            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException);
         } catch (CustomValidationsException e) {
-            if (Objects.isNull(_auszahlungValidationException)) {
+            if (Objects.isNull(auszahlungValidationException)) {
                 return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
             }
-            return CombinedValidationsExceptionMapper.toDto(e, _auszahlungValidationException);
+            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException);
         }
 
         return new ValidationReportDto().hasDocuments(hasDocuments);
