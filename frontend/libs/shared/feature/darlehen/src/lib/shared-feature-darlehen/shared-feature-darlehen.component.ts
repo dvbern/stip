@@ -237,7 +237,7 @@ export class SharedFeatureDarlehenComponent {
     ]);
 
     const darlehen: DarlehenUpdateGs = {
-      darlehenBetragGewuenscht: fromFormatedNumber(realValues.betragGewuenscht),
+      betragGewuenscht: fromFormatedNumber(realValues.betragGewuenscht),
       schulden: fromFormatedNumber(realValues.schulden),
       anzahlBetreibungen: realValues.anzahlBetreibungen,
       // todo: change once contract changed
@@ -300,9 +300,9 @@ export class SharedFeatureDarlehenComponent {
       'gewaehren',
     ]);
     return {
-      darlehenBetrag: fromFormatedNumber(realValues.betrag),
+      betrag: fromFormatedNumber(realValues.betrag),
       kommentar: realValues.kommentar,
-      darlehenGewaehren: realValues.gewaehren,
+      gewaehren: realValues.gewaehren,
     };
   }
 

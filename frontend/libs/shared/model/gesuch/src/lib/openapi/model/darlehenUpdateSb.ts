@@ -11,8 +11,8 @@
  */
 
 export interface DarlehenUpdateSb { 
-    darlehenGewaehren?: boolean;
-    darlehenBetrag?: number;
+    gewaehren?: boolean;
+    betrag?: number;
     kommentar?: string;
 }
 

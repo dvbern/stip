@@ -12,7 +12,7 @@
 import { DarlehenGrund } from './darlehenGrund';
 
 export interface DarlehenUpdateGs { 
-    darlehenBetragGewuenscht?: number;
+    betragGewuenscht?: number;
     schulden?: number;
     anzahlBetreibungen?: number;
     grund?: DarlehenGrund;
