@@ -917,7 +917,7 @@
   "shared.form.darlehen.darlehenGewaehren.false": "Non",
   "shared.form.darlehen.betragDarlehen.label": "Montant du prêt",
   "shared.form.darlehen.kommentar.label": "Commentaire",
-  "shared.form.darlehen.betragDarlehenGewuenscht.label": "Montant du prêt souhaité",
+  "shared.form.darlehen.betragGewuenscht.label": "Montant du prêt souhaité",
   "shared.form.darlehen.betragBezogenKanton.label": "Déjà perçu du canton",
   "shared.form.darlehen.schulden.label": "Autres dettes",
   "shared.form.darlehen.anzahlBetreibungen.label": "Nombre de poursuites",
@@ -960,6 +960,7 @@
   "shared.form.darlehen.zurueckweisen.dialog.confirm": "Refuser le prêt",
   "shared.form.darlehen.zurueckweisen.dialog.placeholder": "Raison du refus",
   "shared.form.darlehen.zurueckweisen.success": "Le prêt a été refusé avec succès.",
+  "shared.form.darlehen.error.missingDocuments": "Veuillez télécharger tous les documents obligatoires avant de soumettre la demande de prêt.",
 
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Désignation(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Désignation(FR)",

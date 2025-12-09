@@ -6,6 +6,7 @@ import {
   computed,
   effect,
   inject,
+  viewChildren,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -31,6 +32,7 @@ import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DarlehenDokumentType,
+  DarlehenGrund,
   DarlehenUpdateGs,
   DarlehenUpdateSb,
 } from '@dv/shared/model/gesuch';
@@ -97,26 +99,31 @@ export class SharedFeatureDarlehenComponent {
   private store = inject(Store);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
 
+  private documentUploadsSig = viewChildren(
+    SharedPatternDocumentUploadComponent,
+  );
+
   darlehenStore = inject(DarlehenStore);
-  darlehenSig = computed(() => {
-    const darlehen = this.darlehenStore.darlehenViewSig().darlehen;
-    if (!darlehen) {
-      throw new Error('Darlehen Component: No Darlehen present');
-    }
-    return darlehen;
-  });
+
+  // todo: change to signal?
+  darlehenSig = this.darlehenStore.cachedDarlehen.data;
 
   maskitoNumber = maskitoNumber;
 
-  // todo: add delegation as well
-  private createUploadOptionsSig = createDarlehenUploadOptionsFactory({
-    darlehenId: this.darlehenSig().id,
-    allowTypes: this.config().deploymentConfig?.allowedMimeTypes?.join(','),
-    permissions: getDarlehenPermissions(
-      this.darlehenSig().status!,
+  darlehenPermissionsSig = computed(() => {
+    return getDarlehenPermissions(
+      // todo: can we have the status not being optional?
+      this.darlehenSig()?.status,
       this.compileTimeConfig.appType,
       this.permissionStore.rolesMapSig(),
-    ).permissions,
+    ).permissions;
+  });
+
+  // todo: add delegation as well
+  private createUploadOptionsSig = createDarlehenUploadOptionsFactory({
+    darlehenId: this.darlehenSig()?.id,
+    allowTypes: this.config().deploymentConfig?.allowedMimeTypes?.join(','),
+    permissions: this.darlehenPermissionsSig(),
   });
 
   // Todo: error is not shown yet, or not anymore
@@ -127,28 +134,43 @@ export class SharedFeatureDarlehenComponent {
     return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
+  private checkDocumentUploadsComplete(): boolean {
+    const dokumentUploads = this.documentUploadsSig();
+    return dokumentUploads.every((upload) => {
+      return upload.gesuchDokumentSig()?.gesuchDokument?.dokumente?.length;
+    });
+  }
+
+  private allDocumentsValidator: ValidatorFn = () => {
+    const allComplete = this.checkDocumentUploadsComplete();
+    return allComplete ? null : { requiredDocumentsMissing: true };
+  };
+
   formSb = this.formBuilder.group({
+    gewaehren: [<boolean | null>null, [Validators.required]],
     betrag: [<string | null>null, [Validators.required]],
     kommentar: [<string | null>null, [Validators.required]],
-    gewaehren: [<boolean | null>null, [Validators.required]],
   });
 
   // todo: how to handle new field betragBezogenKanton?
-  formGs = this.formBuilder.group({
-    betragGewuenscht: [<string | null>null, [Validators.required]],
-    schulden: [<string | null>null, [Validators.required]],
-    anzahlBetreibungen: [<number | null>null, [Validators.required]],
-    gruende: this.formBuilder.group(
-      {
-        grundNichtBerechtigt: [<boolean | undefined>undefined],
-        grundAusbildungZwoelfJahre: [<boolean | undefined>undefined],
-        grundHoheGebuehren: [<boolean | undefined>undefined],
-        grundAnschaffungenFuerAusbildung: [<boolean | undefined>undefined],
-        grundZweitausbildung: [<boolean | undefined>undefined],
-      },
-      { validators: [this.atLeastOneCheckboxChecked] },
-    ),
-  });
+  formGs = this.formBuilder.group(
+    {
+      betragGewuenscht: [<string | null>null, [Validators.required]],
+      schulden: [<string | null>null, [Validators.required]],
+      anzahlBetreibungen: [<number | null>null, [Validators.required]],
+      gruende: this.formBuilder.group(
+        {
+          grundNichtBerechtigt: [<boolean | undefined>undefined],
+          grundAusbildungZwoelfJahre: [<boolean | undefined>undefined],
+          grundHoheGebuehren: [<boolean | undefined>undefined],
+          grundAnschaffungenFuerAusbildung: [<boolean | undefined>undefined],
+          grundZweitausbildung: [<boolean | undefined>undefined],
+        },
+        { validators: [this.atLeastOneCheckboxChecked] },
+      ),
+    },
+    { validators: [this.allDocumentsValidator] },
+  ); // to avoid TS error
 
   grundNichtBerechtigtChangedSig = toSignal(
     this.formGs.controls.gruende.controls.grundNichtBerechtigt.valueChanges,
@@ -188,12 +210,21 @@ export class SharedFeatureDarlehenComponent {
     // patch form value
     effect(() => {
       const darlehen = this.darlehenSig();
+      if (!darlehen) {
+        return;
+      }
+      // todo: handle null values?
+      this.formSb.patchValue({
+        gewaehren: darlehen.gewaehren,
+        betrag: darlehen.betrag?.toString(),
+        kommentar: darlehen.kommentar,
+      });
 
       this.formGs.patchValue({
         betragGewuenscht: darlehen.betragGewuenscht?.toString(),
         schulden: darlehen.schulden?.toString(),
         anzahlBetreibungen: darlehen.anzahlBetreibungen,
-        // todo: gruende
+        // todo: gruende, once changed contract
       });
     });
   }
@@ -209,34 +240,38 @@ export class SharedFeatureDarlehenComponent {
       darlehenBetragGewuenscht: fromFormatedNumber(realValues.betragGewuenscht),
       schulden: fromFormatedNumber(realValues.schulden),
       anzahlBetreibungen: realValues.anzahlBetreibungen,
-      grund: undefined,
+      // todo: change once contract changed
+      grund: DarlehenGrund.ZWEITAUSBILDUNG,
     };
 
     return darlehen;
   }
 
   // Gesuchsteller Actions
-  darlehenUpdateGs(): void {
-    this.formGs.markAllAsTouched();
-    this.formUtils.focusFirstInvalid(this.elementRef);
+  // darlehenUpdateGs(): void {
+  //   this.formGs.markAllAsTouched();
+  //   this.formUtils.focusFirstInvalid(this.elementRef);
 
-    if (this.formGs.invalid) {
-      return;
-    }
+  //   if (this.formGs.invalid) {
+  //     return;
+  //   }
 
-    const darlehen = this.buildUpdatedGsFrom();
+  //   const darlehen = this.buildUpdatedGsFrom();
 
-    this.darlehenStore.darlehenUpdateGs$({
-      darlehenId: this.darlehenSig().id,
-      darlehenUpdateGs: darlehen,
-    });
-  }
+  //   this.darlehenStore.darlehenUpdateGs$({
+  //     darlehenId: this.darlehenSig().id,
+  //     darlehenUpdateGs: darlehen,
+  //   });
+  // }
+
+  // implement this to be a validator on the form?
 
   darlehenEingeben(): void {
     this.formGs.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
+    const darlehen = this.darlehenSig();
 
-    if (this.formGs.invalid) {
+    if (this.formGs.invalid || !darlehen) {
       return;
     }
 
@@ -249,7 +284,10 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // this.createDarlehen();
+          this.darlehenStore.darlehenUpdateAndEingeben$({
+            darlehenId: darlehen.id,
+            darlehenUpdateGs: this.buildUpdatedGsFrom(),
+          });
         }
       });
   }
@@ -271,16 +309,17 @@ export class SharedFeatureDarlehenComponent {
   darlehenUpdateSb(): void {
     this.formSb.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
+    const darlehen = this.darlehenSig();
 
-    if (this.formSb.invalid) {
+    if (this.formSb.invalid || !darlehen) {
       return;
     }
 
-    const darlehen = this.buildUpdatedSbFrom();
+    const updatedDarlehen = this.buildUpdatedSbFrom();
 
     this.darlehenStore.darlehenUpdateSb$({
-      darlehenId: this.darlehenSig().id,
-      darlehenUpdateSb: darlehen,
+      darlehenId: darlehen.id,
+      darlehenUpdateSb: updatedDarlehen,
     });
   }
 
@@ -300,8 +339,14 @@ export class SharedFeatureDarlehenComponent {
   }
 
   darlehenZurueckweisen(): void {
+    const darlehen = this.darlehenSig();
+
+    if (!darlehen) {
+      return;
+    }
+
     SharedUiKommentarDialogComponent.open(this.dialog, {
-      entityId: this.darlehenSig().id,
+      entityId: darlehen.id,
       titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
       messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
       placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',
@@ -310,7 +355,10 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // this.zurueckweisenDarlehen();
+          this.darlehenStore.darlehenZurueckweisen$({
+            darlehenId: result.entityId,
+            kommentar: { text: result.kommentar },
+          });
         }
       });
   }
@@ -318,6 +366,12 @@ export class SharedFeatureDarlehenComponent {
   // Freigabestellen Actions
 
   darlehenAkzeptieren(): void {
+    const darlehen = this.darlehenSig();
+
+    if (!darlehen) {
+      return;
+    }
+
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.akzeptieren.dialog.title',
       message: 'shared.form.darlehen.akzeptieren.dialog.message',
@@ -327,12 +381,20 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // this.akzeptierenDarlehen();
+          this.darlehenStore.darlehenAkzeptieren$({
+            darlehenId: darlehen.id,
+          });
         }
       });
   }
 
   darlehenAblehnen(): void {
+    const darlehen = this.darlehenSig();
+
+    if (!darlehen) {
+      return;
+    }
+
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.ablehnen.dialog.title',
       message: 'shared.form.darlehen.ablehnen.dialog.message',
@@ -342,7 +404,9 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // this.zurueckweisenDarlehen();
+          this.darlehenStore.darlehenAblehnen$({
+            darlehenId: darlehen.id,
+          });
         }
       });
   }

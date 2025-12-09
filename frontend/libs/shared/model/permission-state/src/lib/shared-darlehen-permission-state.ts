@@ -88,11 +88,14 @@ const applyDelegatedDarlehenPermissions = (
 };
 
 export const getDarlehenPermissions = (
-  status: DarlehenStatus,
+  status: DarlehenStatus | undefined,
   appType: AppType,
   rolesMap: RolesMap,
   delegierung?: DelegierungSlim,
 ) => {
+  if (!status) {
+    return { permissions: undefined, status };
+  }
   const state = darlehenPermissionTableByAppType[status][appType](rolesMap);
   const permissions = parsePermissions(state);
 

@@ -362,7 +362,7 @@ export function createDarlehenUploadOptionsFactory<
   T extends {
     darlehenId: string | undefined;
     allowTypes: string | undefined;
-    permissions: DarlehenPermissionMap;
+    permissions: DarlehenPermissionMap | undefined;
   },
 >(view: T) {
   return (
@@ -370,7 +370,10 @@ export function createDarlehenUploadOptionsFactory<
   ) => {
     return computed<DokumentOptions | null>(() => {
       const dokumentTyp = lazyDokumentTyp(view);
-      return dokumentTyp && view.darlehenId && view.allowTypes
+      return dokumentTyp &&
+        view.darlehenId &&
+        view.allowTypes &&
+        view.permissions
         ? {
             allowTypes: view.allowTypes,
             permissions: view.permissions,

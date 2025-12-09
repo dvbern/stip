@@ -917,7 +917,7 @@
   "shared.form.darlehen.darlehenGewaehren.false": "Nein",
   "shared.form.darlehen.betragDarlehen.label": "Betrag Darlehen",
   "shared.form.darlehen.kommentar.label": "Kommentar",
-  "shared.form.darlehen.betragDarlehenGewuenscht.label": "Gewünschter Darlehensbetrag",
+  "shared.form.darlehen.betragGewuenscht.label": "Gewünschter Darlehensbetrag",
   "shared.form.darlehen.betragBezogenKanton.label": "Vom Kanton bereits bezogen",
   "shared.form.darlehen.schulden.label": "Andere Schulden",
   "shared.form.darlehen.anzahlBetreibungen.label": "Anzahl Betreibungen",
@@ -960,6 +960,7 @@
   "shared.form.darlehen.zurueckweisen.dialog.confirm": "Darlehen zurückweisen",
   "shared.form.darlehen.zurueckweisen.dialog.placeholder": "Grund für die Zurückweisung",
   "shared.form.darlehen.zurueckweisen.success": "Das Darlehen wurde erfolgreich zurückgewiesen.",
+  "shared.form.darlehen.error.missingDocuments": "Es müssen noch Dokumente hochgeladen werden, bevor das Darlehen beantragt werden kann.",
 
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Bezeichnung(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Bezeichnung(FR)",
