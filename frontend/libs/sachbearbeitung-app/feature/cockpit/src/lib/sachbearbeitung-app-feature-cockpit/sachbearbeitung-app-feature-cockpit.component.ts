@@ -511,6 +511,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       });
 
       this.router.navigate(['.'], {
+        relativeTo: this.route,
         queryParams: makeEmptyStringPropertiesNull(query),
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -528,6 +529,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
         return;
       }
       this.router.navigate(['.'], {
+        relativeTo: this.route,
         queryParams: {
           show: query,
         },

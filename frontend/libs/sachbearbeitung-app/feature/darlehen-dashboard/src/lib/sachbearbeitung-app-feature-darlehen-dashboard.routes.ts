@@ -14,6 +14,7 @@ export const sachbearbeitungAppFeatureDarlehenDashboardRoutes: Route[] = [
       {
         path: '',
         component: SachbearbeitungAppFeatureDarlehenDashboardComponent,
+        // title: 'sachbearbeitung-app.darlehen-dashboard.title',
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children

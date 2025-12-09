@@ -38,7 +38,6 @@ import {
 } from 'date-fns';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
-import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -92,7 +91,7 @@ import {
 
 type DarlehenFilter = keyof typeof GetDarlehenSbQueryType;
 
-const DEFAULT_FILTER: DarlehenFilter = 'MEINE_DARLEHEN';
+const DEFAULT_FILTER: DarlehenFilter = 'ALLE_DARLEHEN';
 
 type DashboardEntry = Omit<DarlehenDashboard, 'id' | 'fallId'>;
 type DashboardEntryFields = keyof DashboardEntry;
@@ -163,7 +162,6 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private darlehenStore = inject(DarlehenStore);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
@@ -225,7 +223,8 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
   paginateList = paginateList(this.router, this.route);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
-  gesuchStore = inject(GesuchStore);
+  darlehenStore = inject(DarlehenStore);
+
   // Exhaustive quick filter configuration
   private readonly quickFilterConfig = {
     MEINE_DARLEHEN: {
@@ -316,17 +315,15 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
       debounceTime(INPUT_DELAY),
     ),
   );
-  // todo: fix mapping
+
   darlehenDataSourceSig = computed(() => {
-    const gesuche = this.gesuchStore
-      ?.cockpitViewSig()
-      ?.gesuche?.entries?.map((entry) => {
-        const status =
-          entry.typ == 'TRANCHE' ? entry.gesuchStatus : entry.trancheStatus;
-        const translationKey = `sachbearbeitung-app.gesuch.status.${entry.typ == 'TRANCHE' ? 'contract' : 'tranche'}.${status}`;
+    const darlehen = this.darlehenStore
+      ?.dashboardViewSig()
+      ?.darlehen?.entries?.map((entry) => {
+        const status = entry.status;
+        const translationKey = `sachbearbeitung-app.darlehen.status.${status}`;
         return {
-          id: entry.id,
-          trancheId: entry.gesuchTrancheId,
+          id: entry.id!,
           fallNummer: entry.fallNummer,
           piaNachname: entry.piaNachname,
           piaVorname: entry.piaVorname,
@@ -337,15 +334,14 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
           letzteAktivitaet: entry.letzteAktivitaet,
         } satisfies Record<DashboardEntryFields, unknown> & {
           id: string;
-          trancheId: string;
           translationKey: string;
         };
       });
-    const dataSource = new MatTableDataSource(gesuche);
+    const dataSource = new MatTableDataSource(darlehen);
     return dataSource;
   });
   totalEntriesSig = computed(() => {
-    return this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
+    return this.darlehenStore.dashboardViewSig()?.darlehen?.totalEntries;
   });
 
   constructor() {
@@ -387,6 +383,7 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
             : undefined,
       });
       this.router.navigate(['.'], {
+        relativeTo: this.route,
         queryParams: makeEmptyStringPropertiesNull(query),
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -402,6 +399,7 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
         return;
       }
       this.router.navigate(['.'], {
+        relativeTo: this.route,
         queryParams: {
           show: query,
         },

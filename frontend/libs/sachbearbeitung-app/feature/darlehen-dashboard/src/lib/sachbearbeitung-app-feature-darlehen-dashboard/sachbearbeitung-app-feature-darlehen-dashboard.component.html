@@ -7,24 +7,25 @@
           [defaultFilter]="quickFilterGroup.filters[0].typ"
           (filterChange)="handleQuickFilterClick($event)"
           [filters]="quickFilterGroup.filters"
+          baseTranslationKey="sachbearbeitung-app.darlehen-dashboard.quick-filter."
         ></dv-shared-ui-filter-menu-button>
       }
     </div>
 
     <div class="tw:flex tw:justify-between tw:mt-6! tw:mt-8!">
-      <h1 class="tw:text-2xl!" data-testid="cockpit-title">
-        {{ 'sachbearbeitung-app.cockpit.gesuche' | transloco }}
+      <h1 class="tw:text-2xl!" data-testid="darlehen-title">
+        {{ 'sachbearbeitung-app.darlehen.title' | transloco }}
       </h1>
     </div>
 
     <div class="tw:my-6">
       <div class="tw:dv-table">
         <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
-          <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading">
+          <div [class.opacity-50]="darlehenStore.dashboardViewSig().loading">
             <table
               [dvSharedUiFocusableList]="items"
               [dataSource]="darlehenDataSourceSig()"
-              data-testid="cockpit-table"
+              data-testid="darlehen-table"
               mat-table
               matSort
               (matSortChange)="sortList($event)"
@@ -32,14 +33,14 @@
             >
               <caption class="cdk-visually-hidden">
                 {{
-                  'sachbearbeitung-app.cockpit.table.description' | transloco
+                  'sachbearbeitung-app.darlehen-dashboard.table.description' | transloco
                 }}
               </caption>
 
               <ng-container matColumnDef="FALLNUMMER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   <label class="pe-none" for="fallNummer">{{
-                    'sachbearbeitung-app.cockpit.table.fall' | transloco
+                    'sachbearbeitung-app.darlehen-dashboard.table.fallNummer' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -49,7 +50,7 @@
                         [dvMaxLength]="'small'"
                         class="tw:w-full"
                         formControlName="fallNummer"
-                        data-testid="cockpit-filter-fall"
+                        data-testid="darlehen-filter-fall"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
                       />
@@ -67,10 +68,7 @@
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
                   <!-- todo: fix links -->
-                  <a
-                    [routerLink]="['/gesuch/info', darlehen.id, 'tranche', darlehen.trancheId]"
-                    (click)="$event.stopPropagation()"
-                  >
+                  <a [routerLink]="['/gesuch/info', darlehen.id, 'tranche']" (click)="$event.stopPropagation()">
                     {{ darlehen.fallNummer }}
                   </a>
                 </td>
@@ -79,7 +77,7 @@
               <ng-container matColumnDef="PIA_NACHNAME">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="piaNachname">{{
-                    'sachbearbeitung-app.cockpit.table.nachname' | transloco
+                    'sachbearbeitung-app.darlehen-dashboard.table.nachname' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -89,6 +87,7 @@
                         matInput
                         dvMaxLength
                         formControlName="piaNachname"
+                        data-testid="darlehen-filter-nachname"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
                       />
@@ -113,7 +112,7 @@
               <ng-container matColumnDef="PIA_VORNAME">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="piaVorname">{{
-                    'sachbearbeitung-app.cockpit.table.vorname' | transloco
+                    'sachbearbeitung-app.darlehen-dashboard.table.vorname' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -123,6 +122,7 @@
                         matInput
                         dvMaxLength
                         formControlName="piaVorname"
+                        data-testid="darlehen-filter-vorname"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
                       />
@@ -154,7 +154,7 @@
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="piaGeburtsdatum">{{
-                    'sachbearbeitung-app.cockpit.table.geburtsdatum' | transloco
+                    'sachbearbeitung-app.darlehen-dashboard.table.geburtsdatum' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -164,6 +164,7 @@
                         matInput
                         [dvMaxLength]="'small'"
                         formControlName="piaGeburtsdatum"
+                        data-testid="darlehen-filter-geburtsdatum"
                         [matDatepicker]="geburtsdatumDatepicker"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
@@ -199,18 +200,18 @@
 
               <ng-container matColumnDef="STATUS">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-                  {{ 'sachbearbeitung-app.cockpit.table.status' | transloco }}
+                  {{ 'sachbearbeitung-app.darlehen-dashboard.table.status' | transloco }}
                   <mat-form-field class="tw:w-full">
                     <mat-select
-                      [aria-label]="'sachbearbeitung-app.cockpit.table.status' | transloco"
+                      [aria-label]="'sachbearbeitung-app.darlehen-dashboard.table.status' | transloco"
                       formControlName="status"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
-                      [placeholder]="'sachbearbeitung-app.cockpit.no-status-filter' | transloco"
+                      [placeholder]="'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco"
                       panelClass="table-select"
                     >
                       <mat-option [value]="null">
-                        {{ 'sachbearbeitung-app.cockpit.no-status-filter' | transloco }}
+                        {{ 'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco }}
                       </mat-option>
                       <!-- todo: test if working -->
                       @for (status of statusValuesSig(); track status) {
@@ -235,7 +236,7 @@
               <ng-container matColumnDef="BEARBEITER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="bearbeiter">{{
-                    'sachbearbeitung-app.cockpit.table.bearbeiter' | transloco
+                    'sachbearbeitung-app.darlehen-dashboard.table.bearbeiter' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -275,7 +276,7 @@
                   class="filtered tw:w-40 tw:whitespace-nowrap"
                 >
                   <label class="pe-none" for="letzteAktivitaet">{{
-                    'sachbearbeitung-app.cockpit.table.letzteAktivitaet' | transloco
+                    'sachbearbeitung-app.darlehen-dashboard.table.letzteAktivitaet' | transloco
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -347,7 +348,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let darlehen; dataSource: darlehenDataSourceSig(); columns: displayedColumns"
-                [routerLink]="['/gesuch', 'info', darlehen.id, 'tranche', darlehen.trancheId]"
+                [routerLink]="['/gesuch', 'info', darlehen.id, 'tranche']"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
@@ -362,11 +363,11 @@
               [pageSizeOptions]="pageSizes"
               [pageSize]="pageSize() ?? defaultPageSize"
               [pageIndex]="page() ?? 0"
-              [length]="gesuchStore.cockpitViewSig().gesuche?.totalEntries"
+              [length]="darlehenStore.dashboardViewSig().darlehen?.totalEntries"
               (page)="paginateList($event)"
             ></mat-paginator>
           </div>
-          @if (gesuchStore.cockpitViewSig().loading) {
+          @if (darlehenStore.dashboardViewSig().loading) {
             <dv-shared-ui-loading
               class="position-absolute translate-middle start-50 top-50"
               [type]="'compact'"

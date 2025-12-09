@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 import { BuchhaltungStore } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 
@@ -106,8 +107,15 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureVerfuegungRoutes,
           ),
       },
+      // todo: do we need additional guards here?
       {
         path: 'darlehen-dashboard',
+        providers: [DarlehenStore],
+        title: 'sachbearbeitung-app.darlehen-dashboard.title',
+        loadComponent: () =>
+          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
+            (m) => m.SachbearbeitungAppFeatureDarlehenDashboardComponent,
+          ),
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
             (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,

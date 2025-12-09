@@ -52,6 +52,13 @@ export class DarlehenStore extends signalStore(
     patchState(this, { cachedDarlehen: rd });
   }
 
+  dashboardViewSig = computed(() => {
+    return {
+      darlehen: fromCachedDataSig(this.paginatedSbDarlehenDashboard),
+      loading: isPending(this.paginatedSbDarlehenDashboard()),
+    };
+  });
+
   darlehenViewSig = computed(() => {
     return {
       darlehen: fromCachedDataSig(this.cachedDarlehen),
