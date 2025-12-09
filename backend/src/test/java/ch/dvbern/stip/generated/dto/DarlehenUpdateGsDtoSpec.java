@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -31,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenUpdateGsDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUND
+  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUENDE
 })
 @JsonTypeName("DarlehenUpdateGs")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -45,8 +48,8 @@ public class DarlehenUpdateGsDtoSpec {
   public static final String JSON_PROPERTY_ANZAHL_BETREIBUNGEN = "anzahlBetreibungen";
   private Integer anzahlBetreibungen;
 
-  public static final String JSON_PROPERTY_GRUND = "grund";
-  private DarlehenGrundDtoSpec grund;
+  public static final String JSON_PROPERTY_GRUENDE = "gruende";
+  private List<DarlehenGrundDtoSpec> gruende;
 
   public DarlehenUpdateGsDtoSpec() {
   }
@@ -132,29 +135,37 @@ public class DarlehenUpdateGsDtoSpec {
   }
 
 
-  public DarlehenUpdateGsDtoSpec grund(DarlehenGrundDtoSpec grund) {
+  public DarlehenUpdateGsDtoSpec gruende(List<DarlehenGrundDtoSpec> gruende) {
     
-    this.grund = grund;
+    this.gruende = gruende;
+    return this;
+  }
+
+  public DarlehenUpdateGsDtoSpec addGruendeItem(DarlehenGrundDtoSpec gruendeItem) {
+    if (this.gruende == null) {
+      this.gruende = new ArrayList<>();
+    }
+    this.gruende.add(gruendeItem);
     return this;
   }
 
    /**
-   * Get grund
-   * @return grund
+   * Get gruende
+   * @return gruende
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GRUND)
+  @JsonProperty(JSON_PROPERTY_GRUENDE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DarlehenGrundDtoSpec getGrund() {
-    return grund;
+  public List<DarlehenGrundDtoSpec> getGruende() {
+    return gruende;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUND)
+  @JsonProperty(JSON_PROPERTY_GRUENDE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGrund(DarlehenGrundDtoSpec grund) {
-    this.grund = grund;
+  public void setGruende(List<DarlehenGrundDtoSpec> gruende) {
+    this.gruende = gruende;
   }
 
   @Override
@@ -169,12 +180,12 @@ public class DarlehenUpdateGsDtoSpec {
     return Objects.equals(this.betragGewuenscht, darlehenUpdateGs.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
-        Objects.equals(this.grund, darlehenUpdateGs.grund);
+        Objects.equals(this.gruende, darlehenUpdateGs.gruende);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(betragGewuenscht, schulden, anzahlBetreibungen, grund);
+    return Objects.hash(betragGewuenscht, schulden, anzahlBetreibungen, gruende);
   }
 
   @Override
@@ -184,7 +195,7 @@ public class DarlehenUpdateGsDtoSpec {
     sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
+    sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
     sb.append("}");
     return sb.toString();
   }

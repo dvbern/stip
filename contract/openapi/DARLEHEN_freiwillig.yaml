@@ -465,8 +465,10 @@ components:
         anzahlBetreibungen:
           type: integer
           minimum: 0
-        grund:
-          $ref: './components/common.yaml#/DarlehenGrund'
+        gruende:
+          type: array
+          items:
+            $ref: './components/common.yaml#/DarlehenGrund'
 
     NullableDarlehenDokument:
       type: object

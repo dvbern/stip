@@ -25,7 +25,9 @@ import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -88,11 +90,13 @@ public class Darlehen extends AbstractMandantEntity {
     @Column(name = "schulden")
     private Integer schulden;
 
-    @Nullable
+    @ElementCollection
     @Enumerated(EnumType.STRING)
-    @Column(name = "grund")
-    private DarlehenGrund grund;
+    @Column(name = "darlehen_grund")
+    @CollectionTable(name = "darlehen_darlehen_grund", joinColumns = @JoinColumn(name = "darlehen_id"))
+    private Set<DarlehenGrund> darlehenGrund = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "darlehen", orphanRemoval = true)
     private Set<DarlehenDokument> dokumente = new LinkedHashSet<>();
+
 }

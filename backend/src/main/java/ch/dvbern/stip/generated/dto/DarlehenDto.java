@@ -1,6 +1,9 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -29,7 +32,7 @@ public class DarlehenDto  implements Serializable {
   private @Valid Integer betragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
-  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund;
+  private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
 
   /**
    **/
@@ -200,22 +203,38 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto grund(ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund) {
-    this.grund = grund;
+  public DarlehenDto gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+    this.gruende = gruende;
     return this;
   }
 
   
-  @JsonProperty("grund")
-  public ch.dvbern.stip.api.darlehen.type.DarlehenGrund getGrund() {
-    return grund;
+  @JsonProperty("gruende")
+  public List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> getGruende() {
+    return gruende;
   }
 
-  @JsonProperty("grund")
-  public void setGrund(ch.dvbern.stip.api.darlehen.type.DarlehenGrund grund) {
-    this.grund = grund;
+  @JsonProperty("gruende")
+  public void setGruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+    this.gruende = gruende;
   }
 
+  public DarlehenDto addGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+    if (this.gruende == null) {
+      this.gruende = new ArrayList<>();
+    }
+
+    this.gruende.add(gruendeItem);
+    return this;
+  }
+
+  public DarlehenDto removeGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+    if (gruendeItem != null && this.gruende != null) {
+      this.gruende.remove(gruendeItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -235,12 +254,12 @@ public class DarlehenDto  implements Serializable {
         Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.grund, darlehen.grund);
+        Objects.equals(this.gruende, darlehen.gruende);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, grund);
+    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende);
   }
 
   @Override
@@ -257,7 +276,7 @@ public class DarlehenDto  implements Serializable {
     sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    grund: ").append(toIndentedString(grund)).append("\n");
+    sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
     sb.append("}");
     return sb.toString();
   }

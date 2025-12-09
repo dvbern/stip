@@ -5949,8 +5949,10 @@ components:
         anzahlBetreibungen:
           type: integer
           minimum: 0
-        grund:
-          $ref: '#/components/schemas/DarlehenGrund'
+        gruende:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenGrund'
     NullableDarlehenDokument:
       type: object
       properties:
@@ -6032,8 +6034,10 @@ components:
         anzahlBetreibungen:
           type: integer
           minimum: 0
-        grund:
-          $ref: '#/components/schemas/DarlehenGrund'
+        gruende:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenGrund'
     Dokument:
       required:
         - id
