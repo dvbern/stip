@@ -294,13 +294,31 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void removeAllDokumentsOfTypeForAllTranchen(final Gesuch gesuch, final DokumentTyp dokumentTyp) {
+    public void removeAllDokumentsOfTypeAndObjectIdForAllTranchen(
+        final Gesuch gesuch,
+        final DokumentTyp dokumentTyp,
+        final String objectId
+    ) {
         gesuchDokumentRepository.getAllOfTypeForGesuch(gesuch.getId(), dokumentTyp)
             .forEach(
                 gesuchDokument -> {
                     gesuchDokument.getGesuchDokumentKommentare().clear();
                     gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
-                    removeGesuchDokument(gesuchDokument.getId());
+
+                    final var dokumenteToDelete = new ArrayList<Dokument>();
+                    for (final var dokument : gesuchDokument.getDokumente()) {
+                        if (!dokument.getObjectId().equals(objectId)) {
+                            continue;
+                        }
+
+                        dokumenteToDelete.add(dokument);
+                    }
+
+                    dokumenteToDelete.forEach(this::removeDokument);
+
+                    if (gesuchDokument.getDokumente().isEmpty()) {
+                        removeGesuchDokument(gesuchDokument.getId());
+                    }
                 }
             );
     }
@@ -450,9 +468,10 @@ public class GesuchDokumentService {
         // Remove Dokument on all Tranchen if Jahreswert Dokument, otherwise only this
         final var gesuchDokument = dokument.getGesuchDokument();
         if (DokumentOfJahreswertUtil.isDokumentOfJahreswert(gesuchDokument.getDokumentTyp())) {
-            removeAllDokumentsOfTypeForAllTranchen(
+            removeAllDokumentsOfTypeAndObjectIdForAllTranchen(
                 gesuchDokument.getGesuchTranche().getGesuch(),
-                gesuchDokument.getDokumentTyp()
+                gesuchDokument.getDokumentTyp(),
+                dokument.getObjectId()
             );
         } else {
             removeDokument(dokument);
