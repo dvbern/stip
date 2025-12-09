@@ -38,15 +38,4 @@ public class GesuchDokumentKommentarCopyUtil {
 
         return copy;
     }
-
-    public void overrideAll(
-        final GesuchDokument source,
-        final GesuchDokument destination
-    ) {
-        destination.getGesuchDokumentKommentare().clear();
-
-        for (var gesuchDokumentKommentar : source.getGesuchDokumentKommentare()) {
-            destination.addGesuchKommentar(gesuchDokumentKommentar);
-        }
-    }
 }

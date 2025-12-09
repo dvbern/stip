@@ -298,6 +298,7 @@ public class GesuchDokumentService {
         gesuchDokumentRepository.getAllOfTypeForGesuch(gesuch.getId(), dokumentTyp)
             .forEach(
                 gesuchDokument -> {
+                    gesuchDokument.getGesuchDokumentKommentare().clear();
                     gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
                     removeGesuchDokument(gesuchDokument.getId());
                 }
@@ -467,6 +468,7 @@ public class GesuchDokumentService {
         ) {
             dokumentObjectIds.add(dokument.getObjectId());
         }
+
         dokumentRepository.delete(dokument);
 
         dokument.getGesuchDokument().getDokumente().remove(dokument);
