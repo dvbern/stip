@@ -166,7 +166,7 @@ public class BuchhaltungService {
         final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
-        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
+        final TL translator = getTranslator(LocaleUtil.getLocale(gesuch));
 
         final var buchhaltungEntry = new Buchhaltung()
             .setBuchhaltungType(BuchhaltungType.BUSINESSPARTNER_CREATE)
@@ -204,7 +204,7 @@ public class BuchhaltungService {
             default -> throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
         };
 
-        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
+        final TL translator = getTranslator(LocaleUtil.getLocale(gesuch));
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
@@ -243,7 +243,7 @@ public class BuchhaltungService {
         final Gesuch gesuch,
         final Integer stipendiumBetrag
     ) {
-        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
+        final TL translator = getTranslator(LocaleUtil.getLocale(gesuch));
 
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
