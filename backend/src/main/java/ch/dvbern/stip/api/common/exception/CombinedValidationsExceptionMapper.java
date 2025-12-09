@@ -54,11 +54,14 @@ public final class CombinedValidationsExceptionMapper {
                 // set warnings
                 final var warningDto = toWarningDto(constraintViolation);
                 warnings.add(warningDto);
-            } else {
+            } else if (payload.contains(Severity.Error.class)) {
                 // set errors
                 final var validationErrorDto = toErrorDto(constraintViolation);
                 errors.add(validationErrorDto);
             }
+
+            // if other severities are added, they are ignored by default,
+            // and must be handled in following else ifs if required
         });
         errors.add(toErrorDto(additionalConstraintViolation));
 
