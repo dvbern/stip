@@ -299,7 +299,8 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
         ].join(' - ')
       : format(start, 'dd.MM.yyyy');
   });
-  statusValuesSig = toSignal(this.filterForm.controls.status.valueChanges);
+  statusValues = Object.values(DarlehenStatus);
+
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'status',
   ]);

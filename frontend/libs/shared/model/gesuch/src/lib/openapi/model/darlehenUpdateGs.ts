@@ -15,8 +15,6 @@ export interface DarlehenUpdateGs {
     betragGewuenscht?: number;
     schulden?: number;
     anzahlBetreibungen?: number;
-    grund?: DarlehenGrund;
+    gruende?: Array<DarlehenGrund>;
 }
-
-
 

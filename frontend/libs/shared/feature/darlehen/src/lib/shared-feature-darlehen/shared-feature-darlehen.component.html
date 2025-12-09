@@ -5,15 +5,15 @@
   <form [formGroup]="formSb" novalidate data-testid="form-darlehen-sb-form" *dvIfSachbearbeiter>
     <!-- sachbearbeiter fields -->
     <div class="tw:dv-form-half">
-      <!-- todo: once implemented: info betragBezogenKanton -->
+      <!-- todo: KSTIP-2922 info betragBezogenKanton -->
       <div>
         <span>
           {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }}
         </span>
         <span>0</span>
       </div>
+
       <!-- darlehenGewaehren mat-radio-group -->
-      <!-- todo: change to [formcontrol] -->
       <mat-radio-group
         [formControl]="formSb.controls.gewaehren"
         class="tw:w-full"
@@ -64,9 +64,6 @@
           rows="4"
         ></textarea>
 
-        <!-- <mat-error *dvSharedUiFormMessageError="'maxlength'">
-          {{ 'shared.form.error.maxlength' | transloco: { max: 2000 } }}
-        </mat-error> -->
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
         </mat-error>
@@ -196,7 +193,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.grundNichtBerechtigt"
+            [formControl]="formGs.controls.gruende.controls.NICHT_BERECHTIGT"
             data-testid="form-darlehen-grundNichtBerechtigt"
           >
             {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | transloco }}
@@ -213,7 +210,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.grundAusbildungZwoelfJahre"
+            [formControl]="formGs.controls.gruende.controls.AUSBILDUNG_ZWOELF_JAHRE"
             data-testid="form-darlehen-grundAusbildungZwoelfJahre"
           >
             {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | transloco }}
@@ -224,7 +221,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.grundHoheGebuehren"
+            [formControl]="formGs.controls.gruende.controls.HOHE_GEBUEHREN"
             data-testid="form-darlehen-grundHoheGebuehren"
           >
             {{ 'shared.form.darlehen.grundHoheGebuehren.label' | transloco }}
@@ -241,7 +238,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.grundAnschaffungenFuerAusbildung"
+            [formControl]="formGs.controls.gruende.controls.ANSCHAFFUNGEN_FUER_AUSBILDUNG"
             data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
           >
             {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | transloco }}
@@ -258,7 +255,7 @@
         <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
           <mat-checkbox
             class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.grundZweitausbildung"
+            [formControl]="formGs.controls.gruende.controls.ZWEITAUSBILDUNG"
             data-testid="form-darlehen-grundZweitausbildung"
           >
             {{ 'shared.form.darlehen.grundZweitausbildung.label' | transloco }}
@@ -268,7 +265,7 @@
     </div>
 
     <!-- Document Error -->
-    @if (formGs.hasError('requiredDocumentsMissing') && formGs.touched) {
+    @if (!isAllDocumentsUploadedSig()) {
       <mat-error class="tw:block!">
         {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
       </mat-error>

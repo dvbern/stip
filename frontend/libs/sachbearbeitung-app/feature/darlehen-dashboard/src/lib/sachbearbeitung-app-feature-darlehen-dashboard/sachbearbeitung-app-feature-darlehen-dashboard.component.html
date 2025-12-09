@@ -49,7 +49,7 @@
                         matInput
                         [dvMaxLength]="'small'"
                         class="tw:w-full"
-                        formControlName="fallNummer"
+                        [formControl]="filterForm.controls.fallNummer"
                         data-testid="darlehen-filter-fall"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
@@ -86,7 +86,7 @@
                         class="tw:w-full"
                         matInput
                         dvMaxLength
-                        formControlName="piaNachname"
+                        [formControl]="filterForm.controls.piaNachname"
                         data-testid="darlehen-filter-nachname"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
@@ -121,7 +121,7 @@
                         class="tw:w-full"
                         matInput
                         dvMaxLength
-                        formControlName="piaVorname"
+                        [formControl]="filterForm.controls.piaVorname"
                         data-testid="darlehen-filter-vorname"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
@@ -163,7 +163,7 @@
                         class="tw:w-full"
                         matInput
                         [dvMaxLength]="'small'"
-                        formControlName="piaGeburtsdatum"
+                        [formControl]="filterForm.controls.piaGeburtsdatum"
                         data-testid="darlehen-filter-geburtsdatum"
                         [matDatepicker]="geburtsdatumDatepicker"
                         (click)="$event.stopPropagation()"
@@ -204,7 +204,7 @@
                   <mat-form-field class="tw:w-full">
                     <mat-select
                       [aria-label]="'sachbearbeitung-app.darlehen-dashboard.table.status' | transloco"
-                      formControlName="status"
+                      [formControl]="filterForm.controls.status"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
                       [placeholder]="'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco"
@@ -214,9 +214,9 @@
                         {{ 'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco }}
                       </mat-option>
                       <!-- todo: test if working -->
-                      @for (status of statusValuesSig(); track status) {
+                      @for (status of statusValues; track status) {
                         <mat-option [value]="status">
-                          {{ 'sachbearbeitung-app.gesuch.status.' + statusValuesSig() + '.' + status | transloco }}
+                          {{ 'sachbearbeitung-app.darlehen.status.' + status | transloco }}
                         </mat-option>
                       }
                     </mat-select>
@@ -245,7 +245,7 @@
                         class="tw:w-full"
                         matInput
                         dvMaxLength
-                        formControlName="bearbeiter"
+                        [formControl]="filterForm.controls.bearbeiter"
                         (click)="$event.stopPropagation()"
                         (keydown)="$event.stopPropagation()"
                       />

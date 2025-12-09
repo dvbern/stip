@@ -134,17 +134,12 @@ export class SharedFeatureDarlehenComponent {
     return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
-  private checkDocumentUploadsComplete(): boolean {
+  isAllDocumentsUploadedSig = computed<boolean>(() => {
     const dokumentUploads = this.documentUploadsSig();
     return dokumentUploads.every((upload) => {
       return upload.gesuchDokumentSig()?.gesuchDokument?.dokumente?.length;
     });
-  }
-
-  private allDocumentsValidator: ValidatorFn = () => {
-    const allComplete = this.checkDocumentUploadsComplete();
-    return allComplete ? null : { requiredDocumentsMissing: true };
-  };
+  });
 
   formSb = this.formBuilder.group({
     gewaehren: [<boolean | null>null, [Validators.required]],
@@ -152,7 +147,6 @@ export class SharedFeatureDarlehenComponent {
     kommentar: [<string | null>null, [Validators.required]],
   });
 
-  // todo: how to handle new field betragBezogenKanton?
   formGs = this.formBuilder.group(
     {
       betragGewuenscht: [<string | null>null, [Validators.required]],
@@ -160,26 +154,26 @@ export class SharedFeatureDarlehenComponent {
       anzahlBetreibungen: [<number | null>null, [Validators.required]],
       gruende: this.formBuilder.group(
         {
-          grundNichtBerechtigt: [<boolean | undefined>undefined],
-          grundAusbildungZwoelfJahre: [<boolean | undefined>undefined],
-          grundHoheGebuehren: [<boolean | undefined>undefined],
-          grundAnschaffungenFuerAusbildung: [<boolean | undefined>undefined],
-          grundZweitausbildung: [<boolean | undefined>undefined],
-        },
+          ANSCHAFFUNGEN_FUER_AUSBILDUNG: [<boolean | undefined>undefined],
+          AUSBILDUNG_ZWOELF_JAHRE: [<boolean | undefined>undefined],
+          HOHE_GEBUEHREN: [<boolean | undefined>undefined],
+          NICHT_BERECHTIGT: [<boolean | undefined>undefined],
+          ZWEITAUSBILDUNG: [<boolean | undefined>undefined],
+        } satisfies Record<DarlehenGrund, any>,
         { validators: [this.atLeastOneCheckboxChecked] },
       ),
     },
     // { validators: [this.allDocumentsValidator] },
-  ); // to avoid TS error
+  );
 
   grundNichtBerechtigtChangedSig = toSignal(
-    this.formGs.controls.gruende.controls.grundNichtBerechtigt.valueChanges,
+    this.formGs.controls.gruende.controls.NICHT_BERECHTIGT.valueChanges,
   );
   grundHoheGebuehrenChangedSig = toSignal(
-    this.formGs.controls.gruende.controls.grundHoheGebuehren.valueChanges,
+    this.formGs.controls.gruende.controls.HOHE_GEBUEHREN.valueChanges,
   );
   grundAnschaffungenFuerAusbildungChangedSig = toSignal(
-    this.formGs.controls.gruende.controls.grundAnschaffungenFuerAusbildung
+    this.formGs.controls.gruende.controls.ANSCHAFFUNGEN_FUER_AUSBILDUNG
       .valueChanges,
   );
 
@@ -224,7 +218,12 @@ export class SharedFeatureDarlehenComponent {
         betragGewuenscht: darlehen.betragGewuenscht?.toString(),
         schulden: darlehen.schulden?.toString(),
         anzahlBetreibungen: darlehen.anzahlBetreibungen,
-        // todo: gruende, once changed contract
+        gruende: Object.fromEntries(
+          Object.values(DarlehenGrund).map((grund) => [
+            grund,
+            darlehen.gruende?.includes(grund) ?? false,
+          ]),
+        ),
       });
     });
   }
@@ -240,8 +239,9 @@ export class SharedFeatureDarlehenComponent {
       betragGewuenscht: fromFormatedNumber(realValues.betragGewuenscht),
       schulden: fromFormatedNumber(realValues.schulden),
       anzahlBetreibungen: realValues.anzahlBetreibungen,
-      // todo: change once contract changed
-      grund: DarlehenGrund.ZWEITAUSBILDUNG,
+      gruende: Object.entries(this.formGs.controls.gruende.value)
+        .filter(([, value]) => value === true)
+        .map(([key]) => key as DarlehenGrund),
     };
 
     return darlehen;

@@ -22,7 +22,7 @@ export interface Darlehen {
     betragGewuenscht?: number;
     schulden?: number;
     anzahlBetreibungen?: number;
-    grund?: DarlehenGrund;
+    gruende?: Array<DarlehenGrund>;
 }
 
 
