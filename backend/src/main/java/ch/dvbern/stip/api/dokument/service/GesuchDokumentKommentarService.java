@@ -65,7 +65,16 @@ public class GesuchDokumentKommentarService {
     @Transactional
     public void copyKommentareToTranche(
         final List<GesuchDokumentKommentar> gesuchDokumentKommentars,
-        GesuchTranche toTranche
+        final GesuchTranche toTranche
+    ) {
+        copyKommentareToTranche(gesuchDokumentKommentars, toTranche, false);
+    }
+
+    @Transactional
+    public void copyKommentareToTranche(
+        final List<GesuchDokumentKommentar> gesuchDokumentKommentars,
+        final GesuchTranche toTranche,
+        final boolean override
     ) {
         final var toGesuchDokuments = toTranche.getGesuchDokuments();
 
@@ -75,6 +84,10 @@ public class GesuchDokumentKommentarService {
 
                 if (fromGesuchDokument.getDokumentTyp() != null) {
                     if (fromGesuchDokument.getDokumentTyp() == toGesuchDokument.getDokumentTyp()) {
+                        if (override) {
+                            toGesuchDokument.getGesuchDokumentKommentare().clear();
+                        }
+
                         final var newKommentar =
                             GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar, toGesuchDokument);
                         gesuchDokumentKommentarRepository.persist(newKommentar);
@@ -90,6 +103,10 @@ public class GesuchDokumentKommentarService {
                         toGesuchDokument.getCustomDokumentTyp().getDescription()
                     )))
                 ) {
+                    if (override) {
+                        toGesuchDokument.getGesuchDokumentKommentare().clear();
+                    }
+
                     final var newKommentar =
                         GesuchDokumentKommentarCopyUtil.createCopy(fromKommentar, toGesuchDokument);
                     toGesuchDokument.getCustomDokumentTyp().setGesuchDokument(toGesuchDokument);
@@ -97,6 +114,14 @@ public class GesuchDokumentKommentarService {
                 }
             }
         }
+    }
+
+    @Transactional
+    public void overrideKommentareOnTranche(
+        final List<GesuchDokumentKommentar> gesuchDokumentKommentars,
+        final GesuchTranche toTranche
+    ) {
+        copyKommentareToTranche(gesuchDokumentKommentars, toTranche, true);
     }
 
     @Transactional

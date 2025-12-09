@@ -25,7 +25,9 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
+import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
+import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -45,6 +47,8 @@ public class GesuchTrancheOverrideDokumentService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchDokumentService gesuchDokumentService;
+    private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchDokumentKommentarRepository gesuchDokumentKommentarRepository;
 
     void overrideJahreswertDokumente(final Gesuch gesuch, final GesuchTranche newTranche) {
         final var targetTranchen = gesuch.getTranchenTranchen()
@@ -109,6 +113,21 @@ public class GesuchTrancheOverrideDokumentService {
             } else {
                 noNewDokument.accept(jahreswertDokument);
             }
+        }
+
+        final var jahresfeldKommentare = newTranche.getGesuchDokuments()
+            .stream()
+            .filter(gesuchDokument -> gesuchDokumentService.isDokumentOfJahreswert(gesuchDokument.getDokumentTyp()))
+            .flatMap(
+                gesuchDokument -> gesuchDokumentKommentarRepository.getByGesuchDokumentId(gesuchDokument.getId())
+                    .stream()
+            )
+            .toList();
+
+        for (final var targetTranche : targetTranchen) {
+            // Override the Kommentare with the ones on the incoming Aenderung
+            // this ensures that Jahresfeld Kommentare are properly synchronised
+            gesuchDokumentKommentarService.overrideKommentareOnTranche(jahresfeldKommentare, targetTranche);
         }
     }
 
