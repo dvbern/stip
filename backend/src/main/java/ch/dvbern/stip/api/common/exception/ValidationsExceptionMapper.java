@@ -43,18 +43,11 @@ public final class ValidationsExceptionMapper {
 
         constraintViolations.forEach(constraintViolation -> {
             final var payload = constraintViolation.getConstraintDescriptor().getPayload();
-            final var propertyPath = constraintViolation.getPropertyPath();
             if (payload.contains(Severity.Warning.class)) {
-                final var warningDto = new ValidationMessageDto();
-                warningDto.setMessage(constraintViolation.getMessage());
-                warningDto.setMessageTemplate(constraintViolation.getMessageTemplate());
-                warningDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
+                final var warningDto = ExceptionMapperUtil.toMessageDto(constraintViolation);
                 warnings.add(warningDto);
             } else {
-                final var errorDto = new ValidationMessageDto();
-                errorDto.setMessage(constraintViolation.getMessage());
-                errorDto.setMessageTemplate(constraintViolation.getMessageTemplate());
-                errorDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
+                final var errorDto = ExceptionMapperUtil.toMessageDto(constraintViolation);
                 errors.add(errorDto);
             }
         });
