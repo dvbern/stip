@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.pdf.service.DarlehensVerfuegungPdfService;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
@@ -71,6 +73,28 @@ public class DarlehenService {
     private final DokumentDownloadService dokumentDownloadService;
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
     private final NotificationService notificationService;
+    private final DarlehensVerfuegungPdfService darlehensVerfuegungPdfService;
+
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
+    private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
+
+    @Transactional
+    public void createPdfForDarlehen(final Darlehen darlehen) {
+        final ByteArrayOutputStream out = darlehensVerfuegungPdfService.generateDarlehensVerfuegungPdf(darlehen);
+
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            "darlehensverfuegung",
+            s3,
+            configService,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+        );
+        // todo: create darlehen_verfuegung on darlehen
+        // darlehen.set.setObjectId(objectId);
+        // verfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        // verfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+    }
 
     @Transactional
     public DarlehenDto createDarlehen(final UUID fallId) {
