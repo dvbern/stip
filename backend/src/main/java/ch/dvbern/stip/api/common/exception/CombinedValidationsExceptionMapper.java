@@ -89,29 +89,35 @@ public final class CombinedValidationsExceptionMapper {
         return validationsReportDto;
     }
 
-    private static ValidationMessageDto toMessageDto(ConstraintViolation<?> constraintViolation) {
-        final var propertyPath = constraintViolation.getPropertyPath();
+    private static ValidationMessageDto toMessageDto(
+        final String message,
+        final String messageTemplate,
+        final String propertyPath
+    ) {
         var messageDto = new ValidationMessageDto();
-        messageDto.setMessage(constraintViolation.getMessage());
-        messageDto.setMessageTemplate(constraintViolation.getMessageTemplate());
-        messageDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
+        messageDto.setMessage(message);
+        messageDto.setMessageTemplate(messageTemplate);
+        messageDto.setPropertyPath(propertyPath != null ? propertyPath : null);
         return messageDto;
+    }
+
+    private static ValidationMessageDto toMessageDto(ConstraintViolation<?> constraintViolation) {
+        return toMessageDto(
+            constraintViolation.getMessage(),
+            constraintViolation.getMessageTemplate(),
+            constraintViolation.getPropertyPath().toString()
+        );
     }
 
     private static ValidationMessageDto toMessageDto(CustomConstraintViolation additionalConstraintViolation) {
-        final var propertyPath = additionalConstraintViolation.getPropertyPath();
-        final var messageDto = new ValidationMessageDto();
-        messageDto.setMessage(additionalConstraintViolation.getMessage());
-        messageDto.setMessageTemplate(additionalConstraintViolation.getMessageTemplate());
-        messageDto.setPropertyPath(propertyPath != null ? propertyPath.toString() : null);
-        return messageDto;
+        return toMessageDto(
+            additionalConstraintViolation.getMessage(),
+            additionalConstraintViolation.getMessageTemplate(),
+            additionalConstraintViolation.getPropertyPath().toString()
+        );
     }
 
     private static ValidationMessageDto toMessageDto(CustomValidationsException validationsException) {
-        var validationMessageDto = new ValidationMessageDto();
-        validationMessageDto.setMessage(validationsException.getConstraintViolation().getMessage());
-        validationMessageDto.setMessageTemplate(validationsException.getConstraintViolation().getMessageTemplate());
-        validationMessageDto.setPropertyPath(validationsException.getConstraintViolation().getPropertyPath());
-        return validationMessageDto;
+        return toMessageDto(validationsException.getConstraintViolation());
     }
 }
