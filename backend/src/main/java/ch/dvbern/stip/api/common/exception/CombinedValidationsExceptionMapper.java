@@ -56,7 +56,7 @@ public final class CombinedValidationsExceptionMapper {
                 warnings.add(warningDto);
             } else if (payload.contains(Severity.Error.class)) {
                 // set errors
-                final var validationErrorDto = CombinedValidationsExceptionMapper.toMessageDto(constraintViolation);
+                final var validationErrorDto = toMessageDto(constraintViolation);
                 errors.add(validationErrorDto);
             }
 
