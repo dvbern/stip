@@ -84,9 +84,18 @@ public class GesuchDokument extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchDokument")
     private List<Dokument> dokumente = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gesuchDokument")
+    private List<GesuchDokumentKommentar> gesuchDokumentKommentare = new ArrayList<>();
+
     public void addDokument(final Dokument dokument) {
         // Bi-Directional associations must set both sides of the relation
         dokumente.add(dokument);
         dokument.setGesuchDokument(this);
+    }
+
+    public void addGesuchKommentar(final GesuchDokumentKommentar kommentar) {
+        // Bi-Directional associations must set both sides of the relation
+        gesuchDokumentKommentare.add(kommentar);
+        kommentar.setGesuchDokument(this);
     }
 }

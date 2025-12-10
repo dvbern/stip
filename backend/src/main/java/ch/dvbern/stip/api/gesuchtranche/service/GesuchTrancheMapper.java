@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -102,14 +103,17 @@ public abstract class GesuchTrancheMapper {
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        qualifiedByName = "beforeMappingOverrideIncomingVersteckteEltern"
+        qualifiedByName = "centralMappingWithOverrideIncomingElternteile"
     )
     public abstract GesuchTranche partialUpdateOverrideIncomingVersteckteEltern(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        qualifiedByName = "centralMappingWithKeepIncomingElternteile"
+    )
     public abstract GesuchTranche partialUpdateAcceptIncomingVersteckteEltern(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
@@ -150,8 +154,33 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    @Named("beforeMappingOverrideIncomingVersteckteEltern")
+    @Named("centralMappingWithOverrideIncomingElternteile")
     @BeforeMapping
+    protected void centralBeforeMappingWithOverrideIncomingElternteile(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
+    }
+
+    @Named("centralMappingWithOverrideIncomingElternteile")
+    @AfterMapping
+    protected void centralAfterMappingWithOverrideIncomingElternteile(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        synchroniseJahresfelder(newTranche, gesuchTranche);
+    }
+
+    @Named("centralMappingWithKeepIncomingElternteile")
+    @AfterMapping
+    protected void centralAfterMappingWithKeepIncomingElternteile(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        synchroniseJahresfelder(newTranche, gesuchTranche);
+    }
+
     protected void beforeMappingOverrideIncomingVersteckteEltern(
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
@@ -211,6 +240,15 @@ public abstract class GesuchTrancheMapper {
                 );
 
             newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
+        }
+    }
+
+    protected void synchroniseJahresfelder(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        if (gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE) {
+            JahreswertUtil.synchroniseJahreswerte(gesuchTranche);
         }
     }
 }
