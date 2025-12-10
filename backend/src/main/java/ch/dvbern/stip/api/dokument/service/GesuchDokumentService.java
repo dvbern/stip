@@ -497,8 +497,8 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeGesuchDokument(final UUID gesuchDokumentId) {
-        final var gesuchDokument = gesuchDokumentRepository.requireById(gesuchDokumentId);
-        removeGesuchDokument(gesuchDokument);
+        final var gesuchDokument = gesuchDokumentRepository.findByIdOptional(gesuchDokumentId);
+        gesuchDokument.ifPresent(this::removeGesuchDokument);
     }
 
     @Transactional
