@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-12">
+        <dropForeignKeyConstraint baseTableName="qrtz_triggers" constraintName="qrtz_triggers_sched_name_fkey"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-2">
+        <addColumn tableName="darlehen">
+            <column name="darlehen_verfuegung_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-3">
+        <addColumn tableName="darlehen_aud">
+            <column name="darlehen_verfuegung_id" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-4">
+        <addUniqueConstraint columnNames="darlehen_verfuegung_id" constraintName="UC_DARLEHENDARLEHEN_VERFUEGUNG_ID_COL" tableName="darlehen"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-5">
+        <addUniqueConstraint columnNames="custom_dokument_typ_id" constraintName="UC_GESUCH_DOKUMENTCUSTOM_DOKUMENT_TYP_ID_COL" tableName="gesuch_dokument"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-6">
+        <addUniqueConstraint columnNames="dokument_id" constraintName="UC_UNTERSCHRIFTENBLATT_DOKUMENTDOKUMENT_ID_COL" tableName="unterschriftenblatt_dokument"/>
+    </changeSet>
+    <changeSet author="anna-lea.fuhrer (generated)" id="1765379153456-7">
+        <addForeignKeyConstraint baseColumnNames="darlehen_verfuegung_id" baseTableName="darlehen" constraintName="FK_darlehen_verfuegung_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dokument" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
