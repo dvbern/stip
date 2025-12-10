@@ -5,7 +5,6 @@ import {
   ResolveFn,
   Route,
   Router,
-  RouterStateSnapshot,
 } from '@angular/router';
 import { catchError, map, of, switchMap } from 'rxjs';
 
@@ -22,8 +21,6 @@ import { GesuchAppFeatureDarlehenComponent } from './gesuch-app-feature-darlehen
 
 const darlehenResolver: ResolveFn<Darlehen> = (
   route: ActivatedRouteSnapshot,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  state: RouterStateSnapshot,
 ) => {
   const darlehenStore = inject(DarlehenStore);
   const darlehenService = inject(DarlehenService);

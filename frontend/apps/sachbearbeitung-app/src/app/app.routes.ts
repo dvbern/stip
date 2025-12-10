@@ -111,6 +111,7 @@ export const appRoutes: Route[] = [
       {
         path: 'darlehen-dashboard',
         providers: [DarlehenStore],
+        canActivate: [hasBenutzer],
         title: 'sachbearbeitung-app.darlehen-dashboard.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
@@ -122,15 +123,16 @@ export const appRoutes: Route[] = [
           ),
       },
       // todo: create darlehen detail routing, propbably not here, similar route params as gesuch
-      // {
-      //   path: 'darlehen',
-      //   canActivate: [hasBenutzer],
-      //   title: 'sachbearbeitung-app.darlehen.title',
-      //   loadChildren: () =>
-      //     import('@dv/sachbearbeitung-app/feature/darlehen').then(
-      //       (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
-      //     ),
-      // },
+      {
+        path: 'darlehen/:darlehenId',
+        canActivate: [hasBenutzer],
+        providers: [DarlehenStore],
+        title: 'sachbearbeitung-app.darlehen.title',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/darlehen').then(
+            (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
+          ),
+      },
       {
         path: 'infos',
         canActivate: [hasBenutzer],

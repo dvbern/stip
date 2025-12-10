@@ -7,9 +7,7 @@
     <div class="tw:dv-form-half">
       <!-- todo: KSTIP-2922 info betragBezogenKanton -->
       <div>
-        <span>
-          {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }}
-        </span>
+        <span class="tw:font-bold"> {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }} </span>:
         <span>0</span>
       </div>
 
@@ -74,10 +72,10 @@
       <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
+      <button type="submit" (click)="darlehenUpdateSb()" class="btn btn-primary" data-testid="button-update-darlehen">
+        {{ 'shared.form.darlehen.update' | transloco }}
+      </button>
       <div>
-        <button type="submit" (click)="darlehenUpdateSb()" class="btn btn-primary" data-testid="button-create-darlehen">
-          {{ 'shared.form.darlehen.create' | transloco }}
-        </button>
         <!-- darlehen Freigeben -->
         <button
           type="button"
@@ -97,8 +95,8 @@
           {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
         </button>
       </div>
-      <!-- todo: freigabestelle -->
-      @if (false) {
+
+      @if (darlehenPermissionsSig()?.canApproveDarlehen) {
         <!-- button akzeptieren wenn freigabestelle und in Freigabe! -->
         <button
           type="button"
