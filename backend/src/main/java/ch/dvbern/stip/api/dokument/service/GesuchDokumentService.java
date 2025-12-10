@@ -311,6 +311,8 @@ public class GesuchDokumentService {
                             continue;
                         }
 
+                        // On removal of a Dokument we always reset the Status to AUSSTEHEND
+                        dokument.getGesuchDokument().setStatus(GesuchDokumentStatus.AUSSTEHEND);
                         dokumenteToDelete.add(dokument);
                     }
 
