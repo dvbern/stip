@@ -445,7 +445,7 @@ class GesuchTrancheCreateTest {
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
             .getEinnahmenKosten()
-            .setNettoerwerbseinkommen(0);
+            .setRenten(0);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
         gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())

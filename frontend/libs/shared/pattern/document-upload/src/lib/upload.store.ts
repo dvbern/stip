@@ -77,7 +77,7 @@ export class UploadStore {
   isLoading = computed(() => {
     return this.state
       .dokuments()
-      .some((d) => (!d.progress || d.progress < 100) && !d.error);
+      .some((d) => (!d.progress || d.progress < 100 || d.deleting) && !d.error);
   });
 
   /**
@@ -294,6 +294,19 @@ export class UploadStore {
 
     this.removeDocument$
       .pipe(
+        tap((action) => {
+          patchState(this.state, (state) => ({
+            dokuments: state.dokuments.map((dokument) => {
+              if (dokument.file.id === action.dokumentId) {
+                return {
+                  ...dokument,
+                  deleting: true,
+                };
+              }
+              return dokument;
+            }),
+          }));
+        }),
         mergeMap((action) => {
           const dokumentToDelete = this.state
             .dokuments()
