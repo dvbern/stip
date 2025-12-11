@@ -93,7 +93,10 @@ type DarlehenFilter = keyof typeof GetDarlehenSbQueryType;
 
 const DEFAULT_FILTER: DarlehenFilter = 'ALLE_DARLEHEN';
 
-type DashboardEntry = Omit<DarlehenDashboard, 'id' | 'fallId'>;
+type DashboardEntry = Omit<
+  DarlehenDashboard,
+  'id' | 'fallId' | 'gesuchId' | 'gesuchTrancheId'
+>;
 type DashboardEntryFields = keyof DashboardEntry;
 
 /**

@@ -26,4 +26,5 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 export class SachbearbeitungAppFeatureDarlehenComponent {
   private store = inject(Store);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
+  hasUnsavedChanges = false;
 }

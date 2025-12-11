@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Output,
   computed,
   effect,
   inject,
@@ -20,12 +21,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenuContent } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
+import { Observable, merge } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -46,6 +47,7 @@ import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import {
   SharedUiIfGesuchstellerDirective,
@@ -63,6 +65,7 @@ import {
   fromFormatedNumber,
   maskitoNumber,
 } from '@dv/shared/util/maskito-util';
+import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 
 @Component({
   selector: 'dv-shared-feature-darlehen',
@@ -84,12 +87,14 @@ import {
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
     SharedUiMaxLengthDirective,
-    MatMenuContent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDarlehenComponent {
+  @Output() formIsUnsaved: Observable<boolean>;
+
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private dialog = inject(MatDialog);
@@ -106,8 +111,6 @@ export class SharedFeatureDarlehenComponent {
   );
 
   darlehenStore = inject(DarlehenStore);
-
-  // todo: change to signal?
   darlehenSig = this.darlehenStore.cachedDarlehen.data;
 
   maskitoNumber = maskitoNumber;
@@ -121,7 +124,7 @@ export class SharedFeatureDarlehenComponent {
     ).permissions;
   });
 
-  // todo: add delegation as well
+  // todo: add delegation as well, as input, so the permissions can be calculated correctly
   private createUploadOptionsSig = createDarlehenUploadOptionsFactory({
     darlehenId: this.darlehenSig()?.id,
     allowTypes: this.config().deploymentConfig?.allowedMimeTypes?.join(','),
@@ -165,10 +168,9 @@ export class SharedFeatureDarlehenComponent {
         { validators: [this.atLeastOneCheckboxChecked] },
       ),
     },
+    // todo: make this work
     // { validators: [this.allDocumentsValidator] },
   );
-
-  hasUnsavedChanges = false;
 
   gewaehrenChangedSig = toSignal(this.formSb.controls.gewaehren.valueChanges);
   showBetragFieldSig = computed(() => {
@@ -222,7 +224,16 @@ export class SharedFeatureDarlehenComponent {
       : null;
   });
 
+  hasUnsavedChanges = false;
+
   constructor() {
+    // todo: add triggers
+    this.formIsUnsaved = merge(
+      observeUnsavedChanges(this.formGs),
+      observeUnsavedChanges(this.formSb),
+    );
+    this.formUtils.registerFormForUnsavedCheck(this);
+
     // patch form value
     effect(() => {
       const darlehen = this.darlehenSig();

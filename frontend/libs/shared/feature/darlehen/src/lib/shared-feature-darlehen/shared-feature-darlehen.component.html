@@ -2,7 +2,13 @@
 @if (false) {
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
-  <form [formGroup]="formSb" novalidate data-testid="form-darlehen-sb-form" *dvIfSachbearbeiter>
+  <form
+    [formGroup]="formSb"
+    [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteSb"
+    novalidate
+    data-testid="form-darlehen-sb-form"
+    *dvIfSachbearbeiter
+  >
     <!-- sachbearbeiter fields -->
     <div class="tw:dv-form-half">
       <!-- todo: KSTIP-2922 info betragBezogenKanton -->
@@ -126,7 +132,12 @@
     <hr class="tw:my-6 tw:border-t tw:border-gray-400" />
   </form>
 
-  <form [formGroup]="formGs" novalidate data-testid="form-darlehen-gs-form">
+  <form
+    [formGroup]="formGs"
+    [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteGs"
+    novalidate
+    data-testid="form-darlehen-gs-form"
+  >
     <div class="tw:mt-10 tw:dv-form-half">
       <!-- Darlehensbetrag -->
       <mat-form-field dvSharedUiFormField class="tw:w-full">
