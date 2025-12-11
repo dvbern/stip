@@ -12,12 +12,16 @@ import {
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { PermissionMap } from '@dv/shared/model/permission-state';
+import {
+  DarlehenPermissionMap,
+  PermissionMap,
+} from '@dv/shared/model/permission-state';
 import { Extends } from '@dv/shared/model/type-util';
 
 export type SharedModelStandardGesuchDokument = {
   art: Extends<DokumentArt, 'GESUCH_DOKUMENT'>;
   dokumentTyp: DokumentTyp;
+  permissions: PermissionMap;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
 };
@@ -25,6 +29,7 @@ export type SharedModelStandardGesuchDokument = {
 export type SharedModelAdditionalGesuchDokument = {
   art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
   dokumentTyp: UnterschriftenblattDokumentTyp;
+  permissions: PermissionMap;
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: UnterschriftenblattDokument;
@@ -33,6 +38,7 @@ export type SharedModelAdditionalGesuchDokument = {
 export type SharedModelCustomGesuchDokument = {
   art: Extends<DokumentArt, 'CUSTOM_DOKUMENT'>;
   dokumentTyp: CustomDokumentTyp;
+  permissions: PermissionMap;
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
@@ -41,6 +47,7 @@ export type SharedModelCustomGesuchDokument = {
 export type SharedModelDarlehenDokument = {
   art: Extends<DokumentArt, 'DARLEHEN_DOKUMENT'>;
   dokumentTyp: DarlehenDokumentType;
+  permissions: DarlehenPermissionMap;
   darlehenId: string;
   gesuchDokument?: DarlehenDokument;
 };
@@ -92,7 +99,6 @@ type DokumentInfoText = {
 export type DokumentInfo = DokumentInfoTranslatable | DokumentInfoText;
 
 interface BaseDocumentOptions {
-  permissions: PermissionMap;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];
@@ -144,7 +150,6 @@ export interface DokumentState {
 }
 
 export interface UploadView {
-  permissions: PermissionMap;
   dokumentModel: SharedModelGesuchDokument;
   initialDokuments?: Dokument[];
   hasEntries: boolean;
@@ -153,7 +158,7 @@ export interface UploadView {
 
 export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
-  permission: PermissionMap,
+  // permission: DarlehenPermissionMap | PermissionMap,
   isSachbearbeitungApp: boolean,
 ) => {
   switch (dokumentModel.art) {
@@ -161,16 +166,61 @@ export const isUploadable = (
     case 'CUSTOM_DOKUMENT': {
       if (!isSachbearbeitungApp) {
         const status = dokumentModel.gesuchDokument?.status;
-        return status !== 'AKZEPTIERT' && permission.canUploadDocuments;
+        return (
+          status !== 'AKZEPTIERT' &&
+          dokumentModel.permissions.canUploadDocuments
+        );
       }
-      return permission.canUploadDocuments;
+      return dokumentModel.permissions.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
-      return permission.canUploadUnterschriftenblatt;
+      return dokumentModel.permissions.canUploadUnterschriftenblatt;
     }
     // todo: add logic
     case 'DARLEHEN_DOKUMENT': {
-      return true;
+      return dokumentModel.permissions.canUploadDocuments;
     }
   }
 };
+
+// export function isUploadable(
+//   dokumentModel: SharedModelDarlehenDokument,
+//   permission: DarlehenPermissionMap,
+//   isSachbearbeitungApp: boolean,
+// ): boolean;
+// export function isUploadable(
+//   dokumentModel: Exclude<
+//     SharedModelGesuchDokument,
+//     SharedModelDarlehenDokument
+//   >,
+//   permission: PermissionMap,
+//   isSachbearbeitungApp: boolean,
+// ): boolean;
+// export function isUploadable(
+//   dokumentModel: SharedModelGesuchDokument,
+//   permission: DarlehenPermissionMap | PermissionMap,
+//   isSachbearbeitungApp: boolean,
+// ): boolean {
+//   switch (dokumentModel.art) {
+//     case 'GESUCH_DOKUMENT':
+//     case 'CUSTOM_DOKUMENT': {
+//       if (!isSachbearbeitungApp) {
+//         const status = dokumentModel.gesuchDokument?.status;
+//         return (
+//           status !== 'AKZEPTIERT' &&
+//           (permission as PermissionMap).canUploadDocuments
+//         );
+//       }
+//       return (permission as PermissionMap).canUploadDocuments;
+//     }
+//     case 'UNTERSCHRIFTENBLATT': {
+//       return (permission as PermissionMap).canUploadUnterschriftenblatt;
+//     }
+//     // todo: add logic
+//     case 'DARLEHEN_DOKUMENT': {
+//       return isSachbearbeitungApp
+//         ? (permission as DarlehenPermissionMap).canWriteSb
+//         : (permission as DarlehenPermissionMap).canWriteGs;
+//     }
+//   }
+// }

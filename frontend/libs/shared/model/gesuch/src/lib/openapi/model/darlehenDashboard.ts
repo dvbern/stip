@@ -12,14 +12,17 @@
 import { DarlehenStatus } from './darlehenStatus';
 
 export interface DarlehenDashboard { 
-    id?: string;
-    fallNummer?: string;
-    piaVorname?: string;
-    piaNachname?: string;
-    piaGeburtsdatum?: string;
-    status?: DarlehenStatus;
-    bearbeiter?: string;
-    letzteAktivitaet?: string;
+    id: string;
+    gesuchId: string;
+    gesuchTrancheId: string;
+    fallId: string;
+    fallNummer: string;
+    piaVorname: string;
+    piaNachname: string;
+    piaGeburtsdatum: string;
+    status: DarlehenStatus;
+    bearbeiter: string;
+    letzteAktivitaet: string;
 }
 
 

@@ -233,6 +233,7 @@ export class UploadStore {
                           gesuchDokument: value,
                           dokumentTyp: dokument.dokumentTyp,
                           darlehenId: dokument.darlehenId,
+                          permissions: dokument.permissions,
                         }) satisfies SharedModelDarlehenDokument,
                     ),
                   );
@@ -249,6 +250,7 @@ export class UploadStore {
                         gesuchDokument: value,
                         dokumentTyp: dokument.dokumentTyp,
                         trancheId: dokument.trancheId,
+                        permissions: dokument.permissions,
                       }) satisfies SharedModelStandardGesuchDokument,
                   ),
                 );
@@ -265,6 +267,7 @@ export class UploadStore {
                         dokumentTyp: dokument.dokumentTyp,
                         gesuchId: dokument.gesuchId,
                         trancheId: dokument.trancheId,
+                        permissions: dokument.permissions,
                       }) satisfies SharedModelCustomGesuchDokument,
                   ),
                 );
@@ -286,6 +289,7 @@ export class UploadStore {
                           dokumentTyp: dokument.dokumentTyp,
                           gesuchId: dokument.gesuchId,
                           trancheId: dokument.trancheId,
+                          permissions: dokument.permissions,
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );

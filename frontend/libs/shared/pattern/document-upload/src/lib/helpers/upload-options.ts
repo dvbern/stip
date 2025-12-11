@@ -338,7 +338,6 @@ export function createUploadOptionsFactory<
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? {
-            permissions,
             allowTypes,
             info: {
               type: 'TRANSLATABLE',
@@ -347,6 +346,7 @@ export function createUploadOptionsFactory<
                 DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
             },
             dokument: {
+              permissions,
               trancheId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
@@ -376,7 +376,6 @@ export function createDarlehenUploadOptionsFactory<
         view.permissions
         ? {
             allowTypes: view.allowTypes,
-            permissions: view.permissions,
             info: {
               type: 'TRANSLATABLE',
               title: DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -386,6 +385,7 @@ export function createDarlehenUploadOptionsFactory<
                 ],
             },
             dokument: {
+              permissions: view.permissions,
               darlehenId: view.darlehenId,
               dokumentTyp,
               art: 'DARLEHEN_DOKUMENT',
@@ -414,7 +414,6 @@ export function createGesuchDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TRANSLATABLE',
       title: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -422,6 +421,7 @@ export function createGesuchDokumentOptions(options: {
         DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
     },
     dokument: {
+      permissions,
       dokumentTyp,
       trancheId,
       gesuchDokument,
@@ -451,12 +451,12 @@ export function createAdditionalDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TRANSLATABLE',
       title: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
     },
     dokument: {
+      permissions,
       dokumentTyp,
       gesuchId,
       trancheId,
@@ -487,13 +487,13 @@ export function createCustomDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TEXT',
       title: dokumentTyp.type,
       description: dokumentTyp.description,
     },
     dokument: {
+      permissions,
       dokumentTyp,
       gesuchId,
       trancheId,

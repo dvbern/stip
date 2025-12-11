@@ -294,15 +294,6 @@ export const isStepDisabled = (
             vaterUnbekanntVerstorben === 'UNBEKANNT'))
       );
     }
-    // todo: ask MADA if the 18 years logic is still needed
-    // case DARLEHEN: {
-    //   if (!formular?.personInAusbildung?.geburtsdatum) return true;
-
-    //   const geburtsdatum = new Date(formular?.personInAusbildung?.geburtsdatum);
-    //   const istErwachsen = differenceInYears(new Date(), geburtsdatum) >= 18;
-
-    //   return !istErwachsen;
-    // }
     default:
       return false;
   }
