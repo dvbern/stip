@@ -1583,7 +1583,7 @@ components:
           description: 'Stammdaten für die Stipendienberechnung'
           $ref: '#/components/schemas/BerechnungsStammdaten'
         persoenlichesBudgetresultat:
-          description: 'Berechnungsdaten des persönlichen Budgets'
+          description: 'Einnahmen Berechnungsdaten des persönlichen Budgets'
           $ref: '#/components/schemas/PersoenlichesBudgetresultat'
         familienBudgetresultate:
           description: 'Berechnungsdaten der Familienbudgets'
@@ -1604,6 +1604,7 @@ components:
         - preisProMahlzeit
         - stipLimiteMinimalstipendium
         - limiteAlterAntragsstellerHalbierungElternbeitrag
+        - anzahlMonate
       type: object
       properties:
         maxSaeule3a:
@@ -1628,72 +1629,104 @@ components:
           type: integer
         limiteAlterAntragsstellerHalbierungElternbeitrag:
           type: integer
+        anzahlMonate:
+          type: integer
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
-        - anzahlPersonenImHaushalt
+        - total
+        - einnahmenMinusKosten
+        - fehlbetrag
+        - proKopfTeilung
         - eigenerHaushalt
-        - anteilFamilienbudget
-        - einkommen
-        - alimente
-        - leistungenEO
-        - rente
+        - budgetTranche
+        - anzahlMonate
+        - gesetzlichesDarlehen
+        - gesetzlichesDarlehenStipendium
+        - anzahlPersonenImHaushalt
+        - einnahmen
+        - kosten
+      properties:
+        total:
+          type: integer
+        einnahmenMinusKosten:
+          type: integer
+        fehlbetrag:
+          type: integer
+        proKopfTeilung:
+          type: integer
+        eigenerHaushalt:
+          type: boolean
+        budgetTranche:
+          type: integer
+        anzahlMonate:
+          type: integer
+        gesetzlichesDarlehen:
+          type: integer
+        gesetzlichesDarlehenStipendium:
+          type: integer
+        anzahlPersonenImHaushalt:
+          type: integer
+        einnahmen:
+          description: 'Einnahmen des persönlichen Budgets'
+          $ref: '#/components/schemas/PersoenlichesBudgetresultatEinnahmen'
+        kosten:
+          description: 'Kosten des persönlichen Budgets'
+          $ref: '#/components/schemas/PersoenlichesBudgetresultatKosten'
+    PersoenlichesBudgetresultatEinnahmen:
+      required:
+        - total
+        - nettoerwerbseinkommen
+        - nettoerwerbseinkommenPartner
+        - nettoerwerbseinkommenTotal
+        - einnahmenBGSA
+        - einnahmenBGSAPartner
+        - einnahmenBGSATotal
         - kinderAusbildungszulagen
         - kinderAusbildungszulagenPartner
         - kinderAusbildungszulagenKinder
         - kinderAusbildungszulagenTotal
-        - kinderUnterhaltsbeitraege
+        - unterhaltsbeitraege
+        - unterhaltsbeitraegePartner
+        - unterhaltsbeitraegeKinder
+        - unterhaltsbeitraegeTotal
+        - eoLeistungen
+        - eoLeistungenPartner
+        - eoLeistungenTotal
+        - taggelderAHVIV
+        - taggelderAHVIVPartner
+        - taggelderAHVIVTotal
+        - renten
+        - rentenPartner
+        - rentenKinder
+        - rentenTotal
         - ergaenzungsleistungen
-        - gemeindeInstitutionen
-        - steuerbaresVermoegen
+        - ergaenzungsleistungenPartner
+        - ergaenzungsleistungenKinder
+        - ergaenzungsleistungenTotal
+        - beitraegeGemeindeInstitutionen
+        - andereEinnahmen
+        - andereEinnahmenPartner
+        - andereEinnahmenKinder
+        - andereEinnahmenTotal
         - anrechenbaresVermoegen
-        - einkommenPartner
-        - einkommenTotal
-        - einnahmenBGSA
-        - einnahmenPersoenlichesBudget
-        - anteilLebenshaltungskosten
-        - grundbedarf
-        - wohnkosten
-        - medizinischeGrundversorgung
-        - steuern
-        - steuernPartner
-        - fahrkosten
-        - fahrkostenPartner
-        - verpflegung
-        - verpflegungPartner
-        - fremdbetreuung
-        - ausbildungskosten
-        - ausgabenPersoenlichesBudget
-        - persoenlichesbudgetBerechnet
+        - steuerbaresVermoegen
+        - elterlicheLeistung
       type: object
       properties:
-        anzahlPersonenImHaushalt:
+        total:
           type: integer
-        totalVorTeilung:
+        nettoerwerbseinkommen:
           type: integer
-        eigenerHaushalt:
-          type: boolean
-        anteilFamilienbudget:
+        nettoerwerbseinkommenPartner:
           type: integer
-        einkommen:
+        nettoerwerbseinkommenTotal:
           type: integer
-        alimente:
+        einnahmenBGSA:
           type: integer
-        alimentePartner:
+        einnahmenBGSAPartner:
           type: integer
-        alimenteTotal:
-          type: integer
-        leistungenEO:
-          type: integer
-        leistungenEOPartner:
-          type: integer
-        leistungenEOTotal:
-          type: integer
-        rente:
-          type: integer
-        rentePartner:
-          type: integer
-        renteTotal:
+        einnahmenBGSATotal:
           type: integer
         kinderAusbildungszulagen:
           type: integer
@@ -1702,38 +1735,40 @@ components:
         kinderAusbildungszulagenKinder:
           type: array
           items:
-            type: integer
+            $ref: './components/common.yaml#/PersonValueItem'
         kinderAusbildungszulagenTotal:
           type: integer
-        kinderUnterhaltsbeitraege:
-          type: array
-          items:
-            type: integer
-        kinderUnterhaltsbeitraegeTotal:
+        unterhaltsbeitraege:
           type: integer
-        kinderRenten:
-          type: array
-          items:
-            type: integer
-        kinderRentenTotal:
-          type: integer
-        ausbildungszulagenKinder:
-          type: array
-          items:
-            $ref: './components/common.yaml#/KindIntegerValueItem'
-        ausbildungszulagenKinderTotal:
+        unterhaltsbeitraegePartner:
           type: integer
         unterhaltsbeitraegeKinder:
           type: array
           items:
-            $ref: './components/common.yaml#/KindIntegerValueItem'
-        unterhaltsbeitraegeKinderTotal:
+            $ref: './components/common.yaml#/PersonValueItem'
+        unterhaltsbeitraegeTotal:
+          type: integer
+        eoLeistungen:
+          type: integer
+        eoLeistungenPartner:
+          type: integer
+        eoLeistungenTotal:
+          type: integer
+        taggelderAHVIV:
+          type: integer
+        taggelderAHVIVPartner:
+          type: integer
+        taggelderAHVIVTotal:
+          type: integer
+        renten:
+          type: integer
+        rentenPartner:
           type: integer
         rentenKinder:
           type: array
           items:
-            $ref: './components/common.yaml#/KindIntegerValueItem'
-        rentenKinderTotal:
+            $ref: './components/common.yaml#/PersonValueItem'
+        rentenTotal:
           type: integer
         ergaenzungsleistungen:
           type: integer
@@ -1742,22 +1777,192 @@ components:
         ergaenzungsleistungenKinder:
           type: array
           items:
-            $ref: './components/common.yaml#/KindIntegerValueItem'
+            $ref: './components/common.yaml#/PersonValueItem'
         ergaenzungsleistungenTotal:
           type: integer
-        gemeindeInstitutionen:
+        beitraegeGemeindeInstitutionen:
           type: integer
-        steuerbaresVermoegen:
+        andereEinnahmen:
+          type: integer
+        andereEinnahmenPartner:
+          type: integer
+        andereEinnahmenKinder:
+          type: array
+          items:
+            $ref: './components/common.yaml#/PersonValueItem'
+        andereEinnahmenTotal:
           type: integer
         anrechenbaresVermoegen:
           type: integer
-        einkommenPartner:
+        steuerbaresVermoegen:
           type: integer
-        einkommenTotal:
+        elterlicheLeistung:
           type: integer
-        einnahmenPersoenlichesBudget:
+    PersoenlichesBudgetresultatKosten:
+      description: Persoenliche Budget daten fuer und von der Berechnung
+      required:
+        - total
+        - ausbildungskosten
+        - fahrkosten
+        - verpflegungskosten
+        - grundbedarf
+        - wohnkosten
+        - medizinischeGrundversorgung
+        - medizinischeGrundversorgungPartner
+        - medizinischeGrundversorgungTotal
+        - fahrkostenPartner
+        - verpflegungPartner
+        - betreuungskostenKinder
+        - kantonsGemeindesteuern
+        - bundessteuern
+        - anteilLebenshaltungskosten
+      type: object
+      properties:
+        total:
+          type: integer
+        ausbildungskosten:
+          type: integer
+        fahrkosten:
+          type: integer
+        verpflegungskosten:
+          type: integer
+        grundbedarf:
+          type: integer
+        wohnkosten:
+          type: integer
+        medizinischeGrundversorgung:
+          type: array
+          items:
+            $ref: './components/common.yaml#/PersonValueItem'
+        medizinischeGrundversorgungPartner:
+          type: integer
+        medizinischeGrundversorgungTotal:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        betreuungskostenKinder:
+          type: integer
+        kantonsGemeindesteuern:
+          type: integer
+        bundessteuern:
           type: integer
         anteilLebenshaltungskosten:
+          type: integer
+    FamilienBudgetresultat:
+      description: Familien Budget daten fuer und von der Berechnung
+      required:
+        - steuerdatenTyp
+        - total
+        - einnahmenMinusKosten
+        - anzahlPersonenImHaushalt
+        - anzahlKinderInAusbildung
+        - einnahmeUeberschuss
+        - proKopfTeilungKinderInAusbildung
+        - anrechenbareElterlicheLeistung
+        - halbierungsReduktion
+        - fehlbetrag
+        - proKopfTeilung
+        - ungedeckterAnteilLebenshaltungskosten
+        - einnahmen
+        - kosten
+      properties:
+        steuerdatenTyp:
+          $ref: './components/common.yaml#/SteuerdatenTyp'
+        total:
+          type: integer
+        einnahmenMinusKosten:
+          type: integer
+        anzahlPersonenImHaushalt:
+          type: integer
+        anzahlKinderInAusbildung:
+          type: integer
+        einnahmeUeberschuss:
+          type: integer
+        proKopfTeilungKinderInAusbildung:
+          type: integer
+        anrechenbareElterlicheLeistung:
+          type: integer
+        halbierungsReduktion:
+          type: integer
+        fehlbetrag:
+          type: integer
+        proKopfTeilung:
+          type: integer
+        ungedeckterAnteilLebenshaltungskosten:
+          type: integer
+        einnahmen:
+          description: 'Einnahmen des familien Budgets'
+          $ref: '#/components/schemas/FamilienBudgetresultatEinnahmen'
+        kosten:
+          description: 'Kosten des familien Budgets'
+          $ref: '#/components/schemas/FamilienBudgetresultatKosten'
+    FamilienBudgetresultatEinnahmen:
+      required:
+        - total
+        - totalEinkuenfte
+        - einnahmenBGSA
+        - ergaenzungsleistungen
+        - andereEinnahmen
+        - eigenmietwert
+        - unterhaltsbeitraege
+        - sauele3
+        - sauele2
+        - renten
+        - einkommensfreibetrag
+        - zwischentotal
+        - anrechenbaresVermoegen
+        - steuerbaresVermoegen
+      type: object
+      properties:
+        total:
+          type: integer
+        totalEinkuenfte:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        andereEinnahmen:
+          type: integer
+        eigenmietwert:
+          type: integer
+        unterhaltsbeitraege:
+          type: integer
+        sauele3:
+          type: integer
+        sauele2:
+          type: integer
+        renten:
+          type: integer
+        einkommensfreibetrag:
+          type: integer
+        zwischentotal:
+          type: integer
+        anrechenbaresVermoegen:
+          type: integer
+        steuerbaresVermoegen:
+          type: integer
+    FamilienBudgetresultatKosten:
+      required:
+        - total
+        - grundbedarf
+        - wohnkosten
+        - medizinischeGrundversorgung
+        - integrationszulage
+        - integrationszulageAnzahl
+        - integrationszulageTotal
+        - kantonsGemeindesteuern
+        - bundessteuern
+        - fahrkosten
+        - fahrkostenPartner
+        - fahrkostenTotal
+        - verpflegung
+        - verpflegungPartner
+        - verpflegungTotal
+      properties:
+        total:
           type: integer
         grundbedarf:
           type: integer
@@ -1765,11 +1970,15 @@ components:
           type: integer
         medizinischeGrundversorgung:
           type: integer
-        steuern:
+        integrationszulage:
           type: integer
-        steuernPartner:
+        integrationszulageAnzahl:
           type: integer
-        steuernTotal:
+        integrationszulageTotal:
+          type: integer
+        kantonsGemeindesteuern:
+          type: integer
+        bundessteuern:
           type: integer
         fahrkosten:
           type: integer
@@ -1782,124 +1991,6 @@ components:
         verpflegungPartner:
           type: integer
         verpflegungTotal:
-          type: integer
-        fremdbetreuung:
-          type: integer
-        ausbildungskosten:
-          type: integer
-        ausgabenPersoenlichesBudget:
-          type: integer
-        persoenlichesbudgetBerechnet:
-          type: integer
-        elternbeitrag1:
-          type: integer
-        elternbeitrag2:
-          type: integer
-        einnahmenBGSA:
-          type: integer
-        einnahmenBGSAPartner:
-          type: integer
-        einnahmenBGSATotal:
-          type: integer
-        andereEinnahmen:
-          type: integer
-        andereEinnahmenPartner:
-          type: integer
-        andereEinnahmenKinder:
-          type: array
-          items:
-            $ref: './components/common.yaml#/KindIntegerValueItem'
-        andereEinnahmenTotal:
-          type: integer
-        taggelder:
-          type: integer
-        taggelderPartner:
-          type: integer
-        taggelderTotal:
-          type: integer
-    FamilienBudgetresultat:
-      description: Familien Budget daten fuer und von der Berechnung
-      required:
-        - familienBudgetTyp
-        - selbststaendigErwerbend
-        - anzahlPersonenImHaushalt
-        - anzahlGeschwisterInAusbildung
-        - totalEinkuenfte
-        - ergaenzungsleistungen
-        - steuerbaresVermoegen
-        - anrechenbaresVermoegen
-        - saeule2
-        - saeule3a
-        - eigenmietwert
-        - alimente
-        - einnahmenFamilienbudget
-        - grundbedarf
-        - effektiveWohnkosten
-        - medizinischeGrundversorgung
-        - integrationszulage
-        - steuernBund
-        - steuernKantonGemeinde
-        - fahrkostenPerson1
-        - fahrkostenPerson2
-        - essenskostenPerson1
-        - essenskostenPerson2
-        - ausgabenFamilienbudget
-        - familienbudgetBerechnet
-      type: object
-      properties:
-        familienBudgetTyp:
-          $ref: './components/common.yaml#/SteuerdatenTyp'
-        selbststaendigErwerbend:
-          type: boolean
-        anzahlPersonenImHaushalt:
-          type: integer
-        anzahlGeschwisterInAusbildung:
-          type: integer
-        totalEinkuenfte:
-          type: integer
-        ergaenzungsleistungen:
-          type: integer
-        steuerbaresVermoegen:
-          type: integer
-        anrechenbaresVermoegen:
-          type: integer
-        saeule2:
-          type: integer
-        saeule3a:
-          type: integer
-        eigenmietwert:
-          type: integer
-        alimente:
-          type: integer
-        einnahmenBGSA:
-          type: integer
-        andereEinnahmen:
-          type: integer
-        einnahmenFamilienbudget:
-          type: integer
-        grundbedarf:
-          type: integer
-        effektiveWohnkosten:
-          type: integer
-        medizinischeGrundversorgung:
-          type: integer
-        integrationszulage:
-          type: integer
-        steuernBund:
-          type: integer
-        steuernKantonGemeinde:
-          type: integer
-        fahrkostenPerson1:
-          type: integer
-        fahrkostenPerson2:
-          type: integer
-        essenskostenPerson1:
-          type: integer
-        essenskostenPerson2:
-          type: integer
-        ausgabenFamilienbudget:
-          type: integer
-        familienbudgetBerechnet:
           type: integer
 security:
   $ref: './components/security.yaml#/security'

@@ -22,153 +22,152 @@ import java.util.UUID;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
-import com.savoirtech.json.JsonComparatorBuilder;
 import jakarta.ws.rs.NotFoundException;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 class V1StructureTest {
     private static final String EXPECTED = """
         {
-            "templateJson": {
-                "Stammdaten_V1": {
-                    "maxSaeule3a": 7000,
-                    "abzugslimite": 13200,
-                    "einkommensfreibetrag": 6000,
-                    "freibetragErwerbseinkommen": 6000,
-                    "freibetragVermoegen": 30000,
-                    "vermoegensanteilInProzent": 15,
-                    "anzahlWochenLehre": 42,
-                    "anzahlWochenSchule": 37,
-                    "preisProMahlzeit": 7,
-                    "stipLimiteMinimalstipendium": 0,
-                    "limiteAlterAntragsstellerHalbierungElternbeitrag": 25
-                },
-                "InputFamilienbudget_1_V1": {
-                    "elternteil": {
-                        "essenskostenPerson1": 0,
-                        "essenskostenPerson2": 0,
-                        "grundbedarf": 21816,
-                        "fahrkostenPerson1": 0,
-                        "fahrkostenPerson2": 0,
-                        "integrationszulage": 2400,
-                        "steuernBund": 0,
-                        "steuernStaat": 0,
-                        "medizinischeGrundversorgung": 8200,
-                        "effektiveWohnkosten": 0,
-                        "totalEinkuenfte": 0,
-                        "ergaenzungsleistungen": 0,
-                        "eigenmietwert": 0,
-                        "alimente": 0,
-                        "einzahlungSaeule3a": 0,
-                        "einzahlungSaeule2": 0,
-                        "steuerbaresVermoegen": 0,
-                        "selbststaendigErwerbend": false,
-                        "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0,
-                        "steuerdatenTyp": "VATER"
-                    }
-                },
-                "InputFamilienbudget_2_V1": {
-                    "elternteil": {
-                        "essenskostenPerson1": 0,
-                        "essenskostenPerson2": 0,
-                        "grundbedarf": 21816,
-                        "fahrkostenPerson1": 0,
-                        "fahrkostenPerson2": 0,
-                        "integrationszulage": 2400,
-                        "steuernBund": 0,
-                        "steuernStaat": 0,
-                        "medizinischeGrundversorgung": 12200,
-                        "effektiveWohnkosten": 0,
-                        "totalEinkuenfte": 0,
-                        "ergaenzungsleistungen": 0,
-                        "eigenmietwert": 0,
-                        "alimente": 0,
-                        "einzahlungSaeule3a": 0,
-                        "einzahlungSaeule2": 0,
-                        "steuerbaresVermoegen": 0,
-                        "selbststaendigErwerbend": false,
-                        "anzahlPersonenImHaushalt": 3,
-                        "anzahlGeschwisterInAusbildung": 0,
-                        "steuerdatenTyp": "MUTTER"
-                    }
-                },
-                "InputPersoenlichesbudget_V1": {
-                    "antragssteller": {
-                     "piaWohntInElternHaushalt":0,
-                                 "tertiaerstufe":true,
-                                 "einkommen":12916,
-                                 "einkommenPartner":12916,
-                                 "vermoegen":0,
-                                 "alimente":0,
-                                 "alimentePartner":0,
-                                 "rente":0,
-                                 "rentePartner":0,
-                                 "kinderRentenTotal":0,
-                                 "kinderErgaenzungsleistungenTotal":0,
-                                 "kindereAndrereEinnahmenTotal":0,
-                                 "kinderAusbildungszulagenTotal":0,
-                                 "kinderErhalteneUnterhaltsbeitraegeTotal":0,
-                                 "ergaenzungsleistungen":1200,
-                                 "ergaenzungsleistungenPartner":1200,
-                                 "leistungenEO":0,
-                                 "leistungenEOPartner":0,
-                                 "gemeindeInstitutionen":0,
-                                 "alter":18,
-                                 "grundbedarf":17940,
-                                 "wohnkosten":13536,
-                                 "medizinischeGrundversorgung":2800,
-                                 "ausbildungskosten":450,
-                                 "steuern":0,
-                                 "steuernPartner":0,
-                                 "fahrkosten":523,
-                                 "fahrkostenPartner":523,
-                                 "verpflegung":0,
-                                 "verpflegungPartner":5,
-                                 "fremdbetreuung":0,
-                                 "anteilFamilienbudget":0,
-                                 "lehre":false,
-                                 "eigenerHaushalt":true,
-                                 "halbierungElternbeitrag":false,
-                                 "anzahlPersonenImHaushalt":2,
-                                 "verheiratetKonkubinat":true,
-                                 "taggeld":0,
-                                 "taggeldPartner":0,
-                                 "andereEinnahmen":0,
-                                 "andereEinnahmenPartner":0,
-                                 "zulagen":0,
-                                 "zulagenPartner":0,
-                                 "einnahmenBGSA":0,
-                                 "einnahmenBGSAPartner":0,
-                                 "kindAusbildungszulagenIntegerValues":[
-
-                                 ],
-                                 "kindUnterhaltsbeitraegeIntegerValues":[
-
-                                 ],
-                                 "kindRenteIntegerValues":[
-
-                                 ],
-                                 "kindErgaenzungsleistungenIntegerValues":[
-
-                                 ],
-                                 "kindAndereEinnahmenIntegerValues":[
-
-                                 ]
-                    }
-                }
+          "templateJson": {
+            "Stammdaten_V1": {
+              "maxSaeule3a": 7000,
+              "einkommensfreibetrag": 6000,
+              "abzugslimite": 13200,
+              "freibetragErwerbseinkommen": 6000,
+              "freibetragVermoegen": 30000,
+              "vermoegensanteilInProzent": 15,
+              "anzahlWochenLehre": 47,
+              "anzahlWochenSchule": 38,
+              "preisProMahlzeit": 10,
+              "stipLimiteMinimalstipendium": 500,
+              "limiteAlterAntragsstellerHalbierungElternbeitrag": 25,
+              "anzahlMonate": 12
+            },
+            "InputFamilienbudget_1_V1": {
+              "elternteil": {
+                "verpflegungskosten": 0,
+                "verpflegungskostenPartner": 0,
+                "grundbedarf": 21816,
+                "fahrkosten": 0,
+                "fahrkostenPartner": 0,
+                "integrationszulage": 2400,
+                "integrationszulageAnzahl": 1,
+                "integrationszulageTotal": 2400,
+                "steuernKantonGemeinde": 0,
+                "steuernBund": 0,
+                "medizinischeGrundversorgung": 8200,
+                "effektiveWohnkosten": 0,
+                "totalEinkuenfte": 0,
+                "ergaenzungsleistungen": 0,
+                "eigenmietwert": 0,
+                "unterhaltsbeitraege": 0,
+                "einzahlungSaeule3a": 0,
+                "einzahlungSaeule2": 0,
+                "vermoegen": 0,
+                "selbststaendigErwerbend": false,
+                "anzahlPersonenImHaushalt": 3,
+                "anzahlGeschwisterInAusbildung": 0,
+                "einnahmenBGSA": 0,
+                "andereEinnahmen": 0,
+                "renten": 0,
+                "steuerdatenTyp": "VATER"
+              }
+            },
+            "InputFamilienbudget_2_V1": {
+              "elternteil": {
+                "verpflegungskosten": 0,
+                "verpflegungskostenPartner": 0,
+                "grundbedarf": 21816,
+                "fahrkosten": 0,
+                "fahrkostenPartner": 0,
+                "integrationszulage": 2400,
+                "integrationszulageAnzahl": 1,
+                "integrationszulageTotal": 2400,
+                "steuernKantonGemeinde": 0,
+                "steuernBund": 0,
+                "medizinischeGrundversorgung": 12200,
+                "effektiveWohnkosten": 0,
+                "totalEinkuenfte": 0,
+                "ergaenzungsleistungen": 0,
+                "eigenmietwert": 0,
+                "unterhaltsbeitraege": 0,
+                "einzahlungSaeule3a": 0,
+                "einzahlungSaeule2": 0,
+                "vermoegen": 0,
+                "selbststaendigErwerbend": false,
+                "anzahlPersonenImHaushalt": 3,
+                "anzahlGeschwisterInAusbildung": 0,
+                "einnahmenBGSA": 0,
+                "andereEinnahmen": 0,
+                "renten": 0,
+                "steuerdatenTyp": "MUTTER"
+              }
+            },
+            "InputPersoenlichesbudget_V1": {
+              "antragssteller": {
+                "piaWohntInElternHaushalt": 0,
+                "tertiaerstufe": true,
+                "einkommen": 12916,
+                "einkommenPartner": 12916,
+                "vermoegen": 0,
+                "renten": 0,
+                "rentenPartner": 0,
+                "rentenKinder": [],
+                "kinderAusbildungszulagen": 0,
+                "kinderAusbildungszulagenPartner": 0,
+                "kinderAusbildungszulagenKinder": [],
+                "unterhaltsbeitraege": 0,
+                "unterhaltsbeitraegePartner": 0,
+                "unterhaltsbeitraegeKinder": [],
+                "ergaenzungsleistungen": 1200,
+                "ergaenzungsleistungenPartner": 1200,
+                "ergaenzungsleistungenKinder": [],
+                "eoLeistungen": 0,
+                "eoLeistungenPartner": 0,
+                "gemeindeInstitutionen": 0,
+                "alter": 18,
+                "grundbedarf": 17940,
+                "wohnkosten": 13536,
+                "medizinischeGrundversorgung": 2800,
+                "medizinischeGrundversorgungPartner": 1400,
+                "medizinischeGrundversorgungKinder": [],
+                "ausbildungskosten": 450,
+                "steuern": 0,
+                "steuernPartner": 0,
+                "fahrkosten": 523,
+                "fahrkostenPartner": 523,
+                "auswaertigeMittagessenProWoche": 0,
+                "verpflegungskostenPartner": 5,
+                "fremdbetreuung": 0,
+                "anteilFamilienbudget": 0,
+                "lehre": false,
+                "eigenerHaushalt": true,
+                "halbierungElternbeitrag": false,
+                "anzahlPersonenImHaushalt": 2,
+                "verheiratetKonkubinat": true,
+                "taggeld": 0,
+                "taggeldPartner": 0,
+                "andereEinnahmen": 0,
+                "andereEinnahmenPartner": 0,
+                "andereEinnahmenKinder": [],
+                "einnahmenBGSA": 0,
+                "einnahmenBGSAPartner": 0
+              }
             }
+          }
         }
     """;
 
     private static final UUID trancheUuid = UUID.randomUUID();
 
+    @SneakyThrows
     @Test
     void test() throws JsonProcessingException {
         final var gesuch = TestUtil.getGesuchForBerechnung(trancheUuid);
@@ -179,13 +178,10 @@ class V1StructureTest {
             ElternTyp.VATER,
             BerechnungUtil.getPersonenImHaushaltService()
         );
-        final var actual = new ObjectMapper().writeValueAsString(request);
-        final var comparator = new JsonComparatorBuilder().build();
+        final var mapper = new ObjectMapper();
+        final var actual = mapper.writeValueAsString(request);
+        // final var comparator = new JsonComparatorBuilder().build();
 
-        final var result = comparator.compare(EXPECTED, actual);
-        if (!result.isMatch()) {
-            LOG.error("Mismatched results. Actual: " + actual.toString());
-        }
-        assertTrue(result.isMatch(), result.getErrorMessage());
+        assertEquals(mapper.readTree(EXPECTED).get("templateJson"), mapper.readTree(actual));
     }
 }

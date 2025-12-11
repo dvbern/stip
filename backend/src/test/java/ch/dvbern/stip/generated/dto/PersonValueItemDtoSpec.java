@@ -24,25 +24,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * KindIntegerValueItemDtoSpec
+ * PersonValueItemDtoSpec
  */
 @JsonPropertyOrder({
-  KindIntegerValueItemDtoSpec.JSON_PROPERTY_VORNAME,
-  KindIntegerValueItemDtoSpec.JSON_PROPERTY_VALUE
+  PersonValueItemDtoSpec.JSON_PROPERTY_VORNAME,
+  PersonValueItemDtoSpec.JSON_PROPERTY_VALUE
 })
-@JsonTypeName("KindIntegerValueItem")
+@JsonTypeName("PersonValueItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class KindIntegerValueItemDtoSpec {
+public class PersonValueItemDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
   public static final String JSON_PROPERTY_VALUE = "value";
   private Integer value;
 
-  public KindIntegerValueItemDtoSpec() {
+  public PersonValueItemDtoSpec() {
   }
 
-  public KindIntegerValueItemDtoSpec vorname(String vorname) {
+  public PersonValueItemDtoSpec vorname(String vorname) {
     
     this.vorname = vorname;
     return this;
@@ -68,7 +68,7 @@ public class KindIntegerValueItemDtoSpec {
   }
 
 
-  public KindIntegerValueItemDtoSpec value(Integer value) {
+  public PersonValueItemDtoSpec value(Integer value) {
     
     this.value = value;
     return this;
@@ -101,9 +101,9 @@ public class KindIntegerValueItemDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    KindIntegerValueItemDtoSpec kindIntegerValueItem = (KindIntegerValueItemDtoSpec) o;
-    return Objects.equals(this.vorname, kindIntegerValueItem.vorname) &&
-        Objects.equals(this.value, kindIntegerValueItem.value);
+    PersonValueItemDtoSpec personValueItem = (PersonValueItemDtoSpec) o;
+    return Objects.equals(this.vorname, personValueItem.vorname) &&
+        Objects.equals(this.value, personValueItem.value);
   }
 
   @Override
@@ -114,7 +114,7 @@ public class KindIntegerValueItemDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class KindIntegerValueItemDtoSpec {\n");
+    sb.append("class PersonValueItemDtoSpec {\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");

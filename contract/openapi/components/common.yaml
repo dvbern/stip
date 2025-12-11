@@ -961,7 +961,7 @@ AusgewaehlterGrund:
       $ref: '#/UUID'
     kanton:
       $ref: '#/Kanton'
-KindIntegerValueItem:
+PersonValueItem:
   type: object
   properties:
     vorname:

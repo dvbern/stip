@@ -30,19 +30,19 @@ public class BerechnungsStammdatenV1Mapper implements BerechnungsStammdatenMappe
     public BerechnungsStammdatenDto mapFromRequest(CalculatorRequest request) {
         final BerechnungRequestV1 berechnungsRequest = (BerechnungRequestV1) request;
 
-        return new BerechnungsStammdatenDto()
-            .maxSaeule3a(berechnungsRequest.getStammdaten().getMaxSaeule3a())
-            .einkommensfreibetrag(berechnungsRequest.getStammdaten().getEinkommensfreibetrag())
-            .abzugslimite(berechnungsRequest.getStammdaten().getAbzugslimite())
-            .freibetragErwerbseinkommen(berechnungsRequest.getStammdaten().getFreibetragErwerbseinkommen())
-            .freibetragVermoegen(berechnungsRequest.getStammdaten().getFreibetragVermoegen())
-            .vermoegensanteilInProzent(berechnungsRequest.getStammdaten().getVermoegensanteilInProzent())
-            .anzahlWochenLehre(berechnungsRequest.getStammdaten().getAnzahlWochenLehre())
-            .anzahlWochenSchule(berechnungsRequest.getStammdaten().getAnzahlWochenSchule())
-            .preisProMahlzeit(berechnungsRequest.getStammdaten().getPreisProMahlzeit())
-            .stipLimiteMinimalstipendium(berechnungsRequest.getStammdaten().getStipLimiteMinimalstipendium())
-            .limiteAlterAntragsstellerHalbierungElternbeitrag(
-                berechnungsRequest.getStammdaten().getLimiteAlterAntragsstellerHalbierungElternbeitrag()
-            );
+        return new BerechnungsStammdatenDto(
+            berechnungsRequest.getStammdaten().getMaxSaeule3a(),
+            berechnungsRequest.getStammdaten().getEinkommensfreibetrag(),
+            berechnungsRequest.getStammdaten().getAbzugslimite(),
+            berechnungsRequest.getStammdaten().getFreibetragErwerbseinkommen(),
+            berechnungsRequest.getStammdaten().getFreibetragVermoegen(),
+            berechnungsRequest.getStammdaten().getVermoegensanteilInProzent(),
+            berechnungsRequest.getStammdaten().getAnzahlWochenLehre(),
+            berechnungsRequest.getStammdaten().getAnzahlWochenSchule(),
+            berechnungsRequest.getStammdaten().getPreisProMahlzeit(),
+            berechnungsRequest.getStammdaten().getStipLimiteMinimalstipendium(),
+            berechnungsRequest.getStammdaten().getLimiteAlterAntragsstellerHalbierungElternbeitrag(),
+            berechnungsRequest.getStammdaten().getAnzahlMonate()
+        );
     }
 }

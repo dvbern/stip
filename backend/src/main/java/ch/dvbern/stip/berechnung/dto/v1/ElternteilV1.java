@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
+import ch.dvbern.stip.berechnung.util.MathUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -42,23 +43,25 @@ import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 @Value
 @Jacksonized
 public class ElternteilV1 {
-    int essenskostenPerson1;
-    int essenskostenPerson2;
+    int verpflegungskosten;
+    int verpflegungskostenPartner;
     int grundbedarf;
-    int fahrkostenPerson1;
-    int fahrkostenPerson2;
+    int fahrkosten;
+    int fahrkostenPartner;
     int integrationszulage;
+    int integrationszulageAnzahl;
+    int integrationszulageTotal;
+    int steuernKantonGemeinde;
     int steuernBund;
-    int steuernStaat;
     int medizinischeGrundversorgung;
     int effektiveWohnkosten;
     int totalEinkuenfte;
     int ergaenzungsleistungen;
     int eigenmietwert;
-    int alimente;
+    int unterhaltsbeitraege;
     int einzahlungSaeule3a;
     int einzahlungSaeule2;
-    int steuerbaresVermoegen;
+    int vermoegen;
     boolean selbststaendigErwerbend;
     int anzahlPersonenImHaushalt;
     int anzahlGeschwisterInAusbildung;
@@ -88,18 +91,18 @@ public class ElternteilV1 {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
 
         builder.steuerdatenTyp(steuerdaten.getSteuerdatenTyp());
-        builder.essenskostenPerson1(steuerdaten.getVerpflegung());
-        builder.essenskostenPerson2(Objects.requireNonNullElse(steuerdaten.getVerpflegungPartner(), 0));
+        builder.verpflegungskosten(steuerdaten.getVerpflegung());
+        builder.verpflegungskostenPartner(Objects.requireNonNullElse(steuerdaten.getVerpflegungPartner(), 0));
 
         builder.grundbedarf(
             BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false)
         );
 
-        builder.fahrkostenPerson1(steuerdaten.getFahrkosten());
-        builder.fahrkostenPerson2(Objects.requireNonNullElse(steuerdaten.getFahrkostenPartner(), 0));
+        builder.fahrkosten(steuerdaten.getFahrkosten());
+        builder.fahrkostenPartner(Objects.requireNonNullElse(steuerdaten.getFahrkostenPartner(), 0));
 
+        builder.steuernKantonGemeinde(steuerdaten.getSteuernKantonGemeinde());
         builder.steuernBund(steuerdaten.getSteuernBund());
-        builder.steuernStaat(steuerdaten.getSteuernKantonGemeinde());
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
 
@@ -222,9 +225,12 @@ public class ElternteilV1 {
 
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
-        builder.integrationszulage(
+        final var integrationzulageAnzahl = anzahlGeschwisterInNachobligatorischerAusbildung + MathUtil.PIA_COUNT;
+        builder.integrationszulage(gesuchsperiode.getIntegrationszulage());
+        builder.integrationszulageAnzahl(integrationzulageAnzahl);
+        builder.integrationszulageTotal(
             Integer.min(
-                gesuchsperiode.getIntegrationszulage() * (anzahlGeschwisterInNachobligatorischerAusbildung + 1),
+                gesuchsperiode.getIntegrationszulage() * integrationzulageAnzahl,
                 gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
             )
         );
@@ -242,10 +248,12 @@ public class ElternteilV1 {
 
         builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
         builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
-        builder.alimente(toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0)));
+        builder.unterhaltsbeitraege(
+            toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0))
+        );
         builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
         builder.einzahlungSaeule3a(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0));
-        builder.steuerbaresVermoegen(Objects.requireNonNullElse(steuerdaten.getVermoegen(), 0));
+        builder.vermoegen(Objects.requireNonNullElse(steuerdaten.getVermoegen(), 0));
         builder.selbststaendigErwerbend(steuerdaten.getIsArbeitsverhaeltnisSelbstaendig());
         builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
         builder.anzahlGeschwisterInAusbildung(anzahlGeschwisterInAusbildung);

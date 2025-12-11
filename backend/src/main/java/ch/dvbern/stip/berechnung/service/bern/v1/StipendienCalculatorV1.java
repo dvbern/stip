@@ -49,7 +49,7 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
             calculatePersoenlichesBudgetresult(model, familienbudgets.get(0), familienbudgets.get(1));
 
         return new BerechnungResult(
-            persoenlichesBudget.getPersoenlichesbudgetBerechnet(),
+            persoenlichesBudget.getTotal(),
             familienbudgets,
             persoenlichesBudget
         );
@@ -58,12 +58,16 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
     private List<FamilienBudgetresultatDto> calculateFamilienbudgets(final BerechnungRequestV1 model) {
         final var one = FamilienbudgetCalculatorV1.calculateFamilienbudget(
             model.getInputFamilienbudget1(),
-            model.getStammdaten()
+            model.getInputPersoenlichesBudget().getAntragssteller(),
+            model.getStammdaten(),
+            1
         );
 
         final var two = FamilienbudgetCalculatorV1.calculateFamilienbudget(
             model.getInputFamilienbudget2(),
-            model.getStammdaten()
+            model.getInputPersoenlichesBudget().getAntragssteller(),
+            model.getStammdaten(),
+            2
         );
 
         return List.of(one, two);

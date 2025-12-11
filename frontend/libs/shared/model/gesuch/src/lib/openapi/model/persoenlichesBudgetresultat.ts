@@ -9,78 +9,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { KindIntegerValueItem } from './kindIntegerValueItem';
+import { PersoenlichesBudgetresultatKosten } from './persoenlichesBudgetresultatKosten';
+import { PersoenlichesBudgetresultatEinnahmen } from './persoenlichesBudgetresultatEinnahmen';
 
 /**
  * Persoenliche Budget daten fuer und von der Berechnung
  */
 export interface PersoenlichesBudgetresultat { 
-    anzahlPersonenImHaushalt: number;
-    totalVorTeilung?: number;
+    total: number;
+    einnahmenMinusKosten: number;
+    fehlbetrag: number;
+    proKopfTeilung: number;
     eigenerHaushalt: boolean;
-    anteilFamilienbudget: number;
-    einkommen: number;
-    alimente: number;
-    alimentePartner?: number;
-    alimenteTotal?: number;
-    leistungenEO: number;
-    leistungenEOPartner?: number;
-    leistungenEOTotal?: number;
-    rente: number;
-    rentePartner?: number;
-    renteTotal?: number;
-    kinderAusbildungszulagen: number;
-    kinderAusbildungszulagenPartner: number;
-    kinderAusbildungszulagenKinder: Array<number>;
-    kinderAusbildungszulagenTotal: number;
-    kinderUnterhaltsbeitraege: Array<number>;
-    kinderUnterhaltsbeitraegeTotal?: number;
-    kinderRenten?: Array<number>;
-    kinderRentenTotal?: number;
-    ausbildungszulagenKinder?: Array<KindIntegerValueItem>;
-    ausbildungszulagenKinderTotal?: number;
-    unterhaltsbeitraegeKinder?: Array<KindIntegerValueItem>;
-    unterhaltsbeitraegeKinderTotal?: number;
-    rentenKinder?: Array<KindIntegerValueItem>;
-    rentenKinderTotal?: number;
-    ergaenzungsleistungen: number;
-    ergaenzungsleistungenPartner?: number;
-    ergaenzungsleistungenKinder?: Array<KindIntegerValueItem>;
-    ergaenzungsleistungenTotal?: number;
-    gemeindeInstitutionen: number;
-    steuerbaresVermoegen: number;
-    anrechenbaresVermoegen: number;
-    einkommenPartner: number;
-    einkommenTotal: number;
-    einnahmenPersoenlichesBudget: number;
-    anteilLebenshaltungskosten: number;
-    grundbedarf: number;
-    wohnkosten: number;
-    medizinischeGrundversorgung: number;
-    steuern: number;
-    steuernPartner: number;
-    steuernTotal?: number;
-    fahrkosten: number;
-    fahrkostenPartner: number;
-    fahrkostenTotal?: number;
-    verpflegung: number;
-    verpflegungPartner: number;
-    verpflegungTotal?: number;
-    fremdbetreuung: number;
-    ausbildungskosten: number;
-    ausgabenPersoenlichesBudget: number;
-    persoenlichesbudgetBerechnet: number;
-    elternbeitrag1?: number;
-    elternbeitrag2?: number;
-    einnahmenBGSA: number;
-    einnahmenBGSAPartner?: number;
-    einnahmenBGSATotal?: number;
-    andereEinnahmen?: number;
-    andereEinnahmenPartner?: number;
-    andereEinnahmenKinder?: Array<KindIntegerValueItem>;
-    andereEinnahmenTotal?: number;
-    taggelder?: number;
-    taggelderPartner?: number;
-    taggelderTotal?: number;
+    budgetTranche: number;
+    anzahlMonate: number;
+    gesetzlichesDarlehen: number;
+    gesetzlichesDarlehenStipendium: number;
+    anzahlPersonenImHaushalt: number;
+    einnahmen: PersoenlichesBudgetresultatEinnahmen;
+    kosten: PersoenlichesBudgetresultatKosten;
 }
 

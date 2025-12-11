@@ -1,7 +1,9 @@
+import { PersonValueItem, SteuerdatenTyp } from '@dv/shared/model/gesuch';
+
 export type PersoenlicheBerechnung = {
   typ: 'persoenlich';
-  sozialversicherungsnummer: string;
   name: string;
+  sozialversicherungsnummer: string;
   geburtsdatum: string;
   total: number;
   yearRange: string;
@@ -24,85 +26,111 @@ export type PersoenlicheBerechnung = {
     vornamePia: string;
     vornamePartner: string;
     total: number;
-    anzahlPersonenImHaushalt: number;
-    eigenerHaushalt: boolean;
-    einkommen: number;
-    einkommenPartner: number;
-    einkommenTotal: number;
+
+    nettoerwerbseinkommen: number;
+    nettoerwerbseinkommenPartner: number;
+    nettoerwerbseinkommenTotal: number;
     einnahmenBGSA: number;
-    eoLeistungen: number;
-    alimente: number;
+    kinderAusbildungszulagen: number;
+    kinderAusbildungszulagenPartner: number;
+    kinderAusbildungszulagenKinder: PersonValueItem[];
+    kinderAusbildungszulagenTotal: number;
     unterhaltsbeitraege: number;
-    kinderUndAusbildungszulagen: number;
-    kinderUndAusbildungszulagenPartner: number;
-    kinderUndAusbildungszulagenKinder: { name: string; value: number }[];
-    kinderUndAusbildungszulagenTotal: number;
+    unterhaltsbeitraegePartner: number;
+    unterhaltsbeitraegeKinder: PersonValueItem[];
+    unterhaltsbeitraegeTotal: number;
+    eoLeistungen: number;
+    eoLeistungenPartner: number;
+    eoLeistungenTotal: number;
+    taggelderAHVIV: number;
+    taggelderAHVIVPartner: number;
+    taggelderAHVIVTotal: number;
+    renten: number;
+    rentenPartner: number;
+    rentenKinder: PersonValueItem[];
+    rentenTotal: number;
     ergaenzungsleistungen: number;
-    beitraegeGemeindeInstitution: number;
-    steuerbaresVermoegen: number;
+    ergaenzungsleistungenPartner: number;
+    ergaenzungsleistungenKinder: PersonValueItem[];
+    ergaenzungsleistungenTotal: number;
+    beitraegeGemeindeInstitutionen: number;
+    andereEinnahmen: number;
+    andereEinnahmenPartner: number;
+    andereEinnahmenKinder: PersonValueItem[];
+    andereEinnahmenTotal: number;
     anrechenbaresVermoegen: number;
-    elterlicheLeistung: number;
-    freibetragErwerbseinkommen: number;
-    vermoegensanteilInProzent: number;
+    steuerbaresVermoegen: number;
     limiteAlterAntragsstellerHalbierungElternbeitrag: number;
   };
   kosten: {
     vornamePia: string;
     vornamePartner: string;
-    total: number;
     anzahlPersonenImHaushalt: number;
-    anteilLebenshaltungskosten: number;
-    mehrkostenVerpflegung: number;
-    grundbedarfPersonen: number;
-    wohnkostenPersonen: number;
-    medizinischeGrundversorgungPersonen: number;
-    kantonsGemeindesteuern: number;
-    kantonsGemeindesteuernPartner: number;
-    bundessteuern: number;
+    total: number;
+
+    ausbildungskosten: number;
+    fahrkosten: number;
+    verpflegungskosten: number;
+    grundbedarf: number;
+    wohnkosten: number;
+    medizinischeGrundversorgung: PersonValueItem[];
     fahrkostenPartner: number;
     verpflegungPartner: number;
     betreuungskostenKinder: number;
-    ausbildungskosten: number;
-    fahrkosten: number;
+    kantonsGemeindesteuern: number;
+    bundessteuern: number;
+    anteilLebenshaltungskosten: number;
   };
 };
 
 export type FamilienBerechnung = {
   typ: 'familien';
-  nameKey: string;
-  year: number;
+  familienBudgetTyp: SteuerdatenTyp;
+  name: string; // TODO: what if Familie?
+  sozialversicherungsnummer: string; // TODO: what if Familie?
+  geburtsdatum: string; // TODO: what if Familie?
+  steuerjahr: number;
+  veranlagungsStatus: string;
+  gueltigAb: string;
+  gueltigBis: string;
+  monate: number;
   total: number;
   totalEinnahmen: number;
   totalKosten: number;
   einnahmen: {
     total: number;
+
     totalEinkuenfte: number;
+    einnahmenBGSA: number;
     ergaenzungsleistungen: number;
-    steuerbaresVermoegen: number;
-    anrechenbaresVermoegen: number;
-    sauele2: number;
+    andereEinnahmen: number;
+    eigenmietwert: number;
+    unterhaltsbeitraege: number;
     sauele3: number;
-    mietwert: number;
-    kinderalimente: number;
-    einkommensfreibeitrag: number;
-    maxSaeule3a: number;
+    sauele2: number;
+    renten: number;
+    einkommensfreibetrag: number;
+    einkommensfreibetragLimite: number;
+    zwischentotal: number;
+    anrechenbaresVermoegen: number;
     freibetragVermoegen: number;
-    vermoegensanteilInProzent: number;
+    steuerbaresVermoegen: number;
   };
   kosten: {
+    anzahlPersonenImHaushalt: number;
     total: number;
-    abzugslimite: number;
-    anzahlPersonen: number;
+
     grundbedarf: number;
     wohnkosten: number;
     medizinischeGrundversorgung: number;
     integrationszulage: number;
+    integrationszulageAnzahl: number;
+    integrationszulageLimite: number;
+    integrationszulageTotal: number;
     kantonsGemeindesteuern: number;
     bundessteuern: number;
-    fahrkosten: number;
-    fahrkostenPartner: number;
-    verpflegung: number;
-    verpflegungPartner: number;
+    fahrkosten: PersonValueItem[];
+    verpflegung: PersonValueItem[];
   };
 };
 

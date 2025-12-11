@@ -18,6 +18,7 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -194,9 +195,13 @@ public class BerechnungRequestV1 implements CalculatorRequest {
         }
 
         final var antragssteller = AntragsstellerV1.buildFromDependants(gesuchFormular, piaWohntInElternHaushalt);
+        final var anzahlMonate = calcMonthsBetween(
+            gesuchTranche.getGueltigkeit().getGueltigAb(),
+            gesuchTranche.getGueltigkeit().getGueltigBis()
+        );
 
         return new BerechnungRequestV1(
-            StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode()),
+            StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode(), anzahlMonate),
             new InputFamilienbudgetV1(elternteilerequests.get(0)),
             new InputFamilienbudgetV1(elternteilerequests.get(1)),
             new InputPersoenlichesbudgetV1(antragssteller)
@@ -264,5 +269,12 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             medizinischeGrundversorgung = gesuchsperiode.getJugendlicheErwachsene1824();
         }
         return medizinischeGrundversorgung;
+    }
+
+    private static int calcMonthsBetween(final LocalDate from, final LocalDate to) {
+        return (int) ChronoUnit.MONTHS.between(
+            from,
+            to.plusDays(1)
+        );
     }
 }

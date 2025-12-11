@@ -21,11 +21,20 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public final class MathUtil {
+    public static final int PIA_COUNT = 1;
+
     private MathUtil() {
         throw new UnsupportedOperationException();
     }
 
     public static int roundHalfUp(BigDecimal value) {
         return value.setScale(0, RoundingMode.HALF_UP).intValue();
+    }
+
+    public static BigDecimal divideByTranchen(BigDecimal value, int tranchen) {
+        if (tranchen == 12) {
+            return value;
+        }
+        return value.multiply(BigDecimal.valueOf(tranchen)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
     }
 }

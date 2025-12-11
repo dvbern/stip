@@ -27,13 +27,10 @@ import ch.dvbern.stip.api.tenancy.service.MockTenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
-import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
-import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungsStammdatenV1Mapper;
-import ch.dvbern.stip.berechnung.dto.v1.PersoenlichesBudgetResultatV1Mapper;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungTestcase;
@@ -98,20 +95,8 @@ public class BerechnungUtil {
         final var calculators = (Instance<StipendienCalculator>) Mockito.mock(Instance.class);
         Mockito.doAnswer((ignored) -> Stream.of(new StipendienCalculatorV1())).when(calculators).stream();
 
-        final var persoenlichesBudgetRestultatMapper =
-            (Instance<PersoenlichesBudgetResultatMapper>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new PersoenlichesBudgetResultatV1Mapper()))
-            .when(persoenlichesBudgetRestultatMapper)
-            .stream();
-
-        final var familienBudgetRestultatMapper = (Instance<FamilienBudgetresultatMapper>) Mockito.mock(Instance.class);
-        // Mockito.doAnswer((ignored) -> Stream.of(new
-        // FamilienBudgetresultatV1Mapper())).when(familienBudgetRestultatMapper.stream());
-
         return new BerechnungService(
             requestBuilders,
-            persoenlichesBudgetRestultatMapper,
-            familienBudgetRestultatMapper,
             berechnungStammdatenMapper,
             calculators,
             new MockTenantService()
