@@ -67,10 +67,14 @@
                   *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
-                  <!-- todo: fix links -->
-                  <a [routerLink]="['/gesuch/info', darlehen.id, 'tranche']" (click)="$event.stopPropagation()">
+                  <!-- todo: would need gesuchId / trancheId here here -->
+                  <!-- <a
+                    [routerLink]="['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]"
+                    (click)="$event.stopPropagation()"
+                  >
                     {{ darlehen.fallNummer }}
-                  </a>
+                  </a> -->
+                  <span>{{ darlehen.fallNummer }}</span>
                 </td>
               </ng-container>
 
@@ -213,7 +217,6 @@
                       <mat-option [value]="null">
                         {{ 'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco }}
                       </mat-option>
-                      <!-- todo: test if working -->
                       @for (status of statusValues; track status) {
                         <mat-option [value]="status">
                           {{ 'sachbearbeitung-app.darlehen.status.' + status | transloco }}
@@ -348,7 +351,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let darlehen; dataSource: darlehenDataSourceSig(); columns: displayedColumns"
-                [routerLink]="['/gesuch', 'info', darlehen.id, 'tranche']"
+                [routerLink]="['/darlehen', darlehen.id]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

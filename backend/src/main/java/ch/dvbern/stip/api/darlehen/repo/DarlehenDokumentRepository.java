@@ -41,7 +41,7 @@ public class DarlehenDokumentRepository implements BaseRepository<DarlehenDokume
             .selectFrom(darlehenDokument)
             .where(
                 darlehenDokument.darlehen.id.eq(darlehenId)
-                    .and(darlehenDokument.darlehenDokumentType.eq(dokumentType))
+                    .and(darlehenDokument.dokumentType.eq(dokumentType))
             );
         return query.stream().findFirst();
     }

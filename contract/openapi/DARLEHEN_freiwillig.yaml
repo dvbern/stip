@@ -416,8 +416,27 @@ components:
             $ref: '#/components/schemas/DarlehenDashboard'
 
     DarlehenDashboard:
+      type: object
+      required:
+        - id
+        - gesuchId
+        - gesuchTrancheId
+        - fallId
+        - fallNummer
+        - piaVorname
+        - piaNachname
+        - piaGeburtsdatum
+        - status
+        - bearbeiter
+        - letzteAktivitaet
       properties:
         id:
+          $ref: './components/common.yaml#/UUID'
+        gesuchId:
+          $ref: './components/common.yaml#/UUID'
+        gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
+        fallId:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string

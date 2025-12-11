@@ -321,7 +321,7 @@ public class DarlehenService {
     ) {
         final var darlehenDokument = new DarlehenDokument()
             .setDarlehen(darlehen)
-            .setDarlehenDokumentType(type);
+            .setDokumentType(type);
 
         darlehenDokumentRepository.persistAndFlush(darlehenDokument);
         return darlehenDokument;

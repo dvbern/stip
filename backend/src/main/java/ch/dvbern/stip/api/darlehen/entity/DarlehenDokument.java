@@ -49,7 +49,7 @@ import org.hibernate.envers.Audited;
 public class DarlehenDokument extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "dokument_type")
-    private DarlehenDokumentType darlehenDokumentType;
+    private DarlehenDokumentType dokumentType;
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "darlehen_dokument_id")

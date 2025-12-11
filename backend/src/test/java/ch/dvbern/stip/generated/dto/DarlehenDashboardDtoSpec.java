@@ -31,6 +31,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DarlehenDashboardDtoSpec.JSON_PROPERTY_ID,
+  DarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  DarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
+  DarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_ID,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_VORNAME,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
@@ -44,6 +47,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  private UUID gesuchId;
+
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
+  private UUID gesuchTrancheId;
+
+  public static final String JSON_PROPERTY_FALL_ID = "fallId";
+  private UUID fallId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
@@ -79,9 +91,9 @@ public class DarlehenDashboardDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -89,9 +101,87 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public DarlehenDashboardDtoSpec gesuchId(UUID gesuchId) {
+    
+    this.gesuchId = gesuchId;
+    return this;
+  }
+
+   /**
+   * Get gesuchId
+   * @return gesuchId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchId() {
+    return gesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
+  }
+
+
+  public DarlehenDashboardDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+    
+    this.gesuchTrancheId = gesuchTrancheId;
+    return this;
+  }
+
+   /**
+   * Get gesuchTrancheId
+   * @return gesuchTrancheId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchTrancheId() {
+    return gesuchTrancheId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
+    this.gesuchTrancheId = gesuchTrancheId;
+  }
+
+
+  public DarlehenDashboardDtoSpec fallId(UUID fallId) {
+    
+    this.fallId = fallId;
+    return this;
+  }
+
+   /**
+   * Get fallId
+   * @return fallId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getFallId() {
+    return fallId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
 
@@ -105,9 +195,9 @@ public class DarlehenDashboardDtoSpec {
    * Get fallNummer
    * @return fallNummer
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFallNummer() {
     return fallNummer;
@@ -115,7 +205,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
   }
@@ -131,9 +221,9 @@ public class DarlehenDashboardDtoSpec {
    * Get piaVorname
    * @return piaVorname
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaVorname() {
     return piaVorname;
@@ -141,7 +231,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPiaVorname(String piaVorname) {
     this.piaVorname = piaVorname;
   }
@@ -157,9 +247,9 @@ public class DarlehenDashboardDtoSpec {
    * Get piaNachname
    * @return piaNachname
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaNachname() {
     return piaNachname;
@@ -167,7 +257,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPiaNachname(String piaNachname) {
     this.piaNachname = piaNachname;
   }
@@ -183,9 +273,9 @@ public class DarlehenDashboardDtoSpec {
    * Get piaGeburtsdatum
    * @return piaGeburtsdatum
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getPiaGeburtsdatum() {
     return piaGeburtsdatum;
@@ -193,7 +283,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PIA_GEBURTSDATUM)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPiaGeburtsdatum(String piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
   }
@@ -209,9 +299,9 @@ public class DarlehenDashboardDtoSpec {
    * Get status
    * @return status
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public DarlehenStatusDtoSpec getStatus() {
     return status;
@@ -219,7 +309,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_STATUS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setStatus(DarlehenStatusDtoSpec status) {
     this.status = status;
   }
@@ -235,9 +325,9 @@ public class DarlehenDashboardDtoSpec {
    * Get bearbeiter
    * @return bearbeiter
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_BEARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getBearbeiter() {
     return bearbeiter;
@@ -245,7 +335,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BEARBEITER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBearbeiter(String bearbeiter) {
     this.bearbeiter = bearbeiter;
   }
@@ -261,9 +351,9 @@ public class DarlehenDashboardDtoSpec {
    * Get letzteAktivitaet
    * @return letzteAktivitaet
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public LocalDate getLetzteAktivitaet() {
     return letzteAktivitaet;
@@ -271,7 +361,7 @@ public class DarlehenDashboardDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_LETZTE_AKTIVITAET)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setLetzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
   }
@@ -286,6 +376,9 @@ public class DarlehenDashboardDtoSpec {
     }
     DarlehenDashboardDtoSpec darlehenDashboard = (DarlehenDashboardDtoSpec) o;
     return Objects.equals(this.id, darlehenDashboard.id) &&
+        Objects.equals(this.gesuchId, darlehenDashboard.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, darlehenDashboard.gesuchTrancheId) &&
+        Objects.equals(this.fallId, darlehenDashboard.fallId) &&
         Objects.equals(this.fallNummer, darlehenDashboard.fallNummer) &&
         Objects.equals(this.piaVorname, darlehenDashboard.piaVorname) &&
         Objects.equals(this.piaNachname, darlehenDashboard.piaNachname) &&
@@ -297,7 +390,7 @@ public class DarlehenDashboardDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, gesuchId, gesuchTrancheId, fallId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -305,6 +398,9 @@ public class DarlehenDashboardDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenDashboardDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");

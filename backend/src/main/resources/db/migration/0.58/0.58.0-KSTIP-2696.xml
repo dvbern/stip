@@ -186,12 +186,6 @@
     <changeSet author="luca.fondo (generated)" id="1765283465461-39">
         <dropUniqueConstraint constraintName="uc_gesuch_formulardarlehen_id_col" tableName="gesuch_formular"/>
     </changeSet>
-    <changeSet author="luca.fondo (generated)" id="1765283465461-51">
-        <dropColumn columnName="anzahl_betreibungen" tableName="darlehen"/>
-    </changeSet>
-    <changeSet author="luca.fondo (generated)" id="1765283465461-52">
-        <dropColumn columnName="anzahl_betreibungen" tableName="darlehen_aud"/>
-    </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-53">
         <dropColumn columnName="betrag_bezogen_kanton" tableName="darlehen"/>
     </changeSet>

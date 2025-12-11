@@ -20,6 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuContent } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -83,6 +84,7 @@ import {
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
     SharedUiMaxLengthDirective,
+    MatMenuContent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -164,6 +166,26 @@ export class SharedFeatureDarlehenComponent {
       ),
     },
     // { validators: [this.allDocumentsValidator] },
+  );
+
+  hasUnsavedChanges = false;
+
+  gewaehrenChangedSig = toSignal(this.formSb.controls.gewaehren.valueChanges);
+  showBetragFieldSig = computed(() => {
+    const gewaehren = this.gewaehrenChangedSig();
+
+    if (!gewaehren) {
+      this.formSb.controls.betrag.disable();
+    } else {
+      this.formSb.controls.betrag.enable();
+    }
+    this.formSb.controls.betrag.updateValueAndValidity();
+
+    return !!gewaehren;
+  });
+
+  anzahlBetreibungenChangedSig = toSignal(
+    this.formGs.controls.anzahlBetreibungen.valueChanges,
   );
 
   grundNichtBerechtigtChangedSig = toSignal(
