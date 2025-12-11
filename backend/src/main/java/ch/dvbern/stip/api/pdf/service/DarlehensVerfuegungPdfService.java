@@ -91,9 +91,9 @@ public class DarlehensVerfuegungPdfService {
             logo.setMarginTop(-35);
 
             document.add(logo);
-            PdfUtils.header(gesuch, document, leftMargin, translator, true, pdfFont, ausbildungsbeitraegeUri);
+            PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
             // todo: add main content
-            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, true);
+            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
             PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
             PdfUtils.makePageNumberEven(document);
 
