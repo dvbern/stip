@@ -53,16 +53,23 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheValidatorService {
-    private static final Map<GesuchTrancheStatus, List<Class<?>>> statusToValidationGroups =
+    private static final Map<GesuchTrancheStatus, List<Class<?>>> trancheStatusToValidationGroups =
         new EnumMap<>(GesuchTrancheStatus.class);
-    private static final List<Class<?>> VALIDATION_GROUPS_FOR_GESUCHSTATUS_ABKLAERUNG_DURCH_RECHTSABTEILUNG = List.of(
-        GesuchNachInBearbeitungSBValidationGroup.class,
-        GesuchDokumentsAcceptedValidationGroup.class
-    );
+
+    private static final Map<Gesuchstatus, List<Class<?>>> exceptionalGesuchStatusToValidationGroups =
+        new EnumMap<>(Gesuchstatus.class);
 
     static {
-        statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
-        statusToValidationGroups.put(
+        exceptionalGesuchStatusToValidationGroups.put(
+            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            List.of(
+                GesuchNachInBearbeitungSBValidationGroup.class,
+                GesuchDokumentsAcceptedValidationGroup.class
+            )
+        );
+        trancheStatusToValidationGroups
+            .put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
+        trancheStatusToValidationGroups.put(
             GesuchTrancheStatus.AKZEPTIERT,
             List.of(
                 GesuchEinreichenValidationGroup.class,
@@ -70,7 +77,7 @@ public class GesuchTrancheValidatorService {
                 GesuchDokumentsAcceptedValidationGroup.class
             )
         );
-        statusToValidationGroups.put(
+        trancheStatusToValidationGroups.put(
             GesuchTrancheStatus.MANUELLE_AENDERUNG,
             List.of(
                 GesuchEinreichenValidationGroup.class,
@@ -78,7 +85,7 @@ public class GesuchTrancheValidatorService {
                 GesuchDokumentsAcceptedValidationGroup.class
             )
         );
-        statusToValidationGroups.put(
+        trancheStatusToValidationGroups.put(
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
             List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
@@ -88,18 +95,20 @@ public class GesuchTrancheValidatorService {
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        var validationGroups = Stream.concat(
-            Stream.of(Default.class),
-            statusToValidationGroups.getOrDefault(status, List.of()).stream()
-        ).toList();
-        if (toValidate.getGesuch().getGesuchStatus().equals(Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG)) {
+        if (exceptionalGesuchStatusToValidationGroups.containsKey(toValidate.getGesuch().getGesuchStatus())) {
             ValidatorUtil.validate(
                 validator,
                 toValidate.getGesuchFormular(),
-                VALIDATION_GROUPS_FOR_GESUCHSTATUS_ABKLAERUNG_DURCH_RECHTSABTEILUNG
+                exceptionalGesuchStatusToValidationGroups
+                    .getOrDefault(toValidate.getGesuch().getGesuchStatus(), List.of())
             );
             return;
         }
+        var validationGroups = Stream.concat(
+            Stream.of(Default.class),
+            trancheStatusToValidationGroups.getOrDefault(status, List.of()).stream()
+        ).toList();
+
         ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
     }
 
