@@ -5903,8 +5903,27 @@ components:
           items:
             $ref: '#/components/schemas/DarlehenDashboard'
     DarlehenDashboard:
+      type: object
+      required:
+        - id
+        - gesuchId
+        - gesuchTrancheId
+        - fallId
+        - fallNummer
+        - piaVorname
+        - piaNachname
+        - piaGeburtsdatum
+        - status
+        - bearbeiter
+        - letzteAktivitaet
       properties:
         id:
+          $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
+        fallId:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string

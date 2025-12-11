@@ -10,8 +10,8 @@ import {
 } from './shared-model-permission-state';
 
 const DarlehenPermissions = {
-  W: { index: 0, name: 'write' },
-  K: { index: 1, name: 'kommentieren' },
+  W: { index: 0, name: 'writeGs' },
+  K: { index: 1, name: 'writeSb' },
   D: { index: 2, name: 'uploadDocuments' },
   E: { index: 3, name: 'eingeben' },
   F: { index: 4, name: 'freigeben' },
@@ -62,8 +62,8 @@ export const darlehenPermissionTableByAppType = {
   IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W DE  ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   EINGEGEBEN                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm(' K  F ', ['sb']) },
   IN_FREIGABE                     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('     A', ['fe']) },
-  AKZEPTIERT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['fe']) },
-  ABGELEHNT                       : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['fe']) },
+  AKZEPTIERT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  ABGELEHNT                       : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
 } as const satisfies Record<
   DarlehenStatus,
   Record<AppType, PermissionCheck>
@@ -81,7 +81,7 @@ const applyDelegatedDarlehenPermissions = (
 
   return {
     ...permissions,
-    canWrite: false,
+    canWriteGs: false,
     canUploadDocuments: false,
     canEingeben: false,
   };

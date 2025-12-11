@@ -124,7 +124,7 @@ export const appRoutes: Route[] = [
       },
       // todo: create darlehen detail routing, propbably not here, similar route params as gesuch
       {
-        path: 'darlehen/:darlehenId',
+        path: 'darlehen',
         canActivate: [hasBenutzer],
         providers: [DarlehenStore],
         title: 'sachbearbeitung-app.darlehen.title',
