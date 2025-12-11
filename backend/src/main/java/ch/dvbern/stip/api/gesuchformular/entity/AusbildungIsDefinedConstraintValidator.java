@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -37,11 +36,6 @@ public class AusbildungIsDefinedConstraintValidator
         ConstraintValidatorContext context
     ) {
         final var gesuch = gesuchFormular.getTranche().getGesuch();
-
-        if (gesuch.getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_GS) {
-            return true;
-        }
-
         final var isAusbildungDefined = !gesuch.getAusbildung().isAusbildungNichtGefunden();
 
         if (isAusbildungDefined) {

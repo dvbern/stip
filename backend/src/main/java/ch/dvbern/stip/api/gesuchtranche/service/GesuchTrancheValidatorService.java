@@ -62,10 +62,7 @@ public class GesuchTrancheValidatorService {
     static {
         exceptionalGesuchStatusToValidationGroups.put(
             Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-            List.of(
-                GesuchNachInBearbeitungSBValidationGroup.class,
-                GesuchDokumentsAcceptedValidationGroup.class
-            )
+            List.of(GesuchNachInBearbeitungSBValidationGroup.class)
         );
         trancheStatusToValidationGroups
             .put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));

@@ -88,7 +88,7 @@ import org.hibernate.envers.Audited;
 @Audited
 @AusbildungIsDefinedConstraint(
     groups = {
-        GesuchEinreichenValidationGroup.class
+        GesuchNachInBearbeitungSBValidationGroup.class
     }, property = "ausbildung"
 )
 @FamiliensituationElternEntityRequiredConstraint(
