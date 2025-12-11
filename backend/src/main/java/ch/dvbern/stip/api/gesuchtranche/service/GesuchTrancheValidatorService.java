@@ -95,18 +95,14 @@ public class GesuchTrancheValidatorService {
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        if (exceptionalGesuchStatusToValidationGroups.containsKey(toValidate.getGesuch().getGesuchStatus())) {
-            ValidatorUtil.validate(
-                validator,
-                toValidate.getGesuchFormular(),
-                exceptionalGesuchStatusToValidationGroups
-                    .getOrDefault(toValidate.getGesuch().getGesuchStatus(), List.of())
-            );
-            return;
-        }
         var validationGroups = Stream.concat(
             Stream.of(Default.class),
-            trancheStatusToValidationGroups.getOrDefault(status, List.of()).stream()
+            // First check for exceptional gesuch status validation groups defined by the current gesuch status
+            exceptionalGesuchStatusToValidationGroups.getOrDefault(
+                toValidate.getGesuch().getGesuchStatus(),
+                // Otherwise use regular tranche validation groups defined by their current status
+                trancheStatusToValidationGroups.getOrDefault(status, List.of())
+            ).stream()
         ).toList();
 
         ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
