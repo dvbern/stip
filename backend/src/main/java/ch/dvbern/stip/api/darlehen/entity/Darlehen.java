@@ -90,6 +90,11 @@ public class Darlehen extends AbstractMandantEntity {
     @Column(name = "schulden")
     private Integer schulden;
 
+    @Min(value = 0)
+    @Nullable
+    @Column(name = "anzahl_betreibungen")
+    private Integer anzahlBetreibungen;
+
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @Column(name = "darlehen_grund")
