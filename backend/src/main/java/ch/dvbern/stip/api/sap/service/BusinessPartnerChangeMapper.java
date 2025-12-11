@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -117,7 +118,14 @@ public abstract class BusinessPartnerChangeMapper {
     public List<BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
         Fall fall
     ) {
-        return List.of(toPaymentDetails(fall.getRelevantZahlungsverbindung()));
+        final var paymentdetail =
+            toPaymentDetails(fall.getRelevantZahlungsverbindung());
+        if (fall.getAuszahlung().isAuszahlungAnSozialdienst()) {
+            final LocalDate now = LocalDate.now();
+            paymentdetail.setBANKDETAILVALIDFROM(SapMapperUtil.getPaymentdetailValidFromGregorianCalendar(now));
+            paymentdetail.setBANKDETAILVALIDTO(SapMapperUtil.getPaymentdetailValidToGregorianCalendar(now));
+        }
+        return List.of(paymentdetail);
     }
 
     @Named("getSenderParmsDelivery")

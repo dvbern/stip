@@ -36,9 +36,12 @@ import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateRe
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadRequest;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadResponse;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchRequest;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerChangeService;
 import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerCreateService;
 import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerReadService;
+import ch.dvbern.stip.api.sap.generated.business_partner.OsBusinessPartnerSearchService;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadRequest;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.generated.import_status.OsImportStatusReadService;
@@ -65,6 +68,7 @@ public class SapEndpointService {
     private final BusinessPartnerCreateMapper businessPartnerCreateMapper;
     private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
     private final BusinessPartnerReadMapper businessPartnerReadMapper;
+    private final BusinessPartnerSearchMapper businessPartnerSearchMapper;
     private final VendorPostingCreateMapper vendorPostingCreateMapper;
 
     private static final int MAX_LENGTH_REF_DOC_NO = 16;
@@ -143,7 +147,7 @@ public class SapEndpointService {
         return port.osBusinessPartnerChange(businessPartnerChangeRequest);
     }
 
-    public BusinessPartnerReadResponse readBusinessPartner(
+    public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
         BigDecimal sapDeliveryId
     ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
@@ -152,8 +156,34 @@ public class SapEndpointService {
         this.setPortParams((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
-            businessPartnerReadMapper.toBusinessPartnerReadRequest(getSystemid(), sapDeliveryId);
+            businessPartnerReadMapper.toBusinessPartnerReadRequestDeliveryId(getSystemid(), sapDeliveryId);
         return port.osBusinessPartnerRead(businessPartnerReadRequest);
+    }
+
+    public BusinessPartnerReadResponse readBusinessPartnerByBusinessPartnerId(
+        Integer businessPartnerId
+    ) {
+        final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
+        final var port = businessPartnerReadService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
+
+        final BusinessPartnerReadRequest businessPartnerReadRequest =
+            businessPartnerReadMapper.toBusinessPartnerReadRequestBusinessPartnerId(getSystemid(), businessPartnerId);
+        return port.osBusinessPartnerRead(businessPartnerReadRequest);
+    }
+
+    public BusinessPartnerSearchResponse searchBusinessPartner(
+        String sozialversicherungsnummer
+    ) {
+        final OsBusinessPartnerSearchService businessPartnerSearchService = new OsBusinessPartnerSearchService();
+        final var port = businessPartnerSearchService.getHTTPSPort();
+        this.setAuthHeader((BindingProvider) port);
+        this.setPortParams((BindingProvider) port);
+
+        final BusinessPartnerSearchRequest businessPartnerSearchRequest =
+            businessPartnerSearchMapper.toBusinessPartnerSearchRequest(getSystemid(), sozialversicherungsnummer);
+        return port.osBusinessPartnerSearch(businessPartnerSearchRequest);
     }
 
     public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {

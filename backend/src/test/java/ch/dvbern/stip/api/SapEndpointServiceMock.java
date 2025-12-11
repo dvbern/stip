@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRespon
 import ch.dvbern.stip.api.sap.service.BusinessPartnerChangeMapper;
 import ch.dvbern.stip.api.sap.service.BusinessPartnerCreateMapper;
 import ch.dvbern.stip.api.sap.service.BusinessPartnerReadMapper;
+import ch.dvbern.stip.api.sap.service.BusinessPartnerSearchMapper;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.service.VendorPostingCreateMapper;
 import io.quarkus.test.Mock;
@@ -62,6 +63,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
             null,
             null,
             null,
+            null,
             null
         );
         setBusinessPartnerCreateResponse(SUCCESS_STRING);
@@ -75,12 +77,14 @@ public class SapEndpointServiceMock extends SapEndpointService {
     BusinessPartnerCreateMapper businessPartnerCreateMapper,
     BusinessPartnerChangeMapper businessPartnerChangeMapper,
     BusinessPartnerReadMapper businessPartnerReadMapper,
+    BusinessPartnerSearchMapper businessPartnerSearchMapper,
     VendorPostingCreateMapper vendorPostingCreateMapper
     ) {
         super(
             businessPartnerCreateMapper,
             businessPartnerChangeMapper,
             businessPartnerReadMapper,
+            businessPartnerSearchMapper,
             vendorPostingCreateMapper
         );
         setBusinessPartnerCreateResponse(SUCCESS_STRING);
@@ -167,7 +171,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
     }
 
     @Override
-    public BusinessPartnerReadResponse readBusinessPartner(
+    public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerReadResponse;

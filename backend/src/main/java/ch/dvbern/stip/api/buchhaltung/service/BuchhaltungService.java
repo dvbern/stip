@@ -159,20 +159,28 @@ public class BuchhaltungService {
         return TLProducer.defaultBundle().forAppLanguage(language);
     }
 
-    @Transactional
-    public Buchhaltung createBuchhaltungForBusinessPartnerCreate(
-        final UUID gesuchId
+    private Buchhaltung createBuchhaltungForBusinessPartnerAction(
+        final UUID gesuchId,
+        final BuchhaltungType buchhaltungBusinessPartnerType
     ) {
+        final String tlKey = switch (buchhaltungBusinessPartnerType) {
+            case BUSINESSPARTNER_CREATE -> "stip.businesspartner.buchhaltung.erstellen";
+            case BUSINESSPARTNER_CHANGE -> "stip.businesspartner.buchhaltung.aendern";
+            default -> throw new IllegalStateException(
+                "BuchhaltungType " + buchhaltungBusinessPartnerType + " not supported"
+            );
+        };
+
         final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
         final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
 
         final var buchhaltungEntry = new Buchhaltung()
-            .setBuchhaltungType(BuchhaltungType.BUSINESSPARTNER_CREATE)
+            .setBuchhaltungType(buchhaltungBusinessPartnerType)
             .setBetrag(0)
             .setSaldo(lastEntrySaldo)
-            .setComment(translator.translate("stip.businesspartner.buchhaltung.erstellen"))
+            .setComment(translator.translate(tlKey))
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
@@ -190,6 +198,20 @@ public class BuchhaltungService {
         fall.getAuszahlung().setBuchhaltung(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungEntry;
+    }
+
+    @Transactional
+    public Buchhaltung createBuchhaltungForBusinessPartnerCreate(
+        final UUID gesuchId
+    ) {
+        return createBuchhaltungForBusinessPartnerAction(gesuchId, BuchhaltungType.BUSINESSPARTNER_CREATE);
+    }
+
+    @Transactional
+    public Buchhaltung createBuchhaltungForBusinessPartnerChange(
+        final UUID gesuchId
+    ) {
+        return createBuchhaltungForBusinessPartnerAction(gesuchId, BuchhaltungType.BUSINESSPARTNER_CHANGE);
     }
 
     @Transactional

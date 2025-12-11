@@ -107,11 +107,12 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
             .stream();
     }
 
-    public Stream<Buchhaltung> findPendingBusinesspartnerCreateBuchhaltung() {
+    public Stream<Buchhaltung> findPendingBusinesspartnerActionBuchhaltung() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_BUCHHALTUNG)
             .where(
                 Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.BUSINESSPARTNER_CREATE)
+                    .or(Q_BUCHHALTUNG.buchhaltungType.eq(BuchhaltungType.BUSINESSPARTNER_CHANGE))
             )
             .where(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS).not())
             .where(
