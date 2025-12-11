@@ -80,7 +80,7 @@ public class DarlehenService {
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
     @Transactional
-    public void createPdfForDarlehen(final Darlehen darlehen) {
+    public void createPositiveDarlehensVerfuegung(Darlehen darlehen) {
         final ByteArrayOutputStream out = darlehensVerfuegungPdfService.generateDarlehensVerfuegungPdf(darlehen);
 
         final String objectId = dokumentUploadService.executeUploadDocument(
@@ -90,10 +90,15 @@ public class DarlehenService {
             configService,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
+        // todo: also handle negative case
         // todo: create darlehen_verfuegung on darlehen
-        // darlehen.set.setObjectId(objectId);
-        // verfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
-        // verfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+        // todo: add test to make sure that this dokument can be downloaded
+        var darlehensVerfuegung = new Dokument();
+        darlehensVerfuegung.setObjectId(objectId);
+        darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
     }
 
     @Transactional
@@ -210,7 +215,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
 
         darlehenRepository.persistAndFlush(darlehen);
-
+        createPositiveDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAkzeptiertNotification(darlehen);
 
         return darlehenMapper.toDto(darlehen);
