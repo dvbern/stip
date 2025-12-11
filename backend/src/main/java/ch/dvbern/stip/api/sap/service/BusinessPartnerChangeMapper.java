@@ -82,11 +82,16 @@ public abstract class BusinessPartnerChangeMapper {
     }
 
     @Mapping(target = "BANKID", constant = "0001")
-    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = "iban", target = "IBAN", qualifiedByName = "getIban")
     @Mapping(source = ".", target = "ACCOUNTHOLDER", qualifiedByName = "getAccountHolder")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
         Zahlungsverbindung zahlungsverbindung
     );
+
+    @Named("getIban")
+    public String getIban(String iban) {
+        return iban.replace(" ", "");
+    }
 
     @Named("getAccountHolder")
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {

@@ -97,7 +97,7 @@ public class SapService {
             || !Objects.equals(addressLocal.getHOUSENO(), addressRemote.getHOUSENO())
             || !Objects.equals(addressLocal.getPOSTLCOD1(), addressRemote.getPOSTLCOD1())
         ) {
-            return false;
+            return true;
         }
 
         final var persdataLocal = businessPartnerChangeRequest.getPERSDATA();
@@ -109,21 +109,24 @@ public class SapService {
             || !Objects.equals(persdataLocal.getNATIONALITYISO(), persdataRemote.getNATIONALITYISO())
             || !Objects.equals(persdataLocal.getBIRTHDATE(), persdataRemote.getBIRTHDATE())
         ) {
-            return false;
+            return true;
         }
 
         final var paymentdetailLocal = businessPartnerChangeRequest.getPAYMENTDETAIL();
         final var paymentdetailRemote = businessPartner.getPAYMENTDETAIL();
 
         if (
-            !Objects.equals(paymentdetailLocal.get(0).getIBAN(), paymentdetailRemote.get(0).getIBAN())
+            !Objects.equals(
+                paymentdetailLocal.get(0).getIBAN().replace(" ", ""),
+                paymentdetailRemote.get(0).getIBAN().replace(" ", "")
+            )
             || !Objects
                 .equals(paymentdetailLocal.get(0).getACCOUNTHOLDER(), paymentdetailRemote.get(0).getACCOUNTHOLDER())
         ) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Transactional
@@ -131,7 +134,7 @@ public class SapService {
         final var businessPartnerSearchResponse =
             sapEndpointService.searchBusinessPartner(sozialversicherungsnummer);
 
-        SapReturnCodeType.assertSuccess(businessPartnerSearchResponse.getRETURNCODE().get(0).getTYPE());
+        // SapReturnCodeType.assertSuccess(businessPartnerSearchResponse.getRETURNCODE().get(0).getTYPE());
         if (businessPartnerSearchResponse.getBUSINESSPARTNER().isEmpty()) {
             return null;
         }

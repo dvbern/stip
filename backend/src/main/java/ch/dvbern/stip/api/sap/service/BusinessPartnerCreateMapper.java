@@ -84,11 +84,16 @@ public abstract class BusinessPartnerCreateMapper {
         return land.getIso2code();
     }
 
-    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = "iban", target = "IBAN", qualifiedByName = "getIban")
     @Mapping(source = ".", target = "ACCOUNTHOLDER", qualifiedByName = "getAccountHolder")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
         Zahlungsverbindung zahlungsverbindung
     );
+
+    @Named("getIban")
+    public String getIban(String iban) {
+        return iban.replace(" ", "");
+    }
 
     @Named("getAccountHolder")
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
