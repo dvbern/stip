@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRe
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerHEADER;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadResponse;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.ReturnCode;
 import ch.dvbern.stip.api.sap.generated.general.ReturnCodeID;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
@@ -50,6 +51,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
     public static final String ERROR_STRING = "E";
     public static final String INFO_STRING = "I";
 
+    BusinessPartnerSearchResponse businessPartnerSearchResponse = null;
     BusinessPartnerCreateResponse businessPartnerCreateResponse = null;
     BusinessPartnerChangeResponse businessPartnerChangeResponse = null;
     BusinessPartnerReadResponse businessPartnerReadResponse = null;
@@ -66,6 +68,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
             null,
             null
         );
+        setBusinessPartnerSearchResponse(SUCCESS_STRING);
         setBusinessPartnerCreateResponse(SUCCESS_STRING);
         setBusinessPartnerChangeResponse(SUCCESS_STRING);
         setBusinessPartnerReadResponse(SUCCESS_STRING, random.nextInt());
@@ -87,11 +90,22 @@ public class SapEndpointServiceMock extends SapEndpointService {
             businessPartnerSearchMapper,
             vendorPostingCreateMapper
         );
+        setBusinessPartnerSearchResponse(SUCCESS_STRING);
         setBusinessPartnerCreateResponse(SUCCESS_STRING);
         setBusinessPartnerChangeResponse(SUCCESS_STRING);
         setBusinessPartnerReadResponse(SUCCESS_STRING, random.nextInt());
         setImportStatusReadResponse(SUCCESS_STRING, SapStatus.SUCCESS);
         setVendorPostingCreateResponse(SUCCESS_STRING);
+    }
+
+    public void setBusinessPartnerSearchResponse(final String returnCodeString) {
+        var returnCodes = new ArrayList<ReturnCode>();
+        var returnCode = new ReturnCode();
+        returnCode.setTYPE(returnCodeString);
+        returnCodes.add(returnCode);
+        BusinessPartnerSearchResponse searchResponse = new BusinessPartnerSearchResponse();
+        searchResponse.setRETURNCODE(returnCodes);
+        this.businessPartnerSearchResponse = searchResponse;
     }
 
     public void setBusinessPartnerCreateResponse(final String returnCodeString) {
@@ -152,6 +166,13 @@ public class SapEndpointServiceMock extends SapEndpointService {
         VendorPostingCreateResponse postingCreateResponse = new VendorPostingCreateResponse();
         postingCreateResponse.setRETURNCODE(returnCodes);
         this.vendorPostingCreateResponse = postingCreateResponse;
+    }
+
+    @Override
+    public BusinessPartnerSearchResponse searchBusinessPartner(
+        String sozialversicherungsnummer
+    ) {
+        return businessPartnerSearchResponse;
     }
 
     @Override
