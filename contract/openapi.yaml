@@ -604,9 +604,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /getAllDarlehenSb/{fallId}:
+  /darlehen/getAllDarlehenSb/{gesuchId}:
     parameters:
-      - name: fallId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path

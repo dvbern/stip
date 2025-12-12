@@ -407,9 +407,9 @@ paths:
       operationId: darlehenUpdateGs
       summary: Update darlehen as gs
 
-  /getAllDarlehenSb/{fallId}:
+  /darlehen/getAllDarlehenSb/{gesuchId}:
     parameters:
-      - name: fallId
+      - name: gesuchId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path

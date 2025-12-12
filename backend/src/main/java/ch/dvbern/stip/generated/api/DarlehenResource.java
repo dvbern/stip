@@ -89,6 +89,11 @@ public interface DarlehenResource {
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
+    @Path("/getAllDarlehenSb/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    List<DarlehenDto> getAllDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
     @Path("/dashboard/{getDarlehenSbQueryType}")
     @Produces({ "application/json", "text/plain" })
     PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(@PathParam("getDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType getDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);

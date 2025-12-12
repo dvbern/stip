@@ -53,6 +53,17 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
         return query.stream().toList();
     }
 
+    public List<Darlehen> findByGesuchId(final UUID gesuchId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var darlehen = QDarlehen.darlehen;
+        var query = queryFactory
+            .selectFrom(darlehen)
+            .where(
+                darlehen.fall.ausbildungs.any().gesuchs.any().id.eq(gesuchId)
+            );
+        return query.stream().toList();
+    }
+
     public JPAQuery<Darlehen> getAlleQuery() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(darlehen);

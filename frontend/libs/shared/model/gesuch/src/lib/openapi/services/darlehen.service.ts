@@ -85,7 +85,7 @@ export interface DarlehenServiceDownloadDarlehenDokumentRequestParams {
 }
 
 export interface DarlehenServiceGetAllDarlehenSbRequestParams {
-    fallId: string;
+    gesuchId: string;
 }
 
 export interface DarlehenServiceGetDarlehenDashboardSbRequestParams {
@@ -1076,9 +1076,9 @@ export class DarlehenService {
      public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Darlehen>>>;
      public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Darlehen>>>;
      public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const fallId = requestParameters.fallId;
-        if (fallId === null || fallId === undefined) {
-            throw new Error('Required parameter fallId was null or undefined when calling getAllDarlehenSb$.');
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllDarlehenSb$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1126,7 +1126,7 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/getAllDarlehenSb/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<Darlehen>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

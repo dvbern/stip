@@ -81,6 +81,7 @@ public class DarlehenApiSpec {
                 darlehenZurueckweisen(),
                 deleteDarlehenDokument(),
                 downloadDarlehenDokument(),
+                getAllDarlehenSb(),
                 getDarlehenDashboardSb(),
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
@@ -131,6 +132,10 @@ public class DarlehenApiSpec {
 
     public DownloadDarlehenDokumentOper downloadDarlehenDokument() {
         return new DownloadDarlehenDokumentOper(createReqSpec());
+    }
+
+    public GetAllDarlehenSbOper getAllDarlehenSb() {
+        return new GetAllDarlehenSbOper(createReqSpec());
     }
 
     public GetDarlehenDashboardSbOper getDarlehenDashboardSb() {
@@ -998,6 +1003,79 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public DownloadDarlehenDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Return all darlehen for a given fallId
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;DarlehenDtoSpec&gt;
+     */
+    public static class GetAllDarlehenSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/getAllDarlehenSb/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllDarlehenSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/getAllDarlehenSb/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/getAllDarlehenSb/{gesuchId}
+         * @param handler handler
+         * @return List&lt;DarlehenDtoSpec&gt;
+         */
+        public List<DarlehenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DarlehenDtoSpec>> type = new TypeRef<List<DarlehenDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllDarlehenSbOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllDarlehenSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

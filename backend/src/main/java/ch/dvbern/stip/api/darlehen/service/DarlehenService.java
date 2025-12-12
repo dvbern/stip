@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -104,6 +105,13 @@ public class DarlehenService {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
         return darlehenMapper.toDto(darlehen);
+    }
+
+    @Transactional
+    public List<DarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
+        final var darlehenList = darlehenRepository.findByGesuchId(gesuchId);
+
+        return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
     @Transactional
@@ -244,6 +252,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public DarlehenDto darlehenUpdateSb(final UUID darlehenId, final DarlehenUpdateSbDto darlehenUpdateSbDto) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 

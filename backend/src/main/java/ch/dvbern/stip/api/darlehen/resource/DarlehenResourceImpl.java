@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.darlehen.resource;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -189,7 +190,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(GS_GESUCH_READ)
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
     public NullableDarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
         darlehenAuthorizer.canGetDarlehenDokument();
         return darlehenService.getDarlehenDokument(darlehenId, dokumentTyp);
@@ -206,6 +207,13 @@ public class DarlehenResourceImpl implements DarlehenResource {
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM
         );
         return darlehenService.getDokument(dokumentId);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    public List<DarlehenDto> getAllDarlehenSb(UUID gesuchId) {
+        darlehenAuthorizer.canGetDarlehenSb();
+        return darlehenService.getDarlehenAllSb(gesuchId);
     }
 
     @Override

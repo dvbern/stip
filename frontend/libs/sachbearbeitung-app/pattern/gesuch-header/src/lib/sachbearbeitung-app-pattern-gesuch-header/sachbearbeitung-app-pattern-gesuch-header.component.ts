@@ -162,7 +162,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
-        // this.darlehenStore.getAllDarlehenSb$({ gesuchId });
+        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
         this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       }
