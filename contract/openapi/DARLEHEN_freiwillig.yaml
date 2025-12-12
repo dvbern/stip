@@ -100,7 +100,84 @@ paths:
       operationId: createDarlehen
       summary: Create a new Darlehen
 
-  /darlehen/{darlehenId}/{dokumentType}:
+  '/darlehen/dokument/{dokumentId}/token':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+          description: File returned
+      operationId: getDarlehenDownloadToken
+      summary: get Token to downlaod Darlehen Dokument
+
+  '/darlehen/dokument/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenDokument
+      summary: Download Darlehen Dokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+
+  '/darlehen/dokument/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteDarlehenDokument
+      summary: deletes a Darlehen Dokument
+
+  /darlehen/dokument/{darlehenId}/{dokumentType}:
     parameters:
       - name: darlehenId
         schema:
