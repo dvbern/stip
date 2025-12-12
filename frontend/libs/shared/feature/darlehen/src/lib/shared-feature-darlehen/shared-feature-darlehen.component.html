@@ -189,6 +189,7 @@
         </mat-form-field>
         @if (anzahlBetreibungenDocSig(); as options) {
           <dv-shared-pattern-document-upload
+            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -216,6 +217,7 @@
         </div>
         @if (grundNichtBerechtigtDocSig(); as options) {
           <dv-shared-pattern-document-upload
+            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -244,6 +246,7 @@
         </div>
         @if (grundHoheGebuehrenDocSig(); as options) {
           <dv-shared-pattern-document-upload
+            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -261,6 +264,7 @@
         </div>
         @if (grundAnschaffungenFuerAusbildungDocSig(); as options) {
           <dv-shared-pattern-document-upload
+            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>

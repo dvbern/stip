@@ -7,6 +7,7 @@ import {
   computed,
   effect,
   inject,
+  signal,
   viewChildren,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -139,7 +140,10 @@ export class SharedFeatureDarlehenComponent {
     return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
+  documentsHaveChanged = signal(false);
+
   isAllDocumentsUploadedSig = computed<boolean>(() => {
+    this.documentsHaveChanged();
     const dokumentUploads = this.documentUploadsSig();
     return dokumentUploads.every((upload) => {
       return upload.gesuchDokumentSig()?.gesuchDokument?.dokumente?.length;
@@ -164,11 +168,11 @@ export class SharedFeatureDarlehenComponent {
           HOHE_GEBUEHREN: [<boolean | undefined>undefined],
           NICHT_BERECHTIGT: [<boolean | undefined>undefined],
           ZWEITAUSBILDUNG: [<boolean | undefined>undefined],
-        } satisfies Record<DarlehenGrund, any>,
+        } satisfies Record<DarlehenGrund, [boolean | undefined]>,
         { validators: [this.atLeastOneCheckboxChecked] },
       ),
     },
-    // todo: make this work
+    // todo: make this work, but this approach was not best
     // { validators: [this.allDocumentsValidator] },
   );
 
@@ -304,7 +308,7 @@ export class SharedFeatureDarlehenComponent {
     this.formUtils.focusFirstInvalid(this.elementRef);
     const darlehen = this.darlehenSig();
 
-    if (this.formGs.invalid || !darlehen) {
+    if (this.formGs.invalid || !darlehen || !this.isAllDocumentsUploadedSig()) {
       return;
     }
 

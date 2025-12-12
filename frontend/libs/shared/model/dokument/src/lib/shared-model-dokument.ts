@@ -158,7 +158,6 @@ export interface UploadView {
 
 export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
-  // permission: DarlehenPermissionMap | PermissionMap,
   isSachbearbeitungApp: boolean,
 ) => {
   switch (dokumentModel.art) {
@@ -176,51 +175,8 @@ export const isUploadable = (
     case 'UNTERSCHRIFTENBLATT': {
       return dokumentModel.permissions.canUploadUnterschriftenblatt;
     }
-    // todo: add logic
     case 'DARLEHEN_DOKUMENT': {
       return dokumentModel.permissions.canUploadDocuments;
     }
   }
 };
-
-// export function isUploadable(
-//   dokumentModel: SharedModelDarlehenDokument,
-//   permission: DarlehenPermissionMap,
-//   isSachbearbeitungApp: boolean,
-// ): boolean;
-// export function isUploadable(
-//   dokumentModel: Exclude<
-//     SharedModelGesuchDokument,
-//     SharedModelDarlehenDokument
-//   >,
-//   permission: PermissionMap,
-//   isSachbearbeitungApp: boolean,
-// ): boolean;
-// export function isUploadable(
-//   dokumentModel: SharedModelGesuchDokument,
-//   permission: DarlehenPermissionMap | PermissionMap,
-//   isSachbearbeitungApp: boolean,
-// ): boolean {
-//   switch (dokumentModel.art) {
-//     case 'GESUCH_DOKUMENT':
-//     case 'CUSTOM_DOKUMENT': {
-//       if (!isSachbearbeitungApp) {
-//         const status = dokumentModel.gesuchDokument?.status;
-//         return (
-//           status !== 'AKZEPTIERT' &&
-//           (permission as PermissionMap).canUploadDocuments
-//         );
-//       }
-//       return (permission as PermissionMap).canUploadDocuments;
-//     }
-//     case 'UNTERSCHRIFTENBLATT': {
-//       return (permission as PermissionMap).canUploadUnterschriftenblatt;
-//     }
-//     // todo: add logic
-//     case 'DARLEHEN_DOKUMENT': {
-//       return isSachbearbeitungApp
-//         ? (permission as DarlehenPermissionMap).canWriteSb
-//         : (permission as DarlehenPermissionMap).canWriteGs;
-//     }
-//   }
-// }
