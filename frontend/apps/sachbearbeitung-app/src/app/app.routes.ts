@@ -97,6 +97,7 @@ export const appRoutes: Route[] = [
       {
         path: 'verfuegung',
         canActivate: [hasBenutzer],
+        providers: [DarlehenStore],
         title: 'sachbearbeitung-app.verfuegung.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/verfuegung').then(
