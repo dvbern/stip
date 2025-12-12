@@ -45,8 +45,8 @@ public final class CombinedValidationsExceptionMapper {
         CustomConstraintViolation additionalConstraintViolation
     ) {
         ValidationReportDto validationsReportDto = new ValidationReportDto();
-        final var warnings = new ArrayList<ValidationMessageDto>();
-        final var errors = new ArrayList<ValidationMessageDto>();
+        var warnings = new ArrayList<ValidationMessageDto>();
+        var errors = new ArrayList<ValidationMessageDto>();
 
         constraintViolations.forEach(constraintViolation -> {
             final var payload = constraintViolation.getConstraintDescriptor().getPayload();
@@ -54,7 +54,7 @@ public final class CombinedValidationsExceptionMapper {
                 // set warnings
                 final var warningDto = ExceptionMapperUtil.toMessageDto(constraintViolation);
                 warnings.add(warningDto);
-            } else if (payload.contains(Severity.Error.class)) {
+            } else {
                 // set errors
                 final var validationErrorDto = ExceptionMapperUtil.toMessageDto(constraintViolation);
                 errors.add(validationErrorDto);
