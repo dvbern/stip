@@ -136,6 +136,10 @@ export const trancheReadWritestatusByAppType = {
   Record<AppType, PermissionCheck>
 >;
 
+// todo: evalueate renaming of method
+/**
+ * Returns permissions by gesuch type (TRANCHE, AENDERUNG, INITIAL), status and app type
+ */
 export const preparePermissions = (
   trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,

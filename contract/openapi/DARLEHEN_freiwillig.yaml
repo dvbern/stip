@@ -407,6 +407,36 @@ paths:
       operationId: darlehenUpdateGs
       summary: Update darlehen as gs
 
+  /getAllDarlehenSb/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return all darlehen for a given fallId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Darlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllDarlehenSb
+      summary: Return all darlehen for a given fallId
+
   /darlehen/{darlehenId}/sb:
     parameters:
       - name: darlehenId

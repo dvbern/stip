@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  computed,
   input,
   output,
 } from '@angular/core';
@@ -30,4 +31,14 @@ export class SharedUiDashboardGesuchComponent {
   aenderungMelden = output<void>();
   @HostBinding('class') defaultClasses =
     'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:px-6 tw:pt-4 tw:pb-6';
+
+  // Purpose: Only show create darlehen button on the Gesuch that belongs to the current year
+  isCurrentYearTechnischesJahrSig = computed(() => {
+    const gesuch = this.gesuchSig();
+    const gesuchsPeriodeStartYear =
+      gesuch.gesuchsperiode.gesuchsjahr.technischesJahr;
+    const currentYear = new Date().getFullYear();
+
+    return gesuchsPeriodeStartYear === currentYear;
+  });
 }

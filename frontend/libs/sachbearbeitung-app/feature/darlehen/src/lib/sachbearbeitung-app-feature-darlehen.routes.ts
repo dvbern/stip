@@ -55,7 +55,7 @@ const darlehenResolver: ResolveFn<Darlehen> = (
 
 export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
-    path: ':darlehenId',
+    path: ':darlehenId/gesuch/:id/fall/:fallId',
     pathMatch: 'prefix',
     component: SachbearbeitungAppFeatureDarlehenComponent,
     resolve: { darlehen: darlehenResolver },

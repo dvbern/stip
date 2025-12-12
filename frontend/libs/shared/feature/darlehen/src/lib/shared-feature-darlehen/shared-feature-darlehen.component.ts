@@ -10,7 +10,7 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   NonNullableFormBuilder,
@@ -229,12 +229,13 @@ export class SharedFeatureDarlehenComponent {
   });
 
   hasUnsavedChanges = false;
+  gsFormSavedSig = signal(false);
+  sbFormSavedSig = signal(false);
 
   constructor() {
-    // todo: add triggers
     this.formIsUnsaved = merge(
-      observeUnsavedChanges(this.formGs),
-      observeUnsavedChanges(this.formSb),
+      observeUnsavedChanges(this.formGs, toObservable(this.gsFormSavedSig)),
+      observeUnsavedChanges(this.formSb, toObservable(this.sbFormSavedSig)),
     );
     this.formUtils.registerFormForUnsavedCheck(this);
 
@@ -301,8 +302,6 @@ export class SharedFeatureDarlehenComponent {
   //   });
   // }
 
-  // implement this to be a validator on the form?
-
   darlehenEingeben(): void {
     this.formGs.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
@@ -325,11 +324,13 @@ export class SharedFeatureDarlehenComponent {
             darlehenId: darlehen.id,
             darlehenUpdateGs: this.buildUpdatedGsFrom(),
           });
+          this.gsFormSavedSig.set(true);
         }
       });
   }
 
   // Sachbearbeiter Actions
+
   private buildUpdatedSbFrom(): DarlehenUpdateSb {
     const realValues = convertTempFormToRealValues(this.formSb, [
       'betrag',
@@ -354,6 +355,7 @@ export class SharedFeatureDarlehenComponent {
 
     const updatedDarlehen = this.buildUpdatedSbFrom();
 
+    // todo: add saved signal in after success, if behavior is like this.
     this.darlehenStore.darlehenUpdateSb$({
       darlehenId: darlehen.id,
       darlehenUpdateSb: updatedDarlehen,
@@ -361,6 +363,12 @@ export class SharedFeatureDarlehenComponent {
   }
 
   darlehenFreigeben(): void {
+    const darlehen = this.darlehenSig();
+
+    if (!darlehen) {
+      return;
+    }
+
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.freigeben.dialog.title',
       message: 'shared.form.darlehen.freigeben.dialog.message',
@@ -370,7 +378,9 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          // this.freigebenDarlehen();
+          this.darlehenStore.darlehenFreigeben$({
+            darlehenId: darlehen.id,
+          });
         }
       });
   }
@@ -400,7 +410,7 @@ export class SharedFeatureDarlehenComponent {
       });
   }
 
-  // Freigabestellen Actions
+  // Freigabestelle Actions
 
   darlehenAkzeptieren(): void {
     const darlehen = this.darlehenSig();

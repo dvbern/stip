@@ -27,9 +27,11 @@ import { filter, map } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectFallId,
   selectRevision,
   selectRouteId,
   selectRouteTrancheId,
@@ -94,10 +96,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   );
   route = inject(ActivatedRoute);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  darlehenStore = inject(DarlehenStore);
 
   @Output() openSidenav = new EventEmitter<void>();
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
+  fallIdSig = this.store.selectSignal(selectFallId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
 
@@ -156,6 +160,13 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   });
 
   constructor() {
+    effect(() => {
+      const fallId = this.fallIdSig();
+      if (fallId) {
+        this.darlehenStore.getAllDarlehenSb$({ fallId });
+      }
+    });
+
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {

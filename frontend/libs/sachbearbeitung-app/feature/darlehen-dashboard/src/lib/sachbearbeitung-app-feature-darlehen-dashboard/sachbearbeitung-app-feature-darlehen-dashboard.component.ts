@@ -327,17 +327,9 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
         const status = entry.status;
         const translationKey = `sachbearbeitung-app.darlehen.status.${status}`;
         return {
-          id: entry.id!,
-          fallNummer: entry.fallNummer,
-          piaNachname: entry.piaNachname,
-          piaVorname: entry.piaVorname,
-          piaGeburtsdatum: entry.piaGeburtsdatum,
-          status,
+          ...entry,
           translationKey,
-          bearbeiter: entry.bearbeiter,
-          letzteAktivitaet: entry.letzteAktivitaet,
-        } satisfies Record<DashboardEntryFields, unknown> & {
-          id: string;
+        } satisfies DarlehenDashboard & {
           translationKey: string;
         };
       });

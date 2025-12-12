@@ -94,7 +94,7 @@
       </div>
     </mat-menu>
 
-    <!-- todo: darlehen menu with data as above -->
+    @let darlehens = darlehenStore.darlehenListViewSig();
     <button
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
@@ -107,7 +107,22 @@
     </button>
     <mat-menu #darlehenMenu="matMenu" class="header-menu-panel mt-2 rounded">
       <div class="d-flex flex-column gap-2">
-        <span class="px-3 py-2 text-muted"> todo: list all darlehen for fall </span>
+        @for (darlehen of darlehens.darlehenList; track $index) {
+          <a
+            [routerLink]="['/', 'darlehen', darlehen.id, 'gesuch', gesuchId]"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="darlehen-nav-menu-item"
+          >
+            <!-- todo: finish -->
+            <!-- <span>
+            {{
+              'shared.header.darlehen.item'
+                | transloco: { fallNummer: darlehen.fallNummer, index: $index + 1 }
+            }}
+          </span> -->
+            <span>{{ darlehen.betrag }}</span>
+          </a>
+        }
       </div>
     </mat-menu>
 

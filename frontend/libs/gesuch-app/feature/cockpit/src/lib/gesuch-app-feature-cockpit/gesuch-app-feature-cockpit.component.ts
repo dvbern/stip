@@ -110,6 +110,7 @@ export class GesuchAppFeatureCockpitComponent {
     effect(() => {
       const fallId = this.gotNewFallSig();
 
+      // todo: get dashboard here?
       if (fallId) {
         this.dashboardStore.loadDashboard$();
       }

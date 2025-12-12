@@ -122,7 +122,7 @@ export class SharedPatternDocumentUploadComponent {
     initialDokumente: Dokument[] | undefined,
     dokument: SharedModelGesuchDokument,
   ): void {
-    // todo: check if OK!
+    // todo: implement once dokument handling is finalized
     if (dokument.art === 'DARLEHEN_DOKUMENT') {
       return;
     }

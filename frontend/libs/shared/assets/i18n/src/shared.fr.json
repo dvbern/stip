@@ -250,7 +250,7 @@
   "shared.dashboard.aenderung.delete": "Supprimer le changement",
   "shared.dashboard.aenderung.delete.dialog.title": "Supprimer le changement",
   "shared.dashboard.aenderung.delete.dialog.message": "Voulez-vous vraiment supprimer le changement? Vous perdrez toutes les données",
-  "shared.dashboard.darlehen.create": "Demander un prêt",
+  "shared.dashboard.darlehen.create": "Prêts",
 
   "shared.nachrichten.title": "Messages",
   "shared.nachricht.title": "Message",

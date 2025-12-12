@@ -15,6 +15,7 @@
       <div>
         <span class="tw:font-bold"> {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }} </span>:
         <span>0</span>
+        <div>{{ darlehenPermissionsSig()?.canWriteSb }}</div>
       </div>
 
       <!-- darlehenGewaehren mat-radio-group -->
@@ -290,7 +291,6 @@
       </mat-error>
     }
 
-    <!-- todo: show conditions Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:col-span-2" *dvIfGesuchsteller>
       <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>

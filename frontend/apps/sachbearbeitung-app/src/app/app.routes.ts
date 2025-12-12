@@ -83,7 +83,7 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         canActivate: [hasBenutzer],
-        providers: [SteuerdatenStore],
+        providers: [SteuerdatenStore, DarlehenStore],
         title: 'sachbearbeitung-app.gesuch-form.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/gesuch-form').then(

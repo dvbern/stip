@@ -67,14 +67,12 @@
                   *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
-                  <!-- todo: would need gesuchId / trancheId here here -->
-                  <!-- <a
-                    [routerLink]="['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]"
+                  <a
+                    [routerLink]="['/gesuch/info', darlehen.gesuchId, 'tranche', darlehen.gesuchTrancheId]"
                     (click)="$event.stopPropagation()"
                   >
                     {{ darlehen.fallNummer }}
-                  </a> -->
-                  <span>{{ darlehen.fallNummer }}</span>
+                  </a>
                 </td>
               </ng-container>
 
@@ -351,7 +349,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let darlehen; dataSource: darlehenDataSourceSig(); columns: displayedColumns"
-                [routerLink]="['/darlehen', darlehen.id]"
+                [routerLink]="['/darlehen', darlehen.id, 'gesuch', darlehen.gesuchId, 'fall', darlehen.fallId]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

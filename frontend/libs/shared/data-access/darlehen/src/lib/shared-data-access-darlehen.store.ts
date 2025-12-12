@@ -14,6 +14,7 @@ import {
   DarlehenServiceDarlehenUpdateGsRequestParams,
   DarlehenServiceDarlehenUpdateSbRequestParams,
   DarlehenServiceDarlehenZurueckweisenRequestParams,
+  DarlehenServiceGetAllDarlehenSbRequestParams,
   DarlehenServiceGetDarlehenDashboardSbRequestParams,
   DarlehenServiceGetDarlehenGsRequestParams,
   DarlehenServiceGetDarlehenSbRequestParams,
@@ -30,14 +31,14 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type DarlehenState = {
-  // getDarlehenRequest: RemoteData<Darlehen | null>;
   cachedDarlehen: CachedRemoteData<Darlehen>;
+  darlehenList: CachedRemoteData<Darlehen[]>;
   paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
-  // getDarlehenRequest: initial(),
   cachedDarlehen: initial(),
+  darlehenList: initial(),
   paginatedSbDarlehenDashboard: initial(),
 };
 
@@ -63,6 +64,13 @@ export class DarlehenStore extends signalStore(
     return {
       darlehen: fromCachedDataSig(this.cachedDarlehen),
       loading: isPending(this.cachedDarlehen()),
+    };
+  });
+
+  darlehenListViewSig = computed(() => {
+    return {
+      darlehenList: fromCachedDataSig(this.darlehenList),
+      loading: isPending(this.darlehenList()),
     };
   });
 
@@ -197,6 +205,25 @@ export class DarlehenStore extends signalStore(
           .pipe(
             handleApiResponse((darlehen) =>
               patchState(this, { cachedDarlehen: darlehen }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  getAllDarlehenSb$ = rxMethod<DarlehenServiceGetAllDarlehenSbRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          darlehenList: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.darlehenService
+          .getAllDarlehenSb$(req)
+          .pipe(
+            handleApiResponse((darlehen) =>
+              patchState(this, { darlehenList: darlehen }),
             ),
           ),
       ),

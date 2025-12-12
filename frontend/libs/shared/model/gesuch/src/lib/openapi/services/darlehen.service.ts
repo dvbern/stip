@@ -76,12 +76,17 @@ export interface DarlehenServiceDarlehenZurueckweisenRequestParams {
     kommentar: Kommentar;
 }
 
+<<<<<<< HEAD
 export interface DarlehenServiceDeleteDarlehenDokumentRequestParams {
     dokumentId: string;
 }
 
 export interface DarlehenServiceDownloadDarlehenDokumentRequestParams {
     token: string;
+=======
+export interface DarlehenServiceGetAllDarlehenSbRequestParams {
+    fallId: string;
+>>>>>>> 3cafbb58f (feat(KSTIP-2696): Add API endpoint to retrieve all Darlehen SB, Updated Dashboard  routing, Updated GS Darlehen Conditions)
 }
 
 export interface DarlehenServiceGetDarlehenDashboardSbRequestParams {
@@ -923,11 +928,16 @@ export class DarlehenService {
     }
 
     /**
+<<<<<<< HEAD
      * deletes a Darlehen Dokument
+=======
+     * Return all darlehen for a given fallId
+>>>>>>> 3cafbb58f (feat(KSTIP-2696): Add API endpoint to retrieve all Darlehen SB, Updated Dashboard  routing, Updated GS Darlehen Conditions)
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+<<<<<<< HEAD
      public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
      public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
      public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
@@ -935,6 +945,15 @@ export class DarlehenService {
         const dokumentId = requestParameters.dokumentId;
         if (dokumentId === null || dokumentId === undefined) {
             throw new Error('Required parameter dokumentId was null or undefined when calling deleteDarlehenDokument$.');
+=======
+     public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Darlehen>>;
+     public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Darlehen>>>;
+     public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Darlehen>>>;
+     public getAllDarlehenSb$(requestParameters: DarlehenServiceGetAllDarlehenSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAllDarlehenSb$.');
+>>>>>>> 3cafbb58f (feat(KSTIP-2696): Add API endpoint to retrieve all Darlehen SB, Updated Dashboard  routing, Updated GS Darlehen Conditions)
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -956,6 +975,10 @@ export class DarlehenService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+<<<<<<< HEAD
+=======
+                'application/json',
+>>>>>>> 3cafbb58f (feat(KSTIP-2696): Add API endpoint to retrieve all Darlehen SB, Updated Dashboard  routing, Updated GS Darlehen Conditions)
                 'text/plain'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
@@ -981,8 +1004,13 @@ export class DarlehenService {
             }
         }
 
+<<<<<<< HEAD
         const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+=======
+        const localVarPath = `/getAllDarlehenSb/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Array<Darlehen>>('get', `${this.configuration.basePath}${localVarPath}`,
+>>>>>>> 3cafbb58f (feat(KSTIP-2696): Add API endpoint to retrieve all Darlehen SB, Updated Dashboard  routing, Updated GS Darlehen Conditions)
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -995,6 +1023,7 @@ export class DarlehenService {
     }
 
     /**
+<<<<<<< HEAD
      * Download Darlehen Dokument
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1063,6 +1092,8 @@ export class DarlehenService {
     }
 
     /**
+=======
+>>>>>>> 3cafbb58f (feat(KSTIP-2696): Add API endpoint to retrieve all Darlehen SB, Updated Dashboard  routing, Updated GS Darlehen Conditions)
      * Returns darlehen filtered by status and sb
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
