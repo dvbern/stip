@@ -82,7 +82,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(SB_GESUCH_READ)
     public DarlehenDto getDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
-        return null;
+        return darlehenService.getDarlehenSb(darlehenId);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         SortOrder sortOrder
     ) {
         darlehenAuthorizer.canGetDarlehenDashboardSb();
-        return darlehenService.getDarlehenSb(
+        return darlehenService.getDarlehenDashboardSb(
             getDarlehenSbQueryType,
             page,
             pageSize,

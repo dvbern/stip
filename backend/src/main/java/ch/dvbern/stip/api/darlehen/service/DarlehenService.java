@@ -100,7 +100,14 @@ public class DarlehenService {
     }
 
     @Transactional
-    public PaginatedSbDarlehenDashboardDto getDarlehenSb(
+    public DarlehenDto getDarlehenSb(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+
+        return darlehenMapper.toDto(darlehen);
+    }
+
+    @Transactional
+    public PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(
         final GetDarlehenSbQueryType getDarlehenSbQueryType,
         final Integer page,
         final Integer pageSize,
