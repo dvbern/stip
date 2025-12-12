@@ -22,6 +22,7 @@ import { Darlehen } from '../model/darlehen';
 import { DarlehenDokumentType } from '../model/darlehenDokumentType';
 import { DarlehenUpdateGs } from '../model/darlehenUpdateGs';
 import { DarlehenUpdateSb } from '../model/darlehenUpdateSb';
+import { FileDownloadToken } from '../model/fileDownloadToken';
 import { GetDarlehenSbQueryType } from '../model/getDarlehenSbQueryType';
 import { Kommentar } from '../model/kommentar';
 import { NullableDarlehenDokument } from '../model/nullableDarlehenDokument';
@@ -75,6 +76,14 @@ export interface DarlehenServiceDarlehenZurueckweisenRequestParams {
     kommentar: Kommentar;
 }
 
+export interface DarlehenServiceDeleteDarlehenDokumentRequestParams {
+    dokumentId: string;
+}
+
+export interface DarlehenServiceDownloadDarlehenDokumentRequestParams {
+    token: string;
+}
+
 export interface DarlehenServiceGetDarlehenDashboardSbRequestParams {
     getDarlehenSbQueryType: GetDarlehenSbQueryType;
     fallNummer?: string;
@@ -94,6 +103,10 @@ export interface DarlehenServiceGetDarlehenDashboardSbRequestParams {
 export interface DarlehenServiceGetDarlehenDokumentRequestParams {
     darlehenId: string;
     dokumentType: DarlehenDokumentType;
+}
+
+export interface DarlehenServiceGetDarlehenDownloadTokenRequestParams {
+    dokumentId: string;
 }
 
 export interface DarlehenServiceGetDarlehenGsRequestParams {
@@ -342,7 +355,7 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
+        const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -910,6 +923,146 @@ export class DarlehenService {
     }
 
     /**
+     * deletes a Darlehen Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteDarlehenDokument$(requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDarlehenDokument$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Download Darlehen Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<Blob>;
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpResponse<Blob>>;
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpEvent<Blob>>;
+     public downloadDarlehenDokument$(requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<any> {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadDarlehenDokument$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>token, 'token');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/octet-stream'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        const localVarPath = `/darlehen/dokument/download`;
+        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns darlehen filtered by status and sb
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1115,8 +1268,81 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
+        const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
         return this.httpClient.request<NullableDarlehenDokument>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * get Token to downlaod Darlehen Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getDarlehenDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getDarlehenDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getDarlehenDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getDarlehenDownloadToken$(requestParameters: DarlehenServiceGetDarlehenDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDarlehenDownloadToken$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

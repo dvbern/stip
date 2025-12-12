@@ -8,6 +8,7 @@ import {
 import { firstValueFrom, map } from 'rxjs';
 
 import {
+  DarlehenService,
   DatenschutzbriefService,
   DokumentArt,
   DokumentService,
@@ -22,6 +23,10 @@ type DownloadOptions =
       type: 'datenschutzbrief';
       id: string;
       gesuchTrancheId: string;
+    }
+  | {
+      type: 'darlehen';
+      id: string;
     }
   | {
       type: 'berechnungsblatt';
@@ -48,6 +53,7 @@ type DownloadOptions =
 export class SharedUiDownloadButtonDirective {
   optionsSig = input.required<DownloadOptions>({ alias: 'dvDownloadButton' });
   private datenschutzbriefService = inject(DatenschutzbriefService);
+  private darlehenService = inject(DarlehenService);
   private dokumentService = inject(DokumentService);
   private gesuchService = inject(GesuchService);
   private verfuegungService = inject(VerfuegungService);
@@ -60,6 +66,7 @@ export class SharedUiDownloadButtonDirective {
       getDownloadObservable$(
         this.optionsSig(),
         this.datenschutzbriefService,
+        this.darlehenService,
         this.dokumentService,
         this.gesuchService,
         this.verfuegungService,
@@ -74,6 +81,7 @@ export class SharedUiDownloadButtonDirective {
 const getDownloadObservable$ = (
   downloadOptions: DownloadOptions,
   datenschutzbriefService: DatenschutzbriefService,
+  darlehenService: DarlehenService,
   dokumentService: DokumentService,
   gesuchService: GesuchService,
   verfuegungService: VerfuegungService,
@@ -90,6 +98,17 @@ const getDownloadObservable$ = (
           map(
             ({ token }) =>
               `/api/v1/datenschutzbrief/${downloadOptions.gesuchTrancheId}/download?token=${token}`,
+          ),
+        );
+    }
+    case 'darlehen': {
+      return darlehenService
+        .getDarlehenDownloadToken$({
+          dokumentId: id,
+        })
+        .pipe(
+          map(
+            ({ token }) => `/api/v1/darlehen/dokument/download?token=${token}`,
           ),
         );
     }

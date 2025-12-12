@@ -341,10 +341,13 @@ export class UploadStore {
             switch (action.dokument.art) {
               case 'CUSTOM_DOKUMENT':
               case 'GESUCH_DOKUMENT':
-              case 'DARLEHEN_DOKUMENT':
                 return this.deleteDokumentByAppType$(
                   action.dokumentId,
                   !!dokumentToDelete?.error,
+                );
+              case 'DARLEHEN_DOKUMENT':
+                return this.darlehenService.deleteDarlehenDokument$(
+                  ...deleteCallParams,
                 );
               case 'UNTERSCHRIFTENBLATT':
                 return this.documentService.deleteUnterschriftenblattDokument$(

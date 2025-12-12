@@ -24,14 +24,28 @@
           <span class="material-symbols-rounded align-middle">clear</span>
         </button>
       } @else {
-        <button
-          type="button"
-          class="btn btn-link text-truncate filename fs-7 tw:flex tw:!p-0 tw:!no-underline"
-          data-testid="download-button"
-          [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
-        >
-          <span class="material-symbols-rounded text-muted align-middle">download</span>
-        </button>
+        @switch (upload.dokumentModel.art) {
+          @case ('DARLEHEN_DOKUMENT') {
+            <button
+              type="button"
+              class="btn btn-link text-truncate filename fs-7 tw:flex tw:!p-0 tw:!no-underline"
+              data-testid="download-button"
+              [dvDownloadButton]="{ type: 'darlehen', id: document.file.id }"
+            >
+              <span class="material-symbols-rounded text-muted align-middle">download</span>
+            </button>
+          }
+          @default {
+            <button
+              type="button"
+              class="btn btn-link text-truncate filename fs-7 tw:flex tw:!p-0 tw:!no-underline"
+              data-testid="download-button"
+              [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
+            >
+              <span class="material-symbols-rounded text-muted align-middle">download</span>
+            </button>
+          }
+        }
         <button
           type="button"
           class="dv-icon-button delete-icon ms-2 flex-shrink-0"

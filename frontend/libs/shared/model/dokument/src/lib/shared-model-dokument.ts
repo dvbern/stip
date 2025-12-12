@@ -18,8 +18,10 @@ import {
 } from '@dv/shared/model/permission-state';
 import { Extends } from '@dv/shared/model/type-util';
 
+type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT';
+
 export type SharedModelStandardGesuchDokument = {
-  art: Extends<DokumentArt, 'GESUCH_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'GESUCH_DOKUMENT'>;
   dokumentTyp: DokumentTyp;
   permissions: PermissionMap;
   trancheId: string;
@@ -27,7 +29,7 @@ export type SharedModelStandardGesuchDokument = {
 };
 
 export type SharedModelAdditionalGesuchDokument = {
-  art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
+  art: Extends<AvailableDokumentArt, 'UNTERSCHRIFTENBLATT'>;
   dokumentTyp: UnterschriftenblattDokumentTyp;
   permissions: PermissionMap;
   gesuchId: string;
@@ -36,7 +38,7 @@ export type SharedModelAdditionalGesuchDokument = {
 };
 
 export type SharedModelCustomGesuchDokument = {
-  art: Extends<DokumentArt, 'CUSTOM_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'CUSTOM_DOKUMENT'>;
   dokumentTyp: CustomDokumentTyp;
   permissions: PermissionMap;
   gesuchId: string;
@@ -45,7 +47,7 @@ export type SharedModelCustomGesuchDokument = {
 };
 
 export type SharedModelDarlehenDokument = {
-  art: Extends<DokumentArt, 'DARLEHEN_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'DARLEHEN_DOKUMENT'>;
   dokumentTyp: DarlehenDokumentType;
   permissions: DarlehenPermissionMap;
   darlehenId: string;
