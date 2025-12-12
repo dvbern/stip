@@ -20,32 +20,42 @@ package ch.dvbern.stip.api.darlehen.resource;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DarlehenResource;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
 import io.smallrye.common.annotation.Blocking;
+import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIGABESTELLE_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
@@ -55,6 +65,10 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 public class DarlehenResourceImpl implements DarlehenResource {
 
     private final DarlehenService darlehenService;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final BenutzerService benutzerService;
+    private final ConfigService configService;
+    private final JWTParser jwtPar;
     private final DarlehenAuthorizer darlehenAuthorizer;
 
     @Override
@@ -179,5 +193,39 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public NullableDarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
         darlehenAuthorizer.canGetDarlehenDokument();
         return darlehenService.getDarlehenDokument(darlehenId, dokumentTyp);
+    }
+
+    @Blocking
+    @Override
+    @PermitAll
+    public RestMulti<Buffer> downloadDarlehenDokument(String token) {
+        final var dokumentId = dokumentDownloadService.getClaimId(
+            jwtPar,
+            token,
+            configService.getSecret(),
+            DokumentDownloadConstants.DARLEHEN_ID_CLAIM
+        );
+        return darlehenService.getDokument(dokumentId);
+    }
+
+    @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public FileDownloadTokenDto getDarlehenDownloadToken(UUID dokumentId) {
+        darlehenAuthorizer.canGetDarlehenDokument();
+
+        return dokumentDownloadService.getFileDownloadToken(
+            dokumentId,
+            DokumentDownloadConstants.DARLEHEN_ID_CLAIM,
+            benutzerService,
+            configService
+        );
+    }
+
+    @Blocking
+    @Override
+    @RolesAllowed(GS_GESUCH_UPDATE)
+    public void deleteDarlehenDokument(UUID dokumentId) {
+        darlehenAuthorizer.canDeleteDarlehenDokument(dokumentId);
+        darlehenService.removeDokument(dokumentId);
     }
 }

@@ -22,6 +22,7 @@ public final class DokumentDownloadConstants {
 
     public static final String GESUCH_ID_CLAIM = "gesuch_id";
     public static final String DOKUMENT_ID_CLAIM = "dokument_id";
+    public static final String DARLEHEN_ID_CLAIM = "darlehen_id";
     public static final String VERFUEGUNGS_ID_CLAIM = "verfuegungs_id";
     public static final String MASSENDRUCK_JOB_ID_CLAIM = "massendruck_id";
 }

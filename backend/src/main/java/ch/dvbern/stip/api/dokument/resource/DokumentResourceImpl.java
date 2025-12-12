@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
+import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
@@ -85,6 +86,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final BenutzerService benutzerService;
     private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
+    private final DarlehenAuthorizer darlehenAuthorizer;
     private final DokumentAuthorizer dokumentAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
@@ -232,7 +234,6 @@ public class DokumentResourceImpl implements DokumentResource {
             case GESUCH_DOKUMENT, CUSTOM_DOKUMENT -> gesuchDokumentService.getDokument(dokumentId);
             case UNTERSCHRIFTENBLATT -> unterschriftenblattService.getDokument(dokumentId);
             case BESCHWERDE_ENTSCHEID -> beschwerdeEntscheidService.getDokument(dokumentId);
-            case DARLEHEN_DOKUMENT -> darlehenService.getDokument(dokumentId);
         };
     }
 

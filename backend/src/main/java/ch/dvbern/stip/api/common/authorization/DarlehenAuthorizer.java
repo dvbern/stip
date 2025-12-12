@@ -186,6 +186,12 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
+    public void canDeleteDarlehenDokument(UUID dokumentId) {
+        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+
+        assertStatus(darlehen.getId(), DarlehenStatus.IN_BEARBEITUNG_GS);
+    }
+
     public void assertStatus(UUID darlehenId, DarlehenStatus darlehenStatus) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
