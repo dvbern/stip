@@ -94,12 +94,14 @@
       </div>
     </mat-menu>
 
+    <!-- todo: make sure that correct darlehen is highlighted -->
     @let darlehens = darlehenStore.darlehenListViewSig();
     <button
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="sb-gesuch-header-darlehen-nav-menu"
       [matMenuTriggerFor]="darlehenMenu"
+      [disabled]="!darlehens.darlehenList?.length"
     >
       <i class="material-symbols-rounded me-2 text-white">account_balance</i>
       <span>{{ 'shared.header.darlehen' | transloco }}</span>

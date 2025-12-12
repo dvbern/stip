@@ -7,7 +7,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import {
   getTranslocoModule,
@@ -43,7 +42,6 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
       ],
       providers: [
         GesuchInfoStore,
-        DarlehenStore,
         provideRouter([]),
         provideHttpClient(),
         provideMockStore({

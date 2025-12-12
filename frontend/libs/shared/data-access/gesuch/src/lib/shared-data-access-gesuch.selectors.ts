@@ -35,8 +35,6 @@ const { selectRouteParam, selectQueryParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
 
-export const selectFallId = selectRouteParam('fallId');
-
 const isExistingTrancheTyp = (
   trancheTyp: string | undefined,
 ): trancheTyp is GesuchUrlType => {

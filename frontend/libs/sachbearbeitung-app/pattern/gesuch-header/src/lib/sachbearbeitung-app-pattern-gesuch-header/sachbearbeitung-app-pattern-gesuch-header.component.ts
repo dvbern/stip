@@ -31,7 +31,6 @@ import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectFallId,
   selectRevision,
   selectRouteId,
   selectRouteTrancheId,
@@ -101,7 +100,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   @Output() openSidenav = new EventEmitter<void>();
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
-  fallIdSig = this.store.selectSignal(selectFallId);
+
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
 
@@ -161,15 +160,9 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   constructor() {
     effect(() => {
-      const fallId = this.fallIdSig();
-      if (fallId) {
-        this.darlehenStore.getAllDarlehenSb$({ fallId });
-      }
-    });
-
-    effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
+        // this.darlehenStore.getAllDarlehenSb$({ gesuchId });
         this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       }

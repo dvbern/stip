@@ -66,7 +66,6 @@ export const gesuchAppFeatureDarlehenRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
     path: ':fallId',
     pathMatch: 'prefix',
-    providers: [DarlehenStore],
     resolve: { darlehen: darlehenResolver },
     component: GesuchAppFeatureDarlehenComponent,
     title: 'shared.darlehen.title',

@@ -42,7 +42,7 @@ const initialState: DarlehenState = {
   paginatedSbDarlehenDashboard: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DarlehenStore extends signalStore(
   { protectedState: false },
   withState(initialState),
