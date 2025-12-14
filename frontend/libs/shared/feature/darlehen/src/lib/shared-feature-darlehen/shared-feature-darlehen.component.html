@@ -15,7 +15,6 @@
       <div>
         <span class="tw:font-bold"> {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }} </span>:
         <span>0</span>
-        <div>{{ darlehenPermissionsSig()?.canWriteSb }}</div>
       </div>
 
       <!-- darlehenGewaehren mat-radio-group -->
@@ -87,26 +86,26 @@
       }
 
       @if (darlehenPermissionsSig()?.canFreigeben) {
-        <ng-template>
-          <!-- darlehen Freigeben -->
-          <button
-            type="button"
-            data-testid="button-darlehen-freigeben"
-            (click)="darlehenFreigeben()"
-            class="btn btn-primary"
-          >
-            {{ 'shared.form.darlehen.freigeben' | transloco }}
-          </button>
-          <!-- dalehen zurückweisen -->
-          <button
-            type="button"
-            data-testid="button-darlehen-zurueckweisen"
-            (click)="darlehenZurueckweisen()"
-            class="btn btn-primary"
-          >
-            {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
-          </button>
-        </ng-template>
+        <!-- darlehen Freigeben -->
+        <button
+          type="button"
+          data-testid="button-darlehen-freigeben"
+          (click)="darlehenFreigeben()"
+          [disabled]="formSb.invalid || !sbFormSavedSig()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.freigeben' | transloco }}
+        </button>
+        <!-- dalehen zurückweisen -->
+        <button
+          type="button"
+          data-testid="button-darlehen-zurueckweisen"
+          (click)="darlehenZurueckweisen()"
+          [disabled]="formSb.invalid || !sbFormSavedSig()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
+        </button>
       }
 
       @if (darlehenPermissionsSig()?.canApproveDarlehen) {
@@ -285,7 +284,7 @@
     </div>
 
     <!-- Document Error -->
-    @if (!isAllDocumentsUploadedSig()) {
+    @if (!isAllDocumentsUploadedSig() || !formGs.pristine) {
       <mat-error class="tw:block!">
         {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
       </mat-error>
@@ -295,11 +294,11 @@
       <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
-      <div>
+      @if (darlehenPermissionsSig()?.canEingeben) {
         <button type="submit" (click)="darlehenEingeben()" class="btn btn-primary" data-testid="button-create-darlehen">
           {{ 'shared.form.darlehen.create' | transloco }}
         </button>
-      </div>
+      }
     </dv-shared-ui-step-form-buttons>
   </form>
 }

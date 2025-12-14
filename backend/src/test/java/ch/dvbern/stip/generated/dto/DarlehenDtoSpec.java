@@ -42,7 +42,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
   DarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUENDE
+  DarlehenDtoSpec.JSON_PROPERTY_GRUENDE,
+  DarlehenDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
 @JsonTypeName("Darlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -76,6 +77,9 @@ public class DarlehenDtoSpec {
 
   public static final String JSON_PROPERTY_GRUENDE = "gruende";
   private List<DarlehenGrundDtoSpec> gruende;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  private String timestampErstellt;
 
   public DarlehenDtoSpec() {
   }
@@ -351,6 +355,32 @@ public class DarlehenDtoSpec {
     this.gruende = gruende;
   }
 
+
+  public DarlehenDtoSpec timestampErstellt(String timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+   /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTimestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -369,12 +399,13 @@ public class DarlehenDtoSpec {
         Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.gruende, darlehen.gruende);
+        Objects.equals(this.gruende, darlehen.gruende) &&
+        Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende);
+    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
   }
 
   @Override
@@ -391,6 +422,7 @@ public class DarlehenDtoSpec {
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

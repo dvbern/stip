@@ -56,6 +56,7 @@
   "shared.header.darlehen": "Darlehen",
   "shared.header.tranche.item": "Tranche {{ index }} vom {{ date }}",
   "shared.header.aenderung.item": "Änderung {{ index }} vom {{ date }}",
+  "shared.header.darlehen.item": "Darlehen vom {{ date }}",
   "shared.header.aenderungen.completed": "Akzeptierte Änderungen",
   "shared.header.aenderungen.rejected": "Abgelehnte Änderungen",
   "shared.header.aenderungen.initial": "Erstgesuch",

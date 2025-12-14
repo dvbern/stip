@@ -120,7 +120,6 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
           ),
       },
-      // todo: create darlehen detail routing, propbably not here, similar route params as gesuch
       {
         path: 'darlehen',
         canActivate: [hasBenutzer],

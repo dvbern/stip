@@ -94,7 +94,6 @@
       </div>
     </mat-menu>
 
-    <!-- todo: make sure that correct darlehen is highlighted -->
     @let darlehens = darlehenStore.darlehenListViewSig();
     <button
       type="button"
@@ -114,15 +113,17 @@
             [routerLink]="['/', 'darlehen', darlehen.id, 'gesuch', gesuchId]"
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="darlehen-nav-menu-item"
+            [class.active]="darlehenIdSig() === darlehen.id"
           >
-            <!-- todo: finish -->
-            <!-- <span>
-            {{
-              'shared.header.darlehen.item'
-                | transloco: { fallNummer: darlehen.fallNummer, index: $index + 1 }
-            }}
-          </span> -->
-            <span>{{ darlehen.betrag }}</span>
+            <span>
+              {{
+                'shared.header.darlehen.item'
+                  | transloco
+                    : {
+                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+                      }
+              }}
+            </span>
           </a>
         }
       </div>

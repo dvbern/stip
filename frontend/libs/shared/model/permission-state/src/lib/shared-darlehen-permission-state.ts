@@ -109,17 +109,3 @@ export const getDarlehenPermissions = (
     status,
   };
 };
-
-// todo: needed?
-// export const prepareDarlehenPermissions = (
-//   status: DarlehenStatus,
-//   appType: AppType,
-//   rolesMap: RolesMap,
-// ) => {
-//   const { permissions } = getDarlehenPermissions(status, appType, rolesMap);
-
-//   return {
-//     readonly: !permissions.canWrite,
-//     permissions,
-//   };
-// };

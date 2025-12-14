@@ -6173,6 +6173,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DarlehenGrund'
+        timestampErstellt:
+          type: string
     FileDownloadToken:
       required:
         - token

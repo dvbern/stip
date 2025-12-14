@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
@@ -31,6 +31,7 @@ import { Observable, merge } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
+import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -100,9 +101,9 @@ export class SharedFeatureDarlehenComponent {
   private formUtils = inject(SharedUtilFormService);
   private dialog = inject(MatDialog);
   private elementRef = inject(ElementRef);
-  private route = inject(ActivatedRoute);
   private compileTimeConfig = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
+  private gesuchDashboardStore = inject(DashboardStore, { optional: true });
 
   private store = inject(Store);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
@@ -117,19 +118,21 @@ export class SharedFeatureDarlehenComponent {
   maskitoNumber = maskitoNumber;
 
   darlehenPermissionsSig = computed(() => {
+    const delegierung =
+      this.gesuchDashboardStore?.dashboardViewSig()?.delegierung;
+
     return getDarlehenPermissions(
-      // todo: can we have the status not being optional?
       this.darlehenSig()?.status,
       this.compileTimeConfig.appType,
       this.permissionStore.rolesMapSig(),
+      delegierung,
     ).permissions;
   });
 
-  // todo: add delegation as well, as input, so the permissions can be calculated correctly
   private createUploadOptionsSig = createDarlehenUploadOptionsFactory({
-    darlehenId: this.darlehenSig()?.id,
+    darlehen: this.darlehenSig,
     allowTypes: this.config().deploymentConfig?.allowedMimeTypes?.join(','),
-    permissions: this.darlehenPermissionsSig(),
+    permissions: this.darlehenPermissionsSig,
   });
 
   // Todo: error is not shown yet, or not anymore
@@ -156,25 +159,21 @@ export class SharedFeatureDarlehenComponent {
     kommentar: [<string | null>null, [Validators.required]],
   });
 
-  formGs = this.formBuilder.group(
-    {
-      betragGewuenscht: [<string | null>null, [Validators.required]],
-      schulden: [<string | null>null, [Validators.required]],
-      anzahlBetreibungen: [<number | null>null, [Validators.required]],
-      gruende: this.formBuilder.group(
-        {
-          ANSCHAFFUNGEN_FUER_AUSBILDUNG: [<boolean | undefined>undefined],
-          AUSBILDUNG_ZWOELF_JAHRE: [<boolean | undefined>undefined],
-          HOHE_GEBUEHREN: [<boolean | undefined>undefined],
-          NICHT_BERECHTIGT: [<boolean | undefined>undefined],
-          ZWEITAUSBILDUNG: [<boolean | undefined>undefined],
-        } satisfies Record<DarlehenGrund, [boolean | undefined]>,
-        { validators: [this.atLeastOneCheckboxChecked] },
-      ),
-    },
-    // todo: make this work, but this approach was not best
-    // { validators: [this.allDocumentsValidator] },
-  );
+  formGs = this.formBuilder.group({
+    betragGewuenscht: [<string | null>null, [Validators.required]],
+    schulden: [<string | null>null, [Validators.required]],
+    anzahlBetreibungen: [<number | null>null, [Validators.required]],
+    gruende: this.formBuilder.group(
+      {
+        ANSCHAFFUNGEN_FUER_AUSBILDUNG: [<boolean | undefined>undefined],
+        AUSBILDUNG_ZWOELF_JAHRE: [<boolean | undefined>undefined],
+        HOHE_GEBUEHREN: [<boolean | undefined>undefined],
+        NICHT_BERECHTIGT: [<boolean | undefined>undefined],
+        ZWEITAUSBILDUNG: [<boolean | undefined>undefined],
+      } satisfies Record<DarlehenGrund, [boolean | undefined]>,
+      { validators: [this.atLeastOneCheckboxChecked] },
+    ),
+  });
 
   gewaehrenChangedSig = toSignal(this.formSb.controls.gewaehren.valueChanges);
   showBetragFieldSig = computed(() => {
@@ -228,6 +227,7 @@ export class SharedFeatureDarlehenComponent {
       : null;
   });
 
+  // todo: find better solution with scph, currently not really reacting on form changes.
   hasUnsavedChanges = false;
   gsFormSavedSig = signal(false);
   sbFormSavedSig = signal(false);
@@ -245,7 +245,6 @@ export class SharedFeatureDarlehenComponent {
       if (!darlehen) {
         return;
       }
-      // todo: handle null values?
       this.formSb.patchValue({
         gewaehren: darlehen.gewaehren,
         betrag: darlehen.betrag?.toString(),
@@ -321,10 +320,14 @@ export class SharedFeatureDarlehenComponent {
       .subscribe((result) => {
         if (result) {
           this.darlehenStore.darlehenUpdateAndEingeben$({
-            darlehenId: darlehen.id,
-            darlehenUpdateGs: this.buildUpdatedGsFrom(),
+            data: {
+              darlehenId: darlehen.id,
+              darlehenUpdateGs: this.buildUpdatedGsFrom(),
+            },
+            onSuccess: () => {
+              this.gsFormSavedSig.set(true);
+            },
           });
-          this.gsFormSavedSig.set(true);
         }
       });
   }
@@ -355,10 +358,14 @@ export class SharedFeatureDarlehenComponent {
 
     const updatedDarlehen = this.buildUpdatedSbFrom();
 
-    // todo: add saved signal in after success, if behavior is like this.
     this.darlehenStore.darlehenUpdateSb$({
-      darlehenId: darlehen.id,
-      darlehenUpdateSb: updatedDarlehen,
+      data: {
+        darlehenId: darlehen.id,
+        darlehenUpdateSb: updatedDarlehen,
+      },
+      onSuccess: () => {
+        this.sbFormSavedSig.set(true);
+      },
     });
   }
 

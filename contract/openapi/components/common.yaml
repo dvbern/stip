@@ -993,6 +993,8 @@ Darlehen:
       type: array
       items:
         $ref: '#/DarlehenGrund'
+    timestampErstellt:
+      type: string
 DarlehenGrund:
   enum:
     - NICHT_BERECHTIGT

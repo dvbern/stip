@@ -8,6 +8,7 @@ import {
 } from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
+  Darlehen,
   DarlehenDokumentType,
   Dokument,
   DokumentTyp,
@@ -360,9 +361,9 @@ export function createUploadOptionsFactory<
 
 export function createDarlehenUploadOptionsFactory<
   T extends {
-    darlehenId: string | undefined;
+    darlehen: Signal<Darlehen | null | undefined>;
     allowTypes: string | undefined;
-    permissions: DarlehenPermissionMap | undefined;
+    permissions: Signal<DarlehenPermissionMap | undefined>;
   },
 >(view: T) {
   return (
@@ -370,12 +371,12 @@ export function createDarlehenUploadOptionsFactory<
   ) => {
     return computed<DokumentOptions | null>(() => {
       const dokumentTyp = lazyDokumentTyp(view);
-      return dokumentTyp &&
-        view.darlehenId &&
-        view.allowTypes &&
-        view.permissions
+      const darlehenId = view.darlehen()?.id;
+      const permissions = view.permissions();
+      const allowTypes = view.allowTypes;
+      return dokumentTyp && darlehenId && allowTypes && permissions
         ? {
-            allowTypes: view.allowTypes,
+            allowTypes,
             info: {
               type: 'TRANSLATABLE',
               title: DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -385,8 +386,8 @@ export function createDarlehenUploadOptionsFactory<
                 ],
             },
             dokument: {
-              permissions: view.permissions,
-              darlehenId: view.darlehenId,
+              permissions,
+              darlehenId,
               dokumentTyp,
               art: 'DARLEHEN_DOKUMENT',
             },
