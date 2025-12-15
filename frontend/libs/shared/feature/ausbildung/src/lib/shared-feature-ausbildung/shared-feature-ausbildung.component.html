@@ -239,9 +239,7 @@
         >{{ 'shared.form.ausbildung.manuell.label' | transloco }}</mat-checkbox
       >
       <div class="group-errors">
-        @if (
-          form.controls.ausbildungNichtGefunden.touched && form.controls.ausbildungNichtGefunden.errors?.['requiredOff']
-        ) {
+        @if (form.controls.ausbildungNichtGefunden.errors?.['requiredOff']) {
           <mat-error>
             {{ 'shared.form.ausbildung.validation.notFound.part1' | transloco }}
             <a [routerLink]="['/administration/ausbildungsstaette']">{{

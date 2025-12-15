@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -83,11 +84,16 @@ public abstract class BusinessPartnerCreateMapper {
         return land.getIso2code();
     }
 
-    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = "iban", target = "IBAN", qualifiedByName = "getIban")
     @Mapping(source = ".", target = "ACCOUNTHOLDER", qualifiedByName = "getAccountHolder")
     public abstract BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
         Zahlungsverbindung zahlungsverbindung
     );
+
+    @Named("getIban")
+    public String getIban(String iban) {
+        return SapMapperUtil.stripWhitespace(iban);
+    }
 
     @Named("getAccountHolder")
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
@@ -118,7 +124,14 @@ public abstract class BusinessPartnerCreateMapper {
     public List<BusinessPartnerCreateRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
         Fall fall
     ) {
-        return List.of(toPaymentDetails(fall.getRelevantZahlungsverbindung()));
+        final var paymentdetail =
+            toPaymentDetails(fall.getRelevantZahlungsverbindung());
+        if (fall.getAuszahlung().isAuszahlungAnSozialdienst()) {
+            final LocalDate now = LocalDate.now();
+            paymentdetail.setBANKDETAILVALIDFROM(SapMapperUtil.getPaymentdetailValidFromGregorianCalendar(now));
+            paymentdetail.setBANKDETAILVALIDTO(SapMapperUtil.getPaymentdetailValidToGregorianCalendar(now));
+        }
+        return List.of(paymentdetail);
     }
 
     @Named("getSenderParmsDelivery")
