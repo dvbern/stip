@@ -8,6 +8,7 @@ import {
 } from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
+  Darlehen,
   DarlehenDokumentType,
   Dokument,
   DokumentTyp,
@@ -338,7 +339,6 @@ export function createUploadOptionsFactory<
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? {
-            permissions,
             allowTypes,
             info: {
               type: 'TRANSLATABLE',
@@ -347,6 +347,7 @@ export function createUploadOptionsFactory<
                 DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
             },
             dokument: {
+              permissions,
               trancheId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
@@ -360,9 +361,9 @@ export function createUploadOptionsFactory<
 
 export function createDarlehenUploadOptionsFactory<
   T extends {
-    darlehenId: string | undefined;
+    darlehen: Signal<Darlehen | null | undefined>;
     allowTypes: string | undefined;
-    permissions: DarlehenPermissionMap | undefined;
+    permissions: Signal<DarlehenPermissionMap | undefined>;
   },
 >(view: T) {
   return (
@@ -370,13 +371,12 @@ export function createDarlehenUploadOptionsFactory<
   ) => {
     return computed<DokumentOptions | null>(() => {
       const dokumentTyp = lazyDokumentTyp(view);
-      return dokumentTyp &&
-        view.darlehenId &&
-        view.allowTypes &&
-        view.permissions
+      const darlehenId = view.darlehen()?.id;
+      const permissions = view.permissions();
+      const allowTypes = view.allowTypes;
+      return dokumentTyp && darlehenId && allowTypes && permissions
         ? {
-            allowTypes: view.allowTypes,
-            permissions: view.permissions,
+            allowTypes,
             info: {
               type: 'TRANSLATABLE',
               title: DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -386,7 +386,8 @@ export function createDarlehenUploadOptionsFactory<
                 ],
             },
             dokument: {
-              darlehenId: view.darlehenId,
+              permissions,
+              darlehenId,
               dokumentTyp,
               art: 'DARLEHEN_DOKUMENT',
             },
@@ -414,7 +415,6 @@ export function createGesuchDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TRANSLATABLE',
       title: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -422,6 +422,7 @@ export function createGesuchDokumentOptions(options: {
         DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
     },
     dokument: {
+      permissions,
       dokumentTyp,
       trancheId,
       gesuchDokument,
@@ -451,12 +452,12 @@ export function createAdditionalDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TRANSLATABLE',
       title: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
     },
     dokument: {
+      permissions,
       dokumentTyp,
       gesuchId,
       trancheId,
@@ -487,13 +488,13 @@ export function createCustomDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TEXT',
       title: dokumentTyp.type,
       description: dokumentTyp.description,
     },
     dokument: {
+      permissions,
       dokumentTyp,
       gesuchId,
       trancheId,

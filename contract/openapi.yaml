@@ -273,7 +273,91 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/{darlehenId}/{dokumentType}:
+  /darlehen/dokument/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
+      operationId: getDarlehenDownloadToken
+      summary: get Token to downlaod Darlehen Dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenDokument
+      summary: Download Darlehen Dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/{dokumentId}:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteDarlehenDokument
+      summary: deletes a Darlehen Dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/{darlehenId}/{dokumentType}:
     parameters:
       - name: darlehenId
         schema:
@@ -517,6 +601,38 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: darlehenUpdateGs
       summary: Update darlehen as gs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/getAllDarlehenSb/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return all darlehen for a given fallId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDarlehenSb
+      summary: Return all darlehen for a given fallId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2709,7 +2825,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: deleteUnterschriftenblattDokument
-      summary: deletes a Dokument
+      summary: deletes a Unterschriftenblatt Dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6057,6 +6173,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DarlehenGrund'
+        timestampErstellt:
+          type: string
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
     Dokument:
       required:
         - id
@@ -6365,13 +6490,6 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
-    FileDownloadToken:
-      required:
-        - token
-      type: object
-      properties:
-        token:
-          type: string
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -7031,7 +7149,6 @@ components:
         - UNTERSCHRIFTENBLATT
         - CUSTOM_DOKUMENT
         - BESCHWERDE_ENTSCHEID
-        - DARLEHEN_DOKUMENT
       type: string
     DokumentTyp:
       enum:

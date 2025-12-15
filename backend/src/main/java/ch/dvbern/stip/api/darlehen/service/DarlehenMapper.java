@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
@@ -38,7 +37,7 @@ import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class, uses = DarlehenDokumentMapper.class)
 public abstract class DarlehenMapper {
-    @Mapping(source = "darlehenGrund", target = "gruende")
+    @Mapping(source = "fall.id", target = "fallId")
     public abstract DarlehenDto toDto(Darlehen darlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")

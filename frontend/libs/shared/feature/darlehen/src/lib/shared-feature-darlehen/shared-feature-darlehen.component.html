@@ -2,7 +2,13 @@
 @if (false) {
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
-  <form [formGroup]="formSb" novalidate data-testid="form-darlehen-sb-form" *dvIfSachbearbeiter>
+  <form
+    [formGroup]="formSb"
+    [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteSb"
+    novalidate
+    data-testid="form-darlehen-sb-form"
+    *dvIfSachbearbeiter
+  >
     <!-- sachbearbeiter fields -->
     <div class="tw:dv-form-half">
       <!-- todo: KSTIP-2922 info betragBezogenKanton -->
@@ -80,26 +86,26 @@
       }
 
       @if (darlehenPermissionsSig()?.canFreigeben) {
-        <ng-template>
-          <!-- darlehen Freigeben -->
-          <button
-            type="button"
-            data-testid="button-darlehen-freigeben"
-            (click)="darlehenFreigeben()"
-            class="btn btn-primary"
-          >
-            {{ 'shared.form.darlehen.freigeben' | transloco }}
-          </button>
-          <!-- dalehen zurückweisen -->
-          <button
-            type="button"
-            data-testid="button-darlehen-zurueckweisen"
-            (click)="darlehenZurueckweisen()"
-            class="btn btn-primary"
-          >
-            {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
-          </button>
-        </ng-template>
+        <!-- darlehen Freigeben -->
+        <button
+          type="button"
+          data-testid="button-darlehen-freigeben"
+          (click)="darlehenFreigeben()"
+          [disabled]="formSb.invalid || !sbFormSavedSig()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.freigeben' | transloco }}
+        </button>
+        <!-- dalehen zurückweisen -->
+        <button
+          type="button"
+          data-testid="button-darlehen-zurueckweisen"
+          (click)="darlehenZurueckweisen()"
+          [disabled]="formSb.invalid || !sbFormSavedSig()"
+          class="btn btn-primary"
+        >
+          {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
+        </button>
       }
 
       @if (darlehenPermissionsSig()?.canApproveDarlehen) {
@@ -126,7 +132,12 @@
     <hr class="tw:my-6 tw:border-t tw:border-gray-400" />
   </form>
 
-  <form [formGroup]="formGs" novalidate data-testid="form-darlehen-gs-form">
+  <form
+    [formGroup]="formGs"
+    [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteGs"
+    novalidate
+    data-testid="form-darlehen-gs-form"
+  >
     <div class="tw:mt-10 tw:dv-form-half">
       <!-- Darlehensbetrag -->
       <mat-form-field dvSharedUiFormField class="tw:w-full">
@@ -269,22 +280,21 @@
     </div>
 
     <!-- Document Error -->
-    @if (!isAllDocumentsUploadedSig()) {
+    @if (!isAllDocumentsUploadedSig() && formGs.touched) {
       <mat-error class="tw:block!">
         {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
       </mat-error>
     }
 
-    <!-- todo: show conditions Buttons -->
     <dv-shared-ui-step-form-buttons class="tw:col-span-2" *dvIfGesuchsteller>
       <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
-      <div>
+      @if (darlehenPermissionsSig()?.canEingeben) {
         <button type="submit" (click)="darlehenEingeben()" class="btn btn-primary" data-testid="button-create-darlehen">
           {{ 'shared.form.darlehen.create' | transloco }}
         </button>
-      </div>
+      }
     </dv-shared-ui-step-form-buttons>
   </form>
 }

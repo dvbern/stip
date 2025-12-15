@@ -462,7 +462,7 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: deleteUnterschriftenblattDokument
-      summary: deletes a Dokument
+      summary: deletes a Unterschriftenblatt Dokument
     parameters:
       - name: dokumentId
         schema:
@@ -660,7 +660,6 @@ components:
         - UNTERSCHRIFTENBLATT
         - CUSTOM_DOKUMENT
         - BESCHWERDE_ENTSCHEID
-        - DARLEHEN_DOKUMENT
       type: string
 security:
   $ref: './components/security.yaml#/security'

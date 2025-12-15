@@ -103,7 +103,7 @@ public class Darlehen extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "darlehen_grund")
     @CollectionTable(name = "darlehen_darlehen_grund", joinColumns = @JoinColumn(name = "darlehen_id"))
-    private Set<DarlehenGrund> darlehenGrund = new LinkedHashSet<>();
+    private Set<DarlehenGrund> gruende = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "darlehen", orphanRemoval = true)
     private Set<DarlehenDokument> dokumente = new LinkedHashSet<>();

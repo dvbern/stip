@@ -17,4 +17,6 @@ import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout
   styleUrl: './gesuch-app-feature-darlehen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureDarlehenComponent {}
+export class GesuchAppFeatureDarlehenComponent {
+  hasUnsavedChanges = false;
+}

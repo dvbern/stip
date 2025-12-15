@@ -33,6 +33,7 @@ public class DarlehenDto  implements Serializable {
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
   private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+  private @Valid String timestampErstellt;
 
   /**
    **/
@@ -235,6 +236,24 @@ public class DarlehenDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public DarlehenDto timestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  public String getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -254,12 +273,13 @@ public class DarlehenDto  implements Serializable {
         Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.gruende, darlehen.gruende);
+        Objects.equals(this.gruende, darlehen.gruende) &&
+        Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende);
+    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
   }
 
   @Override
@@ -277,6 +297,7 @@ public class DarlehenDto  implements Serializable {
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

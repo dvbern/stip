@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.darlehen.service;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -65,6 +67,7 @@ public class DarlehenService {
     private final DarlehenMapper darlehenMapper;
     private final DarlehenDokumentMapper darlehenDokumentMapper;
     private final DokumentUploadService dokumentUploadService;
+    private final DokumentDeleteService dokumentDeleteService;
     private final S3AsyncClient s3;
     private final ConfigService configService;
     private final Antivirus antivirus;
@@ -127,7 +130,21 @@ public class DarlehenService {
     }
 
     @Transactional
-    public PaginatedSbDarlehenDashboardDto getDarlehenSb(
+    public DarlehenDto getDarlehenSb(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+
+        return darlehenMapper.toDto(darlehen);
+    }
+
+    @Transactional
+    public List<DarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
+        final var darlehenList = darlehenRepository.findByGesuchId(gesuchId);
+
+        return darlehenList.stream().map(darlehenMapper::toDto).toList();
+    }
+
+    @Transactional
+    public PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(
         final GetDarlehenSbQueryType getDarlehenSbQueryType,
         final Integer page,
         final Integer pageSize,
@@ -264,6 +281,7 @@ public class DarlehenService {
         return darlehenMapper.toDto(darlehen);
     }
 
+    @Transactional
     public DarlehenDto darlehenUpdateSb(final UUID darlehenId, final DarlehenUpdateSbDto darlehenUpdateSbDto) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
@@ -350,6 +368,26 @@ public class DarlehenService {
             dokument.getObjectId(),
             DARLEHEN_DOKUMENT_PATH,
             dokument.getFilename()
+        );
+    }
+
+    @Transactional
+    public void removeDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
+        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        final var darlehenDokumente = darlehen.getDokumente();
+
+        dokumentRepository.delete(dokument);
+        for (var darlehenDokument : darlehenDokumente) {
+            if (darlehenDokument.getDokumente().remove(dokument)) {
+                break;
+            }
+        }
+
+        dokumentDeleteService.executeDeleteDokumentFromS3(
+            s3,
+            configService.getBucketName(),
+            DARLEHEN_DOKUMENT_PATH + dokument.getObjectId()
         );
     }
 }

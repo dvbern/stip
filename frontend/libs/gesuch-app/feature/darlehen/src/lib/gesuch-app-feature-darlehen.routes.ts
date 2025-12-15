@@ -10,6 +10,7 @@ import { catchError, map, of, switchMap } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { Darlehen, DarlehenService } from '@dv/shared/model/gesuch';
+import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import {
   failure,
   isFailure,
@@ -62,12 +63,11 @@ const darlehenResolver: ResolveFn<Darlehen> = (
 };
 
 export const gesuchAppFeatureDarlehenRoutes: Route[] = [
-  {
+  routeWithUnsavedChangesGuard({
     path: ':fallId',
     pathMatch: 'prefix',
-    providers: [DarlehenStore],
     resolve: { darlehen: darlehenResolver },
     component: GesuchAppFeatureDarlehenComponent,
     title: 'shared.darlehen.title',
-  },
+  }),
 ];

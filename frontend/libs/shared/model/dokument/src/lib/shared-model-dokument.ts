@@ -12,35 +12,44 @@ import {
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { PermissionMap } from '@dv/shared/model/permission-state';
+import {
+  DarlehenPermissionMap,
+  PermissionMap,
+} from '@dv/shared/model/permission-state';
 import { Extends } from '@dv/shared/model/type-util';
 
+type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT';
+
 export type SharedModelStandardGesuchDokument = {
-  art: Extends<DokumentArt, 'GESUCH_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'GESUCH_DOKUMENT'>;
   dokumentTyp: DokumentTyp;
+  permissions: PermissionMap;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
 };
 
 export type SharedModelAdditionalGesuchDokument = {
-  art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
+  art: Extends<AvailableDokumentArt, 'UNTERSCHRIFTENBLATT'>;
   dokumentTyp: UnterschriftenblattDokumentTyp;
+  permissions: PermissionMap;
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: UnterschriftenblattDokument;
 };
 
 export type SharedModelCustomGesuchDokument = {
-  art: Extends<DokumentArt, 'CUSTOM_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'CUSTOM_DOKUMENT'>;
   dokumentTyp: CustomDokumentTyp;
+  permissions: PermissionMap;
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
 };
 
 export type SharedModelDarlehenDokument = {
-  art: Extends<DokumentArt, 'DARLEHEN_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'DARLEHEN_DOKUMENT'>;
   dokumentTyp: DarlehenDokumentType;
+  permissions: DarlehenPermissionMap;
   darlehenId: string;
   gesuchDokument?: DarlehenDokument;
 };
@@ -92,7 +101,6 @@ type DokumentInfoText = {
 export type DokumentInfo = DokumentInfoTranslatable | DokumentInfoText;
 
 interface BaseDocumentOptions {
-  permissions: PermissionMap;
   allowTypes: string;
   dokument: SharedModelGesuchDokument;
   initialDokumente?: Dokument[];
@@ -144,7 +152,6 @@ export interface DokumentState {
 }
 
 export interface UploadView {
-  permissions: PermissionMap;
   dokumentModel: SharedModelGesuchDokument;
   initialDokuments?: Dokument[];
   hasEntries: boolean;
@@ -153,7 +160,6 @@ export interface UploadView {
 
 export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
-  permission: PermissionMap,
   isSachbearbeitungApp: boolean,
 ) => {
   switch (dokumentModel.art) {
@@ -161,16 +167,18 @@ export const isUploadable = (
     case 'CUSTOM_DOKUMENT': {
       if (!isSachbearbeitungApp) {
         const status = dokumentModel.gesuchDokument?.status;
-        return status !== 'AKZEPTIERT' && permission.canUploadDocuments;
+        return (
+          status !== 'AKZEPTIERT' &&
+          dokumentModel.permissions.canUploadDocuments
+        );
       }
-      return permission.canUploadDocuments;
+      return dokumentModel.permissions.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
-      return permission.canUploadUnterschriftenblatt;
+      return dokumentModel.permissions.canUploadUnterschriftenblatt;
     }
-    // todo: add logic
     case 'DARLEHEN_DOKUMENT': {
-      return true;
+      return dokumentModel.permissions.canUploadDocuments;
     }
   }
 };

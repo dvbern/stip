@@ -10,6 +10,7 @@ import { catchError, map, of, switchMap } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { Darlehen, DarlehenService } from '@dv/shared/model/gesuch';
+import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 import {
   failure,
   isFailure,
@@ -53,8 +54,8 @@ const darlehenResolver: ResolveFn<Darlehen> = (
 };
 
 export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
-  {
-    path: ':darlehenId',
+  routeWithUnsavedChangesGuard({
+    path: ':darlehenId/gesuch/:id',
     pathMatch: 'prefix',
     component: SachbearbeitungAppFeatureDarlehenComponent,
     resolve: { darlehen: darlehenResolver },
@@ -68,5 +69,5 @@ export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
     //   // it is also possible to add nested routes as children
     //   // of this feature root component (or even lazy loaded sub features)
     // ],
-  },
+  }),
 ];

@@ -233,6 +233,7 @@ export class UploadStore {
                           gesuchDokument: value,
                           dokumentTyp: dokument.dokumentTyp,
                           darlehenId: dokument.darlehenId,
+                          permissions: dokument.permissions,
                         }) satisfies SharedModelDarlehenDokument,
                     ),
                   );
@@ -249,6 +250,7 @@ export class UploadStore {
                         gesuchDokument: value,
                         dokumentTyp: dokument.dokumentTyp,
                         trancheId: dokument.trancheId,
+                        permissions: dokument.permissions,
                       }) satisfies SharedModelStandardGesuchDokument,
                   ),
                 );
@@ -265,6 +267,7 @@ export class UploadStore {
                         dokumentTyp: dokument.dokumentTyp,
                         gesuchId: dokument.gesuchId,
                         trancheId: dokument.trancheId,
+                        permissions: dokument.permissions,
                       }) satisfies SharedModelCustomGesuchDokument,
                   ),
                 );
@@ -286,6 +289,7 @@ export class UploadStore {
                           dokumentTyp: dokument.dokumentTyp,
                           gesuchId: dokument.gesuchId,
                           trancheId: dokument.trancheId,
+                          permissions: dokument.permissions,
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );
@@ -337,10 +341,13 @@ export class UploadStore {
             switch (action.dokument.art) {
               case 'CUSTOM_DOKUMENT':
               case 'GESUCH_DOKUMENT':
-              case 'DARLEHEN_DOKUMENT':
                 return this.deleteDokumentByAppType$(
                   action.dokumentId,
                   !!dokumentToDelete?.error,
+                );
+              case 'DARLEHEN_DOKUMENT':
+                return this.darlehenService.deleteDarlehenDokument$(
+                  ...deleteCallParams,
                 );
               case 'UNTERSCHRIFTENBLATT':
                 return this.documentService.deleteUnterschriftenblattDokument$(
@@ -350,10 +357,7 @@ export class UploadStore {
                 assertUnreachable(action.dokument);
             }
           })();
-          return serviceCall$.pipe(
-            map(() => action),
-            tap(() => this.documentChangedSig.set({ hasChanged: true })),
-          );
+          return serviceCall$.pipe(map(() => action));
         }),
         takeUntilDestroyed(),
       )
@@ -367,6 +371,7 @@ export class UploadStore {
               ({ file }) => file.id !== action.dokumentId,
             ),
           }));
+          this.documentChangedSig.set({ hasChanged: true });
         },
       });
 

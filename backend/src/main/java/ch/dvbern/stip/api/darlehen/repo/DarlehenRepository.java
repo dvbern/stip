@@ -30,6 +30,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -52,6 +53,17 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
         return query.stream().toList();
     }
 
+    public List<Darlehen> findByGesuchId(final UUID gesuchId) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var darlehen = QDarlehen.darlehen;
+        var query = queryFactory
+            .selectFrom(darlehen)
+            .where(
+                darlehen.fall.ausbildungs.any().gesuchs.any().id.eq(gesuchId)
+            );
+        return query.stream().toList();
+    }
+
     public JPAQuery<Darlehen> getAlleQuery() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(darlehen);
@@ -70,5 +82,13 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
 
     public JPAQuery<Darlehen> getMeineBearbeitbarQuery(final UUID benutzerId) {
         return getMeineQuery(benutzerId).where(darlehen.status.eq(DarlehenStatus.EINGEGEBEN));
+    }
+
+    public Darlehen requireByDokumentId(final UUID dokumentId) {
+        return getAlleQuery()
+            .where(darlehen.dokumente.any().dokumente.any().id.eq(dokumentId))
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
     }
 }

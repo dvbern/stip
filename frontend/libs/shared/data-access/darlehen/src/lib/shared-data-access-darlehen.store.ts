@@ -14,6 +14,7 @@ import {
   DarlehenServiceDarlehenUpdateGsRequestParams,
   DarlehenServiceDarlehenUpdateSbRequestParams,
   DarlehenServiceDarlehenZurueckweisenRequestParams,
+  DarlehenServiceGetAllDarlehenSbRequestParams,
   DarlehenServiceGetDarlehenDashboardSbRequestParams,
   DarlehenServiceGetDarlehenGsRequestParams,
   DarlehenServiceGetDarlehenSbRequestParams,
@@ -30,18 +31,18 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type DarlehenState = {
-  // getDarlehenRequest: RemoteData<Darlehen | null>;
   cachedDarlehen: CachedRemoteData<Darlehen>;
+  darlehenList: CachedRemoteData<Darlehen[]>;
   paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
-  // getDarlehenRequest: initial(),
   cachedDarlehen: initial(),
+  darlehenList: initial(),
   paginatedSbDarlehenDashboard: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DarlehenStore extends signalStore(
   { protectedState: false },
   withState(initialState),
@@ -63,6 +64,13 @@ export class DarlehenStore extends signalStore(
     return {
       darlehen: fromCachedDataSig(this.cachedDarlehen),
       loading: isPending(this.cachedDarlehen()),
+    };
+  });
+
+  darlehenListViewSig = computed(() => {
+    return {
+      darlehenList: fromCachedDataSig(this.darlehenList),
+      loading: isPending(this.darlehenList()),
     };
   });
 
@@ -136,10 +144,11 @@ export class DarlehenStore extends signalStore(
   //   ),
   // );
 
-  darlehenUpdateAndEingeben$ = rxMethod<
-    DarlehenServiceDarlehenUpdateGsRequestParams &
-      DarlehenServiceDarlehenEingebenRequestParams
-  >(
+  darlehenUpdateAndEingeben$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateGsRequestParams &
+      DarlehenServiceDarlehenEingebenRequestParams;
+    onSuccess: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -147,16 +156,24 @@ export class DarlehenStore extends signalStore(
         }));
       }),
       // todo: is the outer error handling sufficient here?
-      switchMap(({ darlehenId, darlehenUpdateGs }) =>
+      switchMap(({ data, onSuccess }) =>
         this.darlehenService
-          .darlehenUpdateGs$({ darlehenId, darlehenUpdateGs })
+          .darlehenUpdateGs$({
+            darlehenId: data.darlehenId,
+            darlehenUpdateGs: data.darlehenUpdateGs,
+          })
           .pipe(
             switchMap(() =>
-              this.darlehenService.darlehenEingeben$({ darlehenId }),
+              this.darlehenService.darlehenEingeben$({
+                darlehenId: data.darlehenId,
+              }),
             ),
-            handleApiResponse((darlehen) => {
-              patchState(this, { cachedDarlehen: darlehen });
-            }),
+            handleApiResponse(
+              (darlehen) => {
+                patchState(this, { cachedDarlehen: darlehen });
+              },
+              { onSuccess },
+            ),
           ),
       ),
       catchError((error) => {
@@ -203,18 +220,43 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  darlehenUpdateSb$ = rxMethod<DarlehenServiceDarlehenUpdateSbRequestParams>(
+  getAllDarlehenSb$ = rxMethod<DarlehenServiceGetAllDarlehenSbRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          darlehenList: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.darlehenService
+          .getAllDarlehenSb$(req)
+          .pipe(
+            handleApiResponse((darlehen) =>
+              patchState(this, { darlehenList: darlehen }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  darlehenUpdateSb$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    onSuccess: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           cachedDarlehen: cachedPending(state.cachedDarlehen),
         }));
       }),
-      switchMap((data) =>
+      switchMap(({ data, onSuccess }) =>
         this.darlehenService.darlehenUpdateSb$(data).pipe(
-          handleApiResponse((darlehen) => {
-            patchState(this, { cachedDarlehen: darlehen });
-          }),
+          handleApiResponse(
+            (darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            },
+            { onSuccess },
+          ),
         ),
       ),
     ),
