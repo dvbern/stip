@@ -117,4 +117,9 @@ public interface DarlehenResource {
     @Path("/{darlehenId}/sb")
     @Produces({ "application/json", "text/plain" })
     DarlehenDto getDarlehenSb(@PathParam("darlehenId") UUID darlehenId);
+
+    @GET
+    @Path("/verfuegung/{darlehenId}/download")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDarlehensVerfuegungDokument(@QueryParam("token") @NotNull   String token,@PathParam("darlehenId") UUID darlehenId);
 }
