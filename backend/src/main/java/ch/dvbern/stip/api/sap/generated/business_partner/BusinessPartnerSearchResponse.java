@@ -122,6 +122,10 @@ public class BusinessPartnerSearchResponse {
         return this.returncode;
     }
 
+    public void setRETURNCODE(List<ReturnCode> value) {
+        this.returncode = value;
+    }
+
 
     /**
      * <p>Java class for anonymous complex type</p>.
