@@ -45,7 +45,11 @@ import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { aenderungRoutes, getTrancheRoute } from '@dv/shared/model/gesuch';
+import {
+  aenderungRoutes,
+  darlehenRoutes,
+  getTrancheRoute,
+} from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
@@ -124,6 +128,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   isAenderungRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
+    ),
+  );
+  isDarlehenRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => darlehenRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
   canViewBerechnungSig = computed(() => {

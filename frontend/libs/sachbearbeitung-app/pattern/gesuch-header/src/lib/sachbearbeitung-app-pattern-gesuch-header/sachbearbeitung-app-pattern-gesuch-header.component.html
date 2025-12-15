@@ -99,6 +99,7 @@
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="sb-gesuch-header-darlehen-nav-menu"
+      [class.active]="isDarlehenRouteSig()"
       [matMenuTriggerFor]="darlehenMenu"
       [disabled]="!darlehens.darlehenList?.length"
     >

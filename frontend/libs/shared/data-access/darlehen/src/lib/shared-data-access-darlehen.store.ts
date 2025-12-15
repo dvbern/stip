@@ -1,4 +1,4 @@
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, computed, inject, untracked } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
@@ -23,6 +23,7 @@ import {
 import {
   CachedRemoteData,
   cachedPending,
+  cachedResult,
   fromCachedDataSig,
   handleApiResponse,
   initial,
@@ -170,16 +171,21 @@ export class DarlehenStore extends signalStore(
             ),
             handleApiResponse(
               (darlehen) => {
-                patchState(this, { cachedDarlehen: darlehen });
+                patchState(this, {
+                  cachedDarlehen: cachedResult(
+                    untracked(this.cachedDarlehen),
+                    darlehen,
+                  ),
+                });
               },
               { onSuccess },
             ),
+            catchError((error) => {
+              console.error('Error in darlehenUpdateAndEingeben$', error);
+              return EMPTY;
+            }),
           ),
       ),
-      catchError((error) => {
-        console.error('Error in darlehenUpdateAndEingeben$', error);
-        return EMPTY;
-      }),
     ),
   );
 
