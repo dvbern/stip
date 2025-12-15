@@ -27,13 +27,12 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungValidatorService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.exception.CombinedValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
-import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -578,9 +577,9 @@ public class GesuchTrancheService {
             gesuchTrancheValidatorService.validateAenderungForAkzeptiert(gesuchTranche);
 
         } catch (ValidationsException e) {
-            return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+            return ValidationsExceptionMapper.toDto(e, hasDocuments);
         } catch (CustomValidationsException e) {
-            return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
+            return ValidationsExceptionMapper.toDto(e, hasDocuments);
         }
 
         return new ValidationReportDto().hasDocuments(hasDocuments);
@@ -590,13 +589,8 @@ public class GesuchTrancheService {
         final var documents = gesuchTranche.getGesuchDokuments();
         final var hasDocuments = documents != null && !documents.isEmpty();
 
-        CustomValidationsException auszahlungValidationException = null;
-
-        try {
-            auszahlungValidatorService.validateAuszahlung(gesuchTranche.getGesuch());
-        } catch (CustomValidationsException customAuszahlungValidationException) {
-            auszahlungValidationException = customAuszahlungValidationException;
-        }
+        CustomConstraintViolation auszahlungConstraintViolation =
+            auszahlungValidatorService.getZahlungsverbindungCustomConstraintViolation(gesuchTranche.getGesuch());
 
         try {
             if (
@@ -608,22 +602,14 @@ public class GesuchTrancheService {
                 gesuchTrancheValidatorService.validateGesuchTrancheForEinreichen(gesuchTranche);
             }
         } catch (ValidationsException e) {
-            if (Objects.isNull(auszahlungValidationException)) {
-                return ValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
-            }
-            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException)
-                .hasDocuments(hasDocuments);
+            return ValidationsExceptionMapper.toDto(e, auszahlungConstraintViolation, hasDocuments);
         } catch (CustomValidationsException e) {
-            if (Objects.isNull(auszahlungValidationException)) {
-                return CustomValidationsExceptionMapper.toDto(e).hasDocuments(hasDocuments);
-            }
-            return CombinedValidationsExceptionMapper.toDto(e, auszahlungValidationException)
-                .hasDocuments(hasDocuments);
+            return ValidationsExceptionMapper.toDto(e, auszahlungConstraintViolation, hasDocuments);
         }
 
         // handle case when Auszahlung only is invalid
-        if (Objects.nonNull(auszahlungValidationException)) {
-            return CustomValidationsExceptionMapper.toDto(auszahlungValidationException).hasDocuments(hasDocuments);
+        if (Objects.nonNull(auszahlungConstraintViolation)) {
+            return ValidationsExceptionMapper.toDto(auszahlungConstraintViolation, hasDocuments);
         }
 
         return new ValidationReportDto().hasDocuments(hasDocuments);

@@ -21,10 +21,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
@@ -35,21 +36,44 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class AuszahlungValidatorService {
     private final Validator validator;
 
-    public void validateAuszahlung(final Gesuch toValidate) {
-        var auszahlungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung());
-        var violations = auszahlungOpt
-            .map(Auszahlung::getZahlungsverbindung)
-            .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
-            .orElse(Set.of());
+    public CustomConstraintViolation getZahlungsverbindungCustomConstraintViolation(
+        final Gesuch gesuch
+    ) {
+        var auszahlungOpt = Optional.ofNullable(gesuch.getAusbildung().getFall().getAuszahlung());
+        return auszahlungOpt.map(Auszahlung::getZahlungsverbindung)
+            .map(this::getZahlungsverbindungCustomConstraintViolation)
+            .orElse(null);
+    }
 
-        if (auszahlungOpt.isEmpty() || !violations.isEmpty()) {
-            throw new CustomValidationsException(
-                "Keine Auszahlung vorhanden oder ungültige Zahlungsverbindung",
-                new CustomConstraintViolation(
-                    VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
-                    "auszahlung"
-                )
+    public CustomConstraintViolation getZahlungsverbindungCustomConstraintViolation(
+        final Zahlungsverbindung zahlungsverbindung
+    ) {
+        final Set<ConstraintViolation<Zahlungsverbindung>> violations = validator.validate(zahlungsverbindung);
+
+        CustomConstraintViolation out = null;
+        if (!violations.isEmpty()) {
+            out = new CustomConstraintViolation(
+                VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
+                "auszahlung"
             );
         }
+        return out;
     }
+    //
+    // public void validateAuszahlung(final Gesuch toValidate) {
+    // var auszahlungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung());
+    // var customConstraintViolationOpt = auszahlungOpt
+    // .map(Auszahlung::getZahlungsverbindung)
+    // .map(this::getZahlungsverbindungCustomConstraintViolation);
+    //
+    // if (auszahlungOpt.isEmpty() || customConstraintViolationOpt.isPresent()) {
+    // throw new CustomValidationsException(
+    // "Keine Auszahlung vorhanden oder ungültige Zahlungsverbindung",
+    // new CustomConstraintViolation(
+    // VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
+    // "auszahlung"
+    // )
+    // );
+    // }
+    // }
 }
