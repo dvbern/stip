@@ -62,6 +62,7 @@
   "shared.file.upload": "Dateien Durchsuchen",
   "shared.file.uploadError": "Fehler beim Hochladen der Datei",
   "shared.file.uploading": "Datei wird hochgeladen...",
+  "shared.file.deleting": "Datei wird gelöscht...",
   "shared.file.uploadDone": "Hochgeladen am {{ date }} • {{ size }}",
   "shared.file.dropZone": "Datei(en) hineinziehen<br>oder",
   "shared.file.delete.title": "Datei löschen",

@@ -22,7 +22,7 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import org.mapstruct.Mapper;
 
-@Mapper(config = MappingConfig.class)
+@Mapper(config = MappingConfig.class, uses = { VerfuegungDokumentMapper.class })
 public interface VerfuegungMapper {
-    VerfuegungDto toDto(Verfuegung verfuegung);
+    VerfuegungDto toDto(final Verfuegung verfuegung);
 }

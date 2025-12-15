@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.massendruck.entity.VerfuegungMassendruck;
 import ch.dvbern.stip.api.massendruck.repo.MassendruckJobRepository;
 import ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -194,10 +195,19 @@ public class MassendruckJobPdfService {
         return verfuegungMassendrucks.stream()
             .map(verfuegungMassendruck -> {
                 final var verfuegung = verfuegungMassendruck.getVerfuegung();
+                final var dokument = verfuegung.getDokumente()
+                    .stream()
+                    .filter(
+                        verfuegungDokument -> verfuegungDokument.getTyp()
+                            .equals(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG)
+                    )
+                    .findFirst()
+                    .orElseThrow(IllegalStateException::new);
+
                 final var bytes = s3async.getObject(
                     GetObjectRequest.builder()
                         .bucket(configService.getBucketName())
-                        .key(verfuegung.getFilepath() + verfuegung.getObjectId())
+                        .key(dokument.getFilepath() + dokument.getObjectId())
                         .build(),
                     AsyncResponseTransformer.toBytes()
                 );

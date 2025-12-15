@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +36,10 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.berechnung.service.BerechnungsblattService;
+import com.itextpdf.io.font.FontProgram;
+import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.action.PdfAction;
@@ -59,10 +60,14 @@ import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.svg.converter.SvgConverter;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.io.IOUtils;
+import org.jboss.resteasy.spi.InternalServerErrorException;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_SMALL;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.NUMBER_FORMAT;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.RECHTSMITTELBELEHRUNG_TITLE_KEY;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
@@ -70,18 +75,40 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
 
 @UtilityClass
 public class PdfUtils {
-    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
-
     public static String formatNumber(Number number) {
         return NUMBER_FORMAT.format(number);
     }
 
+    public boolean isPageNumberEven(final Document document) {
+        return document.getPdfDocument().getNumberOfPages() % 2 == 0;
+    }
+
     public void makePageNumberEven(Document document) {
-        if (document.getPdfDocument().getNumberOfPages() % 2 == 0) {
+        if (isPageNumberEven(document)) {
             return;
         }
         document.getPdfDocument().addNewPage();
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+    }
+
+    public PdfFont createFont() {
+        return getPdfFont(PdfConstants.FONT_PATH);
+    }
+
+    public PdfFont createFontBold() {
+        return getPdfFont(FONT_BOLD_PATH);
+    }
+
+    private static PdfFont getPdfFont(String fontPath) {
+        final FontProgram font;
+        try {
+            final byte[] fontBytes =
+                IOUtils.toByteArray(Objects.requireNonNull(PdfUtils.class.getResourceAsStream(fontPath)));
+            font = FontProgramFactory.createFont(fontBytes);
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
+        }
+        return PdfFontFactory.createFont(font);
     }
 
     public Image getLogo(
@@ -145,16 +172,6 @@ public class PdfUtils {
             cell.add(createParagraph(font, fontSize, 0, text));
         }
         return cell;
-    }
-
-    public void addBerechnungsblaetter(
-        final Document document,
-        final Gesuch gesuch,
-        final BerechnungsblattService berechnungsblattService
-    ) throws IOException {
-        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-        berechnungsblattService
-            .addBerechnungsblattToDocument(gesuch, LocaleUtil.getLocaleFromGesuch(gesuch), document, false);
     }
 
     public void header(
@@ -357,12 +374,7 @@ public class PdfUtils {
         headerTable.addCell(date);
 
         if (!isDeckblatt) {
-            final Locale locale = gesuch
-                .getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .getKorrespondenzSprache()
-                .getLocale();
+            final Locale locale = LocaleUtil.getLocale(gesuch);
 
             final var ausbildungsStaette = gesuch.getAusbildung().getAusbildungsstaetteOrAlternative(locale);
             final var ausbildungsGang = gesuch.getAusbildung().getAusbildungsgangOrAlternative(locale);
@@ -410,12 +422,7 @@ public class PdfUtils {
         final var sachbearbeiterBenutzer =
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
 
-        final var locale = gesuch
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getKorrespondenzSprache()
-            .getLocale();
+        final var locale = LocaleUtil.getLocale(gesuch);
 
         signatureTable.addCell(
             PdfUtils.createCell(

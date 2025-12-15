@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
+import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -128,6 +129,7 @@ public class GesuchTrancheService {
     private final BenutzerService benutzerService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
+    private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
 
     public GesuchTranche getGesuchTrancheOrHistorical(final UUID gesuchTrancheId) {
         return gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
@@ -317,6 +319,7 @@ public class GesuchTrancheService {
         );
 
         for (final var gesuchDokument : superfluousGesuchDokuments) {
+            gesuchDokument.getGesuchDokumentKommentare().clear();
             gesuchDokumentKommentarService.deleteForGesuchDokument(gesuchDokument.getId());
             formular.getTranche().getGesuchDokuments().remove(gesuchDokument);
         }
@@ -424,6 +427,8 @@ public class GesuchTrancheService {
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(aenderung, newTranche);
 
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
+        gesuchTrancheOverrideDokumentService.overrideJahreswertDokumente(gesuch, newTranche);
+        JahreswertUtil.synchroniseJahreswerte(newTranche);
     }
 
     @Transactional
@@ -518,6 +523,7 @@ public class GesuchTrancheService {
                 gesuchDokument.getStatus() == GesuchDokumentStatus.AUSSTEHEND
             ) {
                 existingDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
+                existingDokument.getGesuchDokumentKommentare().clear();
                 gesuchDokumentKommentarService.deleteForGesuchDokument(existingDokument.getId());
             }
         }
