@@ -143,13 +143,10 @@ export class SharedFeatureDarlehenComponent {
     return checked ? null : { atLeastOneCheckboxChecked: true };
   };
 
-  documentsHaveChanged = signal(false);
-
   isAllDocumentsUploadedSig = computed<boolean>(() => {
-    this.documentsHaveChanged();
     const dokumentUploads = this.documentUploadsSig();
     return dokumentUploads.every((upload) => {
-      return upload.gesuchDokumentSig()?.gesuchDokument?.dokumente?.length;
+      return upload.hasEntriesSig();
     });
   });
 

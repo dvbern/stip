@@ -189,7 +189,6 @@
         </mat-form-field>
         @if (anzahlBetreibungenDocSig(); as options) {
           <dv-shared-pattern-document-upload
-            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -217,7 +216,6 @@
         </div>
         @if (grundNichtBerechtigtDocSig(); as options) {
           <dv-shared-pattern-document-upload
-            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -246,7 +244,6 @@
         </div>
         @if (grundHoheGebuehrenDocSig(); as options) {
           <dv-shared-pattern-document-upload
-            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -264,7 +261,6 @@
         </div>
         @if (grundAnschaffungenFuerAusbildungDocSig(); as options) {
           <dv-shared-pattern-document-upload
-            (documentsChanged)="documentsHaveChanged.set(true)"
             class="flex-shrink-1"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
@@ -284,7 +280,7 @@
     </div>
 
     <!-- Document Error -->
-    @if (!isAllDocumentsUploadedSig() || !formGs.pristine) {
+    @if (!isAllDocumentsUploadedSig() && formGs.touched) {
       <mat-error class="tw:block!">
         {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
       </mat-error>

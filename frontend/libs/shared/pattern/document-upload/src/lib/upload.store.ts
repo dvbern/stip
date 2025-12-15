@@ -357,10 +357,7 @@ export class UploadStore {
                 assertUnreachable(action.dokument);
             }
           })();
-          return serviceCall$.pipe(
-            map(() => action),
-            tap(() => this.documentChangedSig.set({ hasChanged: true })),
-          );
+          return serviceCall$.pipe(map(() => action));
         }),
         takeUntilDestroyed(),
       )
@@ -374,6 +371,7 @@ export class UploadStore {
               ({ file }) => file.id !== action.dokumentId,
             ),
           }));
+          this.documentChangedSig.set({ hasChanged: true });
         },
       });
 
