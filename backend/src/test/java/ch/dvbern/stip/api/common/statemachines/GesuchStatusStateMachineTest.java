@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -72,6 +73,7 @@ class GesuchStatusStateMachineTest {
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
     private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private StatusprotokollService statusprotokollService;
+    private VerfuegtHandler verfuegtHandlerMock;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
     @BeforeEach
@@ -95,6 +97,7 @@ class GesuchStatusStateMachineTest {
         bereitFuerBearbeitungHandler = Mockito.mock(BereitFuerBearbeitungHandler.class);
         aenderungFehlendeDokumenteZurueckweisenHandlerMock =
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class);
+        verfuegtHandlerMock = Mockito.mock(VerfuegtHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -112,7 +115,8 @@ class GesuchStatusStateMachineTest {
             juristischeAbklaerungDurchPruefungHandlerSpy,
             statusprotokollService,
             bereitFuerBearbeitungHandler,
-            aenderungFehlendeDokumenteZurueckweisenHandlerMock
+            aenderungFehlendeDokumenteZurueckweisenHandlerMock,
+            verfuegtHandlerMock
         ).createStateMachineConfig();
     }
 
