@@ -621,6 +621,11 @@ public class GesuchTrancheService {
                 .hasDocuments(hasDocuments);
         }
 
+        // handle case when Auszahlung only is invalid
+        if (Objects.nonNull(auszahlungValidationException)) {
+            return CustomValidationsExceptionMapper.toDto(auszahlungValidationException).hasDocuments(hasDocuments);
+        }
+
         return new ValidationReportDto().hasDocuments(hasDocuments);
     }
 
