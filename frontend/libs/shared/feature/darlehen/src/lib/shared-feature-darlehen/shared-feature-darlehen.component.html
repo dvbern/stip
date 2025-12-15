@@ -2,6 +2,8 @@
 @if (false) {
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
+  <div>{{ hasUnsavedChanges }}</div>
+  <div>{{ formSb.dirty }}</div>
   <form
     [formGroup]="formSb"
     [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteSb"

@@ -10,7 +10,11 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   NonNullableFormBuilder,
@@ -27,7 +31,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { Observable, merge } from 'rxjs';
+import { Observable, merge, tap } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -135,7 +139,7 @@ export class SharedFeatureDarlehenComponent {
     permissions: this.darlehenPermissionsSig,
   });
 
-  // Todo: error is not shown yet, or not anymore
+  // Todo: error message is not shown yet, or not anymore
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
   ) => {
@@ -202,8 +206,11 @@ export class SharedFeatureDarlehenComponent {
   );
 
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
+    // trigger recomputation for darlehen.state change that will disable the upload
+    this.darlehenSig();
     return DarlehenDokumentType.BETREIBUNGS_AUSZUG;
   });
+
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
     return isGrundNichtBerechtigt
@@ -224,7 +231,6 @@ export class SharedFeatureDarlehenComponent {
       : null;
   });
 
-  // todo: find better solution with scph, currently not really reacting on form changes.
   hasUnsavedChanges = false;
   gsFormSavedSig = signal(false);
   sbFormSavedSig = signal(false);
@@ -233,7 +239,13 @@ export class SharedFeatureDarlehenComponent {
     this.formIsUnsaved = merge(
       observeUnsavedChanges(this.formGs, toObservable(this.gsFormSavedSig)),
       observeUnsavedChanges(this.formSb, toObservable(this.sbFormSavedSig)),
+    ).pipe(
+      tap((unsaved) => {
+        this.hasUnsavedChanges = unsaved;
+      }),
+      takeUntilDestroyed(),
     );
+
     this.formUtils.registerFormForUnsavedCheck(this);
 
     // patch form value
@@ -323,6 +335,7 @@ export class SharedFeatureDarlehenComponent {
             },
             onSuccess: () => {
               this.gsFormSavedSig.set(true);
+              this.formGs.markAsPristine();
             },
           });
         }
@@ -361,7 +374,8 @@ export class SharedFeatureDarlehenComponent {
         darlehenUpdateSb: updatedDarlehen,
       },
       onSuccess: () => {
-        this.sbFormSavedSig.set(true);
+        this.sbFormSavedSig.set(false);
+        this.formSb.markAsPristine();
       },
     });
   }
