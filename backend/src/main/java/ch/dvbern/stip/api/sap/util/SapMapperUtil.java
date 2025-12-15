@@ -137,4 +137,8 @@ public class SapMapperUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public String stripWhitespace(String input) {
+        return input.replace(" ", "");
+    }
 }

@@ -100,6 +100,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         BusinessPartnerCreateResponse createResponse = new BusinessPartnerCreateResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // BusinessPartnerCreateResponse has this method implemented
         createResponse.setRETURNCODE(returnCodes);
         this.businessPartnerCreateResponse = createResponse;
     }
@@ -110,6 +112,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         BusinessPartnerChangeResponse changeResponse = new BusinessPartnerChangeResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // BusinessPartnerChangeResponse has this method implemented
         changeResponse.setRETURNCODE(returnCodes);
         this.businessPartnerChangeResponse = changeResponse;
     }
@@ -120,6 +124,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         BusinessPartnerReadResponse readResponse = new BusinessPartnerReadResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // BusinessPartnerReadResponse has this method implemented
         readResponse.setRETURNCODE(returnCodes);
         var bpHeader = new BusinessPartnerHEADER();
         bpHeader.setBPARTNER(businessPartnerId.toString());
@@ -135,6 +141,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         ImportStatusReadResponse readResponse = new ImportStatusReadResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // ImportStatusReadResponse has this method implemented
         readResponse.setRETURNCODE(returnCodes);
         var deliverys = new ArrayList<DELIVERY>();
         var delivery = new DELIVERY();
@@ -150,6 +158,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         VendorPostingCreateResponse postingCreateResponse = new VendorPostingCreateResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // VendorPostingCreateResponse has this method implemented
         postingCreateResponse.setRETURNCODE(returnCodes);
         this.vendorPostingCreateResponse = postingCreateResponse;
     }

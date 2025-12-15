@@ -117,8 +117,8 @@ public class SapService {
 
         if (
             !Objects.equals(
-                paymentdetailLocal.get(0).getIBAN().replace(" ", ""),
-                paymentdetailRemote.get(0).getIBAN().replace(" ", "")
+                SapMapperUtil.stripWhitespace(paymentdetailLocal.get(0).getIBAN()),
+                SapMapperUtil.stripWhitespace(paymentdetailRemote.get(0).getIBAN())
             )
             || !Objects
                 .equals(paymentdetailLocal.get(0).getACCOUNTHOLDER(), paymentdetailRemote.get(0).getACCOUNTHOLDER())
@@ -134,7 +134,6 @@ public class SapService {
         final var businessPartnerSearchResponse =
             sapEndpointService.searchBusinessPartner(sozialversicherungsnummer);
 
-        // SapReturnCodeType.assertSuccess(businessPartnerSearchResponse.getRETURNCODE().get(0).getTYPE());
         if (businessPartnerSearchResponse.getBUSINESSPARTNER().isEmpty()) {
             return null;
         }

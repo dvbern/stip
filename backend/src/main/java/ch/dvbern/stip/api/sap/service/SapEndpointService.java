@@ -87,28 +87,33 @@ public class SapEndpointService {
     @ConfigProperty(name = "kstip.sap.receiveTimeout")
     Integer receiveTimeout;
 
-    private void setLogHandler(BindingProvider port) {
+    private void configureLogHandler(BindingProvider port) {
         var handlerChain = port.getBinding().getHandlerChain();
         handlerChain.add(new SOAPLoggingHandler());
         port.getBinding().setHandlerChain(handlerChain);
     }
 
-    private void setTimeouts(BindingProvider port) {
+    private void configureTimeouts(BindingProvider port) {
         // Set timeout until a connection is established
         port.getRequestContext().put("javax.xml.ws.client.connectionTimeout", String.valueOf(connectionTimeout));
         // Set timeout until the response is received
         port.getRequestContext().put("javax.xml.ws.client.receiveTimeout", String.valueOf(receiveTimeout));
     }
 
-    private void setPortParams(BindingProvider port) {
-        setLogHandler(port);
-        setTimeouts(port);
+    private void configurePortParams(BindingProvider port) {
+        configureLogHandler(port);
+        configureTimeouts(port);
     }
 
-    private void setAuthHeader(BindingProvider port) {
+    private void configureAuthHeader(BindingProvider port) {
         Map<String, List<String>> headers = new HashMap<>();
         headers.put("Authorization", Collections.singletonList("Basic " + authHeaderValue));
         port.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, headers);
+    }
+
+    private void configurePort(BindingProvider port) {
+        configureAuthHeader(port);
+        configurePortParams(port);
     }
 
     public static BigDecimal generateDeliveryId(final BigInteger systemid) {
@@ -124,8 +129,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerCreateService businessPartnerCreateService = new OsBusinessPartnerCreateService();
         final var port = businessPartnerCreateService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
             businessPartnerCreateMapper.toBusinessPartnerCreateRequest(getSystemid(), sapDeliveryId, fall);
@@ -139,8 +143,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
         final var port = businessPartnerChangeService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartnerChangeRequest(getSystemid(), sapDeliveryId, fall);
@@ -152,8 +155,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequestDeliveryId(getSystemid(), sapDeliveryId);
@@ -165,8 +167,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequestBusinessPartnerId(getSystemid(), businessPartnerId);
@@ -178,8 +179,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerSearchService businessPartnerSearchService = new OsBusinessPartnerSearchService();
         final var port = businessPartnerSearchService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final BusinessPartnerSearchRequest businessPartnerSearchRequest =
             businessPartnerSearchMapper.toBusinessPartnerSearchRequest(getSystemid(), sozialversicherungsnummer);
@@ -189,8 +189,7 @@ public class SapEndpointService {
     public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {
         final OsImportStatusReadService importStatusReadService = new OsImportStatusReadService();
         final var port = importStatusReadService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final ImportStatusReadRequest importStatusReadRequest = new ImportStatusReadRequest();
         importStatusReadRequest.setSENDER(SapMapperUtil.getImportStatusReadSenderParms(getSystemid()));
@@ -209,8 +208,7 @@ public class SapEndpointService {
     ) {
         final OsVendorPostingCreateService vendorPostingCreateService = new OsVendorPostingCreateService();
         final var port = vendorPostingCreateService.getHTTPSPort();
-        this.setAuthHeader((BindingProvider) port);
-        this.setPortParams((BindingProvider) port);
+        configurePort((BindingProvider) port);
 
         final VendorPostingCreateRequest vendorPostingCreateRequest =
             vendorPostingCreateMapper

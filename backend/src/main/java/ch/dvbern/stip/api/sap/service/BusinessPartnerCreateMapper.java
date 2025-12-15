@@ -92,7 +92,7 @@ public abstract class BusinessPartnerCreateMapper {
 
     @Named("getIban")
     public String getIban(String iban) {
-        return iban.replace(" ", "");
+        return SapMapperUtil.stripWhitespace(iban);
     }
 
     @Named("getAccountHolder")
