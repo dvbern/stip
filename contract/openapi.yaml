@@ -695,7 +695,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/verfuegung/{darlehenId}/download:
+  /darlehen/dokument/verfuegung/{darlehenId}/download:
     parameters:
       - name: token
         schema:
