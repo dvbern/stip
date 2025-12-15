@@ -450,7 +450,7 @@ public class VerfuegungPdfService {
             ).setPadding(1)
         );
 
-        final int anspruch = relevantBuchhaltung.getStipendium();
+        final int anspruch = Objects.requireNonNullElse(relevantBuchhaltung.getStipendium(), 0);
 
         calculationTable.addCell(
             PdfUtils.createCell(
@@ -507,9 +507,10 @@ public class VerfuegungPdfService {
             ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
+        int total = relevantBuchhaltung.getSaldo();
         var totalLabel = translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total");
 
-        if (isRueckforderung) {
+        if (isRueckforderung || total < 0) {
             totalLabel = String.format(
                 "%s %s",
                 totalLabel,
@@ -533,15 +534,13 @@ public class VerfuegungPdfService {
             ).setPadding(1)
         );
 
-        final int total = relevantBuchhaltung.getSaldo();
-
         calculationTable.addCell(
             PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
                 1,
-                PdfUtils.formatNumber(total)
+                PdfUtils.formatNumber(Math.abs(total))
             ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 
@@ -733,15 +732,13 @@ public class VerfuegungPdfService {
 
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
-        ByteArrayOutputStream verfuegungsBrief = new ByteArrayOutputStream();
+        ByteArrayOutputStream verfuegungsBrief;
 
-        if (berechnungsresultat == 0) {
+        if (berechnungsresultat == 0 && gesuch.isFirstVerfuegung()) {
             verfuegungsBrief = createVerfuegungOhneAnspruchPdf(
                 verfuegungService.getLatestVerfuegung(gesuch.getId())
             );
-        }
-
-        if (berechnungsresultat > 0) {
+        } else {
             verfuegungsBrief = createVerfuegungMitAnspruchPdf(verfuegungService.getLatestVerfuegung(gesuch.getId()));
         }
 
