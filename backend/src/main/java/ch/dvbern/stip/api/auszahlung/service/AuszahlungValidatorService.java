@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
@@ -40,9 +39,10 @@ public class AuszahlungValidatorService {
     public CustomConstraintViolation getZahlungsverbindungCustomConstraintViolation(
         final Gesuch gesuch
     ) {
-        Optional<Auszahlung> auszahlungOpt = Optional.ofNullable(gesuch.getAusbildung().getFall().getAuszahlung());
+        var relevantZahlungsverbindungOpt =
+            Optional.ofNullable(gesuch.getAusbildung().getFall().getRelevantZahlungsverbindung());
         Set<ConstraintViolation<Zahlungsverbindung>> violations =
-            auszahlungOpt.map(Auszahlung::getZahlungsverbindung)
+            relevantZahlungsverbindungOpt
                 .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
                 .orElse(null);
 
