@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 
@@ -14,6 +15,7 @@ export const appRoutes: Route[] = [
   {
     path: '',
     canActivate: [hasBenutzer],
+    providers: [DashboardStore],
     children: [
       {
         path: '',

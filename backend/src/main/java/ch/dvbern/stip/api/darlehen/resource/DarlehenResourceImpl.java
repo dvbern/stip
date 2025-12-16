@@ -73,10 +73,10 @@ public class DarlehenResourceImpl implements DarlehenResource {
     private final DarlehenAuthorizer darlehenAuthorizer;
 
     @Override
-    @RolesAllowed(GS_GESUCH_CREATE)
-    public DarlehenDto getDarlehenGs(UUID fallId) {
-        darlehenAuthorizer.canGetDarlehenGs(fallId);
-        return darlehenService.getDarlehenGs(fallId);
+    @RolesAllowed(GS_GESUCH_READ)
+    public DarlehenDto getDarlehenGs(UUID darlehenId) {
+        darlehenAuthorizer.canGetDarlehenGs(darlehenId);
+        return darlehenService.getDarlehenGs(darlehenId);
     }
 
     @Override
@@ -214,6 +214,13 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public List<DarlehenDto> getAllDarlehenSb(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehenAllSb(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed(GS_GESUCH_READ)
+    public List<DarlehenDto> getAllDarlehenGs(UUID fallId) {
+        darlehenAuthorizer.canGetDarlehenByFallId(fallId);
+        return darlehenService.getDarlehenAllGs(fallId);
     }
 
     @Override

@@ -56,7 +56,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   ],
   templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DashboardStore],
 })
 export class SozialdienstAppFeatureGesuchCockpitComponent {
   private sidenavSig = viewChild.required(MatSidenav);

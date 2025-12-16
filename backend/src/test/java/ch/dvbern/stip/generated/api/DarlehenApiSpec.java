@@ -81,6 +81,7 @@ public class DarlehenApiSpec {
                 darlehenZurueckweisen(),
                 deleteDarlehenDokument(),
                 downloadDarlehenDokument(),
+                getAllDarlehenGs(),
                 getAllDarlehenSb(),
                 getDarlehenDashboardSb(),
                 getDarlehenDokument(),
@@ -132,6 +133,10 @@ public class DarlehenApiSpec {
 
     public DownloadDarlehenDokumentOper downloadDarlehenDokument() {
         return new DownloadDarlehenDokumentOper(createReqSpec());
+    }
+
+    public GetAllDarlehenGsOper getAllDarlehenGs() {
+        return new GetAllDarlehenGsOper(createReqSpec());
     }
 
     public GetAllDarlehenSbOper getAllDarlehenSb() {
@@ -1011,6 +1016,79 @@ public class DarlehenApiSpec {
      * Return all darlehen for a given fallId
      * 
      *
+     * @see #fallIdPath  (required)
+     * return List&lt;DarlehenDtoSpec&gt;
+     */
+    public static class GetAllDarlehenGsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/getAllDarlehenGs/{fallId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllDarlehenGsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/getAllDarlehenGs/{fallId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/getAllDarlehenGs/{fallId}
+         * @param handler handler
+         * @return List&lt;DarlehenDtoSpec&gt;
+         */
+        public List<DarlehenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DarlehenDtoSpec>> type = new TypeRef<List<DarlehenDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllDarlehenGsOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Return all darlehen for a given fallId
+     * 
+     *
      * @see #gesuchIdPath  (required)
      * return List&lt;DarlehenDtoSpec&gt;
      */
@@ -1459,13 +1537,13 @@ public class DarlehenApiSpec {
      * Return active darlehen darlehen if exists or else null
      * 
      *
-     * @see #fallIdPath  (required)
+     * @see #darlehenIdPath  (required)
      * return DarlehenDtoSpec
      */
     public static class GetDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/{fallId}";
+        public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1477,7 +1555,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/{fallId}
+         * GET /darlehen/{darlehenId}/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1488,7 +1566,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/{fallId}
+         * GET /darlehen/{darlehenId}/gs
          * @param handler handler
          * @return DarlehenDtoSpec
          */
@@ -1497,14 +1575,14 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String FALL_ID_PATH = "fallId";
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
 
         /**
-         * @param fallId (UUID)  (required)
+         * @param darlehenId (UUID)  (required)
          * @return operation
          */
-        public GetDarlehenGsOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+        public GetDarlehenGsOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
 

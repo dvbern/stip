@@ -39,7 +39,14 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
 
     @Transactional
-    public void canGetDarlehenGs(UUID fallId) {
+    public void canGetDarlehenGs(UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+
+        canGetDarlehenByFallId(darlehen.getFall().getId());
+    }
+
+    @Transactional
+    public void canGetDarlehenByFallId(UUID fallId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 

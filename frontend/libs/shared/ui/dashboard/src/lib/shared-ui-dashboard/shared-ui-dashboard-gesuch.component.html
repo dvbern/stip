@@ -155,16 +155,6 @@
               </button>
             }
           }
-          <!-- todo: Add flag canCreateDarlehen in future -->
-          @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && isCurrentYearTechnischesJahrSig()) {
-            <a
-              class="btn btn-outline-primary"
-              data-testid="cockpit-gesuch-edit"
-              [routerLink]="['/darlehen', gesuch.fallId]"
-            >
-              {{ 'shared.dashboard.darlehen.create' | transloco }}
-            </a>
-          }
         }
       </div>
     </div>

@@ -227,29 +227,6 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          description: Return active darlehen if exists or else null
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Darlehen'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getDarlehenGs
-      summary: Return active darlehen darlehen if exists or else null
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
     post:
       tags:
         - Darlehen
@@ -575,6 +552,29 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return active darlehen if exists or else null
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenGs
+      summary: Return active darlehen darlehen if exists or else null
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
     patch:
       tags:
         - Darlehen
@@ -601,6 +601,38 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: darlehenUpdateGs
       summary: Update darlehen as gs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/getAllDarlehenGs/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return all darlehen for a given fallId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDarlehenGs
+      summary: Return all darlehen for a given fallId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []

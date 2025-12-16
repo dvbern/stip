@@ -95,16 +95,10 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto getDarlehenGs(final UUID fallId) {
-        final var darlehenList = darlehenRepository.findByFallId(fallId);
-        final var darlehenActive = darlehenList.stream()
-            .filter(
-                d -> !d.getStatus().equals(DarlehenStatus.AKZEPTIERT) && !d.getStatus().equals(DarlehenStatus.ABGELEHNT)
-            )
-            .findFirst()
-            .orElse(null);
+    public DarlehenDto getDarlehenGs(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
 
-        return darlehenMapper.toDto(darlehenActive);
+        return darlehenMapper.toDto(darlehen);
     }
 
     @Transactional
@@ -118,6 +112,12 @@ public class DarlehenService {
     public List<DarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
         final var darlehenList = darlehenRepository.findByGesuchId(gesuchId);
 
+        return darlehenList.stream().map(darlehenMapper::toDto).toList();
+    }
+
+    @Transactional
+    public List<DarlehenDto> getDarlehenAllGs(final UUID fallId) {
+        final var darlehenList = darlehenRepository.findByFallId(fallId);
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 

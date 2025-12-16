@@ -62,7 +62,6 @@ import {
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -89,7 +88,6 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
     SharedUiFormFieldDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiFormMessageErrorDirective,
-    SharedUiStepFormButtonsComponent,
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
     SharedUiMaxLengthDirective,
@@ -294,21 +292,30 @@ export class SharedFeatureDarlehenComponent {
   }
 
   // Gesuchsteller Actions
-  // darlehenUpdateGs(): void {
-  //   this.formGs.markAllAsTouched();
-  //   this.formUtils.focusFirstInvalid(this.elementRef);
+  darlehenUpdateGs(): void {
+    this.formGs.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
+    const darlehen = this.darlehenSig();
 
-  //   if (this.formGs.invalid) {
-  //     return;
-  //   }
+    if (!darlehen) {
+      return;
+    }
 
-  //   const darlehen = this.buildUpdatedGsFrom();
+    if (this.formGs.invalid) {
+      return;
+    }
 
-  //   this.darlehenStore.darlehenUpdateGs$({
-  //     darlehenId: this.darlehenSig().id,
-  //     darlehenUpdateGs: darlehen,
-  //   });
-  // }
+    this.darlehenStore.darlehenUpdateGs$({
+      data: {
+        darlehenId: darlehen.id,
+        darlehenUpdateGs: this.buildUpdatedGsFrom(),
+      },
+      onSuccess: () => {
+        this.gsFormSavedSig.set(false);
+        this.formGs.markAsPristine();
+      },
+    });
+  }
 
   darlehenEingeben(): void {
     this.formGs.markAllAsTouched();
@@ -320,24 +327,15 @@ export class SharedFeatureDarlehenComponent {
     }
 
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'shared.form.darlehen.create.dialog.title',
-      message: 'shared.form.darlehen.create.dialog.message',
+      title: 'shared.form.darlehen.eingeben.dialog.title',
+      message: 'shared.form.darlehen.eingeben.dialog.message',
       cancelText: 'shared.cancel',
-      confirmText: 'shared.form.darlehen.create.dialog.confirm',
+      confirmText: 'shared.form.darlehen.eingeben.dialog.confirm',
     })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.darlehenStore.darlehenUpdateAndEingeben$({
-            data: {
-              darlehenId: darlehen.id,
-              darlehenUpdateGs: this.buildUpdatedGsFrom(),
-            },
-            onSuccess: () => {
-              this.gsFormSavedSig.set(true);
-              this.formGs.markAsPristine();
-            },
-          });
+          this.darlehenStore.darlehenEingeben$({ darlehenId: darlehen.id });
         }
       });
   }

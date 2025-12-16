@@ -1,8 +1,10 @@
-import { Injectable, computed, inject, untracked } from '@angular/core';
+import { Injectable, Signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
+import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
 import {
   Darlehen,
   DarlehenService,
@@ -14,6 +16,7 @@ import {
   DarlehenServiceDarlehenUpdateGsRequestParams,
   DarlehenServiceDarlehenUpdateSbRequestParams,
   DarlehenServiceDarlehenZurueckweisenRequestParams,
+  DarlehenServiceGetAllDarlehenGsRequestParams,
   DarlehenServiceGetAllDarlehenSbRequestParams,
   DarlehenServiceGetDarlehenDashboardSbRequestParams,
   DarlehenServiceGetDarlehenGsRequestParams,
@@ -23,13 +26,43 @@ import {
 import {
   CachedRemoteData,
   cachedPending,
-  cachedResult,
   fromCachedDataSig,
   handleApiResponse,
   initial,
   isPending,
   pending,
 } from '@dv/shared/util/remote-data';
+
+// todo: improve this check, maybe move to helper or backend
+export const canCreateDarlehenFn = (
+  dashBoardSig: Signal<SharedModelGsDashboardView | undefined>,
+  darlehenListSig: Signal<Darlehen[] | undefined>,
+): Signal<boolean> => {
+  return computed(() => {
+    const dashboardView = dashBoardSig();
+    const darlehenList = darlehenListSig();
+    if (!dashboardView || !darlehenList) {
+      return false;
+    }
+
+    const hasActiveAusbildungWithGesuchNotInBearbeitung =
+      dashboardView.activeAusbildungen.some((ausbildung) =>
+        ausbildung.gesuchs.some(
+          (gesuch) => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS',
+        ),
+      );
+
+    const hasNoDarlehen = !darlehenList.some((darlehen) => {
+      return (
+        darlehen.status === 'IN_BEARBEITUNG_GS' ||
+        darlehen.status === 'EINGEGEBEN' ||
+        darlehen.status === 'IN_FREIGABE'
+      );
+    });
+
+    return hasActiveAusbildungWithGesuchNotInBearbeitung && hasNoDarlehen;
+  });
+};
 
 type DarlehenState = {
   cachedDarlehen: CachedRemoteData<Darlehen>;
@@ -49,6 +82,7 @@ export class DarlehenStore extends signalStore(
   withState(initialState),
 ) {
   private darlehenService = inject(DarlehenService);
+  private router = inject(Router);
 
   setDarlehen(rd: CachedRemoteData<Darlehen>) {
     patchState(this, { cachedDarlehen: rd });
@@ -66,6 +100,10 @@ export class DarlehenStore extends signalStore(
       darlehen: fromCachedDataSig(this.cachedDarlehen),
       loading: isPending(this.cachedDarlehen()),
     };
+  });
+
+  darlehenListSig = computed(() => {
+    return fromCachedDataSig(this.darlehenList);
   });
 
   darlehenListViewSig = computed(() => {
@@ -94,6 +132,25 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
+  getAllDarlehenGs$ = rxMethod<DarlehenServiceGetAllDarlehenGsRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          darlehenList: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        this.darlehenService
+          .getAllDarlehenGs$(req)
+          .pipe(
+            handleApiResponse((darlehen) =>
+              patchState(this, { darlehenList: darlehen }),
+            ),
+          ),
+      ),
+    ),
+  );
+
   createDarlehen$ = rxMethod<DarlehenServiceCreateDarlehenRequestParams>(
     pipe(
       tap(() => {
@@ -103,51 +160,23 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap((req) =>
         this.darlehenService.createDarlehen$(req).pipe(
-          handleApiResponse((darlehen) => {
-            patchState(this, { cachedDarlehen: darlehen });
-          }),
+          handleApiResponse(
+            (darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            },
+            {
+              onSuccess: (data) => {
+                this.router.navigate(['/darlehen', data.id]);
+              },
+            },
+          ),
         ),
       ),
     ),
   );
 
-  // darlehenUpdateGs$ = rxMethod<DarlehenServiceDarlehenUpdateGsRequestParams>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         cachedDarlehen: cachedPending(state.cachedDarlehen),
-  //       }));
-  //     }),
-  //     switchMap((data) =>
-  //       this.darlehenService.darlehenUpdateGs$(data).pipe(
-  //         handleApiResponse((darlehen) => {
-  //           patchState(this, { cachedDarlehen: darlehen });
-  //         }),
-  //       ),
-  //     ),
-  //   ),
-  // );
-
-  // darlehenEingeben$ = rxMethod<DarlehenServiceDarlehenEingebenRequestParams>(
-  //   pipe(
-  //     tap(() => {
-  //       patchState(this, (state) => ({
-  //         cachedDarlehen: cachedPending(state.cachedDarlehen),
-  //       }));
-  //     }),
-  //     switchMap((data) =>
-  //       this.darlehenService.darlehenEingeben$(data).pipe(
-  //         handleApiResponse((darlehen) => {
-  //           patchState(this, { cachedDarlehen: darlehen });
-  //         }),
-  //       ),
-  //     ),
-  //   ),
-  // );
-
-  darlehenUpdateAndEingeben$ = rxMethod<{
-    data: DarlehenServiceDarlehenUpdateGsRequestParams &
-      DarlehenServiceDarlehenEingebenRequestParams;
+  darlehenUpdateGs$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateGsRequestParams;
     onSuccess: () => void;
   }>(
     pipe(
@@ -156,35 +185,32 @@ export class DarlehenStore extends signalStore(
           cachedDarlehen: cachedPending(state.cachedDarlehen),
         }));
       }),
-      // todo: is the outer error handling sufficient here?
       switchMap(({ data, onSuccess }) =>
-        this.darlehenService
-          .darlehenUpdateGs$({
-            darlehenId: data.darlehenId,
-            darlehenUpdateGs: data.darlehenUpdateGs,
-          })
-          .pipe(
-            switchMap(() =>
-              this.darlehenService.darlehenEingeben$({
-                darlehenId: data.darlehenId,
-              }),
-            ),
-            handleApiResponse(
-              (darlehen) => {
-                patchState(this, {
-                  cachedDarlehen: cachedResult(
-                    untracked(this.cachedDarlehen),
-                    darlehen,
-                  ),
-                });
-              },
-              { onSuccess },
-            ),
-            catchError((error) => {
-              console.error('Error in darlehenUpdateAndEingeben$', error);
-              return EMPTY;
-            }),
+        this.darlehenService.darlehenUpdateGs$(data).pipe(
+          handleApiResponse(
+            (darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            },
+            { onSuccess },
           ),
+        ),
+      ),
+    ),
+  );
+
+  darlehenEingeben$ = rxMethod<DarlehenServiceDarlehenEingebenRequestParams>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap((req) =>
+        this.darlehenService.darlehenEingeben$(req).pipe(
+          handleApiResponse((darlehen) => {
+            patchState(this, { cachedDarlehen: darlehen });
+          }),
+        ),
       ),
     ),
   );
