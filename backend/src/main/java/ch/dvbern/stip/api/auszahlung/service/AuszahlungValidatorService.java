@@ -17,16 +17,12 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
@@ -40,20 +36,16 @@ public class AuszahlungValidatorService {
     public CustomConstraintViolation getZahlungsverbindungCustomConstraintViolation(
         final Gesuch gesuch
     ) {
-
-        Optional<Auszahlung> auszahlungOpt = Optional.ofNullable(gesuch.getAusbildung().getFall().getAuszahlung());
-        Set<ConstraintViolation<Zahlungsverbindung>> violations =
-            auszahlungOpt.map(Auszahlung::getZahlungsverbindung)
-                .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
-                .orElse(null);
-
-        CustomConstraintViolation out = null;
-        if (Objects.isNull(violations) || !violations.isEmpty()) {
-            out = new CustomConstraintViolation(
-                VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
-                "auszahlung"
-            );
-        }
-        return out;
+        return Optional.ofNullable(gesuch.getAusbildung().getFall().getAuszahlung())
+            .map(Auszahlung::getZahlungsverbindung)
+            .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
+            .filter(constraintViolations -> !constraintViolations.isEmpty())
+            .map(
+                constraintViolations -> new CustomConstraintViolation(
+                    VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
+                    "auszahlung"
+                )
+            )
+            .orElse(null);
     }
 }

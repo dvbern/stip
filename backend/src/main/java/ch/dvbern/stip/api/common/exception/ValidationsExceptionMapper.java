@@ -32,6 +32,19 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ValidationsExceptionMapper {
     public ValidationReportDto toDto(
+        ValidationsException validationsException
+    ) {
+        return toDto(validationsException, false);
+    }
+
+    public ValidationReportDto toDto(
+        ValidationsException validationsException,
+        Boolean hasDocuments
+    ) {
+        return toDto(validationsException, null, hasDocuments);
+    }
+
+    public ValidationReportDto toDto(
         ValidationsException validationsException,
         CustomConstraintViolation additionalConstraintViolation,
         Boolean hasDocuments
@@ -43,16 +56,10 @@ public class ValidationsExceptionMapper {
     }
 
     public ValidationReportDto toDto(
-        ValidationsException validationsException,
+        Set<? extends ConstraintViolation<?>> constraintViolations,
         Boolean hasDocuments
     ) {
-        return toDto(validationsException, null, hasDocuments);
-    }
-
-    public ValidationReportDto toDto(
-        ValidationsException validationsException
-    ) {
-        return toDto(validationsException, false);
+        return toDto(constraintViolations, null, hasDocuments);
     }
 
     public ValidationReportDto toDto(
@@ -71,11 +78,13 @@ public class ValidationsExceptionMapper {
             if (payload.contains(Severity.Warning.class)) {
                 // set warnings
                 warnings.add(messageDto);
-            } else {
+            } else if (payload.contains(Severity.Error.class) || payload.isEmpty()) {
                 // set errors. Violations with no payload are considered errors.
                 // if other severities are added, they are thrown by default,
                 // and must be handled seperately
                 errors.add(messageDto);
+            } else {
+                throw new IllegalStateException("Unhandled constraint payload: " + payload.toString());
             }
         });
         if (Objects.nonNull(additionalConstraintViolation)) {
@@ -89,31 +98,10 @@ public class ValidationsExceptionMapper {
         return validationsReportDto;
     }
 
-    public ValidationReportDto toDto(
-        Set<? extends ConstraintViolation<?>> constraintViolations,
-        Boolean hasDocuments
+    public static ValidationReportDto toDto(
+        CustomValidationsException validationsException
     ) {
-        return toDto(constraintViolations, null, hasDocuments);
-    }
-
-    public ValidationReportDto toDto(
-        CustomValidationsException validationsException,
-        CustomConstraintViolation additionalConstraintViolation,
-        Boolean hasDocuments
-    ) {
-        final ArrayList<ValidationMessageDto> validationErrors = new ArrayList<>();
-        if (Objects.nonNull(validationsException)) {
-            final ValidationMessageDto validationErrorDto = ExceptionMapperUtil.toMessageDto(validationsException);
-            validationErrors.add(validationErrorDto);
-        }
-
-        if (Objects.nonNull(additionalConstraintViolation)) {
-            validationErrors.add(ExceptionMapperUtil.toMessageDto(additionalConstraintViolation));
-        }
-        final ValidationReportDto report = new ValidationReportDto();
-        report.setValidationErrors(validationErrors);
-        report.setHasDocuments(hasDocuments);
-        return report;
+        return toDto(validationsException, false);
     }
 
     public ValidationReportDto toDto(
@@ -131,16 +119,29 @@ public class ValidationsExceptionMapper {
     }
 
     public ValidationReportDto toDto(
+        CustomValidationsException validationsException,
+        CustomConstraintViolation additionalConstraintViolation,
         Boolean hasDocuments
     ) {
+        final ArrayList<ValidationMessageDto> validationErrors = new ArrayList<>();
+        if (Objects.nonNull(validationsException)) {
+            final ValidationMessageDto validationErrorDto = ExceptionMapperUtil.toMessageDto(validationsException);
+            validationErrors.add(validationErrorDto);
+        }
+
+        if (Objects.nonNull(additionalConstraintViolation)) {
+            validationErrors.add(ExceptionMapperUtil.toMessageDto(additionalConstraintViolation));
+        }
+
         final ValidationReportDto report = new ValidationReportDto();
+        report.setValidationErrors(validationErrors);
         report.setHasDocuments(hasDocuments);
         return report;
     }
 
-    public static ValidationReportDto toDto(
-        CustomValidationsException validationsException
+    public ValidationReportDto toDto(
+        Boolean hasDocuments
     ) {
-        return toDto(validationsException, false);
+        return toDto((CustomValidationsException) null, null, hasDocuments);
     }
 }

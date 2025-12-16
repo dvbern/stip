@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -575,14 +574,13 @@ public class GesuchTrancheService {
 
         try {
             gesuchTrancheValidatorService.validateAenderungForAkzeptiert(gesuchTranche);
-
         } catch (ValidationsException e) {
             return ValidationsExceptionMapper.toDto(e, hasDocuments);
         } catch (CustomValidationsException e) {
             return ValidationsExceptionMapper.toDto(e, hasDocuments);
         }
 
-        return new ValidationReportDto().hasDocuments(hasDocuments);
+        return ValidationsExceptionMapper.toDto(hasDocuments);
     }
 
     private ValidationReportDto einreichenValidationReport(final GesuchTranche gesuchTranche) {
@@ -607,12 +605,7 @@ public class GesuchTrancheService {
             return ValidationsExceptionMapper.toDto(e, auszahlungConstraintViolation, hasDocuments);
         }
 
-        // handle case when Auszahlung only is invalid
-        if (Objects.nonNull(auszahlungConstraintViolation)) {
-            return ValidationsExceptionMapper.toDto(auszahlungConstraintViolation, hasDocuments);
-        }
-
-        return new ValidationReportDto().hasDocuments(hasDocuments);
+        return ValidationsExceptionMapper.toDto(auszahlungConstraintViolation, hasDocuments);
     }
 
     @Transactional
