@@ -59,21 +59,4 @@ public class AuszahlungValidatorService {
         }
         return out;
     }
-    //
-    // public void validateAuszahlung(final Gesuch toValidate) {
-    // var auszahlungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung());
-    // var customConstraintViolationOpt = auszahlungOpt
-    // .map(Auszahlung::getZahlungsverbindung)
-    // .map(this::getZahlungsverbindungCustomConstraintViolation);
-    //
-    // if (auszahlungOpt.isEmpty() || customConstraintViolationOpt.isPresent()) {
-    // throw new CustomValidationsException(
-    // "Keine Auszahlung vorhanden oder ungültige Zahlungsverbindung",
-    // new CustomConstraintViolation(
-    // VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
-    // "auszahlung"
-    // )
-    // );
-    // }
-    // }
 }

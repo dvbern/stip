@@ -71,13 +71,11 @@ public class ValidationsExceptionMapper {
             if (payload.contains(Severity.Warning.class)) {
                 // set warnings
                 warnings.add(messageDto);
-            } else if (payload.contains(Severity.Error.class)) {
-                // set errors
-                errors.add(messageDto);
-            } else if (!payload.isEmpty()) {
+            } else {
+                // set errors. Violations with no payload are considered errors.
                 // if other severities are added, they are thrown by default,
                 // and must be handled seperately
-                throw new IllegalStateException("unhandled constraintViolation severity: " + payload.toString());
+                errors.add(messageDto);
             }
         });
         if (Objects.nonNull(additionalConstraintViolation)) {
