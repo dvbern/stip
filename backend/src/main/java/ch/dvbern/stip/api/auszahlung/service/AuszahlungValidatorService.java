@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.auszahlung.service;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,19 +40,15 @@ public class AuszahlungValidatorService {
     public CustomConstraintViolation getZahlungsverbindungCustomConstraintViolation(
         final Gesuch gesuch
     ) {
-        var auszahlungOpt = Optional.ofNullable(gesuch.getAusbildung().getFall().getAuszahlung());
-        return auszahlungOpt.map(Auszahlung::getZahlungsverbindung)
-            .map(this::getZahlungsverbindungCustomConstraintViolation)
-            .orElse(null);
-    }
 
-    public CustomConstraintViolation getZahlungsverbindungCustomConstraintViolation(
-        final Zahlungsverbindung zahlungsverbindung
-    ) {
-        final Set<ConstraintViolation<Zahlungsverbindung>> violations = validator.validate(zahlungsverbindung);
+        Optional<Auszahlung> auszahlungOpt = Optional.ofNullable(gesuch.getAusbildung().getFall().getAuszahlung());
+        Set<ConstraintViolation<Zahlungsverbindung>> violations =
+            auszahlungOpt.map(Auszahlung::getZahlungsverbindung)
+                .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
+                .orElse(null);
 
         CustomConstraintViolation out = null;
-        if (!violations.isEmpty()) {
+        if (Objects.isNull(violations) || !violations.isEmpty()) {
             out = new CustomConstraintViolation(
                 VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
                 "auszahlung"
