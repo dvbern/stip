@@ -86,8 +86,7 @@ public class DarlehenApiSpec {
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
                 getDarlehenGs(),
-                getDarlehenSb(),
-                getDarlehensVerfuegungDokument()
+                getDarlehenSb()
         );
     }
 
@@ -157,10 +156,6 @@ public class DarlehenApiSpec {
 
     public GetDarlehenSbOper getDarlehenSb() {
         return new GetDarlehenSbOper(createReqSpec());
-    }
-
-    public GetDarlehensVerfuegungDokumentOper getDarlehensVerfuegungDokument() {
-        return new GetDarlehensVerfuegungDokumentOper(createReqSpec());
     }
 
     /**
@@ -1602,91 +1597,6 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * get Dokument for Darlehensverfuegung
-     * 
-     *
-     * @see #tokenQuery  (required)
-     * @see #darlehenIdPath  (required)
-     * return File
-     */
-    public static class GetDarlehensVerfuegungDokumentOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/dokument/verfuegung/{darlehenId}/download";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetDarlehensVerfuegungDokumentOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/octet-stream");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /darlehen/dokument/verfuegung/{darlehenId}/download
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /darlehen/dokument/verfuegung/{darlehenId}/download
-         * @param handler handler
-         * @return File
-         */
-        public File executeAs(Function<Response, Response> handler) {
-            TypeRef<File> type = new TypeRef<File>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public GetDarlehensVerfuegungDokumentOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        public static final String TOKEN_QUERY = "token";
-
-        /**
-         * @param token (String)  (required)
-         * @return operation
-         */
-        public GetDarlehensVerfuegungDokumentOper tokenQuery(Object... token) {
-            reqSpec.addQueryParam(TOKEN_QUERY, token);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetDarlehensVerfuegungDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetDarlehensVerfuegungDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

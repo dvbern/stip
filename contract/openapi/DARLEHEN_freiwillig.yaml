@@ -490,40 +490,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: darlehenUpdateSb
       summary: Update darlehen as sb
-  /darlehen/dokument/verfuegung/{darlehenId}/download:
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-      - name: darlehenId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: File returned
-      operationId: getDarlehensVerfuegungDokument
-      summary: get Dokument for Darlehensverfuegung
-      x-quarkus-response-type: >-
-        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
-
   schemas:
     SbDarlehenDashboardColumn:
       enum:

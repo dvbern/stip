@@ -695,36 +695,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/dokument/verfuegung/{darlehenId}/download:
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-      - name: darlehenId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: File returned
-      operationId: getDarlehensVerfuegungDokument
-      summary: get Dokument for Darlehensverfuegung
-      x-quarkus-response-type: >-
-        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
   /delegieren/{fallId}/{sozialdienstId}:
     parameters:
       - $ref: '#/components/parameters/fallId'

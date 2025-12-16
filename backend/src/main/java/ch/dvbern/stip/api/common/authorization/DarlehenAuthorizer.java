@@ -105,7 +105,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
+        // assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional

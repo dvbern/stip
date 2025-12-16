@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.darlehen.service;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -52,7 +51,6 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -90,7 +88,7 @@ public class DarlehenService {
 
         final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
-            "darlehensverfuegung",
+            DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             s3,
             configService,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
@@ -100,8 +98,8 @@ public class DarlehenService {
         // todo: add test to make sure that this dokument can be downloaded
         var darlehensVerfuegung = new Dokument();
         darlehensVerfuegung.setObjectId(objectId);
-        darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
-        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
         darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
     }
@@ -371,17 +369,6 @@ public class DarlehenService {
             DARLEHEN_DOKUMENT_PATH,
             dokument.getFilename()
         );
-    }
-
-    @Transactional
-    public RestMulti<Buffer> getDarlehensVerfuegungDokument(
-        final UUID darlehenId
-    ) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
-        return Optional.of(getDokument(darlehen.getDarlehenVerfuegung().getId()))
-            .orElseThrow(
-                NotFoundException::new
-            );
     }
 
     @Transactional

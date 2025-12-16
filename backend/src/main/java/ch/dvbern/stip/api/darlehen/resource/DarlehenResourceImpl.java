@@ -86,19 +86,6 @@ public class DarlehenResourceImpl implements DarlehenResource {
         return darlehenService.getDarlehenSb(darlehenId);
     }
 
-    @Blocking
-    @Override
-    @PermitAll
-    public RestMulti<Buffer> getDarlehensVerfuegungDokument(String token, UUID darlehenId) {
-        dokumentDownloadService.getClaimId(
-            jwtPar,
-            token,
-            configService.getSecret(),
-            DokumentDownloadConstants.DOKUMENT_ID_CLAIM
-        );
-        return darlehenService.getDarlehensVerfuegungDokument(darlehenId);
-    }
-
     @Override
     @RolesAllowed(SB_GESUCH_READ)
     public PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(
