@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.fall.entity;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -107,7 +108,11 @@ public class Fall extends AbstractMandantEntity {
     @Column(name = "failed_buchhaltung_auszahlung_type", nullable = true)
     private BuchhaltungType failedBuchhaltungAuszahlungType;
 
+    @Nullable
     public Zahlungsverbindung getRelevantZahlungsverbindung() {
+        if (Objects.isNull(auszahlung)) {
+            return null;
+        }
         if (auszahlung.isAuszahlungAnSozialdienst()) {
             return delegierung.getSozialdienst().getZahlungsverbindung();
         }
