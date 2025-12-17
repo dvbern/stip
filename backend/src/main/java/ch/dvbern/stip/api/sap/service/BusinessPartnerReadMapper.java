@@ -30,8 +30,20 @@ import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class)
 public abstract class BusinessPartnerReadMapper {
+    @Named("getFilterParmsBusinessPartnerId")
+    @Mapping(source = "businessPartnerId", target = "BPARTNER", qualifiedByName = "getBusinessPartnerId")
+    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParmsBusinessPartnerId(
+        Integer businessPartnerId
+    );
+
+    @Named("getBusinessPartnerId")
+    public String getBusinessPartnerId(Integer businessPartnerId) {
+        return String.valueOf(businessPartnerId);
+    }
+
+    @Named("getFilterParmsDeliveryId")
     @Mapping(source = "deliveryid", target = "DELIVERYID", qualifiedByName = "getDeliveryId")
-    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParms(
+    public abstract BusinessPartnerReadRequest.FILTERPARMS getFilterParmsDeliveryId(
         BigDecimal deliveryid
     );
 
@@ -47,11 +59,18 @@ public abstract class BusinessPartnerReadMapper {
         return sender;
     }
 
-    @Mapping(source = ".", target = "FILTERPARMS")
+    @Mapping(source = ".", target = "FILTERPARMS", qualifiedByName = "getFilterParmsDeliveryId")
     @Mapping(source = ".", target = "SENDER", qualifiedByName = "getSenderParms")
-    public abstract BusinessPartnerReadRequest toBusinessPartnerReadRequest(
+    public abstract BusinessPartnerReadRequest toBusinessPartnerReadRequestDeliveryId(
         @Context BigInteger sysid,
         BigDecimal deliveryid
+    );
+
+    @Mapping(source = ".", target = "FILTERPARMS", qualifiedByName = "getFilterParmsBusinessPartnerId")
+    @Mapping(source = ".", target = "SENDER", qualifiedByName = "getSenderParms")
+    public abstract BusinessPartnerReadRequest toBusinessPartnerReadRequestBusinessPartnerId(
+        @Context BigInteger sysid,
+        Integer businessPartnerId
     );
 
 }

@@ -153,7 +153,7 @@ class DokumentResourceImplTest {
     @TestAsGesuchsteller
     @Test
     void gsShouldNotBeAbleToDenyDocumentTest() {
-        doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(), any());
+        doNothing().when(gesuchDokumentService).gesuchDokumentAblehnen(any(UUID.class), any());
         assertThrows(
             io.quarkus.security.ForbiddenException.class,
             () -> dokumentResource.gesuchDokumentAblehnen(UUID.randomUUID(), null)
@@ -163,7 +163,7 @@ class DokumentResourceImplTest {
     @TestAsGesuchsteller
     @Test
     void gsShouldNotBeAbleToAcceptDocumentTest() {
-        doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any());
+        doNothing().when(gesuchDokumentService).gesuchDokumentAkzeptieren(any(UUID.class));
         assertThrows(
             io.quarkus.security.ForbiddenException.class,
             () -> dokumentResource.gesuchDokumentAkzeptieren(UUID.randomUUID())

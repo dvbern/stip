@@ -42,8 +42,11 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse.BUSINESSPARTNER;
 import ch.dvbern.stip.api.sap.repo.SapDeliveryRepository;
+import ch.dvbern.stip.api.sap.util.SapMapperUtil;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -54,6 +57,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.AUSZAHLUNG_INITIAL;
+import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.BUSINESSPARTNER_CHANGE;
 import static ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType.BUSINESSPARTNER_CREATE;
 
 @Slf4j
@@ -72,9 +76,72 @@ public class SapService {
     private final AdresseRepository adresseRepository;
     private final NotificationService notificationService;
     private final MailService mailService;
+    private final BusinessPartnerChangeMapper businessPartnerChangeMapper;
+
+    private boolean businessPartnerNeedsUpate(
+        final Gesuch gesuch,
+        final Integer businessPartnerId
+    ) {
+        final var businessPartner =
+            sapEndpointService.readBusinessPartnerByBusinessPartnerId(businessPartnerId).getBUSINESSPARTNER();
+        final var businessPartnerChangeRequest =
+            businessPartnerChangeMapper.toBusinessPartner(gesuch.getAusbildung().getFall());
+        final var addressLocal = businessPartnerChangeRequest.getADDRESS().get(0);
+        final var addressRemote = businessPartner.getADDRESS().get(0);
+
+        if (
+            !Objects.equals(addressLocal.getCOUNTRY(), addressRemote.getCOUNTRY())
+            || !Objects.equals(addressLocal.getCITY(), addressRemote.getCITY())
+            || !Objects.equals(addressLocal.getCONAME(), addressRemote.getCONAME())
+            || !Objects.equals(addressLocal.getSTREET(), addressRemote.getSTREET())
+            || !Objects.equals(addressLocal.getHOUSENO(), addressRemote.getHOUSENO())
+            || !Objects.equals(addressLocal.getPOSTLCOD1(), addressRemote.getPOSTLCOD1())
+        ) {
+            return true;
+        }
+
+        final var persdataLocal = businessPartnerChangeRequest.getPERSDATA();
+        final var persdataRemote = businessPartner.getPERSDATA();
+
+        if (
+            !Objects.equals(persdataLocal.getFIRSTNAME(), persdataRemote.getFIRSTNAME())
+            || !Objects.equals(persdataLocal.getLASTNAME(), persdataRemote.getLASTNAME())
+            || !Objects.equals(persdataLocal.getNATIONALITYISO(), persdataRemote.getNATIONALITYISO())
+            || !Objects.equals(persdataLocal.getBIRTHDATE(), persdataRemote.getBIRTHDATE())
+        ) {
+            return true;
+        }
+
+        final var paymentdetailLocal = businessPartnerChangeRequest.getPAYMENTDETAIL();
+        final var paymentdetailRemote = businessPartner.getPAYMENTDETAIL();
+
+        if (
+            !Objects.equals(
+                SapMapperUtil.stripWhitespace(paymentdetailLocal.get(0).getIBAN()),
+                SapMapperUtil.stripWhitespace(paymentdetailRemote.get(0).getIBAN())
+            )
+            || !Objects
+                .equals(paymentdetailLocal.get(0).getACCOUNTHOLDER(), paymentdetailRemote.get(0).getACCOUNTHOLDER())
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 
     @Transactional
-    public void getBusinessPartnerCreateStatus(final UUID auszahlungId) {
+    public BUSINESSPARTNER searchBusinessPartner(final String sozialversicherungsnummer) {
+        final var businessPartnerSearchResponse =
+            sapEndpointService.searchBusinessPartner(sozialversicherungsnummer);
+
+        if (businessPartnerSearchResponse.getBUSINESSPARTNER().isEmpty()) {
+            return null;
+        }
+        return businessPartnerSearchResponse.getBUSINESSPARTNER().get(0);
+    }
+
+    @Transactional
+    public void getBusinessPartnerActionStatus(final UUID auszahlungId) {
         final var auszahlung = auszahlungRepository.requireById(auszahlungId);
         final var buchhaltung = auszahlung.getBuchhaltung();
         final SapDelivery sapDelivery = buchhaltung.getLatestSapDelivery();
@@ -87,7 +154,7 @@ public class SapService {
             status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
         }
         if (status == SapStatus.SUCCESS) {
-            final var readResponse = sapEndpointService.readBusinessPartner(deliveryid);
+            final var readResponse = sapEndpointService.readBusinessPartnerByDeliveryId(deliveryid);
             SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
             buchhaltung.getFall()
                 .getAuszahlung()
@@ -98,36 +165,69 @@ public class SapService {
         sapDelivery.setSapStatus(status);
     }
 
-    @Transactional
-    public void createBusinessPartnerOrGetStatus(
-        final Gesuch gesuch
+    private Buchhaltung getBusinessPartnerActionBuchhaltung(
+        final Gesuch gesuch,
+        final BuchhaltungType buchhaltungBusinessPartnerType
     ) {
+        if (
+            !EnumSet.of(BuchhaltungType.BUSINESSPARTNER_CREATE, BuchhaltungType.BUSINESSPARTNER_CHANGE)
+                .contains(buchhaltungBusinessPartnerType)
+        ) {
+            throw new IllegalStateException();
+        }
         final var fall = gesuch.getAusbildung().getFall();
         final var auszahlung = fall.getAuszahlung();
-        Buchhaltung businessPartnerCreateBuchhaltung = auszahlung.getBuchhaltung();
+        Buchhaltung businessPartnerActionBuchhaltung = auszahlung.getBuchhaltung();
+
+        if (Objects.nonNull(businessPartnerActionBuchhaltung)) {
+            if (businessPartnerActionBuchhaltung.getBuchhaltungType() != buchhaltungBusinessPartnerType) {
+                throw new IllegalStateException();
+            }
+        }
+
         if (
-            Objects.isNull(businessPartnerCreateBuchhaltung)
-            || businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.FAILURE
+            Objects.isNull(businessPartnerActionBuchhaltung)
+            || businessPartnerActionBuchhaltung.getSapStatus() == SapStatus.FAILURE
         ) {
-            businessPartnerCreateBuchhaltung =
-                buchhaltungService.createBuchhaltungForBusinessPartnerCreate(gesuch.getId());
+            switch (buchhaltungBusinessPartnerType) {
+                case BUSINESSPARTNER_CREATE -> businessPartnerActionBuchhaltung =
+                    buchhaltungService.createBuchhaltungForBusinessPartnerCreate(gesuch.getId());
+                case BUSINESSPARTNER_CHANGE -> businessPartnerActionBuchhaltung =
+                    buchhaltungService.createBuchhaltungForBusinessPartnerChange(gesuch.getId());
+                case null, default -> throw new IllegalStateException();
+            }
             fall.setFailedBuchhaltungAuszahlungType(null);
         }
 
         if (
             !EnumSet.of(SapStatus.SUCCESS, SapStatus.IN_PROGRESS)
-                .contains(businessPartnerCreateBuchhaltung.getSapStatus())
+                .contains(businessPartnerActionBuchhaltung.getSapStatus())
         ) {
             throw new IllegalStateException(
                 String.format(
                     "buchhaltung status is not IN_PROGRESS or SUCCESS but %s",
-                    businessPartnerCreateBuchhaltung.getSapStatus()
+                    businessPartnerActionBuchhaltung.getSapStatus()
                 )
             );
         }
+        return businessPartnerActionBuchhaltung;
+    }
 
-        final var sapDeliverys = businessPartnerCreateBuchhaltung.getSapDeliverys();
+    @Transactional
+    public void doBusinessPartnerActionOrGetStatus(
+        final Gesuch gesuch,
+        final BuchhaltungType businessPartnerActionBuchhaltungType
+    ) {
+        if (
+            !EnumSet.of(BuchhaltungType.BUSINESSPARTNER_CREATE, BuchhaltungType.BUSINESSPARTNER_CHANGE)
+                .contains(businessPartnerActionBuchhaltungType)
+        ) {
+            throw new IllegalStateException();
+        }
+        Buchhaltung businessPartnerActionBuchhaltung =
+            getBusinessPartnerActionBuchhaltung(gesuch, businessPartnerActionBuchhaltungType);
 
+        final var sapDeliverys = businessPartnerActionBuchhaltung.getSapDeliverys();
         final var sapDeliveryInProgress = sapDeliverys
             .stream()
             .filter(
@@ -136,6 +236,7 @@ public class SapService {
             .sorted(Comparator.comparing(SapDelivery::getTimestampErstellt).reversed())
             .findFirst();
 
+        final var fall = gesuch.getAusbildung().getFall();
         BigDecimal deliveryid = null;
         if (sapDeliveryInProgress.isEmpty()) {
             final var lastSapDelivery =
@@ -152,41 +253,40 @@ public class SapService {
                 sapDeliveryRepository.persistAndFlush(sapDelivery);
                 sapDelivery = sapDeliveryRepository.requireById(sapDelivery.getId());
 
-                // boolean success = false;
                 try {
-                    final var createResponse = sapEndpointService.createBusinessPartner(fall, deliveryid);
-                    SapReturnCodeType.assertSuccess(createResponse.getRETURNCODE().get(0).getTYPE());
-                    // success = true;
+                    switch (businessPartnerActionBuchhaltungType) {
+                        case BUSINESSPARTNER_CREATE -> {
+                            final var response = sapEndpointService.createBusinessPartner(fall, deliveryid);
+                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
+                        }
+                        case BUSINESSPARTNER_CHANGE -> {
+                            final var response = sapEndpointService.changeBusinessPartner(fall, deliveryid);
+                            SapReturnCodeType.assertSuccess(response.getRETURNCODE().get(0).getTYPE());
+                        }
+                        case null, default -> throw new IllegalStateException();
+                    }
                 } catch (Exception e) {
-                    LOG.error("Failed to send createBusinessPartner action", e);
+                    LOG.error(
+                        String.format("Failed to send %s action", businessPartnerActionBuchhaltungType.name()),
+                        e
+                    );
                     sapDelivery.setSapStatus(SapStatus.FAILURE);
                 }
 
-                // // TOOO: Most likely not needed as we check the status just after this if block. But still here for
-                // safety.
-                // IF IT IS NEEDED WE NEED A TRY CATCH AROUND IT
-                // if (success) {
-                // final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
-                // SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
-                //
-                // sapDelivery
-                // .setSapStatus(SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS()));
-                // }
-
-                sapDelivery.setBuchhaltung(businessPartnerCreateBuchhaltung);
-                businessPartnerCreateBuchhaltung.getSapDeliverys().add(sapDelivery);
+                sapDelivery.setBuchhaltung(businessPartnerActionBuchhaltung);
+                businessPartnerActionBuchhaltung.getSapDeliverys().add(sapDelivery);
             } else {
                 return;
             }
         }
         try {
-            getBusinessPartnerCreateStatus(auszahlung.getId());
+            getBusinessPartnerActionStatus(fall.getAuszahlung().getId());
         } catch (Exception e) {
-            LOG.error("Failed to read BusinessPartnerCreateStatus", e);
+            LOG.error(String.format("Failed to read %s status", businessPartnerActionBuchhaltungType.name()), e);
         }
 
-        if (businessPartnerCreateBuchhaltung.getSapStatus() == SapStatus.FAILURE) {
-            fall.setFailedBuchhaltungAuszahlungType(BUSINESSPARTNER_CREATE);
+        if (businessPartnerActionBuchhaltung.getSapStatus() == SapStatus.FAILURE) {
+            fall.setFailedBuchhaltungAuszahlungType(businessPartnerActionBuchhaltungType);
             notificationService.createFailedAuszahlungBuchhaltungNotification(gesuch);
             mailService.sendStandardNotificationEmailForGesuch(gesuch);
         }
@@ -322,9 +422,9 @@ public class SapService {
         switch (fall.getFailedBuchhaltungAuszahlungType()) {
             case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuch.getId());
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuch.getId());
-            case BUSINESSPARTNER_CREATE -> {
+            case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
                 gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                createBusinessPartnerOrGetStatus(gesuch);
+                doBusinessPartnerActionOrGetStatus(gesuch, fall.getFailedBuchhaltungAuszahlungType());
             }
             case null, default -> throw new BadRequestException();
         }
@@ -339,9 +439,12 @@ public class SapService {
         switch (gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()) {
             case AUSZAHLUNG_INITIAL -> createInitialAuszahlungOrGetStatus(gesuchId);
             case AUSZAHLUNG_REMAINDER -> createRemainderAuszahlungOrGetStatus(gesuchId);
-            case BUSINESSPARTNER_CREATE -> {
+            case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> {
                 gesuch.getAusbildung().getFall().getAuszahlung().setBuchhaltung(null);
-                createBusinessPartnerOrGetStatus(gesuch);
+                doBusinessPartnerActionOrGetStatus(
+                    gesuch,
+                    gesuch.getAusbildung().getFall().getFailedBuchhaltungAuszahlungType()
+                );
             }
             default -> throw new BadRequestException();
         }
@@ -368,13 +471,32 @@ public class SapService {
     }
 
     @Transactional
+    public void getUpdateOrCreateBusinessPartner(final Gesuch gesuch) {
+        final PersonInAusbildung pia = SapMapperUtil.getPia(gesuch.getAusbildung().getFall());
+        final BUSINESSPARTNER businesspartner = searchBusinessPartner(pia.getSozialversicherungsnummer());
+        if (Objects.nonNull(businesspartner)) {
+            gesuch.getAusbildung()
+                .getFall()
+                .getAuszahlung()
+                .setSapBusinessPartnerId(
+                    Integer.valueOf(businesspartner.getHEADER().getBPARTNER())
+                );
+            if (businessPartnerNeedsUpate(gesuch, Integer.valueOf(businesspartner.getHEADER().getBPARTNER()))) {
+                doBusinessPartnerActionOrGetStatus(gesuch, BUSINESSPARTNER_CHANGE);
+            }
+        } else {
+            doBusinessPartnerActionOrGetStatus(gesuch, BUSINESSPARTNER_CREATE);
+        }
+    }
+
+    @Transactional
     public void createInitialAuszahlungOrGetStatus(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            createBusinessPartnerOrGetStatus(gesuch);
+            getUpdateOrCreateBusinessPartner(gesuch);
             gesuch.setPendingSapAction(AUSZAHLUNG_INITIAL);
             return;
         }
@@ -424,7 +546,7 @@ public class SapService {
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            createBusinessPartnerOrGetStatus(gesuch);
+            getUpdateOrCreateBusinessPartner(gesuch);
             gesuch.setPendingSapAction(BuchhaltungType.AUSZAHLUNG_REMAINDER);
             return;
         }
@@ -463,7 +585,10 @@ public class SapService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var fall = gesuch.getAusbildung().getFall();
 
-        if (!fall.getAuszahlung().getBuchhaltung().getSapStatus().equals(SapStatus.SUCCESS)) {
+        if (
+            Objects.nonNull(fall.getAuszahlung().getBuchhaltung()) &&
+            !fall.getAuszahlung().getBuchhaltung().getSapStatus().equals(SapStatus.SUCCESS)
+        ) {
             return;
         }
 
@@ -481,25 +606,33 @@ public class SapService {
         }
     }
 
-    public void processPendingCreateBusinessPartnerActions() {
-        final var pendingBusinessPartnerCreateBuchhaltungs =
-            buchhaltungRepository.findPendingBusinesspartnerCreateBuchhaltung().toList();
+    public void processPendingBusinessPartnerActions() {
+        final var pendingBusinessPartnerActionBuchhaltungs =
+            buchhaltungRepository.findPendingBusinesspartnerActionBuchhaltung().toList();
 
-        for (final var pendingBusinessPartnerCreateBuchhaltung : pendingBusinessPartnerCreateBuchhaltungs) {
+        for (final var pendingBusinessPartnerActionBuchhaltung : pendingBusinessPartnerActionBuchhaltungs) {
             try {
                 LOG.info(
                     String.format(
                         "Processing pendingBusinessPartnerCreateBuchhaltung: %s",
-                        pendingBusinessPartnerCreateBuchhaltung.getId()
+                        pendingBusinessPartnerActionBuchhaltung.getId()
                     )
                 );
-                final var gesuch = pendingBusinessPartnerCreateBuchhaltung.getGesuch();
-                createBusinessPartnerOrGetStatus(gesuch);
+                final var gesuch = pendingBusinessPartnerActionBuchhaltung.getGesuch();
+                switch (pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()) {
+                    case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> doBusinessPartnerActionOrGetStatus(
+                        gesuch,
+                        pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType()
+                    );
+                    case null, default -> throw new IllegalStateException(
+                        "Invalid pending action: " + pendingBusinessPartnerActionBuchhaltung.getBuchhaltungType().name()
+                    );
+                }
             } catch (Exception e) {
                 LOG.error(
                     String.format(
-                        "processPendingCreateBusinessPartnerActions: Error during processing of pendingBusinessPartnerCreateBuchhaltung %s",
-                        pendingBusinessPartnerCreateBuchhaltung.getId()
+                        "processPendingBusinessPartnerActions: Error during processing of pendingBusinessPartnerActionBuchhaltung %s",
+                        pendingBusinessPartnerActionBuchhaltung.getId()
                     ),
                     e
                 );

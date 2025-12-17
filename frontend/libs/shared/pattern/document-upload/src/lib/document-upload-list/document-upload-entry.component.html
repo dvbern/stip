@@ -3,7 +3,7 @@
 @if (document && upload) {
   <dv-shared-ui-icon-chip
     class="fs-5 reverse me-2 mt-1"
-    [class.spin]="document.state === 'uploading'"
+    [class.spin]="loadingSig()"
     [ngClass]="'bg-' + document.theme.type"
   >
     <i class="material-symbols-rounded fs-6" [ngClass]="'text-' + document.theme.type">
@@ -14,47 +14,56 @@
     <div class="d-flex flex-row">
       <span class="text-truncate filename fs-7" [title]="document.file.filename">{{ document.file.filename }}</span>
       <div class="flex-grow-1"></div>
-      @if (document.state === 'uploading') {
-        <button
-          type="button"
-          class="dv-icon-button cancel-icon ms-2 flex-shrink-0"
-          [attr.aria-label]="t('shared.cancel')"
-          (click)="cancelUpload.emit({ dokumentId: document.file.id })"
-        >
-          <span class="material-symbols-rounded align-middle">clear</span>
-        </button>
-      } @else {
-        <button
-          type="button"
-          class="btn btn-link text-truncate filename fs-7 tw:flex tw:!p-0 tw:!no-underline"
-          data-testid="download-button"
-          [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
-        >
-          <span class="material-symbols-rounded text-muted align-middle">download</span>
-        </button>
-        <button
-          type="button"
-          class="dv-icon-button delete-icon ms-2 flex-shrink-0"
-          [attr.aria-label]="t('shared.form.delete')"
-          [disabled]="!isDeletableSig() || loadingSig()"
-          (click)="checkForRemove$.emit()"
-        >
-          <span class="material-symbols-rounded text-muted align-middle">delete</span>
-        </button>
+      @switch (document.state) {
+        @case ('uploading') {
+          <button
+            type="button"
+            class="dv-icon-button cancel-icon ms-2 flex-shrink-0"
+            [attr.aria-label]="t('shared.cancel')"
+            (click)="cancelUpload.emit({ dokumentId: document.file.id })"
+          >
+            <span class="material-symbols-rounded align-middle">clear</span>
+          </button>
+        }
+        @case ('deleting') {}
+        @default {
+          <button
+            type="button"
+            class="btn btn-link text-truncate filename fs-7 tw:flex tw:!p-0 tw:!no-underline"
+            data-testid="download-button"
+            [dvDownloadButton]="{ type: 'dokument', id: document.file.id, dokumentArt: upload.dokumentModel.art }"
+          >
+            <span class="material-symbols-rounded text-muted align-middle">download</span>
+          </button>
+          <button
+            type="button"
+            class="dv-icon-button delete-icon ms-2 flex-shrink-0"
+            [attr.aria-label]="t('shared.form.delete')"
+            [disabled]="!isDeletableSig() || loadingSig()"
+            (click)="checkForRemove$.emit()"
+          >
+            <span class="material-symbols-rounded text-muted align-middle">delete</span>
+          </button>
+        }
       }
     </div>
     <mat-progress-bar [color]="document.theme.color" [value]="document.progress"></mat-progress-bar>
 
-    @if (document.state === 'done') {
-      <span class="fs-8 fst-italic text-success">{{
-        t('shared.file.uploadDone', {
-          date: document.file.timestampErstellt | date: 'dd.MM.yyyy',
-          size: document.file.filesize | filesize,
-        })
-      }}</span>
-    }
-    @if (document.state === 'uploading') {
-      <span class="fs-8 fst-italic text-info">{{ t('shared.file.uploading') }}</span>
+    @switch (document.state) {
+      @case ('done') {
+        <span class="fs-8 fst-italic text-success">{{
+          t('shared.file.uploadDone', {
+            date: document.file.timestampErstellt | date: 'dd.MM.yyyy',
+            size: document.file.filesize | filesize,
+          })
+        }}</span>
+      }
+      @case ('uploading') {
+        <span class="fs-8 fst-italic text-info">{{ t('shared.file.uploading') }}</span>
+      }
+      @case ('deleting') {
+        <span class="fs-8 fst-italic text-info">{{ t('shared.file.deleting') }}</span>
+      }
     }
     @if (document.error; as error) {
       <span

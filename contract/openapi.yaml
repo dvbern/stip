@@ -1084,7 +1084,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /verfuegung/download:
+  /verfuegung/{gesuchId}/verfuegungen:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Verfuegung'
+          description: Returns a list of all Verfuegungen for a Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungen
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /verfuegung/dokument/download:
     parameters:
       - name: token
         schema:
@@ -1101,17 +1130,16 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File returned
-      operationId: getVerfuegung
-      summary: get Verfuegung
+          description: Returns a file
+      operationId: getVerfuegungDokument
       x-quarkus-response-type: >-
         org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /verfuegung/{verfuegungsId}/token:
+  /verfuegung/dokument/{verfuegungDokumentId}/token:
     parameters:
-      - name: verfuegungsId
+      - name: verfuegungDokumentId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -1125,19 +1153,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileDownloadToken'
-          description: Token returned
-        '400':
-          $ref: '#/components/responses/BadRequest'
+          description: Returns a download token
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-          description: File returned
-      operationId: getVerfuegungsDownloadToken
+      operationId: getVerfuegungDokumentDownloadToken
       summary: get Token to downlaod Verfuegung
       security:
         - auth-uat-bern: []
@@ -3470,36 +3493,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/adminDokumente:
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminDokumente'
-          description: Returns a List of all Verfuegungen for a Gesuch
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAdminDokumente
-      summary: All dokument information required for the Admin tab in Info of Gesuch
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
   /gesuch/{gesuchId}/nachfristDokumente:
     parameters:
       - name: gesuchId
@@ -3769,31 +3762,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungsblattDownloadToken
       summary: get Berechnungsblatt Download Token
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuch/berechnungsblatt:
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: Berechnungsblatt File returned
-      operationId: getBerechnungsBlattForGesuch
-      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
-      x-quarkus-response-type: >-
-        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -4208,7 +4176,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5972,6 +5940,41 @@ components:
         - VATER
         - MUTTER
       type: string
+    VerfuegungDokumentTyp:
+      enum:
+        - BERECHNUNGSBLATT_PIA
+        - BERECHNUNGSBLATT_MUTTER
+        - BERECHNUNGSBLATT_VATER
+        - BERECHNUNGSBLATT_FAMILIE
+        - VERSENDETE_VERFUEGUNG
+        - VERFUEGUNGSBRIEF
+    VerfuegungDokument:
+      type: object
+      required:
+        - id
+        - typ
+        - filename
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        typ:
+          $ref: '#/components/schemas/VerfuegungDokumentTyp'
+        filename:
+          type: string
+    Verfuegung:
+      type: object
+      required:
+        - id
+        - dokumente
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          type: string
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerfuegungDokument'
     AusbildungBase:
       required:
         - fallId
@@ -7041,17 +7044,6 @@ components:
           type: boolean
         canChangeGesuchsperiode:
           type: boolean
-    AdminDokumente:
-      type: object
-      required:
-        - verfuegungen
-      properties:
-        verfuegungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/Verfuegung'
-        datenschutzbriefMassendruckJobId:
-          $ref: '#/components/schemas/UUID'
     NachfristAendernRequest:
       type: object
       required:
@@ -8472,21 +8464,6 @@ components:
           $ref: '#/components/schemas/UUID'
         kanton:
           $ref: '#/components/schemas/Kanton'
-    Verfuegung:
-      type: object
-      required:
-        - id
-        - timestampErstellt
-        - filename
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        timestampErstellt:
-          type: string
-        filename:
-          type: string
-        stipDecision:
-          $ref: '#/components/schemas/StipDecision'
     PersonValueItem:
       type: object
       properties:

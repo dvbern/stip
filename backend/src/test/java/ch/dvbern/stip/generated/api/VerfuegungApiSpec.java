@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.api;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
+import ch.dvbern.stip.generated.dto.VerfuegungDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,17 +59,22 @@ public class VerfuegungApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                getVerfuegung(),
-                getVerfuegungsDownloadToken()
+                getVerfuegungDokument(),
+                getVerfuegungDokumentDownloadToken(),
+                getVerfuegungen()
         );
     }
 
-    public GetVerfuegungOper getVerfuegung() {
-        return new GetVerfuegungOper(createReqSpec());
+    public GetVerfuegungDokumentOper getVerfuegungDokument() {
+        return new GetVerfuegungDokumentOper(createReqSpec());
     }
 
-    public GetVerfuegungsDownloadTokenOper getVerfuegungsDownloadToken() {
-        return new GetVerfuegungsDownloadTokenOper(createReqSpec());
+    public GetVerfuegungDokumentDownloadTokenOper getVerfuegungDokumentDownloadToken() {
+        return new GetVerfuegungDokumentDownloadTokenOper(createReqSpec());
+    }
+
+    public GetVerfuegungenOper getVerfuegungen() {
+        return new GetVerfuegungenOper(createReqSpec());
     }
 
     /**
@@ -83,28 +88,28 @@ public class VerfuegungApiSpec {
     }
 
     /**
-     * get Verfuegung
+     * 
      * 
      *
      * @see #tokenQuery  (required)
      * return File
      */
-    public static class GetVerfuegungOper implements Oper {
+    public static class GetVerfuegungDokumentOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/verfuegung/download";
+        public static final String REQ_URI = "/verfuegung/dokument/download";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetVerfuegungOper(RequestSpecBuilder reqSpec) {
+        public GetVerfuegungDokumentOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/octet-stream");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /verfuegung/download
+         * GET /verfuegung/dokument/download
          * @param handler handler
          * @param <T> type
          * @return type
@@ -115,7 +120,7 @@ public class VerfuegungApiSpec {
         }
 
         /**
-         * GET /verfuegung/download
+         * GET /verfuegung/dokument/download
          * @param handler handler
          * @return File
          */
@@ -130,7 +135,7 @@ public class VerfuegungApiSpec {
          * @param token (String)  (required)
          * @return operation
          */
-        public GetVerfuegungOper tokenQuery(Object... token) {
+        public GetVerfuegungDokumentOper tokenQuery(Object... token) {
             reqSpec.addQueryParam(TOKEN_QUERY, token);
             return this;
         }
@@ -140,7 +145,7 @@ public class VerfuegungApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetVerfuegungDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -150,7 +155,7 @@ public class VerfuegungApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetVerfuegungDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -159,25 +164,25 @@ public class VerfuegungApiSpec {
      * get Token to downlaod Verfuegung
      * 
      *
-     * @see #verfuegungsIdPath  (required)
+     * @see #verfuegungDokumentIdPath  (required)
      * return FileDownloadTokenDtoSpec
      */
-    public static class GetVerfuegungsDownloadTokenOper implements Oper {
+    public static class GetVerfuegungDokumentDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/verfuegung/{verfuegungsId}/token";
+        public static final String REQ_URI = "/verfuegung/dokument/{verfuegungDokumentId}/token";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetVerfuegungsDownloadTokenOper(RequestSpecBuilder reqSpec) {
+        public GetVerfuegungDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /verfuegung/{verfuegungsId}/token
+         * GET /verfuegung/dokument/{verfuegungDokumentId}/token
          * @param handler handler
          * @param <T> type
          * @return type
@@ -188,7 +193,7 @@ public class VerfuegungApiSpec {
         }
 
         /**
-         * GET /verfuegung/{verfuegungsId}/token
+         * GET /verfuegung/dokument/{verfuegungDokumentId}/token
          * @param handler handler
          * @return FileDownloadTokenDtoSpec
          */
@@ -197,14 +202,14 @@ public class VerfuegungApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String VERFUEGUNGS_ID_PATH = "verfuegungsId";
+        public static final String VERFUEGUNG_DOKUMENT_ID_PATH = "verfuegungDokumentId";
 
         /**
-         * @param verfuegungsId (UUID)  (required)
+         * @param verfuegungDokumentId (UUID)  (required)
          * @return operation
          */
-        public GetVerfuegungsDownloadTokenOper verfuegungsIdPath(Object verfuegungsId) {
-            reqSpec.addPathParam(VERFUEGUNGS_ID_PATH, verfuegungsId);
+        public GetVerfuegungDokumentDownloadTokenOper verfuegungDokumentIdPath(Object verfuegungDokumentId) {
+            reqSpec.addPathParam(VERFUEGUNG_DOKUMENT_ID_PATH, verfuegungDokumentId);
             return this;
         }
 
@@ -213,7 +218,7 @@ public class VerfuegungApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetVerfuegungsDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetVerfuegungDokumentDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -223,7 +228,80 @@ public class VerfuegungApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetVerfuegungsDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetVerfuegungDokumentDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;VerfuegungDtoSpec&gt;
+     */
+    public static class GetVerfuegungenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/verfuegung/{gesuchId}/verfuegungen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetVerfuegungenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /verfuegung/{gesuchId}/verfuegungen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /verfuegung/{gesuchId}/verfuegungen
+         * @param handler handler
+         * @return List&lt;VerfuegungDtoSpec&gt;
+         */
+        public List<VerfuegungDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<VerfuegungDtoSpec>> type = new TypeRef<List<VerfuegungDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetVerfuegungenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetVerfuegungenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetVerfuegungenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

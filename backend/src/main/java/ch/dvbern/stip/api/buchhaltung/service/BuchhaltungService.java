@@ -159,20 +159,28 @@ public class BuchhaltungService {
         return TLProducer.defaultBundle().forAppLanguage(language);
     }
 
-    @Transactional
-    public Buchhaltung createBuchhaltungForBusinessPartnerCreate(
-        final UUID gesuchId
+    private Buchhaltung createBuchhaltungForBusinessPartnerAction(
+        final UUID gesuchId,
+        final BuchhaltungType buchhaltungBusinessPartnerType
     ) {
+        final String tlKey = switch (buchhaltungBusinessPartnerType) {
+            case BUSINESSPARTNER_CREATE -> "stip.businesspartner.buchhaltung.erstellen";
+            case BUSINESSPARTNER_CHANGE -> "stip.businesspartner.buchhaltung.aendern";
+            default -> throw new IllegalStateException(
+                "BuchhaltungType " + buchhaltungBusinessPartnerType + " not supported"
+            );
+        };
+
         final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
-        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
+        final TL translator = getTranslator(LocaleUtil.getLocale(gesuch));
 
         final var buchhaltungEntry = new Buchhaltung()
-            .setBuchhaltungType(BuchhaltungType.BUSINESSPARTNER_CREATE)
+            .setBuchhaltungType(buchhaltungBusinessPartnerType)
             .setBetrag(0)
             .setSaldo(lastEntrySaldo)
-            .setComment(translator.translate("stip.businesspartner.buchhaltung.erstellen"))
+            .setComment(translator.translate(tlKey))
             .setGesuch(gesuch)
             .setFall(gesuch.getAusbildung().getFall());
 
@@ -193,6 +201,20 @@ public class BuchhaltungService {
     }
 
     @Transactional
+    public Buchhaltung createBuchhaltungForBusinessPartnerCreate(
+        final UUID gesuchId
+    ) {
+        return createBuchhaltungForBusinessPartnerAction(gesuchId, BuchhaltungType.BUSINESSPARTNER_CREATE);
+    }
+
+    @Transactional
+    public Buchhaltung createBuchhaltungForBusinessPartnerChange(
+        final UUID gesuchId
+    ) {
+        return createBuchhaltungForBusinessPartnerAction(gesuchId, BuchhaltungType.BUSINESSPARTNER_CHANGE);
+    }
+
+    @Transactional
     public Buchhaltung createAuszahlungBuchhaltungForGesuch(
         final Gesuch gesuch,
         final Integer betrag,
@@ -204,7 +226,7 @@ public class BuchhaltungService {
             default -> throw new IllegalStateException("BuchhaltungType " + buchhaltungType + " not supported");
         };
 
-        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
+        final TL translator = getTranslator(LocaleUtil.getLocale(gesuch));
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
         final var buchhaltungEntry = new Buchhaltung()
@@ -243,7 +265,7 @@ public class BuchhaltungService {
         final Gesuch gesuch,
         final Integer stipendiumBetrag
     ) {
-        final TL translator = getTranslator(LocaleUtil.getLocaleFromGesuch(gesuch));
+        final TL translator = getTranslator(LocaleUtil.getLocale(gesuch));
 
         final var lastEntrySaldo = getLastEntrySaldo(gesuch.getAusbildung().getFall().getBuchhaltungs());
 
