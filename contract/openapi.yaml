@@ -7414,6 +7414,7 @@ components:
         - wohnkosten
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungPartner
+        - medizinischeGrundversorgungKinder
         - medizinischeGrundversorgungTotal
         - fahrkostenPartner
         - verpflegungPartner
@@ -7436,11 +7437,13 @@ components:
         wohnkosten:
           type: integer
         medizinischeGrundversorgung:
+          type: integer
+        medizinischeGrundversorgungPartner:
+          type: integer
+        medizinischeGrundversorgungKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
-        medizinischeGrundversorgungPartner:
-          type: integer
         medizinischeGrundversorgungTotal:
           type: integer
         fahrkostenPartner:

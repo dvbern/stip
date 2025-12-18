@@ -31,8 +31,9 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer verpflegungskosten;
   private @Valid Integer grundbedarf;
   private @Valid Integer wohnkosten;
-  private @Valid List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
+  private @Valid Integer medizinischeGrundversorgung;
   private @Valid Integer medizinischeGrundversorgungPartner;
+  private @Valid List<PersonValueItemDto> medizinischeGrundversorgungKinder = new ArrayList<>();
   private @Valid Integer medizinischeGrundversorgungTotal;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
@@ -157,7 +158,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgung(List<PersonValueItemDto> medizinischeGrundversorgung) {
+  public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
     return this;
   }
@@ -165,31 +166,15 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   
   @JsonProperty("medizinischeGrundversorgung")
   @NotNull
-  public List<PersonValueItemDto> getMedizinischeGrundversorgung() {
+  public Integer getMedizinischeGrundversorgung() {
     return medizinischeGrundversorgung;
   }
 
   @JsonProperty("medizinischeGrundversorgung")
-  public void setMedizinischeGrundversorgung(List<PersonValueItemDto> medizinischeGrundversorgung) {
+  public void setMedizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
   }
 
-  public PersoenlichesBudgetresultatKostenDto addMedizinischeGrundversorgungItem(PersonValueItemDto medizinischeGrundversorgungItem) {
-    if (this.medizinischeGrundversorgung == null) {
-      this.medizinischeGrundversorgung = new ArrayList<>();
-    }
-
-    this.medizinischeGrundversorgung.add(medizinischeGrundversorgungItem);
-    return this;
-  }
-
-  public PersoenlichesBudgetresultatKostenDto removeMedizinischeGrundversorgungItem(PersonValueItemDto medizinischeGrundversorgungItem) {
-    if (medizinischeGrundversorgungItem != null && this.medizinischeGrundversorgung != null) {
-      this.medizinischeGrundversorgung.remove(medizinischeGrundversorgungItem);
-    }
-
-    return this;
-  }
   /**
    **/
   public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgungPartner(Integer medizinischeGrundversorgungPartner) {
@@ -209,6 +194,41 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     this.medizinischeGrundversorgungPartner = medizinischeGrundversorgungPartner;
   }
 
+  /**
+   **/
+  public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgungKinder(List<PersonValueItemDto> medizinischeGrundversorgungKinder) {
+    this.medizinischeGrundversorgungKinder = medizinischeGrundversorgungKinder;
+    return this;
+  }
+
+  
+  @JsonProperty("medizinischeGrundversorgungKinder")
+  @NotNull
+  public List<PersonValueItemDto> getMedizinischeGrundversorgungKinder() {
+    return medizinischeGrundversorgungKinder;
+  }
+
+  @JsonProperty("medizinischeGrundversorgungKinder")
+  public void setMedizinischeGrundversorgungKinder(List<PersonValueItemDto> medizinischeGrundversorgungKinder) {
+    this.medizinischeGrundversorgungKinder = medizinischeGrundversorgungKinder;
+  }
+
+  public PersoenlichesBudgetresultatKostenDto addMedizinischeGrundversorgungKinderItem(PersonValueItemDto medizinischeGrundversorgungKinderItem) {
+    if (this.medizinischeGrundversorgungKinder == null) {
+      this.medizinischeGrundversorgungKinder = new ArrayList<>();
+    }
+
+    this.medizinischeGrundversorgungKinder.add(medizinischeGrundversorgungKinderItem);
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatKostenDto removeMedizinischeGrundversorgungKinderItem(PersonValueItemDto medizinischeGrundversorgungKinderItem) {
+    if (medizinischeGrundversorgungKinderItem != null && this.medizinischeGrundversorgungKinder != null) {
+      this.medizinischeGrundversorgungKinder.remove(medizinischeGrundversorgungKinderItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public PersoenlichesBudgetresultatKostenDto medizinischeGrundversorgungTotal(Integer medizinischeGrundversorgungTotal) {
@@ -360,6 +380,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultatKosten.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungPartner, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungPartner) &&
+        Objects.equals(this.medizinischeGrundversorgungKinder, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungKinder) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
@@ -371,7 +392,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungPartner, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungPartner, medizinischeGrundversorgungKinder, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
   }
 
   @Override
@@ -387,6 +408,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungPartner: ").append(toIndentedString(medizinischeGrundversorgungPartner)).append("\n");
+    sb.append("    medizinischeGrundversorgungKinder: ").append(toIndentedString(medizinischeGrundversorgungKinder)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");

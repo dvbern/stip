@@ -39,6 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_PARTNER,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_KINDER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
@@ -69,10 +70,13 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   private Integer wohnkosten;
 
   public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG = "medizinischeGrundversorgung";
-  private List<PersonValueItemDtoSpec> medizinischeGrundversorgung;
+  private Integer medizinischeGrundversorgung;
 
   public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_PARTNER = "medizinischeGrundversorgungPartner";
   private Integer medizinischeGrundversorgungPartner;
+
+  public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_KINDER = "medizinischeGrundversorgungKinder";
+  private List<PersonValueItemDtoSpec> medizinischeGrundversorgungKinder;
 
   public static final String JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL = "medizinischeGrundversorgungTotal";
   private Integer medizinischeGrundversorgungTotal;
@@ -254,17 +258,9 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgung(List<PersonValueItemDtoSpec> medizinischeGrundversorgung) {
+  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
     
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
-    return this;
-  }
-
-  public PersoenlichesBudgetresultatKostenDtoSpec addMedizinischeGrundversorgungItem(PersonValueItemDtoSpec medizinischeGrundversorgungItem) {
-    if (this.medizinischeGrundversorgung == null) {
-      this.medizinischeGrundversorgung = new ArrayList<>();
-    }
-    this.medizinischeGrundversorgung.add(medizinischeGrundversorgungItem);
     return this;
   }
 
@@ -276,14 +272,14 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<PersonValueItemDtoSpec> getMedizinischeGrundversorgung() {
+  public Integer getMedizinischeGrundversorgung() {
     return medizinischeGrundversorgung;
   }
 
 
   @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMedizinischeGrundversorgung(List<PersonValueItemDtoSpec> medizinischeGrundversorgung) {
+  public void setMedizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
     this.medizinischeGrundversorgung = medizinischeGrundversorgung;
   }
 
@@ -311,6 +307,40 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setMedizinischeGrundversorgungPartner(Integer medizinischeGrundversorgungPartner) {
     this.medizinischeGrundversorgungPartner = medizinischeGrundversorgungPartner;
+  }
+
+
+  public PersoenlichesBudgetresultatKostenDtoSpec medizinischeGrundversorgungKinder(List<PersonValueItemDtoSpec> medizinischeGrundversorgungKinder) {
+    
+    this.medizinischeGrundversorgungKinder = medizinischeGrundversorgungKinder;
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatKostenDtoSpec addMedizinischeGrundversorgungKinderItem(PersonValueItemDtoSpec medizinischeGrundversorgungKinderItem) {
+    if (this.medizinischeGrundversorgungKinder == null) {
+      this.medizinischeGrundversorgungKinder = new ArrayList<>();
+    }
+    this.medizinischeGrundversorgungKinder.add(medizinischeGrundversorgungKinderItem);
+    return this;
+  }
+
+   /**
+   * Get medizinischeGrundversorgungKinder
+   * @return medizinischeGrundversorgungKinder
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_KINDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<PersonValueItemDtoSpec> getMedizinischeGrundversorgungKinder() {
+    return medizinischeGrundversorgungKinder;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_KINDER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setMedizinischeGrundversorgungKinder(List<PersonValueItemDtoSpec> medizinischeGrundversorgungKinder) {
+    this.medizinischeGrundversorgungKinder = medizinischeGrundversorgungKinder;
   }
 
 
@@ -512,6 +542,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultatKosten.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungPartner, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungPartner) &&
+        Objects.equals(this.medizinischeGrundversorgungKinder, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungKinder) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
@@ -523,7 +554,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungPartner, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungPartner, medizinischeGrundversorgungKinder, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
   }
 
   @Override
@@ -538,6 +569,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungPartner: ").append(toIndentedString(medizinischeGrundversorgungPartner)).append("\n");
+    sb.append("    medizinischeGrundversorgungKinder: ").append(toIndentedString(medizinischeGrundversorgungKinder)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");

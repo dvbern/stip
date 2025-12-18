@@ -21,8 +21,9 @@ export interface PersoenlichesBudgetresultatKosten {
     verpflegungskosten: number;
     grundbedarf: number;
     wohnkosten: number;
-    medizinischeGrundversorgung: Array<PersonValueItem>;
+    medizinischeGrundversorgung: number;
     medizinischeGrundversorgungPartner: number;
+    medizinischeGrundversorgungKinder: Array<PersonValueItem>;
     medizinischeGrundversorgungTotal: number;
     fahrkostenPartner: number;
     verpflegungPartner: number;

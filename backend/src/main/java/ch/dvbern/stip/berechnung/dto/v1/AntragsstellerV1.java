@@ -135,30 +135,25 @@ public class AntragsstellerV1 {
         int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         builder.alter(alter);
 
-        int currentMedizinischeGrundversorgung;
         int medizinischeGrundversorgung = 0;
         int medizinischeGrundversorgungPartner = 0;
         int anzahlPersonenImHaushalt = 0;
         if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
             anzahlPersonenImHaushalt = 1;
-            currentMedizinischeGrundversorgung =
-                BerechnungRequestV1
-                    .getMedizinischeGrundversorgung(
-                        personInAusbildung.getGeburtsdatum(),
-                        ausbildung.getAusbildungBegin(),
-                        gesuchsperiode
-                    );
-            medizinischeGrundversorgung += currentMedizinischeGrundversorgung;
+            medizinischeGrundversorgung = BerechnungRequestV1
+                .getMedizinischeGrundversorgung(
+                    personInAusbildung.getGeburtsdatum(),
+                    ausbildung.getAusbildungBegin(),
+                    gesuchsperiode
+                );
 
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
-                currentMedizinischeGrundversorgung = BerechnungRequestV1.getMedizinischeGrundversorgung(
+                medizinischeGrundversorgungPartner = BerechnungRequestV1.getMedizinischeGrundversorgung(
                     partner.getGeburtsdatum(),
                     ausbildung.getAusbildungBegin(),
                     gesuchsperiode
                 );
-                medizinischeGrundversorgung += currentMedizinischeGrundversorgung;
-                medizinischeGrundversorgungPartner = currentMedizinischeGrundversorgung;
             }
 
             builder.medizinischeGrundversorgungKinder = medizinischeGrundversorgungKinder;
@@ -195,8 +190,6 @@ public class AntragsstellerV1 {
             );
         }
 
-        builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
-
         builder.ausbildungskosten(
             getAusbildungskosten(
                 einnahmenKosten,
@@ -217,11 +210,11 @@ public class AntragsstellerV1 {
         // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
         final var abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
 
-        final boolean isLehre = abschluss.getBildungsrichtung()
+        final boolean isLehre = (abschluss.getBildungsrichtung()
             .equals(
                 Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG
             )
-            && abschluss.isBerufsbefaehigenderAbschluss();
+        && abschluss.isBerufsbefaehigenderAbschluss());
         builder.lehre(isLehre);
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
@@ -257,55 +250,51 @@ public class AntragsstellerV1 {
             builder.einnahmenBGSAPartner(Objects.requireNonNullElse(ekPartner.getEinnahmenBGSA(), 0));
         }
 
-        // TODO: 1st thing to fix and update
-        // TODO: Add kind and Partner Values to the totals for all values, not only medizinischeGrundversorgung
-        // TODO: Check if other fields also should only add the values, if the child is wohnsitzanteil PiA
-        gesuchFormular.getKinds().forEach(kind -> {
-            anzahlPersonenImHaushalt += 1;
-            kinderAusbildungszulagenKinder.add(
-                new PersonValueItemDto(
-                    kind.getVorname(), Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0)
-                )
-            );
-            unterhaltsbeitraegeKinder.add(
-                new PersonValueItemDto(
-                    kind.getVorname(), Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0)
-                )
-            );
-            renteKinder
-                .add(new PersonValueItemDto(kind.getVorname(), Objects.requireNonNullElse(kind.getRenten(), 0)));
-            ergaenzungsleistungenKinder.add(
-                new PersonValueItemDto(
-                    kind.getVorname(), Objects.requireNonNullElse(kind.getErgaenzungsleistungen(), 0)
-                )
-            );
-            andereEinnahmenKinder.add(
-                new PersonValueItemDto(
-                    kind.getVorname(), Objects.requireNonNullElse(kind.getAndereEinnahmen(), 0)
-                )
-            );
-
-            // if child does still live with the parents/ a parent
+        for (var kind : gesuchFormular.getKinds()) {
             if (kind.getWohnsitzAnteilPia() > 0) {
-                currentMedizinischeGrundversorgung = BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    kind.getGeburtsdatum(),
-                    ausbildung.getAusbildungBegin(),
-                    gesuchsperiode
+                anzahlPersonenImHaushalt += 1;
+                kinderAusbildungszulagenKinder.add(
+                    new PersonValueItemDto(
+                        kind.getVorname(), Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0)
+                    )
                 );
-                medizinischeGrundversorgung += currentMedizinischeGrundversorgung;
+                unterhaltsbeitraegeKinder.add(
+                    new PersonValueItemDto(
+                        kind.getVorname(), Objects.requireNonNullElse(kind.getKinderUndAusbildungszulagen(), 0)
+                    )
+                );
+                renteKinder
+                    .add(new PersonValueItemDto(kind.getVorname(), Objects.requireNonNullElse(kind.getRenten(), 0)));
+                ergaenzungsleistungenKinder.add(
+                    new PersonValueItemDto(
+                        kind.getVorname(), Objects.requireNonNullElse(kind.getErgaenzungsleistungen(), 0)
+                    )
+                );
+                andereEinnahmenKinder.add(
+                    new PersonValueItemDto(
+                        kind.getVorname(), Objects.requireNonNullElse(kind.getAndereEinnahmen(), 0)
+                    )
+                );
+
                 medizinischeGrundversorgungKinder.add(
                     new PersonValueItemDto(
                         kind.getVorname(),
-                        currentMedizinischeGrundversorgung
+                        BerechnungRequestV1.getMedizinischeGrundversorgung(
+                            kind.getGeburtsdatum(),
+                            ausbildung.getAusbildungBegin(),
+                            gesuchsperiode
+                        )
                     )
                 );
             }
-        });
+        }
 
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)
                 .contains(personInAusbildung.getZivilstand())
         );
+
+        builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
 
         return builder.build();
     }
@@ -352,8 +341,8 @@ public class AntragsstellerV1 {
         final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
             .filter(
                 lebenslaufItem -> lebenslaufItem.isAusbildung()
-                    && lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
-                    && lebenslaufItem.isAusbildungAbgeschlossen()
+                && lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
+                && lebenslaufItem.isAusbildungAbgeschlossen()
             )
             .findFirst();
 
@@ -370,7 +359,7 @@ public class AntragsstellerV1 {
 
         final boolean halbierungAbgeschlosseneErstausbildung =
             erstAusbildungWasCompletedBeforeAusbildungsjahr
-                && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
+            && (alterAtEndOfAusbildungsjahr >= gesuch.getGesuchsperiode()
                 .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
         final var beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
@@ -388,7 +377,7 @@ public class AntragsstellerV1 {
         final int monthsBerufstaetig = berufstaetigeItems
             .mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
             .sum()
-            / 30;
+        / 30;
         final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
 
         return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;
