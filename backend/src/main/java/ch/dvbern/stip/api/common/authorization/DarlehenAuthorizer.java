@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -59,12 +60,19 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     public void canGetDarlehenSb() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
 
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
+            forbidden();
+        }
     }
 
     public void canGetDarlehenDashboardSb() {
-        permitAll();
+        final var benutzer = benutzerService.getCurrentBenutzer();
 
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
+            forbidden();
+        }
     }
 
     @Transactional
@@ -102,7 +110,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canDarlehenAblehenen(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isFreigabestelle(benutzer)) {
             forbidden();
         }
 
@@ -113,7 +121,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canDarlehenAkzeptieren(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isFreigabestelle(benutzer)) {
             forbidden();
         }
 
@@ -140,7 +148,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canDarlehenZurueckweisen(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
             forbidden();
         }
 
@@ -169,11 +177,11 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canDarlehenUpdateSb(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
             forbidden();
         }
 
-        assertStatus(darlehenId, DarlehenStatus.EINGEGEBEN);
+        assertStatus(darlehenId, DarlehenStatus.EINGEGEBEN, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
@@ -194,8 +202,30 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         assertStatus(darlehenId, DarlehenStatus.IN_BEARBEITUNG_GS);
     }
 
-    public void canGetDarlehenDokument() {
-        permitAll();
+    private void canGetDarlehenDokument(Darlehen darlehen) {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                darlehen.getFall(),
+                benutzer,
+                sozialdienstService
+            ) && !isSachbearbeiterOrFreigabestelle(benutzer)
+        ) {
+            forbidden();
+        }
+    }
+
+    @Transactional
+    public void canGetDarlehenDokument(UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+        canGetDarlehenDokument(darlehen);
+    }
+
+    @Transactional
+    public void canGetDarlehenDokumentByDokumentId(UUID dokumentId) {
+        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        canGetDarlehenDokument(darlehen);
     }
 
     public void canDeleteDarlehenDokument(UUID dokumentId) {
@@ -215,11 +245,13 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         assertStatus(darlehen.getId(), DarlehenStatus.IN_BEARBEITUNG_GS);
     }
 
-    public void assertStatus(UUID darlehenId, DarlehenStatus darlehenStatus) {
+    public void assertStatus(UUID darlehenId, DarlehenStatus... darlehenStatus) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
-        if (!darlehen.getStatus().equals(darlehenStatus)) {
-            forbidden();
+        if (Arrays.stream(darlehenStatus).anyMatch(status -> darlehen.getStatus().equals(status))) {
+            return;
         }
+
+        forbidden();
     }
 }

@@ -26,6 +26,10 @@ public final class OidcPermissions {
     public static final String SB_GESUCH_UPDATE = "V0_GESUCH_UPDATE_SB";
     public static final String SB_GESUCH_READ = "V0_GESUCH_READ_SB";
 
+    public static final String DARLEHEN_UPDATE_GS = "V0_DARLEHEN_UPDATE_GS";
+    public static final String DARLEHEN_UPDATE_SB = "V0_DARLEHEN_UPDATE_SB";
+    public static final String DARLEHEN_FREIGABESTELLE = "V0_DARLEHEN_FREIGABESTELLE";
+
     public static final String FREIGABESTELLE_GESUCH_UPDATE = "V0_GESUCH_UPDATE_FREIGABESTELLE";
 
     public static final String JURIST_GESUCH_READ = "V0_GESUCH_READ_JURIST";

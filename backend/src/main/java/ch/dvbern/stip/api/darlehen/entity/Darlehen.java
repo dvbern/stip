@@ -102,6 +102,7 @@ public class Darlehen extends AbstractMandantEntity {
     @Column(name = "anzahl_betreibungen")
     private Integer anzahlBetreibungen;
 
+    @Size(min = 1, groups = { DarlehenEinreichenValidationGroup.class })
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @Column(name = "darlehen_grund")
