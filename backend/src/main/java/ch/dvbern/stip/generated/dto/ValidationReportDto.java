@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.ValidationErrorDto;
-import ch.dvbern.stip.generated.dto.ValidationWarningDto;
+import ch.dvbern.stip.generated.dto.ValidationMessageDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,13 +23,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class ValidationReportDto  implements Serializable {
-  private @Valid List<ValidationErrorDto> validationErrors = new ArrayList<>();
-  private @Valid List<ValidationWarningDto> validationWarnings = new ArrayList<>();
+  private @Valid List<ValidationMessageDto> validationErrors = new ArrayList<>();
+  private @Valid List<ValidationMessageDto> validationWarnings = new ArrayList<>();
   private @Valid Boolean hasDocuments;
 
   /**
    **/
-  public ValidationReportDto validationErrors(List<ValidationErrorDto> validationErrors) {
+  public ValidationReportDto validationErrors(List<ValidationMessageDto> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }
@@ -38,16 +37,16 @@ public class ValidationReportDto  implements Serializable {
   
   @JsonProperty("validationErrors")
   @NotNull
-  public List<ValidationErrorDto> getValidationErrors() {
+  public List<ValidationMessageDto> getValidationErrors() {
     return validationErrors;
   }
 
   @JsonProperty("validationErrors")
-  public void setValidationErrors(List<ValidationErrorDto> validationErrors) {
+  public void setValidationErrors(List<ValidationMessageDto> validationErrors) {
     this.validationErrors = validationErrors;
   }
 
-  public ValidationReportDto addValidationErrorsItem(ValidationErrorDto validationErrorsItem) {
+  public ValidationReportDto addValidationErrorsItem(ValidationMessageDto validationErrorsItem) {
     if (this.validationErrors == null) {
       this.validationErrors = new ArrayList<>();
     }
@@ -56,7 +55,7 @@ public class ValidationReportDto  implements Serializable {
     return this;
   }
 
-  public ValidationReportDto removeValidationErrorsItem(ValidationErrorDto validationErrorsItem) {
+  public ValidationReportDto removeValidationErrorsItem(ValidationMessageDto validationErrorsItem) {
     if (validationErrorsItem != null && this.validationErrors != null) {
       this.validationErrors.remove(validationErrorsItem);
     }
@@ -65,7 +64,7 @@ public class ValidationReportDto  implements Serializable {
   }
   /**
    **/
-  public ValidationReportDto validationWarnings(List<ValidationWarningDto> validationWarnings) {
+  public ValidationReportDto validationWarnings(List<ValidationMessageDto> validationWarnings) {
     this.validationWarnings = validationWarnings;
     return this;
   }
@@ -73,16 +72,16 @@ public class ValidationReportDto  implements Serializable {
   
   @JsonProperty("validationWarnings")
   @NotNull
-  public List<ValidationWarningDto> getValidationWarnings() {
+  public List<ValidationMessageDto> getValidationWarnings() {
     return validationWarnings;
   }
 
   @JsonProperty("validationWarnings")
-  public void setValidationWarnings(List<ValidationWarningDto> validationWarnings) {
+  public void setValidationWarnings(List<ValidationMessageDto> validationWarnings) {
     this.validationWarnings = validationWarnings;
   }
 
-  public ValidationReportDto addValidationWarningsItem(ValidationWarningDto validationWarningsItem) {
+  public ValidationReportDto addValidationWarningsItem(ValidationMessageDto validationWarningsItem) {
     if (this.validationWarnings == null) {
       this.validationWarnings = new ArrayList<>();
     }
@@ -91,7 +90,7 @@ public class ValidationReportDto  implements Serializable {
     return this;
   }
 
-  public ValidationReportDto removeValidationWarningsItem(ValidationWarningDto validationWarningsItem) {
+  public ValidationReportDto removeValidationWarningsItem(ValidationMessageDto validationWarningsItem) {
     if (validationWarningsItem != null && this.validationWarnings != null) {
       this.validationWarnings.remove(validationWarningsItem);
     }

@@ -19,16 +19,31 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.util.Objects;
 
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE;
 
 public class EinnahmenKostenPartnerRequiredConstraintValidator
     implements ConstraintValidator<EinnahmenKostenPartnerRequiredConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext context) {
-        if (Objects.isNull(gesuchFormular.getPartner())) {
+        if (Objects.isNull(gesuchFormular.getPersonInAusbildung())) {
+            return true;
+        }
+        if (!gesuchFormular.getPersonInAusbildung().getZivilstand().hasPartnerschaft()) {
             return Objects.isNull(gesuchFormular.getEinnahmenKostenPartner());
         }
-        return Objects.nonNull(gesuchFormular.getEinnahmenKostenPartner());
+
+        if (Objects.nonNull(gesuchFormular.getEinnahmenKostenPartner())) {
+            return true;
+        }
+
+        return GesuchValidatorUtil.addProperty(
+            context,
+            VALIDATION_PARTNER_NOT_NULL_REQUIRED_MESSAGE,
+            "einnahmenKostenPartner"
+        );
     }
 }

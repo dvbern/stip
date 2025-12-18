@@ -37,7 +37,7 @@ public class ServerExceptionMappers {
     public RestResponse<ValidationReportDto> mapException(CustomValidationsException validationsException) {
         return RestResponse.status(
             RestResponse.Status.BAD_REQUEST,
-            CustomValidationsExceptionMapper.toDto(validationsException)
+            ValidationsExceptionMapper.toDto(validationsException)
         );
     }
 
