@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -78,19 +79,23 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        ausbildungs.forEach(ausbildung -> {
-            final var gesuchs = ausbildung.getGesuchs();
-            if (gesuchs.size() > 1) {
-                return;
-            }
+        final var hasNoOpenDarlehen =
+            fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);
+        if (!hasNoOpenDarlehen) {
+            forbidden();
+        }
 
-            gesuchs.forEach(gesuch -> {
-                if (gesuch.getGesuchStatus().isEingereicht()) {
-                    return;
-                }
-                forbidden();
-            });
-        });
+        final var atLeastOneGesuchEingereicht = ausbildungs
+            .stream()
+            .anyMatch(
+                // has more than one Gesuch
+                ausbildung -> ausbildung.getGesuchs().size() > 1
+                // or has at least one eingereicht gesuch
+                || ausbildung.getGesuchs().stream().anyMatch(g -> g.getGesuchStatus().isEingereicht())
+            );
+        if (!atLeastOneGesuchEingereicht) {
+            forbidden();
+        }
     }
 
     @Transactional

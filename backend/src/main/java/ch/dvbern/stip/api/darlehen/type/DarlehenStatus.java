@@ -22,5 +22,12 @@ public enum DarlehenStatus {
     EINGEGEBEN,
     IN_FREIGABE,
     AKZEPTIERT,
-    ABGELEHNT,
+    ABGELEHNT;
+
+    public boolean isCompleted() {
+        return switch (this) {
+            case IN_BEARBEITUNG_GS, EINGEGEBEN, IN_FREIGABE -> false;
+            case AKZEPTIERT, ABGELEHNT -> true;
+        };
+    }
 }
