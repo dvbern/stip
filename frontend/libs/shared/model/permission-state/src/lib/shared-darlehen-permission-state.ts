@@ -61,7 +61,7 @@ export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 export const darlehenPermissionTableByAppType = {
   IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W DE  ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   EINGEGEBEN                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm(' K  F ', ['sb']) },
-  IN_FREIGABE                     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('     A', ['fe']) },
+  IN_FREIGABE                     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm(' K   A', ['fe']) },
   AKZEPTIERT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
   ABGELEHNT                       : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
 } as const satisfies Record<

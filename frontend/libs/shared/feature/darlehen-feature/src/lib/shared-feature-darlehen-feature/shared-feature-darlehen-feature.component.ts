@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -5,16 +6,18 @@ import {
   computed,
   effect,
   inject,
+  input,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedFeatureDarlehenComponent } from '@dv/shared/feature/darlehen';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 
 import { canCreateDarlehenFn } from '../can-create-darlehen';
 
@@ -27,10 +30,9 @@ import { canCreateDarlehenFn } from '../can-create-darlehen';
     SharedPatternMainLayoutComponent,
     SharedFeatureDarlehenComponent,
     MatMenuModule,
-    TranslocoPipe,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './shared-feature-darlehen-feature.component.html',
-  styleUrl: './shared-feature-darlehen-feature.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureDarlehenFeatureComponent {
@@ -39,10 +41,7 @@ export class SharedFeatureDarlehenFeatureComponent {
   route = inject(ActivatedRoute);
   fallStore = inject(FallStore);
   hasUnsavedChanges = false;
-
-  darlehenIdRouteSig = computed(() => {
-    return this.route.snapshot.paramMap.get('darlehenId');
-  });
+  darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
 
   canCreateDarlehenSig = canCreateDarlehenFn(
     this.dashboardStore.dashboardViewSig,

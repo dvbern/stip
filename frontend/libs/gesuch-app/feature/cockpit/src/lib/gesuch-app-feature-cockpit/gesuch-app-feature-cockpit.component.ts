@@ -10,7 +10,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
@@ -28,7 +27,6 @@ import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language'
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
-import { canCreateDarlehenFn } from '@dv/shared/feature/darlehen-feature';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
@@ -42,6 +40,7 @@ import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-hea
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import {
   SharedUiDashboardAusbildungComponent,
   SharedUiDashboardCompactAusbildungComponent,
@@ -67,9 +66,9 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
+    SharedUiDarlehenMenuComponent,
     GesuchAppUiAdvTranslocoDirective,
     MatMenuModule,
-    TranslocoPipe,
   ],
   providers: [
     SozialdienstStore,
@@ -104,11 +103,6 @@ export class GesuchAppFeatureCockpitComponent {
         sozialdienst.aktiv || sozialdienst.id === delegierterSozialdienst?.id,
     );
   });
-
-  canCreateDarlehenSig = canCreateDarlehenFn(
-    this.dashboardStore.dashboardViewSig,
-    this.darlehenStore.darlehenListSig,
-  );
 
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;

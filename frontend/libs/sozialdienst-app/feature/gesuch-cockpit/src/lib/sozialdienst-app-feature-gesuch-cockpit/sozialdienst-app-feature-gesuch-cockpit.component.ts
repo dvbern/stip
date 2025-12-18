@@ -1,5 +1,6 @@
 /* eslint-disable @angular-eslint/no-input-rename */
 
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
@@ -17,6 +19,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import {
   SharedDataAccessGesuchEvents,
@@ -33,6 +36,7 @@ import { compareById } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import {
   SharedUiDashboardAusbildungComponent,
   SharedUiDashboardCompactAusbildungComponent,
@@ -43,16 +47,19 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
   imports: [
+    CommonModule,
     RouterLink,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SharedPatternAppHeaderComponent,
     TranslocoPipe,
     MatSelectModule,
+    MatMenuModule,
     SharedUiIconChipComponent,
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,6 +74,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   dashboardStore = inject(DashboardStore);
+  darlehenStore = inject(DarlehenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();

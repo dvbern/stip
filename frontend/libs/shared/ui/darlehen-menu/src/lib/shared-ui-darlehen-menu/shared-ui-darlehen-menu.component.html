@@ -1,0 +1,60 @@
+@let darlehens = darlehenListByStatusSig();
+@let fallId = fallIdSig();
+<button
+  type="button"
+  class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+  data-testid="header-nav-darlehen-menu"
+  [matMenuTriggerFor]="darlehenMenu"
+  [class.active]="darlehenRouteIdSig()"
+>
+  <i class="material-symbols-rounded me-2 text-white">account_balance</i>
+  <span>{{ 'shared.header.darlehen' | transloco }}</span>
+  <i class="material-symbols-rounded ms-2">expand_more</i>
+</button>
+<mat-menu #darlehenMenu="matMenu" class="header-menu-panel mt-2 rounded">
+  <div class="d-flex flex-column gap-2">
+    @for (state of darlehenCompletedStates; track $index) {
+      @if (darlehens[state]?.length) {
+        <div class="d-flex align-items-center text-muted small gap-2">
+          <hr class="flex-grow-1" />
+          {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (darlehen of darlehens[state]; track $index) {
+          <a
+            [routerLink]="
+              gesuchIdSig() ? ['/', 'darlehen', darlehen.id, 'gesuch', gesuchIdSig()] : ['/', 'darlehen', darlehen.id]
+            "
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="header-nav-darlehen-menu-item"
+            [class.active]="darlehenRouteIdSig() === darlehen.id"
+          >
+            <span>
+              {{
+                'shared.header.darlehen.item'
+                  | transloco
+                    : {
+                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+                      }
+              }}
+            </span>
+          </a>
+        }
+      }
+    }
+
+    <!-- button create darlehen -->
+    @if (fallId) {
+      <hr class="flex-grow-1" />
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        data-testid="cockpit-gesuch-darlehen-create"
+        (click)="createDarlehen.emit({ fallId })"
+        [disabled]="!canCreateDarlehenSig()"
+      >
+        {{ 'shared.dashboard.darlehen.create' | transloco }}
+      </button>
+    }
+  </div>
+</mat-menu>

@@ -196,6 +196,7 @@
       "@dv/shared/ui/clear-button": ["libs/shared/ui/clear-button/src/index.ts"],
       "@dv/shared/ui/comming-soon": ["libs/shared/ui/comming-soon/src/index.ts"],
       "@dv/shared/ui/confirm-dialog": ["libs/shared/ui/confirm-dialog/src/index.ts"],
+      "@dv/shared/ui/darlehen-menu": ["libs/shared/ui/darlehen-menu/src/index.ts"],
       "@dv/shared/ui/dashboard": ["libs/shared/ui/dashboard/src/index.ts"],
       "@dv/shared/ui/download-button": ["libs/shared/ui/download-button/src/index.ts"],
       "@dv/shared/ui/drop-file": ["libs/shared/ui/drop-file/src/index.ts"],

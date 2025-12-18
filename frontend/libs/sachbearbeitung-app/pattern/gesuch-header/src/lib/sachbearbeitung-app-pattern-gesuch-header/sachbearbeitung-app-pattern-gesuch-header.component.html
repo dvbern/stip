@@ -95,40 +95,11 @@
     </mat-menu>
 
     @let darlehens = darlehenStore.darlehenListViewSig();
-    <button
-      type="button"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="sb-gesuch-header-darlehen-nav-menu"
-      [class.active]="isDarlehenRouteSig()"
-      [matMenuTriggerFor]="darlehenMenu"
-      [disabled]="!darlehens.darlehenList?.length"
-    >
-      <i class="material-symbols-rounded me-2 text-white">account_balance</i>
-      <span>{{ 'shared.header.darlehen' | transloco }}</span>
-      <i class="material-symbols-rounded ms-2">expand_more</i>
-    </button>
-    <mat-menu #darlehenMenu="matMenu" class="header-menu-panel mt-2 rounded">
-      <div class="d-flex flex-column gap-2">
-        @for (darlehen of darlehens.darlehenList; track $index) {
-          <a
-            [routerLink]="['/', 'darlehen', darlehen.id, 'gesuch', gesuchId]"
-            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-            data-testid="darlehen-nav-menu-item"
-            [class.active]="darlehenIdSig() === darlehen.id"
-          >
-            <span>
-              {{
-                'shared.header.darlehen.item'
-                  | transloco
-                    : {
-                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
-                      }
-              }}
-            </span>
-          </a>
-        }
-      </div>
-    </mat-menu>
+    <dv-shared-ui-darlehen-menu
+      [darlehenListSig]="darlehens.darlehenList"
+      [fallIdSig]="undefined"
+      [gesuchIdSig]="gesuchId"
+    ></dv-shared-ui-darlehen-menu>
 
     <!-- Verfuegung-->
     <a
