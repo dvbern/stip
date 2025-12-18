@@ -1,10 +1,9 @@
-import { Injectable, Signal, computed, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
 import {
   Darlehen,
   DarlehenService,
@@ -32,37 +31,6 @@ import {
   isPending,
   pending,
 } from '@dv/shared/util/remote-data';
-
-// todo: improve this check, maybe move to helper or backend
-export const canCreateDarlehenFn = (
-  dashBoardSig: Signal<SharedModelGsDashboardView | undefined>,
-  darlehenListSig: Signal<Darlehen[] | undefined>,
-): Signal<boolean> => {
-  return computed(() => {
-    const dashboardView = dashBoardSig();
-    const darlehenList = darlehenListSig();
-    if (!dashboardView || !darlehenList) {
-      return false;
-    }
-
-    const hasActiveAusbildungWithGesuchNotInBearbeitung =
-      dashboardView.activeAusbildungen.some((ausbildung) =>
-        ausbildung.gesuchs.some(
-          (gesuch) => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS',
-        ),
-      );
-
-    const hasNoDarlehen = !darlehenList.some((darlehen) => {
-      return (
-        darlehen.status === 'IN_BEARBEITUNG_GS' ||
-        darlehen.status === 'EINGEGEBEN' ||
-        darlehen.status === 'IN_FREIGABE'
-      );
-    });
-
-    return hasActiveAusbildungWithGesuchNotInBearbeitung && hasNoDarlehen;
-  });
-};
 
 type DarlehenState = {
   cachedDarlehen: CachedRemoteData<Darlehen>;

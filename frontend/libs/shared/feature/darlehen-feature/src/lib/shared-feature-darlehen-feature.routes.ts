@@ -18,9 +18,8 @@ import {
   success,
 } from '@dv/shared/util/remote-data';
 
-import { GesuchAppFeatureDarlehenComponent } from './gesuch-app-feature-darlehen/gesuch-app-feature-darlehen.component';
+import { SharedFeatureDarlehenFeatureComponent } from './shared-feature-darlehen-feature/shared-feature-darlehen-feature.component';
 
-// todo: duplicate code with sozialdienst-app, move to shared location
 const darlehenResolver: ResolveFn<Darlehen> = (
   route: ActivatedRouteSnapshot,
 ) => {
@@ -53,12 +52,12 @@ const darlehenResolver: ResolveFn<Darlehen> = (
   );
 };
 
-export const gesuchAppFeatureDarlehenRoutes: Route[] = [
+export const sharedFeatureDarlehenFeatureRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
     path: ':darlehenId',
     pathMatch: 'prefix',
     resolve: { darlehen: darlehenResolver },
-    component: GesuchAppFeatureDarlehenComponent,
+    component: SharedFeatureDarlehenFeatureComponent,
     title: 'shared.darlehen.title',
   }),
 ];

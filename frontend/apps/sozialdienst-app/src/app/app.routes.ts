@@ -6,13 +6,6 @@ import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
-    path: 'sozialdienst-app-feature-darlehen',
-    loadChildren: () =>
-      import('@dv/sozialdienst-app/feature/darlehen').then(
-        (m) => m.sozialdienstAppFeatureDarlehenRoutes,
-      ),
-  },
-  {
     path: '',
     canActivate: [hasBenutzer],
     providers: [DashboardStore],
@@ -50,8 +43,8 @@ export const appRoutes: Route[] = [
       {
         path: 'darlehen',
         loadChildren: () =>
-          import('@dv/sozialdienst-app/feature/darlehen').then(
-            (m) => m.sozialdienstAppFeatureDarlehenRoutes,
+          import('@dv/shared/feature/darlehen-feature').then(
+            (m) => m.sharedFeatureDarlehenFeatureRoutes,
           ),
       },
       {

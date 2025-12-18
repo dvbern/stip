@@ -10,17 +10,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
-import {
-  DarlehenStore,
-  canCreateDarlehenFn,
-} from '@dv/shared/data-access/darlehen';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedFeatureDarlehenComponent } from '@dv/shared/feature/darlehen';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 
+import { canCreateDarlehenFn } from '../can-create-darlehen';
+
 @Component({
-  selector: 'dv-gesuch-app-feature-darlehen',
+  selector: 'dv-shared-feature-darlehen-feature',
   imports: [
     CommonModule,
     RouterLink,
@@ -30,11 +29,11 @@ import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout
     MatMenuModule,
     TranslocoPipe,
   ],
-  templateUrl: './gesuch-app-feature-darlehen.component.html',
-  styleUrl: './gesuch-app-feature-darlehen.component.scss',
+  templateUrl: './shared-feature-darlehen-feature.component.html',
+  styleUrl: './shared-feature-darlehen-feature.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppFeatureDarlehenComponent {
+export class SharedFeatureDarlehenFeatureComponent {
   darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   route = inject(ActivatedRoute);
@@ -45,7 +44,6 @@ export class GesuchAppFeatureDarlehenComponent {
     return this.route.snapshot.paramMap.get('darlehenId');
   });
 
-  // todo: improve this check, maybe move to helper or backend
   canCreateDarlehenSig = canCreateDarlehenFn(
     this.dashboardStore.dashboardViewSig,
     this.darlehenStore.darlehenListSig,

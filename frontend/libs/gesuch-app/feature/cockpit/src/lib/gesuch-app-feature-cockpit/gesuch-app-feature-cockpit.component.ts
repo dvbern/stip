@@ -16,10 +16,7 @@ import { Store } from '@ngrx/store';
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
-import {
-  DarlehenStore,
-  canCreateDarlehenFn,
-} from '@dv/shared/data-access/darlehen';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
@@ -31,6 +28,7 @@ import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language'
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
+import { canCreateDarlehenFn } from '@dv/shared/feature/darlehen-feature';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
@@ -107,7 +105,6 @@ export class GesuchAppFeatureCockpitComponent {
     );
   });
 
-  // todo: improve this check, maybe move to helper or backend
   canCreateDarlehenSig = canCreateDarlehenFn(
     this.dashboardStore.dashboardViewSig,
     this.darlehenStore.darlehenListSig,
