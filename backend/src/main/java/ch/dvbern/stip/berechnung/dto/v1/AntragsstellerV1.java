@@ -210,11 +210,11 @@ public class AntragsstellerV1 {
         // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
         final var abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
 
-        final boolean isLehre = (abschluss.getBildungsrichtung()
+        final boolean isLehre = abschluss.getBildungsrichtung()
             .equals(
                 Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG
             )
-        && abschluss.isBerufsbefaehigenderAbschluss());
+            && abschluss.isBerufsbefaehigenderAbschluss();
         builder.lehre(isLehre);
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
@@ -377,7 +377,7 @@ public class AntragsstellerV1 {
         final int monthsBerufstaetig = berufstaetigeItems
             .mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
             .sum()
-        / 30;
+            / 30;
         final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
 
         return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;
