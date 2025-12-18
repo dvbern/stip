@@ -49,12 +49,10 @@ import {
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   getLatestGesuchIdFromGesuch$,
   getLatestTrancheIdFromGesuchOnUpdate$,
 } from '@dv/shared/util/gesuch';
-import { isPending } from '@dv/shared/util/remote-data';
 import {
   dateFromMonthYearString,
   formatBackendLocalDate,
@@ -77,7 +75,6 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiHeaderSuffixDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiFormReadonlyDirective,
-    SharedUiLoadingComponent,
     TranslocoPipe,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
@@ -103,12 +100,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormTrancheView);
   revisionSig = this.store.selectSignal(selectRevision);
-  isAenderungUpdatingSig = computed(() => {
-    const { loading } = this.viewSig();
-    return (
-      loading || isPending(this.gesuchAenderungStore.cachedGesuchAenderung())
-    );
-  });
 
   form = this.formBuilder.group({
     status: [''],
