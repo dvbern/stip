@@ -15,8 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.ValidationErrorDtoSpec;
-import ch.dvbern.stip.generated.dto.ValidationWarningDtoSpec;
+import ch.dvbern.stip.generated.dto.ValidationMessageDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,10 +39,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class ValidationReportDtoSpec {
   public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
-  private List<ValidationErrorDtoSpec> validationErrors;
+  private List<ValidationMessageDtoSpec> validationErrors;
 
   public static final String JSON_PROPERTY_VALIDATION_WARNINGS = "validationWarnings";
-  private List<ValidationWarningDtoSpec> validationWarnings;
+  private List<ValidationMessageDtoSpec> validationWarnings;
 
   public static final String JSON_PROPERTY_HAS_DOCUMENTS = "hasDocuments";
   private Boolean hasDocuments;
@@ -51,13 +50,13 @@ public class ValidationReportDtoSpec {
   public ValidationReportDtoSpec() {
   }
 
-  public ValidationReportDtoSpec validationErrors(List<ValidationErrorDtoSpec> validationErrors) {
+  public ValidationReportDtoSpec validationErrors(List<ValidationMessageDtoSpec> validationErrors) {
     
     this.validationErrors = validationErrors;
     return this;
   }
 
-  public ValidationReportDtoSpec addValidationErrorsItem(ValidationErrorDtoSpec validationErrorsItem) {
+  public ValidationReportDtoSpec addValidationErrorsItem(ValidationMessageDtoSpec validationErrorsItem) {
     if (this.validationErrors == null) {
       this.validationErrors = new ArrayList<>();
     }
@@ -73,25 +72,25 @@ public class ValidationReportDtoSpec {
   @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<ValidationErrorDtoSpec> getValidationErrors() {
+  public List<ValidationMessageDtoSpec> getValidationErrors() {
     return validationErrors;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setValidationErrors(List<ValidationErrorDtoSpec> validationErrors) {
+  public void setValidationErrors(List<ValidationMessageDtoSpec> validationErrors) {
     this.validationErrors = validationErrors;
   }
 
 
-  public ValidationReportDtoSpec validationWarnings(List<ValidationWarningDtoSpec> validationWarnings) {
+  public ValidationReportDtoSpec validationWarnings(List<ValidationMessageDtoSpec> validationWarnings) {
     
     this.validationWarnings = validationWarnings;
     return this;
   }
 
-  public ValidationReportDtoSpec addValidationWarningsItem(ValidationWarningDtoSpec validationWarningsItem) {
+  public ValidationReportDtoSpec addValidationWarningsItem(ValidationMessageDtoSpec validationWarningsItem) {
     if (this.validationWarnings == null) {
       this.validationWarnings = new ArrayList<>();
     }
@@ -107,14 +106,14 @@ public class ValidationReportDtoSpec {
   @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<ValidationWarningDtoSpec> getValidationWarnings() {
+  public List<ValidationMessageDtoSpec> getValidationWarnings() {
     return validationWarnings;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VALIDATION_WARNINGS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setValidationWarnings(List<ValidationWarningDtoSpec> validationWarnings) {
+  public void setValidationWarnings(List<ValidationMessageDtoSpec> validationWarnings) {
     this.validationWarnings = validationWarnings;
   }
 
