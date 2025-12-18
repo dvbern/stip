@@ -677,7 +677,6 @@ public class GesuchService {
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);
-        gesuch.setVerfuegt(true);
         gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.VERFUEGT);
     }
 
