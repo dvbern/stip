@@ -47,7 +47,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             ? stipendien.getBerechnungReduziert()
             : stipendien.getBerechnung();
 
-        if (berechnungsresultat > 0) {
+        if (berechnungsresultat > 0 || !gesuch.isFirstVerfuegung()) {
             buchhaltungService.createStipendiumBuchhaltungEntry(
                 gesuch,
                 berechnungsresultat
