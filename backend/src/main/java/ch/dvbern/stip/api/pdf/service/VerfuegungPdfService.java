@@ -733,13 +733,14 @@ public class VerfuegungPdfService {
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
         ByteArrayOutputStream verfuegungsBrief;
-
-        if (berechnungsresultat == 0 && gesuch.isFirstVerfuegung()) {
+        if (Objects.nonNull(verfuegung.getStipDecision())) {
+            verfuegungsBrief = createNegativeVerfuegungPdf(verfuegung);
+        } else if (berechnungsresultat == 0 && gesuch.isFirstVerfuegung()) {
             verfuegungsBrief = createVerfuegungOhneAnspruchPdf(
-                verfuegungService.getLatestVerfuegung(gesuch.getId())
+                verfuegung
             );
         } else {
-            verfuegungsBrief = createVerfuegungMitAnspruchPdf(verfuegungService.getLatestVerfuegung(gesuch.getId()));
+            verfuegungsBrief = createVerfuegungMitAnspruchPdf(verfuegung);
         }
 
         verfuegungService.createAndStoreVerfuegungDokument(
