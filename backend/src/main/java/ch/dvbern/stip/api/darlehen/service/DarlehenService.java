@@ -84,7 +84,8 @@ public class DarlehenService {
 
     @Transactional
     public void createPositiveDarlehensVerfuegung(Darlehen darlehen) {
-        final ByteArrayOutputStream out = darlehensVerfuegungPdfService.generateDarlehensVerfuegungPdf(darlehen);
+        final ByteArrayOutputStream out =
+            darlehensVerfuegungPdfService.generatePositiveDarlehensVerfuegungPdf(darlehen);
 
         final String objectId = dokumentUploadService.executeUploadDocument(
             out.toByteArray(),
@@ -93,12 +94,31 @@ public class DarlehenService {
             configService,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
-        // todo: also handle negative case
-        // todo: create darlehen_verfuegung on darlehen
-        // todo: add test to make sure that this dokument can be downloaded
+
         var darlehensVerfuegung = new Dokument();
         darlehensVerfuegung.setObjectId(objectId);
         darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
+    }
+
+    @Transactional
+    public void createNegativeDarlehensVerfuegung(Darlehen darlehen) {
+        final ByteArrayOutputStream out =
+            darlehensVerfuegungPdfService.generateNegativeDarlehensVerfuegungPdf(darlehen);
+
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+        );
+
+        var darlehensVerfuegung = new Dokument();
+        darlehensVerfuegung.setObjectId(objectId);
+        darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
         darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
@@ -220,7 +240,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
 
         darlehenRepository.persistAndFlush(darlehen);
-
+        createNegativeDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAbgelehntNotification(darlehen);
 
         return darlehenMapper.toDto(darlehen);

@@ -67,7 +67,7 @@ public class DarlehensVerfuegungPdfService {
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    public ByteArrayOutputStream generateDarlehensVerfuegungPdf(final Darlehen darlehen) {
+    public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final Darlehen darlehen) {
         final var out = new ByteArrayOutputStream();
         final FontProgram font;
         final FontProgram fontBold;
@@ -227,6 +227,166 @@ public class DarlehensVerfuegungPdfService {
             );
 
             // todo: add wichtige infos to rechtsmittelbelehurng (flag)
+            PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
+            PdfUtils.makePageNumberEven(document);
+
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
+        }
+        return out;
+    }
+
+    public ByteArrayOutputStream generateNegativeDarlehensVerfuegungPdf(final Darlehen darlehen) {
+        final var out = new ByteArrayOutputStream();
+        final FontProgram font;
+        final FontProgram fontBold;
+        try {
+            final byte[] fontBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_PATH));
+            final byte[] fontBoldBytes = IOUtils.toByteArray(getClass().getResourceAsStream(FONT_BOLD_PATH));
+            font = FontProgramFactory.createFont(fontBytes);
+            fontBold = FontProgramFactory.createFont(fontBoldBytes);
+        } catch (IOException ex) {
+            throw new InternalServerErrorException(ex);
+
+        }
+        pdfFont = PdfFontFactory.createFont(font);
+        pdfFontBold = PdfFontFactory.createFont(fontBold);
+        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+        final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
+        final Locale locale = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung()
+            .getKorrespondenzSprache()
+            .getLocale();
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
+        try (
+            final PdfWriter writer = new PdfWriter(out);
+            final PdfDocument pdfDocument = new PdfDocument(writer);
+            final Document document = new Document(pdfDocument, PAGE_SIZE);
+        ) {
+            final float leftMargin = document.getLeftMargin();
+
+            final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
+            logo.setMarginLeft(-25);
+            logo.setMarginTop(-35);
+
+            document.add(logo);
+            PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
+
+            final LocalDate ausbildungsjahrVon = darlehen.getFall()
+                .getLatestGesuch()
+                .getGesuchTranchen()
+                .stream()
+                .map(GesuchTranche::getGueltigkeit)
+                .min(Comparator.comparing(DateRange::getGueltigAb))
+                .get()
+                .getGueltigAb();
+
+            final LocalDate ausbildungsjahrBis = darlehen.getFall()
+                .getLatestGesuch()
+                .getGesuchTranchen()
+                .stream()
+                .map(GesuchTranche::getGueltigkeit)
+                .max(Comparator.comparing(DateRange::getGueltigBis))
+                .get()
+                .getGueltigBis();
+
+            final String ausbildungsjahr = String.format(
+                " %d/%d",
+                ausbildungsjahrVon.getYear(),
+                ausbildungsjahrBis.getYear()
+            );
+
+            // überschrift
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFontBold,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    String.format(
+                        "Verfügung für das Ausbildungsjahr %s",
+                        ausbildungsjahr
+                    )
+                )
+            );
+            // anrede/begrüssung
+            final PersonInAusbildung personInAusbildung = darlehen.getFall()
+                .getLatestGesuch()
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung();
+
+            final String translateKey = personInAusbildung
+                .getAnrede()
+                .equals(Anrede.HERR)
+                    ? "stip.pdf.begruessung.mann"
+                    : "stip.pdf.begruessung.frau";
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate(translateKey) + " ",
+                    personInAusbildung.getNachname()
+                )
+            );
+
+            // einleitungstext
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    String.format(
+                        "Ihren Antrag vom %s haben wir geprüft. ",
+                        DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
+                    )
+                )
+            );
+
+            // mail to text
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "Auf Grund der finanziellen und familiären Situation Ihrer Eltern sowie der tatsächlichen Kosten können wir Ihnen leider kein Ausbildungsdarlehen bewilligen. "
+                )
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "Wir möchten Sie darauf hinweisen, dass auf Darlehen nach Art. 7 ABV kein Rechtsanspruch besteht. Wir bedauern, Ihnen keinen positiven Entscheid geben zu können. "
+                )
+            );
+
+            // erfolgswunsch
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "Für Ihre Ausbildung wünschen wir Ihnen viel Erfolg. "
+                )
+            );
+
+            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
+            // kopie an bkd
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "- ",
+                    "Kopie an: «e_dor_Verteiler»\n"
+                )
+            );
+
             PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
             PdfUtils.makePageNumberEven(document);
 
