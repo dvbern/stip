@@ -104,7 +104,6 @@ public class DarlehensVerfuegungPdfService {
 
             document.add(logo);
             PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
-            // todo: add main content
 
             final LocalDate ausbildungsjahrVon = darlehen.getFall()
                 .getLatestGesuch()
@@ -130,21 +129,24 @@ public class DarlehensVerfuegungPdfService {
                 ausbildungsjahrBis.getYear()
             );
 
-            // überschrift
+            final var titelZeile1 =
+                String.format(translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile1"), ausbildungsjahr);
+            // todo: which number/id must be appearing in title?
+            final var titelZeile2 =
+                String.format(translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile2"), darlehen.getId());
             document.add(
                 PdfUtils.createParagraph(
                     pdfFontBold,
                     FONT_SIZE_BIG,
                     leftMargin,
                     String.format(
-                        "Verfügung für das Ausbildungsjahr %s\n"
-                        + "Ausbildungsdarlehen %s",
-                        ausbildungsjahr,
-                        darlehen.getId()
+                        "%s \n %s",
+                        titelZeile1,
+                        titelZeile2
                     )
                 )
             );
-            // anrede/begrüssung
+
             final PersonInAusbildung personInAusbildung = darlehen.getFall()
                 .getLatestGesuch()
                 .getLatestGesuchTranche()
@@ -167,53 +169,55 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // einleitungstext
+            final var text1 = String.format(
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins"),
+                DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
+            );
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    String.format(
-                        "Vielen Dank für Ihren Antrag vom %s. Wir haben diesen geprüft und gewähren Ihnen folgendes Ausbildungsdarlehen: ",
-                        DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
-                    )
+                    text1
                 )
             );
 
             // todo: display table correctly
-            addTable(document, darlehen);
+            addDetailsForDarlehenTable(document, darlehen);
 
-            // mail to text
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    "Die Auszahlung erfolgt durch die Berner Kantonalbank BEKB. Um die Akten anzufordern, bitten wir Sie, sich 10 Tage vor Auszahlungstermin direkt mit der BEKB, Team Ausbildungsdarlehen,\n"
-                    + "Email Ausbildungsdarlehen@bekb.ch, in Verbindung zu setzen. \n"
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.zwei"),
+                    "\n",
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.drei"),
+                    "\n"
                 )
             );
 
-            // erfolgswunsch
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    "Wir wünschen Ihnen viel Erfolg für Ihre Ausbildung. "
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.vier")
                 )
             );
 
             PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
-            // kopie an bkd
+
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
                     "- ",
-                    "Kopie an: Berner Kantonalbank, Team Ausbildungsdarlehen\n"
-                    + "  und «e_dor_Verteiler»\n"
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
+                    "\n",
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2"),
+                    "\n"
                 )
             );
             document.add(
@@ -222,7 +226,7 @@ public class DarlehensVerfuegungPdfService {
                     FONT_SIZE_BIG,
                     leftMargin,
                     "- ",
-                    "Hinweis: Bitte beachten Sie unbedingt die wichtigen Hinweise auf der Rückseite. "
+                    translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis")
                 )
             );
 
@@ -298,16 +302,14 @@ public class DarlehensVerfuegungPdfService {
                 ausbildungsjahrBis.getYear()
             );
 
-            // überschrift
+            final var titel =
+                String.format(translator.translate("stip.darlehen.verfuegung.negativ.titel.zeile1"), ausbildungsjahr);
             document.add(
                 PdfUtils.createParagraph(
                     pdfFontBold,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    String.format(
-                        "Verfügung für das Ausbildungsjahr %s",
-                        ausbildungsjahr
-                    )
+                    titel
                 )
             );
             // anrede/begrüssung
@@ -339,20 +341,7 @@ public class DarlehensVerfuegungPdfService {
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    String.format(
-                        "Ihren Antrag vom %s haben wir geprüft. ",
-                        DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
-                    )
-                )
-            );
-
-            // mail to text
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "Auf Grund der finanziellen und familiären Situation Ihrer Eltern sowie der tatsächlichen Kosten können wir Ihnen leider kein Ausbildungsdarlehen bewilligen. "
+                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins")
                 )
             );
 
@@ -361,7 +350,16 @@ public class DarlehensVerfuegungPdfService {
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    "Wir möchten Sie darauf hinweisen, dass auf Darlehen nach Art. 7 ABV kein Rechtsanspruch besteht. Wir bedauern, Ihnen keinen positiven Entscheid geben zu können. "
+                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.zwei")
+                )
+            );
+
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.drei")
                 )
             );
 
@@ -371,7 +369,7 @@ public class DarlehensVerfuegungPdfService {
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    "Für Ihre Ausbildung wünschen wir Ihnen viel Erfolg. "
+                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.vier")
                 )
             );
 
@@ -383,7 +381,7 @@ public class DarlehensVerfuegungPdfService {
                     FONT_SIZE_BIG,
                     leftMargin,
                     "- ",
-                    "Kopie an: «e_dor_Verteiler»\n"
+                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.kopieAn")
                 )
             );
 
@@ -396,7 +394,7 @@ public class DarlehensVerfuegungPdfService {
         return out;
     }
 
-    private void addTable(Document document, final Darlehen darlehen) {
+    private void addDetailsForDarlehenTable(Document document, final Darlehen darlehen) {
         final float[] columnWidths = { 50, 50 };
         final var leftMargin = document.getLeftMargin();
         final Table calculationTable = PdfUtils.createTable(columnWidths, leftMargin);
