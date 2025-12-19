@@ -31,10 +31,10 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.pdf.util.DarlehenPdfUtils;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.io.font.FontProgram;
@@ -134,7 +134,6 @@ public class DarlehensVerfuegungPdfService {
 
             final var titelZeile1 =
                 String.format(translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile1"), ausbildungsjahr);
-            // todo: which number/id must be appearing in title?
             final var titelZeile2 =
                 String.format(
                     translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile2"),
@@ -188,7 +187,7 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // todo: display table correctly
+            // todo KSTIP-2697: display darlehen detail table correctly
             addDetailsForDarlehenTable(document, darlehen);
 
             document.add(
@@ -214,7 +213,7 @@ public class DarlehensVerfuegungPdfService {
 
             PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
 
-            final var kopieAnTextZeile2 = getKopieAnSozialdienstRezipientString(
+            final var kopieAnTextZeile2 = DarlehenPdfUtils.getKopieAnSozialdienstRezipientString(
                 darlehen.getFall(),
                 translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2")
             );
@@ -241,7 +240,7 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // todo: add wichtige infos to rechtsmittelbelehurng (flag)
+            // todo KSTIP-2697: add wichtige infos to rechtsmittelbelehurng (flag)
             PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
             PdfUtils.makePageNumberEven(document);
 
@@ -323,7 +322,7 @@ public class DarlehensVerfuegungPdfService {
                     titel
                 )
             );
-            // anrede/begrüssung
+
             final PersonInAusbildung personInAusbildung = darlehen.getFall()
                 .getLatestGesuch()
                 .getLatestGesuchTranche()
@@ -346,7 +345,6 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // einleitungstext
             final var text1 = String.format(
                 translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins"),
                 DateUtil.formatDate(darlehen.getEingabedatum())
@@ -378,7 +376,6 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // erfolgswunsch
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
@@ -390,7 +387,7 @@ public class DarlehensVerfuegungPdfService {
 
             PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
 
-            final var kopieAnText = getKopieAnSozialdienstRezipientString(
+            final var kopieAnText = DarlehenPdfUtils.getKopieAnSozialdienstRezipientString(
                 darlehen.getFall(),
                 String.format("- %s", translator.translate("stip.darlehen.verfuegung.negativ.textBlock.kopieAn"))
             );
@@ -410,19 +407,6 @@ public class DarlehensVerfuegungPdfService {
             throw new InternalServerErrorException(e);
         }
         return out;
-    }
-
-    private LocalDate getEndOfGesuchsjahr(final Gesuch gesuch) {
-        return gesuchMapper.toInfoDto(gesuch).getEndDate();
-    }
-
-    private String getKopieAnSozialdienstRezipientString(final Fall fall, final String kopieAnTemplate) {
-        if (Objects.isNull(fall.getDelegierung())) {
-            return "";
-        }
-
-        final var delegierung = fall.getDelegierung();
-        return String.format(kopieAnTemplate, delegierung.getDelegierterMitarbeiter().getFullName());
     }
 
     private void addDetailsForDarlehenTable(Document document, final Darlehen darlehen) {
@@ -510,7 +494,8 @@ public class DarlehensVerfuegungPdfService {
         );
 
         // todo KSTIP-2697: refine definition of "ende gesuchsjahr" for gueltigkeit of darlehen
-        final var gueltigBis = DateUtil.formatDate(getEndOfGesuchsjahr(darlehen.getFall().getLatestGesuch()));
+        final var gueltigBis = DateUtil
+            .formatDate(DarlehenPdfUtils.getEndOfGesuchsjahr(darlehen.getFall().getLatestGesuch(), gesuchMapper));
 
         calculationTable.addCell(
             PdfUtils.createCell(
