@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -64,6 +65,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DarlehensVerfuegungPdfService {
+    private GesuchMapper gesuchMapper;
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
@@ -410,6 +412,10 @@ public class DarlehensVerfuegungPdfService {
         return out;
     }
 
+    private LocalDate getEndOfGesuchsjahr(final Gesuch gesuch) {
+        return gesuchMapper.toInfoDto(gesuch).getEndDate();
+    }
+
     private String getKopieAnSozialdienstRezipientString(final Fall fall, final String kopieAnTemplate) {
         if (Objects.isNull(fall.getDelegierung())) {
             return "";
@@ -426,10 +432,6 @@ public class DarlehensVerfuegungPdfService {
         calculationTable.setMarginTop(SPACING_MEDIUM);
         calculationTable.setMarginBottom(SPACING_MEDIUM);
         calculationTable.setPaddingRight(SPACING_MEDIUM);
-        // betrag -> CHF <total>
-        // geburtsdatum
-        // heimatort
-        // verfall (verfuegungs-ende)
 
         calculationTable.addCell(
             PdfUtils.createCell(
@@ -507,8 +509,8 @@ public class DarlehensVerfuegungPdfService {
             ).setPadding(1)
         );
 
-        // todo
-        final var verfuegungBis = darlehen.getFall().getLatestGesuch().getGesuchsperiode().getFiskaljahr();
+        // todo KSTIP-2697: refine definition of "ende gesuchsjahr" for gueltigkeit of darlehen
+        final var gueltigBis = DateUtil.formatDate(getEndOfGesuchsjahr(darlehen.getFall().getLatestGesuch()));
 
         calculationTable.addCell(
             PdfUtils.createCell(
@@ -516,7 +518,7 @@ public class DarlehensVerfuegungPdfService {
                 FONT_SIZE_BIG,
                 1,
                 1,
-                verfuegungBis
+                gueltigBis
             ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
         );
 

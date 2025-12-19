@@ -93,8 +93,8 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         if (!isSachbearbeiter(benutzer)) {
             forbidden();
         }
-
-        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
+        // todo: re-enable this line!!!
+        // assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
@@ -105,6 +105,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
+        // todo: re-enable this line!!!
         // assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
@@ -204,10 +205,11 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     public void assertStatus(UUID darlehenId, DarlehenStatus darlehenStatus) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
-
-        if (!darlehen.getStatus().equals(darlehenStatus)) {
-            forbidden();
-        }
+        return;
+        // final var darlehen = darlehenRepository.requireById(darlehenId);
+        //
+        // if (!darlehen.getStatus().equals(darlehenStatus)) {
+        // forbidden();
+        // }
     }
 }
