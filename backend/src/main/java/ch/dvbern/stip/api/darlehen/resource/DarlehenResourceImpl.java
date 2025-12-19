@@ -129,14 +129,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Override
     @RolesAllowed(DARLEHEN_FREIGABESTELLE)
     public DarlehenDto darlehenAblehen(UUID darlehenId) {
-        // darlehenAuthorizer.canDarlehenAblehenen(darlehenId);
+        darlehenAuthorizer.canDarlehenAblehenen(darlehenId);
         return darlehenService.darlehenAblehnen(darlehenId);
     }
 
     @Override
     @RolesAllowed(DARLEHEN_FREIGABESTELLE)
     public DarlehenDto darlehenAkzeptieren(UUID darlehenId) {
-        // darlehenAuthorizer.canDarlehenAkzeptieren(darlehenId);
+        darlehenAuthorizer.canDarlehenAkzeptieren(darlehenId);
         return darlehenService.darlehenAkzeptieren(darlehenId);
     }
 
@@ -231,7 +231,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Override
     @RolesAllowed(DARLEHEN_READ)
     public FileDownloadTokenDto getDarlehenDownloadToken(UUID dokumentId) {
-        darlehenAuthorizer.canGetDarlehenDokumentOrDarlehenVerfuegungByDokumentId(dokumentId);
+        darlehenAuthorizer.canGetDarlehenDokumentByDokumentId(dokumentId);
 
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
