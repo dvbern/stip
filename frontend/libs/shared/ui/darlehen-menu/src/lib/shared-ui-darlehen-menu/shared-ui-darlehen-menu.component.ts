@@ -7,9 +7,11 @@ import {
   input,
   output,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { map } from 'rxjs';
 
 import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
 import { Darlehen, DarlehenStatus } from '@dv/shared/model/gesuch';
@@ -45,9 +47,11 @@ export class SharedUiDarlehenMenuComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  darlehenRouteIdSig = computed(() => {
-    return this.route.snapshot.paramMap.get('darlehenId');
-  });
+  darlehenRouteIdSig = toSignal(
+    this.route.paramMap.pipe(
+      map((params) => params.get('darlehenId') || undefined),
+    ),
+  );
 
   darlehenCompletedStates: DarlehenCompleteStates[] = [
     'open',
@@ -58,7 +62,6 @@ export class SharedUiDarlehenMenuComponent {
   darlehenListByStatusSig = computed(() => {
     const darlehenList = this.darlehenListSig() ?? [];
 
-    // reduce with swithch case to group by status
     return darlehenList.reduce(
       (acc, darlehen) => {
         const statusKey = darlehenStatusMapping[darlehen.status!];

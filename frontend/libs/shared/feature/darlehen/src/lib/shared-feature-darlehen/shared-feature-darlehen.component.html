@@ -112,20 +112,11 @@
         <!-- button akzeptieren wenn freigabestelle und in Freigabe! -->
         <button
           type="button"
-          data-testid="button-darlehen-akzeptieren"
-          (click)="darlehenAkzeptieren()"
+          data-testid="button-darlehen-abschliessen"
+          (click)="darlehenAbschliessen()"
           class="btn btn-primary"
         >
-          {{ 'shared.form.darlehen.akzeptieren' | transloco }}
-        </button>
-        <!-- darlehen ablehnen  -->
-        <button
-          type="button"
-          data-testid="button-darlehen-ablehnen"
-          (click)="darlehenAblehnen()"
-          class="btn btn-primary"
-        >
-          {{ 'shared.form.darlehen.ablehnen' | transloco }}
+          {{ 'shared.form.darlehen.abschliessen' | transloco }}
         </button>
       }
     </div>
