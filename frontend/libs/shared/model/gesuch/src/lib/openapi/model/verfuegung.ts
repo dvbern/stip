@@ -9,14 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { StipDecision } from './stipDecision';
+import { VerfuegungDokument } from './verfuegungDokument';
 
 export interface Verfuegung { 
     id: string;
-    timestampErstellt: string;
-    filename: string;
-    stipDecision?: StipDecision;
+    timestampErstellt?: string;
+    dokumente: Array<VerfuegungDokument>;
 }
-
-
 

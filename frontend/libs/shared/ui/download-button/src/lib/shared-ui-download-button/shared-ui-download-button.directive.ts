@@ -135,10 +135,15 @@ const getDownloadObservable$ = (
     }
     case 'verfuegung': {
       return verfuegungService
-        .getVerfuegungsDownloadToken$({
-          verfuegungsId: id,
+        .getVerfuegungDokumentDownloadToken$({
+          verfuegungDokumentId: id,
         })
-        .pipe(map(({ token }) => `/api/v1/verfuegung/download?token=${token}`));
+        .pipe(
+          map(
+            ({ token }) =>
+              `/api/v1/verfuegung/dokument/download?token=${token}`,
+          ),
+        );
     }
     case 'massendruck': {
       return massendruckService

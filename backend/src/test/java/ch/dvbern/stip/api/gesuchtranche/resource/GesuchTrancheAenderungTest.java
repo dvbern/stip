@@ -425,7 +425,7 @@ class GesuchTrancheAenderungTest {
                 + 20
             );
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuch.getId())
             .body(fullGesuch)
             .execute(TestUtil.PEEK_IF_ENV_SET)

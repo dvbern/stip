@@ -2,17 +2,37 @@ Verfuegung:
   type: object
   required:
     - id
-    - timestampErstellt
-    - filename
+    - dokumente
   properties:
     id:
       $ref: '#/UUID'
     timestampErstellt:
       type: string
+    dokumente:
+      type: array
+      items:
+        $ref: '#/VerfuegungDokument'
+VerfuegungDokument:
+  type: object
+  required:
+    - id
+    - typ
+    - filename
+  properties:
+    id:
+      $ref: '#/UUID'
+    typ:
+      $ref: '#/VerfuegungDokumentTyp'
     filename:
       type: string
-    stipDecision:
-      $ref: '#/StipDecision'
+VerfuegungDokumentTyp:
+  enum:
+    - BERECHNUNGSBLATT_PIA
+    - BERECHNUNGSBLATT_MUTTER
+    - BERECHNUNGSBLATT_VATER
+    - BERECHNUNGSBLATT_FAMILIE
+    - VERSENDETE_VERFUEGUNG
+    - VERFUEGUNGSBRIEF
 CustomDokumentTyp:
   type: object
   required:
@@ -479,11 +499,11 @@ ValidationReport:
     validationErrors:
       type: array
       items:
-        $ref: '#/ValidationError'
+        $ref: '#/ValidationMessage'
     validationWarnings:
       type: array
       items:
-        $ref: '#/ValidationWarning'
+        $ref: '#/ValidationMessage'
     hasDocuments:
       description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
       type: boolean
@@ -499,12 +519,6 @@ ValidationMessage:
       type: string
     message:
       type: string
-ValidationWarning:
-  allOf:
-    - $ref: '#/ValidationMessage'
-ValidationError:
-  allOf:
-    - $ref: '#/ValidationMessage'
 AusbildungBase:
   required:
     - fallId

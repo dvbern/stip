@@ -65,16 +65,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void sbCanChangeGesuchStatusToVerfuegungAmGenerieren(UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_AM_GENERIEREN);
-    }
-
-    @Transactional
-    public void sbCanChangeGesuchStatusToVersandbereit(final UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT);
-    }
-
-    @Transactional
     public void freigabestelleCanChangeGesuchStatusToVerfuegt(final UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGT);
     }
@@ -95,10 +85,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE);
     }
 
-    public void juristCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
-        sbCanChangeGesuchStatusToBereitFuerBearbeitung(gesuchId);
-    }
-
     @Transactional
     public void sbCanChangeGesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
@@ -115,11 +101,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             )
         );
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
-    }
-
-    @Transactional
-    public void sbCanChangeGesuchStatusToDatenschutzBriefAmGenerieren(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Set.of(Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT));
     }
 
     @Transactional
@@ -144,11 +125,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetBerechnung(final UUID gesuchId) {
         assertSBCanGetBerechnung(gesuchId);
-    }
-
-    @Transactional
-    public void sbCanRead() {
-        permitAll();
     }
 
     @Transactional

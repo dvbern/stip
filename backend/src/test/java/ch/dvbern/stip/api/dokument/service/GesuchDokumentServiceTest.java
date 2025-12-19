@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -50,7 +49,6 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
-import io.quarkus.security.ForbiddenException;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -137,31 +135,6 @@ class GesuchDokumentServiceTest {
             gesuchDokumente.remove(arg.getId());
             return null;
         }).when(gesuchDokumentRepository).delete(Mockito.any());
-    }
-
-    @TestAsGesuchsteller
-    @Test
-    void gesuchStellerShouldNotBeAbleToInvokeEndpoint() {
-        // Arrange
-        final var ablehnenRequest = new GesuchDokumentAblehnenRequestDto();
-        mockedDokument = (GesuchDokument) new GesuchDokument()
-            .setStatus(GesuchDokumentStatus.AUSSTEHEND)
-            .setId(id);
-
-        GesuchDokumentKommentarDto gesuchDokumentKommentarDto = new GesuchDokumentKommentarDto();
-        gesuchDokumentKommentarDto.setKommentar("Some known comment");
-        gesuchDokumentKommentarDto.setTimestampErstellt(LocalDate.now());
-        ablehnenRequest.setKommentar(gesuchDokumentKommentarDto);
-
-        GesuchTranche tranche = initGesuchTranche();
-
-        tranche.getGesuch().setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_SB);
-        mockedDokument.setGesuchTranche(tranche);
-
-        // Act & Assert
-        assertThrows(ForbiddenException.class, () -> {
-            gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), ablehnenRequest);
-        });
     }
 
     @TestAsSachbearbeiter

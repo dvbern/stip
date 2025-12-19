@@ -18,6 +18,8 @@ export * from './delegieren.service';
 // import { DelegierenService } from './delegieren.service';
 export * from './dokument.service';
 // import { DokumentService } from './dokument.service';
+export * from './eltern.service';
+// import { ElternService } from './eltern.service';
 export * from './fall.service';
 // import { FallService } from './fall.service';
 export * from './gesuch.service';

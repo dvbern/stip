@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheOverrideDokumentService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
@@ -91,6 +92,7 @@ public class DokumentResourceImpl implements DokumentResource {
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
+    private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final DokumentDownloadService dokumentDownloadService;
     private final DarlehenService darlehenService;
@@ -185,7 +187,6 @@ public class DokumentResourceImpl implements DokumentResource {
     @RolesAllowed(DOKUMENT_DELETE_SB)
     public void deleteDokumentSB(UUID dokumentId) {
         gesuchDokumentAuthorizer.assertSbCanDeleteDokumentOfTranche(dokumentId);
-        gesuchDokumentService.setGesuchDokumentOfDokumentToAusstehend(dokumentId);
         gesuchDokumentService.removeDokument(dokumentId);
     }
 
@@ -197,6 +198,8 @@ public class DokumentResourceImpl implements DokumentResource {
     ) {
         gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
+        gesuchTrancheOverrideDokumentService
+            .jahresfeldGesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
     @Override
@@ -204,6 +207,7 @@ public class DokumentResourceImpl implements DokumentResource {
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
+        gesuchTrancheOverrideDokumentService.jahresfeldGesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
     @Override
@@ -268,14 +272,14 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(DOKUMENT_READ)
     public NullableGesuchDokumentDto getGesuchDokumentForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        gesuchDokumentAuthorizer.canGetGesuchDokumentForTranche(gesuchTrancheId);
+        gesuchDokumentAuthorizer.canGetGesuchDokumentForTrancheGS(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp);
     }
 
     @Override
     @RolesAllowed(DOKUMENT_READ)
     public NullableGesuchDokumentDto getGesuchDokumentForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        gesuchDokumentAuthorizer.canGetGesuchDokumentForTranche(gesuchTrancheId);
+        gesuchDokumentAuthorizer.canGetGesuchDokumentForTrancheSB(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
     }
 }

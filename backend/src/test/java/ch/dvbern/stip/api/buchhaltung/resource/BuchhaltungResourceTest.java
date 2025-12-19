@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
-import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
@@ -160,7 +159,7 @@ class BuchhaltungResourceTest {
                     .getEinnahmenKostenPartner()
             );
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
             .body(gesuchUpdateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -260,8 +259,6 @@ class BuchhaltungResourceTest {
         assertThat(buchhaltungEntrys.get(0).getRueckforderung(), is(nullValue()));
         assertThat(buchhaltungEntrys.get(0).getAuszahlung(), is(nullValue()));
         assertThat(buchhaltungEntrys.get(0).getStipendienBetrag(), greaterThan(0));
-
-        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.DE);
 
         assertThat(
             buchhaltungEntrys.get(0).getComment(),

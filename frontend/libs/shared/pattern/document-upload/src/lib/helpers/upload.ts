@@ -56,6 +56,7 @@ export const UPLOAD_THEME_MAP: Record<
   DokumentView['theme']
 > = {
   error: { icon: 'warning', type: 'danger', color: 'warn' },
+  deleting: { icon: 'sync', type: 'info', color: 'info' },
   uploading: { icon: 'sync', type: 'info', color: 'info' },
   done: { icon: 'check', type: 'success', color: 'success' },
 };
@@ -65,6 +66,9 @@ export const checkDocumentState = (
 ): DokumentView['state'] => {
   if (document.error) {
     return 'error';
+  }
+  if (document.deleting) {
+    return 'deleting';
   }
   if (document.progress === 100) {
     return 'done';

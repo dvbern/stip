@@ -11,6 +11,10 @@ GesuchFormular:
       $ref: '#/Familiensituation'
     partner:
       $ref: '#/Partner'
+    versteckteEltern:
+      type: array
+      items:
+        $ref: './common.yaml#/ElternTyp'
     elterns:
       type: array
       items:
@@ -440,8 +444,6 @@ SteuererklaerungUpdate:
     - steuererklaerungInBern
   type: object
   properties:
-    id:
-      $ref: './common.yaml#/UUID'
     steuerdatenTyp:
       $ref: './common.yaml#/SteuerdatenTyp'
     steuererklaerungInBern:

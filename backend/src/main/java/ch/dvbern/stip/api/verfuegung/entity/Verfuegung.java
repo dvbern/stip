@@ -17,11 +17,15 @@
 
 package ch.dvbern.stip.api.verfuegung.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.stipdecision.type.Kanton;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,14 +34,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Audited
 @Entity
@@ -49,23 +51,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Getter
 @Setter
 public class Verfuegung extends AbstractMandantEntity {
-
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filename")
-    private String filename;
-
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filepath")
-    private String filepath;
-
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "filesize")
-    private String filesize;
-
-    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "object_id")
-    private String objectId;
-
     @Nullable
     @Enumerated(EnumType.STRING)
     @Column(name = "stip_decision")
@@ -87,4 +72,7 @@ public class Verfuegung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "is_versendet")
     private boolean isVersendet = false;
+
+    @OneToMany(mappedBy = "verfuegung", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<VerfuegungDokument> dokumente = new ArrayList<>();
 }

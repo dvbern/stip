@@ -17,15 +17,12 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import java.io.IOException;
-
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +33,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final ConfigService configService;
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
-    private final VerfuegungService verfuegungService;
+    private final VerfuegungPdfService verfuegungPdfService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -50,25 +47,13 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             ? stipendien.getBerechnungReduziert()
             : stipendien.getBerechnung();
 
-        if (berechnungsresultat == 0) {
-            try {
-                verfuegungService.createPdfForVerfuegungOhneAnspruch(
-                    verfuegungService.getLatestVerfuegung(gesuch.getId())
-                );
-            } catch (IOException e) {
-                throw new InternalServerErrorException(e);
-            }
-        }
-
-        if (berechnungsresultat > 0) {
+        if (berechnungsresultat > 0 || !gesuch.isFirstVerfuegung()) {
             buchhaltungService.createStipendiumBuchhaltungEntry(
                 gesuch,
                 berechnungsresultat
             );
-
-            verfuegungService.createPdfForVerfuegungMitAnspruch(
-                verfuegungService.getLatestVerfuegung(gesuch.getId())
-            );
         }
+
+        verfuegungPdfService.createVerfuegungsDocuments(gesuch, stipendien);
     }
 }

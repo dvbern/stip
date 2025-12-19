@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -39,11 +40,16 @@ public abstract class BusinessPartnerChangeMapper {
     @Mapping(source = "businessPartnerId", target = "BPARTNER")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.HEADER getHeader(Integer businessPartnerId);
 
-    @Mapping(source = "fallNummer", target = "EXTID")
+    @Mapping(source = ".", target = "EXTID", qualifiedByName = "getExtId")
     @Mapping(source = ".", target = "AHVNR", qualifiedByName = "getAhvNr")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.IDKEYS toIdKeys(
         Fall fall
     );
+
+    @Named("getExtId")
+    public String getExtId(Fall fall) {
+        return SapMapperUtil.getExtId(fall);
+    }
 
     @Named("getAhvNr")
     public String getAhvNr(Fall fall) {
@@ -76,11 +82,16 @@ public abstract class BusinessPartnerChangeMapper {
     }
 
     @Mapping(target = "BANKID", constant = "0001")
-    @Mapping(source = "iban", target = "IBAN")
+    @Mapping(source = "iban", target = "IBAN", qualifiedByName = "getIban")
     @Mapping(source = ".", target = "ACCOUNTHOLDER", qualifiedByName = "getAccountHolder")
     public abstract BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL toPaymentDetails(
         Zahlungsverbindung zahlungsverbindung
     );
+
+    @Named("getIban")
+    public String getIban(String iban) {
+        return SapMapperUtil.stripWhitespace(iban);
+    }
 
     @Named("getAccountHolder")
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
@@ -112,7 +123,14 @@ public abstract class BusinessPartnerChangeMapper {
     public List<BusinessPartnerChangeRequest.BUSINESSPARTNER.PAYMENTDETAIL> setPaymentDetail(
         Fall fall
     ) {
-        return List.of(toPaymentDetails(fall.getRelevantZahlungsverbindung()));
+        final var paymentdetail =
+            toPaymentDetails(fall.getRelevantZahlungsverbindung());
+        if (fall.getAuszahlung().isAuszahlungAnSozialdienst()) {
+            final LocalDate now = LocalDate.now();
+            paymentdetail.setBANKDETAILVALIDFROM(SapMapperUtil.getPaymentdetailValidFromGregorianCalendar(now));
+            paymentdetail.setBANKDETAILVALIDTO(SapMapperUtil.getPaymentdetailValidToGregorianCalendar(now));
+        }
+        return List.of(paymentdetail);
     }
 
     @Named("getSenderParmsDelivery")

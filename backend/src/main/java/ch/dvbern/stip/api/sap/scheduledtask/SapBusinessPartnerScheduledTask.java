@@ -37,8 +37,8 @@ public class SapBusinessPartnerScheduledTask {
 
     private void run() {
         try {
-            LOG.info("processPendingCreateBusinessPartnerActions from scheduled task");
-            sapService.processPendingCreateBusinessPartnerActions();
+            LOG.info("processPendingBusinessPartnerActions from scheduled task");
+            sapService.processPendingBusinessPartnerActions();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }

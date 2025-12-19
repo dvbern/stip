@@ -18,10 +18,12 @@
 package ch.dvbern.stip.api.notification.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
@@ -32,6 +34,7 @@ import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
@@ -304,6 +307,12 @@ public class NotificationService {
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
             .getPersonInAusbildung();
+        final var mostRecentVerfuegungsDokument = verfuegung.getDokumente()
+            .stream()
+            .filter(
+                d -> d.getTyp() == VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG
+            )
+            .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
         final var sprache = pia.getKorrespondenzSprache();
 
         final var msg = Templates.getNeueVerfuegungText(sprache).render();
@@ -311,7 +320,7 @@ public class NotificationService {
             .setNotificationType(NotificationType.NEUE_VERFUEGUNG)
             .setFall(verfuegung.getGesuch().getAusbildung().getFall())
             .setNotificationText(msg)
-            .setContextId(verfuegung.getId());
+            .setContextId(mostRecentVerfuegungsDokument.get().getId());
         setAbsender(verfuegung.getGesuch(), notification);
         notificationRepository.persistAndFlush(notification);
     }

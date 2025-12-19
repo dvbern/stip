@@ -88,7 +88,7 @@ class CustomGesuchDokumentTypAuthorizerTest {
         sozialdienstService = Mockito.mock(SozialdienstService.class);
 
         gesuchDokumentAuthorizer = new GesuchDokumentAuthorizer(
-            gesuchTrancheRepository, benutzerService, gesuchDokumentRepository, null, sozialdienstService, null
+            gesuchTrancheRepository, benutzerService, gesuchDokumentRepository, null, sozialdienstService, null, null
         );
 
         customGesuchDokumentTypAuthorizer = new CustomGesuchDokumentTypAuthorizer(
