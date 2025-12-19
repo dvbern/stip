@@ -8,7 +8,7 @@
       <div class="d-flex justify-content-between">
         @switch (dokumentRd.data?.status) {
           @case ('AUSSTEHEND') {
-            @if (uploadViewSig().permissions.canWrite) {
+            @if (uploadViewSig().permissions.canApprove) {
               <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
                 <i class="material-symbols-rounded fs-4">close</i>
                 <span>

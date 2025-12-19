@@ -33,6 +33,8 @@ tags:
     x-displayName: Massendruck
   - name: Verfuegung
     x-displayName: Verfuegung
+  - name: Eltern
+    x-displayName: Eltern
   - name: Ausbildung
     x-displayName: Ausbildung
   - name: Auszahlung
@@ -1140,7 +1142,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /verfuegung/download:
+  /verfuegung/{gesuchId}/verfuegungen:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Verfuegung'
+          description: Returns a list of all Verfuegungen for a Gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungen
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /verfuegung/dokument/download:
     parameters:
       - name: token
         schema:
@@ -1157,17 +1188,16 @@ paths:
               schema:
                 format: binary
                 type: string
-          description: File returned
-      operationId: getVerfuegung
-      summary: get Verfuegung
+          description: Returns a file
+      operationId: getVerfuegungDokument
       x-quarkus-response-type: >-
         org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /verfuegung/{verfuegungsId}/token:
+  /verfuegung/dokument/{verfuegungDokumentId}/token:
     parameters:
-      - name: verfuegungsId
+      - name: verfuegungDokumentId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -1181,7 +1211,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileDownloadToken'
-          description: Token returned
+          description: Returns a download token
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungDokumentDownloadToken
+      summary: get Token to downlaod Verfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /setVersteckteEltern/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ElternTyp'
+        required: true
+      tags:
+        - Eltern
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ElternTyp'
+          description: Versteckte Eltern updated
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1190,11 +1258,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-          description: File returned
-      operationId: getVerfuegungsDownloadToken
-      summary: get Token to downlaod Verfuegung
+      operationId: setVersteckteEltern
+      summary: Set the list of versteckte Eltern for the given gesuchTrancheId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2702,6 +2767,33 @@ paths:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
+    delete:
+      tags:
+        - Gesuch
+      responses:
+        '204':
+          description: |
+            Gesuch deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteGesuch
+      summary: delete a Gesuch
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/{gesuchId}/gs:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     patch:
       requestBody:
         content:
@@ -2724,18 +2816,32 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: updateGesuch
+      operationId: updateGesuchGS
       summary: Updates the Gesuch with the given Id
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-    delete:
+  /gesuch/{gesuchId}/sb:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
       tags:
         - Gesuch
       responses:
-        '204':
-          description: |
-            Gesuch deleted
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2744,8 +2850,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: deleteGesuch
-      summary: delete a Gesuch
+      operationId: updateGesuchSB
+      summary: Updates the Gesuch with the given Id
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -3445,36 +3551,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/adminDokumente:
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminDokumente'
-          description: Returns a List of all Verfuegungen for a Gesuch
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAdminDokumente
-      summary: All dokument information required for the Admin tab in Info of Gesuch
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
   /gesuch/{gesuchId}/nachfristDokumente:
     parameters:
       - name: gesuchId
@@ -3744,31 +3820,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getBerechnungsblattDownloadToken
       summary: get Berechnungsblatt Download Token
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuch/berechnungsblatt:
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: Berechnungsblatt File returned
-      operationId: getBerechnungsBlattForGesuch
-      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
-      x-quarkus-response-type: >-
-        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -4183,7 +4234,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Gesuch'
-          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert todo
+          description: Gueltigkeit von Aenderung wurde erfolgreich geaendert
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5461,12 +5512,6 @@ components:
           type: string
         message:
           type: string
-    ValidationError:
-      allOf:
-        - $ref: '#/components/schemas/ValidationMessage'
-    ValidationWarning:
-      allOf:
-        - $ref: '#/components/schemas/ValidationMessage'
     ValidationReport:
       required:
         - validationErrors
@@ -5476,11 +5521,11 @@ components:
         validationErrors:
           type: array
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/ValidationMessage'
         validationWarnings:
           type: array
           items:
-            $ref: '#/components/schemas/ValidationWarning'
+            $ref: '#/components/schemas/ValidationMessage'
         hasDocuments:
           description: >-
             Whether or not the Gesuch validated has one or more GesuchDokument
@@ -6645,7 +6690,8 @@ components:
       enum:
         - ALLE_GESUCHE
         - MEINE_GESUCHE
-        - PENDENTE_GESUCHE
+        - ALLE_PENDENTE_GESUCHE
+        - MEINE_PENDENTE_GESUCHE
         - ALLE_BEARBEITBAR
         - MEINE_BEARBEITBAR
         - ALLE_JURISTISCHE_ABKLAERUNG
@@ -6660,6 +6706,41 @@ components:
         - VATER
         - MUTTER
       type: string
+    VerfuegungDokumentTyp:
+      enum:
+        - BERECHNUNGSBLATT_PIA
+        - BERECHNUNGSBLATT_MUTTER
+        - BERECHNUNGSBLATT_VATER
+        - BERECHNUNGSBLATT_FAMILIE
+        - VERSENDETE_VERFUEGUNG
+        - VERFUEGUNGSBRIEF
+    VerfuegungDokument:
+      type: object
+      required:
+        - id
+        - typ
+        - filename
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        typ:
+          $ref: '#/components/schemas/VerfuegungDokumentTyp'
+        filename:
+          type: string
+    Verfuegung:
+      type: object
+      required:
+        - id
+        - dokumente
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          type: string
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerfuegungDokument'
     AusbildungBase:
       required:
         - fallId
@@ -7729,17 +7810,6 @@ components:
           type: boolean
         canChangeGesuchsperiode:
           type: boolean
-    AdminDokumente:
-      type: object
-      required:
-        - verfuegungen
-      properties:
-        verfuegungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/Verfuegung'
-        datenschutzbriefMassendruckJobId:
-          $ref: '#/components/schemas/UUID'
     NachfristAendernRequest:
       type: object
       required:
@@ -8496,8 +8566,6 @@ components:
         - steuererklaerungInBern
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/UUID'
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
@@ -8662,6 +8730,10 @@ components:
           $ref: '#/components/schemas/Familiensituation'
         partner:
           $ref: '#/components/schemas/Partner'
+        versteckteEltern:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElternTyp'
         elterns:
           type: array
           items:
@@ -8858,21 +8930,6 @@ components:
           $ref: '#/components/schemas/UUID'
         kanton:
           $ref: '#/components/schemas/Kanton'
-    Verfuegung:
-      type: object
-      required:
-        - id
-        - timestampErstellt
-        - filename
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        timestampErstellt:
-          type: string
-        filename:
-          type: string
-        stipDecision:
-          $ref: '#/components/schemas/StipDecision'
     BaseTrancheRequest:
       type: object
       properties:

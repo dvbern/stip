@@ -409,7 +409,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
         final var gesuchUpdateDtoSpec = new GesuchUpdateDtoSpec();
         gesuchUpdateDtoSpec.setGesuchTrancheToWorkWith(trancheUpdateDtoSpec);
 
-        gesuchApiSpec.updateGesuch()
+        gesuchApiSpec.updateGesuchGS()
             .gesuchIdPath(gesuchId)
             .body(gesuchUpdateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)

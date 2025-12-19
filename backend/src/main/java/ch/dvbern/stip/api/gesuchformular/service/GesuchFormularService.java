@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.gesuchformular.service;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
-import ch.dvbern.stip.api.common.exception.CustomValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
@@ -65,9 +64,9 @@ public class GesuchFormularService {
         );
         violations.addAll(validator.validate(gesuchFormular));
 
-        final var validationReportDto = ValidationsExceptionMapper.toDto(violations);
         final var documents = gesuchFormular.getTranche().getGesuchDokuments();
-        validationReportDto.hasDocuments(documents != null && !documents.isEmpty());
+        final Boolean hasDocuments = documents != null && !documents.isEmpty();
+        final var validationReportDto = ValidationsExceptionMapper.toDto(violations, hasDocuments);
 
         try {
             gesuchFormularValidatorService.validateNoOtherGesuchWithSameSvNumber(
@@ -75,7 +74,7 @@ public class GesuchFormularService {
                 gesuchFormular.getTranche().getGesuch().getId()
             );
         } catch (CustomValidationsException exception) {
-            CustomValidationsExceptionMapper
+            ValidationsExceptionMapper
                 .toDto(exception)
                 .getValidationErrors()
                 .forEach(validationReportDto::addValidationErrorsItem);

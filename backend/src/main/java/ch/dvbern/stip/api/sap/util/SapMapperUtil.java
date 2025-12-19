@@ -20,7 +20,12 @@ package ch.dvbern.stip.api.sap.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -32,6 +37,9 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class SapMapperUtil {
+    public static int SOZIALDIENST_PAYMENT_DETAIL_MONTHS_VALID = 12;
+    private static int EXT_ID_UNIQUE_ID_NUM_DIGITS = 4;
+
     public PersonInAusbildung getPia(
         Fall fall
     ) {
@@ -52,22 +60,32 @@ public class SapMapperUtil {
         return gesuchTranche.getGesuchFormular().getPersonInAusbildung();
     }
 
+    public String getExtId(Fall fall) {
+        return String.format(
+            "%s.%d",
+            fall.getFallNummer(),
+            Math.abs(fall.getId().getMostSignificantBits()) % Math.round(Math.pow(10, EXT_ID_UNIQUE_ID_NUM_DIGITS))
+        );
+    }
+
     public String getAhvNr(Fall fall) {
-        return getPia(fall).getSozialversicherungsnummer();
+        final var ahv = getPia(fall).getSozialversicherungsnummer();
+
+        // Remove the dots, as the SAP Endpoint won't accept it otherwise
+        return ahv.replace(".", "");
     }
 
     public String getAccountHolder(Zahlungsverbindung zahlungsverbindung) {
-        final var adresse = zahlungsverbindung.getAdresse();
-        return String.format(
-            "%s %s, %s %s, %s %s, %s",
+        // TODO KSTIP-2927: Change this here
+        final var accountHolder = String.format(
+            "%s %s",
             zahlungsverbindung.getVorname(),
-            zahlungsverbindung.getNachname(),
-            adresse.getStrasse(),
-            adresse.getHausnummer(),
-            adresse.getPlz(),
-            adresse.getOrt(),
-            adresse.getLand().getDeKurzform()
+            zahlungsverbindung.getNachname()
         );
+
+        // Truncate to a max length of 60, as the ACCOUNTHOLDER property in SAP is limited to that
+        final var end = Math.min(accountHolder.length(), 60);
+        return accountHolder.substring(0, end);
     }
 
     public ch.dvbern.stip.api.sap.generated.business_partner.SenderParmsDelivery getBusinessPartnerSenderParmsDelivery(
@@ -87,5 +105,40 @@ public class SapMapperUtil {
         final SenderParms sender = new SenderParms();
         sender.setSYSID(sysid);
         return sender;
+    }
+
+    public XMLGregorianCalendar getPaymentdetailValidFromGregorianCalendar(
+        final LocalDate validFrom
+    ) {
+        try {
+            return DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar(
+                    GregorianCalendar.from(
+                        validFrom.atStartOfDay(ZoneId.systemDefault())
+                    )
+                );
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public XMLGregorianCalendar getPaymentdetailValidToGregorianCalendar(
+        final LocalDate validFrom
+    ) {
+        try {
+            return DatatypeFactory.newInstance()
+                .newXMLGregorianCalendar(
+                    GregorianCalendar.from(
+                        validFrom.atStartOfDay(ZoneId.systemDefault())
+                            .plusMonths(SapMapperUtil.SOZIALDIENST_PAYMENT_DETAIL_MONTHS_VALID)
+                    )
+                );
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String stripWhitespace(String input) {
+        return input.replace(" ", "");
     }
 }

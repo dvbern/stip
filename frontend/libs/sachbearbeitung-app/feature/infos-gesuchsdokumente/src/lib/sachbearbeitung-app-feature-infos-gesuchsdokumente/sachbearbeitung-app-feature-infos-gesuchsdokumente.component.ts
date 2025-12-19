@@ -1,59 +1,41 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   computed,
-  effect,
   inject,
-  input,
 } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatTabsModule } from '@angular/material/tabs';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { map, startWith } from 'rxjs';
 
-import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
-import { Verfuegung } from '@dv/shared/model/gesuch';
-import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+
+const ALL_TABS = ['stipendien', 'darlehen', 'datenschutzbriefe'] as const;
 
 @Component({
-  imports: [
-    CommonModule,
-    TranslocoPipe,
-    MatTableModule,
-    TypeSafeMatCellDefDirective,
-    SharedUiDownloadButtonDirective,
-    RouterLink,
-  ],
-  providers: [paginatorTranslationProvider()],
+  selector: 'dv-sachbearbeitung-app-feature-infos-gesuchsdokumente',
+  imports: [RouterOutlet, RouterLink, MatTabsModule, TranslocoPipe],
   templateUrl:
     './sachbearbeitung-app-feature-infos-gesuchsdokumente.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureInfosAdminComponent {
-  private infosAdminStore = inject(InfosGesuchsdokumenteStore);
-  displayColumns = ['timestamp', 'verfuegung'];
-  datenschutzbriefMassendruckJobIdSig = computed(() => {
-    return this.infosAdminStore.adminDokumenteViewSig()
-      ?.datenschutzbriefMassendruckJobId;
+export class SachbearbeitungAppFeatureInfosGesuchsDokumenteComponent {
+  private router = inject(Router);
+  private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
+  activeTabSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map(() => this.wndw?.location.pathname),
+      startWith(this.wndw?.location.pathname),
+    ),
+  );
+  tabsSig = computed(() => {
+    const path = this.activeTabSig();
+    return ALL_TABS.map((tab) => ({
+      active: !!path?.endsWith(tab),
+      name: tab,
+    }));
   });
-  verfuegungenSig = computed(() => {
-    const { verfuegungen } = this.infosAdminStore.adminDokumenteViewSig() ?? {};
-    return new MatTableDataSource<Verfuegung>(verfuegungen ?? []);
-  });
-  // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchIdSig = input.required<string>({ alias: 'id' });
-
-  constructor() {
-    effect(() => {
-      const gesuchId = this.gesuchIdSig();
-
-      if (!gesuchId) {
-        return;
-      }
-
-      this.infosAdminStore.loadAdminDokumente$({ gesuchId });
-    });
-  }
 }

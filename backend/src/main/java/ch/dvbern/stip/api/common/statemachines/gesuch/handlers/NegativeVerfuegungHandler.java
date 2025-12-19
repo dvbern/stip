@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class NegativeVerfuegungHandler implements GesuchStatusChangeHandler {
-    private final VerfuegungService verfuegungService;
+    private final VerfuegungPdfService verfuegungPdfService;
     private final GesuchService gesuchService;
 
     @Override
     public void handle(Gesuch gesuch) {
         final var latestVerfuegung = gesuchService.getLatestVerfuegungForGesuch(gesuch.getId());
         if (Objects.nonNull(latestVerfuegung.getStipDecision())) {
-            verfuegungService.createPdfForNegtativeVerfuegung(latestVerfuegung);
+            verfuegungPdfService.createPdfForNegtativeVerfuegung(latestVerfuegung);
         }
     }
 }

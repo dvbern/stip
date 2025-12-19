@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,12 +6,19 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
+import { debounceTime, map } from 'rxjs';
 
+import { translatableShared } from '@dv/shared/assets/i18n';
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { VersteckteElternStore } from '@dv/shared/data-access/versteckte-eltern';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -21,7 +29,10 @@ import {
 import { ELTERN, isStepDisabled } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 import { capitalized, lowercased } from '@dv/shared/model/type-util';
+import { INPUT_DELAY } from '@dv/shared/model/ui-constants';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 
@@ -29,15 +40,22 @@ import { SharedFeatureGesuchFormElternEditorComponent } from '../shared-feature-
 import { ElternteilCardComponent } from './elternteil-card/elternteil-card.component';
 import { selectSharedFeatureGesuchFormElternView } from './shared-feature-gesuch-form-eltern.selector';
 
+const allEltern = Object.values(ElternTyp);
+
 @Component({
   selector: 'dv-shared-feature-gesuch-form-eltern',
   imports: [
-    TranslocoPipe,
-    SharedFeatureGesuchFormElternEditorComponent,
+    ReactiveFormsModule,
+    CommonModule,
+    MatListModule,
+    MatTooltipModule,
     ElternteilCardComponent,
+    SharedFeatureGesuchFormElternEditorComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
     SharedUiLoadingComponent,
+    SharedUiAdvTranslocoDirective,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-eltern.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,11 +64,31 @@ export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
   private permissionStore = inject(PermissionStore);
   private appType = inject(SharedModelCompileTimeConfig).appType;
+  private versteckteElternStore = inject(VersteckteElternStore);
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
+  shouldHide = this.appType === 'gesuch-app';
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormElternView);
+  sichtbarReadonlySig = computed(() => {
+    const { gesuchFormular, readonly } = this.viewSig();
+    return (
+      readonly || !!gesuchFormular?.familiensituation?.elternVerheiratetZusammen
+    );
+  });
+  sichtbareElternSig = computed(() => {
+    const { gesuchFormular } = this.viewSig();
+    const versteckteEltern = gesuchFormular?.versteckteEltern;
+    const sichtbareEltern =
+      this.sichtbareElternChangedSig()?.value ??
+      allEltern.filter((e) => !versteckteEltern?.includes(e));
+    return {
+      MUTTER: !!sichtbareEltern?.includes('MUTTER'),
+      VATER: !!sichtbareEltern?.includes('VATER'),
+    };
+  });
   hasChangesSig = computed(() => {
     const { listChanges } = this.viewSig();
     const changes =
@@ -62,9 +100,19 @@ export class SharedFeatureGesuchFormElternComponent {
     };
   });
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
-
+  elternTyps = ElternTyp;
+  sichtbareEltern = new FormControl(allEltern, {
+    nonNullable: true,
+  });
   editedElternteil?: Omit<Partial<ElternUpdate>, 'elternTyp'> &
     Required<Pick<ElternUpdate, 'elternTyp'>>;
+
+  private sichtbareElternChangedSig = toSignal(
+    this.sichtbareEltern.valueChanges.pipe(
+      map((value) => ({ value })),
+      debounceTime(INPUT_DELAY),
+    ),
+  );
 
   constructor() {
     this.store.dispatch(SharedEventGesuchFormEltern.init());
@@ -79,6 +127,20 @@ export class SharedFeatureGesuchFormElternComponent {
         this.appType,
         rolesMap,
       );
+      const sichtbarReadonly = this.sichtbarReadonlySig();
+
+      if (sichtbarReadonly) {
+        this.sichtbareEltern.disable({ emitEvent: false });
+      } else {
+        this.sichtbareEltern.enable({ emitEvent: false });
+      }
+      const versteckteEltern = gesuchFormular?.versteckteEltern;
+      if (versteckteEltern) {
+        this.sichtbareEltern.setValue(
+          allEltern.filter((e) => !versteckteEltern.includes(e)),
+          { emitEvent: false },
+        );
+      }
       if (
         !loading &&
         gesuch &&
@@ -93,10 +155,44 @@ export class SharedFeatureGesuchFormElternComponent {
         );
       }
     });
+
+    effect(() => {
+      const { id: gesuchTrancheId, gesuchFormular } =
+        this.viewSig().gesuch?.gesuchTrancheToWorkWith ?? {};
+      const sichtbareEltern = this.sichtbareElternChangedSig()?.value;
+
+      if (gesuchTrancheId && sichtbareEltern) {
+        // Convert visible eltern to hidden eltern (inverse)
+        const versteckteEltern =
+          gesuchFormular?.elterns
+            ?.map((e) => e.elternTyp)
+            ?.filter((e) => !sichtbareEltern.includes(e)) ?? [];
+        this.versteckteElternStore.saveVersteckteEltern$({
+          gesuchTrancheId,
+          versteckteEltern: versteckteEltern,
+          onSuccess: () => {
+            this.globalNotificationStore.createSuccessNotification({
+              messageKey: translatableShared(
+                'shared.form.eltern.sichtbar.success',
+              ),
+            });
+          },
+        });
+      }
+    });
   }
 
   trackByIndex(index: number) {
     return index;
+  }
+
+  changeElternTypVisibility(elternTyp: ElternTyp, sichtbar: boolean) {
+    const currentSichtbar = this.sichtbareEltern.value;
+    this.sichtbareEltern.patchValue(
+      sichtbar
+        ? [...currentSichtbar, elternTyp]
+        : currentSichtbar.filter((e) => e !== elternTyp),
+    );
   }
 
   handleEdit(elternteil: ElternUpdate) {

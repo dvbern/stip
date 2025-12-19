@@ -31,7 +31,8 @@ public class SapDeliverysLengthConstraintValidator
             case SALDOAENDERUNG, STIPENDIUM -> value.getSapDeliverys().isEmpty();
             case AUSZAHLUNG_INITIAL, AUSZAHLUNG_REMAINDER -> value.getSapDeliverys()
                 .size() <= MAX_SAP_DELIVERYS_AUSZAHLUNG;
-            case BUSINESSPARTNER_CREATE -> value.getSapDeliverys().size() <= MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER;
+            case BUSINESSPARTNER_CREATE, BUSINESSPARTNER_CHANGE -> value.getSapDeliverys()
+                .size() <= MAX_SAP_DELIVERYS_CREATE_BUSINESSPARTNER;
         };
     }
 }

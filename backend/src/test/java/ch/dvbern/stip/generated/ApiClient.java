@@ -66,6 +66,9 @@ public class ApiClient {
     public DokumentApiSpec dokument() {
         return DokumentApiSpec.dokument(config.reqSpecSupplier);
     }
+    public ElternApiSpec eltern() {
+        return ElternApiSpec.eltern(config.reqSpecSupplier);
+    }
     public FallApiSpec fall() {
         return FallApiSpec.fall(config.reqSpecSupplier);
     }

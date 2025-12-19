@@ -9,12 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ValidationError } from './validationError';
-import { ValidationWarning } from './validationWarning';
+import { ValidationMessage } from './validationMessage';
 
 export interface ValidationReport { 
-    validationErrors: Array<ValidationError>;
-    validationWarnings: Array<ValidationWarning>;
+    validationErrors: Array<ValidationMessage>;
+    validationWarnings: Array<ValidationMessage>;
     /**
      * Whether or not the Gesuch validated has one or more GesuchDokument attached
      */

@@ -98,6 +98,10 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .where(gesuchNotiz.pendenzAbgeschlossen.not());
     }
 
+    public JPAQuery<Gesuch> getFindAlleMeinePendenteQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAllePendenteQuery());
+    }
+
     public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
         // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();

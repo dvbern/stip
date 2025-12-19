@@ -33,6 +33,7 @@ import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { AppType } from '@dv/shared/model/config';
 import {
+  GesuchFormular,
   GesuchFormularType,
   GesuchFormularUpdate,
   GesuchService,
@@ -247,8 +248,32 @@ export const loadGesuch = createEffect(
   { functional: true },
 );
 
+const getUpdateGesuchServiceCalls = (
+  gesuchService: GesuchService,
+  gesuchId: string,
+  trancheId: string,
+  gesuchFormular: Partial<GesuchFormular> | Partial<GesuchFormularUpdate>,
+) => {
+  return {
+    'gesuch-app': () =>
+      gesuchService.updateGesuchGS$({
+        gesuchId,
+        gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
+      }),
+    'sachbearbeitung-app': () =>
+      gesuchService.updateGesuchSB$({
+        gesuchId,
+        gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
+      }),
+  } satisfies Record<AppType, unknown>;
+};
+
 export const updateGesuch = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    store = inject(Store),
+  ) => {
     return actions$.pipe(
       ofType(
         SharedEventGesuchFormPartner.nextStepTriggered,
@@ -258,33 +283,48 @@ export const updateGesuch = createEffect(
         SharedEventGesuchFormEinnahmenkosten.saveTriggered,
         SharedEventGesuchFormDarlehen.saveTriggered,
       ),
-      concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
-        return gesuchService
-          .updateGesuch$({
+      withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
+      concatMap(
+        ([
+          { gesuchId, trancheId, gesuchFormular, origin },
+          { compileTimeConfig },
+        ]) => {
+          if (!trancheId || !compileTimeConfig) {
+            throw new Error('Missing trancheId or compileTimeConfig');
+          }
+          return getUpdateGesuchServiceCalls(
+            gesuchService,
             gesuchId,
-            gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
-          })
-          .pipe(
-            map(() =>
-              SharedDataAccessGesuchEvents.gesuchUpdatedSuccess({
-                id: gesuchId,
-                origin,
-              }),
-            ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchUpdatedFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
+            trancheId,
+            gesuchFormular,
+          )
+            [compileTimeConfig.appType]()
+            .pipe(
+              map(() =>
+                SharedDataAccessGesuchEvents.gesuchUpdatedSuccess({
+                  id: gesuchId,
+                  origin,
+                }),
+              ),
+              catchError((error) => [
+                SharedDataAccessGesuchEvents.gesuchUpdatedFailure({
+                  error: sharedUtilFnErrorTransformer(error),
+                }),
+              ]),
+            );
+        },
+      ),
     );
   },
   { functional: true },
 );
 
 export const updateGesuchSubform = createEffect(
-  (actions$ = inject(Actions), gesuchService = inject(GesuchService)) => {
+  (
+    actions$ = inject(Actions),
+    gesuchService = inject(GesuchService),
+    store = inject(Store),
+  ) => {
     return actions$.pipe(
       ofType(
         SharedEventGesuchFormEltern.saveSubformTriggered,
@@ -292,26 +332,37 @@ export const updateGesuchSubform = createEffect(
         SharedEventGesuchFormKinder.saveSubformTriggered,
         SharedEventGesuchFormLebenslauf.saveSubformTriggered,
       ),
-      concatMap(({ gesuchId, trancheId, gesuchFormular, origin }) => {
-        return gesuchService
-          .updateGesuch$({
+      withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
+      concatMap(
+        ([
+          { gesuchId, trancheId, gesuchFormular, origin },
+          { compileTimeConfig },
+        ]) => {
+          if (!trancheId || !compileTimeConfig) {
+            throw new Error('Missing trancheId or compileTimeConfig');
+          }
+          return getUpdateGesuchServiceCalls(
+            gesuchService,
             gesuchId,
-            gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
-          })
-          .pipe(
-            map(() =>
-              SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess({
-                id: gesuchId,
-                origin,
-              }),
-            ),
-            catchError((error) => [
-              SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure({
-                error: sharedUtilFnErrorTransformer(error),
-              }),
-            ]),
-          );
-      }),
+            trancheId,
+            gesuchFormular,
+          )
+            [compileTimeConfig.appType]()
+            .pipe(
+              map(() =>
+                SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess({
+                  id: gesuchId,
+                  origin,
+                }),
+              ),
+              catchError((error) => [
+                SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure({
+                  error: sharedUtilFnErrorTransformer(error),
+                }),
+              ]),
+            );
+        },
+      ),
     );
   },
   { functional: true },
@@ -463,22 +514,14 @@ const prepareFormularData = (
   if ('ausbildung' in formular) {
     delete formular.ausbildung;
   }
+  if ('versteckteEltern' in formular) {
+    delete formular.versteckteEltern;
+  }
   viewOnlyFields.forEach((field) => {
     if (field in formular) {
       delete formular[field];
     }
   });
-
-  if (
-    'steuererklaerung' in formular &&
-    Array.isArray(formular.steuererklaerung)
-  ) {
-    formular.steuererklaerung = formular.steuererklaerung.map((item) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id: _, ...rest } = item;
-      return rest;
-    });
-  }
 
   return {
     gesuchTrancheToWorkWith: {

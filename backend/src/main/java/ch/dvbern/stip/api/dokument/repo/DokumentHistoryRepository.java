@@ -51,7 +51,7 @@ public class DokumentHistoryRepository {
     public long countDistinctTranchenThatReferenceDokumentByObjectId(final String objectId) {
         final var reader = AuditReaderFactory.get(em);
 
-        // This is OK but because of type erasure we can't check before casting
+        // We can't check due to type erasure
         // noinspection unchecked
         final var list = (List<GesuchTranche>) reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, true)

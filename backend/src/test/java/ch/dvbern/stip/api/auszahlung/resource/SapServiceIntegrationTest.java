@@ -110,7 +110,7 @@ class SapServiceIntegrationTest {
         auszahlung.getZahlungsverbindung();
 
         final var businessPartnerReadResponse =
-            sapEndpointService.readBusinessPartner(BigDecimal.ZERO);
+            sapEndpointService.readBusinessPartnerByDeliveryId(BigDecimal.ZERO);
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerReadResponse.getRETURNCODE().get(0).getTYPE()),
             is(false)

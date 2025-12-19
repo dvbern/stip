@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklae
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungVersendetHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -67,6 +68,7 @@ public class GesuchStatusConfigProducer {
     private final StatusprotokollService statusprotokollService;
     private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private final AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandler;
+    private final VerfuegtHandler verfuegtHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -196,7 +198,11 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.VERFUEGT)
             .permit(GesuchStatusChangeEvent.WARTEN_AUF_UNTERSCHRIFTENBLATT, Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.VERFUEGT),
+                verfuegtHandler::handle
+            );
 
         config.configure(Gesuchstatus.IN_FREIGABE)
             .permit(GesuchStatusChangeEvent.VERFUEGT, Gesuchstatus.VERFUEGT)

@@ -21,21 +21,18 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
-import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
-import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -47,17 +44,23 @@ import jakarta.validation.Validator;
 import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE;
-
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheValidatorService {
-    private static final Map<GesuchTrancheStatus, List<Class<?>>> statusToValidationGroups =
+    private static final Map<GesuchTrancheStatus, List<Class<?>>> trancheStatusToValidationGroups =
         new EnumMap<>(GesuchTrancheStatus.class);
 
+    private static final Map<Gesuchstatus, List<Class<?>>> exceptionalGesuchStatusToValidationGroups =
+        new EnumMap<>(Gesuchstatus.class);
+
     static {
-        statusToValidationGroups.put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
-        statusToValidationGroups.put(
+        exceptionalGesuchStatusToValidationGroups.put(
+            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
+            List.of(GesuchNachInBearbeitungSBValidationGroup.class)
+        );
+        trancheStatusToValidationGroups
+            .put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
+        trancheStatusToValidationGroups.put(
             GesuchTrancheStatus.AKZEPTIERT,
             List.of(
                 GesuchEinreichenValidationGroup.class,
@@ -65,7 +68,7 @@ public class GesuchTrancheValidatorService {
                 GesuchDokumentsAcceptedValidationGroup.class
             )
         );
-        statusToValidationGroups.put(
+        trancheStatusToValidationGroups.put(
             GesuchTrancheStatus.MANUELLE_AENDERUNG,
             List.of(
                 GesuchEinreichenValidationGroup.class,
@@ -73,7 +76,7 @@ public class GesuchTrancheValidatorService {
                 GesuchDokumentsAcceptedValidationGroup.class
             )
         );
-        statusToValidationGroups.put(
+        trancheStatusToValidationGroups.put(
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE,
             List.of(GesuchFehlendeDokumenteValidationGroup.class)
         );
@@ -83,11 +86,21 @@ public class GesuchTrancheValidatorService {
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
     public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        final var validationGroups = Stream.concat(
+        var validationGroups = Stream.concat(
             Stream.of(Default.class),
-            statusToValidationGroups.getOrDefault(status, List.of()).stream()
+            // First check for exceptional gesuch status validation groups defined by the current gesuch status
+            exceptionalGesuchStatusToValidationGroups.getOrDefault(
+                toValidate.getGesuch().getGesuchStatus(),
+                // Otherwise use regular tranche validation groups defined by their current status
+                trancheStatusToValidationGroups.getOrDefault(status, List.of())
+            ).stream()
         ).toList();
+
         ValidatorUtil.validate(validator, toValidate.getGesuchFormular(), validationGroups);
+    }
+
+    public void validateGesuchTrancheForCurrentStatus(final GesuchTranche toValidate) {
+        validateGesuchTrancheForStatus(toValidate, toValidate.getStatus());
     }
 
     public void validateAenderungForAkzeptiert(final GesuchTranche toValidate) {
@@ -117,8 +130,6 @@ public class GesuchTrancheValidatorService {
                 gesuch.getId()
             );
         }
-
-        validateAuszahlung(gesuch);
     }
 
     @Transactional
@@ -131,24 +142,6 @@ public class GesuchTrancheValidatorService {
             validator.validate(gesuch, validationGroups.toArray(new Class<?>[0]));
         if (!violations.isEmpty()) {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
-        }
-    }
-
-    private void validateAuszahlung(final Gesuch toValidate) {
-        var auszahlungOpt = Optional.ofNullable(toValidate.getAusbildung().getFall().getAuszahlung());
-        var violations = auszahlungOpt
-            .map(Auszahlung::getZahlungsverbindung)
-            .map(zahlungsverbindung -> validator.validate(zahlungsverbindung))
-            .orElse(Set.of());
-
-        if (auszahlungOpt.isEmpty() || !violations.isEmpty()) {
-            throw new CustomValidationsException(
-                "Keine Auszahlung vorhanden oder ungültige Zahlungsverbindung",
-                new CustomConstraintViolation(
-                    VALIDATION_GESUCHEINREICHEN_AUSZAHLUNG_VALID_MESSAGE,
-                    "auszahlung"
-                )
-            );
         }
     }
 

@@ -43,6 +43,30 @@ paths:
           $ref: './components/common.yaml#/UUID'
         in: path
         required: true
+    delete:
+      tags:
+        - Gesuch
+      responses:
+        '204':
+          description: |
+            Gesuch deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteGesuch
+      summary: delete a Gesuch
+  '/gesuch/{gesuchId}/gs':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
     patch:
       requestBody:
         content:
@@ -65,15 +89,29 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: updateGesuch
+      operationId: updateGesuchGS
       summary: Updates the Gesuch with the given Id
-    delete:
+  '/gesuch/{gesuchId}/sb':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GesuchUpdate'
+        required: true
       tags:
         - Gesuch
       responses:
-        '204':
-          description: |
-            Gesuch deleted
+        '202':
+          description: Gesuch updated
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -82,8 +120,8 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: deleteGesuch
-      summary: delete a Gesuch
+      operationId: updateGesuchSB
+      summary: Updates the Gesuch with the given Id
   '/gesuch/changes/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId
@@ -709,33 +747,6 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: gesuchManuellPruefenJur
       summary: Das Gesuch manuell pruefen als Jurist
-  '/gesuch/{gesuchId}/adminDokumente':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AdminDokumente'
-          description: Returns a List of all Verfuegungen for a Gesuch
-        '400':
-          $ref: './components/responses.yaml#/BadRequest'
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getAdminDokumente
-      summary: All dokument information required for the Admin tab in Info of Gesuch
   '/gesuch/{gesuchId}/nachfristDokumente':
     parameters:
       - name: gesuchId
@@ -981,27 +992,6 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getBerechnungsblattDownloadToken
       summary: get Berechnungsblatt Download Token
-  '/gesuch/berechnungsblatt':
-    parameters:
-      - name: token
-        schema:
-          type: string
-        in: query
-        required: true
-    get:
-      tags:
-        - Gesuch
-      responses:
-        '200':
-          content:
-            application/octet-stream:
-              schema:
-                format: binary
-                type: string
-          description: Berechnungsblatt File returned
-      operationId: getBerechnungsBlattForGesuch
-      summary: Berechnet und generiert das Berechnungsblatt für ein Gesuch
-      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1394,17 +1384,6 @@ components:
           type: boolean
         canChangeGesuchsperiode:
           type: boolean
-    AdminDokumente:
-      type: object
-      required:
-        - verfuegungen
-      properties:
-        verfuegungen:
-          type: array
-          items:
-            $ref: './components/common.yaml#/Verfuegung'
-        datenschutzbriefMassendruckJobId:
-          $ref: './components/common.yaml#/UUID'
     NachfristAendernRequest:
       type: object
       required:

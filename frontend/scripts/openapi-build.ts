@@ -40,6 +40,7 @@ const generatedApis = [
   'DemoData',
   'Dokument',
   'Drucken',
+  'Eltern',
   'Fall',
   'Gesuch',
   'GesuchNotiz',

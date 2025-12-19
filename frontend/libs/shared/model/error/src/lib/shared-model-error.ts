@@ -3,8 +3,7 @@ import { z } from 'zod';
 
 import {
   NeskoError as DvNeskoError,
-  ValidationError as DvValidationError,
-  ValidationWarning as DvValidationWarning,
+  ValidationMessage as DvValidationMessage,
   ValidationReport,
 } from '@dv/shared/model/gesuch';
 import { Extends } from '@dv/shared/model/type-util';
@@ -25,14 +24,14 @@ export const ValidationError = ValidationMessage;
 
 export type ValidationError = Extends<
   z.infer<typeof ValidationError>,
-  DvValidationError
+  DvValidationMessage
 >;
 
 export const ValidationWarning = ValidationMessage;
 
 export type ValidationWarning = Extends<
   z.infer<typeof ValidationWarning>,
-  DvValidationWarning
+  DvValidationMessage
 >;
 
 export const UnknownHttpError = z.object({

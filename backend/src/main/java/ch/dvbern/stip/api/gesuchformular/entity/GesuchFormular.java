@@ -64,7 +64,11 @@ import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
@@ -88,7 +92,7 @@ import org.jilt.BuilderStyle;
 @Audited
 @AusbildungIsDefinedConstraint(
     groups = {
-        GesuchEinreichenValidationGroup.class
+        GesuchNachInBearbeitungSBValidationGroup.class
     }, property = "ausbildung"
 )
 @FamiliensituationElternEntityRequiredConstraint(
@@ -109,8 +113,11 @@ import org.jilt.BuilderStyle;
         GeschwisterPageValidation.class
     }, property = "geschwisters"
 )
+@FamiliensituationNotVerheiratetIfElternteilVerstecktConstraint(
+    groups = GesuchEinreichenValidationGroup.class,
+    property = "familiensituation"
+)
 @EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
-
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -136,14 +143,12 @@ import org.jilt.BuilderStyle;
         EinnahmenKostenPageValidation.class
     }, property = "einnahmenKostenPartner"
 )
-
 @DarlehenRequiredIfVolljaehrigConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
         DarlehenPageValidation.class
     }, property = "darlehen"
 )
-
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -399,6 +404,12 @@ public class GesuchFormular extends AbstractMandantEntity {
     @JoinColumn(name = "gesuch_formular_id", referencedColumnName = "id", nullable = false)
     @HasPageValidation(SteuererklaerungPageValidation.class)
     private @Valid Set<Steuererklaerung> steuererklaerung = new LinkedHashSet<>();
+
+    @NotNull
+    @Column(name = "versteckte_eltern", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = ElternTyp.class)
+    private @Valid Set<ElternTyp> versteckteEltern = new LinkedHashSet<>();
 
     public Optional<Eltern> getElternteilOfTyp(final ElternTyp elternTyp) {
         return elterns.stream().filter(elternteil -> elternteil.getElternTyp() == elternTyp).findFirst();
