@@ -65,7 +65,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DarlehensVerfuegungPdfService {
-    private GesuchMapper gesuchMapper;
+    private final GesuchMapper gesuchMapper;
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
