@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -40,6 +41,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -116,5 +118,18 @@ public class Darlehen extends AbstractMandantEntity {
         nullable = true
     )
     private Dokument darlehenVerfuegung;
+
+    @Nullable
+    @Column(name = "eingabedatum")
+    private LocalDate eingabedatum;
+
+    @Transient
+    public String getDarlehenNr() {
+        // remove everything except numbers from fallNr.
+        // and fill missing spots with zeros (total length of 8 required)
+
+        var fallNrDigitsOnly = this.getFall().getFallNummer().replaceAll("\\D+", "");
+        return String.format("%s%s", "0".repeat(8 - fallNrDigitsOnly.length()), fallNrDigitsOnly);
+    }
 
 }

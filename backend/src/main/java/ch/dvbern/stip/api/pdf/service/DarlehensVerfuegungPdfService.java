@@ -134,7 +134,10 @@ public class DarlehensVerfuegungPdfService {
                 String.format(translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile1"), ausbildungsjahr);
             // todo: which number/id must be appearing in title?
             final var titelZeile2 =
-                String.format(translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile2"), darlehen.getId());
+                String.format(
+                    translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile2"),
+                    darlehen.getDarlehenNr()
+                );
             document.add(
                 PdfUtils.createParagraph(
                     pdfFontBold,
@@ -172,7 +175,7 @@ public class DarlehensVerfuegungPdfService {
 
             final var text1 = String.format(
                 translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins"),
-                DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
+                DateUtil.formatDate(darlehen.getEingabedatum())
             );
             document.add(
                 PdfUtils.createParagraph(
@@ -344,7 +347,7 @@ public class DarlehensVerfuegungPdfService {
             // einleitungstext
             final var text1 = String.format(
                 translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins"),
-                DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
+                DateUtil.formatDate(darlehen.getEingabedatum())
             );
             document.add(
                 PdfUtils.createParagraph(
@@ -504,7 +507,8 @@ public class DarlehensVerfuegungPdfService {
             ).setPadding(1)
         );
 
-        final var verfuegungBis = "todo";
+        // todo
+        final var verfuegungBis = darlehen.getFall().getLatestGesuch().getGesuchsperiode().getFiskaljahr();
 
         calculationTable.addCell(
             PdfUtils.createCell(

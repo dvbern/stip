@@ -262,6 +262,7 @@ public class DarlehenService {
     public DarlehenDto darlehenEingeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
+        darlehen.setEingabedatum(LocalDate.now());
 
         darlehenRepository.persistAndFlush(darlehen);
 
