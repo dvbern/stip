@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -208,6 +209,11 @@ public class DarlehensVerfuegungPdfService {
 
             PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
 
+            final var kopieAnTextZeile2 = getKopieAnSozialdienstRezipientString(
+                darlehen.getFall(),
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2")
+            );
+
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
@@ -216,7 +222,7 @@ public class DarlehensVerfuegungPdfService {
                     "- ",
                     translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
                     "\n",
-                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2"),
+                    kopieAnTextZeile2,
                     "\n"
                 )
             );
@@ -336,12 +342,16 @@ public class DarlehensVerfuegungPdfService {
             );
 
             // einleitungstext
+            final var text1 = String.format(
+                translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins"),
+                DateUtil.formatDate(darlehen.getTimestampErstellt().toLocalDate())
+            );
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins")
+                    text1
                 )
             );
 
@@ -374,14 +384,17 @@ public class DarlehensVerfuegungPdfService {
             );
 
             PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
-            // kopie an bkd
+
+            final var kopieAnText = getKopieAnSozialdienstRezipientString(
+                darlehen.getFall(),
+                String.format("- %s", translator.translate("stip.darlehen.verfuegung.negativ.textBlock.kopieAn"))
+            );
             document.add(
                 PdfUtils.createParagraph(
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    "- ",
-                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.kopieAn")
+                    kopieAnText
                 )
             );
 
@@ -392,6 +405,15 @@ public class DarlehensVerfuegungPdfService {
             throw new InternalServerErrorException(e);
         }
         return out;
+    }
+
+    private String getKopieAnSozialdienstRezipientString(final Fall fall, final String kopieAnTemplate) {
+        if (Objects.isNull(fall.getDelegierung())) {
+            return "";
+        }
+
+        final var delegierung = fall.getDelegierung();
+        return String.format(kopieAnTemplate, delegierung.getDelegierterMitarbeiter().getFullName());
     }
 
     private void addDetailsForDarlehenTable(Document document, final Darlehen darlehen) {
