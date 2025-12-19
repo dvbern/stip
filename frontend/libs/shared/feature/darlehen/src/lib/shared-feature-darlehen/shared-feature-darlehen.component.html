@@ -281,10 +281,11 @@
       <a [routerLink]="['/']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
+
       <button
         type="submit"
         (click)="darlehenUpdateGs()"
-        [disabled]="!darlehenPermissionsSig()?.canEingeben"
+        [disabled]="!darlehenPermissionsSig()?.canWriteGs"
         class="btn btn-primary"
         data-testid="button-update-darlehen"
       >
@@ -299,6 +300,11 @@
           [disabled]="formGs.invalid || formGs.dirty"
         >
           {{ 'shared.form.darlehen.eingeben' | transloco }}
+        </button>
+      }
+      @if (darlehenPermissionsSig()?.canWriteGs) {
+        <button type="button" (click)="darlehenDeleteGs()" class="btn btn-danger" data-testid="button-delete-darlehen">
+          {{ 'shared.form.darlehen.delete' | transloco }}
         </button>
       }
     </div>

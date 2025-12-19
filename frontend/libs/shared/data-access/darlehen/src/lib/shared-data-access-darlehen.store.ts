@@ -16,6 +16,7 @@ import {
   DarlehenServiceDarlehenUpdateGsRequestParams,
   DarlehenServiceDarlehenUpdateSbRequestParams,
   DarlehenServiceDarlehenZurueckweisenRequestParams,
+  DarlehenServiceDeleteDarlehenGsRequestParams,
   DarlehenServiceGetAllDarlehenGsRequestParams,
   DarlehenServiceGetAllDarlehenSbRequestParams,
   DarlehenServiceGetDarlehenDashboardSbRequestParams,
@@ -166,6 +167,31 @@ export class DarlehenStore extends signalStore(
                 onSuccess();
                 this.globalNotificationStore.createSuccessNotification({
                   messageKey: 'shared.form.darlehen.update.success',
+                });
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+
+  darlehenDeleteGs$ = rxMethod<{
+    data: DarlehenServiceDeleteDarlehenGsRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ data, onSuccess }) =>
+        this.darlehenService.deleteDarlehenGs$(data).pipe(
+          handleApiResponse(
+            () => {
+              patchState(this, { cachedDarlehen: initial() });
+            },
+            {
+              onSuccess: () => {
+                onSuccess();
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.delete.success',
                 });
               },
             },

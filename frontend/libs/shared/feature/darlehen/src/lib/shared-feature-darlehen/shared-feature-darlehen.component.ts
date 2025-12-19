@@ -27,7 +27,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
@@ -106,6 +106,7 @@ export class SharedFeatureDarlehenComponent {
   private compileTimeConfig = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
   private gesuchDashboardStore = inject(DashboardStore, { optional: true });
+  private router = inject(Router);
 
   private store = inject(Store);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
@@ -314,6 +315,34 @@ export class SharedFeatureDarlehenComponent {
         this.formGs.markAsPristine();
       },
     });
+  }
+
+  darlehenDeleteGs(): void {
+    {
+      const darlehen = this.darlehenSig();
+
+      if (!darlehen) {
+        return;
+      }
+
+      SharedUiConfirmDialogComponent.open(this.dialog, {
+        title: 'shared.form.darlehen.delete.dialog.title',
+        message: 'shared.form.darlehen.delete.dialog.message',
+        cancelText: 'shared.cancel',
+        confirmText: 'shared.form.darlehen.delete',
+      })
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.darlehenStore.darlehenDeleteGs$({
+              data: { darlehenId: darlehen.id },
+              onSuccess: () => {
+                this.router.navigate(['/']);
+              },
+            });
+          }
+        });
+    }
   }
 
   darlehenEingeben(): void {
