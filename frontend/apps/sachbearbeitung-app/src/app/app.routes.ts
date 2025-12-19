@@ -106,7 +106,6 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureVerfuegungRoutes,
           ),
       },
-      // todo: do we need additional guards here?
       {
         path: 'darlehen-dashboard',
         canActivate: [hasBenutzer],

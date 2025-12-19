@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -49,10 +50,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
 @Entity
 @Audited
+@DarlehenDocumentsRequiredConstraint(
+    groups = { DarlehenEinreichenValidationGroup.class }
+)
 @Table(
     name = "darlehen",
     indexes = {
@@ -82,25 +86,29 @@ public class Darlehen extends AbstractMandantEntity {
     private Integer betrag;
 
     @Nullable
-    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "kommentar", length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "kommentar", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String kommentar;
 
     @Nullable
+    @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Min(value = 0)
     @Column(name = "betrag_gewuenscht")
     private Integer betragGewuenscht;
 
     @Min(value = 0)
     @Nullable
+    @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Column(name = "schulden")
     private Integer schulden;
 
     @Min(value = 0)
     @Nullable
+    @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Column(name = "anzahl_betreibungen")
     private Integer anzahlBetreibungen;
 
+    @Size(min = 1, groups = { DarlehenEinreichenValidationGroup.class })
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @Column(name = "darlehen_grund")

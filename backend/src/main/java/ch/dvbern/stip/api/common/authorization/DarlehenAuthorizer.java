@@ -17,10 +17,12 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -39,7 +41,14 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
 
     @Transactional
-    public void canGetDarlehenGs(UUID fallId) {
+    public void canGetDarlehenGs(UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+
+        canGetDarlehenByFallId(darlehen.getFall().getId());
+    }
+
+    @Transactional
+    public void canGetDarlehenByFallId(UUID fallId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
 
@@ -51,12 +60,19 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     public void canGetDarlehenSb() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
 
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
+            forbidden();
+        }
     }
 
     public void canGetDarlehenDashboardSb() {
-        permitAll();
+        final var benutzer = benutzerService.getCurrentBenutzer();
 
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
+            forbidden();
+        }
     }
 
     @Transactional
@@ -71,42 +87,45 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        ausbildungs.forEach(ausbildung -> {
-            final var gesuchs = ausbildung.getGesuchs();
-            if (gesuchs.size() > 1) {
-                return;
-            }
+        final var hasNoOpenDarlehen =
+            fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);
+        if (!hasNoOpenDarlehen) {
+            forbidden();
+        }
 
-            gesuchs.forEach(gesuch -> {
-                if (gesuch.getGesuchStatus().isEingereicht()) {
-                    return;
-                }
-                forbidden();
-            });
-        });
+        final var atLeastOneGesuchEingereicht = ausbildungs
+            .stream()
+            .anyMatch(
+                // has more than one Gesuch
+                ausbildung -> ausbildung.getGesuchs().size() > 1
+                // or has at least one eingereicht gesuch
+                || ausbildung.getGesuchs().stream().anyMatch(g -> g.getGesuchStatus().isEingereicht())
+            );
+        if (!atLeastOneGesuchEingereicht) {
+            forbidden();
+        }
     }
 
     @Transactional
     public void canDarlehenAblehenen(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isFreigabestelle(benutzer)) {
             forbidden();
         }
-        // todo: re-enable this line!!!
-        // assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
+
+        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
     public void canDarlehenAkzeptieren(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isFreigabestelle(benutzer)) {
             forbidden();
         }
 
-        // todo: re-enable this line!!!
-        // assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
+        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
@@ -129,7 +148,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canDarlehenZurueckweisen(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
             forbidden();
         }
 
@@ -158,11 +177,11 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canDarlehenUpdateSb(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
             forbidden();
         }
 
-        assertStatus(darlehenId, DarlehenStatus.EINGEGEBEN);
+        assertStatus(darlehenId, DarlehenStatus.EINGEGEBEN, DarlehenStatus.IN_FREIGABE);
     }
 
     @Transactional
@@ -183,8 +202,30 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         assertStatus(darlehenId, DarlehenStatus.IN_BEARBEITUNG_GS);
     }
 
-    public void canGetDarlehenDokument() {
-        permitAll();
+    private void canGetDarlehenDokument(Darlehen darlehen) {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                darlehen.getFall(),
+                benutzer,
+                sozialdienstService
+            ) && !isSachbearbeiterOrFreigabestelle(benutzer)
+        ) {
+            forbidden();
+        }
+    }
+
+    @Transactional
+    public void canGetDarlehenDokument(UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+        canGetDarlehenDokument(darlehen);
+    }
+
+    @Transactional
+    public void canGetDarlehenDokumentByDokumentId(UUID dokumentId) {
+        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        canGetDarlehenDokument(darlehen);
     }
 
     public void canDeleteDarlehenDokument(UUID dokumentId) {
@@ -204,12 +245,13 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         assertStatus(darlehen.getId(), DarlehenStatus.IN_BEARBEITUNG_GS);
     }
 
-    public void assertStatus(UUID darlehenId, DarlehenStatus darlehenStatus) {
-        return;
-        // final var darlehen = darlehenRepository.requireById(darlehenId);
-        //
-        // if (!darlehen.getStatus().equals(darlehenStatus)) {
-        // forbidden();
-        // }
+    public void assertStatus(UUID darlehenId, DarlehenStatus... darlehenStatus) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+
+        if (Arrays.stream(darlehenStatus).anyMatch(status -> darlehen.getStatus().equals(status))) {
+            return;
+        }
+
+        forbidden();
     }
 }

@@ -59,26 +59,6 @@ paths:
           $ref: './components/common.yaml#/UUID'
         in: path
         required: true
-    get:
-      tags:
-        - Darlehen
-      responses:
-        '200':
-          description: Return active darlehen if exists or else null
-          content:
-            application/json:
-              schema:
-                $ref: './components/common.yaml#/Darlehen'
-        '400':
-          $ref: './components/responses.yaml#/BadRequest'
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getDarlehenGs
-      summary: Return active darlehen darlehen if exists or else null
     post:
       tags:
         - Darlehen
@@ -380,6 +360,26 @@ paths:
           $ref: './components/common.yaml#/UUID'
         in: path
         required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return active darlehen if exists or else null
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Darlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenGs
+      summary: Return active darlehen darlehen if exists or else null
     patch:
       tags:
         - Darlehen
@@ -406,6 +406,36 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: darlehenUpdateGs
       summary: Update darlehen as gs
+
+  /darlehen/getAllDarlehenGs/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return all darlehen for a given fallId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Darlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllDarlehenGs
+      summary: Return all darlehen for a given fallId
 
   /darlehen/getAllDarlehenSb/{gesuchId}:
     parameters:

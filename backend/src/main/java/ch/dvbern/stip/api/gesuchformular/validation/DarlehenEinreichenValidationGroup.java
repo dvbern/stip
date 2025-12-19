@@ -15,19 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.darlehen.type;
+package ch.dvbern.stip.api.gesuchformular.validation;
 
-public enum DarlehenStatus {
-    IN_BEARBEITUNG_GS,
-    EINGEGEBEN,
-    IN_FREIGABE,
-    AKZEPTIERT,
-    ABGELEHNT;
-
-    public boolean isCompleted() {
-        return switch (this) {
-            case IN_BEARBEITUNG_GS, EINGEGEBEN, IN_FREIGABE -> false;
-            case AKZEPTIERT, ABGELEHNT -> true;
-        };
-    }
+public interface DarlehenEinreichenValidationGroup {
 }

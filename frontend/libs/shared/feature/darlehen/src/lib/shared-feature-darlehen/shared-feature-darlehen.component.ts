@@ -10,7 +10,11 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import {
+  takeUntilDestroyed,
+  toObservable,
+  toSignal,
+} from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   NonNullableFormBuilder,
@@ -27,7 +31,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { Observable, merge } from 'rxjs';
+import { Observable, merge, tap } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -58,7 +62,6 @@ import {
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -85,7 +88,6 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
     SharedUiFormFieldDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiFormMessageErrorDirective,
-    SharedUiStepFormButtonsComponent,
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
     SharedUiMaxLengthDirective,
@@ -135,7 +137,7 @@ export class SharedFeatureDarlehenComponent {
     permissions: this.darlehenPermissionsSig,
   });
 
-  // Todo: error is not shown yet, or not anymore
+  // Todo: error message is not shown yet, or not anymore
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
   ) => {
@@ -202,8 +204,11 @@ export class SharedFeatureDarlehenComponent {
   );
 
   anzahlBetreibungenDocSig = this.createUploadOptionsSig(() => {
+    // trigger recomputation for darlehen.state change that will disable the upload
+    this.darlehenSig();
     return DarlehenDokumentType.BETREIBUNGS_AUSZUG;
   });
+
   grundNichtBerechtigtDocSig = this.createUploadOptionsSig(() => {
     const isGrundNichtBerechtigt = this.grundNichtBerechtigtChangedSig();
     return isGrundNichtBerechtigt
@@ -224,7 +229,6 @@ export class SharedFeatureDarlehenComponent {
       : null;
   });
 
-  // todo: find better solution with scph, currently not really reacting on form changes.
   hasUnsavedChanges = false;
   gsFormSavedSig = signal(false);
   sbFormSavedSig = signal(false);
@@ -233,7 +237,13 @@ export class SharedFeatureDarlehenComponent {
     this.formIsUnsaved = merge(
       observeUnsavedChanges(this.formGs, toObservable(this.gsFormSavedSig)),
       observeUnsavedChanges(this.formSb, toObservable(this.sbFormSavedSig)),
+    ).pipe(
+      tap((unsaved) => {
+        this.hasUnsavedChanges = unsaved;
+      }),
+      takeUntilDestroyed(),
     );
+
     this.formUtils.registerFormForUnsavedCheck(this);
 
     // patch form value
@@ -282,21 +292,30 @@ export class SharedFeatureDarlehenComponent {
   }
 
   // Gesuchsteller Actions
-  // darlehenUpdateGs(): void {
-  //   this.formGs.markAllAsTouched();
-  //   this.formUtils.focusFirstInvalid(this.elementRef);
+  darlehenUpdateGs(): void {
+    this.formGs.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
+    const darlehen = this.darlehenSig();
 
-  //   if (this.formGs.invalid) {
-  //     return;
-  //   }
+    if (!darlehen) {
+      return;
+    }
 
-  //   const darlehen = this.buildUpdatedGsFrom();
+    if (this.formGs.invalid) {
+      return;
+    }
 
-  //   this.darlehenStore.darlehenUpdateGs$({
-  //     darlehenId: this.darlehenSig().id,
-  //     darlehenUpdateGs: darlehen,
-  //   });
-  // }
+    this.darlehenStore.darlehenUpdateGs$({
+      data: {
+        darlehenId: darlehen.id,
+        darlehenUpdateGs: this.buildUpdatedGsFrom(),
+      },
+      onSuccess: () => {
+        this.gsFormSavedSig.set(false);
+        this.formGs.markAsPristine();
+      },
+    });
+  }
 
   darlehenEingeben(): void {
     this.formGs.markAllAsTouched();
@@ -308,23 +327,15 @@ export class SharedFeatureDarlehenComponent {
     }
 
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'shared.form.darlehen.create.dialog.title',
-      message: 'shared.form.darlehen.create.dialog.message',
+      title: 'shared.form.darlehen.eingeben.dialog.title',
+      message: 'shared.form.darlehen.eingeben.dialog.message',
       cancelText: 'shared.cancel',
-      confirmText: 'shared.form.darlehen.create.dialog.confirm',
+      confirmText: 'shared.form.darlehen.eingeben.dialog.confirm',
     })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.darlehenStore.darlehenUpdateAndEingeben$({
-            data: {
-              darlehenId: darlehen.id,
-              darlehenUpdateGs: this.buildUpdatedGsFrom(),
-            },
-            onSuccess: () => {
-              this.gsFormSavedSig.set(true);
-            },
-          });
+          this.darlehenStore.darlehenEingeben$({ darlehenId: darlehen.id });
         }
       });
   }
@@ -361,7 +372,8 @@ export class SharedFeatureDarlehenComponent {
         darlehenUpdateSb: updatedDarlehen,
       },
       onSuccess: () => {
-        this.sbFormSavedSig.set(true);
+        this.sbFormSavedSig.set(false);
+        this.formSb.markAsPristine();
       },
     });
   }

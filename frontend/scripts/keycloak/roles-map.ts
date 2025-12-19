@@ -39,6 +39,7 @@ export const PERMISSION_ROLE_LIST = [
     'AUSZAHLUNG_READ',
     'AUSZAHLUNG_CREATE',
     'AUSZAHLUNG_UPDATE',
+    'DARLEHEN_UPDATE_GS',
   ],
   [
     ['Freigabestelle'],
@@ -53,6 +54,8 @@ export const PERMISSION_ROLE_LIST = [
     'UNTERSCHRIFTENBLATT_READ',
     'AUSZAHLUNG_READ',
     'FALL_READ',
+    'DARLEHEN_UPDATE_SB',
+    'DARLEHEN_FREIGABESTELLE',
   ],
   [
     ['Sachbearbeiter'],
@@ -79,6 +82,7 @@ export const PERMISSION_ROLE_LIST = [
     'UNTERSCHRIFTENBLATT_DELETE',
     'AUSZAHLUNG_READ',
     'FALL_READ',
+    'DARLEHEN_UPDATE_SB',
   ],
   [
     ['Jurist'],

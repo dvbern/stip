@@ -19,9 +19,13 @@ package ch.dvbern.stip.api.darlehen.service;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
@@ -38,6 +42,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.pdf.service.DarlehensVerfuegungPdfService;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
@@ -51,6 +56,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -76,6 +82,7 @@ public class DarlehenService {
     private final DokumentDownloadService dokumentDownloadService;
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
     private final NotificationService notificationService;
+    private final Validator validator;
     private final DarlehensVerfuegungPdfService darlehensVerfuegungPdfService;
 
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
@@ -137,16 +144,10 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto getDarlehenGs(final UUID fallId) {
-        final var darlehenList = darlehenRepository.findByFallId(fallId);
-        final var darlehenActive = darlehenList.stream()
-            .filter(
-                d -> !d.getStatus().equals(DarlehenStatus.AKZEPTIERT) && !d.getStatus().equals(DarlehenStatus.ABGELEHNT)
-            )
-            .findFirst()
-            .orElse(null);
+    public DarlehenDto getDarlehenGs(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
 
-        return darlehenMapper.toDto(darlehenActive);
+        return darlehenMapper.toDto(darlehen);
     }
 
     @Transactional
@@ -160,6 +161,12 @@ public class DarlehenService {
     public List<DarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
         final var darlehenList = darlehenRepository.findByGesuchId(gesuchId);
 
+        return darlehenList.stream().map(darlehenMapper::toDto).toList();
+    }
+
+    @Transactional
+    public List<DarlehenDto> getDarlehenAllGs(final UUID fallId) {
+        final var darlehenList = darlehenRepository.findByFallId(fallId);
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
@@ -264,6 +271,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
         darlehen.setEingabedatum(LocalDate.now());
 
+        ValidatorUtil.validate(validator, darlehen, DarlehenEinreichenValidationGroup.class);
         darlehenRepository.persistAndFlush(darlehen);
 
         notificationService.createDarlehenEingegebenNotification(darlehen);
@@ -297,7 +305,9 @@ public class DarlehenService {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
         darlehenMapper.partialUpdate(darlehenUpdateGsDto, darlehen);
+        removeSuperfluousDokumentsForDarlehen(darlehen);
 
+        ValidatorUtil.validate(validator, darlehen, DarlehenEinreichenValidationGroup.class);
         darlehenRepository.persistAndFlush(darlehen);
         return darlehenMapper.toDto(darlehen);
     }
@@ -337,6 +347,39 @@ public class DarlehenService {
                 objectId
             )
         );
+    }
+
+    @Transactional
+    public Set<DarlehenDokumentType> getRequiredDokumentsForDarlehen(final UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var requiredDokumentTypes = new HashSet<DarlehenDokumentType>();
+
+        requiredDokumentTypes.add(DarlehenDokumentType.BETREIBUNGS_AUSZUG);
+        for (var grund : darlehen.getGruende()) {
+            final var documentType = switch (grund) {
+                case NICHT_BERECHTIGT -> DarlehenDokumentType.AUFSTELLUNG_KOSTEN_ELTERN;
+                case HOHE_GEBUEHREN -> DarlehenDokumentType.KOPIE_SCHULGELDRECHNUNG;
+                case ANSCHAFFUNGEN_FUER_AUSBILDUNG -> DarlehenDokumentType.BELEGE_ANSCHAFFUNGEN;
+                case AUSBILDUNG_ZWOELF_JAHRE, ZWEITAUSBILDUNG -> null;
+            };
+            if (Objects.nonNull(documentType)) {
+                requiredDokumentTypes.add(documentType);
+            }
+        }
+        return requiredDokumentTypes;
+    }
+
+    private void removeSuperfluousDokumentsForDarlehen(final Darlehen darlehen) {
+        final var requiredDokumentTypes = getRequiredDokumentsForDarlehen(darlehen.getId());
+        darlehen.getDokumente().removeIf(darlehenDokument -> {
+            if (!requiredDokumentTypes.contains(darlehenDokument.getDokumentType())) {
+                // Create a copy of the dokumente list to preserve the iteration count
+                darlehenDokument.getDokumente().stream().toList().forEach(this::removeDokumentAndFromS3);
+                return true;
+            }
+            return false;
+        });
+        darlehenRepository.persistAndFlush(darlehen);
     }
 
     private void uploadDokument(
@@ -398,13 +441,17 @@ public class DarlehenService {
         final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
         final var darlehenDokumente = darlehen.getDokumente();
 
-        dokumentRepository.delete(dokument);
         for (var darlehenDokument : darlehenDokumente) {
             if (darlehenDokument.getDokumente().remove(dokument)) {
                 break;
             }
         }
 
+        removeDokumentAndFromS3(dokument);
+    }
+
+    private void removeDokumentAndFromS3(final Dokument dokument) {
+        dokumentRepository.delete(dokument);
         dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
             configService.getBucketName(),

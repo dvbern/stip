@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -13,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
@@ -37,6 +40,7 @@ import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-hea
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import {
   SharedUiDashboardAusbildungComponent,
   SharedUiDashboardCompactAusbildungComponent,
@@ -53,6 +57,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   imports: [
     MatSelectModule,
     RouterLink,
+    CommonModule,
     SharedPatternMainLayoutComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
@@ -61,10 +66,11 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
+    SharedUiDarlehenMenuComponent,
     GesuchAppUiAdvTranslocoDirective,
+    MatMenuModule,
   ],
   providers: [
-    FallStore,
     SozialdienstStore,
     provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
   ],
@@ -77,6 +83,7 @@ export class GesuchAppFeatureCockpitComponent {
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
+  darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   globalNotificationStore = inject(GlobalNotificationStore);
@@ -110,8 +117,8 @@ export class GesuchAppFeatureCockpitComponent {
     effect(() => {
       const fallId = this.gotNewFallSig();
 
-      // todo: get dashboard here?
       if (fallId) {
+        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.dashboardStore.loadDashboard$();
       }
     });

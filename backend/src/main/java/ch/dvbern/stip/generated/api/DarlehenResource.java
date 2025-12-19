@@ -89,6 +89,11 @@ public interface DarlehenResource {
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
+    @Path("/getAllDarlehenGs/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    List<DarlehenDto> getAllDarlehenGs(@PathParam("fallId") UUID fallId);
+
+    @GET
     @Path("/getAllDarlehenSb/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     List<DarlehenDto> getAllDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
@@ -109,9 +114,9 @@ public interface DarlehenResource {
     FileDownloadTokenDto getDarlehenDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/{fallId}")
+    @Path("/{darlehenId}/gs")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto getDarlehenGs(@PathParam("fallId") UUID fallId);
+    DarlehenDto getDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
 
     @GET
     @Path("/{darlehenId}/sb")

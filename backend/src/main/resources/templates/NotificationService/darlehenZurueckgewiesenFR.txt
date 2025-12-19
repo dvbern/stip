@@ -1,0 +1,1 @@
+Votre prêt a été refusé pour la raison suivante: {kommentar}

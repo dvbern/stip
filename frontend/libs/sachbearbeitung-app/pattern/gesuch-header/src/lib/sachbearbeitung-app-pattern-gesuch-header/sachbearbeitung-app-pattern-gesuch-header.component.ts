@@ -32,7 +32,6 @@ import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRevision,
-  selectRouteDarlehenId,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
@@ -53,6 +52,7 @@ import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
@@ -75,6 +75,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiLoadingComponent,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -101,7 +102,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   @Output() openSidenav = new EventEmitter<void>();
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
-  darlehenIdSig = this.store.selectSignal(selectRouteDarlehenId);
+  // darlehenIdSig = this.store.selectSignal(selectRouteDarlehenId);
 
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
@@ -126,6 +127,11 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
+  // isDarlehenRouteSig = toSignal(
+  //   urlAfterNavigationEnd(this.router).pipe(
+  //     map((url) => darlehenRoutes.some((route) => url.includes(`/${route}/`))),
+  //   ),
+  // );
   canViewBerechnungSig = computed(() => {
     const canViewBerechnung =
       this.gesuchInfoStore.gesuchInfo().data?.canGetBerechnung;

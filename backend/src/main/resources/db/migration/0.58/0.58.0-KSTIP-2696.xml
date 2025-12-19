@@ -130,12 +130,12 @@
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-16">
         <addColumn tableName="darlehen">
-            <column name="kommentar" type="VARCHAR(20)"/>
+            <column name="kommentar" type="VARCHAR(2000)"/>
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-17">
         <addColumn tableName="darlehen_aud">
-            <column name="kommentar" type="VARCHAR(20)"/>
+            <column name="kommentar" type="VARCHAR(2000)"/>
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-18">
