@@ -458,4 +458,10 @@ public class DarlehenService {
             DARLEHEN_DOKUMENT_PATH + dokument.getObjectId()
         );
     }
+
+    @Transactional
+    public void deleteDarlehen(UUID darlehenId) {
+        final var darlehen = darlehenRepository.requireById(darlehenId);
+        darlehenRepository.delete(darlehen);
+    }
 }

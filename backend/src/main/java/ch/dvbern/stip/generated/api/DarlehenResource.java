@@ -83,6 +83,11 @@ public interface DarlehenResource {
     @Produces({ "text/plain" })
     void deleteDarlehenDokument(@PathParam("dokumentId") UUID dokumentId);
 
+    @DELETE
+    @Path("/{darlehenId}/gs")
+    @Produces({ "application/json", "text/plain" })
+    void deleteDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
+
     @GET
     @Path("/dokument/download")
     @Produces({ "application/octet-stream" })

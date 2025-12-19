@@ -12,63 +12,82 @@
       [elternteilSig]="editedElternteil"
       [gesuchFormularSig]="gesuchFormular"
       [changes]="changes?.changesByIdentifier?.[editedElternteil.elternTyp] ?? {}"
+      [sichtbar]="sichtbareElternSig()[editedElternteil.elternTyp]"
+      [disableSichtbar]="sichtbarReadonlySig()"
       (saveTriggered)="handleEditorSave($event)"
       (closeTriggered)="handleEditorClose()"
       (deleteTriggered)="handleDeleteElternteil($event)"
       (formIsUnsaved)="hasUnsavedChanges = $event"
+      (sichtbarChanged)="changeElternTypVisibility(editedElternteil.elternTyp, $event)"
     />
   }
 }
 
 <!-- OVERVIEW -->
 @if (!editedElternteil && !view.loading) {
-  <div class="row g-4 mt-4">
-    @if (view.expectVater) {
-      <div class="col-12 col-md-6 col-xl-4 position-relative">
-        <dv-shared-feature-gesuch-form-eltern-card
-          [elternteil]="view.vater"
-          [elternTyp]="'VATER'"
-          [translationkey]="'vater'"
-          [readonly]="view.readonly"
-          (addTriggered)="handleAddElternteil($event)"
-          (editTriggered)="handleEdit($event)"
-        />
-        @if (changes?.hasChangesByIdentifier?.['VATER']) {
-          <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
+  <ng-container *dvTranslocoShared="let t">
+    <mat-selection-list [formControl]="sichtbareEltern" [disableRipple]="true">
+      <div class="row g-4 mt-4">
+        @if (view.expectVater) {
+          <div class="col-12 col-md-6 col-xl-4 position-relative">
+            <mat-list-option
+              [value]="elternTyps.VATER"
+              *dvIfSachbearbeiter
+              [matTooltip]="sichtbareEltern.disabled ? t('shared.form.eltern.unableToHide') : null"
+              >{{ t('shared.form.eltern.sichtbar') }}</mat-list-option
+            >
+            <dv-shared-feature-gesuch-form-eltern-card
+              [elternteil]="view.vater"
+              [elternTyp]="'VATER'"
+              [hidden]="!sichtbareElternSig().VATER && shouldHide"
+              [readonly]="view.readonly"
+              (addTriggered)="handleAddElternteil($event)"
+              (editTriggered)="handleEdit($event)"
+            />
+            @if (changes?.hasChangesByIdentifier?.['VATER']) {
+              <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
+            }
+          </div>
+        }
+        @if (view.expectMutter) {
+          <div class="col-12 col-md-6 col-xl-4 position-relative">
+            <mat-list-option
+              [value]="elternTyps.MUTTER"
+              *dvIfSachbearbeiter
+              [matTooltip]="sichtbareEltern.disabled ? t('shared.form.eltern.unableToHide') : null"
+              >{{ t('shared.form.eltern.sichtbar') }}</mat-list-option
+            >
+            <dv-shared-feature-gesuch-form-eltern-card
+              [elternteil]="view.mutter"
+              [elternTyp]="'MUTTER'"
+              [hidden]="!sichtbareElternSig().MUTTER && shouldHide"
+              [readonly]="view.readonly"
+              (addTriggered)="handleAddElternteil($event)"
+              (editTriggered)="handleEdit($event)"
+            />
+            @if (changes?.hasChangesByIdentifier?.['MUTTER']) {
+              <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
+            }
+          </div>
+        }
+        @if (!view.expectVater && !view.expectMutter) {
+          <div>
+            {{ t('shared.form.eltern.none') }}
+          </div>
         }
       </div>
-    }
-    @if (view.expectMutter) {
-      <div class="col-12 col-md-6 col-xl-4 position-relative">
-        <dv-shared-feature-gesuch-form-eltern-card
-          [elternteil]="view.mutter"
-          [elternTyp]="'MUTTER'"
-          [translationkey]="'mutter'"
-          [readonly]="view.readonly"
-          (addTriggered)="handleAddElternteil($event)"
-          (editTriggered)="handleEdit($event)"
-        />
-        @if (changes?.hasChangesByIdentifier?.['MUTTER']) {
-          <dv-shared-ui-change-indicator></dv-shared-ui-change-indicator>
-        }
-      </div>
-    }
-    @if (!view.expectVater && !view.expectMutter) {
-      <div>
-        {{ 'shared.form.eltern.none' | transloco }}
-      </div>
-    }
-  </div>
+    </mat-selection-list>
 
-  <dv-shared-ui-step-form-buttons>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="handleContinue()"
-      [disabled]="!view.gesuchId"
-      data-testid="button-continue"
-    >
-      {{ 'shared.form.gonext' | transloco }}
-    </button>
-  </dv-shared-ui-step-form-buttons>
+    <dv-shared-ui-step-form-buttons>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="handleContinue()"
+        [disabled]="!view.gesuchId"
+        data-testid="button-continue"
+      >
+        {{ t('shared.form.gonext') }}
+      </button>
+    </dv-shared-ui-step-form-buttons>
+  </ng-container>
 }

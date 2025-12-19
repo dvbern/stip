@@ -1,9 +1,0 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-  <changeSet id="1739183250862-1" author="Juri Furer">
-    <modifyDataType tableName="gesuch" columnName="einreichedatum" newDataType="date" />
-  </changeSet>
-  <changeSet id="1739183380372-1" author="Juri Furer">
-    <modifyDataType tableName="gesuch_aud" columnName="einreichedatum" newDataType="date" />
-  </changeSet>
-</databaseChangeLog>

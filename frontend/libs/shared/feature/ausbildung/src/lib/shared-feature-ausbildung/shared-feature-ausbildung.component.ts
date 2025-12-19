@@ -471,7 +471,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     });
 
     effect(() => {
-      const { readonly } = this.cachedGesuchViewSig();
+      const readonly = !this.isEditableSig();
       const { invalidFormularProps } = this.einreichenStore.validationViewSig();
       const nichtGefunden = this.ausbildungNichtGefundenChangedSig();
 

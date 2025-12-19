@@ -194,8 +194,6 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
   displayedColumns = Object.keys(SbDarlehenDashboardColumn);
   refreshQuickfilterSig = signal<unknown>(null);
   private defaultFilterSig = computed(() => {
-    // const rolesMap = this.permissionStore.rolesMapSig();
-    // return rolesMap.V0_Jurist ? DEFAULT_FILTER.jurist : DEFAULT_FILTER.other;
     return DEFAULT_FILTER;
   });
 

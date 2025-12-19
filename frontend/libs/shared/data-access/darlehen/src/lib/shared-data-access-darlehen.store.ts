@@ -4,6 +4,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Darlehen,
   DarlehenService,
@@ -15,6 +16,7 @@ import {
   DarlehenServiceDarlehenUpdateGsRequestParams,
   DarlehenServiceDarlehenUpdateSbRequestParams,
   DarlehenServiceDarlehenZurueckweisenRequestParams,
+  DarlehenServiceDeleteDarlehenGsRequestParams,
   DarlehenServiceGetAllDarlehenGsRequestParams,
   DarlehenServiceGetAllDarlehenSbRequestParams,
   DarlehenServiceGetDarlehenDashboardSbRequestParams,
@@ -51,6 +53,7 @@ export class DarlehenStore extends signalStore(
 ) {
   private darlehenService = inject(DarlehenService);
   private router = inject(Router);
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
   setDarlehen(rd: CachedRemoteData<Darlehen>) {
     patchState(this, { cachedDarlehen: rd });
@@ -159,7 +162,39 @@ export class DarlehenStore extends signalStore(
             (darlehen) => {
               patchState(this, { cachedDarlehen: darlehen });
             },
-            { onSuccess },
+            {
+              onSuccess: () => {
+                onSuccess();
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.update.success',
+                });
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+
+  darlehenDeleteGs$ = rxMethod<{
+    data: DarlehenServiceDeleteDarlehenGsRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      switchMap(({ data, onSuccess }) =>
+        this.darlehenService.deleteDarlehenGs$(data).pipe(
+          handleApiResponse(
+            () => {
+              patchState(this, { cachedDarlehen: initial() });
+            },
+            {
+              onSuccess: () => {
+                onSuccess();
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.delete.success',
+                });
+              },
+            },
           ),
         ),
       ),
@@ -175,9 +210,18 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap((req) =>
         this.darlehenService.darlehenEingeben$(req).pipe(
-          handleApiResponse((darlehen) => {
-            patchState(this, { cachedDarlehen: darlehen });
-          }),
+          handleApiResponse(
+            (darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            },
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.eingeben.success',
+                });
+              },
+            },
+          ),
         ),
       ),
     ),
@@ -255,7 +299,14 @@ export class DarlehenStore extends signalStore(
             (darlehen) => {
               patchState(this, { cachedDarlehen: darlehen });
             },
-            { onSuccess },
+            {
+              onSuccess: () => {
+                onSuccess();
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.update.success',
+                });
+              },
+            },
           ),
         ),
       ),
@@ -271,9 +322,18 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap((data) =>
         this.darlehenService.darlehenFreigeben$(data).pipe(
-          handleApiResponse((darlehen) => {
-            patchState(this, { cachedDarlehen: darlehen });
-          }),
+          handleApiResponse(
+            (darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            },
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.freigeben.success',
+                });
+              },
+            },
+          ),
         ),
       ),
     ),
@@ -289,9 +349,18 @@ export class DarlehenStore extends signalStore(
         }),
         switchMap((data) =>
           this.darlehenService.darlehenZurueckweisen$(data).pipe(
-            handleApiResponse((darlehen) => {
-              patchState(this, { cachedDarlehen: darlehen });
-            }),
+            handleApiResponse(
+              (darlehen) => {
+                patchState(this, { cachedDarlehen: darlehen });
+              },
+              {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.form.darlehen.zurueckweisen.success',
+                  });
+                },
+              },
+            ),
           ),
         ),
       ),
@@ -309,9 +378,18 @@ export class DarlehenStore extends signalStore(
         }),
         switchMap((data) =>
           this.darlehenService.darlehenAkzeptieren$(data).pipe(
-            handleApiResponse((darlehen) => {
-              patchState(this, { cachedDarlehen: darlehen });
-            }),
+            handleApiResponse(
+              (darlehen) => {
+                patchState(this, { cachedDarlehen: darlehen });
+              },
+              {
+                onSuccess: () => {
+                  this.globalNotificationStore.createSuccessNotification({
+                    messageKey: 'shared.form.darlehen.abschliessen.success',
+                  });
+                },
+              },
+            ),
           ),
         ),
       ),
@@ -326,9 +404,18 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap((data) =>
         this.darlehenService.darlehenAblehen$(data).pipe(
-          handleApiResponse((darlehen) => {
-            patchState(this, { cachedDarlehen: darlehen });
-          }),
+          handleApiResponse(
+            (darlehen) => {
+              patchState(this, { cachedDarlehen: darlehen });
+            },
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'shared.form.darlehen.abschliessen.success',
+                });
+              },
+            },
+          ),
         ),
       ),
     ),

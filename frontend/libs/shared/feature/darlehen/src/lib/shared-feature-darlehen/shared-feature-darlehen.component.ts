@@ -27,7 +27,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
@@ -106,6 +106,7 @@ export class SharedFeatureDarlehenComponent {
   private compileTimeConfig = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
   private gesuchDashboardStore = inject(DashboardStore, { optional: true });
+  private router = inject(Router);
 
   private store = inject(Store);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
@@ -137,7 +138,6 @@ export class SharedFeatureDarlehenComponent {
     permissions: this.darlehenPermissionsSig,
   });
 
-  // Todo: error message is not shown yet, or not anymore
   private atLeastOneCheckboxChecked: ValidatorFn = (
     control: AbstractControl,
   ) => {
@@ -317,6 +317,34 @@ export class SharedFeatureDarlehenComponent {
     });
   }
 
+  darlehenDeleteGs(): void {
+    {
+      const darlehen = this.darlehenSig();
+
+      if (!darlehen) {
+        return;
+      }
+
+      SharedUiConfirmDialogComponent.open(this.dialog, {
+        title: 'shared.form.darlehen.delete.dialog.title',
+        message: 'shared.form.darlehen.delete.dialog.message',
+        cancelText: 'shared.cancel',
+        confirmText: 'shared.form.darlehen.delete',
+      })
+        .afterClosed()
+        .subscribe((result) => {
+          if (result) {
+            this.darlehenStore.darlehenDeleteGs$({
+              data: { darlehenId: darlehen.id },
+              onSuccess: () => {
+                this.router.navigate(['/']);
+              },
+            });
+          }
+        });
+    }
+  }
+
   darlehenEingeben(): void {
     this.formGs.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
@@ -427,8 +455,7 @@ export class SharedFeatureDarlehenComponent {
   }
 
   // Freigabestelle Actions
-
-  darlehenAkzeptieren(): void {
+  darlehenAbschliessen(): void {
     const darlehen = this.darlehenSig();
 
     if (!darlehen) {
@@ -436,17 +463,23 @@ export class SharedFeatureDarlehenComponent {
     }
 
     SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'shared.form.darlehen.akzeptieren.dialog.title',
-      message: 'shared.form.darlehen.akzeptieren.dialog.message',
+      title: 'shared.form.darlehen.abschliessen.dialog.title',
+      message: 'shared.form.darlehen.abschliessen.dialog.message',
       cancelText: 'shared.cancel',
-      confirmText: 'shared.form.darlehen.akzeptieren',
+      confirmText: 'shared.form.darlehen.abschliessen.dialog.confirm',
     })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.darlehenStore.darlehenAkzeptieren$({
-            darlehenId: darlehen.id,
-          });
+          if (darlehen.gewaehren) {
+            this.darlehenStore.darlehenAkzeptieren$({
+              darlehenId: darlehen.id,
+            });
+          } else {
+            this.darlehenStore.darlehenAblehnen$({
+              darlehenId: darlehen.id,
+            });
+          }
         }
       });
   }

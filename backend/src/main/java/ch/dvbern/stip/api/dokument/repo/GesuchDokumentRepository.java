@@ -126,6 +126,16 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         return query.stream().toList();
     }
 
+    public List<GesuchDokument> getAllOfTypeForGesuch(final UUID gesuchId, final DokumentTyp dokumentTyp) {
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(gesuchDokument)
+            .where(gesuchDokument.dokumentTyp.eq(dokumentTyp))
+            .where(gesuchDokument.gesuchTranche.gesuch.id.eq(gesuchId))
+            .stream()
+            .toList();
+    }
+
     public boolean customDokumentHasGesuchDokuments(UUID customDokumentTypId) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;

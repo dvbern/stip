@@ -52,7 +52,9 @@ import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_FREIGABESTELLE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_UPDATE_GS;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_UPDATE_SB;
 
@@ -69,21 +71,21 @@ public class DarlehenResourceImpl implements DarlehenResource {
     private final DarlehenAuthorizer darlehenAuthorizer;
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(DARLEHEN_READ)
     public DarlehenDto getDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenGs(darlehenId);
         return darlehenService.getDarlehenGs(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(DARLEHEN_READ)
     public DarlehenDto getDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehenSb(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(DARLEHEN_READ)
     public PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(
         GetDarlehenSbQueryType getDarlehenSbQueryType,
         Integer page,
@@ -167,6 +169,13 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
+    @RolesAllowed(DARLEHEN_DELETE)
+    public void deleteDarlehenGs(UUID darlehenId) {
+        darlehenAuthorizer.canDarlehenUpdateGs(darlehenId);
+        darlehenService.deleteDarlehen(darlehenId);
+    }
+
+    @Override
     @RolesAllowed(DARLEHEN_UPDATE_SB)
     public DarlehenDto darlehenUpdateSb(UUID darlehenId, DarlehenUpdateSbDto darlehenUpdateSbDto) {
         darlehenAuthorizer.canDarlehenUpdateSb(darlehenId);
@@ -186,7 +195,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed({ DARLEHEN_UPDATE_GS, DARLEHEN_UPDATE_SB })
+    @RolesAllowed(DARLEHEN_READ)
     public NullableDarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
         darlehenAuthorizer.canGetDarlehenDokument(darlehenId);
         return darlehenService.getDarlehenDokument(darlehenId, dokumentTyp);
@@ -206,21 +215,21 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(DARLEHEN_READ)
     public List<DarlehenDto> getAllDarlehenSb(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehenAllSb(gesuchId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(DARLEHEN_READ)
     public List<DarlehenDto> getAllDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenByFallId(fallId);
         return darlehenService.getDarlehenAllGs(fallId);
     }
 
     @Override
-    @RolesAllowed({ DARLEHEN_UPDATE_GS, DARLEHEN_UPDATE_SB })
+    @RolesAllowed(DARLEHEN_READ)
     public FileDownloadTokenDto getDarlehenDownloadToken(UUID dokumentId) {
         darlehenAuthorizer.canGetDarlehenDokumentByDokumentId(dokumentId);
 

@@ -97,7 +97,7 @@ export const permissionTableByAppType = {
   BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
   IN_BEARBEITUNG_SB                : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('WD UANJ', ['sb']) },
   IN_FREIGABE                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('W  U NJ', ['ju']) },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['ju']) },
   ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['sb']) },
   FEHLENDE_DOKUMENTE               : { [GS_APP]: perm(' DF    ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
   GESUCH_ABGELEHNT                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },

@@ -36,6 +36,7 @@ public class GesuchFormularDto  implements Serializable {
   private @Valid PersonInAusbildungDto personInAusbildung;
   private @Valid FamiliensituationDto familiensituation;
   private @Valid PartnerDto partner;
+  private @Valid List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern;
   private @Valid List<ElternDto> elterns;
   private @Valid List<GeschwisterDto> geschwisters;
   private @Valid List<LebenslaufItemDto> lebenslaufItems;
@@ -118,6 +119,40 @@ public class GesuchFormularDto  implements Serializable {
     this.partner = partner;
   }
 
+  /**
+   **/
+  public GesuchFormularDto versteckteEltern(List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern) {
+    this.versteckteEltern = versteckteEltern;
+    return this;
+  }
+
+  
+  @JsonProperty("versteckteEltern")
+  public List<ch.dvbern.stip.api.eltern.type.ElternTyp> getVersteckteEltern() {
+    return versteckteEltern;
+  }
+
+  @JsonProperty("versteckteEltern")
+  public void setVersteckteEltern(List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern) {
+    this.versteckteEltern = versteckteEltern;
+  }
+
+  public GesuchFormularDto addVersteckteElternItem(ch.dvbern.stip.api.eltern.type.ElternTyp versteckteElternItem) {
+    if (this.versteckteEltern == null) {
+      this.versteckteEltern = new ArrayList<>();
+    }
+
+    this.versteckteEltern.add(versteckteElternItem);
+    return this;
+  }
+
+  public GesuchFormularDto removeVersteckteElternItem(ch.dvbern.stip.api.eltern.type.ElternTyp versteckteElternItem) {
+    if (versteckteElternItem != null && this.versteckteEltern != null) {
+      this.versteckteEltern.remove(versteckteElternItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public GesuchFormularDto elterns(List<ElternDto> elterns) {
@@ -372,6 +407,7 @@ public class GesuchFormularDto  implements Serializable {
         Objects.equals(this.personInAusbildung, gesuchFormular.personInAusbildung) &&
         Objects.equals(this.familiensituation, gesuchFormular.familiensituation) &&
         Objects.equals(this.partner, gesuchFormular.partner) &&
+        Objects.equals(this.versteckteEltern, gesuchFormular.versteckteEltern) &&
         Objects.equals(this.elterns, gesuchFormular.elterns) &&
         Objects.equals(this.geschwisters, gesuchFormular.geschwisters) &&
         Objects.equals(this.lebenslaufItems, gesuchFormular.lebenslaufItems) &&
@@ -384,7 +420,7 @@ public class GesuchFormularDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung, steuerdatenTabs);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, versteckteEltern, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung, steuerdatenTabs);
   }
 
   @Override
@@ -396,6 +432,7 @@ public class GesuchFormularDto  implements Serializable {
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
+    sb.append("    versteckteEltern: ").append(toIndentedString(versteckteEltern)).append("\n");
     sb.append("    elterns: ").append(toIndentedString(elterns)).append("\n");
     sb.append("    geschwisters: ").append(toIndentedString(geschwisters)).append("\n");
     sb.append("    lebenslaufItems: ").append(toIndentedString(lebenslaufItems)).append("\n");

@@ -17,12 +17,30 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.entity.QDokument;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DokumentRepository implements BaseRepository<Dokument> {
+    private final EntityManager em;
+
+    public List<Dokument> findAllForGesuchDokumentAndTyp(final UUID gesuchDokumentId, final DokumentTyp dokumentTyp) {
+        final var dokument = QDokument.dokument;
+        return new JPAQueryFactory(em)
+            .selectFrom(dokument)
+            .where(dokument.gesuchDokument.id.eq(gesuchDokumentId))
+            .where(dokument.gesuchDokument.dokumentTyp.eq(dokumentTyp))
+            .stream()
+            .toList();
+    }
 }

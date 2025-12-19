@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ElternTyp } from './elternTyp';
 import { Eltern } from './eltern';
 import { PersonInAusbildung } from './personInAusbildung';
 import { Ausbildung } from './ausbildung';
@@ -26,6 +27,7 @@ export interface GesuchFormular {
     personInAusbildung?: PersonInAusbildung;
     familiensituation?: Familiensituation;
     partner?: Partner;
+    versteckteEltern?: Array<ElternTyp>;
     elterns?: Array<Eltern>;
     geschwisters?: Array<Geschwister>;
     lebenslaufItems?: Array<LebenslaufItem>;

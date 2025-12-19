@@ -3,21 +3,47 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { AdminDokumente, GesuchService } from '@dv/shared/model/gesuch';
+import { Verfuegung, VerfuegungService } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isPending,
 } from '@dv/shared/util/remote-data';
 
+// Todo KSTIP-2697 Dummy types until the contract is updated
+export interface DarlehenDokument {
+  id: string;
+  datum: string;
+  kategorie: string;
+  darlehensverfuegung?: string;
+  gesetzlichesDarlehen?: string;
+  freiwilligesDarlehen?: string;
+  kommentar?: string;
+}
+
+// Todo: Dummy types until the contract is updated Task unkown
+export interface DatenschutzbriefDokument {
+  id: string;
+  datum: string;
+  kategorie: string;
+  sachbearbeiter: string;
+  person: string;
+  massendruckJobId?: string;
+}
+
 type InfosAdminState = {
-  adminDokumente: CachedRemoteData<AdminDokumente>;
+  verfuegungen: CachedRemoteData<Verfuegung[]>;
+  darlehenDokumente: CachedRemoteData<DarlehenDokument[]>;
+  datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefDokument[]>;
 };
 
 const initialState: InfosAdminState = {
-  adminDokumente: initial(),
+  verfuegungen: initial(),
+  darlehenDokumente: initial(),
+  datenschutzbriefeDokumente: initial(),
 };
 
 @Injectable()
@@ -25,30 +51,101 @@ export class InfosGesuchsdokumenteStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
-  private gesuchService = inject(GesuchService);
+  private verfuegungService = inject(VerfuegungService);
 
-  adminDokumenteViewSig = computed(() => {
-    return fromCachedDataSig(this.adminDokumente);
+  verfuegungenViewSig = computed(() => {
+    return {
+      verfuegungen: fromCachedDataSig(this.verfuegungen),
+      loading: isPending(this.verfuegungen()),
+    };
   });
 
-  loadAdminDokumente$ = rxMethod<{ gesuchId: string }>(
+  darlehenDokumenteViewSig = computed(() => {
+    return {
+      darlehenDokumente: fromCachedDataSig(this.darlehenDokumente),
+      loading: isPending(this.darlehenDokumente()),
+    };
+  });
+
+  datenschutzbriefeDokumenteViewSig = computed(() => {
+    return {
+      datenschutzbriefe: fromCachedDataSig(this.datenschutzbriefeDokumente),
+      loading: isPending(this.datenschutzbriefeDokumente()),
+    };
+  });
+
+  loadVerfuegungDokumente$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          adminDokumente: cachedPending(state.adminDokumente),
+          verfuegungen: cachedPending(state.verfuegungen),
         }));
       }),
       switchMap(({ gesuchId }) =>
-        this.gesuchService
-          .getAdminDokumente$({
+        this.verfuegungService
+          .getVerfuegungen$({
             gesuchId,
           })
           .pipe(
-            handleApiResponse((adminDokumente) =>
-              patchState(this, { adminDokumente }),
+            handleApiResponse((verfuegungen) =>
+              patchState(this, { verfuegungen }),
             ),
           ),
       ),
+    ),
+  );
+
+  loadDarlehenDokumente$ = rxMethod<{ gesuchId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          darlehenDokumente: cachedPending(state.darlehenDokumente),
+        }));
+      }),
+      tap(() => {
+        // Todo KSTIP-2697 : Dummy data - will be replaced with actual API call
+        const dummyData: DarlehenDokument[] = [
+          {
+            id: '1',
+            datum: new Date().toISOString(),
+            kategorie: 'Gesetzlich',
+            darlehensverfuegung: 'darlehen_verfuegung_1.pdf',
+            gesetzlichesDarlehen: 'gesetzlich_1.pdf',
+            kommentar: 'Test Kommentar',
+          },
+        ];
+        patchState(this, {
+          darlehenDokumente: { data: dummyData, type: 'success' },
+        });
+      }),
+    ),
+  );
+
+  loadDatenschutzbriefeDokumente$ = rxMethod<{ gesuchId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          datenschutzbriefeDokumente: cachedPending(
+            state.datenschutzbriefeDokumente,
+          ),
+        }));
+      }),
+      tap(() => {
+        // Todo KSTIP-2697: Dummy data - will be replaced with actual API call
+        const dummyData: DatenschutzbriefDokument[] = [
+          {
+            id: '1',
+            datum: new Date().toISOString(),
+            kategorie: 'Standard',
+            sachbearbeiter: 'Max Mustermann',
+            person: 'Anna Schmidt',
+            massendruckJobId: 'job-123',
+          },
+        ];
+        patchState(this, {
+          datenschutzbriefeDokumente: { data: dummyData, type: 'success' },
+        });
+      }),
     ),
   );
 }

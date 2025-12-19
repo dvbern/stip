@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerChangeRe
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerCreateResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerHEADER;
 import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerReadResponse;
+import ch.dvbern.stip.api.sap.generated.business_partner.BusinessPartnerSearchResponse;
 import ch.dvbern.stip.api.sap.generated.business_partner.ReturnCode;
 import ch.dvbern.stip.api.sap.generated.general.ReturnCodeID;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateRespon
 import ch.dvbern.stip.api.sap.service.BusinessPartnerChangeMapper;
 import ch.dvbern.stip.api.sap.service.BusinessPartnerCreateMapper;
 import ch.dvbern.stip.api.sap.service.BusinessPartnerReadMapper;
+import ch.dvbern.stip.api.sap.service.BusinessPartnerSearchMapper;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.service.VendorPostingCreateMapper;
 import io.quarkus.test.Mock;
@@ -49,6 +51,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
     public static final String ERROR_STRING = "E";
     public static final String INFO_STRING = "I";
 
+    BusinessPartnerSearchResponse businessPartnerSearchResponse = null;
     BusinessPartnerCreateResponse businessPartnerCreateResponse = null;
     BusinessPartnerChangeResponse businessPartnerChangeResponse = null;
     BusinessPartnerReadResponse businessPartnerReadResponse = null;
@@ -62,8 +65,10 @@ public class SapEndpointServiceMock extends SapEndpointService {
             null,
             null,
             null,
+            null,
             null
         );
+        setBusinessPartnerSearchResponse(SUCCESS_STRING);
         setBusinessPartnerCreateResponse(SUCCESS_STRING);
         setBusinessPartnerChangeResponse(SUCCESS_STRING);
         setBusinessPartnerReadResponse(SUCCESS_STRING, random.nextInt());
@@ -75,19 +80,32 @@ public class SapEndpointServiceMock extends SapEndpointService {
     BusinessPartnerCreateMapper businessPartnerCreateMapper,
     BusinessPartnerChangeMapper businessPartnerChangeMapper,
     BusinessPartnerReadMapper businessPartnerReadMapper,
+    BusinessPartnerSearchMapper businessPartnerSearchMapper,
     VendorPostingCreateMapper vendorPostingCreateMapper
     ) {
         super(
             businessPartnerCreateMapper,
             businessPartnerChangeMapper,
             businessPartnerReadMapper,
+            businessPartnerSearchMapper,
             vendorPostingCreateMapper
         );
+        setBusinessPartnerSearchResponse(SUCCESS_STRING);
         setBusinessPartnerCreateResponse(SUCCESS_STRING);
         setBusinessPartnerChangeResponse(SUCCESS_STRING);
         setBusinessPartnerReadResponse(SUCCESS_STRING, random.nextInt());
         setImportStatusReadResponse(SUCCESS_STRING, SapStatus.SUCCESS);
         setVendorPostingCreateResponse(SUCCESS_STRING);
+    }
+
+    public void setBusinessPartnerSearchResponse(final String returnCodeString) {
+        var returnCodes = new ArrayList<ReturnCode>();
+        var returnCode = new ReturnCode();
+        returnCode.setTYPE(returnCodeString);
+        returnCodes.add(returnCode);
+        BusinessPartnerSearchResponse searchResponse = new BusinessPartnerSearchResponse();
+        searchResponse.setRETURNCODE(returnCodes);
+        this.businessPartnerSearchResponse = searchResponse;
     }
 
     public void setBusinessPartnerCreateResponse(final String returnCodeString) {
@@ -96,6 +114,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         BusinessPartnerCreateResponse createResponse = new BusinessPartnerCreateResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // BusinessPartnerCreateResponse has this method implemented
         createResponse.setRETURNCODE(returnCodes);
         this.businessPartnerCreateResponse = createResponse;
     }
@@ -106,6 +126,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         BusinessPartnerChangeResponse changeResponse = new BusinessPartnerChangeResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // BusinessPartnerChangeResponse has this method implemented
         changeResponse.setRETURNCODE(returnCodes);
         this.businessPartnerChangeResponse = changeResponse;
     }
@@ -116,6 +138,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         BusinessPartnerReadResponse readResponse = new BusinessPartnerReadResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // BusinessPartnerReadResponse has this method implemented
         readResponse.setRETURNCODE(returnCodes);
         var bpHeader = new BusinessPartnerHEADER();
         bpHeader.setBPARTNER(businessPartnerId.toString());
@@ -131,6 +155,8 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         ImportStatusReadResponse readResponse = new ImportStatusReadResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // ImportStatusReadResponse has this method implemented
         readResponse.setRETURNCODE(returnCodes);
         var deliverys = new ArrayList<DELIVERY>();
         var delivery = new DELIVERY();
@@ -146,8 +172,17 @@ public class SapEndpointServiceMock extends SapEndpointService {
         returnCode.setTYPE(returnCodeString);
         returnCodes.add(returnCode);
         VendorPostingCreateResponse postingCreateResponse = new VendorPostingCreateResponse();
+        // setRETURNCODE was added to generated code to enable testing, if these calls fail check that the
+        // VendorPostingCreateResponse has this method implemented
         postingCreateResponse.setRETURNCODE(returnCodes);
         this.vendorPostingCreateResponse = postingCreateResponse;
+    }
+
+    @Override
+    public BusinessPartnerSearchResponse searchBusinessPartner(
+        String sozialversicherungsnummer
+    ) {
+        return businessPartnerSearchResponse;
     }
 
     @Override
@@ -167,7 +202,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
     }
 
     @Override
-    public BusinessPartnerReadResponse readBusinessPartner(
+    public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerReadResponse;

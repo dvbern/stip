@@ -11,10 +11,11 @@
   <span>{{ 'shared.header.darlehen' | transloco }}</span>
   <i class="material-symbols-rounded ms-2">expand_more</i>
 </button>
+
 <mat-menu #darlehenMenu="matMenu" class="header-menu-panel mt-2 rounded">
   <div class="d-flex flex-column gap-2">
     @for (state of darlehenCompletedStates; track $index) {
-      @if (darlehens[state]?.length) {
+      @if (darlehens[state] && darlehens[state].length) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
@@ -43,9 +44,11 @@
       }
     }
 
-    <!-- button create darlehen -->
-    @if (fallId) {
+    @if (darlehenListSig()?.length && !gesuchIdSig()) {
       <hr class="flex-grow-1" />
+    }
+
+    @if (fallId) {
       <button
         type="button"
         class="btn btn-outline-primary"

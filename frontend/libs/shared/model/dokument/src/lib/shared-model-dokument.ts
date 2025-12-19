@@ -129,11 +129,12 @@ export interface DokumentUpload {
   file: Dokument;
   isTemporary?: boolean;
   progress?: number;
+  deleting?: boolean;
   error?: { translationKey: string; values?: unknown };
 }
 
 export interface DokumentView extends DokumentUpload {
-  state: 'uploading' | 'done' | 'error';
+  state: 'uploading' | 'deleting' | 'done' | 'error';
   theme:
     | { icon: 'warning'; type: 'danger'; color: 'warn' }
     | { icon: 'sync'; type: 'info'; color: 'info' }

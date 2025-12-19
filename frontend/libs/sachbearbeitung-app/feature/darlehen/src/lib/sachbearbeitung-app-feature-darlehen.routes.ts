@@ -42,7 +42,6 @@ const darlehenResolver: ResolveFn<Darlehen> = (
         return of(redirectToRoot);
       }
 
-      // if (isSuccess(rd) && rd.data) {
       if (isSuccess(rd)) {
         darlehenStore.setDarlehen(rd);
         return of(rd.data);
@@ -59,15 +58,5 @@ export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
     pathMatch: 'prefix',
     component: SachbearbeitungAppFeatureDarlehenComponent,
     resolve: { darlehen: darlehenResolver },
-    providers: [
-      // feature specific services and other providers
-      // always remove { providedIn: 'root' } from the feature specific services
-    ],
-    // children: [
-    //   { path: '', component: SachbearbeitungAppFeatureDarlehenComponent },
-    //   // add more routes here (siblings)
-    //   // it is also possible to add nested routes as children
-    //   // of this feature root component (or even lazy loaded sub features)
-    // ],
   }),
 ];

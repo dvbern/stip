@@ -80,6 +80,7 @@ public class DarlehenApiSpec {
                 darlehenUpdateSb(),
                 darlehenZurueckweisen(),
                 deleteDarlehenDokument(),
+                deleteDarlehenGs(),
                 downloadDarlehenDokument(),
                 getAllDarlehenGs(),
                 getAllDarlehenSb(),
@@ -129,6 +130,10 @@ public class DarlehenApiSpec {
 
     public DeleteDarlehenDokumentOper deleteDarlehenDokument() {
         return new DeleteDarlehenDokumentOper(createReqSpec());
+    }
+
+    public DeleteDarlehenGsOper deleteDarlehenGs() {
+        return new DeleteDarlehenGsOper(createReqSpec());
     }
 
     public DownloadDarlehenDokumentOper downloadDarlehenDokument() {
@@ -935,6 +940,68 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public DeleteDarlehenDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Deletes a given darlehen by ID
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     */
+    public static class DeleteDarlehenGsOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteDarlehenGsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /darlehen/{darlehenId}/gs
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteDarlehenGsOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

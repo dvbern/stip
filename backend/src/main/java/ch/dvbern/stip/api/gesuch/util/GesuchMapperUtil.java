@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.util;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +25,7 @@ import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -36,42 +36,32 @@ public class GesuchMapperUtil {
     private final GesuchMapper gesuchMapper;
     private final GesuchTrancheMapper gesuchTrancheMapper;
 
-    public GesuchDto mapWithOldestTranche(final Gesuch gesuch) {
-        return mapWithTranche(gesuch, gesuch.getOldestGesuchTranche().orElseThrow(IllegalStateException::new));
+    public GesuchDto mapWithGesuchOfTranche(final GesuchTranche gesuchTranche, final boolean withVersteckteEltern) {
+        return mapWithTranche(gesuchTranche.getGesuch(), gesuchTranche, withVersteckteEltern);
     }
 
-    public GesuchDto mapWithGesuchOfTranche(final GesuchTranche gesuchTranche) {
-        return mapWithTranche(gesuchTranche.getGesuch(), gesuchTranche);
+    public GesuchDto mapWithNewestTranche(final Gesuch gesuch, final boolean withVersteckteEltern) {
+        return mapWithTranche(
+            gesuch,
+            gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new),
+            withVersteckteEltern
+        );
     }
 
-    /**
-     * If a Gesuch contains a aenderung, two GesuchDtos will be returned.
-     * One for the Gesuch
-     * One (separate) for the Aenderung
-     *
-     * @param gesuch The Gesuch which contains a Aenderung (as tranche to work with)
-     * @return a list of GesuchDtos which includes Aenderungen
-     */
-    public List<GesuchDto> mapWithAenderung(final Gesuch gesuch) {
-        List<GesuchDto> gesuchDtos = new ArrayList<>();
-
-        // find oldest tranche (without aenderungen)
-        // the first dto to be returned: Tranche
-        gesuch.getOldestGesuchTranche().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch, tranche)));
-
-        // the first dto to be returned: Aenderung
-        gesuch.getAenderungZuUeberpruefen().ifPresent(tranche -> gesuchDtos.add(mapWithTranche(gesuch, tranche)));
-
-        return gesuchDtos;
-    }
-
-    public GesuchDto mapWithNewestTranche(final Gesuch gesuch) {
-        return mapWithTranche(gesuch, gesuch.getNewestGesuchTranche().orElseThrow(IllegalStateException::new));
-    }
-
-    public GesuchDto mapWithTranche(final Gesuch gesuch, final GesuchTranche tranche) {
+    public GesuchDto mapWithTranche(
+        final Gesuch gesuch,
+        final GesuchTranche tranche,
+        final boolean withVersteckteEltern
+    ) {
         final var gesuchDto = gesuchMapper.toDto(gesuch);
-        gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
+        final GesuchTrancheDto gesuchTrancheToWorkWith;
+        if (withVersteckteEltern) {
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+        } else {
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
+        }
+
+        gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheToWorkWith);
         return gesuchDto;
     }
 
@@ -79,15 +69,16 @@ public class GesuchMapperUtil {
         final Gesuch gesuch,
         final GesuchTranche tranche,
         final GesuchTranche changes,
-        final boolean isInitial
+        final boolean isInitial,
+        final boolean withVersteckteEltern
     ) {
         var dto = gesuchMapper.toWithChangesDto(gesuch);
         dto.setIsInitial(isInitial);
-        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
+        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutEltern(tranche, withVersteckteEltern));
         if (Objects.isNull(changes)) {
             dto.setChanges(List.of());
         } else {
-            dto.setChanges(List.of(gesuchTrancheMapper.toDto(changes)));
+            dto.setChanges(List.of(mapWithOrWithoutEltern(changes, withVersteckteEltern)));
         }
         return dto;
     }
@@ -95,16 +86,16 @@ public class GesuchMapperUtil {
     public GesuchWithChangesDto toWithChangesDto(
         final Gesuch gesuch,
         final GesuchTranche tranche,
-        final GesuchTranche changes
+        final GesuchTranche changes,
+        final boolean withVersteckteEltern
     ) {
-        final var dto = gesuchMapper.toWithChangesDto(gesuch);
-        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
-        if (Objects.isNull(changes)) {
-            dto.setChanges(List.of());
-        } else {
-            dto.setChanges(List.of(gesuchTrancheMapper.toDto(changes)));
-        }
-        return dto;
+        return toWithChangesDto(
+            gesuch,
+            tranche,
+            changes,
+            false,
+            withVersteckteEltern
+        );
     }
 
     public GesuchWithChangesDto toWithChangesDto(
@@ -113,8 +104,16 @@ public class GesuchMapperUtil {
         final List<GesuchTranche> changes
     ) {
         final var dto = gesuchMapper.toWithChangesDto(gesuch);
-        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDto(tranche));
-        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDto).toList());
+        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche));
+        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithVersteckteEltern).toList());
         return dto;
+    }
+
+    private GesuchTrancheDto mapWithOrWithoutEltern(final GesuchTranche tranche, final boolean withVersteckteEltern) {
+        if (withVersteckteEltern) {
+            return gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+        } else {
+            return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
+        }
     }
 }

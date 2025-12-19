@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.verfuegung.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.VerfuegungResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -48,36 +50,45 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @Validated
 public class VerfuegungResourceImpl implements VerfuegungResource {
 
-    private final VerfuegungService verfuegungService;
-    private final VerfuegungAuthorizer verfuegungAuthorizer;
     private final BenutzerService benutzerService;
     private final ConfigService configService;
-    private final JWTParser jwtPar;
+    private final JWTParser jwtParser;
+    private final VerfuegungService verfuegungService;
+    private final VerfuegungAuthorizer verfuegungAuthorizer;
+
     private final DokumentDownloadService dokumentDownloadService;
 
     @Blocking
     @Override
     @PermitAll
-    public RestMulti<Buffer> getVerfuegung(String token) {
-        final var verfuegungId = dokumentDownloadService.getClaimId(
-            jwtPar,
+    public RestMulti<Buffer> getVerfuegungDokument(String token) {
+        final var verfuegungDokumentId = dokumentDownloadService.getClaimId(
+            jwtParser,
             token,
             configService.getSecret(),
-            DokumentDownloadConstants.VERFUEGUNGS_ID_CLAIM
+            DokumentDownloadConstants.VERFUEGUN_DOKUMENT_ID_CLAIM
         );
-        return verfuegungService.getVerfuegung(verfuegungId);
+        return verfuegungService.getVerfuegungDokument(verfuegungDokumentId);
     }
 
     @Override
     @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public FileDownloadTokenDto getVerfuegungsDownloadToken(UUID verfuegungsId) {
-        verfuegungAuthorizer.canGetVerfuegungDownloadToken(verfuegungsId);
+    public FileDownloadTokenDto getVerfuegungDokumentDownloadToken(UUID verfuegungDokumentId) {
+        verfuegungAuthorizer.canGetVerfuegungDownloadToken(verfuegungDokumentId);
 
         return dokumentDownloadService.getFileDownloadToken(
-            verfuegungsId,
-            DokumentDownloadConstants.VERFUEGUNGS_ID_CLAIM,
+            verfuegungDokumentId,
+            DokumentDownloadConstants.VERFUEGUN_DOKUMENT_ID_CLAIM,
             benutzerService,
             configService
         );
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public List<VerfuegungDto> getVerfuegungen(UUID gesuchId) {
+        verfuegungAuthorizer.canGetVerfuegungen();
+
+        return verfuegungService.getVerfuegungen(gesuchId);
     }
 }

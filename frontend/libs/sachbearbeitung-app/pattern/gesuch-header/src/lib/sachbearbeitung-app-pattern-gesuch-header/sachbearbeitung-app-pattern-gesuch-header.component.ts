@@ -102,7 +102,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   @Output() openSidenav = new EventEmitter<void>();
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
-  // darlehenIdSig = this.store.selectSignal(selectRouteDarlehenId);
 
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
@@ -127,11 +126,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
-  // isDarlehenRouteSig = toSignal(
-  //   urlAfterNavigationEnd(this.router).pipe(
-  //     map((url) => darlehenRoutes.some((route) => url.includes(`/${route}/`))),
-  //   ),
-  // );
   canViewBerechnungSig = computed(() => {
     const canViewBerechnung =
       this.gesuchInfoStore.gesuchInfo().data?.canGetBerechnung;
