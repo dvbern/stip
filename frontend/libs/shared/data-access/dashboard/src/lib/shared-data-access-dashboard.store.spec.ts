@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { provideSharedPatternVitestTestSetup } from '@dv/shared/pattern/vitest-test-setup';
 
-import { DashboardStore } from './gesuch-app-data-access-dashboard.store';
+import { DashboardStore } from './shared-data-access-dashboard.store';
 
 describe('DashboardStore', () => {
   let store: DashboardStore;
