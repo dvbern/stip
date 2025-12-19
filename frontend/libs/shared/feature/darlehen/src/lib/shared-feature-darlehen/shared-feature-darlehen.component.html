@@ -113,6 +113,7 @@
           type="button"
           data-testid="button-darlehen-abschliessen"
           (click)="darlehenAbschliessen()"
+          [disabled]="formSb.invalid || formSb.dirty"
           class="btn btn-primary"
         >
           {{ 'shared.form.darlehen.abschliessen' | transloco }}

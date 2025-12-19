@@ -455,7 +455,6 @@ export class SharedFeatureDarlehenComponent {
   }
 
   // Freigabestelle Actions
-
   darlehenAbschliessen(): void {
     const darlehen = this.darlehenSig();
 
