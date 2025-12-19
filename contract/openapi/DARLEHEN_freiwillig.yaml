@@ -406,6 +406,22 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: darlehenUpdateGs
       summary: Update darlehen as gs
+    delete:
+      tags:
+        - Darlehen
+      responses:
+        '204':
+          description: Darlehen was deleted
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteDarlehenGs
+      summary: Deletes a given darlehen by ID
 
   /darlehen/getAllDarlehenGs/{fallId}:
     parameters:
