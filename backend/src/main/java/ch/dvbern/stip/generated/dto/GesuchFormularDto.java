@@ -53,7 +53,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("ausbildung")
   @NotNull
   public AusbildungDto getAusbildung() {
@@ -72,7 +72,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("personInAusbildung")
   public PersonInAusbildungDto getPersonInAusbildung() {
     return personInAusbildung;
@@ -90,7 +90,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("familiensituation")
   public FamiliensituationDto getFamiliensituation() {
     return familiensituation;
@@ -108,7 +108,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("partner")
   public PartnerDto getPartner() {
     return partner;
@@ -126,7 +126,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("versteckteEltern")
   public List<ch.dvbern.stip.api.eltern.type.ElternTyp> getVersteckteEltern() {
     return versteckteEltern;
@@ -160,7 +160,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("elterns")
   public List<ElternDto> getElterns() {
     return elterns;
@@ -194,7 +194,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("geschwisters")
   public List<GeschwisterDto> getGeschwisters() {
     return geschwisters;
@@ -228,7 +228,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("lebenslaufItems")
   public List<LebenslaufItemDto> getLebenslaufItems() {
     return lebenslaufItems;
@@ -262,7 +262,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("kinds")
   public List<KindDto> getKinds() {
     return kinds;
@@ -296,7 +296,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einnahmenKosten")
   public EinnahmenKostenDto getEinnahmenKosten() {
     return einnahmenKosten;
@@ -314,7 +314,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("einnahmenKostenPartner")
   public EinnahmenKostenDto getEinnahmenKostenPartner() {
     return einnahmenKostenPartner;
@@ -332,7 +332,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuererklaerung")
   public List<SteuererklaerungUpdateDto> getSteuererklaerung() {
     return steuererklaerung;
@@ -366,7 +366,7 @@ public class GesuchFormularDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("steuerdatenTabs")
   public List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> getSteuerdatenTabs() {
     return steuerdatenTabs;
@@ -420,14 +420,14 @@ public class GesuchFormularDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung, steuerdatenTabs);
+    return Objects.hash(ausbildung, personInAusbildung, familiensituation, partner, versteckteEltern, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung, steuerdatenTabs);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchFormularDto {\n");
-
+    
     sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
