@@ -94,13 +94,6 @@
       </div>
     </mat-menu>
 
-    @let darlehens = darlehenStore.darlehenListViewSig();
-    <dv-shared-ui-darlehen-menu
-      [darlehenListSig]="darlehens.darlehenList"
-      [fallIdSig]="undefined"
-      [gesuchIdSig]="gesuchId"
-    ></dv-shared-ui-darlehen-menu>
-
     <!-- Verfuegung-->
     <a
       [routerLink]="['/', 'verfuegung', gesuchId]"
@@ -127,9 +120,17 @@
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let availableTrancheInteraction = availableTrancheInteractionSig();
 
+    <div class="text-body-tertiary vr my-1"></div>
+
+    <!-- Darlehen Menu -->
+    @let darlehens = darlehenStore.darlehenListViewSig();
+    <dv-shared-ui-darlehen-menu
+      [darlehenListSig]="darlehens.darlehenList"
+      [gesuchIdSig]="gesuchId"
+    ></dv-shared-ui-darlehen-menu>
+
     @if (isTrancheRouteSig()) {
       <!-- Separator -->
-      <div class="text-body-tertiary vr my-1"></div>
 
       <div class="tw:relative">
         @if (isLoadingSig()) {

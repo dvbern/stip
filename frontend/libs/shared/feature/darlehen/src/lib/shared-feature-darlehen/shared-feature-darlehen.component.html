@@ -1,4 +1,4 @@
-@if (false) {
+@if (darlehenStore.darlehenListViewSig().loading) {
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
   <!-- sachbearbeiter form -->
@@ -272,7 +272,7 @@
     </div>
 
     <!-- Missing Document Error -->
-    @if (!isAllDocumentsUploadedSig() && formGs.touched) {
+    @if (!isAllDocumentsUploadedSig() && formGs.touched && gsFormSubmittedSig()) {
       <mat-error class="tw:block!">
         {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
       </mat-error>

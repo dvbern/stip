@@ -19,8 +19,6 @@ import { SharedFeatureDarlehenComponent } from '@dv/shared/feature/darlehen';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 
-import { canCreateDarlehenFn } from '../can-create-darlehen';
-
 @Component({
   selector: 'dv-shared-feature-darlehen-feature',
   imports: [
@@ -43,11 +41,6 @@ export class SharedFeatureDarlehenFeatureComponent {
   hasUnsavedChanges = false;
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
 
-  canCreateDarlehenSig = canCreateDarlehenFn(
-    this.dashboardStore.dashboardViewSig,
-    this.darlehenStore.darlehenListSig,
-  );
-
   fallIdSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;
   });
@@ -63,6 +56,7 @@ export class SharedFeatureDarlehenFeatureComponent {
       const fallId = this.fallIdSig();
 
       if (fallId) {
+        this.dashboardStore.loadDashboard$();
         this.darlehenStore.getAllDarlehenGs$({ fallId });
       }
     });

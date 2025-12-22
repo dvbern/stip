@@ -56,8 +56,8 @@ export const sharedFeatureDarlehenFeatureRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
     path: ':darlehenId',
     pathMatch: 'prefix',
-    resolve: { darlehen: darlehenResolver },
     component: SharedFeatureDarlehenFeatureComponent,
+    resolve: { darlehen: darlehenResolver },
     title: 'shared.darlehen.title',
   }),
 ];

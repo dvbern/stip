@@ -955,6 +955,7 @@
   "shared.form.darlehen.delete": "Supprimer le prêt",
   "shared.form.darlehen.delete.dialog.title": "Supprimer le prêt",
   "shared.form.darlehen.delete.dialog.message": "Voulez-vous supprimer le prêt ? Cette action est irréversible.",
+  "shared.form.darlehen.delete.success": "Le prêt a été supprimé avec succès.",
   "shared.form.darlehen.freigeben": "Libérer le prêt",
   "shared.form.darlehen.freigeben.dialog.title": "Libérer le prêt",
   "shared.form.darlehen.freigeben.dialog.message": "Voulez-vous libérer le prêt ? Après la libération, aucune modification ne sera possible.",
