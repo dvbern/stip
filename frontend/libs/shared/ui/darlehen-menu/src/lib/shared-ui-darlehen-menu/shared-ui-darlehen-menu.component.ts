@@ -34,13 +34,13 @@ const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
 })
 export class SharedUiDarlehenMenuComponent {
   /**
-   * Set undefined in SB app, so no create button is shown there
+   * If undefined, no create button is shown.
    */
-  fallIdSig = input.required<string | undefined>();
+  fallIdSig = input<string | undefined>();
   /**
    * Set in SB app, so link is correct!
    */
-  gesuchIdSig = input.required<string | undefined>();
+  gesuchIdSig = input<string | undefined>();
   darlehenListSig = input.required<Darlehen[] | undefined>();
   dashboardViewSig = input<SharedModelGsDashboardView | undefined>();
   createDarlehen = output<{ fallId: string }>();
@@ -92,14 +92,12 @@ export class SharedUiDarlehenMenuComponent {
         ),
       );
 
-    const hasNoDarlehen = !darlehenList.some((darlehen) => {
+    const hasNoOpenDarlehen = darlehenList.every((darlehen) => {
       return (
-        darlehen.status === 'IN_BEARBEITUNG_GS' ||
-        darlehen.status === 'EINGEGEBEN' ||
-        darlehen.status === 'IN_FREIGABE'
+        darlehen.status === 'ABGELEHNT' || darlehen.status === 'AKZEPTIERT'
       );
     });
 
-    return hasActiveAusbildungWithGesuchNotInBearbeitung && hasNoDarlehen;
+    return hasActiveAusbildungWithGesuchNotInBearbeitung && hasNoOpenDarlehen;
   });
 }

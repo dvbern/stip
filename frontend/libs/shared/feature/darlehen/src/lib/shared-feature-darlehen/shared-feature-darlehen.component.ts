@@ -231,6 +231,7 @@ export class SharedFeatureDarlehenComponent {
 
   hasUnsavedChanges = false;
   gsFormSavedSig = signal(false);
+  gsFormSubmittedSig = signal(false);
   sbFormSavedSig = signal(false);
 
   constructor() {
@@ -296,12 +297,9 @@ export class SharedFeatureDarlehenComponent {
     this.formGs.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     const darlehen = this.darlehenSig();
+    this.gsFormSubmittedSig.set(true);
 
-    if (!darlehen) {
-      return;
-    }
-
-    if (this.formGs.invalid) {
+    if (!darlehen || this.formGs.invalid || !this.isAllDocumentsUploadedSig()) {
       return;
     }
 
@@ -311,7 +309,8 @@ export class SharedFeatureDarlehenComponent {
         darlehenUpdateGs: this.buildUpdatedGsFrom(),
       },
       onSuccess: () => {
-        this.gsFormSavedSig.set(false);
+        this.gsFormSavedSig.set(true);
+        this.gsFormSubmittedSig.set(false);
         this.formGs.markAsPristine();
       },
     });
@@ -400,7 +399,7 @@ export class SharedFeatureDarlehenComponent {
         darlehenUpdateSb: updatedDarlehen,
       },
       onSuccess: () => {
-        this.sbFormSavedSig.set(false);
+        this.sbFormSavedSig.set(true);
         this.formSb.markAsPristine();
       },
     });

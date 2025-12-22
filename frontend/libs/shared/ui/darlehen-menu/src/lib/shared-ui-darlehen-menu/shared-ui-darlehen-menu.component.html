@@ -5,6 +5,7 @@
   class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
   data-testid="header-nav-darlehen-menu"
   [matMenuTriggerFor]="darlehenMenu"
+  [disabled]="!darlehenListSig()?.length && gesuchIdSig()"
   [class.active]="darlehenRouteIdSig()"
 >
   <i class="material-symbols-rounded me-2 text-white">account_balance</i>

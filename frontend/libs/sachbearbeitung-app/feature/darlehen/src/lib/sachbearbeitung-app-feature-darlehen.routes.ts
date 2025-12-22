@@ -58,5 +58,6 @@ export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
     pathMatch: 'prefix',
     component: SachbearbeitungAppFeatureDarlehenComponent,
     resolve: { darlehen: darlehenResolver },
+    title: 'shared.darlehen.title',
   }),
 ];
