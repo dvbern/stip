@@ -74,14 +74,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(DARLEHEN_READ)
     public DarlehenDto getDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenGs(darlehenId);
-        return darlehenService.getDarlehenGs(darlehenId);
+        return darlehenService.getDarlehen(darlehenId);
     }
 
     @Override
     @RolesAllowed(DARLEHEN_READ)
     public DarlehenDto getDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
-        return darlehenService.getDarlehenSb(darlehenId);
+        return darlehenService.getDarlehen(darlehenId);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         SbDarlehenDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
-        darlehenAuthorizer.canGetDarlehenDashboardSb();
+        darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehenDashboardSb(
             getDarlehenSbQueryType,
             page,
@@ -129,14 +129,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Override
     @RolesAllowed(DARLEHEN_FREIGABESTELLE)
     public DarlehenDto darlehenAblehen(UUID darlehenId) {
-        darlehenAuthorizer.canDarlehenAblehenen(darlehenId);
+        darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
         return darlehenService.darlehenAblehnen(darlehenId);
     }
 
     @Override
     @RolesAllowed(DARLEHEN_FREIGABESTELLE)
     public DarlehenDto darlehenAkzeptieren(UUID darlehenId) {
-        darlehenAuthorizer.canDarlehenAkzeptieren(darlehenId);
+        darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
         return darlehenService.darlehenAkzeptieren(darlehenId);
     }
 

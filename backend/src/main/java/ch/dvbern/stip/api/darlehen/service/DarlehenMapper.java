@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
@@ -86,32 +87,28 @@ public abstract class DarlehenMapper {
 
     @Named("getPiaNachname")
     public String getPiaNachname(Darlehen darlehen) {
-        return darlehen.getFall()
-            .getLatestGesuch()
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
+        return getPia(darlehen)
             .getNachname();
     }
 
     @Named("getPiaVorname")
     public String getPiaVorname(Darlehen darlehen) {
-        return darlehen.getFall()
-            .getLatestGesuch()
-            .getLatestGesuchTranche()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
+        return getPia(darlehen)
             .getVorname();
     }
 
     @Named("getPiaGeburtsdatum")
     public LocalDate getPiaGeburtsdatum(Darlehen darlehen) {
+        return getPia(darlehen)
+            .getGeburtsdatum();
+    }
+
+    private static PersonInAusbildung getPia(Darlehen darlehen) {
         return darlehen.getFall()
             .getLatestGesuch()
             .getLatestGesuchTranche()
             .getGesuchFormular()
-            .getPersonInAusbildung()
-            .getGeburtsdatum();
+            .getPersonInAusbildung();
     }
 
     @Named("getBearbeiter")

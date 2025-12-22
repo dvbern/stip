@@ -25,8 +25,4 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public interface RequiredDocumentsProducer {
     Pair<String, Set<DokumentTyp>> getRequiredDocuments(final GesuchFormular formular);
-
-    default boolean greaterThanZero(final Integer base) {
-        return base != null && base > 0;
-    }
 }

@@ -95,10 +95,6 @@ public class DeleteChangedDocumentsUtil {
         documentTypesToDelete.addAll(
             getDocumentsToDeleteForEinnahmenKosten(newFormular.getEinnahmenKosten(), oldFormular.getEinnahmenKosten())
         );
-        // TODO: identify if needed
-        // documentTypesToDelete.addAll(
-        // getDocumentsToDeleteForDarlehen(newFormular.getDarlehen(), oldFormular.getDarlehen())
-        // );
 
         return documentTypesToDelete;
     }

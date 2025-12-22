@@ -67,14 +67,6 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         }
     }
 
-    public void canGetDarlehenDashboardSb() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-
-        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
-            forbidden();
-        }
-    }
-
     @Transactional
     public void canCreateDarlehen(UUID fallId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
@@ -107,18 +99,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canDarlehenAblehenen(UUID darlehenId) {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-
-        if (!isFreigabestelle(benutzer)) {
-            forbidden();
-        }
-
-        assertStatus(darlehenId, DarlehenStatus.IN_FREIGABE);
-    }
-
-    @Transactional
-    public void canDarlehenAkzeptieren(UUID darlehenId) {
+    public void canDarlehenAblehenenAkzeptieren(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (!isFreigabestelle(benutzer)) {
