@@ -35,6 +35,7 @@ import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -194,6 +195,23 @@ public class DarlehenResourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(9)
+    void darlehenUpdateSb() {
+        final var updateDto = new DarlehenUpdateSbDtoSpec();
+        updateDto.setBetrag(0);
+        updateDto.setGewaehren(false);
+        updateDto.setKommentar("asd");
+        darlehenApiSpec.darlehenUpdateSb()
+            .darlehenIdPath(darlehen.getId())
+            .body(updateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
     void darlehenZurueckweisen() {
         final var kommentarDto = new KommentarDtoSpec();
         kommentarDto.setText("Test");

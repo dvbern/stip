@@ -214,6 +214,7 @@ public class DarlehenService {
     public DarlehenDto darlehenEingeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
+        removeSuperfluousDokumentsForDarlehen(darlehen);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
 
         ValidatorUtil.validate(validator, darlehen, DarlehenEinreichenValidationGroup.class);
@@ -422,6 +423,8 @@ public class DarlehenService {
     }
 
     private static void assertDarlehenStatus(final Darlehen darlehen, final Set<DarlehenStatus> darlehenStatuss) {
-        darlehenStatuss.forEach(darlehenStatus -> assertDarlehenStatus(darlehen, darlehenStatus));
+        if (!darlehenStatuss.contains(darlehen.getStatus())) {
+            throw new IllegalStateException(String.format("Darlehen not in statuss %s", darlehenStatuss.toString()));
+        }
     }
 }
