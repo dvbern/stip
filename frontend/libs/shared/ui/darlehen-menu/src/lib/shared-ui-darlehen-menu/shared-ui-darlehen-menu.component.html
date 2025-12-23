@@ -45,17 +45,13 @@
       }
     }
 
-    @if (darlehenListSig()?.length && !gesuchIdSig()) {
-      <hr class="flex-grow-1" />
-    }
-
-    @if (fallId) {
+    @if (fallId && canCreateDarlehenSig()) {
+      <hr class="flex-grow-1 tw:hidden tw:not-first:block" />
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn btn-nav shadow-none"
         data-testid="cockpit-gesuch-darlehen-create"
         (click)="createDarlehen.emit({ fallId })"
-        [disabled]="!canCreateDarlehenSig()"
       >
         {{ 'shared.dashboard.darlehen.create' | transloco }}
       </button>

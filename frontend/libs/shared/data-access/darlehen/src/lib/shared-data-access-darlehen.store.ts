@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
@@ -146,7 +146,7 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  darlehenUpdateGs$ = rxMethod<{
+  darlehenUpdateAndEingebenGs$ = rxMethod<{
     data: DarlehenServiceDarlehenUpdateGsRequestParams;
     onSuccess: () => void;
   }>(
@@ -158,19 +158,38 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap(({ data, onSuccess }) =>
         this.darlehenService.darlehenUpdateGs$(data).pipe(
-          handleApiResponse(
-            (darlehen) => {
-              patchState(this, { cachedDarlehen: darlehen });
-            },
-            {
-              onSuccess: () => {
-                onSuccess();
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'shared.form.darlehen.update.success',
-                });
-              },
-            },
+          switchMap((updatedDarlehen) =>
+            this.darlehenService
+              .darlehenEingeben$({ darlehenId: updatedDarlehen.id })
+              .pipe(
+                handleApiResponse(
+                  (darlehen) => {
+                    patchState(this, { cachedDarlehen: darlehen });
+                  },
+                  {
+                    onSuccess: () => {
+                      onSuccess();
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey: 'shared.form.darlehen.eingeben.success',
+                      });
+                    },
+                  },
+                ),
+              ),
           ),
+          catchError(() => {
+            this.globalNotificationStore.createNotification({
+              type: 'ERROR',
+              messageKey: 'shared.form.darlehen.eingeben.failure',
+            });
+
+            // the form shall not be empty nor pending in case of an error, so the user can retry
+            patchState(this, (state) => ({
+              cachedDarlehen: state.cachedDarlehen,
+            }));
+
+            return EMPTY;
+          }),
         ),
       ),
     ),

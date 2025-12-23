@@ -272,7 +272,7 @@
     </div>
 
     <!-- Missing Document Error -->
-    @if (!isAllDocumentsUploadedSig() && formGs.touched && gsFormSubmittedSig()) {
+    @if (!isAllDocumentsUploadedSig() && formGs.touched && gsShowMissingDocsErrorSig()) {
       <mat-error class="tw:block!">
         {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
       </mat-error>
@@ -283,22 +283,12 @@
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
 
-      <button
-        type="submit"
-        (click)="darlehenUpdateGs()"
-        [disabled]="!darlehenPermissionsSig()?.canWriteGs"
-        class="btn btn-primary"
-        data-testid="button-update-darlehen"
-      >
-        {{ 'shared.form.darlehen.update' | transloco }}
-      </button>
       @if (darlehenPermissionsSig()?.canEingeben) {
         <button
           type="button"
-          (click)="darlehenEingeben()"
+          (click)="darlehenUpdateAndEingebenGs()"
           class="btn btn-primary"
           data-testid="button-eingeben-darlehen"
-          [disabled]="formGs.invalid || formGs.dirty"
         >
           {{ 'shared.form.darlehen.eingeben' | transloco }}
         </button>

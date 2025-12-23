@@ -231,7 +231,7 @@ export class SharedFeatureDarlehenComponent {
 
   hasUnsavedChanges = false;
   gsFormSavedSig = signal(false);
-  gsFormSubmittedSig = signal(false);
+  gsShowMissingDocsErrorSig = signal(false);
   sbFormSavedSig = signal(false);
 
   constructor() {
@@ -293,27 +293,40 @@ export class SharedFeatureDarlehenComponent {
   }
 
   // Gesuchsteller Actions
-  darlehenUpdateGs(): void {
+  darlehenUpdateAndEingebenGs(): void {
     this.formGs.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     const darlehen = this.darlehenSig();
-    this.gsFormSubmittedSig.set(true);
+    this.gsShowMissingDocsErrorSig.set(true);
 
     if (!darlehen || this.formGs.invalid || !this.isAllDocumentsUploadedSig()) {
       return;
     }
 
-    this.darlehenStore.darlehenUpdateGs$({
-      data: {
-        darlehenId: darlehen.id,
-        darlehenUpdateGs: this.buildUpdatedGsFrom(),
-      },
-      onSuccess: () => {
-        this.gsFormSavedSig.set(true);
-        this.gsFormSubmittedSig.set(false);
-        this.formGs.markAsPristine();
-      },
-    });
+    const updatedDarlehen = this.buildUpdatedGsFrom();
+
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.darlehen.eingeben.dialog.title',
+      message: 'shared.form.darlehen.eingeben.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.darlehen.eingeben.dialog.confirm',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.darlehenStore.darlehenUpdateAndEingebenGs$({
+            data: {
+              darlehenId: 'test',
+              darlehenUpdateGs: updatedDarlehen,
+            },
+            onSuccess: () => {
+              this.gsFormSavedSig.set(true);
+              this.gsShowMissingDocsErrorSig.set(false);
+              this.formGs.markAsPristine();
+            },
+          });
+        }
+      });
   }
 
   darlehenDeleteGs(): void {
@@ -342,29 +355,6 @@ export class SharedFeatureDarlehenComponent {
           }
         });
     }
-  }
-
-  darlehenEingeben(): void {
-    this.formGs.markAllAsTouched();
-    this.formUtils.focusFirstInvalid(this.elementRef);
-    const darlehen = this.darlehenSig();
-
-    if (this.formGs.invalid || !darlehen || !this.isAllDocumentsUploadedSig()) {
-      return;
-    }
-
-    SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'shared.form.darlehen.eingeben.dialog.title',
-      message: 'shared.form.darlehen.eingeben.dialog.message',
-      cancelText: 'shared.cancel',
-      confirmText: 'shared.form.darlehen.eingeben.dialog.confirm',
-    })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.darlehenStore.darlehenEingeben$({ darlehenId: darlehen.id });
-        }
-      });
   }
 
   // Sachbearbeiter Actions
