@@ -7282,37 +7282,23 @@ components:
       required:
         - total
         - nettoerwerbseinkommen
-        - nettoerwerbseinkommenPartner
         - nettoerwerbseinkommenTotal
         - einnahmenBGSA
-        - einnahmenBGSAPartner
         - einnahmenBGSATotal
         - kinderAusbildungszulagen
-        - kinderAusbildungszulagenPartner
-        - kinderAusbildungszulagenKinder
         - kinderAusbildungszulagenTotal
         - unterhaltsbeitraege
-        - unterhaltsbeitraegePartner
-        - unterhaltsbeitraegeKinder
         - unterhaltsbeitraegeTotal
         - eoLeistungen
-        - eoLeistungenPartner
         - eoLeistungenTotal
         - taggelderAHVIV
-        - taggelderAHVIVPartner
         - taggelderAHVIVTotal
         - renten
-        - rentenPartner
-        - rentenKinder
         - rentenTotal
         - ergaenzungsleistungen
-        - ergaenzungsleistungenPartner
-        - ergaenzungsleistungenKinder
         - ergaenzungsleistungenTotal
         - beitraegeGemeindeInstitutionen
         - andereEinnahmen
-        - andereEinnahmenPartner
-        - andereEinnahmenKinder
         - andereEinnahmenTotal
         - anrechenbaresVermoegen
         - steuerbaresVermoegen
@@ -7322,64 +7308,48 @@ components:
         total:
           type: integer
         nettoerwerbseinkommen:
-          type: integer
-        nettoerwerbseinkommenPartner:
-          type: integer
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValueItem'
         nettoerwerbseinkommenTotal:
           type: integer
         einnahmenBGSA:
-          type: integer
-        einnahmenBGSAPartner:
-          type: integer
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValueItem'
         einnahmenBGSATotal:
           type: integer
         kinderAusbildungszulagen:
-          type: integer
-        kinderAusbildungszulagenPartner:
-          type: integer
-        kinderAusbildungszulagenKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
         kinderAusbildungszulagenTotal:
           type: integer
         unterhaltsbeitraege:
-          type: integer
-        unterhaltsbeitraegePartner:
-          type: integer
-        unterhaltsbeitraegeKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
         unterhaltsbeitraegeTotal:
           type: integer
         eoLeistungen:
-          type: integer
-        eoLeistungenPartner:
-          type: integer
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValueItem'
         eoLeistungenTotal:
           type: integer
         taggelderAHVIV:
-          type: integer
-        taggelderAHVIVPartner:
-          type: integer
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonValueItem'
         taggelderAHVIVTotal:
           type: integer
         renten:
-          type: integer
-        rentenPartner:
-          type: integer
-        rentenKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
         rentenTotal:
           type: integer
         ergaenzungsleistungen:
-          type: integer
-        ergaenzungsleistungenPartner:
-          type: integer
-        ergaenzungsleistungenKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
@@ -7388,10 +7358,6 @@ components:
         beitraegeGemeindeInstitutionen:
           type: integer
         andereEinnahmen:
-          type: integer
-        andereEinnahmenPartner:
-          type: integer
-        andereEinnahmenKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
@@ -7413,8 +7379,6 @@ components:
         - grundbedarf
         - wohnkosten
         - medizinischeGrundversorgung
-        - medizinischeGrundversorgungPartner
-        - medizinischeGrundversorgungKinder
         - medizinischeGrundversorgungTotal
         - fahrkostenPartner
         - verpflegungPartner
@@ -7437,10 +7401,6 @@ components:
         wohnkosten:
           type: integer
         medizinischeGrundversorgung:
-          type: integer
-        medizinischeGrundversorgungPartner:
-          type: integer
-        medizinischeGrundversorgungKinder:
           type: array
           items:
             $ref: '#/components/schemas/PersonValueItem'
