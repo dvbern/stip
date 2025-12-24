@@ -316,7 +316,7 @@ export class SharedFeatureDarlehenComponent {
         if (result) {
           this.darlehenStore.darlehenUpdateAndEingebenGs$({
             data: {
-              darlehenId: 'test',
+              darlehenId: darlehen.id,
               darlehenUpdateGs: updatedDarlehen,
             },
             onSuccess: () => {
@@ -372,7 +372,7 @@ export class SharedFeatureDarlehenComponent {
     };
   }
 
-  darlehenUpdateSb(): void {
+  darlehenUpdateAndFreigeben(): void {
     this.formSb.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     const darlehen = this.darlehenSig();
@@ -383,25 +383,6 @@ export class SharedFeatureDarlehenComponent {
 
     const updatedDarlehen = this.buildUpdatedSbFrom();
 
-    this.darlehenStore.darlehenUpdateSb$({
-      data: {
-        darlehenId: darlehen.id,
-        darlehenUpdateSb: updatedDarlehen,
-      },
-      onSuccess: () => {
-        this.sbFormSavedSig.set(true);
-        this.formSb.markAsPristine();
-      },
-    });
-  }
-
-  darlehenFreigeben(): void {
-    const darlehen = this.darlehenSig();
-
-    if (!darlehen) {
-      return;
-    }
-
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.freigeben.dialog.title',
       message: 'shared.form.darlehen.freigeben.dialog.message',
@@ -411,14 +392,24 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.darlehenStore.darlehenFreigeben$({
-            darlehenId: darlehen.id,
+          this.darlehenStore.darlehenUpdateAndFreigebenSb$({
+            data: {
+              darlehenId: darlehen.id,
+              darlehenUpdateSb: updatedDarlehen,
+            },
+            onSuccess: () => {
+              this.sbFormSavedSig.set(true);
+              this.formSb.markAsPristine();
+            },
           });
         }
       });
   }
 
-  darlehenZurueckweisen(): void {
+  darlehenUpdateAndZurueckweisen(): void {
+    this.formSb.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
+
     const darlehen = this.darlehenSig();
 
     if (!darlehen) {
@@ -428,28 +419,51 @@ export class SharedFeatureDarlehenComponent {
     SharedUiKommentarDialogComponent.open(this.dialog, {
       entityId: darlehen.id,
       titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
-      messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
+      messageKey: this.formSb.valid
+        ? 'shared.form.darlehen.zurueckweisen.dialog.message'
+        : 'shared.form.darlehen.zurueckweisen.dialog.message-no-changes',
       placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',
       confirmKey: 'shared.form.darlehen.zurueckweisen',
     })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.darlehenStore.darlehenZurueckweisen$({
-            darlehenId: result.entityId,
-            kommentar: { text: result.kommentar },
-          });
+          if (this.formSb.valid) {
+            // Form has unsaved changes, update then zurückweisen
+            const updatedDarlehen = this.buildUpdatedSbFrom();
+            this.darlehenStore.darlehenUpdateAndZurueckweisenSb$({
+              data: {
+                darlehenId: darlehen.id,
+                darlehenUpdateSb: updatedDarlehen,
+              },
+              kommentar: { text: result.kommentar },
+              onSuccess: () => {
+                this.sbFormSavedSig.set(true);
+                this.formSb.markAsPristine();
+              },
+            });
+          } else {
+            // Form is clean, just zurückweisen
+            this.darlehenStore.darlehenZurueckweisen$({
+              darlehenId: darlehen.id,
+              kommentar: { text: result.kommentar },
+            });
+          }
         }
       });
   }
 
   // Freigabestelle Actions
-  darlehenAbschliessen(): void {
+  darlehenUpdateAndAbschliessen(): void {
+    this.formSb.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
     const darlehen = this.darlehenSig();
 
-    if (!darlehen) {
+    if (this.formSb.invalid || !darlehen) {
       return;
     }
+
+    const updatedDarlehen = this.buildUpdatedSbFrom();
 
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.abschliessen.dialog.title',
@@ -460,25 +474,30 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          if (darlehen.gewaehren) {
-            this.darlehenStore.darlehenAkzeptieren$({
+          this.darlehenStore.darlehenUpdateAndAbschliessenSb$({
+            data: {
               darlehenId: darlehen.id,
-            });
-          } else {
-            this.darlehenStore.darlehenAblehnen$({
-              darlehenId: darlehen.id,
-            });
-          }
+              darlehenUpdateSb: updatedDarlehen,
+            },
+            onSuccess: () => {
+              this.sbFormSavedSig.set(true);
+              this.formSb.markAsPristine();
+            },
+          });
         }
       });
   }
 
-  darlehenAblehnen(): void {
+  darlehenUpdateAndAblehnen(): void {
+    this.formSb.markAllAsTouched();
+    this.formUtils.focusFirstInvalid(this.elementRef);
     const darlehen = this.darlehenSig();
 
-    if (!darlehen) {
+    if (this.formSb.invalid || !darlehen) {
       return;
     }
+
+    const updatedDarlehen = this.buildUpdatedSbFrom();
 
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.form.darlehen.ablehnen.dialog.title',
@@ -489,8 +508,15 @@ export class SharedFeatureDarlehenComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.darlehenStore.darlehenAblehnen$({
-            darlehenId: darlehen.id,
+          this.darlehenStore.darlehenUpdateAndAblehnenSb$({
+            data: {
+              darlehenId: darlehen.id,
+              darlehenUpdateSb: updatedDarlehen,
+            },
+            onSuccess: () => {
+              this.sbFormSavedSig.set(true);
+              this.formSb.markAsPristine();
+            },
           });
         }
       });

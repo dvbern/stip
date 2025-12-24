@@ -78,19 +78,13 @@
       <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
         <span>{{ 'shared.cancel' | transloco }}</span>
       </a>
-      @if (darlehenPermissionsSig()?.canWriteSb) {
-        <button type="submit" (click)="darlehenUpdateSb()" class="btn btn-primary" data-testid="button-update-darlehen">
-          {{ 'shared.form.darlehen.update' | transloco }}
-        </button>
-      }
 
       @if (darlehenPermissionsSig()?.canFreigeben) {
         <!-- darlehen Freigeben -->
         <button
           type="button"
           data-testid="button-darlehen-freigeben"
-          (click)="darlehenFreigeben()"
-          [disabled]="formSb.invalid || formSb.dirty"
+          (click)="darlehenUpdateAndFreigeben()"
           class="btn btn-primary"
         >
           {{ 'shared.form.darlehen.freigeben' | transloco }}
@@ -99,8 +93,7 @@
         <button
           type="button"
           data-testid="button-darlehen-zurueckweisen"
-          (click)="darlehenZurueckweisen()"
-          [disabled]="formSb.invalid || formSb.dirty"
+          (click)="darlehenUpdateAndZurueckweisen()"
           class="btn btn-primary"
         >
           {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
@@ -112,8 +105,7 @@
         <button
           type="button"
           data-testid="button-darlehen-abschliessen"
-          (click)="darlehenAbschliessen()"
-          [disabled]="formSb.invalid || formSb.dirty"
+          (click)="darlehenUpdateAndAbschliessen()"
           class="btn btn-primary"
         >
           {{ 'shared.form.darlehen.abschliessen' | transloco }}

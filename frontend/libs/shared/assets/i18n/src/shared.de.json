@@ -968,6 +968,7 @@
   "shared.form.darlehen.zurueckweisen": "Darlehen zurückweisen",
   "shared.form.darlehen.zurueckweisen.dialog.title": "Darlehen zurückweisen",
   "shared.form.darlehen.zurueckweisen.dialog.message": "Möchten Sie das Darlehen zurückweisen?",
+  "shared.form.darlehen.zurueckweisen.dialog.message-no-changes": "Sie haben keine Eingaben gemacht oder diese sind nicht komplett und werden nicht übernommen.<br/>Möchten Sie das Darlehen trotzdem zurückweisen?",
   "shared.form.darlehen.zurueckweisen.dialog.confirm": "Darlehen zurückweisen",
   "shared.form.darlehen.zurueckweisen.dialog.placeholder": "Grund für die Zurückweisung",
   "shared.form.darlehen.zurueckweisen.success": "Das Darlehen wurde erfolgreich zurückgewiesen.",

@@ -358,6 +358,54 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
+  darlehenUpdateAndFreigebenSb$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap(({ data, onSuccess }) =>
+        this.darlehenService.darlehenUpdateSb$(data).pipe(
+          switchMap((updatedDarlehen) =>
+            this.darlehenService
+              .darlehenFreigeben$({ darlehenId: updatedDarlehen.id })
+              .pipe(
+                handleApiResponse(
+                  (darlehen) => {
+                    patchState(this, { cachedDarlehen: darlehen });
+                  },
+                  {
+                    onSuccess: () => {
+                      onSuccess();
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey: 'shared.form.darlehen.freigeben.success',
+                      });
+                    },
+                  },
+                ),
+              ),
+          ),
+          catchError(() => {
+            this.globalNotificationStore.createNotification({
+              type: 'ERROR',
+              messageKey: 'shared.form.darlehen.freigeben.failure',
+            });
+
+            patchState(this, (state) => ({
+              cachedDarlehen: state.cachedDarlehen,
+            }));
+
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
+
   darlehenZurueckweisen$ =
     rxMethod<DarlehenServiceDarlehenZurueckweisenRequestParams>(
       pipe(
@@ -384,6 +432,59 @@ export class DarlehenStore extends signalStore(
         ),
       ),
     );
+
+  darlehenUpdateAndZurueckweisenSb$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    kommentar: { text: string };
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap(({ data, kommentar, onSuccess }) =>
+        this.darlehenService.darlehenUpdateSb$(data).pipe(
+          switchMap((updatedDarlehen) =>
+            this.darlehenService
+              .darlehenZurueckweisen$({
+                darlehenId: updatedDarlehen.id,
+                kommentar,
+              })
+              .pipe(
+                handleApiResponse(
+                  (darlehen) => {
+                    patchState(this, { cachedDarlehen: darlehen });
+                  },
+                  {
+                    onSuccess: () => {
+                      onSuccess();
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey:
+                          'shared.form.darlehen.zurueckweisen.success',
+                      });
+                    },
+                  },
+                ),
+              ),
+          ),
+          catchError(() => {
+            this.globalNotificationStore.createNotification({
+              type: 'ERROR',
+              messageKey: 'shared.form.darlehen.zurueckweisen.failure',
+            });
+
+            patchState(this, (state) => ({
+              cachedDarlehen: state.cachedDarlehen,
+            }));
+
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
 
   // SB Freigabestelle Methoden
 
@@ -414,6 +515,60 @@ export class DarlehenStore extends signalStore(
       ),
     );
 
+  darlehenUpdateAndAbschliessenSb$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap(({ data, onSuccess }) =>
+        this.darlehenService.darlehenUpdateSb$(data).pipe(
+          switchMap((updatedDarlehen) => {
+            const action$ = updatedDarlehen.gewaehren
+              ? this.darlehenService.darlehenAkzeptieren$({
+                  darlehenId: updatedDarlehen.id,
+                })
+              : this.darlehenService.darlehenAblehen$({
+                  darlehenId: updatedDarlehen.id,
+                });
+
+            return action$.pipe(
+              handleApiResponse(
+                (darlehen) => {
+                  patchState(this, { cachedDarlehen: darlehen });
+                },
+                {
+                  onSuccess: () => {
+                    onSuccess();
+                    this.globalNotificationStore.createSuccessNotification({
+                      messageKey: 'shared.form.darlehen.abschliessen.success',
+                    });
+                  },
+                },
+              ),
+            );
+          }),
+          catchError(() => {
+            this.globalNotificationStore.createNotification({
+              type: 'ERROR',
+              messageKey: 'shared.form.darlehen.abschliessen.failure',
+            });
+
+            patchState(this, (state) => ({
+              cachedDarlehen: state.cachedDarlehen,
+            }));
+
+            return EMPTY;
+          }),
+        ),
+      ),
+    ),
+  );
+
   darlehenAblehnen$ = rxMethod<DarlehenServiceDarlehenAblehenRequestParams>(
     pipe(
       tap(() => {
@@ -435,6 +590,54 @@ export class DarlehenStore extends signalStore(
               },
             },
           ),
+        ),
+      ),
+    ),
+  );
+
+  darlehenUpdateAndAblehnenSb$ = rxMethod<{
+    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          cachedDarlehen: cachedPending(state.cachedDarlehen),
+        }));
+      }),
+      switchMap(({ data, onSuccess }) =>
+        this.darlehenService.darlehenUpdateSb$(data).pipe(
+          switchMap((updatedDarlehen) =>
+            this.darlehenService
+              .darlehenAblehen$({ darlehenId: updatedDarlehen.id })
+              .pipe(
+                handleApiResponse(
+                  (darlehen) => {
+                    patchState(this, { cachedDarlehen: darlehen });
+                  },
+                  {
+                    onSuccess: () => {
+                      onSuccess();
+                      this.globalNotificationStore.createSuccessNotification({
+                        messageKey: 'shared.form.darlehen.ablehnen.success',
+                      });
+                    },
+                  },
+                ),
+              ),
+          ),
+          catchError(() => {
+            this.globalNotificationStore.createNotification({
+              type: 'ERROR',
+              messageKey: 'shared.form.darlehen.ablehnen.failure',
+            });
+
+            patchState(this, (state) => ({
+              cachedDarlehen: state.cachedDarlehen,
+            }));
+
+            return EMPTY;
+          }),
         ),
       ),
     ),
