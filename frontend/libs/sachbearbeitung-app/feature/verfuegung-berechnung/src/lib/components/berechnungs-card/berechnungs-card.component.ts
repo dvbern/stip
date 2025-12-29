@@ -4,13 +4,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoDirective } from '@jsverse/transloco';
 
+import { BerechnungPersonalOrFam } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfNegativePipe,
   SharedUiFormatChfPipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
 import { BerechnungsExpansionPanelComponent } from './berechnungs-expansion-panel.component';
-import { Berechnung } from '../../../models';
 
 @Component({
   selector: 'dv-berechnungs-card',
@@ -27,7 +27,7 @@ import { Berechnung } from '../../../models';
   templateUrl: './berechnungs-card.component.html',
 })
 export class BerechnungsCardComponent {
-  berechnungSig = input.required<Berechnung>();
+  berechnungSig = input.required<BerechnungPersonalOrFam>();
 
   Math = Math;
 }

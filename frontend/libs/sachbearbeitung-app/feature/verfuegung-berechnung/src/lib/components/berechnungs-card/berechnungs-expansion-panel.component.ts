@@ -8,10 +8,11 @@ import {
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { capitalized } from '@dv/shared/model/type-util';
+import {
+  BerechnungPersonalOrFam,
+  BerechnungsValue,
+} from '@dv/shared/model/verfuegung';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
-
-import { Berechnung, BerechnungsValue } from '../../../models';
 
 @Component({
   selector: 'dv-berechnungs-expansion-panel',
@@ -57,7 +58,7 @@ import { Berechnung, BerechnungsValue } from '../../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BerechnungsExpansionPanelComponent {
-  berechnungSig = input.required<Berechnung>();
+  berechnungSig = input.required<BerechnungPersonalOrFam>();
   variantSig = input.required<BerechnungsValue>();
 
   viewSig = computed(() => {
@@ -67,7 +68,7 @@ export class BerechnungsExpansionPanelComponent {
       titleKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.title`,
       infoKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.total`,
       shouldChangeSize: berechnung.typ === 'persoenlich',
-      total: berechnung[`total${capitalized(variant)}`],
+      total: berechnung.total,
     };
   });
 }

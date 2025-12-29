@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
+import { BerechnungsStammdaten } from '@dv/shared/model/gesuch';
+import { PersoenlichesBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
-
-import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-persoenliche-einnahmen',
@@ -32,22 +32,22 @@ import { PersoenlicheBerechnung } from '../../../models';
                   'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info',
                   {
                     freibetragErwerbseinkommen:
-                      einnahmenSig().freibetragErwerbseinkommen | formatChf,
+                      stammdatenSig().freibetragErwerbseinkommen | formatChf,
                   }
                 )
               }}
             </div>
-            <div>
-              {{ einnahmenSig().vornamePia }}:
-              {{ einnahmenSig().einkommen | formatChf }} CHF,
-
-              {{ einnahmenSig().vornamePartner }}:
-              {{ einnahmenSig().einkommenPartner | formatChf }} CHF
-            </div>
+            <!-- Type missmatch! -->
+            <!-- <div class="tw:flex">
+              @for (e of einnahmenSig().nettoerwerbseinkommen; track $index) {
+                <span>{{ e.vorname }}</span>
+                <span>{{ e.value | formatChf }}</span>
+              }
+            </div> -->
           </div>
         </div>
         <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
-          {{ einnahmenSig().einkommenTotal | formatChfPositive }}
+          {{ einnahmenSig().nettoerwerbseinkommenTotal | formatChfPositive }}
         </div>
       </div>
 
@@ -59,13 +59,14 @@ import { PersoenlicheBerechnung } from '../../../models';
               'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einnahmenBGSA'
             )
           }}
+          <!-- Todo: is PersonalValueItem -->
           <a href="#1" class="tw:text-xs tw:align-text-top tw:no-underline!">
-            1)
+            1
           </a>
         </div>
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().einnahmenBGSA | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
 
       <!-- Kinder- und Ausbildungszulagen -->
@@ -78,14 +79,15 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
           <div class="tw:text-gray-500 tw:text-sm">
             <!-- TODO: Pia, Partner, Kinder  and other fields too-->
-            {{ einnahmenSig().kinderUndAusbildungszulagen }}
+            <!-- {{ einnahmenSig().kinderUndAusbildungszulagen }} -->
           </div>
         </div>
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- Todo: is PersonalValueItem -->
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{
             einnahmenSig().kinderUndAusbildungszulagenTotal | formatChfPositive
           }}
-        </div>
+        </div> -->
       </div>
 
       <!-- EO -->
@@ -104,21 +106,23 @@ import { PersoenlicheBerechnung } from '../../../models';
             }}
           </div>
         </div>
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- Todo: is PersonalValueItem -->
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().eoLeistungen | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
 
-      <!-- Alimente -->
+      <!-- Alimente/Renten -->
       <div class="tw:flex tw:gap-2">
         {{
           t(
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.alimente'
           )
         }}
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- Todo: is PersonalValueItem -->
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().alimente | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
 
       <!-- Unterhaltsbeiträge -->
@@ -128,9 +132,10 @@ import { PersoenlicheBerechnung } from '../../../models';
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
           )
         }}
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- Todo: is PersonalValueItem -->
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
 
       <!-- Ergänzungsleistungen -->
@@ -140,9 +145,10 @@ import { PersoenlicheBerechnung } from '../../../models';
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
           )
         }}
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- Todo: is PersonalValueItem -->
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
 
       <!-- Beiträge an Gemeindeinstitutionen -->
@@ -152,9 +158,9 @@ import { PersoenlicheBerechnung } from '../../../models';
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitution'
           )
         }}
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().beitraegeGemeindeInstitution | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
 
       <!-- Anrechenbares Vermögen -->
@@ -179,6 +185,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         </div>
       </div>
 
+      <!-- Todo: is PersonalValueItem  and moves up? -->
       <!-- Einkommen Partner -->
       <div class="tw:flex tw:gap-2">
         {{
@@ -186,10 +193,12 @@ import { PersoenlicheBerechnung } from '../../../models';
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
           )
         }}
-        <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().einkommenPartner | formatChfPositive }}
-        </div>
+        </div> -->
       </div>
+
+      <!-- Todo: Andere einnahmen ? -->
 
       <!-- Elterliche Leistung -->
       <div class="tw:flex tw:gap-2">
@@ -221,5 +230,6 @@ import { PersoenlicheBerechnung } from '../../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {
-  einnahmenSig = input.required<PersoenlicheBerechnung['einnahmen']>();
+  einnahmenSig = input.required<PersoenlichesBudgetresultatView['einnahmen']>();
+  stammdatenSig = input.required<BerechnungsStammdaten>();
 }

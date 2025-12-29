@@ -1,14 +1,15 @@
 <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | transloco }}</p>
-@if (berechnungenSig().loading) {
+@if (berechnungStore.berechnungsViewSig().loading) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  @if (berechnungenSig().berechnung; as berechnung) {
+  @if (berechnungenRawSig(); as berechnung) {
     <div class="row">
       <div class="col-12">
         <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
           <dv-persoenliche-einnahmen
             class="d-flex flex-column gap-3 ps-4"
             [einnahmenSig]="berechnung.persoenlich.einnahmen"
+            [stammdatenSig]="berechnung.berechnungsStammdaten"
           ></dv-persoenliche-einnahmen>
           <dv-persoenliche-kosten
             class="d-flex flex-column gap-3 ps-4"

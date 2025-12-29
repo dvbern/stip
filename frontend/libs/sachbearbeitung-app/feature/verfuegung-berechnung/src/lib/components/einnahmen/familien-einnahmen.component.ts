@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfNegativePipe,
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
-
-import { FamilienBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-familien-einnahmen',
@@ -47,7 +46,7 @@ import { FamilienBerechnung } from '../../../models';
           | transloco
       }}
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().mietwert | formatChfNegative: true }}
+        {{ einnahmenSig().eigenmietwert | formatChfNegative: true }}
       </div>
     </div>
 
@@ -58,7 +57,7 @@ import { FamilienBerechnung } from '../../../models';
           | transloco
       }}
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().kinderalimente | formatChfNegative: true }}
+        {{ einnahmenSig().renten | formatChfNegative: true }}
       </div>
     </div>
 
@@ -100,7 +99,7 @@ import { FamilienBerechnung } from '../../../models';
       </div>
     </div>
 
-    <!-- Einkommensfreibetrag -->
+    <!-- todo: mit stammdaten? Einkommensfreibetrag  -->
     <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
         {{
@@ -115,7 +114,7 @@ import { FamilienBerechnung } from '../../../models';
         </div>
       </div>
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().einkommensfreibeitrag | formatChfNegative: true }}
+        {{ einnahmenSig().einkommensfreibetrag | formatChfNegative: true }}
       </div>
     </div>
 
@@ -154,5 +153,5 @@ import { FamilienBerechnung } from '../../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienEinnahmenComponent {
-  einnahmenSig = input.required<FamilienBerechnung['einnahmen']>();
+  einnahmenSig = input.required<FamilienBudgetresultatView['einnahmen']>();
 }

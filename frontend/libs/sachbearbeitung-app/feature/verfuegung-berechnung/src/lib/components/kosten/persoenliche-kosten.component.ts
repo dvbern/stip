@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { PersoenlichesBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
-
-import { PersoenlicheBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-persoenliche-kosten',
@@ -31,7 +30,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         </div>
       </div>
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().mehrkostenVerpflegung | formatChfPositive }}
+        {{ kostenSig().verpflegungskosten | formatChfPositive }}
       </div>
     </div>
 
@@ -80,7 +79,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         </div>
       </div>
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().grundbedarfPersonen | formatChfPositive }}
+        {{ kostenSig().grundbedarf | formatChfPositive }}
       </div>
     </div>
 
@@ -99,7 +98,7 @@ import { PersoenlicheBerechnung } from '../../../models';
         </div>
       </div>
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().wohnkostenPersonen | formatChfPositive }}
+        {{ kostenSig().wohnkosten | formatChfPositive }}
       </div>
     </div>
 
@@ -117,11 +116,10 @@ import { PersoenlicheBerechnung } from '../../../models';
           }}
         </div>
       </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{
-          kostenSig().medizinischeGrundversorgungPersonen | formatChfPositive
-        }}
-      </div>
+      <!-- Todo: is PersonValueItem now -->
+      <!-- <div class="text-muted flex-grow-1 text-end text-nowrap">
+        {{ kostenSig().medizinischeGrundversorgung | formatChfPositive }}
+      </div> -->
     </div>
 
     <!-- Fahrkosten Ehepartnerin/Ehepartner -->
@@ -191,7 +189,7 @@ import { PersoenlicheBerechnung } from '../../../models';
           | transloco
       }}
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().kantonsGemeindesteuernPartner | formatChfPositive }}
+        {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
       </div>
     </div>
 
@@ -241,5 +239,5 @@ import { PersoenlicheBerechnung } from '../../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheKostenComponent {
-  kostenSig = input.required<PersoenlicheBerechnung['kosten']>();
+  kostenSig = input.required<PersoenlichesBudgetresultatView['kosten']>();
 }

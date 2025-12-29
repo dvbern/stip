@@ -23,16 +23,17 @@
                   {{ t('sachbearbeitung-app.verfuegung.berechnung.to') }}:
                   {{ berechnung.gueltigBis | date: 'MM.yyyy' }}
 
-                  {{ t('sachbearbeitung-app.verfuegung.berechnung.months') }}: {{ berechnung.monate }}
+                  {{ t('sachbearbeitung-app.verfuegung.berechnung.months') }}: {{ berechnung.anzahlMonate }}
                 </span>
               </span>
               <span>
                 {{ t('sachbearbeitung-app.verfuegung.berechnung.ausbildungsjahr') }} {{ berechnung.yearRange }}
               </span>
             }
-            @case ('familien') {
+            <!-- TODO -->
+            <!-- @case ('familien') {
               {{ t(berechnung.nameKey, berechnung) }}
-            }
+            } -->
           }
         </div>
       </mat-card-title>
@@ -49,13 +50,13 @@
     </mat-card-content>
     <mat-card-footer class="px-3 py-4">
       <!-- wenn verheiratet, geteilt durch anzahl personen im haushalt -->
-      @if (berechnung.typ === 'persoenlich' && berechnung.totalVorTeilung) {
+      @if (berechnung.typ === 'persoenlich' && berechnung.proKopfTeilung) {
         <div class="d-flex justify-content-between fs-5 h4">
           <div>
             {{ t('sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.total') }}
           </div>
           <div>
-            {{ berechnung.totalVorTeilung | formatChfNegative }}
+            {{ berechnung.proKopfTeilung | formatChfNegative }}
           </div>
         </div>
         <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
@@ -63,7 +64,7 @@
             {{ t('sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.anzahlPersonen') }}
           </div>
           <div>
-            {{ berechnung.einnahmen.anzahlPersonenImHaushalt }}
+            {{ berechnung.anzahlPersonenImHaushalt }}
           </div>
         </div>
         <div class="d-flex justify-content-between fs-4 h4">
@@ -87,17 +88,17 @@
         <div class="d-flex justify-content-between fs-3 h4 mt-3">
           <div>
             <div>{{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch') }}</div>
-            @if (berechnung.monate !== 12) {
+            @if (berechnung.anzahlMonate !== 12) {
               <div class="text-muted mt-1 fw-normal fs-6">
                 {{
                   t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate', {
-                    monate: berechnung.monate,
+                    monate: berechnung.anzahlMonate,
                   })
                 }}
               </div>
             }
           </div>
-          <div>{{ berechnung.berechnung | formatChf }}</div>
+          <div>{{ berechnung.total | formatChf }}</div>
         </div>
       } @else if (berechnung.typ === 'persoenlich') {
         <div class="d-flex justify-content-between fs-4 h4">
@@ -121,17 +122,17 @@
         <div class="d-flex justify-content-between fs-3 h4 mt-3">
           <div>
             <div>{{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch') }}</div>
-            @if (berechnung.monate !== 12) {
+            @if (berechnung.anzahlMonate !== 12) {
               <div class="text-muted mt-1 fw-normal fs-6">
                 {{
                   t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate', {
-                    monate: berechnung.monate,
+                    monate: berechnung.anzahlMonate,
                   })
                 }}
               </div>
             }
           </div>
-          <div>{{ berechnung.berechnung | formatChf }}</div>
+          <div>{{ berechnung.total | formatChf }}</div>
         </div>
       } @else {
         <div class="d-flex justify-content-between fs-4 h4">

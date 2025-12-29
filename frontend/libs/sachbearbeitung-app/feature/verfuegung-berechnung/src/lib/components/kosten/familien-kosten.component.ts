@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
-
-import { FamilienBerechnung } from '../../../models';
 
 @Component({
   selector: 'dv-familien-kosten',
@@ -158,5 +157,5 @@ import { FamilienBerechnung } from '../../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienKostenComponent {
-  kostenSig = input.required<FamilienBerechnung['kosten']>();
+  kostenSig = input.required<FamilienBudgetresultatView['kosten']>();
 }
