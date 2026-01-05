@@ -62,7 +62,6 @@ import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.TextAlignment;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -733,7 +732,7 @@ public class VerfuegungPdfService {
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
         ByteArrayOutputStream verfuegungsBrief;
-        if (Objects.nonNull(verfuegung.getStipDecision())) {
+        if (verfuegung.isNegativeVerfuegung()) {
             verfuegungsBrief = createNegativeVerfuegungPdf(verfuegung);
         } else if (berechnungsresultat == 0 && gesuch.isFirstVerfuegung()) {
             verfuegungsBrief = createVerfuegungOhneAnspruchPdf(
@@ -749,29 +748,41 @@ public class VerfuegungPdfService {
             verfuegungsBrief
         );
 
-        createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
-        createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.VATER);
-        createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.FAMILIE);
+        if (!verfuegung.isNegativeVerfuegung()) {
+            ByteArrayOutputStream berechnungsBlaetter;
 
-        var berechnungsBlaetterPia =
-            berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, stipendien);
+            createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
+            createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.VATER);
+            createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.FAMILIE);
 
-        verfuegungService.createAndStoreVerfuegungDokument(
-            verfuegung,
-            VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
-            berechnungsBlaetterPia
-        );
+            var berechnungsBlaetterPia =
+                berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, stipendien);
 
-        var berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, stipendien);
+            verfuegungService.createAndStoreVerfuegungDokument(
+                verfuegung,
+                VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
+                berechnungsBlaetterPia
+            );
 
-        final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
-            verfuegungsBrief,
-            berechnungsBlaetter
-        );
+            berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, stipendien);
+
+            final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
+                verfuegungsBrief,
+                berechnungsBlaetter
+            );
+            verfuegungService.createAndStoreVerfuegungDokument(
+                verfuegung,
+                VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
+                versendeteVerfuegungOutput
+            );
+
+            return;
+        }
+
         verfuegungService.createAndStoreVerfuegungDokument(
             verfuegung,
             VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
-            versendeteVerfuegungOutput
+            verfuegungsBrief
         );
     }
 
@@ -793,17 +804,6 @@ public class VerfuegungPdfService {
                 berechnungsBlaetter
             );
         }
-    }
-
-    @Transactional
-    public void createPdfForNegtativeVerfuegung(final Verfuegung verfuegung) {
-        final ByteArrayOutputStream out = createNegativeVerfuegungPdf(verfuegung);
-
-        verfuegungService.createAndStoreVerfuegungDokument(
-            verfuegung,
-            VerfuegungDokumentTyp.VERFUEGUNGSBRIEF,
-            out
-        );
     }
 
     private VerfuegungDokumentTyp mapToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {
