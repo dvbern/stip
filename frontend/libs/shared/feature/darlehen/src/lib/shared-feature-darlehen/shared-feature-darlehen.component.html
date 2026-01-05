@@ -2,118 +2,119 @@
   <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
 } @else {
   <!-- sachbearbeiter form -->
-  <form
-    [formGroup]="formSb"
-    [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteSb"
-    novalidate
-    data-testid="form-darlehen-sb-form"
-    *dvIfSachbearbeiter
-  >
-    <div class="tw:dv-form-half">
-      <!-- todo: KSTIP-2922 info betragBezogenKanton -->
-      <div>
-        <span class="tw:font-bold"> {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }} </span>:
-        <span>0</span>
-      </div>
+  @if (darlehenPermissionsSig()?.canReadSbForm) {
+    <form
+      [formGroup]="formSb"
+      [dvSharedUiFormReadonly]="!darlehenPermissionsSig()?.canWriteSb"
+      novalidate
+      data-testid="form-darlehen-sb-form"
+    >
+      <div class="tw:dv-form-half">
+        <!-- todo: KSTIP-2922 info betragBezogenKanton -->
+        <div>
+          <span class="tw:font-bold"> {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }} </span>:
+          <span>0</span>
+        </div>
 
-      <!-- darlehenGewaehren -->
-      <mat-radio-group
-        [formControl]="formSb.controls.gewaehren"
-        class="tw:w-full"
-        data-testid="form-darlehen-darlehenGewaehren"
-        dvSharedUiFormField
-      >
-        <div class="tw:flex tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.darlehenGewaehren.label' | transloco }}</mat-label>
-        </div>
-        <div class="tw:flex tw:justify-between tw:flex-col tw:w-full tw:gap-2">
-          @for (value of [true, false]; track $index) {
-            <mat-radio-button [value]="value">{{
-              'shared.form.darlehen.darlehenGewaehren.' + value | transloco
-            }}</mat-radio-button>
-          }
-        </div>
-        <div class="group-errors">
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </div>
-      </mat-radio-group>
+        <!-- darlehenGewaehren -->
+        <mat-radio-group
+          [formControl]="formSb.controls.gewaehren"
+          class="tw:w-full"
+          data-testid="form-darlehen-darlehenGewaehren"
+          dvSharedUiFormField
+        >
+          <div class="tw:flex tw:w-full">
+            <mat-label>{{ 'shared.form.darlehen.darlehenGewaehren.label' | transloco }}</mat-label>
+          </div>
+          <div class="tw:flex tw:justify-between tw:flex-col tw:w-full tw:gap-2">
+            @for (value of [true, false]; track $index) {
+              <mat-radio-button [value]="value">{{
+                'shared.form.darlehen.darlehenGewaehren.' + value | transloco
+              }}</mat-radio-button>
+            }
+          </div>
+          <div class="group-errors">
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </div>
+        </mat-radio-group>
 
-      @if (showBetragFieldSig()) {
+        @if (showBetragFieldSig()) {
+          <mat-form-field dvSharedUiFormField class="tw:w-full">
+            <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
+            <input
+              [formControl]="formSb.controls.betrag"
+              data-testid="form-darlehen-betragDarlehen"
+              matInput
+              type="text"
+              [maskito]="maskitoNumber"
+            />
+
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </mat-form-field>
+        }
+
+        <!-- kommentar  -->
         <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
-          <input
-            [formControl]="formSb.controls.betrag"
-            data-testid="form-darlehen-betragDarlehen"
+          <mat-label>{{ 'shared.form.darlehen.kommentar.label' | transloco }}</mat-label>
+          <textarea
+            [formControl]="formSb.controls.kommentar"
+            data-testid="form-darlehen-kommentar"
+            dvMaxLength="large"
             matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
+            rows="4"
+          ></textarea>
 
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
-      }
+      </div>
 
-      <!-- kommentar  -->
-      <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>{{ 'shared.form.darlehen.kommentar.label' | transloco }}</mat-label>
-        <textarea
-          [formControl]="formSb.controls.kommentar"
-          data-testid="form-darlehen-kommentar"
-          dvMaxLength="large"
-          matInput
-          rows="4"
-        ></textarea>
+      <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
+        <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
+          <span>{{ 'shared.cancel' | transloco }}</span>
+        </a>
 
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+        @if (darlehenPermissionsSig()?.canFreigeben) {
+          <!-- darlehen Freigeben -->
+          <button
+            type="button"
+            data-testid="button-darlehen-freigeben"
+            (click)="darlehenUpdateAndFreigeben()"
+            class="btn btn-primary"
+          >
+            {{ 'shared.form.darlehen.freigeben' | transloco }}
+          </button>
+          <!-- dalehen zurückweisen -->
+          <button
+            type="button"
+            data-testid="button-darlehen-zurueckweisen"
+            (click)="darlehenUpdateAndZurueckweisen()"
+            class="btn btn-danger"
+          >
+            {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
+          </button>
+        }
 
-    <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
-      <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
-        <span>{{ 'shared.cancel' | transloco }}</span>
-      </a>
-
-      @if (darlehenPermissionsSig()?.canFreigeben) {
-        <!-- darlehen Freigeben -->
-        <button
-          type="button"
-          data-testid="button-darlehen-freigeben"
-          (click)="darlehenUpdateAndFreigeben()"
-          class="btn btn-primary"
-        >
-          {{ 'shared.form.darlehen.freigeben' | transloco }}
-        </button>
-        <!-- dalehen zurückweisen -->
-        <button
-          type="button"
-          data-testid="button-darlehen-zurueckweisen"
-          (click)="darlehenUpdateAndZurueckweisen()"
-          class="btn btn-primary"
-        >
-          {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
-        </button>
-      }
-
-      @if (darlehenPermissionsSig()?.canApproveDarlehen) {
-        <!-- darlehen abschliessen -->
-        <button
-          type="button"
-          data-testid="button-darlehen-abschliessen"
-          (click)="darlehenUpdateAndAbschliessen()"
-          class="btn btn-primary"
-        >
-          {{ 'shared.form.darlehen.abschliessen' | transloco }}
-        </button>
-      }
-    </div>
-    <hr class="tw:my-6 tw:border-t tw:border-gray-400" />
-  </form>
+        @if (darlehenPermissionsSig()?.canApproveDarlehen) {
+          <!-- darlehen abschliessen -->
+          <button
+            type="button"
+            data-testid="button-darlehen-abschliessen"
+            (click)="darlehenUpdateAndAbschliessen()"
+            class="btn btn-primary"
+          >
+            {{ 'shared.form.darlehen.abschliessen' | transloco }}
+          </button>
+        }
+      </div>
+    </form>
+    <hr class="tw:mt-10! tw:border-t tw:border-gray-400" />
+  }
 
   <!-- gesuchsteller form -->
   <form

@@ -59,5 +59,6 @@ export const sharedFeatureDarlehenFeatureRoutes: Route[] = [
     component: SharedFeatureDarlehenFeatureComponent,
     resolve: { darlehen: darlehenResolver },
     title: 'shared.darlehen.title',
+    data: { shouldReuseRoute: false },
   }),
 ];

@@ -11,18 +11,19 @@ import {
 
 const DarlehenPermissions = {
   W: { index: 0, name: 'writeGs' },
-  K: { index: 1, name: 'writeSb' },
-  D: { index: 2, name: 'uploadDocuments' },
-  E: { index: 3, name: 'eingeben' },
-  F: { index: 4, name: 'freigeben' },
-  A: { index: 5, name: 'approveDarlehen' },
+  R: { index: 1, name: 'readSbForm' },
+  K: { index: 2, name: 'writeSb' },
+  D: { index: 3, name: 'uploadDocuments' },
+  E: { index: 4, name: 'eingeben' },
+  F: { index: 5, name: 'freigeben' },
+  A: { index: 6, name: 'approveDarlehen' },
 } as const;
 type DarlehenPermissions = typeof DarlehenPermissions;
 type DarlehenPermissionFlag = keyof DarlehenPermissions;
 type P<T extends DarlehenPermissionFlag> = T | ' ';
 
 type DarlehenPermissionFlags =
-  `${P<'W'>}${P<'K'>}${P<'D'>}${P<'E'>}${P<'F'>}${P<'A'>}`;
+  `${P<'W'>}${P<'R'>}${P<'K'>}${P<'D'>}${P<'E'>}${P<'F'>}${P<'A'>}`;
 
 export type DarlehenPermission =
   DarlehenPermissions[DarlehenPermissionFlag]['name'];
@@ -39,7 +40,7 @@ const perm = (flags: DarlehenPermissionFlags, roles: ShortRole[]) => {
   return (rolesMap: RolesMap): DarlehenPermissionFlags =>
     roles.some((shortRole) => !!rolesMap[shortRoleMap[shortRole]])
       ? flags
-      : '      ';
+      : '       ';
 };
 type PermissionCheck = ReturnType<typeof perm>;
 
@@ -59,11 +60,11 @@ export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 
 // prettier-ignore
 export const darlehenPermissionTableByAppType = {
-  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W DE  ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  EINGEGEBEN                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm(' K  F ', ['sb']) },
-  IN_FREIGABE                     : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm(' K   A', ['fe']) },
-  AKZEPTIERT                      : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
-  ABGELEHNT                       : { [GS_APP]: perm('      ', ['gs']), [SB_APP]: perm('      ', ['sb']) },
+  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
+  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm(' RK  F ', ['sb']) },
+  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm(' RK   A', ['fe']) },
+  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
+  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
 } as const satisfies Record<
   DarlehenStatus,
   Record<AppType, PermissionCheck>
