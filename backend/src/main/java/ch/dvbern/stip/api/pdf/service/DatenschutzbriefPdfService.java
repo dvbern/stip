@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.kernel.font.PdfFont;
@@ -191,7 +193,8 @@ public class DatenschutzbriefPdfService {
                 )
             );
 
-            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, false);
+            final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
+            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
 
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
