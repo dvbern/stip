@@ -981,7 +981,7 @@ class GesuchServiceTest {
 
         when(gesuchTrancheRepository.requireById(any())).thenReturn(tranche);
         when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-        when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(tranche);
+        when(gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(any())).thenReturn(tranche);
         tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(0);
         tranche.setTyp(GesuchTrancheTyp.TRANCHE);
 
@@ -989,15 +989,10 @@ class GesuchServiceTest {
         list.add(TestUtil.prepareSteuerdaten());
         tranche.getGesuchFormular().setSteuerdaten(list);
 
-        final var reportDto = gesuchTrancheService.einreichenValidierenSB(tranche.getId());
-
+        final var reportDto = gesuchTrancheService.einreichenValidierenGS(tranche.getId());
         assertThat(
-            reportDto.toString() + "\nEltern: " + gesuchUpdateDto.getGesuchTrancheToWorkWith()
-                .getGesuchFormular()
-                .getElterns()
-                .size(),
-            reportDto.getValidationErrors().size(),
-            Matchers.is(1)
+            reportDto.getValidationErrors().stream().anyMatch(error -> error.getPropertyPath().equals("auszahlung")),
+            is(true)
         );
     }
 

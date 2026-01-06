@@ -248,7 +248,7 @@ class BerechnungTest {
             .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
             .setGeburtsdatum(
                 // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
-                LocalDate.now().minusYears(24).minusMonths(6)
+                LocalDate.now().minusYears(23).withDayOfMonth(1).withMonth(11)
             );
 
         gesuchFormular.setFamiliensituation(

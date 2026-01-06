@@ -87,6 +87,7 @@ class DokumentAuthorizerTest {
             null,
             null,
             sozialdienstService,
+            null,
             null
         );
     }

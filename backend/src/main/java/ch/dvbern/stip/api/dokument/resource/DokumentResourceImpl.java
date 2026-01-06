@@ -268,14 +268,14 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(DOKUMENT_READ)
     public NullableGesuchDokumentDto getGesuchDokumentForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        gesuchDokumentAuthorizer.canGetGesuchDokumentForTranche(gesuchTrancheId);
+        gesuchDokumentAuthorizer.canGetGesuchDokumentForTrancheGS(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp);
     }
 
     @Override
     @RolesAllowed(DOKUMENT_READ)
     public NullableGesuchDokumentDto getGesuchDokumentForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
-        gesuchDokumentAuthorizer.canGetGesuchDokumentForTranche(gesuchTrancheId);
+        gesuchDokumentAuthorizer.canGetGesuchDokumentForTrancheSB(gesuchTrancheId);
         return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
     }
 }
