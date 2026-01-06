@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { PersoenlichesBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
@@ -7,236 +7,226 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
+import { PositionComponent } from '../position/position.component';
+
 @Component({
   selector: 'dv-persoenliche-kosten',
   imports: [
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
+    PositionComponent,
   ],
   template: `
-    <!-- Ausbildungskosten der/des Auszubildenden -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().ausbildungskosten | formatChfPositive }}
-      </div>
-    </div>
+    <ng-container *transloco="let t">
+      <!-- Ausbildungskosten der/des Auszubildenden -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
+          )
+        "
+        [amountSig]="kostenSig().ausbildungskosten | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Fahrkosten der/des Auszubildenden -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- Fahrkosten der/des Auszubildenden -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurElternWohnend.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().fahrkosten | formatChfPositive }}
-      </div>
-    </div>
+          )
+        "
+        [amountSig]="kostenSig().fahrkosten | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Mehrkosten für auswärtige Verpflegung -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- Mehrkosten für auswärtige Verpflegung -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurElternWohnend.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegungskosten | formatChfPositive }}
-      </div>
-    </div>
+          )
+        "
+        [amountSig]="kostenSig().verpflegungskosten | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Grundbedarf für 0 Personenhaushalt -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen'
-            | transloco: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
-              | transloco: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().grundbedarf | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Grundbedarf für 0 Personenhaushalt -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen',
+            { anzahl: kostenSig().anzahlPersonenImHaushalt }
+          )
+        "
+        [infoSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info',
+            { anzahl: kostenSig().anzahlPersonenImHaushalt }
+          )
+        "
+        [amountSig]="kostenSig().grundbedarf | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Wohnkosten für 0 Personenhaushalt -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen'
-            | transloco: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
-              | transloco: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().wohnkosten | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Wohnkosten für anz Personenhaushalt -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen',
+            { anzahl: kostenSig().anzahlPersonenImHaushalt }
+          )
+        "
+        [infoSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info',
+            { anzahl: kostenSig().anzahlPersonenImHaushalt }
+          )
+        "
+        [amountSig]="kostenSig().wohnkosten | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Medizinische Grundversorgung für 0 Personenhaushalt -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen'
-            | transloco: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info'
-              | transloco: { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          }}
-        </div>
-      </div>
-      <!-- Todo: is PersonValueItem now -->
-      <!-- <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().medizinischeGrundversorgung | formatChfPositive }}
-      </div> -->
-    </div>
+      <!-- Medizinische Grundversorgung für anz Personenhaushalt -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen',
+            { anzahl: kostenSig().anzahlPersonenImHaushalt }
+          )
+        "
+        [infoSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info',
+            { anzahl: kostenSig().anzahlPersonenImHaushalt }
+          )
+        "
+        [personValueItemsSig]="kostenSig().medizinischeGrundversorgung"
+        [amountSig]="
+          kostenSig().medizinischeGrundversorgungTotal | formatChfPositive
+        "
+      >
+      </dv-position>
 
-    <!-- Fahrkosten Ehepartnerin/Ehepartner -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- Fahrkosten Ehepartnerin/Ehepartner -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurErwerbstaetig.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().fahrkostenPartner | formatChfPositive }}
-      </div>
-    </div>
+          )
+        "
+        [amountSig]="kostenSig().fahrkostenPartner | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Verpflegung Ehepartnerin/Ehepartner -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- Verpflegung Ehepartnerin/Ehepartner -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurErwerbstaetig.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegungPartner | formatChfPositive }}
-      </div>
-    </div>
+          )
+        "
+        [amountSig]="kostenSig().verpflegungPartner | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Betreuungskosten für Kinder -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().betreuungskostenKinder | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Betreuungskosten für Kinder -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder'
+          )
+        "
+        [amountSig]="kostenSig().betreuungskostenKinder | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Kantons- und Gemeindesteuern -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Kantons- und Gemeindesteuern -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern'
+          )
+        "
+        [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- todo: still here? Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
-      </div>
-    </div>
+      <!-- todo: still here? Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner'
+          )
+        "
+        [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Bundessteuern -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().bundessteuern | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Bundessteuern -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern'
+          )
+        "
+        [amountSig]="kostenSig().bundessteuern | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Ungedeckter Anteil Lebenshaltungskosten  -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- Ungedeckter Anteil Lebenshaltungskosten  -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten.info'
-              | transloco
+          )
+        "
+        [amountSig]="kostenSig().anteilLebenshaltungskosten | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- Total -->
+      <div class="tw:flex mt-3 tw:gap-2">
+        <div class="h4">
+          {{
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total'
+            )
           }}
         </div>
+        <div class="h4 flex-grow-1 text-end text-nowrap">
+          {{ kostenSig().total | formatChf }}
+        </div>
       </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().anteilLebenshaltungskosten | formatChfPositive }}
-      </div>
-    </div>
 
-    <!-- Total -->
-    <div class="d-flex mt-3 gap-2">
-      <div class="h4">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total'
-            | transloco
-        }}
-      </div>
-      <div class="h4 flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().total | formatChf }}
-      </div>
-    </div>
-
-    <!-- Todo: Anpassungen an der Zusammenfassung, siehe Fuss teil excel?  -->
+      <!-- Todo: Anpassungen an der Zusammenfassung, siehe Fuss teil excel?  -->
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

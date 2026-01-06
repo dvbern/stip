@@ -103,7 +103,7 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- todo: Taggelder -->
+      <!-- Taggelder -->
       <dv-position
         [titleSig]="
           t(
@@ -154,7 +154,7 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- Todo: Andere einnahmen ? -->
+      <!-- Andere Einnahmen -->
       <dv-position
         [titleSig]="
           t(

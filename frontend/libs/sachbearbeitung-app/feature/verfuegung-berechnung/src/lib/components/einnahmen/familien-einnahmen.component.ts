@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
@@ -8,182 +8,182 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
+import { PositionComponent } from '../position/position.component';
+
 @Component({
   selector: 'dv-familien-einnahmen',
   imports: [
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
     SharedUiFormatChfPositivePipe,
+    PositionComponent,
   ],
   template: `
-    <!-- Total Einkünfte -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().totalEinkuenfte | formatChfPositive }}
-      </div>
-    </div>
+    <ng-container *transloco="let t">
+      <!-- Total Einkünfte -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
+          )
+        "
+        [amountSig]="einnahmenSig().totalEinkuenfte | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Einkünfte nach BGSA 1) -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einnahmenBGSA'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().einnahmenBGSA | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Einkünfte nach BGSA 1) -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einnahmenBGSA'
+          )
+        "
+        [amountSig]="einnahmenSig().einnahmenBGSA | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Ergänzungsleistungen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Ergänzungsleistungen -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
+          )
+        "
+        [amountSig]="einnahmenSig().ergaenzungsleistungen | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Andere Einnahmen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.andereEinnahmen'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().andereEinnahmen | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Andere Einnahmen -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.andereEinnahmen'
+          )
+        "
+        [amountSig]="einnahmenSig().andereEinnahmen | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Abzüglich Mietwert -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().eigenmietwert | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Abzüglich Mietwert -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
+          )
+        "
+        [amountSig]="einnahmenSig().eigenmietwert | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- Abzüglich Unterhaltsbeträge  -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.unterhaltsbeitraege'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().unterhaltsbeitraege | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Abzüglich Unterhaltsbeträge  -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.unterhaltsbeitraege'
+          )
+        "
+        [amountSig]="
+          einnahmenSig().unterhaltsbeitraege | formatChfNegative: true
+        "
+      >
+      </dv-position>
 
-    <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
-              | transloco: einnahmenSig()
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().sauele3 | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
+          )
+        "
+        [infoSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info',
+            einnahmenSig()
+          )
+        "
+        [amountSig]="einnahmenSig().sauele3 | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().sauele2 | formatChfNegative: true }}
-      </div>
-    </div>
+          )
+        "
+        [amountSig]="einnahmenSig().sauele2 | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().renten | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
+          )
+        "
+        [amountSig]="einnahmenSig().renten | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- todo: mit stammdaten? Einkommensfreibetrag  -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
+      <!-- todo: mit stammdaten? Einkommensfreibetrag  -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
+          )
+        "
+        [infoSig]="
+          t(
             'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().einkommensfreibetrag | formatChfNegative: true }}
-      </div>
-    </div>
+          )
+        "
+        [amountSig]="
+          einnahmenSig().einkommensfreibetrag | formatChfNegative: true
+        "
+      >
+      </dv-position>
 
-    <!-- todo: Zwischentotal -->
+      <!-- todo: Zwischentotal -->
 
-    <!-- Anrechenbares Vermögen -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
+      <!-- Anrechenbares Vermögen -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
+          )
+        "
+        [infoSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info',
+            einnahmenSig()
+          )
+        "
+        [amountSig]="einnahmenSig().anrechenbaresVermoegen | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- Total -->
+      <div class="tw:flex mt-3 tw:gap-2">
+        <div class="h4 m-0">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
-              | transloco: einnahmenSig()
+            t(
+              'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
+            )
           }}
         </div>
+        <div class="h4 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().total | formatChf }}
+        </div>
       </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Total -->
-    <div class="d-flex mt-3 gap-2">
-      <div class="h4 m-0">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
-            | transloco
-        }}
-      </div>
-      <div class="h4 flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().total | formatChf }}
-      </div>
-    </div>
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

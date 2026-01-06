@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
@@ -7,144 +7,148 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
+import { PositionComponent } from '../position/position.component';
+
 @Component({
   selector: 'dv-familien-kosten',
   imports: [
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
+    PositionComponent,
   ],
   template: `
-    <!-- todo: add anz. personen Grundbedarf  -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().grundbedarf | formatChfPositive }}
-      </div>
-    </div>
+    <ng-container *transloco="let t">
+      <!-- todo: add anz. personen Grundbedarf  -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
+          )
+        "
+        [amountSig]="kostenSig().grundbedarf | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- todo: add anz. personen Wohnkosten -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().wohnkosten | formatChfPositive }}
-      </div>
-    </div>
+      <!-- todo: add anz. personen Wohnkosten -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
+          )
+        "
+        [amountSig]="kostenSig().wohnkosten | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- todo: add anz. personen Medizinische Grundversorgung -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().medizinischeGrundversorgung | formatChfPositive }}
-      </div>
-    </div>
+      <!-- todo: add anz. personen Medizinische Grundversorgung -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
+          )
+        "
+        [amountSig]="
+          kostenSig().medizinischeGrundversorgung | formatChfPositive
+        "
+      >
+      </dv-position>
 
-    <!-- lntegrationszulage pro in Ausbildung stehendes Kind -->
-    <div class="d-flex gap-5">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
+      <!-- lntegrationszulage pro in Ausbildung stehendes Kind -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
+          )
+        "
+        [infoSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info',
+            kostenSig()
+          )
+        "
+        [amountSig]="kostenSig().integrationszulage | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- Kantons- und Gemeindesteuern -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
+          )
+        "
+        [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- Bundessteuern -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
+          )
+        "
+        [amountSig]="kostenSig().bundessteuern | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- todo: @fabrice, besser Array? - Fahrkosten -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
+          )
+        "
+        [amountSig]="kostenSig().fahrkosten | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- todo: @fabrice, besser Array? - Fahrkosten Partner:in -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
+          )
+        "
+        [amountSig]="kostenSig().fahrkostenPartner | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- todo: @fabrice, besser Array? - Verpflegung auswärts -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
+          )
+        "
+        [amountSig]="kostenSig().verpflegung | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- todo: @fabrice, besser Array? - Verpflegung auswärts Partner:in -->
+      <dv-position
+        [titleSig]="
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
+          )
+        "
+        [amountSig]="kostenSig().verpflegungPartner | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- Total -->
+      <div class="tw:flex mt-3 tw:gap-2">
+        <div class="h4 m-0">
           {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info'
-              | transloco: kostenSig()
+            t('sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total')
           }}
         </div>
+        <div class="h4 flex-grow-1 text-end text-nowrap">
+          {{ kostenSig().total | formatChf }}
+        </div>
       </div>
-      <div class="text-muted flex-grow-1 ps-5 text-end text-nowrap">
-        {{ kostenSig().integrationszulage | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Kantons- und Gemeindesteuern -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Bundessteuern -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().bundessteuern | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- todo: @fabrice, besser Array? - Fahrkosten -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().fahrkosten | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- todo: @fabrice, besser Array? - Fahrkosten Partner:in -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().fahrkostenPartner | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- todo: @fabrice, besser Array? - Verpflegung auswärts -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegung | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- todo: @fabrice, besser Array? - Verpflegung auswärts Partner:in -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegungPartner | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Total -->
-    <div class="d-flex mt-3 gap-2">
-      <div class="h4 m-0">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total'
-            | transloco
-        }}
-      </div>
-      <div class="h4 flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().total | formatChf }}
-      </div>
-    </div>
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
