@@ -18,12 +18,14 @@
 package ch.dvbern.stip.api;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
+import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
@@ -58,7 +60,10 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     }
 
     @Override
-    public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(Verfuegung verfuegung) {
+    public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(
+        Verfuegung verfuegung,
+        List<Anhangs> anhangs
+    ) {
         return new ByteArrayOutputStream();
     }
 
