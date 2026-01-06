@@ -15,15 +15,7 @@ import {
     SharedUiFormatChfPositivePipe,
   ],
   template: `
-    <!-- Anzahl anrechenbare Personen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
-          | transloco: kostenSig()
-      }}
-    </div>
-
-    <!-- Grundbedarf  -->
+    <!-- todo: add anz. personen Grundbedarf  -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
@@ -34,7 +26,7 @@ import {
       </div>
     </div>
 
-    <!-- Wohnkosten -->
+    <!-- todo: add anz. personen Wohnkosten -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
@@ -45,7 +37,7 @@ import {
       </div>
     </div>
 
-    <!-- Medizinische Grundversorgung -->
+    <!-- todo: add anz. personen Medizinische Grundversorgung -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
@@ -97,7 +89,7 @@ import {
       </div>
     </div>
 
-    <!-- Fahrkosten -->
+    <!-- todo: @fabrice, besser Array? - Fahrkosten -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
@@ -108,7 +100,7 @@ import {
       </div>
     </div>
 
-    <!-- Fahrkosten Partner:in -->
+    <!-- todo: @fabrice, besser Array? - Fahrkosten Partner:in -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
@@ -119,7 +111,7 @@ import {
       </div>
     </div>
 
-    <!-- Verpflegung auswärts -->
+    <!-- todo: @fabrice, besser Array? - Verpflegung auswärts -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
@@ -130,7 +122,7 @@ import {
       </div>
     </div>
 
-    <!-- Verpflegung auswärts Partner:in -->
+    <!-- todo: @fabrice, besser Array? - Verpflegung auswärts Partner:in -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'

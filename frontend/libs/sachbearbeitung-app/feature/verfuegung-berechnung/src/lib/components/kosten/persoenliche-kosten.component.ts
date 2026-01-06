@@ -15,22 +15,14 @@ import {
     SharedUiFormatChfPositivePipe,
   ],
   template: `
-    <!-- Mehrkosten für auswärtige Verpflegung -->
+    <!-- Ausbildungskosten der/des Auszubildenden -->
     <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurElternWohnend.info'
-              | transloco
-          }}
-        </div>
-      </div>
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
+          | transloco
+      }}
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegungskosten | formatChfPositive }}
+        {{ kostenSig().ausbildungskosten | formatChfPositive }}
       </div>
     </div>
 
@@ -53,14 +45,22 @@ import {
       </div>
     </div>
 
-    <!-- Ausbildungskosten der/des Auszubildenden -->
+    <!-- Mehrkosten für auswärtige Verpflegung -->
     <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
-          | transloco
-      }}
+      <div classs="d-flex flex-column">
+        {{
+          'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
+            | transloco
+        }}
+        <div class="text-muted fs-7">
+          {{
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurElternWohnend.info'
+              | transloco
+          }}
+        </div>
+      </div>
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().ausbildungskosten | formatChfPositive }}
+        {{ kostenSig().verpflegungskosten | formatChfPositive }}
       </div>
     </div>
 
@@ -182,7 +182,7 @@ import {
       </div>
     </div>
 
-    <!-- Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
+    <!-- todo: still here? Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
     <div class="d-flex gap-2">
       {{
         'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner'
@@ -235,6 +235,8 @@ import {
         {{ kostenSig().total | formatChf }}
       </div>
     </div>
+
+    <!-- Todo: Anpassungen an der Zusammenfassung, siehe Fuss teil excel?  -->
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

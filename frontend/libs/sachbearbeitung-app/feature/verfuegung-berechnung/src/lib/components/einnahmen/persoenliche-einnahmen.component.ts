@@ -15,7 +15,7 @@ import {
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
   ],
-  template: `
+  template: `.
     <ng-container *transloco="let t">
       <!-- Nettoerwerbseinkommen -->
       <div class="tw:flex tw:gap-2">
@@ -90,6 +90,19 @@ import {
         </div> -->
       </div>
 
+      <!-- Unterhaltsbeiträge -->
+      <div class="tw:flex tw:gap-2">
+        {{
+          t(
+            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
+          )
+        }}
+        <!-- Todo: is PersonalValueItem -->
+        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
+          {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
+        </div> -->
+      </div>
+
       <!-- EO -->
       <div class="tw:flex tw:gap-2">
         <div classs="tw:flex flex-column">
@@ -112,6 +125,8 @@ import {
         </div> -->
       </div>
 
+      <!-- todo: Taggelder -->
+
       <!-- Alimente/Renten -->
       <div class="tw:flex tw:gap-2">
         {{
@@ -122,19 +137,6 @@ import {
         <!-- Todo: is PersonalValueItem -->
         <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().alimente | formatChfPositive }}
-        </div> -->
-      </div>
-
-      <!-- Unterhaltsbeiträge -->
-      <div class="tw:flex tw:gap-2">
-        {{
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
-          )
-        }}
-        <!-- Todo: is PersonalValueItem -->
-        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
-          {{ einnahmenSig().unterhaltsbeitraege | formatChfPositive }}
         </div> -->
       </div>
 
@@ -163,6 +165,8 @@ import {
         </div> -->
       </div>
 
+      <!-- Todo: Andere einnahmen ? -->
+
       <!-- Anrechenbares Vermögen -->
       <div class="tw:flex tw:gap-2">
         <div classs="tw:flex flex-column">
@@ -184,21 +188,6 @@ import {
           {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
         </div>
       </div>
-
-      <!-- Todo: is PersonalValueItem  and moves up? -->
-      <!-- Einkommen Partner -->
-      <div class="tw:flex tw:gap-2">
-        {{
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einkommenPartner'
-          )
-        }}
-        <!-- <div class="tw:text-gray-500 flex-grow-1 text-end text-nowrap">
-          {{ einnahmenSig().einkommenPartner | formatChfPositive }}
-        </div> -->
-      </div>
-
-      <!-- Todo: Andere einnahmen ? -->
 
       <!-- Elterliche Leistung -->
       <div class="tw:flex tw:gap-2">
@@ -225,8 +214,7 @@ import {
           {{ einnahmenSig().total | formatChf }}
         </div>
       </div>
-    </ng-container>
-  `,
+    </ng-container> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {

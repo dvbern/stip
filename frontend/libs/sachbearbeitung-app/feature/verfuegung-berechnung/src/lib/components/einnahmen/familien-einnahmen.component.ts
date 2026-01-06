@@ -28,6 +28,17 @@ import {
       </div>
     </div>
 
+    <!-- Einkünfte nach BGSA 1) -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einnahmenBGSA'
+          | transloco
+      }}
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
+        {{ einnahmenSig().einnahmenBGSA | formatChfPositive }}
+      </div>
+    </div>
+
     <!-- Ergänzungsleistungen -->
     <div class="d-flex gap-2">
       {{
@@ -36,6 +47,17 @@ import {
       }}
       <div class="text-muted flex-grow-1 text-end text-nowrap">
         {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
+      </div>
+    </div>
+
+    <!-- Andere Einnahmen -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.andereEinnahmen'
+          | transloco
+      }}
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
+        {{ einnahmenSig().andereEinnahmen | formatChfPositive }}
       </div>
     </div>
 
@@ -50,14 +72,14 @@ import {
       </div>
     </div>
 
-    <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
+    <!-- Abzüglich Unterhaltsbeträge  -->
     <div class="d-flex gap-2">
       {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.unterhaltsbeitraege'
           | transloco
       }}
       <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().renten | formatChfNegative: true }}
+        {{ einnahmenSig().unterhaltsbeitraege | formatChfNegative: true }}
       </div>
     </div>
 
@@ -99,6 +121,17 @@ import {
       </div>
     </div>
 
+    <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
+    <div class="d-flex gap-2">
+      {{
+        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
+          | transloco
+      }}
+      <div class="text-muted flex-grow-1 text-end text-nowrap">
+        {{ einnahmenSig().renten | formatChfNegative: true }}
+      </div>
+    </div>
+
     <!-- todo: mit stammdaten? Einkommensfreibetrag  -->
     <div class="d-flex gap-2">
       <div classs="d-flex flex-column">
@@ -117,6 +150,8 @@ import {
         {{ einnahmenSig().einkommensfreibetrag | formatChfNegative: true }}
       </div>
     </div>
+
+    <!-- todo: Zwischentotal -->
 
     <!-- Anrechenbares Vermögen -->
     <div class="d-flex gap-2">
