@@ -79,6 +79,7 @@ class GesuchDokumentAuthorizerTest {
             gesuchDokumentRepository,
             null,
             null,
+            null,
             null
         );
     }
@@ -194,6 +195,7 @@ class GesuchDokumentAuthorizerTest {
             gesuchDokumentRepository,
             null,
             null,
+            null,
             null
         );
 
@@ -226,6 +228,7 @@ class GesuchDokumentAuthorizerTest {
             gesuchTrancheRepository,
             benutzerService,
             gesuchDokumentRepository,
+            null,
             null,
             null,
             null

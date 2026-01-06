@@ -184,12 +184,18 @@
         }
       }
 
-      <div class="tw:mt-8 tw:flex tw:items-center tw:gap-8 tw:xl:max-w-3xl">
+      <div class="tw:mt-8 tw:flex tw:items-center tw:gap-8 tw:xl:max-w-3xl tw:relative">
+        @if (isAenderungUpdatingSig()) {
+          <div>
+            <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+          </div>
+        }
         <button
           class="btn btn-outline-primary flex-grow-1"
           data-testid="aenderung-reject"
           type="button"
           (click)="changeAenderungState(tranche.id, 'ABGELEHNT', gesuchId)"
+          [disabled]="isAenderungUpdatingSig()"
         >
           {{ 'shared.form.aenderung.action.reject' | transloco }}
         </button>
@@ -197,8 +203,8 @@
           class="btn btn-primary flex-grow-1"
           data-testid="aenderung-accept"
           type="button"
-          [disabled]="hasValidationErrors"
           (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
+          [disabled]="hasValidationErrors || isAenderungUpdatingSig()"
         >
           {{ 'shared.form.aenderung.action.accept' | transloco }}
         </button>
@@ -208,6 +214,7 @@
           type="button"
           [disabled]="hasValidationErrors"
           (click)="changeAenderungState(tranche.id, 'MANUELLE_AENDERUNG', gesuchId)"
+          [disabled]="isAenderungUpdatingSig()"
         >
           {{ 'shared.form.aenderung.action.manuallyChange' | transloco }}
         </button>

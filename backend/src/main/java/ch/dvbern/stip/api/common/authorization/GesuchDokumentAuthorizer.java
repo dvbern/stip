@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -29,9 +30,11 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
@@ -47,6 +50,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     private final GesuchDokumentHistoryRepository gesuchDokumentHistoryRepository;
     private final SozialdienstService sozialdienstService;
     private final DokumentRepository dokumentRepository;
+    private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     public void assertSbCanModifyDokumentOfTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -194,13 +198,10 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    public void canGetGesuchDokumentForTranche(final UUID gesuchTrancheId) {
-        final var currentBenutzer = benutzerService.getCurrentBenutzer();
-        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
-            return;
-        }
-
-        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+    private void canGetGesuchDokumentForTranche(
+        final Benutzer currentBenutzer,
+        final GesuchTranche gesuchTranche
+    ) {
         if (
             AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuchTranche.getGesuch().getAusbildung().getFall(),
@@ -212,5 +213,25 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         }
 
         forbidden();
+    }
+
+    public void canGetGesuchDokumentForTrancheGS(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
+            return;
+        }
+
+        final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
+        canGetGesuchDokumentForTranche(currentBenutzer, gesuchTranche);
+    }
+
+    public void canGetGesuchDokumentForTrancheSB(final UUID gesuchTrancheId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        if (isSbOrFreigabestelleOrJurist(currentBenutzer)) {
+            return;
+        }
+
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        canGetGesuchDokumentForTranche(currentBenutzer, gesuchTranche);
     }
 }
