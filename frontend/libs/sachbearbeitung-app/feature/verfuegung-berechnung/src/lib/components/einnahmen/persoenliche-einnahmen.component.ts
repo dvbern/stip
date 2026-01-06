@@ -19,22 +19,20 @@ import { PositionComponent } from '../position/position.component';
     PositionComponent,
   ],
   template: `
-    <ng-container *transloco="let t">
+    <ng-container
+      *transloco="
+        let t;
+        prefix: 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen'
+      "
+    >
       <!-- Nettoerwerbseinkommen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen'
-          )
-        "
+        [titleSig]="t('nettoerwerbseinkommen')"
         [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.nettoerwerbseinkommen.info',
-            {
-              freibetragErwerbseinkommen:
-                stammdatenSig().freibetragErwerbseinkommen | formatChf,
-            }
-          )
+          t('nettoerwerbseinkommen.info', {
+            freibetragErwerbseinkommen:
+              stammdatenSig().freibetragErwerbseinkommen | formatChf,
+          })
         "
         [personValueItemsSig]="einnahmenSig().nettoerwerbseinkommen"
         [amountSig]="
@@ -45,11 +43,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- BGSA -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.einnahmenBGSA'
-          )
-        "
+        [titleSig]="t('einnahmenBGSA')"
         [personValueItemsSig]="einnahmenSig().einnahmenBGSA"
         [amountSig]="einnahmenSig().einnahmenBGSATotal | formatChfPositive"
       >
@@ -60,11 +54,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Kinder- und Ausbildungszulagen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.kinderUndAusbildungszulagen'
-          )
-        "
+        [titleSig]="t('kinderUndAusbildungszulagen')"
         [personValueItemsSig]="einnahmenSig().kinderAusbildungszulagen"
         [amountSig]="
           einnahmenSig().kinderAusbildungszulagenTotal | formatChfPositive
@@ -74,11 +64,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Unterhaltsbeiträge -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.unterhaltsbeitraege'
-          )
-        "
+        [titleSig]="t('unterhaltsbeitraege')"
         [personValueItemsSig]="einnahmenSig().unterhaltsbeitraege"
         [amountSig]="
           einnahmenSig().unterhaltsbeitraegeTotal | formatChfPositive
@@ -88,16 +74,8 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- EO -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.eoLeistungen.info'
-          )
-        "
+        [titleSig]="t('eoLeistungen')"
+        [infoSig]="t('eoLeistungen.info')"
         [personValueItemsSig]="einnahmenSig().eoLeistungen"
         [amountSig]="einnahmenSig().eoLeistungenTotal | formatChfPositive"
       >
@@ -105,11 +83,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Taggelder -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.taggelderAHVIV'
-          )
-        "
+        [titleSig]="t('taggelderAHVIV')"
         [personValueItemsSig]="einnahmenSig().taggelderAHVIV"
         [amountSig]="einnahmenSig().taggelderAHVIVTotal | formatChfPositive"
       >
@@ -117,11 +91,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Alimente/Renten -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.renten'
-          )
-        "
+        [titleSig]="t('renten')"
         [personValueItemsSig]="einnahmenSig().renten"
         [amountSig]="einnahmenSig().rentenTotal | formatChfPositive"
       >
@@ -129,11 +99,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Ergänzungsleistungen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.ergaenzungsleistungen'
-          )
-        "
+        [titleSig]="t('ergaenzungsleistungen')"
         [personValueItemsSig]="einnahmenSig().ergaenzungsleistungen"
         [amountSig]="
           einnahmenSig().ergaenzungsleistungenTotal | formatChfPositive
@@ -143,11 +109,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Beiträge an Gemeindeinstitutionen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.beitraegeGemeindeInstitutionen'
-          )
-        "
+        [titleSig]="t('beitraegeGemeindeInstitutionen')"
         [amountSig]="
           einnahmenSig().beitraegeGemeindeInstitutionen | formatChfPositive
         "
@@ -156,16 +118,8 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Andere Einnahmen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.andereEinnahmen'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.andereEinnahmen.info'
-          )
-        "
+        [titleSig]="t('andereEinnahmen')"
+        [infoSig]="t('andereEinnahmen.info')"
         [personValueItemsSig]="einnahmenSig().andereEinnahmen"
         [amountSig]="einnahmenSig().andereEinnahmenTotal | formatChfPositive"
       >
@@ -173,28 +127,15 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Anrechenbares Vermögen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.anrechenbaresVermoegen.info',
-            einnahmenSig()
-          )
-        "
+        [titleSig]="t('anrechenbaresVermoegen')"
+        [infoSig]="t('anrechenbaresVermoegen.info', einnahmenSig())"
         [amountSig]="einnahmenSig().anrechenbaresVermoegen | formatChfPositive"
       >
       </dv-position>
 
       <!-- Elterliche Leistung -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.elterlicheLeistung'
-          )
-        "
+        [titleSig]="t('elterlicheLeistung')"
         [amountSig]="einnahmenSig().elterlicheLeistung | formatChfPositive"
       >
       </dv-position>
@@ -202,11 +143,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Total -->
       <div class="tw:flex mt-3 tw:gap-2">
         <div class="h4">
-          {{
-            t(
-              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total'
-            )
-          }}
+          {{ t('total') }}
         </div>
         <div class="h4 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().total | formatChf }}

@@ -20,69 +20,50 @@ import { PositionComponent } from '../position/position.component';
     PositionComponent,
   ],
   template: `
-    <ng-container *transloco="let t">
+    <ng-container
+      *transloco="
+        let t;
+        prefix: 'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen'
+      "
+    >
       <!-- Total Einkünfte -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
-          )
-        "
+        [titleSig]="t('totalEinkuenfte')"
         [amountSig]="einnahmenSig().totalEinkuenfte | formatChfPositive"
       >
       </dv-position>
 
       <!-- Einkünfte nach BGSA 1) -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einnahmenBGSA'
-          )
-        "
+        [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmenSig().einnahmenBGSA | formatChfPositive"
       >
       </dv-position>
 
       <!-- Ergänzungsleistungen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-          )
-        "
+        [titleSig]="t('ergaenzungsleistungen')"
         [amountSig]="einnahmenSig().ergaenzungsleistungen | formatChfPositive"
       >
       </dv-position>
 
       <!-- Andere Einnahmen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.andereEinnahmen'
-          )
-        "
+        [titleSig]="t('andereEinnahmen')"
         [amountSig]="einnahmenSig().andereEinnahmen | formatChfPositive"
       >
       </dv-position>
 
       <!-- Abzüglich Mietwert -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
-          )
-        "
+        [titleSig]="t('mietwert')"
         [amountSig]="einnahmenSig().eigenmietwert | formatChfNegative: true"
       >
       </dv-position>
 
       <!-- Abzüglich Unterhaltsbeträge  -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.unterhaltsbeitraege'
-          )
-        "
+        [titleSig]="t('unterhaltsbeitraege')"
         [amountSig]="
           einnahmenSig().unterhaltsbeitraege | formatChfNegative: true
         "
@@ -91,60 +72,31 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info',
-            einnahmenSig()
-          )
-        "
+        [titleSig]="t('beitraegeSaule3a')"
+        [infoSig]="t('beitraegeSaule3a.info', einnahmenSig())"
         [amountSig]="einnahmenSig().sauele3 | formatChfNegative: true"
       >
       </dv-position>
 
       <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
-          )
-        "
+        [titleSig]="t('beitraegeSaule2')"
+        [infoSig]="t('beitraegeSaule2.info')"
         [amountSig]="einnahmenSig().sauele2 | formatChfNegative: true"
       >
       </dv-position>
 
       <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
-          )
-        "
+        [titleSig]="t('kinderalimente')"
         [amountSig]="einnahmenSig().renten | formatChfNegative: true"
       >
       </dv-position>
 
       <!-- todo: mit stammdaten? Einkommensfreibetrag  -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info'
-          )
-        "
+        [titleSig]="t('einkommensfreibeitrag')"
+        [infoSig]="t('einkommensfreibeitrag.info')"
         [amountSig]="
           einnahmenSig().einkommensfreibetrag | formatChfNegative: true
         "
@@ -155,17 +107,8 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Anrechenbares Vermögen -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info',
-            einnahmenSig()
-          )
-        "
+        [titleSig]="t('anrechenbaresVermoegen')"
+        [infoSig]="t('anrechenbaresVermoegen.info', einnahmenSig())"
         [amountSig]="einnahmenSig().anrechenbaresVermoegen | formatChfPositive"
       >
       </dv-position>
@@ -173,11 +116,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Total -->
       <div class="tw:flex mt-3 tw:gap-2">
         <div class="h4 m-0">
-          {{
-            t(
-              'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
-            )
-          }}
+          {{ t('total') }}
         </div>
         <div class="h4 flex-grow-1 text-end text-nowrap">
           {{ einnahmenSig().total | formatChf }}

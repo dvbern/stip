@@ -18,46 +18,31 @@ import { PositionComponent } from '../position/position.component';
     PositionComponent,
   ],
   template: `
-    <ng-container *transloco="let t">
+    <ng-container
+      *transloco="
+        let t;
+        prefix: 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten'
+      "
+    >
       <!-- Ausbildungskosten der/des Auszubildenden -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.ausbildungskosten'
-          )
-        "
+        [titleSig]="t('ausbildungskosten')"
         [amountSig]="kostenSig().ausbildungskosten | formatChfPositive"
       >
       </dv-position>
 
       <!-- Fahrkosten der/des Auszubildenden -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkosten'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurElternWohnend.info'
-          )
-        "
+        [titleSig]="t('fahrkosten')"
+        [infoSig]="t('nurElternWohnend.info')"
         [amountSig]="kostenSig().fahrkosten | formatChfPositive"
       >
       </dv-position>
 
       <!-- Mehrkosten für auswärtige Verpflegung -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.mehrkostenVerpflegung'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurElternWohnend.info'
-          )
-        "
+        [titleSig]="t('mehrkostenVerpflegung')"
+        [infoSig]="t('nurElternWohnend.info')"
         [amountSig]="kostenSig().verpflegungskosten | formatChfPositive"
       >
       </dv-position>
@@ -65,16 +50,14 @@ import { PositionComponent } from '../position/position.component';
       <!-- Grundbedarf für 0 Personenhaushalt -->
       <dv-position
         [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.grundbedarfPersonen',
-            { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          )
+          t('grundbedarfPersonen', {
+            anzahl: kostenSig().anzahlPersonenImHaushalt,
+          })
         "
         [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info',
-            { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          )
+          t('nurEigenerHaushalt.info', {
+            anzahl: kostenSig().anzahlPersonenImHaushalt,
+          })
         "
         [amountSig]="kostenSig().grundbedarf | formatChfPositive"
       >
@@ -83,16 +66,14 @@ import { PositionComponent } from '../position/position.component';
       <!-- Wohnkosten für anz Personenhaushalt -->
       <dv-position
         [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.wohnkostenPersonen',
-            { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          )
+          t('wohnkostenPersonen', {
+            anzahl: kostenSig().anzahlPersonenImHaushalt,
+          })
         "
         [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info',
-            { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          )
+          t('nurEigenerHaushalt.info', {
+            anzahl: kostenSig().anzahlPersonenImHaushalt,
+          })
         "
         [amountSig]="kostenSig().wohnkosten | formatChfPositive"
       >
@@ -101,16 +82,14 @@ import { PositionComponent } from '../position/position.component';
       <!-- Medizinische Grundversorgung für anz Personenhaushalt -->
       <dv-position
         [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.medizinischeGrundversorgungPersonen',
-            { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          )
+          t('medizinischeGrundversorgungPersonen', {
+            anzahl: kostenSig().anzahlPersonenImHaushalt,
+          })
         "
         [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurEigenerHaushalt.info',
-            { anzahl: kostenSig().anzahlPersonenImHaushalt }
-          )
+          t('nurEigenerHaushalt.info', {
+            anzahl: kostenSig().anzahlPersonenImHaushalt,
+          })
         "
         [personValueItemsSig]="kostenSig().medizinischeGrundversorgung"
         [amountSig]="
@@ -121,92 +100,52 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Fahrkosten Ehepartnerin/Ehepartner -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurErwerbstaetig.info'
-          )
-        "
+        [titleSig]="t('fahrkostenPartner')"
+        [infoSig]="t('nurErwerbstaetig.info')"
         [amountSig]="kostenSig().fahrkostenPartner | formatChfPositive"
       >
       </dv-position>
 
       <!-- Verpflegung Ehepartnerin/Ehepartner -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.nurErwerbstaetig.info'
-          )
-        "
+        [titleSig]="t('verpflegungPartner')"
+        [infoSig]="t('nurErwerbstaetig.info')"
         [amountSig]="kostenSig().verpflegungPartner | formatChfPositive"
       >
       </dv-position>
 
       <!-- Betreuungskosten für Kinder -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder'
-          )
-        "
+        [titleSig]="t('betreuungskostenKinder')"
         [amountSig]="kostenSig().betreuungskostenKinder | formatChfPositive"
       >
       </dv-position>
 
       <!-- Kantons- und Gemeindesteuern -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuern'
-          )
-        "
+        [titleSig]="t('kantonsGemeindesteuern')"
         [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
       >
       </dv-position>
 
       <!-- todo: still here? Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.kantonsGemeindesteuernPartner'
-          )
-        "
+        [titleSig]="t('kantonsGemeindesteuernPartner')"
         [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
       >
       </dv-position>
 
       <!-- Bundessteuern -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern'
-          )
-        "
+        [titleSig]="t('bundessteuern')"
         [amountSig]="kostenSig().bundessteuern | formatChfPositive"
       >
       </dv-position>
 
       <!-- Ungedeckter Anteil Lebenshaltungskosten  -->
       <dv-position
-        [titleSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten'
-          )
-        "
-        [infoSig]="
-          t(
-            'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.anteilLebenshaltungskosten.info'
-          )
-        "
+        [titleSig]="t('anteilLebenshaltungskosten')"
+        [infoSig]="t('anteilLebenshaltungskosten.info')"
         [amountSig]="kostenSig().anteilLebenshaltungskosten | formatChfPositive"
       >
       </dv-position>
@@ -214,11 +153,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Total -->
       <div class="tw:flex mt-3 tw:gap-2">
         <div class="h4">
-          {{
-            t(
-              'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.total'
-            )
-          }}
+          {{ t('total') }}
         </div>
         <div class="h4 flex-grow-1 text-end text-nowrap">
           {{ kostenSig().total | formatChf }}
