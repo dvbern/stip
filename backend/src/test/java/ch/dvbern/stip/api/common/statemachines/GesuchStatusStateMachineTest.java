@@ -33,7 +33,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
@@ -65,7 +64,6 @@ class GesuchStatusStateMachineTest {
     private FehlendeDokumenteHandler fehlendeDokumenteHandlerSpy;
     private VerfuegungDruckbereitHandler verfuegungDruckbereitHandlerSpy;
     private VerfuegungVersendetHandler verfuegungVersendetHandlerSpy;
-    private NegativeVerfuegungHandler negativeVerfuegungHandlerSpy;
     private AenderungZurueckweisenHandler aenderungZurueckweisenHandlerSpy;
     private AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandlerSpy;
     private AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandlerMock;
@@ -87,7 +85,6 @@ class GesuchStatusStateMachineTest {
         fehlendeDokumenteHandlerSpy = Mockito.mock(FehlendeDokumenteHandler.class);
         verfuegungDruckbereitHandlerSpy = Mockito.mock(VerfuegungDruckbereitHandler.class);
         verfuegungVersendetHandlerSpy = Mockito.mock(VerfuegungVersendetHandler.class);
-        negativeVerfuegungHandlerSpy = Mockito.mock(NegativeVerfuegungHandler.class);
         aenderungZurueckweisenHandlerSpy = Mockito.mock(AenderungZurueckweisenHandler.class);
         aenderungFehlendeDokumenteNichtEingereichtHandlerSpy =
             Mockito.mock(AenderungFehlendeDokumenteNichtEingereichtHandler.class);
@@ -108,7 +105,6 @@ class GesuchStatusStateMachineTest {
             fehlendeDokumenteHandlerSpy,
             verfuegungDruckbereitHandlerSpy,
             verfuegungVersendetHandlerSpy,
-            negativeVerfuegungHandlerSpy,
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
             stipendienAnspruchHandlerSpy,
@@ -157,7 +153,6 @@ class GesuchStatusStateMachineTest {
             fehlendeDokumenteHandlerSpy,
             verfuegungDruckbereitHandlerSpy,
             verfuegungVersendetHandlerSpy,
-            negativeVerfuegungHandlerSpy,
             aenderungZurueckweisenHandlerSpy,
             aenderungFehlendeDokumenteNichtEingereichtHandlerSpy,
             stipendienAnspruchHandlerSpy
