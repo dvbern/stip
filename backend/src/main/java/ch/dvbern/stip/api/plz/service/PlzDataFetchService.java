@@ -145,7 +145,7 @@ public class PlzDataFetchService {
         ) {
             csvReader.readAll()
                 .forEach(
-                    plzLine -> plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[5]))
+                    plzLine -> plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[6]))
                 );
         }
 
@@ -158,6 +158,14 @@ public class PlzDataFetchService {
                     .setKantonskuerzel(plzLineElement.get(2))
             )
         );
+
+        plzList.stream().filter(plz -> plz.getPlz().equals("3005")).forEach(plz -> {
+            if (!plz.getOrt().equals("Bern") || !plz.getKantonskuerzel().equalsIgnoreCase("be")) {
+                throw new IllegalStateException(
+                    "Importing of PLZ data failed to find known '3005 Bern BE', check CSV manually if the format changed"
+                );
+            }
+        });
 
         storePlzData(plzList);
     }
