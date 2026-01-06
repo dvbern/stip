@@ -18,7 +18,7 @@ import {
   success,
 } from '@dv/shared/util/remote-data';
 
-import { SharedFeatureDarlehenFeatureComponent } from './shared-feature-darlehen-feature/shared-feature-darlehen-feature.component';
+import { SharedFeatureDarlehenFeatureComponent } from './shared-feature-darlehen/shared-feature-darlehen.component';
 
 const darlehenResolver: ResolveFn<Darlehen> = (
   route: ActivatedRouteSnapshot,

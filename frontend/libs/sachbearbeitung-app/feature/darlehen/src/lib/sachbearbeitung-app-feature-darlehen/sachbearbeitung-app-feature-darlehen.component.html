@@ -13,7 +13,9 @@
         <h1 class="tw:!mb-8">
           {{ 'shared.darlehen.title' | transloco }}
         </h1>
-        <dv-shared-feature-darlehen (formIsUnsaved)="hasUnsavedChanges = $event"></dv-shared-feature-darlehen>
+        <dv-shared-pattern-darlehen-form
+          (formIsUnsavedSig)="hasUnsavedChanges = $event"
+        ></dv-shared-pattern-darlehen-form>
       </div>
     </main>
   </mat-sidenav-content>

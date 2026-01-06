@@ -6,8 +6,9 @@ import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { SharedFeatureDarlehenComponent } from '@dv/shared/feature/darlehen';
+import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUtilFormService } from '@dv/shared/util/form';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-darlehen',
@@ -16,7 +17,7 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
-    SharedFeatureDarlehenComponent,
+    SharedPatternDarlehenFormComponent,
     TranslocoPipe,
   ],
   templateUrl: './sachbearbeitung-app-feature-darlehen.component.html',
@@ -25,6 +26,11 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 })
 export class SachbearbeitungAppFeatureDarlehenComponent {
   private store = inject(Store);
+  private formUtils = inject(SharedUtilFormService);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   hasUnsavedChanges = false;
+
+  constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
+  }
 }
