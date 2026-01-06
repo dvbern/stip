@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungPdfService verfuegungPdfService;
+    private final VerfuegungService verfuegungService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -47,7 +49,9 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             ? stipendien.getBerechnungReduziert()
             : stipendien.getBerechnung();
 
-        if (berechnungsresultat > 0 || !gesuch.isFirstVerfuegung()) {
+        final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
+
+        if ((berechnungsresultat > 0 || !gesuch.isFirstVerfuegung()) && !latestVerfuegung.isNegativeVerfuegung()) {
             buchhaltungService.createStipendiumBuchhaltungEntry(
                 gesuch,
                 berechnungsresultat

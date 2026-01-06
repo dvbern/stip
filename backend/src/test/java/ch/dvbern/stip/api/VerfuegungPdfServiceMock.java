@@ -72,7 +72,4 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
         versendeteVerfuegung.setVerfuegung(currentVerfuegung);
         currentVerfuegung.getDokumente().add(versendeteVerfuegung);
     }
-
-    @Override
-    public void createPdfForNegtativeVerfuegung(Verfuegung verfuegung) {}
 }
