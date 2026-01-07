@@ -21,7 +21,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +38,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
@@ -88,30 +91,37 @@ public class VerfuegungPdfService {
     private PdfFont pdfFontBold = null;
     private Link ausbildungsbeitraegeUri = null;
 
-    private ByteArrayOutputStream createNegativeVerfuegungPdf(final Verfuegung verfuegung) {
-        final VerfuegungPdfSection negativeVerfuegungSection = this::negativeVerfuegung;
-        return this.createPdf(verfuegung, negativeVerfuegungSection);
+    private ByteArrayOutputStream createNegativeVerfuegungPdf(
+        final Verfuegung verfuegung,
+        final List<Anhangs> anhangs
+    ) {
+        final VerfuegungPdfSection verfuegungPdfSection =
+            this::negativeVerfuegung;
+        return this.createPdf(verfuegung, verfuegungPdfSection, anhangs);
     }
 
     public ByteArrayOutputStream createVerfuegungOhneAnspruchPdf(
-        final Verfuegung verfuegung
+        final Verfuegung verfuegung,
+        final List<Anhangs> anhangs
     ) {
-        final VerfuegungPdfSection negativeVerfuegungSection =
+        final VerfuegungPdfSection verfuegungPdfSection =
             this::verfuegungOhneAnspruch;
-        return this.createPdf(verfuegung, negativeVerfuegungSection);
+        return this.createPdf(verfuegung, verfuegungPdfSection, anhangs);
     }
 
     private ByteArrayOutputStream createVerfuegungMitAnspruchPdf(
-        final Verfuegung verfuegung
+        final Verfuegung verfuegung,
+        final List<Anhangs> anhangs
     ) {
-        final VerfuegungPdfSection negativeVerfuegungSection =
+        final VerfuegungPdfSection verfuegungPdfSection =
             this::verfuegungMitAnspruch;
-        return this.createPdf(verfuegung, negativeVerfuegungSection);
+        return this.createPdf(verfuegung, verfuegungPdfSection, anhangs);
     }
 
     private ByteArrayOutputStream createPdf(
         final Verfuegung verfuegung,
-        final VerfuegungPdfSection section
+        final VerfuegungPdfSection section,
+        final List<Anhangs> anhangs
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -142,7 +152,8 @@ public class VerfuegungPdfService {
                     section,
                     logo,
                     leftMargin,
-                    translator
+                    translator,
+                    anhangs
                 );
 
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
@@ -150,7 +161,7 @@ public class VerfuegungPdfService {
                 PdfUtils.header(gesuch, document, leftMargin, translator, true, pdfFont, ausbildungsbeitraegeUri);
             }
 
-            addVerfuegung(verfuegung, document, section, logo, leftMargin, translator);
+            addVerfuegung(verfuegung, document, section, logo, leftMargin, translator, anhangs);
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -164,7 +175,8 @@ public class VerfuegungPdfService {
         final VerfuegungPdfSection section,
         final Image logo,
         final float leftMargin,
-        final TL translator
+        final TL translator,
+        final List<Anhangs> anhangs
     ) throws IOException {
         final var gesuch = verfuegung.getGesuch();
         document.add(logo);
@@ -172,7 +184,8 @@ public class VerfuegungPdfService {
 
         // Add the main content and footer sections.
         section.render(verfuegung, document, leftMargin, translator);
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, true);
+        anhangs.addFirst(Anhangs.RECHTSMITTELBELEHRUNG);
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, true);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
         PdfUtils.makePageNumberEven(document);
     }
@@ -733,13 +746,17 @@ public class VerfuegungPdfService {
 
         ByteArrayOutputStream verfuegungsBrief;
         if (verfuegung.isNegativeVerfuegung()) {
-            verfuegungsBrief = createNegativeVerfuegungPdf(verfuegung);
+            verfuegungsBrief = createNegativeVerfuegungPdf(verfuegung, new ArrayList<>());
         } else if (berechnungsresultat == 0 && gesuch.isFirstVerfuegung()) {
             verfuegungsBrief = createVerfuegungOhneAnspruchPdf(
-                verfuegung
+                verfuegung,
+                new ArrayList<>()
             );
         } else {
-            verfuegungsBrief = createVerfuegungMitAnspruchPdf(verfuegung);
+            verfuegungsBrief = createVerfuegungMitAnspruchPdf(
+                verfuegung,
+                new ArrayList<>(List.of(Anhangs.BERECHNUNGSBLAETTER))
+            );
         }
 
         verfuegungService.createAndStoreVerfuegungDokument(

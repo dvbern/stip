@@ -1221,7 +1221,8 @@ class GesuchServiceTest {
         verfuegung.setTimestampErstellt(LocalDateTime.now());
         verfuegung.setGesuch(gesuch);
         gesuch.getVerfuegungs().add(verfuegung);
-        when(verfuegungPdfService.createVerfuegungOhneAnspruchPdf(any())).thenReturn(new ByteArrayOutputStream());
+        when(verfuegungPdfService.createVerfuegungOhneAnspruchPdf(any(), any()))
+            .thenReturn(new ByteArrayOutputStream());
         when(stipDecisionTextRepository.requireById(any())).thenReturn(new StipDecisionText());
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToVerfuegt(gesuch.getId()));

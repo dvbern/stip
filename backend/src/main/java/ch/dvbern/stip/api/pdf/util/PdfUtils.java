@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.pdf.type.Anhangs;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -401,6 +402,7 @@ public class PdfUtils {
         float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
+        final List<Anhangs> anhangs,
         final boolean addKopieAn
     ) {
         final float[] columnWidths = { 50, 50 };
@@ -437,15 +439,17 @@ public class PdfUtils {
         signatureTable.setMarginBottom(SPACING_MEDIUM);
         document.add(signatureTable);
 
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate(RECHTSMITTELBELEHRUNG_TITLE_KEY)
-            )
-        );
+        anhangs.forEach(anhang -> {
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    "- ",
+                    translator.translate(anhang.getTranslationKey())
+                )
+            );
+        });
 
         if (addKopieAn) {
             addCopieAnParagraph(gesuch, translator, leftMargin, document, pdfFont);
