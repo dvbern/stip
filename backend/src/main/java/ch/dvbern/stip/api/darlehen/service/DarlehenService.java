@@ -172,7 +172,8 @@ public class DarlehenService {
         }
 
         darlehenDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.stream()
+        final var results = baseQuery.distinct()
+            .stream()
             .map(darlehenMapper::toDashboardDto)
             .toList();
 

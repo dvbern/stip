@@ -28,11 +28,9 @@ import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
-import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DarlehenDashboardQueryBuilder {
     private static final QDarlehen darlehen = QDarlehen.darlehen;
-    private static final QGesuch gesuch = QGesuch.gesuch;
     private static final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
     private static final QAusbildung ausbildung = QAusbildung.ausbildung;
@@ -59,32 +56,14 @@ public class DarlehenDashboardQueryBuilder {
             case MEINE_BEARBEITBAR -> darlehenRepository.getMeineBearbeitbarQuery(benutzerId);
         };
 
-        final var joinSubselect = JPAExpressions.select(tranche.id)
-            .from(tranche)
-            .where(
-                tranche.gesuch.id.eq(
-                    JPAExpressions.select(gesuch.id)
-                        .where(
-                            gesuch.gesuchsperiode.gesuchsperiodeStopp.eq(
-                                JPAExpressions.select(gesuch.gesuchsperiode.gesuchsperiodeStopp.max())
-                                    .from(gesuch)
-                            )
-                        )
-                )
-                    .and(
-                        tranche.gueltigkeit.gueltigBis.eq(
-                            JPAExpressions.select(tranche.gueltigkeit.gueltigBis.max())
-                                .from(tranche)
-                        )
-                    )
-            );
+        // TODO KSTIP-2977: Currently the Darlehen list will probably "append" the oldest gesuch in a Fall
+        // this task KSTIP-2977 will add a gesuch FK and thus a complex query is no longer necessary
 
         query
             .join(ausbildung)
             .on(ausbildung.fall.id.eq(darlehen.fall.id))
             .join(tranche)
-            .on(tranche.gesuch.ausbildung.id.eq(ausbildung.id))
-            .where(tranche.id.in(joinSubselect));
+            .on(tranche.gesuch.ausbildung.id.eq(ausbildung.id));
 
         return query;
     }
