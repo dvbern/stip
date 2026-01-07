@@ -14,6 +14,7 @@
           {{ 'shared.darlehen.title' | transloco }}
         </h1>
         <dv-shared-pattern-darlehen-form
+          (darlehenUpdatedSig)="reloadDarlehenList()"
           (formIsUnsavedSig)="hasUnsavedChanges = $event"
         ></dv-shared-pattern-darlehen-form>
       </div>

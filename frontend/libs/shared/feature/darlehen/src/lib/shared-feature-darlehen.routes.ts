@@ -1,63 +1,14 @@
-import { inject } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  RedirectCommand,
-  ResolveFn,
-  Route,
-  Router,
-} from '@angular/router';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { Route } from '@angular/router';
 
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { Darlehen, DarlehenService } from '@dv/shared/model/gesuch';
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
-import {
-  failure,
-  isFailure,
-  isSuccess,
-  success,
-} from '@dv/shared/util/remote-data';
 
 import { SharedFeatureDarlehenFeatureComponent } from './shared-feature-darlehen/shared-feature-darlehen.component';
-
-const darlehenResolver: ResolveFn<Darlehen> = (
-  route: ActivatedRouteSnapshot,
-) => {
-  const darlehenStore = inject(DarlehenStore);
-  const darlehenService = inject(DarlehenService);
-  const darlehenId = route.paramMap.get('darlehenId');
-  const router = inject(Router);
-  const redirectToRoot = new RedirectCommand(router.parseUrl('/'));
-
-  if (!darlehenId) {
-    return redirectToRoot;
-  }
-
-  return darlehenService.getDarlehenGs$({ darlehenId }).pipe(
-    map((data) => success(data)),
-    catchError((err) => of(failure(err))),
-    switchMap((rd) => {
-      if (isFailure(rd)) {
-        darlehenStore.setDarlehen(rd);
-        return of(redirectToRoot);
-      }
-
-      if (isSuccess(rd) && rd.data) {
-        darlehenStore.setDarlehen(rd);
-        return of(rd.data);
-      }
-
-      return of(redirectToRoot);
-    }),
-  );
-};
 
 export const sharedFeatureDarlehenFeatureRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
     path: ':darlehenId',
     pathMatch: 'prefix',
     component: SharedFeatureDarlehenFeatureComponent,
-    resolve: { darlehen: darlehenResolver },
     title: 'shared.darlehen.title',
     data: { shouldReuseRoute: false },
   }),

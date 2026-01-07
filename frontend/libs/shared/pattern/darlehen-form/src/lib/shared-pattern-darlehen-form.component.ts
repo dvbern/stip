@@ -235,6 +235,7 @@ export class SharedPatternDarlehenFormComponent {
       observeUnsavedChanges(this.formSb, toObservable(this.sbFormSavedSig)),
     ),
   );
+  darlehenUpdatedSig = output<void>();
   darlehenDeletedSig = output<void>();
 
   constructor() {
@@ -409,36 +410,18 @@ export class SharedPatternDarlehenFormComponent {
     SharedUiKommentarDialogComponent.open(this.dialog, {
       entityId: darlehen.id,
       titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
-      messageKey: this.formSb.valid
-        ? 'shared.form.darlehen.zurueckweisen.dialog.message'
-        : 'shared.form.darlehen.zurueckweisen.dialog.message-no-changes',
+      messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
       placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',
       confirmKey: 'shared.form.darlehen.zurueckweisen',
     })
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          if (this.formSb.valid) {
-            // Form has unsaved changes, update then zurückweisen
-            const updatedDarlehen = this.buildUpdatedSbFrom();
-            this.darlehenStore.darlehenUpdateAndZurueckweisenSb$({
-              data: {
-                darlehenId: darlehen.id,
-                darlehenUpdateSb: updatedDarlehen,
-              },
-              kommentar: { text: result.kommentar },
-              onSuccess: () => {
-                this.sbFormSavedSig.set(true);
-                this.formSb.markAsPristine();
-              },
-            });
-          } else {
-            // Form is clean, just zurückweisen
-            this.darlehenStore.darlehenZurueckweisen$({
-              darlehenId: darlehen.id,
-              kommentar: { text: result.kommentar },
-            });
-          }
+          this.formSb.reset();
+          this.darlehenStore.darlehenZurueckweisen$({
+            darlehenId: darlehen.id,
+            kommentar: { text: result.kommentar },
+          });
         }
       });
   }
@@ -471,40 +454,7 @@ export class SharedPatternDarlehenFormComponent {
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);
-              this.formSb.markAsPristine();
-            },
-          });
-        }
-      });
-  }
-
-  darlehenUpdateAndAblehnen(): void {
-    this.formSb.markAllAsTouched();
-    this.formUtils.focusFirstInvalid(this.elementRef);
-    const darlehen = this.darlehenSig();
-
-    if (this.formSb.invalid || !darlehen) {
-      return;
-    }
-
-    const updatedDarlehen = this.buildUpdatedSbFrom();
-
-    SharedUiConfirmDialogComponent.open(this.dialog, {
-      title: 'shared.form.darlehen.ablehnen.dialog.title',
-      message: 'shared.form.darlehen.ablehnen.dialog.message',
-      cancelText: 'shared.cancel',
-      confirmText: 'shared.form.darlehen.ablehnen',
-    })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.darlehenStore.darlehenUpdateAndAblehnenSb$({
-            data: {
-              darlehenId: darlehen.id,
-              darlehenUpdateSb: updatedDarlehen,
-            },
-            onSuccess: () => {
-              this.sbFormSavedSig.set(true);
+              this.darlehenUpdatedSig.emit();
               this.formSb.markAsPristine();
             },
           });

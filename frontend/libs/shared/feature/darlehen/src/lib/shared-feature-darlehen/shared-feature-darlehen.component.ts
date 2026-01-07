@@ -64,6 +64,18 @@ export class SharedFeatureDarlehenFeatureComponent {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
       }
     });
+
+    effect(() => {
+      const darlehenId = this.darlehenIdSig();
+      if (darlehenId) {
+        this.darlehenStore.getDarlehenGs$({
+          darlehenId,
+          onFailure: () => {
+            this.redirectToHome();
+          },
+        });
+      }
+    });
   }
 
   redirectToHome() {
