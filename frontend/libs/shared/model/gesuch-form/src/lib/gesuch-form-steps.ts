@@ -1,5 +1,3 @@
-import { differenceInYears } from 'date-fns';
-
 import { AppType } from '@dv/shared/model/config';
 import {
   DokumentTyp,
@@ -133,13 +131,6 @@ export const PROTOKOLL: GesuchFormStep = {
   iconSymbolName: 'history',
 } satisfies GesuchFormStep;
 
-export const DARLEHEN: GesuchFormStep = {
-  route: 'darlehen',
-  translationKey: 'shared.darlehen.title',
-  titleTranslationKey: 'shared.darlehen.title',
-  iconSymbolName: 'account_balance',
-} satisfies GesuchFormStep;
-
 const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
   FAMILIE: 'people',
   MUTTER: 'woman',
@@ -211,7 +202,6 @@ export const BaseFormSteps = {
   GESCHWISTER,
   DOKUMENTE,
   AUSZAHLUNG,
-  DARLEHEN,
 };
 export type BaseStepKeys = keyof typeof BaseFormSteps;
 
@@ -242,7 +232,6 @@ export const FormPropsToStepsMap: Record<
   kinds: KINDER,
   einnahmenKosten: EINNAHMEN_KOSTEN,
   einnahmenKostenPartner: EINNAHMEN_KOSTEN_PARTNER,
-  darlehen: DARLEHEN,
   dokuments: DOKUMENTE,
   abschluss: ABSCHLUSS,
 };
@@ -268,7 +257,6 @@ export const FormRoutesToPropsMap: Record<
   [AUSZAHLUNG.route]: 'auszahlung',
   [EINNAHMEN_KOSTEN.route]: 'einnahmenKosten',
   [EINNAHMEN_KOSTEN_PARTNER.route]: 'einnahmenKostenPartner',
-  [DARLEHEN.route]: 'darlehen',
   [DOKUMENTE.route]: 'dokuments',
 };
 
@@ -305,14 +293,6 @@ export const isStepDisabled = (
           (vaterUnbekanntVerstorben === 'VERSTORBEN' ||
             vaterUnbekanntVerstorben === 'UNBEKANNT'))
       );
-    }
-    case DARLEHEN: {
-      if (!formular?.personInAusbildung?.geburtsdatum) return true;
-
-      const geburtsdatum = new Date(formular?.personInAusbildung?.geburtsdatum);
-      const istErwachsen = differenceInYears(new Date(), geburtsdatum) >= 18;
-
-      return !istErwachsen;
     }
     default:
       return false;

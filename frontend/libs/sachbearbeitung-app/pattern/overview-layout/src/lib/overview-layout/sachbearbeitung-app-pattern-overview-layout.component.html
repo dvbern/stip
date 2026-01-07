@@ -16,6 +16,16 @@
           <i class="material-symbols-rounded text-white me-2">list</i>
           <span>{{ 'sachbearbeitung-app.header.antraege' | transloco }}</span>
         </a>
+        <!-- Darlehen -->
+        <a
+          routerLink="/darlehen-dashboard"
+          routerLinkActive="active"
+          class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+          data-testid="gesuch-step-nav-darlehen"
+        >
+          <i class="material-symbols-rounded text-white me-2">payments</i>
+          <span>{{ 'sachbearbeitung-app.header.darlehen' | transloco }}</span>
+        </a>
         <!-- Massendruck -->
         <a
           routerLink="/massendruck"

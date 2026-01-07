@@ -9,44 +9,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DarlehenStatus } from './darlehenStatus';
+import { DarlehenGrund } from './darlehenGrund';
 
 export interface Darlehen { 
-    /**
-     * Required wenn volljährig, sonst nicht moeglich!
-     */
-    willDarlehen: boolean;
-    /**
-     * Required wenn willDarlehen = true
-     */
-    betragDarlehen?: number;
-    /**
-     * Required wenn willDarlehen = true
-     */
-    betragBezogenKanton?: number;
-    /**
-     * Required wenn willDarlehen = true
-     */
+    id: string;
+    fallId?: string;
+    status?: DarlehenStatus;
+    gewaehren?: boolean;
+    betrag?: number;
+    kommentar?: string;
+    betragGewuenscht?: number;
     schulden?: number;
-    /**
-     * Required wenn willDarlehen = true - mit Fileupload
-     */
     anzahlBetreibungen?: number;
-    /**
-     * Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
-     */
-    grundNichtBerechtigt?: boolean;
-    /**
-     * Keine Stipendienberechtigung wegen Überschreitens der Ausbildungsdauer von 12 Jahren.
-     */
-    grundAusbildungZwoelfJahre?: boolean;
-    /**
-     * Falls ja mit Fileupload
-     */
-    grundHoheGebuehren?: boolean;
-    /**
-     * Falls ja mit Fileupload
-     */
-    grundAnschaffungenFuerAusbildung?: boolean;
-    grundZweitausbildung?: boolean;
+    gruende?: Array<DarlehenGrund>;
+    timestampErstellt?: string;
 }
+
+
 

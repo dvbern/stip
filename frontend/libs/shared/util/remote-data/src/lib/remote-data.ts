@@ -221,7 +221,7 @@ export const cachedResult = <T>(
   previousRd: CachedRemoteData<T>,
   currentRd: CachedRemoteData<T>,
 ): CachedRemoteData<T> =>
-  currentRd.type === 'failure' && previousRd.type === 'success'
+  currentRd.type === 'failure' && previousRd.data
     ? {
         type: 'failure',
         data: previousRd.data,

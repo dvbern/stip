@@ -24,7 +24,32 @@ fallNummer:
   name: fallNummer
   schema:
     type: string
-
+piaVorname:
+  in: query
+  name: piaVorname
+  schema:
+    type: string
+piaNachname:
+  in: query
+  name: piaNachname
+  schema:
+    type: string
+piaGeburtsdatum:
+  in: query
+  name: piaGeburtsdatum
+  schema:
+    type: string
+    format: date
+bearbeiter:
+  in: query
+  name: bearbeiter
+  schema:
+    type: string
+status:
+  in: query
+  name: status
+  schema:
+    type: string
 page:
   in: query
   name: page

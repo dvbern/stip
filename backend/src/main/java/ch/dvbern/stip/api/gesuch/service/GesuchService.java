@@ -66,7 +66,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
-import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
+import ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
@@ -122,7 +122,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -413,7 +413,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public PaginatedSbDashboardDto findGesucheSB(
+    public PaginatedSbGesucheDashboardDto findGesucheSB(
         final GetGesucheSBQueryType queryType,
         final String fallNummer,
         final String piaNachname,
@@ -426,7 +426,7 @@ public class GesuchService {
         final GesuchTrancheTyp typ,
         final int page,
         final int pageSize,
-        final SbDashboardColumn sortColumn,
+        final SbGesucheDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
         if (pageSize > configService.getMaxAllowedPageSize()) {
@@ -478,7 +478,7 @@ public class GesuchService {
             .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ))
             .toList();
 
-        return new PaginatedSbDashboardDto(
+        return new PaginatedSbGesucheDashboardDto(
             page,
             results.size(),
             Math.toIntExact(countQuery.fetchFirst()),

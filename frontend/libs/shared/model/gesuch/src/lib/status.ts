@@ -12,4 +12,6 @@ export const aenderungRoutes = [
   'aenderung',
   'initial',
 ] satisfies TrancheRoute[];
+export const darlehenRoutes = ['darlehen'] as const;
+export type DarlehenRoute = (typeof darlehenRoutes)[number];
 export const getTrancheRoute = (route: TrancheRoute) => route;

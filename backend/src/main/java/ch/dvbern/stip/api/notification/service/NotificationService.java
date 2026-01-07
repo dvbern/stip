@@ -20,10 +20,12 @@ package ch.dvbern.stip.api.notification.service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -45,6 +47,67 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+
+    @Transactional
+    public void createDarlehenAbgelehntNotification(final Darlehen darlehen) {
+        createDarlehenNotification(NotificationType.DARLEHEN_ABGELEHNT, darlehen, Optional.empty());
+    }
+
+    @Transactional
+    public void createDarlehenAkzeptiertNotification(final Darlehen darlehen) {
+        createDarlehenNotification(NotificationType.DARLEHEN_AKZEPTIERT, darlehen, Optional.empty());
+    }
+
+    @Transactional
+    public void createDarlehenEingegebenNotification(final Darlehen darlehen) {
+        createDarlehenNotification(NotificationType.DARLEHEN_EINGEGEBEN, darlehen, Optional.empty());
+    }
+
+    @Transactional
+    public void createDarlehenZurueckgewiesenNotification(final Darlehen darlehen, String kommentar) {
+        createDarlehenNotification(NotificationType.DARLEHEN_ZURUECKGEWIESEN, darlehen, Optional.of(kommentar));
+    }
+
+    private void createDarlehenNotification(
+        final NotificationType notificationType,
+        final Darlehen darlehen,
+        Optional<String> kommentar
+    ) {
+        final var fall = darlehen.getFall();
+        final var absender = darlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        final var pia =
+            darlehen.getFall().getLatestGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), pia.getKorrespondenzSprache());
+
+        final Notification notification = new Notification()
+            .setNotificationType(notificationType)
+            .setFall(fall);
+        setAbsender(absender, notification);
+
+        final String msg = switch (notificationType) {
+            case DARLEHEN_ABGELEHNT -> Templates
+                .getDarlehenAbgelehnt(anrede, pia.getNachname(), darlehen.getKommentar(), pia.getKorrespondenzSprache())
+                .render();
+            case DARLEHEN_AKZEPTIERT -> Templates
+                .getDarlehenAkzeptiert(
+                    anrede,
+                    pia.getNachname(),
+                    darlehen.getKommentar(),
+                    pia.getKorrespondenzSprache()
+                )
+                .render();
+            case DARLEHEN_EINGEGEBEN -> Templates
+                .getDarlehenEingegeben(anrede, pia.getNachname(), pia.getKorrespondenzSprache())
+                .render();
+            case DARLEHEN_ZURUECKGEWIESEN -> Templates
+                .getDarlehenZurueckgewiesen(anrede, pia.getNachname(), kommentar.get(), pia.getKorrespondenzSprache())
+                .render();
+            default -> throw new IllegalStateException("Unexpected value: " + notificationType);
+        };
+
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+    }
 
     @Transactional
     public void createDelegierungAufgeloestNotification(final Delegierung delegierung) {
@@ -323,6 +386,77 @@ public class NotificationService {
 
     @CheckedTemplate
     public static class Templates {
+        public static native TemplateInstance darlehenAbgelehntDE(String anrede, String nachname, String kommentar);
+
+        public static native TemplateInstance darlehenAbgelehntFR(String anrede, String nachname, String kommentar);
+
+        public static TemplateInstance getDarlehenAbgelehnt(
+            final String anrede,
+            final String nachname,
+            final String kommentar,
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return darlehenAbgelehntFR(anrede, nachname, kommentar);
+            }
+            return darlehenAbgelehntDE(anrede, nachname, kommentar);
+        }
+
+        public static native TemplateInstance darlehenAkzeptiertDE(String anrede, String nachname, String kommentar);
+
+        public static native TemplateInstance darlehenAkzeptiertFR(String anrede, String nachname, String kommentar);
+
+        public static TemplateInstance getDarlehenAkzeptiert(
+            final String anrede,
+            final String nachname,
+            final String kommentar,
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return darlehenAkzeptiertFR(anrede, nachname, kommentar);
+            }
+            return darlehenAkzeptiertDE(anrede, nachname, kommentar);
+        }
+
+        public static native TemplateInstance darlehenZurueckgewiesenDE(
+            String anrede,
+            String nachname,
+            String kommentar
+        );
+
+        public static native TemplateInstance darlehenZurueckgewiesenFR(
+            String anrede,
+            String nachname,
+            String kommentar
+        );
+
+        public static TemplateInstance getDarlehenZurueckgewiesen(
+            final String anrede,
+            final String nachname,
+            final String kommentar,
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return darlehenZurueckgewiesenFR(anrede, nachname, kommentar);
+            }
+            return darlehenZurueckgewiesenDE(anrede, nachname, kommentar);
+        }
+
+        public static native TemplateInstance darlehenEingegebenDE(String anrede, String nachname);
+
+        public static native TemplateInstance darlehenEingegebenFR(String anrede, String nachname);
+
+        public static TemplateInstance getDarlehenEingegeben(
+            final String anrede,
+            final String nachname,
+            final Sprache korrespondenzSprache
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return darlehenEingegebenFR(anrede, nachname);
+            }
+            return darlehenEingegebenDE(anrede, nachname);
+        }
+
         public static native TemplateInstance gesuchEingereichtDE(String anrede, String nachname);
 
         public static native TemplateInstance gesuchEingereichtFR(String anrede, String nachname);
@@ -333,7 +467,6 @@ public class NotificationService {
             final Sprache korrespondenzSprache
         ) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-
                 return gesuchEingereichtFR(anrede, nachname);
             }
             return gesuchEingereichtDE(anrede, nachname);

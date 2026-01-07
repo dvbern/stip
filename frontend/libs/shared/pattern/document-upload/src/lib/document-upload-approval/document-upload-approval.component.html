@@ -1,6 +1,6 @@
 @let dokumentRd = dokumentsStore.dokument();
 
-@if (uploadViewSig().dokumentModel.art === 'GESUCH_DOKUMENT') {
+@if (gesuchDokumentViewSig()?.art === 'GESUCH_DOKUMENT') {
   @if (dokumentRd | rdIsPendingWithoutCache: { ignoreInitial: true }) {
     <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
   } @else {
@@ -8,7 +8,7 @@
       <div class="d-flex justify-content-between">
         @switch (dokumentRd.data?.status) {
           @case ('AUSSTEHEND') {
-            @if (uploadViewSig().permissions.canApprove) {
+            @if (gesuchDokumentViewSig()?.permissions?.canApprove) {
               <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
                 <i class="material-symbols-rounded fs-4">close</i>
                 <span>

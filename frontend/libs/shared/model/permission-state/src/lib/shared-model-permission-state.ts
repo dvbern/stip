@@ -35,12 +35,13 @@ type PermissionFlags =
 
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
-export type ShortRole = 'gs' | 'sb' | 'ju';
+export type ShortRole = 'gs' | 'sb' | 'ju' | 'fe';
 
-const shortRoleMap = {
+export const shortRoleMap = {
   gs: 'V0_Gesuchsteller',
   sb: 'V0_Sachbearbeiter',
   ju: 'V0_Jurist',
+  fe: 'V0_Freigabestelle',
 } satisfies Partial<Record<ShortRole, AvailableBenutzerRole>>;
 
 const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
@@ -135,6 +136,9 @@ export const trancheReadWritestatusByAppType = {
   Record<AppType, PermissionCheck>
 >;
 
+/**
+ * Returns permissions by gesuch type (TRANCHE, AENDERUNG, INITIAL), status and app type
+ */
 export const preparePermissions = (
   trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,

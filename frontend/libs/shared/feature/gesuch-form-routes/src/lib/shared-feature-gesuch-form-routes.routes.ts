@@ -4,7 +4,6 @@ import { trancheRoutes } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
   AUSZAHLUNG,
-  DARLEHEN,
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   EINNAHMEN_KOSTEN_PARTNER,
@@ -169,17 +168,6 @@ export const baseGesuchFormRoutes: Routes = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-einnahmenkosten').then(
         (m) => m.gesuchAppFeatureGesuchFormEinnahmenkostenRoutes,
-      ),
-  },
-  {
-    path: DARLEHEN.route,
-    resolve: {
-      step: () => DARLEHEN,
-    },
-    title: DARLEHEN.translationKey,
-    loadChildren: () =>
-      import('@dv/shared/feature/darlehen').then(
-        (m) => m.sharedFeatureDarlehenRoutes,
       ),
   },
   {

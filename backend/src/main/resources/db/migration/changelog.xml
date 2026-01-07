@@ -9,4 +9,8 @@
   
   <!-- <editor-fold desc="v0.59" defaultstate="collapsed" -->
   <!--  </editor-fold> -->
+  
+  <!-- <editor-fold desc="v0.56" defaultstate="collapsed" -->
+  <include file="/db/migration/0.58/0.58.0-KSTIP-2696.xml" />
+  <!--  </editor-fold> -->
 </databaseChangeLog>

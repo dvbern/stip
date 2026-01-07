@@ -21,6 +21,8 @@ tags:
     x-displayName: Plz
   - name: Notification
     x-displayName: Notification
+  - name: Darlehen
+    x-displayName: Darlehen
   - name: Delegieren
     x-displayName: Delegieren
   - name: Sozialdienst
@@ -174,6 +176,575 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getNotificationsForCurrentUser
       summary: Gets all notifications for the User
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dashboard/{getDarlehenSbQueryType}:
+    parameters:
+      - name: getDarlehenSbQueryType
+        schema:
+          $ref: '#/components/schemas/GetDarlehenSbQueryType'
+        in: path
+        required: true
+      - $ref: '#/components/parameters/fallNummer'
+      - $ref: '#/components/parameters/piaNachname'
+      - $ref: '#/components/parameters/piaVorname'
+      - $ref: '#/components/parameters/piaGeburtsdatum'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/bearbeiter'
+      - $ref: '#/components/parameters/letzteAktivitaetFrom'
+      - $ref: '#/components/parameters/letzteAktivitaetTo'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - name: sortColumn
+        schema:
+          $ref: '#/components/schemas/SbDarlehenDashboardColumn'
+        in: query
+      - $ref: '#/components/parameters/sortOrder'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSbDarlehenDashboard'
+          description: Returns gesuche filtered by status and sb
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenDashboardSb
+      summary: Returns darlehen filtered by status and sb
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Darlehen
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createDarlehen
+      summary: Create a new Darlehen
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
+      operationId: getDarlehenDownloadToken
+      summary: get Token to downlaod Darlehen Dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenDokument
+      summary: Download Darlehen Dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/{dokumentId}:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteDarlehenDokument
+      summary: deletes a Darlehen Dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/dokument/{darlehenId}/{dokumentType}:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+      - name: dokumentType
+        schema:
+          $ref: '#/components/schemas/DarlehenDokumentType'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return Darlehen dokument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NullableDarlehenDokument'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenDokument
+      summary: Returns Darlehen dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DarlehenDokumentCreate'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createDarlehenDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/eingeben:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenEingeben
+      summary: Change darlehen status to eingegeben
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/freigeben:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenFreigeben
+      summary: Change darlehen status to freigegeben
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/zurueckweisen:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenZurueckweisen
+      summary: Change darlehen status to in bearbeitung gs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/akzeptieren:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenAkzeptieren
+      summary: Change darlehen status to akzeptiert
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/ablehnen:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenAblehen
+      summary: Change darlehen status to abgelehnt
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/gs:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return active darlehen if exists or else null
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenGs
+      summary: Return active darlehen darlehen if exists or else null
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    patch:
+      tags:
+        - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DarlehenUpdateGs'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenUpdateGs
+      summary: Update darlehen as gs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    delete:
+      tags:
+        - Darlehen
+      responses:
+        '204':
+          description: Darlehen was deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteDarlehenGs
+      summary: Deletes a given darlehen by ID
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/getAllDarlehenGs/{fallId}:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return all darlehen for a given fallId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDarlehenGs
+      summary: Return all darlehen for a given fallId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/getAllDarlehenSb/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return all darlehen for a given fallId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDarlehenSb
+      summary: Return all darlehen for a given fallId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/{darlehenId}/sb:
+    parameters:
+      - name: darlehenId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Return darlehen
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenSb
+      summary: Return darlehen
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    patch:
+      tags:
+        - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DarlehenUpdateSb'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Darlehen'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: darlehenUpdateSb
+      summary: Update darlehen as sb
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2370,7 +2941,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: deleteUnterschriftenblattDokument
-      summary: deletes a Dokument
+      summary: deletes a Unterschriftenblatt Dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2940,7 +3511,7 @@ paths:
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SbDashboardColumn'
+            $ref: '#/components/schemas/SbGesucheDashboardColumn'
           in: query
           required: false
         - $ref: '#/components/parameters/sortOrder'
@@ -2949,7 +3520,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedSbDashboard'
+                $ref: '#/components/schemas/PaginatedSbGesucheDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -5487,6 +6058,11 @@ components:
         - FAILED_AUSZAHLUNG
         - DELEGIERUNG_ANGENOMMEN
         - DELEGIERUNG_ABGELEHNT
+        - DELEGIERUNG_AUFGELOEST
+        - DARLEHEN_EINGEGEBEN
+        - DARLEHEN_ZURUECKGEWIESEN
+        - DARLEHEN_AKZEPTIERT
+        - DARLEHEN_ABGELEHNT
     LocalDate:
       format: date
       type: string
@@ -5514,6 +6090,224 @@ components:
         timestampErstellt:
           $ref: '#/components/schemas/LocalDate'
         absender:
+          type: string
+    SbDarlehenDashboardColumn:
+      enum:
+        - FALLNUMMER
+        - PIA_NACHNAME
+        - PIA_VORNAME
+        - PIA_GEBURTSDATUM
+        - STATUS
+        - BEARBEITER
+        - LETZTE_AKTIVITAET
+    GetDarlehenSbQueryType:
+      enum:
+        - ALLE_DARLEHEN
+        - MEINE_DARLEHEN
+        - ALLE_BEARBEITBAR
+        - MEINE_BEARBEITBAR
+    PaginatedSbDarlehenDashboard:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResult'
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenDashboard'
+    DarlehenDashboard:
+      type: object
+      required:
+        - id
+        - gesuchId
+        - gesuchTrancheId
+        - fallId
+        - fallNummer
+        - piaVorname
+        - piaNachname
+        - piaGeburtsdatum
+        - status
+        - bearbeiter
+        - letzteAktivitaet
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
+        piaVorname:
+          type: string
+        piaNachname:
+          type: string
+        piaGeburtsdatum:
+          type: string
+        status:
+          $ref: '#/components/schemas/DarlehenStatus'
+        bearbeiter:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date
+    DarlehenDokumentType:
+      enum:
+        - BETREIBUNGS_AUSZUG
+        - AUFSTELLUNG_KOSTEN_ELTERN
+        - KOPIE_SCHULGELDRECHNUNG
+        - BELEGE_ANSCHAFFUNGEN
+    DarlehenUpdateSb:
+      type: object
+      properties:
+        gewaehren:
+          type: boolean
+        betrag:
+          type: integer
+          minimum: 0
+        kommentar:
+          type: string
+    DarlehenUpdateGs:
+      type: object
+      properties:
+        betragGewuenscht:
+          type: integer
+          minimum: 0
+        schulden:
+          type: integer
+          minimum: 0
+        anzahlBetreibungen:
+          type: integer
+          minimum: 0
+        gruende:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenGrund'
+    NullableDarlehenDokument:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/DarlehenDokument'
+    DarlehenDokument:
+      type: object
+      required:
+        - id
+        - dokumentType
+        - dokumente
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokumentType:
+          $ref: '#/components/schemas/DarlehenDokumentType'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
+    DarlehenDokumentCreate:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    SortOrder:
+      enum:
+        - ASCENDING
+        - DESCENDING
+    PaginatedResult:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalEntries:
+          type: integer
+    DarlehenStatus:
+      enum:
+        - IN_BEARBEITUNG_GS
+        - EINGEGEBEN
+        - IN_FREIGABE
+        - AKZEPTIERT
+        - ABGELEHNT
+    DarlehenGrund:
+      enum:
+        - NICHT_BERECHTIGT
+        - AUSBILDUNG_ZWOELF_JAHRE
+        - HOHE_GEBUEHREN
+        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+        - ZWEITAUSBILDUNG
+    Darlehen:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        status:
+          $ref: '#/components/schemas/DarlehenStatus'
+        gewaehren:
+          type: boolean
+        betrag:
+          type: integer
+          minimum: 0
+        kommentar:
+          type: string
+        betragGewuenscht:
+          type: integer
+          minimum: 0
+        schulden:
+          type: integer
+          minimum: 0
+        anzahlBetreibungen:
+          type: integer
+          minimum: 0
+        gruende:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenGrund'
+        timestampErstellt:
+          type: string
+    FileDownloadToken:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
+    Dokument:
+      required:
+        - id
+        - filename
+        - filepath
+        - filesize
+        - objectId
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: string
+        timestampErstellt:
+          type: string
+        objectId:
+          type: string
+    FileUpload:
+      format: binary
+      type: string
+    Kommentar:
+      type: object
+      required:
+        - text
+      properties:
+        text:
           type: string
     Delegierung:
       type: object
@@ -5636,19 +6430,6 @@ components:
           type: string
         ort:
           type: string
-    SortOrder:
-      enum:
-        - ASCENDING
-        - DESCENDING
-    PaginatedResult:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        totalEntries:
-          type: integer
     SozialdienstSlim:
       required:
         - id
@@ -5805,13 +6586,6 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
-    FileDownloadToken:
-      required:
-        - token
-      type: object
-      properties:
-        token:
-          type: string
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -6579,10 +7353,6 @@ components:
         - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
         - EK_PARTNER_LOHNABRECHNUNG
         - EK_PARTNER_VERMOEGEN
-        - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
-        - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
-        - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
-        - DARLEHEN_BELEGE_ANSCHAFFUNGEN
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
         - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
@@ -6615,27 +7385,6 @@ components:
           type: string
         description:
           type: string
-    Dokument:
-      required:
-        - id
-        - filename
-        - filepath
-        - filesize
-        - objectId
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        filename:
-          type: string
-        filepath:
-          type: string
-        filesize:
-          type: string
-        timestampErstellt:
-          type: string
-        objectId:
-          type: string
     Dokumentstatus:
       enum:
         - AUSSTEHEND
@@ -6660,9 +7409,6 @@ components:
             $ref: '#/components/schemas/Dokument'
         status:
           $ref: '#/components/schemas/Dokumentstatus'
-    FileUpload:
-      format: binary
-      type: string
     UnterschriftenblattDokumentTyp:
       type: string
       enum:
@@ -6814,7 +7560,7 @@ components:
             $ref: '#/components/schemas/GesuchDashboardItem'
       allOf:
         - $ref: '#/components/schemas/Ausbildung'
-    SbDashboardColumn:
+    SbGesucheDashboardColumn:
       enum:
         - FALLNUMMER
         - TYP
@@ -6824,7 +7570,7 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    PaginatedSbDashboard:
+    PaginatedSbGesucheDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
       properties:
@@ -6982,8 +7728,6 @@ components:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
         einnahmenKostenPartner:
           $ref: '#/components/schemas/EinnahmenKostenUpdate'
-        darlehen:
-          $ref: '#/components/schemas/Darlehen'
         steuererklaerung:
           type: array
           items:
@@ -7826,49 +8570,6 @@ components:
           type: integer
           minimum: 0
           maximum: 2147483647
-    Darlehen:
-      type: object
-      required:
-        - willDarlehen
-      properties:
-        willDarlehen:
-          description: Required wenn volljährig, sonst nicht moeglich!
-          type: boolean
-        betragDarlehen:
-          description: Required wenn willDarlehen = true
-          type: integer
-          minimum: 0
-        betragBezogenKanton:
-          description: Required wenn willDarlehen = true
-          type: integer
-          minimum: 0
-        schulden:
-          description: Required wenn willDarlehen = true
-          type: integer
-          minimum: 0
-        anzahlBetreibungen:
-          description: Required wenn willDarlehen = true - mit Fileupload
-          type: integer
-          minimum: 0
-        grundNichtBerechtigt:
-          description: >-
-            Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten
-            können die Mittel der Eltern jedoch nicht einbezogen werden - Falls
-            Ja mit Fileupload
-          type: boolean
-        grundAusbildungZwoelfJahre:
-          description: >-
-            Keine Stipendienberechtigung wegen Überschreitens der
-            Ausbildungsdauer von 12 Jahren.
-          type: boolean
-        grundHoheGebuehren:
-          description: Falls ja mit Fileupload
-          type: boolean
-        grundAnschaffungenFuerAusbildung:
-          description: Falls ja mit Fileupload
-          type: boolean
-        grundZweitausbildung:
-          type: boolean
     SteuerdatenTyp:
       enum:
         - FAMILIE
@@ -8078,8 +8779,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SteuerdatenTyp'
-        darlehen:
-          $ref: '#/components/schemas/Darlehen'
     GesuchTrancheStatus:
       enum:
         - IN_BEARBEITUNG_GS
@@ -8201,13 +8900,6 @@ components:
           $ref: '#/components/schemas/GesuchTrancheTyp'
         revision:
           type: integer
-    Kommentar:
-      type: object
-      required:
-        - text
-      properties:
-        text:
-          type: string
     Kanton:
       enum:
         - AG
@@ -8842,6 +9534,61 @@ components:
       name: fallNummer
       schema:
         type: string
+    piaNachname:
+      in: query
+      name: piaNachname
+      schema:
+        type: string
+    piaVorname:
+      in: query
+      name: piaVorname
+      schema:
+        type: string
+    piaGeburtsdatum:
+      in: query
+      name: piaGeburtsdatum
+      schema:
+        type: string
+        format: date
+    status:
+      in: query
+      name: status
+      schema:
+        type: string
+    bearbeiter:
+      in: query
+      name: bearbeiter
+      schema:
+        type: string
+    letzteAktivitaetFrom:
+      in: query
+      name: letzteAktivitaetFrom
+      schema:
+        type: string
+        format: date
+    letzteAktivitaetTo:
+      in: query
+      name: letzteAktivitaetTo
+      schema:
+        type: string
+        format: date
+    page:
+      in: query
+      name: page
+      required: true
+      schema:
+        type: integer
+    pageSize:
+      in: query
+      name: pageSize
+      required: true
+      schema:
+        type: integer
+    sortOrder:
+      in: query
+      name: sortOrder
+      schema:
+        $ref: '#/components/schemas/SortOrder'
     wohnort:
       in: query
       name: wohnort
@@ -8888,23 +9635,6 @@ components:
         $ref: '#/components/schemas/UUID'
       in: path
       required: true
-    page:
-      in: query
-      name: page
-      required: true
-      schema:
-        type: integer
-    pageSize:
-      in: query
-      name: pageSize
-      required: true
-      schema:
-        type: integer
-    sortOrder:
-      in: query
-      name: sortOrder
-      schema:
-        $ref: '#/components/schemas/SortOrder'
     MassendruckJobTyp:
       in: query
       name: massendruckJobTyp
@@ -8939,32 +9669,6 @@ components:
         $ref: '#/components/schemas/UnterschriftenblattDokumentTyp'
       in: path
       required: true
-    piaVorname:
-      in: query
-      name: piaVorname
-      schema:
-        type: string
-    piaNachname:
-      in: query
-      name: piaNachname
-      schema:
-        type: string
-    piaGeburtsdatum:
-      in: query
-      name: piaGeburtsdatum
-      schema:
-        type: string
-        format: date
-    bearbeiter:
-      in: query
-      name: bearbeiter
-      schema:
-        type: string
-    status:
-      in: query
-      name: status
-      schema:
-        type: string
     typ:
       in: query
       name: typ
@@ -8978,18 +9682,6 @@ components:
       description: Die ID der Aenderung
       schema:
         $ref: '#/components/schemas/UUID'
-    letzteAktivitaetFrom:
-      in: query
-      name: letzteAktivitaetFrom
-      schema:
-        type: string
-        format: date
-    letzteAktivitaetTo:
-      in: query
-      name: letzteAktivitaetTo
-      schema:
-        type: string
-        format: date
     gesuchTrancheId:
       name: gesuchTrancheId
       in: path

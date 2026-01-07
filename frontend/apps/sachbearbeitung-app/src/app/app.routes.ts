@@ -105,6 +105,28 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'darlehen-dashboard',
+        canActivate: [hasBenutzer],
+        title: 'sachbearbeitung-app.darlehen-dashboard.title',
+        loadComponent: () =>
+          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
+            (m) => m.SachbearbeitungAppFeatureDarlehenDashboardComponent,
+          ),
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
+            (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
+          ),
+      },
+      {
+        path: 'darlehen',
+        canActivate: [hasBenutzer],
+        title: 'sachbearbeitung-app.darlehen.title',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/darlehen').then(
+            (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
+          ),
+      },
+      {
         path: 'infos',
         canActivate: [hasBenutzer],
         title: 'sachbearbeitung-app.infos.title',

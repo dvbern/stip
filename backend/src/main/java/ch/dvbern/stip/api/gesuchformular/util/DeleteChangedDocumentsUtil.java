@@ -95,9 +95,6 @@ public class DeleteChangedDocumentsUtil {
         documentTypesToDelete.addAll(
             getDocumentsToDeleteForEinnahmenKosten(newFormular.getEinnahmenKosten(), oldFormular.getEinnahmenKosten())
         );
-        documentTypesToDelete.addAll(
-            getDocumentsToDeleteForDarlehen(newFormular.getDarlehen(), oldFormular.getDarlehen())
-        );
 
         return documentTypesToDelete;
     }
@@ -195,11 +192,11 @@ public class DeleteChangedDocumentsUtil {
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        if (
-            hasChangedAndNewIsGreaterThanZero(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())
-        ) {
-            toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
-        }
+        // if (
+        // hasChangedAndNewIsGreaterThanZero(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())
+        // ) {
+        // toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
+        // }
 
         return toDelete;
     }
