@@ -10,5 +10,6 @@ export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
     pathMatch: 'prefix',
     component: SachbearbeitungAppFeatureDarlehenComponent,
     title: 'shared.darlehen.title',
+    data: { shouldReuseRoute: false },
   }),
 ];

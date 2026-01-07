@@ -99,6 +99,7 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 export class SharedPatternDarlehenFormComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
+  private formService = inject(SharedUtilFormService);
   private dialog = inject(MatDialog);
   private elementRef = inject(ElementRef);
   private compileTimeConfig = inject(SharedModelCompileTimeConfig);
@@ -174,13 +175,6 @@ export class SharedPatternDarlehenFormComponent {
   gewaehrenChangedSig = toSignal(this.formSb.controls.gewaehren.valueChanges);
   showBetragFieldSig = computed(() => {
     const gewaehren = this.gewaehrenChangedSig();
-
-    if (!gewaehren) {
-      this.formSb.controls.betrag.disable();
-    } else {
-      this.formSb.controls.betrag.enable();
-    }
-    this.formSb.controls.betrag.updateValueAndValidity();
 
     return !!gewaehren;
   });
@@ -262,6 +256,14 @@ export class SharedPatternDarlehenFormComponent {
           ]),
         ),
       });
+    });
+
+    effect(() => {
+      const gewaehren = this.showBetragFieldSig();
+      this.formService.setDisabledState(
+        this.formSb.controls.betrag,
+        !gewaehren,
+      );
     });
   }
 
