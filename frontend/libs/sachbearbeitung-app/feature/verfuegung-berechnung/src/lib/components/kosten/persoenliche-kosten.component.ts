@@ -27,6 +27,12 @@ import { PositionComponent } from '../position/position.component';
       <!-- Ausbildungskosten der/des Auszubildenden -->
       <dv-position
         [titleSig]="t('ausbildungskosten')"
+        [infoSig]="
+          t('ausbildungskosten.info', {
+            ausbildungskosten: kostenSig().ausbildungskosten,
+            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+          })
+        "
         [amountSig]="kostenSig().ausbildungskosten | formatChfPositive"
       >
       </dv-position>
@@ -34,7 +40,12 @@ import { PositionComponent } from '../position/position.component';
       <!-- Fahrkosten der/des Auszubildenden -->
       <dv-position
         [titleSig]="t('fahrkosten')"
-        [infoSig]="t('nurElternWohnend.info')"
+        [infoSig]="
+          t('fahrkosten.info', {
+            fahrkosten: kostenSig().fahrkosten,
+            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+          })
+        "
         [amountSig]="kostenSig().fahrkosten | formatChfPositive"
       >
       </dv-position>
@@ -54,11 +65,7 @@ import { PositionComponent } from '../position/position.component';
             anzahl: kostenSig().anzahlPersonenImHaushalt,
           })
         "
-        [infoSig]="
-          t('nurEigenerHaushalt.info', {
-            anzahl: kostenSig().anzahlPersonenImHaushalt,
-          })
-        "
+        [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kostenSig().grundbedarf | formatChfPositive"
       >
       </dv-position>
@@ -70,11 +77,7 @@ import { PositionComponent } from '../position/position.component';
             anzahl: kostenSig().anzahlPersonenImHaushalt,
           })
         "
-        [infoSig]="
-          t('nurEigenerHaushalt.info', {
-            anzahl: kostenSig().anzahlPersonenImHaushalt,
-          })
-        "
+        [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kostenSig().wohnkosten | formatChfPositive"
       >
       </dv-position>
@@ -86,11 +89,7 @@ import { PositionComponent } from '../position/position.component';
             anzahl: kostenSig().anzahlPersonenImHaushalt,
           })
         "
-        [infoSig]="
-          t('nurEigenerHaushalt.info', {
-            anzahl: kostenSig().anzahlPersonenImHaushalt,
-          })
-        "
+        [infoSig]="t('nurEigenerHaushalt.info')"
         [personValueItemsSig]="kostenSig().medizinischeGrundversorgung"
         [amountSig]="
           kostenSig().medizinischeGrundversorgungTotal | formatChfPositive
@@ -101,7 +100,12 @@ import { PositionComponent } from '../position/position.component';
       <!-- Fahrkosten Ehepartnerin/Ehepartner -->
       <dv-position
         [titleSig]="t('fahrkostenPartner')"
-        [infoSig]="t('nurErwerbstaetig.info')"
+        [infoSig]="
+          t('fahrkostenPartner.info', {
+            fahrkosten: kostenSig().fahrkosten,
+            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+          })
+        "
         [amountSig]="kostenSig().fahrkostenPartner | formatChfPositive"
       >
       </dv-position>
@@ -109,7 +113,12 @@ import { PositionComponent } from '../position/position.component';
       <!-- Verpflegung Ehepartnerin/Ehepartner -->
       <dv-position
         [titleSig]="t('verpflegungPartner')"
-        [infoSig]="t('nurErwerbstaetig.info')"
+        [infoSig]="
+          t('verpflegungPartner.info', {
+            verpflegungPartner: kostenSig().verpflegungPartner,
+            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+          })
+        "
         [amountSig]="kostenSig().verpflegungPartner | formatChfPositive"
       >
       </dv-position>
@@ -124,13 +133,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Kantons- und Gemeindesteuern -->
       <dv-position
         [titleSig]="t('kantonsGemeindesteuern')"
-        [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
-      >
-      </dv-position>
-
-      <!-- todo: still here? Kantons- und Gemeindesteuern Ehepartnerin/Ehepartner -->
-      <dv-position
-        [titleSig]="t('kantonsGemeindesteuernPartner')"
+        [infoSig]="t('steuern.info')"
         [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
       >
       </dv-position>
@@ -138,6 +141,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Bundessteuern -->
       <dv-position
         [titleSig]="t('bundessteuern')"
+        [infoSig]="t('steuern.info')"
         [amountSig]="kostenSig().bundessteuern | formatChfPositive"
       >
       </dv-position>

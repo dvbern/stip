@@ -84,6 +84,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Taggelder -->
       <dv-position
         [titleSig]="t('taggelderAHVIV')"
+        [infoSig]="t('taggelderAHVIV.info')"
         [personValueItemsSig]="einnahmenSig().taggelderAHVIV"
         [amountSig]="einnahmenSig().taggelderAHVIVTotal | formatChfPositive"
       >
@@ -92,6 +93,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Alimente/Renten -->
       <dv-position
         [titleSig]="t('renten')"
+        [infoSig]="t('renten.info')"
         [personValueItemsSig]="einnahmenSig().renten"
         [amountSig]="einnahmenSig().rentenTotal | formatChfPositive"
       >
