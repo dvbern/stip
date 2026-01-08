@@ -15,11 +15,15 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.PersonValueItemDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -37,10 +41,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_KANTONS_GEMEINDESTEUERN,
   FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_BUNDESSTEUERN,
   FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
-  FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_TOTAL,
   FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG,
-  FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
   FamilienBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_TOTAL
 })
 @JsonTypeName("FamilienBudgetresultatKosten")
@@ -74,19 +76,13 @@ public class FamilienBudgetresultatKostenDtoSpec {
   private Integer bundessteuern;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
-  private Integer fahrkosten;
-
-  public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER = "fahrkostenPartner";
-  private Integer fahrkostenPartner;
+  private List<PersonValueItemDtoSpec> fahrkosten;
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_TOTAL = "fahrkostenTotal";
   private Integer fahrkostenTotal;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG = "verpflegung";
-  private Integer verpflegung;
-
-  public static final String JSON_PROPERTY_VERPFLEGUNG_PARTNER = "verpflegungPartner";
-  private Integer verpflegungPartner;
+  private List<PersonValueItemDtoSpec> verpflegung;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG_TOTAL = "verpflegungTotal";
   private Integer verpflegungTotal;
@@ -328,9 +324,17 @@ public class FamilienBudgetresultatKostenDtoSpec {
   }
 
 
-  public FamilienBudgetresultatKostenDtoSpec fahrkosten(Integer fahrkosten) {
+  public FamilienBudgetresultatKostenDtoSpec fahrkosten(List<PersonValueItemDtoSpec> fahrkosten) {
     
     this.fahrkosten = fahrkosten;
+    return this;
+  }
+
+  public FamilienBudgetresultatKostenDtoSpec addFahrkostenItem(PersonValueItemDtoSpec fahrkostenItem) {
+    if (this.fahrkosten == null) {
+      this.fahrkosten = new ArrayList<>();
+    }
+    this.fahrkosten.add(fahrkostenItem);
     return this;
   }
 
@@ -342,41 +346,15 @@ public class FamilienBudgetresultatKostenDtoSpec {
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getFahrkosten() {
+  public List<PersonValueItemDtoSpec> getFahrkosten() {
     return fahrkosten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FAHRKOSTEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkosten(Integer fahrkosten) {
+  public void setFahrkosten(List<PersonValueItemDtoSpec> fahrkosten) {
     this.fahrkosten = fahrkosten;
-  }
-
-
-  public FamilienBudgetresultatKostenDtoSpec fahrkostenPartner(Integer fahrkostenPartner) {
-    
-    this.fahrkostenPartner = fahrkostenPartner;
-    return this;
-  }
-
-   /**
-   * Get fahrkostenPartner
-   * @return fahrkostenPartner
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getFahrkostenPartner() {
-    return fahrkostenPartner;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFahrkostenPartner(Integer fahrkostenPartner) {
-    this.fahrkostenPartner = fahrkostenPartner;
   }
 
 
@@ -406,9 +384,17 @@ public class FamilienBudgetresultatKostenDtoSpec {
   }
 
 
-  public FamilienBudgetresultatKostenDtoSpec verpflegung(Integer verpflegung) {
+  public FamilienBudgetresultatKostenDtoSpec verpflegung(List<PersonValueItemDtoSpec> verpflegung) {
     
     this.verpflegung = verpflegung;
+    return this;
+  }
+
+  public FamilienBudgetresultatKostenDtoSpec addVerpflegungItem(PersonValueItemDtoSpec verpflegungItem) {
+    if (this.verpflegung == null) {
+      this.verpflegung = new ArrayList<>();
+    }
+    this.verpflegung.add(verpflegungItem);
     return this;
   }
 
@@ -420,41 +406,15 @@ public class FamilienBudgetresultatKostenDtoSpec {
   @JsonProperty(JSON_PROPERTY_VERPFLEGUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getVerpflegung() {
+  public List<PersonValueItemDtoSpec> getVerpflegung() {
     return verpflegung;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VERPFLEGUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerpflegung(Integer verpflegung) {
+  public void setVerpflegung(List<PersonValueItemDtoSpec> verpflegung) {
     this.verpflegung = verpflegung;
-  }
-
-
-  public FamilienBudgetresultatKostenDtoSpec verpflegungPartner(Integer verpflegungPartner) {
-    
-    this.verpflegungPartner = verpflegungPartner;
-    return this;
-  }
-
-   /**
-   * Get verpflegungPartner
-   * @return verpflegungPartner
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getVerpflegungPartner() {
-    return verpflegungPartner;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERPFLEGUNG_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVerpflegungPartner(Integer verpflegungPartner) {
-    this.verpflegungPartner = verpflegungPartner;
   }
 
 
@@ -502,16 +462,14 @@ public class FamilienBudgetresultatKostenDtoSpec {
         Objects.equals(this.kantonsGemeindesteuern, familienBudgetresultatKosten.kantonsGemeindesteuern) &&
         Objects.equals(this.bundessteuern, familienBudgetresultatKosten.bundessteuern) &&
         Objects.equals(this.fahrkosten, familienBudgetresultatKosten.fahrkosten) &&
-        Objects.equals(this.fahrkostenPartner, familienBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.fahrkostenTotal, familienBudgetresultatKosten.fahrkostenTotal) &&
         Objects.equals(this.verpflegung, familienBudgetresultatKosten.verpflegung) &&
-        Objects.equals(this.verpflegungPartner, familienBudgetresultatKosten.verpflegungPartner) &&
         Objects.equals(this.verpflegungTotal, familienBudgetresultatKosten.verpflegungTotal);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, grundbedarf, wohnkosten, medizinischeGrundversorgung, integrationszulage, integrationszulageAnzahl, integrationszulageTotal, kantonsGemeindesteuern, bundessteuern, fahrkosten, fahrkostenPartner, fahrkostenTotal, verpflegung, verpflegungPartner, verpflegungTotal);
+    return Objects.hash(total, grundbedarf, wohnkosten, medizinischeGrundversorgung, integrationszulage, integrationszulageAnzahl, integrationszulageTotal, kantonsGemeindesteuern, bundessteuern, fahrkosten, fahrkostenTotal, verpflegung, verpflegungTotal);
   }
 
   @Override
@@ -528,10 +486,8 @@ public class FamilienBudgetresultatKostenDtoSpec {
     sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
     sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
-    sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    fahrkostenTotal: ").append(toIndentedString(fahrkostenTotal)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
-    sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    verpflegungTotal: ").append(toIndentedString(verpflegungTotal)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -169,10 +169,11 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             elternteilerequests.set(
                 currentIdx,
                 ElternteilV1.buildFromDependants(
+                    currentIdx + 1,
                     gesuch.getGesuchsperiode(),
                     elternteile,
-                    steuerdatenToUse,
                     steuererklaerungToUse,
+                    steuerdatenToUse,
                     personenImHaushaltList.get(currentIdx),
                     kinderDerElternInHaushalten,
                     (int) gesuchFormular.getGeschwisters()

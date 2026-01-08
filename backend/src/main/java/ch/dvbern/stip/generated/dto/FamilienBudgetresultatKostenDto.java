@@ -1,6 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.PersonValueItemDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -28,11 +32,9 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer integrationszulageTotal;
   private @Valid Integer kantonsGemeindesteuern;
   private @Valid Integer bundessteuern;
-  private @Valid Integer fahrkosten;
-  private @Valid Integer fahrkostenPartner;
+  private @Valid List<PersonValueItemDto> fahrkosten = new ArrayList<>();
   private @Valid Integer fahrkostenTotal;
-  private @Valid Integer verpflegung;
-  private @Valid Integer verpflegungPartner;
+  private @Valid List<PersonValueItemDto> verpflegung = new ArrayList<>();
   private @Valid Integer verpflegungTotal;
 
   /**
@@ -208,7 +210,7 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public FamilienBudgetresultatKostenDto fahrkosten(Integer fahrkosten) {
+  public FamilienBudgetresultatKostenDto fahrkosten(List<PersonValueItemDto> fahrkosten) {
     this.fahrkosten = fahrkosten;
     return this;
   }
@@ -216,34 +218,31 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
   
   @JsonProperty("fahrkosten")
   @NotNull
-  public Integer getFahrkosten() {
+  public List<PersonValueItemDto> getFahrkosten() {
     return fahrkosten;
   }
 
   @JsonProperty("fahrkosten")
-  public void setFahrkosten(Integer fahrkosten) {
+  public void setFahrkosten(List<PersonValueItemDto> fahrkosten) {
     this.fahrkosten = fahrkosten;
   }
 
-  /**
-   **/
-  public FamilienBudgetresultatKostenDto fahrkostenPartner(Integer fahrkostenPartner) {
-    this.fahrkostenPartner = fahrkostenPartner;
+  public FamilienBudgetresultatKostenDto addFahrkostenItem(PersonValueItemDto fahrkostenItem) {
+    if (this.fahrkosten == null) {
+      this.fahrkosten = new ArrayList<>();
+    }
+
+    this.fahrkosten.add(fahrkostenItem);
     return this;
   }
 
-  
-  @JsonProperty("fahrkostenPartner")
-  @NotNull
-  public Integer getFahrkostenPartner() {
-    return fahrkostenPartner;
-  }
+  public FamilienBudgetresultatKostenDto removeFahrkostenItem(PersonValueItemDto fahrkostenItem) {
+    if (fahrkostenItem != null && this.fahrkosten != null) {
+      this.fahrkosten.remove(fahrkostenItem);
+    }
 
-  @JsonProperty("fahrkostenPartner")
-  public void setFahrkostenPartner(Integer fahrkostenPartner) {
-    this.fahrkostenPartner = fahrkostenPartner;
+    return this;
   }
-
   /**
    **/
   public FamilienBudgetresultatKostenDto fahrkostenTotal(Integer fahrkostenTotal) {
@@ -265,7 +264,7 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public FamilienBudgetresultatKostenDto verpflegung(Integer verpflegung) {
+  public FamilienBudgetresultatKostenDto verpflegung(List<PersonValueItemDto> verpflegung) {
     this.verpflegung = verpflegung;
     return this;
   }
@@ -273,34 +272,31 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
   
   @JsonProperty("verpflegung")
   @NotNull
-  public Integer getVerpflegung() {
+  public List<PersonValueItemDto> getVerpflegung() {
     return verpflegung;
   }
 
   @JsonProperty("verpflegung")
-  public void setVerpflegung(Integer verpflegung) {
+  public void setVerpflegung(List<PersonValueItemDto> verpflegung) {
     this.verpflegung = verpflegung;
   }
 
-  /**
-   **/
-  public FamilienBudgetresultatKostenDto verpflegungPartner(Integer verpflegungPartner) {
-    this.verpflegungPartner = verpflegungPartner;
+  public FamilienBudgetresultatKostenDto addVerpflegungItem(PersonValueItemDto verpflegungItem) {
+    if (this.verpflegung == null) {
+      this.verpflegung = new ArrayList<>();
+    }
+
+    this.verpflegung.add(verpflegungItem);
     return this;
   }
 
-  
-  @JsonProperty("verpflegungPartner")
-  @NotNull
-  public Integer getVerpflegungPartner() {
-    return verpflegungPartner;
-  }
+  public FamilienBudgetresultatKostenDto removeVerpflegungItem(PersonValueItemDto verpflegungItem) {
+    if (verpflegungItem != null && this.verpflegung != null) {
+      this.verpflegung.remove(verpflegungItem);
+    }
 
-  @JsonProperty("verpflegungPartner")
-  public void setVerpflegungPartner(Integer verpflegungPartner) {
-    this.verpflegungPartner = verpflegungPartner;
+    return this;
   }
-
   /**
    **/
   public FamilienBudgetresultatKostenDto verpflegungTotal(Integer verpflegungTotal) {
@@ -340,16 +336,14 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.kantonsGemeindesteuern, familienBudgetresultatKosten.kantonsGemeindesteuern) &&
         Objects.equals(this.bundessteuern, familienBudgetresultatKosten.bundessteuern) &&
         Objects.equals(this.fahrkosten, familienBudgetresultatKosten.fahrkosten) &&
-        Objects.equals(this.fahrkostenPartner, familienBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.fahrkostenTotal, familienBudgetresultatKosten.fahrkostenTotal) &&
         Objects.equals(this.verpflegung, familienBudgetresultatKosten.verpflegung) &&
-        Objects.equals(this.verpflegungPartner, familienBudgetresultatKosten.verpflegungPartner) &&
         Objects.equals(this.verpflegungTotal, familienBudgetresultatKosten.verpflegungTotal);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, grundbedarf, wohnkosten, medizinischeGrundversorgung, integrationszulage, integrationszulageAnzahl, integrationszulageTotal, kantonsGemeindesteuern, bundessteuern, fahrkosten, fahrkostenPartner, fahrkostenTotal, verpflegung, verpflegungPartner, verpflegungTotal);
+    return Objects.hash(total, grundbedarf, wohnkosten, medizinischeGrundversorgung, integrationszulage, integrationszulageAnzahl, integrationszulageTotal, kantonsGemeindesteuern, bundessteuern, fahrkosten, fahrkostenTotal, verpflegung, verpflegungTotal);
   }
 
   @Override
@@ -367,10 +361,8 @@ public class FamilienBudgetresultatKostenDto  implements Serializable {
     sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
     sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
-    sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    fahrkostenTotal: ").append(toIndentedString(fahrkostenTotal)).append("\n");
     sb.append("    verpflegung: ").append(toIndentedString(verpflegung)).append("\n");
-    sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    verpflegungTotal: ").append(toIndentedString(verpflegungTotal)).append("\n");
     sb.append("}");
     return sb.toString();

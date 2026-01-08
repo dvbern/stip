@@ -36,12 +36,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Resultat der Berechnung (eine Tranche)
  */
 @JsonPropertyOrder({
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_VORNAME_PIA,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NACHNAME_PIA,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_VORNAME_PARTNER,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NACHNAME_PARTNER,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
@@ -56,24 +50,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("TranchenBerechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TranchenBerechnungsresultatDtoSpec {
-  public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
-  private String sozialversicherungsnummer;
-
-  public static final String JSON_PROPERTY_VORNAME_PIA = "vornamePia";
-  private String vornamePia;
-
-  public static final String JSON_PROPERTY_NACHNAME_PIA = "nachnamePia";
-  private String nachnamePia;
-
-  public static final String JSON_PROPERTY_VORNAME_PARTNER = "vornamePartner";
-  private String vornamePartner;
-
-  public static final String JSON_PROPERTY_NACHNAME_PARTNER = "nachnamePartner";
-  private String nachnamePartner;
-
-  public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private LocalDate geburtsdatum;
-
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
 
@@ -106,162 +82,6 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   public TranchenBerechnungsresultatDtoSpec() {
   }
-
-  public TranchenBerechnungsresultatDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
-    
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-    return this;
-  }
-
-   /**
-   * Get sozialversicherungsnummer
-   * @return sozialversicherungsnummer
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getSozialversicherungsnummer() {
-    return sozialversicherungsnummer;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec vornamePia(String vornamePia) {
-    
-    this.vornamePia = vornamePia;
-    return this;
-  }
-
-   /**
-   * Get vornamePia
-   * @return vornamePia
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME_PIA)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getVornamePia() {
-    return vornamePia;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VORNAME_PIA)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVornamePia(String vornamePia) {
-    this.vornamePia = vornamePia;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec nachnamePia(String nachnamePia) {
-    
-    this.nachnamePia = nachnamePia;
-    return this;
-  }
-
-   /**
-   * Get nachnamePia
-   * @return nachnamePia
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME_PIA)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getNachnamePia() {
-    return nachnamePia;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NACHNAME_PIA)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachnamePia(String nachnamePia) {
-    this.nachnamePia = nachnamePia;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec vornamePartner(String vornamePartner) {
-    
-    this.vornamePartner = vornamePartner;
-    return this;
-  }
-
-   /**
-   * Get vornamePartner
-   * @return vornamePartner
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_VORNAME_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getVornamePartner() {
-    return vornamePartner;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VORNAME_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setVornamePartner(String vornamePartner) {
-    this.vornamePartner = vornamePartner;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec nachnamePartner(String nachnamePartner) {
-    
-    this.nachnamePartner = nachnamePartner;
-    return this;
-  }
-
-   /**
-   * Get nachnamePartner
-   * @return nachnamePartner
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NACHNAME_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getNachnamePartner() {
-    return nachnamePartner;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NACHNAME_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNachnamePartner(String nachnamePartner) {
-    this.nachnamePartner = nachnamePartner;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec geburtsdatum(LocalDate geburtsdatum) {
-    
-    this.geburtsdatum = geburtsdatum;
-    return this;
-  }
-
-   /**
-   * dd.MM.yyyy
-   * @return geburtsdatum
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public LocalDate getGeburtsdatum() {
-    return geburtsdatum;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
-    this.geburtsdatum = geburtsdatum;
-  }
-
 
   public TranchenBerechnungsresultatDtoSpec berechnung(Integer berechnung) {
     
@@ -539,13 +359,7 @@ public class TranchenBerechnungsresultatDtoSpec {
       return false;
     }
     TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultat = (TranchenBerechnungsresultatDtoSpec) o;
-    return Objects.equals(this.sozialversicherungsnummer, tranchenBerechnungsresultat.sozialversicherungsnummer) &&
-        Objects.equals(this.vornamePia, tranchenBerechnungsresultat.vornamePia) &&
-        Objects.equals(this.nachnamePia, tranchenBerechnungsresultat.nachnamePia) &&
-        Objects.equals(this.vornamePartner, tranchenBerechnungsresultat.vornamePartner) &&
-        Objects.equals(this.nachnamePartner, tranchenBerechnungsresultat.nachnamePartner) &&
-        Objects.equals(this.geburtsdatum, tranchenBerechnungsresultat.geburtsdatum) &&
-        Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
+    return Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
@@ -559,19 +373,13 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, vornamePia, nachnamePia, vornamePartner, nachnamePartner, geburtsdatum, berechnung, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDtoSpec {\n");
-    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
-    sb.append("    vornamePia: ").append(toIndentedString(vornamePia)).append("\n");
-    sb.append("    nachnamePia: ").append(toIndentedString(nachnamePia)).append("\n");
-    sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
-    sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
-    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");

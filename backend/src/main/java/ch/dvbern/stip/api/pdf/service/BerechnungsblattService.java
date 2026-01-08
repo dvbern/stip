@@ -592,7 +592,7 @@ public class BerechnungsblattService {
         );
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getNettoerwerbseinkommen()
+                persoenlichesBudgetresultat.getEinnahmen().getNettoerwerbseinkommenTotal()
             )
         );
 
@@ -602,7 +602,7 @@ public class BerechnungsblattService {
             );
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getEinnahmenBGSA()
+                persoenlichesBudgetresultat.getEinnahmen().getEinnahmenBGSATotal()
             )
         );
 
@@ -615,7 +615,7 @@ public class BerechnungsblattService {
             );
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getKinderAusbildungszulagen()
+                persoenlichesBudgetresultat.getEinnahmen().getKinderAusbildungszulagenTotal()
             )
         );
 
@@ -623,7 +623,7 @@ public class BerechnungsblattService {
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.unterhaltsbeitraege", tl));
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getUnterhaltsbeitraege()
+                persoenlichesBudgetresultat.getEinnahmen().getUnterhaltsbeitraegeTotal()
             )
         );
 
@@ -633,7 +633,7 @@ public class BerechnungsblattService {
             );
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getEoLeistungen()
+                persoenlichesBudgetresultat.getEinnahmen().getEoLeistungenTotal()
             )
         );
 
@@ -641,7 +641,7 @@ public class BerechnungsblattService {
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.taggelderAHVIV", tl));
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getTaggelderAHVIV()
+                persoenlichesBudgetresultat.getEinnahmen().getTaggelderAHVIVTotal()
             )
         );
 
@@ -649,7 +649,7 @@ public class BerechnungsblattService {
             .addCell(getDefaultParagraphTranslated("stip.berechnung.persoenlich.einnahmen.renten", tl));
         persoenlichesBudgetTableEinnahmen.addCell(
             getDefaultParagraphNumber(
-                persoenlichesBudgetresultat.getEinnahmen().getRenten()
+                persoenlichesBudgetresultat.getEinnahmen().getRentenTotal()
             )
         );
 
@@ -660,7 +660,7 @@ public class BerechnungsblattService {
             getDefaultParagraphNumber(
                 persoenlichesBudgetresultat
                     .getEinnahmen()
-                    .getErgaenzungsleistungen()
+                    .getErgaenzungsleistungenTotal()
 
             )
         );

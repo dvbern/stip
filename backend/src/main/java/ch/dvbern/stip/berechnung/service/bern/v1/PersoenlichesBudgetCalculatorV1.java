@@ -19,9 +19,10 @@ package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+import ch.dvbern.stip.berechnung.dto.InputUtils;
 import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputPersoenlichesbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.StammdatenV1;
@@ -29,7 +30,6 @@ import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatEinnahmenDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatKostenDto;
-import ch.dvbern.stip.generated.dto.PersonValueItemDto;
 import lombok.experimental.UtilityClass;
 
 import static ch.dvbern.stip.berechnung.util.MathUtil.divideByTranchen;
@@ -39,8 +39,8 @@ import static ch.dvbern.stip.berechnung.util.MathUtil.roundHalfUp;
 public class PersoenlichesBudgetCalculatorV1 {
     public PersoenlichesBudgetresultatDto calculatePersoenlichesBudget(
         final InputPersoenlichesbudgetV1 input,
-        final FamilienBudgetresultatDto familienbudget1,
-        final FamilienBudgetresultatDto familienbudget2,
+        final Optional<FamilienBudgetresultatDto> familienbudget1,
+        final Optional<FamilienBudgetresultatDto> familienbudget2,
         final StammdatenV1 stammdaten
     ) {
         final var antragssteller = input.getAntragssteller();
@@ -78,6 +78,10 @@ public class PersoenlichesBudgetCalculatorV1 {
         total = budgetTranche;
 
         return new PersoenlichesBudgetresultatDto(
+            antragssteller.getVorname(),
+            antragssteller.getNachname(),
+            antragssteller.getSozialversicherungsnummer(),
+            antragssteller.getGeburtsdatum(),
             roundHalfUp(total),
             roundHalfUp(einnahmenMinusKosten),
             roundHalfUp(fehlbetrag),
@@ -89,34 +93,27 @@ public class PersoenlichesBudgetCalculatorV1 {
             0, // TODO KSTIP-2584: same as above
             antragssteller.getAnzahlPersonenImHaushalt(),
             einnahmen,
-            kosten
+            kosten,
+            antragssteller.getVornamePartner(),
+            antragssteller.getNachnamePartner()
         );
     }
 
     private PersoenlichesBudgetresultatKostenDto calculateKosten(
         final AntragsstellerV1 antragssteller,
-        final FamilienBudgetresultatDto familienbudget1,
-        final FamilienBudgetresultatDto familienbudget2,
+        final Optional<FamilienBudgetresultatDto> familienbudget1,
+        final Optional<FamilienBudgetresultatDto> familienbudget2,
         final StammdatenV1 stammdaten
     ) {
         var grundbedarf = 0;
         var wohnkosten = 0;
-        var medizinischeGrundversorgung = 0;
-        var medizinischeGrundversorgungPartner = 0;
-        List<PersonValueItemDto> medizinischeGrundversorgungKinder = null;
+        var medizinischeGrundversorgungs = antragssteller.getMedizinischeGrundversorgungs();
         var medizinischeGrundversorgungTotal = 0;
 
         if (antragssteller.isEigenerHaushalt()) {
             grundbedarf = antragssteller.getGrundbedarf();
             wohnkosten = antragssteller.getWohnkosten();
-            medizinischeGrundversorgung = antragssteller.getMedizinischeGrundversorgung();
-            medizinischeGrundversorgungPartner = antragssteller.getMedizinischeGrundversorgungPartner();
-            medizinischeGrundversorgungKinder = antragssteller.getMedizinischeGrundversorgungKinder();
-            medizinischeGrundversorgungTotal = sumValues(
-                medizinischeGrundversorgungKinder,
-                medizinischeGrundversorgung,
-                medizinischeGrundversorgungPartner
-            );
+            medizinischeGrundversorgungTotal = InputUtils.sumValues(medizinischeGrundversorgungs);
         }
 
         var ausbildungskosten = antragssteller.getAusbildungskosten();
@@ -138,7 +135,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
         }
 
-        final var fahrkostenPartner = antragssteller.getFahrkostenPartner();
+        final var fahrkostenPartner = Objects.requireNonNullElse(antragssteller.getFahrkostenPartner(), 0);
 
         var verpflegung = 0;
         if (!antragssteller.isEigenerHaushalt()) {
@@ -152,26 +149,31 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
         }
 
-        final var verpflegungPartner = antragssteller.getVerpflegungskostenPartner();
+        final var verpflegungPartner = Objects.requireNonNullElse(antragssteller.getVerpflegungskostenPartner(), 0);
         final var fremdbetreuung = antragssteller.getFremdbetreuung();
 
-        final var anteilLebenshaltungskosten1 = familienbudget1.getUngedeckterAnteilLebenshaltungskosten();
-        final var anteilLebenshaltungskosten2 = familienbudget2.getUngedeckterAnteilLebenshaltungskosten();
-        final var anteilLebenshaltungskosten = anteilLebenshaltungskosten1 + anteilLebenshaltungskosten2;
+        final var anteilLebenshaltungskosten1 =
+            familienbudget1.map(FamilienBudgetresultatDto::getUngedeckterAnteilLebenshaltungskosten);
+        final var anteilLebenshaltungskosten2 =
+            familienbudget1.map(FamilienBudgetresultatDto::getUngedeckterAnteilLebenshaltungskosten);
+        final var anteilLebenshaltungskosten =
+            InputUtils.sumNullables(anteilLebenshaltungskosten1.orElse(null), anteilLebenshaltungskosten2.orElse(null));
 
         final var ausgaben =
             grundbedarf
-            + wohnkosten
-            + medizinischeGrundversorgungTotal
-            + ausbildungskosten
-            + steuern
-            + steuernPartner
-            + fahrkosten
-            + fahrkostenPartner
-            + verpflegung
-            + verpflegungPartner
-            + fremdbetreuung
-            + anteilLebenshaltungskosten;
+            + InputUtils.sumNullables(
+                wohnkosten,
+                medizinischeGrundversorgungTotal,
+                ausbildungskosten,
+                steuern,
+                steuernPartner,
+                fahrkosten,
+                fahrkostenPartner,
+                verpflegung,
+                verpflegungPartner,
+                fremdbetreuung,
+                anteilLebenshaltungskosten
+            );
 
         // Set calculated values on dto
         return new PersoenlichesBudgetresultatKostenDto(
@@ -181,9 +183,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             verpflegung,
             grundbedarf,
             wohnkosten,
-            medizinischeGrundversorgung,
-            medizinischeGrundversorgungPartner,
-            medizinischeGrundversorgungKinder,
+            medizinischeGrundversorgungs,
             medizinischeGrundversorgungTotal,
             fahrkostenPartner,
             verpflegungPartner,
@@ -196,109 +196,83 @@ public class PersoenlichesBudgetCalculatorV1 {
 
     private PersoenlichesBudgetresultatEinnahmenDto calculateEinnahmen(
         final AntragsstellerV1 antragssteller,
-        final FamilienBudgetresultatDto familienbudget1,
-        final FamilienBudgetresultatDto familienbudget2,
+        final Optional<FamilienBudgetresultatDto> familienbudget1,
+        final Optional<FamilienBudgetresultatDto> familienbudget2,
         final StammdatenV1 stammdaten
     ) {
-        final var einkommen = antragssteller.getEinkommen();
-        final var einkommenPartner = antragssteller.getEinkommenPartner();
-        final var einkommenTotal = einkommen + einkommenPartner;
-        final var kinderAusbildungszulagen = antragssteller.getKinderAusbildungszulagen();
-        final var kinderAusbildungszulagenPartner = antragssteller.getKinderAusbildungszulagenPartner();
-        final var kinderAusbildungszulagenKinder = antragssteller.getKinderAusbildungszulagenKinder();
-        final var kinderAusbildungszulagenTotal =
-            sumValues(kinderAusbildungszulagenKinder, kinderAusbildungszulagen, kinderAusbildungszulagenPartner);
-        final var unterhaltsbeitraege = antragssteller.getUnterhaltsbeitraege();
-        final var unterhaltsbeitraegePartner = antragssteller.getUnterhaltsbeitraegePartner();
-        final var unterhaltsbeitraegeKinder = antragssteller.getUnterhaltsbeitraegeKinder();
-        final var unterhaltsbeitraegeTotal =
-            sumValues(unterhaltsbeitraegeKinder, unterhaltsbeitraege, unterhaltsbeitraegePartner);
-        final var eoLeistungen = antragssteller.getEoLeistungen();
-        final var eoLeistungenPartner = antragssteller.getEoLeistungenPartner();
-        final var eoLeistungenTotal = eoLeistungen + eoLeistungenPartner;
-        final var taggelderAHVIV = antragssteller.getTaggeld();
-        final var taggelderAHVIVPartner = antragssteller.getTaggeldPartner();
-        final var taggelderAHVIVTotal = taggelderAHVIV + taggelderAHVIVPartner;
-        final var renten = antragssteller.getRenten();
-        final var rentenPartner = antragssteller.getRentenPartner();
-        final var rentenKinder = antragssteller.getRentenKinder();
-        final var rentenTotal = sumValues(rentenKinder, renten, rentenPartner);
-        final var ergaenzungsleistungen = antragssteller.getErgaenzungsleistungen();
-        final var ergaenzungsleistungenPartner = antragssteller.getErgaenzungsleistungenPartner();
-        final var ergaenzungsleistungenKinder = antragssteller.getErgaenzungsleistungenKinder();
-        final var ergaenzungsleistungenTotal =
-            sumValues(ergaenzungsleistungenKinder, ergaenzungsleistungen, ergaenzungsleistungenPartner);
-        final var gemeindeInstitutionen = antragssteller.getGemeindeInstitutionen();
-        final var andereEinnahmen = antragssteller.getAndereEinnahmen();
-        final var andereEinnahmenPartner = antragssteller.getAndereEinnahmenPartner();
-        final var andereEinnahmenKinder = antragssteller.getAndereEinnahmenKinder();
-        final var andereEinnahmenTotal = sumValues(andereEinnahmenKinder, andereEinnahmen, andereEinnahmenPartner);
+        final var einkommens = antragssteller.getEinkommens();
+        final var einkommenTotal = InputUtils.sumValues(einkommens);
+        final var kinderAusbildungszulagens = antragssteller.getKinderAusbildungszulagens();
+        final var kinderAusbildungszulagenTotal = InputUtils.sumValues(kinderAusbildungszulagens);
+        final var unterhaltsbeitraeges = antragssteller.getUnterhaltsbeitraeges();
+        final var unterhaltsbeitraegeTotal = InputUtils.sumValues(unterhaltsbeitraeges);
+        final var eoLeistungens = antragssteller.getEoLeistungens();
+        final var eoLeistungenTotal = InputUtils.sumValues(eoLeistungens);
+        final var taggelderAHVIVs = antragssteller.getTaggelds();
+        final var taggelderAHVIVTotal = InputUtils.sumValues(taggelderAHVIVs);
+        final var rentens = antragssteller.getRentens();
+        final var rentenTotal = InputUtils.sumValues(rentens);
+        final var ergaenzungsleistungens = antragssteller.getErgaenzungsleistungens();
+        final var ergaenzungsleistungenTotal = InputUtils.sumValues(ergaenzungsleistungens);
+        final var gemeindeInstitutionen = Objects.requireNonNullElse(antragssteller.getGemeindeInstitutionen(), 0);
+        final var andereEinnahmens = antragssteller.getAndereEinnahmens();
+        final var andereEinnahmenTotal = InputUtils.sumValues(andereEinnahmens);
         final var anrechenbaresVermoegen = roundHalfUp(
             BigDecimal.valueOf(antragssteller.getVermoegen())
                 .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
                 .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
         );
         final var steuerbaresVermoegen = antragssteller.getVermoegen();
-        final var elternbeitrag1 = calculateElternbeitrag(antragssteller, familienbudget1);
-        final var elternbeitrag2 = calculateElternbeitrag(antragssteller, familienbudget2);
-        final var einnahmenBGSA = antragssteller.getEinnahmenBGSA();
-        final var einnahmenBGSAPartner = antragssteller.getEinnahmenBGSAPartner();
-        final var einnahmenBGSATotal = einnahmenBGSA + einnahmenBGSAPartner;
+        final var elternbeitrag1 = familienbudget1.map(budget -> calculateElternbeitrag(antragssteller, budget));
+        final var elternbeitrag2 = familienbudget2.map(budget -> calculateElternbeitrag(antragssteller, budget));
+        final var einnahmenBGSAs = antragssteller.getEinnahmenBGSAs();
+        final var einnahmenBGSATotal = InputUtils.sumValues(einnahmenBGSAs);;
 
         final var einnahmen =
             einkommenTotal
-            + anrechenbaresVermoegen
-            + unterhaltsbeitraegeTotal
-            + rentenTotal
-            + kinderAusbildungszulagenTotal
-            + ergaenzungsleistungenTotal
-            + eoLeistungenTotal
-            + gemeindeInstitutionen
-            + einnahmenBGSATotal
-            + taggelderAHVIVTotal
-            + andereEinnahmenTotal
-            + elternbeitrag1
-            + elternbeitrag2;
+            + InputUtils.sumNullables(
+                anrechenbaresVermoegen,
+                unterhaltsbeitraegeTotal,
+                rentenTotal,
+                kinderAusbildungszulagenTotal,
+                ergaenzungsleistungenTotal,
+                eoLeistungenTotal,
+                gemeindeInstitutionen,
+                einnahmenBGSATotal,
+                taggelderAHVIVTotal,
+                andereEinnahmenTotal,
+                elternbeitrag1.orElse(null),
+                elternbeitrag2.orElse(null)
+            );
 
         // Set calculated values on dto
         return new PersoenlichesBudgetresultatEinnahmenDto(
             einnahmen,
-            einkommen,
-            einkommenPartner,
+            einkommens,
             einkommenTotal,
-            einnahmenBGSA,
-            einnahmenBGSAPartner,
+            einnahmenBGSAs,
             einnahmenBGSATotal,
-            kinderAusbildungszulagen,
-            kinderAusbildungszulagenPartner,
-            kinderAusbildungszulagenKinder,
+            kinderAusbildungszulagens,
             kinderAusbildungszulagenTotal,
-            unterhaltsbeitraege,
-            unterhaltsbeitraegePartner,
-            unterhaltsbeitraegeKinder,
+            unterhaltsbeitraeges,
             unterhaltsbeitraegeTotal,
-            eoLeistungen,
-            eoLeistungenPartner,
+            eoLeistungens,
             eoLeistungenTotal,
-            taggelderAHVIV,
-            taggelderAHVIVPartner,
+            taggelderAHVIVs,
             taggelderAHVIVTotal,
-            renten,
-            rentenPartner,
-            rentenKinder,
+            rentens,
             rentenTotal,
-            ergaenzungsleistungen,
-            ergaenzungsleistungenPartner,
-            ergaenzungsleistungenKinder,
+            ergaenzungsleistungens,
             ergaenzungsleistungenTotal,
             gemeindeInstitutionen,
-            andereEinnahmen,
-            andereEinnahmenPartner,
-            andereEinnahmenKinder,
+            andereEinnahmens,
             andereEinnahmenTotal,
             anrechenbaresVermoegen,
             steuerbaresVermoegen,
-            elternbeitrag1 + elternbeitrag2
+            InputUtils.sumNullables(
+                elternbeitrag1.orElse(null),
+                elternbeitrag2.orElse(null)
+            )
         );
     }
 
@@ -321,16 +295,5 @@ public class PersoenlichesBudgetCalculatorV1 {
             return fractionalValue.divide(BigDecimal.TWO, RoundingMode.HALF_UP).intValue();
         }
         return fractionalValue.intValue();
-    }
-
-    public static int sumValues(int... otherValues) {
-        return Arrays.stream(otherValues).sum();
-    }
-
-    public static int sumValues(List<PersonValueItemDto> list, int... otherValues) {
-        if (list == null || list.isEmpty()) {
-            return 0;
-        }
-        return sumValues(otherValues) + list.stream().mapToInt(PersonValueItemDto::getValue).sum();
     }
 }

@@ -30,7 +30,10 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
+import ch.dvbern.stip.berechnung.dto.InputUtils;
+import ch.dvbern.stip.berechnung.dto.PersonValueList;
 import ch.dvbern.stip.berechnung.util.MathUtil;
+import ch.dvbern.stip.generated.dto.PersonValueItemDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -43,39 +46,53 @@ import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 @Value
 @Jacksonized
 public class ElternteilV1 {
-    int verpflegungskosten;
-    int verpflegungskostenPartner;
-    int grundbedarf;
-    int fahrkosten;
-    int fahrkostenPartner;
+    int elternhaushalt;
+    boolean isInitialized;
+    String vorname;
+    String nachname;
+    String vornamePartner;
+    String nachnamePartner;
+    String sozialversicherungsnummer;
+    String sozialversicherungsnummerPartner;
+    LocalDate geburtsdatum;
+    LocalDate geburtsdatumPartner;
+    SteuerdatenTyp steuerdatenTyp;
+    boolean selbststaendigErwerbend;
+    int anzahlPersonenImHaushalt;
+    int anzahlGeschwisterInAusbildung;
+    int steuerjahr;
+    String veranlagungscode;
+
+    // Einnahmen
+    int totalEinkuenfte;
+    int vermoegen;
     int integrationszulage;
     int integrationszulageAnzahl;
     int integrationszulageTotal;
+    Integer unterhaltsbeitraege;
+    Integer einzahlungSaeule3a;
+    Integer einzahlungSaeule2;
+    Integer einnahmenBGSA;
+    Integer andereEinnahmen;
+    Integer renten;
+
+    // Kosten
+    int grundbedarf;
+    List<PersonValueItemDto> verpflegungskostens;
+    List<PersonValueItemDto> fahrkostens;
     int steuernKantonGemeinde;
     int steuernBund;
     int medizinischeGrundversorgung;
     int effektiveWohnkosten;
-    int totalEinkuenfte;
-    int ergaenzungsleistungen;
     int eigenmietwert;
-    int unterhaltsbeitraege;
-    int einzahlungSaeule3a;
-    int einzahlungSaeule2;
-    int vermoegen;
-    boolean selbststaendigErwerbend;
-    int anzahlPersonenImHaushalt;
-    int anzahlGeschwisterInAusbildung;
-    int einnahmenBGSA;
-    int andereEinnahmen;
-    int renten;
-
-    SteuerdatenTyp steuerdatenTyp;
+    Integer ergaenzungsleistungen;
 
     public static ElternteilV1Builder builderWithDefaults() {
-        return new ElternteilV1Builder();
+        return new ElternteilV1Builder().isInitialized(false);
     }
 
     public static ElternteilV1Builder builderFromDependants(
+        final int elternhaushalt,
         final Gesuchsperiode gesuchsperiode,
         final List<Eltern> eltern,
         final Steuererklaerung steuererklaerung,
@@ -89,28 +106,47 @@ public class ElternteilV1 {
         final LocalDate ausbildungsBegin
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
+        final var steuernElternTyp = InputUtils.fromSteuerdatenTyp(steuerdaten.getSteuerdatenTyp());
+        final var elternteileToUse =
+            InputUtils.getElterteileToUse(eltern, familiensituation.getElternVerheiratetZusammen(), steuernElternTyp);
+        final var elternteil = elternteileToUse.getLeft();
+        final var elternteilPartner = elternteileToUse.getRight();
+        final var elternteilPartnerName = elternteilPartner.map(Eltern::getVorname);
+
+        final var verpflegungskostens = new PersonValueList();
+        final var fahrkostens = new PersonValueList();
 
         builder.steuerdatenTyp(steuerdaten.getSteuerdatenTyp());
-        builder.verpflegungskosten(steuerdaten.getVerpflegung());
-        builder.verpflegungskostenPartner(Objects.requireNonNullElse(steuerdaten.getVerpflegungPartner(), 0));
+        verpflegungskostens.setPersonValue(elternteil.getVorname(), steuerdaten.getVerpflegung());
+        fahrkostens.setPersonValue(elternteil.getVorname(), steuerdaten.getFahrkosten());
+        elternteilPartnerName.ifPresent(partnerName -> {
+            verpflegungskostens.setPartnerValue(partnerName, steuerdaten.getVerpflegungPartner());
+            fahrkostens.setPartnerValue(partnerName, steuerdaten.getFahrkostenPartner());
+        });
 
-        builder.grundbedarf(
-            BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false)
-        );
-
-        builder.fahrkosten(steuerdaten.getFahrkosten());
-        builder.fahrkostenPartner(Objects.requireNonNullElse(steuerdaten.getFahrkostenPartner(), 0));
-
-        builder.steuernKantonGemeinde(steuerdaten.getSteuernKantonGemeinde());
-        builder.steuernBund(steuerdaten.getSteuernBund());
+        builder
+            .isInitialized(true)
+            .elternhaushalt(elternhaushalt)
+            .vorname(elternteil.getVorname())
+            .nachname(elternteil.getNachname())
+            .vornamePartner(elternteilPartnerName.orElse(null))
+            .nachnamePartner(elternteilPartner.map(Eltern::getNachname).orElse(null))
+            .sozialversicherungsnummer(elternteil.getSozialversicherungsnummer())
+            .sozialversicherungsnummerPartner(elternteilPartner.map(Eltern::getSozialversicherungsnummer).orElse(null))
+            .geburtsdatum(elternteil.getGeburtsdatum())
+            .steuerjahr(steuerdaten.getSteuerjahr())
+            .veranlagungscode(steuerdaten.getVeranlagungsStatus())
+            .grundbedarf(
+                BerechnungRequestV1.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false)
+            )
+            .steuernKantonGemeinde(steuerdaten.getSteuernKantonGemeinde())
+            .steuernBund(steuerdaten.getSteuernBund())
+            .ergaenzungsleistungen(steuererklaerung.getErgaenzungsleistungen());
         int medizinischeGrundversorgung = 0;
         if (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.FAMILIE) {
-
-            for (final var elternteil : eltern) {
-                builder
-                    .ergaenzungsleistungen(Objects.requireNonNullElse(steuererklaerung.getErgaenzungsleistungen(), 0));
+            for (final var e : eltern) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    elternteil.getGeburtsdatum(),
+                    e.getGeburtsdatum(),
                     ausbildungsBegin,
                     gesuchsperiode
                 );
@@ -123,18 +159,6 @@ public class ElternteilV1 {
                 );
             }
         } else {
-            final var steuernElternTyp =
-                steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER
-                    ? ElternTyp.MUTTER
-                    : ElternTyp.VATER; // Never is Family
-            final var elternteilToUse = eltern.stream()
-                .filter(
-                    elternteil -> elternteil.getElternTyp() == steuernElternTyp
-                )
-                .toList()
-                .get(0);
-            builder.ergaenzungsleistungen(Objects.requireNonNullElse(steuererklaerung.getErgaenzungsleistungen(), 0));
-
             final var kindDesElternteilsVollzeit = kinderDerElternInHaushalten.stream()
                 .filter(
                     kind -> Objects
@@ -171,55 +195,21 @@ public class ElternteilV1 {
             }
         }
 
-        int wohnkosten = 0;
-        switch (steuerdaten.getSteuerdatenTyp()) {
-            case VATER -> {
-                final var elternteilToUse = eltern.stream()
-                    .filter(
-                        elternteil -> elternteil.getElternTyp() == ElternTyp.VATER
-                    )
-                    .toList()
-                    .get(0);
-                wohnkosten += elternteilToUse.getWohnkosten();
-                medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    elternteilToUse.getGeburtsdatum(),
-                    ausbildungsBegin,
-                    gesuchsperiode
-                );
-                if (Boolean.TRUE.equals(familiensituation.getVaterWiederverheiratet())) {
-                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        LocalDate.now().minusYears(29),
-                        ausbildungsBegin,
-                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist.
-                                       // 29 für margin
-                    );
-                }
-            }
-            case MUTTER -> {
-                final var elternteilToUse = eltern.stream()
-                    .filter(
-                        elternteil -> elternteil.getElternTyp() == ElternTyp.MUTTER
-                    )
-                    .toList()
-                    .get(0);
-                wohnkosten += elternteilToUse.getWohnkosten();
-                medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    elternteilToUse.getGeburtsdatum(),
-                    ausbildungsBegin,
-                    gesuchsperiode
-                );
-                if (Boolean.TRUE.equals(familiensituation.getMutterWiederverheiratet())) {
-                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        LocalDate.now().minusYears(29),
-                        ausbildungsBegin,
-                        gesuchsperiode // Wir gehen davon aus, dass der Partner eines Elternteils älter als 25 ist.
-                                       // 29 für margin
-                    );
-                }
-            }
-            case FAMILIE -> {
-                final var elternteilToUse = eltern.stream().findFirst().get();
-                wohnkosten += elternteilToUse.getWohnkosten();
+        int wohnkosten = elternteil.getWohnkosten();
+        if (steuerdaten.getSteuerdatenTyp() != SteuerdatenTyp.FAMILIE) {
+            medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
+                elternteil.getGeburtsdatum(),
+                ausbildungsBegin,
+                gesuchsperiode
+            );
+            final var wiederverheiratet = switch (steuerdaten.getSteuerdatenTyp()) {
+                case MUTTER -> familiensituation.getMutterWiederverheiratet();
+                case VATER -> familiensituation.getVaterWiederverheiratet();
+                case FAMILIE -> Boolean.FALSE;
+            };
+            if (Boolean.TRUE.equals(wiederverheiratet)) {
+                // Wir gehen davon aus, dass der Partner eines Elternteils erwachsen ist
+                medizinischeGrundversorgung += gesuchsperiode.getErwachsene2599();
             }
         }
 
@@ -242,30 +232,33 @@ public class ElternteilV1 {
                 anzahlPersonenImHaushalt
             )
         );
-        builder.einnahmenBGSA(Objects.requireNonNullElse(steuererklaerung.getEinnahmenBGSA(), 0));
-        builder.andereEinnahmen(Objects.requireNonNullElse(steuererklaerung.getAndereEinnahmen(), 0));
-        builder.renten(Objects.requireNonNullElse(steuererklaerung.getRenten(), 0));
+        builder.einnahmenBGSA(steuererklaerung.getEinnahmenBGSA());
+        builder.andereEinnahmen(steuererklaerung.getAndereEinnahmen());
+        builder.renten(steuererklaerung.getRenten());
 
-        builder.totalEinkuenfte(Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0));
-        builder.eigenmietwert(Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0));
+        builder.totalEinkuenfte(steuerdaten.getTotalEinkuenfte());
+        builder.eigenmietwert(steuerdaten.getEigenmietwert());
         builder.unterhaltsbeitraege(
-            toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0))
+            toJahresWert(steuererklaerung.getUnterhaltsbeitraege())
         );
-        builder.einzahlungSaeule2(Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0));
-        builder.einzahlungSaeule3a(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0));
-        builder.vermoegen(Objects.requireNonNullElse(steuerdaten.getVermoegen(), 0));
+        builder.einzahlungSaeule2(steuerdaten.getSaeule2());
+        builder.einzahlungSaeule3a(steuerdaten.getSaeule3a());
+        builder.vermoegen(steuerdaten.getVermoegen());
         builder.selbststaendigErwerbend(steuerdaten.getIsArbeitsverhaeltnisSelbstaendig());
         builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
         builder.anzahlGeschwisterInAusbildung(anzahlGeschwisterInAusbildung);
+        builder.verpflegungskostens(verpflegungskostens.toList());
+        builder.fahrkostens(fahrkostens.toList());
 
         return builder;
     }
 
     public static ElternteilV1 buildFromDependants(
+        final int elternhaushalt,
         final Gesuchsperiode gesuchsperiode,
         final List<Eltern> eltern,
-        final Steuerdaten steuerdaten,
         final Steuererklaerung steuererklaerung,
+        final Steuerdaten steuerdaten,
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
@@ -275,6 +268,7 @@ public class ElternteilV1 {
         final LocalDate ausbildungsBegin
     ) {
         return builderFromDependants(
+            elternhaushalt,
             gesuchsperiode,
             eltern,
             steuererklaerung,

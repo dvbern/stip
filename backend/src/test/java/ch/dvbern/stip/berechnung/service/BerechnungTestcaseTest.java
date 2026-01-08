@@ -47,6 +47,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 @RequiredArgsConstructor
 @QuarkusTest
 @Slf4j
@@ -122,16 +125,16 @@ public class BerechnungTestcaseTest {
         final var tranchenResultat = berechnungsresultat.getTranchenBerechnungsresultate().get(0);
         // TODO: Check what went wrong
         assertThat(
-        tranchenResultat.getPersoenlichesBudgetresultat().getEinnahmen().getTotal(),
-        is(testcase.einnahmenPersoenlichesBudget)
+            tranchenResultat.getPersoenlichesBudgetresultat().getEinnahmen().getTotal(),
+            is(testcase.einnahmenPersoenlichesBudget)
         );
         assertThat(
-        tranchenResultat.getPersoenlichesBudgetresultat().getKosten().getTotal(),
-        is(testcase.ausgabenPersoenlichesBudget)
+            tranchenResultat.getPersoenlichesBudgetresultat().getKosten().getTotal(),
+            is(testcase.ausgabenPersoenlichesBudget)
         );
         assertThat(
-        tranchenResultat.getPersoenlichesBudgetresultat().getTotal(),
-        is(testcase.persoenlichesbudgetBerechnet)
+            tranchenResultat.getPersoenlichesBudgetresultat().getTotal(),
+            is(testcase.persoenlichesbudgetBerechnet)
         );
     }
 }

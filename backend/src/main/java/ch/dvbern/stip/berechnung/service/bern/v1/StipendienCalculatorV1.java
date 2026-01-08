@@ -18,6 +18,8 @@
 package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
@@ -50,33 +52,29 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
 
         return new BerechnungResult(
             persoenlichesBudget.getTotal(),
-            familienbudgets,
+            familienbudgets.stream().flatMap(Optional::stream).toList(),
             persoenlichesBudget
         );
     }
 
-    private List<FamilienBudgetresultatDto> calculateFamilienbudgets(final BerechnungRequestV1 model) {
-        final var one = FamilienbudgetCalculatorV1.calculateFamilienbudget(
-            model.getInputFamilienbudget1(),
-            model.getInputPersoenlichesBudget().getAntragssteller(),
-            model.getStammdaten(),
-            1
-        );
+    private List<Optional<FamilienBudgetresultatDto>> calculateFamilienbudgets(final BerechnungRequestV1 model) {
+        return Stream.of(model.getInputFamilienbudget1(), model.getInputFamilienbudget2())
+            .map(
+                budget -> FamilienbudgetCalculatorV1.calculateFamilienbudget(
+                    budget,
 
-        final var two = FamilienbudgetCalculatorV1.calculateFamilienbudget(
-            model.getInputFamilienbudget2(),
-            model.getInputPersoenlichesBudget().getAntragssteller(),
-            model.getStammdaten(),
-            2
-        );
-
-        return List.of(one, two);
+                    model.getInputPersoenlichesBudget().getAntragssteller(),
+                    model.getStammdaten()
+                )
+            )
+            .map(Optional::ofNullable)
+            .toList();
     }
 
     private PersoenlichesBudgetresultatDto calculatePersoenlichesBudgetresult(
         final BerechnungRequestV1 model,
-        final FamilienBudgetresultatDto familienBudgetresultat1,
-        final FamilienBudgetresultatDto familienBudgetresultat2
+        final Optional<FamilienBudgetresultatDto> familienBudgetresultat1,
+        final Optional<FamilienBudgetresultatDto> familienBudgetresultat2
     ) {
         return PersoenlichesBudgetCalculatorV1.calculatePersoenlichesBudget(
             model.getInputPersoenlichesBudget(),

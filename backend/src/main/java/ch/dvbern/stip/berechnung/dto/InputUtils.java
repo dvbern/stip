@@ -17,11 +17,56 @@
 
 package ch.dvbern.stip.berechnung.dto;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.generated.dto.PersonValueItemDto;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.tuple.Pair;
 
 @UtilityClass
 public class InputUtils {
+    public static ElternTyp fromSteuerdatenTyp(SteuerdatenTyp steuerdatenTyp) {
+        return switch (steuerdatenTyp) {
+            case SteuerdatenTyp.MUTTER -> ElternTyp.MUTTER;
+            case SteuerdatenTyp.VATER, SteuerdatenTyp.FAMILIE -> ElternTyp.VATER;
+        };
+    }
+
+    public static Pair<Eltern, Optional<Eltern>> getElterteileToUse(
+        List<Eltern> eltern,
+        boolean verheiratetOderZusammen,
+        ElternTyp elternTyp
+    ) {
+        final var elternsByType = eltern.stream().collect(Collectors.groupingBy(Eltern::getElternTyp));
+        return Pair.of(
+            elternsByType.remove(elternTyp).getFirst(),
+            verheiratetOderZusammen ? elternsByType.values().stream().findFirst().map(List::getFirst) : Optional.empty()
+        );
+    }
+
+    public static int sumValues(List<PersonValueItemDto> values) {
+        return values.stream().mapToInt(PersonValueItemDto::getValue).sum();
+    }
+
+    public static int sumNullables(Integer... values) {
+        return Arrays.stream(values).filter(Objects::nonNull).mapToInt(value -> value).sum();
+    }
+
     public static int toJahresWert(final int monatsWert) {
+        return monatsWert * 12;
+    }
+
+    public static Integer toJahresWert(final Integer monatsWert) {
+        if (Objects.isNull(monatsWert)) {
+            return null;
+        }
         return monatsWert * 12;
     }
 }

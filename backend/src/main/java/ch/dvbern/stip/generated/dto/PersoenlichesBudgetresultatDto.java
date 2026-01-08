@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatEinnahmenDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatKostenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -23,6 +24,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class PersoenlichesBudgetresultatDto  implements Serializable {
+  private @Valid String vorname;
+  private @Valid String nachname;
+  private @Valid String sozialversicherungsnummer;
+  private @Valid LocalDate geburtsdatum;
   private @Valid Integer total;
   private @Valid Integer einnahmenMinusKosten;
   private @Valid Integer fehlbetrag;
@@ -35,6 +40,85 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer anzahlPersonenImHaushalt;
   private @Valid PersoenlichesBudgetresultatEinnahmenDto einnahmen;
   private @Valid PersoenlichesBudgetresultatKostenDto kosten;
+  private @Valid String vornamePartner;
+  private @Valid String nachnamePartner;
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto vorname(String vorname) {
+    this.vorname = vorname;
+    return this;
+  }
+
+  
+  @JsonProperty("vorname")
+  @NotNull
+  public String getVorname() {
+    return vorname;
+  }
+
+  @JsonProperty("vorname")
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto nachname(String nachname) {
+    this.nachname = nachname;
+    return this;
+  }
+
+  
+  @JsonProperty("nachname")
+  @NotNull
+  public String getNachname() {
+    return nachname;
+  }
+
+  @JsonProperty("nachname")
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto sozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialversicherungsnummer")
+  @NotNull
+  public String getSozialversicherungsnummer() {
+    return sozialversicherungsnummer;
+  }
+
+  @JsonProperty("sozialversicherungsnummer")
+  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+  }
+
+  /**
+   * dd.MM.yyyy
+   **/
+  public PersoenlichesBudgetresultatDto geburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+    return this;
+  }
+
+  
+  @JsonProperty("geburtsdatum")
+  @NotNull
+  public LocalDate getGeburtsdatum() {
+    return geburtsdatum;
+  }
+
+  @JsonProperty("geburtsdatum")
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+  }
 
   /**
    **/
@@ -264,6 +348,42 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     this.kosten = kosten;
   }
 
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto vornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
+    return this;
+  }
+
+  
+  @JsonProperty("vornamePartner")
+  public String getVornamePartner() {
+    return vornamePartner;
+  }
+
+  @JsonProperty("vornamePartner")
+  public void setVornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto nachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
+    return this;
+  }
+
+  
+  @JsonProperty("nachnamePartner")
+  public String getNachnamePartner() {
+    return nachnamePartner;
+  }
+
+  @JsonProperty("nachnamePartner")
+  public void setNachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -274,7 +394,11 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
       return false;
     }
     PersoenlichesBudgetresultatDto persoenlichesBudgetresultat = (PersoenlichesBudgetresultatDto) o;
-    return Objects.equals(this.total, persoenlichesBudgetresultat.total) &&
+    return Objects.equals(this.vorname, persoenlichesBudgetresultat.vorname) &&
+        Objects.equals(this.nachname, persoenlichesBudgetresultat.nachname) &&
+        Objects.equals(this.sozialversicherungsnummer, persoenlichesBudgetresultat.sozialversicherungsnummer) &&
+        Objects.equals(this.geburtsdatum, persoenlichesBudgetresultat.geburtsdatum) &&
+        Objects.equals(this.total, persoenlichesBudgetresultat.total) &&
         Objects.equals(this.einnahmenMinusKosten, persoenlichesBudgetresultat.einnahmenMinusKosten) &&
         Objects.equals(this.fehlbetrag, persoenlichesBudgetresultat.fehlbetrag) &&
         Objects.equals(this.proKopfTeilung, persoenlichesBudgetresultat.proKopfTeilung) &&
@@ -285,12 +409,14 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.gesetzlichesDarlehenStipendium, persoenlichesBudgetresultat.gesetzlichesDarlehenStipendium) &&
         Objects.equals(this.anzahlPersonenImHaushalt, persoenlichesBudgetresultat.anzahlPersonenImHaushalt) &&
         Objects.equals(this.einnahmen, persoenlichesBudgetresultat.einnahmen) &&
-        Objects.equals(this.kosten, persoenlichesBudgetresultat.kosten);
+        Objects.equals(this.kosten, persoenlichesBudgetresultat.kosten) &&
+        Objects.equals(this.vornamePartner, persoenlichesBudgetresultat.vornamePartner) &&
+        Objects.equals(this.nachnamePartner, persoenlichesBudgetresultat.nachnamePartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, gesetzlichesDarlehen, gesetzlichesDarlehenStipendium, anzahlPersonenImHaushalt, einnahmen, kosten);
+    return Objects.hash(vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, gesetzlichesDarlehen, gesetzlichesDarlehenStipendium, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner);
   }
 
   @Override
@@ -298,6 +424,10 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class PersoenlichesBudgetresultatDto {\n");
     
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
+    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    einnahmenMinusKosten: ").append(toIndentedString(einnahmenMinusKosten)).append("\n");
     sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
@@ -310,6 +440,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
     sb.append("    einnahmen: ").append(toIndentedString(einnahmen)).append("\n");
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");
+    sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
+    sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
     sb.append("}");
     return sb.toString();
   }

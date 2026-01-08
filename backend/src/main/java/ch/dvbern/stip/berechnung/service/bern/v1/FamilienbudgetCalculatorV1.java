@@ -19,7 +19,9 @@ package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
+import ch.dvbern.stip.berechnung.dto.InputUtils;
 import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputFamilienbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.ElternteilV1;
@@ -38,10 +40,9 @@ public class FamilienbudgetCalculatorV1 {
     public FamilienBudgetresultatDto calculateFamilienbudget(
         final InputFamilienbudgetV1 input,
         final AntragsstellerV1 antragssteller,
-        final StammdatenV1 stammdaten,
-        final int elternHaushalt
+        final StammdatenV1 stammdaten
     ) {
-        if (input == null) {
+        if (input == null || !input.getElternteil().isInitialized()) {
             return null;
         }
 
@@ -66,11 +67,14 @@ public class FamilienbudgetCalculatorV1 {
         if (einnahmenMinusKosten.signum() < 0) {
             fehlbetrag = total.abs();
             proKopfTeilung = anzahlPersonenImHaushalt;
+            // TODO: check if correct
             ungedeckterAnteilLebenshaltungskosten =
-                calculateAnteilLebenshaltungskosten(antragssteller, total, anzahlPersonenImHaushalt, elternHaushalt); // TODO:
-                                                                                                                      // check
-                                                                                                                      // if
-                                                                                                                      // correct
+                calculateAnteilLebenshaltungskosten(
+                    antragssteller,
+                    total,
+                    anzahlPersonenImHaushalt,
+                    elternteil.getElternhaushalt()
+                );
             total = ungedeckterAnteilLebenshaltungskosten.negate();
         }
         // otherwise einnahmeUeberschuss values are filled
@@ -91,6 +95,11 @@ public class FamilienbudgetCalculatorV1 {
 
         return new FamilienBudgetresultatDto(
             elternteil.getSteuerdatenTyp(),
+            elternteil.getVorname(),
+            elternteil.getNachname(),
+            elternteil.getGeburtsdatum(),
+            elternteil.getSteuerjahr(),
+            elternteil.getVeranlagungscode(),
             roundHalfUp(total),
             roundHalfUp(einnahmenMinusKosten),
             anzahlPersonenImHaushalt,
@@ -103,7 +112,12 @@ public class FamilienbudgetCalculatorV1 {
             proKopfTeilung,
             roundHalfUp(ungedeckterAnteilLebenshaltungskosten),
             einnahmen,
-            kosten
+            kosten,
+            elternteil.getVornamePartner(),
+            elternteil.getNachnamePartner(),
+            elternteil.getSozialversicherungsnummer(),
+            elternteil.getSozialversicherungsnummerPartner(),
+            elternteil.getGeburtsdatumPartner()
         );
     }
 
@@ -116,22 +130,22 @@ public class FamilienbudgetCalculatorV1 {
         final var integrationszulage = elternteil.getIntegrationszulage();
         final var integrationszulageAnzahl = elternteil.getIntegrationszulageAnzahl();
         final var integrationszulageTotal = elternteil.getIntegrationszulageTotal();
-        final var fahrkosten = elternteil.getFahrkosten();
-        final var fahrkostenPartner = elternteil.getFahrkostenPartner();
-        final var verpflegungskosten = elternteil.getVerpflegungskosten();
-        final var verpflegungskostenPartner = elternteil.getVerpflegungskostenPartner();
+        final var fahrkostens = elternteil.getFahrkostens();
+        final var fahrkostenTotal = InputUtils.sumValues(fahrkostens);
+        final var verpflegungskostens = elternteil.getVerpflegungskostens();
+        final var verpflegungskostenTotal = InputUtils.sumValues(verpflegungskostens);
 
         final var ausgaben =
             grundbedarf
-            + effektiveWohnkosten
-            + medizinischeGrundversorgung
-            + kantonsGemeindesteuern
-            + bundessteuern
-            + integrationszulageTotal
-            + fahrkosten
-            + fahrkostenPartner
-            + verpflegungskosten
-            + verpflegungskostenPartner;
+            + InputUtils.sumNullables(
+                effektiveWohnkosten,
+                medizinischeGrundversorgung,
+                kantonsGemeindesteuern,
+                bundessteuern,
+                integrationszulageTotal,
+                fahrkostenTotal,
+                verpflegungskostenTotal
+            );
 
         // Set calculated values on dto
         return new FamilienBudgetresultatKostenDto(
@@ -144,12 +158,10 @@ public class FamilienbudgetCalculatorV1 {
             integrationszulageTotal,
             kantonsGemeindesteuern,
             bundessteuern,
-            fahrkosten,
-            fahrkostenPartner,
-            fahrkosten + fahrkostenPartner,
-            verpflegungskosten,
-            verpflegungskostenPartner,
-            verpflegungskosten + verpflegungskostenPartner
+            fahrkostens,
+            fahrkostenTotal,
+            verpflegungskostens,
+            verpflegungskostenTotal
         );
     }
 
@@ -157,7 +169,7 @@ public class FamilienbudgetCalculatorV1 {
         final ElternteilV1 elternteil,
         final StammdatenV1 stammdaten
     ) {
-        final var ergaenzungsleistungen = elternteil.getErgaenzungsleistungen();
+        final var ergaenzungsleistungen = Objects.requireNonNullElse(elternteil.getErgaenzungsleistungen(), 0);
         final var totalEinkuenfte = elternteil.getTotalEinkuenfte();
         final var eigenmietwert = elternteil.getEigenmietwert();
         final var unterhaltsbeitraege = elternteil.getUnterhaltsbeitraege();
@@ -165,21 +177,25 @@ public class FamilienbudgetCalculatorV1 {
         final var saeule3a = getSaeule3a(elternteil, stammdaten);
         final var saeule2 = getSaeule2(elternteil);
         final var anrechenbaresVermoegen = getAnrechenbaresVermoegen(elternteil, stammdaten);
-        final var einnahmenBGSA = elternteil.getEinnahmenBGSA();
-        final var andereEinnahmen = elternteil.getAndereEinnahmen();
+        final var einnahmenBGSA = Objects.requireNonNullElse(elternteil.getEinnahmenBGSA(), 0);
+        final var andereEinnahmen = Objects.requireNonNullElse(elternteil.getAndereEinnahmen(), 0);
         final var renten = elternteil.getRenten();
 
         final var einnahmenBeforeVermoegen = max(
             totalEinkuenfte
-            + ergaenzungsleistungen
-            + einnahmenBGSA
-            + andereEinnahmen
-            - eigenmietwert
-            - unterhaltsbeitraege
-            - saeule3a
-            - saeule2
-            - renten
-            - stammdaten.getEinkommensfreibetrag(),
+            + InputUtils.sumNullables(
+                ergaenzungsleistungen,
+                einnahmenBGSA,
+                andereEinnahmen
+            )
+            - InputUtils.sumNullables(
+                eigenmietwert,
+                unterhaltsbeitraege,
+                saeule3a,
+                saeule2,
+                renten,
+                stammdaten.getEinkommensfreibetrag()
+            ),
             0
         );
 

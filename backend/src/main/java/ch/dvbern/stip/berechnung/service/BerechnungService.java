@@ -234,13 +234,6 @@ public class BerechnungService {
                 );
             }
 
-            String vornamePartner = "";
-            String nachnamePartner = "";
-            if (Objects.nonNull(gesuchTranche.getGesuchFormular().getPartner())) {
-                vornamePartner = gesuchTranche.getGesuchFormular().getPartner().getVorname();
-                nachnamePartner = gesuchTranche.getGesuchFormular().getPartner().getNachname();
-            }
-
             if (
                 steuerdaten.size() <= 1
                 || noKinderOhneEigenenHaushalt == 0
@@ -251,12 +244,6 @@ public class BerechnungService {
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer(),
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getVorname(),
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNachname(),
-                        vornamePartner,
-                        nachnamePartner,
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum(),
                         Math.min(0, stipendienCalculated.getStipendien()), // KSTIP-2548: positive
                                                                            // Zwischenbeiträge/Teilrechnungen auf 0
                                                                            // setzen
@@ -305,12 +292,6 @@ public class BerechnungService {
                 // TODO: Clean up this totally messed up tangle of code, duplications and pure chaos
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getSozialversicherungsnummer(),
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getVorname(),
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getNachname(),
-                        vornamePartner,
-                        nachnamePartner,
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getGeburtsdatum(),
                         Math.min(0, berechnung), // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
