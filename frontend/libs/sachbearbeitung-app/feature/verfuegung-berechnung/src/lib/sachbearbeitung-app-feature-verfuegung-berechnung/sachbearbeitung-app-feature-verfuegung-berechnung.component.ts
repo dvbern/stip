@@ -108,6 +108,11 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       familien: r.familienBudgetresultate.map((v) => ({
         ...v,
         typ: 'familien',
+        kosten: {
+          ...v.kosten,
+          anzahlKinderInAusbildung: v.anzahlKinderInAusbildung,
+          anzahlPersonenImHaushalt: v.anzahlPersonenImHaushalt,
+        },
       })),
       berechnung: r.berechnung,
       berechnungsStammdaten: r.berechnungsStammdaten,

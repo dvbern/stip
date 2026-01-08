@@ -29,6 +29,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Total Einkünfte -->
       <dv-position
         [titleSig]="t('totalEinkuenfte')"
+        [infoSig]="t('totalEinkuenfte.info')"
         [amountSig]="einnahmenSig().totalEinkuenfte | formatChfPositive"
       >
       </dv-position>
@@ -64,6 +65,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Abzüglich Unterhaltsbeträge  -->
       <dv-position
         [titleSig]="t('unterhaltsbeitraege')"
+        [infoSig]="t('unterhaltsbeitraege.info')"
         [amountSig]="
           einnahmenSig().unterhaltsbeitraege | formatChfNegative: true
         "
@@ -73,7 +75,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
       <dv-position
         [titleSig]="t('beitraegeSaule3a')"
-        [infoSig]="t('beitraegeSaule3a.info', einnahmenSig())"
+        [infoSig]="t('beitraegeSaule3a.info')"
         [amountSig]="einnahmenSig().sauele3 | formatChfNegative: true"
       >
       </dv-position>
@@ -88,22 +90,29 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
       <dv-position
-        [titleSig]="t('kinderalimente')"
+        [titleSig]="t('renten')"
+        [infoSig]="t('renten.info')"
         [amountSig]="einnahmenSig().renten | formatChfNegative: true"
       >
       </dv-position>
 
-      <!-- todo: mit stammdaten? Einkommensfreibetrag  -->
+      <!--  Einkommensfreibetrag  -->
       <dv-position
         [titleSig]="t('einkommensfreibeitrag')"
-        [infoSig]="t('einkommensfreibeitrag.info')"
+        [infoSig]="einnahmenSig().einkommensfreibetrag | formatChf"
         [amountSig]="
           einnahmenSig().einkommensfreibetrag | formatChfNegative: true
         "
       >
       </dv-position>
 
-      <!-- todo: Zwischentotal -->
+      <!-- todo: Zwischentotal anrechenbare, jährliche Einnahmen, welcher betrag? -->
+      <dv-position
+        [titleSig]="t('zwischentotal')"
+        [infoSig]="t('zwischentotal.info')"
+        [amountSig]="'Betrag TBD'"
+      >
+      </dv-position>
 
       <!-- Anrechenbares Vermögen -->
       <dv-position
