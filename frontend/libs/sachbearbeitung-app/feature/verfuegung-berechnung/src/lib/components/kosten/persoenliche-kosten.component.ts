@@ -24,16 +24,18 @@ import { PositionComponent } from '../position/position.component';
         prefix: 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten'
       "
     >
+      @let budget = budgetSig();
+      @let kosten = budget.kosten;
       <!-- Ausbildungskosten der/des Auszubildenden -->
       <dv-position
         [titleSig]="t('ausbildungskosten')"
         [infoSig]="
           t('ausbildungskosten.info', {
-            ausbildungskosten: kostenSig().ausbildungskosten,
-            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+            ausbildungskosten: kosten.ausbildungskosten,
+            anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kostenSig().ausbildungskosten | formatChfPositive"
+        [amountSig]="kosten.ausbildungskosten | formatChfPositive"
       >
       </dv-position>
 
@@ -42,11 +44,11 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('fahrkosten')"
         [infoSig]="
           t('fahrkosten.info', {
-            fahrkosten: kostenSig().fahrkosten,
-            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+            fahrkosten: kosten.fahrkosten,
+            anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kostenSig().fahrkosten | formatChfPositive"
+        [amountSig]="kosten.fahrkosten | formatChfPositive"
       >
       </dv-position>
 
@@ -54,7 +56,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('mehrkostenVerpflegung')"
         [infoSig]="t('nurElternWohnend.info')"
-        [amountSig]="kostenSig().verpflegungskosten | formatChfPositive"
+        [amountSig]="kosten.verpflegungskosten | formatChfPositive"
       >
       </dv-position>
 
@@ -62,11 +64,11 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="
           t('grundbedarfPersonen', {
-            anzahl: kostenSig().anzahlPersonenImHaushalt,
+            anzahl: budget.anzahlPersonenImHaushalt,
           })
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
-        [amountSig]="kostenSig().grundbedarf | formatChfPositive"
+        [amountSig]="kosten.grundbedarf | formatChfPositive"
       >
       </dv-position>
 
@@ -74,11 +76,11 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="
           t('wohnkostenPersonen', {
-            anzahl: kostenSig().anzahlPersonenImHaushalt,
+            anzahl: budget.anzahlPersonenImHaushalt,
           })
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
-        [amountSig]="kostenSig().wohnkosten | formatChfPositive"
+        [amountSig]="kosten.wohnkosten | formatChfPositive"
       >
       </dv-position>
 
@@ -86,13 +88,13 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="
           t('medizinischeGrundversorgungPersonen', {
-            anzahl: kostenSig().anzahlPersonenImHaushalt,
+            anzahl: budget.anzahlPersonenImHaushalt,
           })
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
-        [personValueItemsSig]="kostenSig().medizinischeGrundversorgung"
+        [personValueItemsSig]="kosten.medizinischeGrundversorgung"
         [amountSig]="
-          kostenSig().medizinischeGrundversorgungTotal | formatChfPositive
+          kosten.medizinischeGrundversorgungTotal | formatChfPositive
         "
       >
       </dv-position>
@@ -102,11 +104,11 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('fahrkostenPartner')"
         [infoSig]="
           t('fahrkostenPartner.info', {
-            fahrkosten: kostenSig().fahrkosten,
-            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+            fahrkosten: kosten.fahrkosten,
+            anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kostenSig().fahrkostenPartner | formatChfPositive"
+        [amountSig]="kosten.fahrkostenPartner | formatChfPositive"
       >
       </dv-position>
 
@@ -115,18 +117,18 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('verpflegungPartner')"
         [infoSig]="
           t('verpflegungPartner.info', {
-            verpflegungPartner: kostenSig().verpflegungPartner,
-            anzahlPersonenImHaushalt: kostenSig().anzahlPersonenImHaushalt,
+            verpflegungPartner: kosten.verpflegungPartner,
+            anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kostenSig().verpflegungPartner | formatChfPositive"
+        [amountSig]="kosten.verpflegungPartner | formatChfPositive"
       >
       </dv-position>
 
       <!-- Betreuungskosten für Kinder -->
       <dv-position
         [titleSig]="t('betreuungskostenKinder')"
-        [amountSig]="kostenSig().betreuungskostenKinder | formatChfPositive"
+        [amountSig]="kosten.betreuungskostenKinder | formatChfPositive"
       >
       </dv-position>
 
@@ -134,7 +136,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('kantonsGemeindesteuern')"
         [infoSig]="t('steuern.info')"
-        [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
+        [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
       >
       </dv-position>
 
@@ -142,7 +144,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('bundessteuern')"
         [infoSig]="t('steuern.info')"
-        [amountSig]="kostenSig().bundessteuern | formatChfPositive"
+        [amountSig]="kosten.bundessteuern | formatChfPositive"
       >
       </dv-position>
 
@@ -150,7 +152,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('anteilLebenshaltungskosten')"
         [infoSig]="t('anteilLebenshaltungskosten.info')"
-        [amountSig]="kostenSig().anteilLebenshaltungskosten | formatChfPositive"
+        [amountSig]="kosten.anteilLebenshaltungskosten | formatChfPositive"
       >
       </dv-position>
 
@@ -160,7 +162,7 @@ import { PositionComponent } from '../position/position.component';
           {{ t('total') }}
         </div>
         <div class="h4 flex-grow-1 text-end text-nowrap">
-          {{ kostenSig().total | formatChf }}
+          {{ kosten.total | formatChf }}
         </div>
       </div>
 
@@ -170,5 +172,5 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheKostenComponent {
-  kostenSig = input.required<PersoenlichesBudgetresultatView['kosten']>();
+  budgetSig = input.required<PersoenlichesBudgetresultatView>();
 }

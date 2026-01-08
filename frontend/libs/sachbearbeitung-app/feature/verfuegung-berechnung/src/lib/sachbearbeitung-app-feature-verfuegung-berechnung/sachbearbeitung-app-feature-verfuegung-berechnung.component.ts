@@ -81,38 +81,18 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
           .map((d) => d.split('.')[1])
           .join('/'),
         name: `${r.persoenlichesBudgetresultat.vorname} ${r.persoenlichesBudgetresultat.nachname}`,
-        geburtsdatum: r.persoenlichesBudgetresultat.geburtsdatum,
         gueltigAb: r.gueltigAb,
         gueltigBis: r.gueltigBis,
-        sozialversicherungsnummer:
-          r.persoenlichesBudgetresultat.sozialversicherungsnummer,
         geteilteBerechnung: r.type
           ? {
               berechnungsanteilKinder: Math.round(r.berechnungsanteilKinder),
               anteil: r.berechnung,
             }
           : null,
-        einnahmen: {
-          ...r.persoenlichesBudgetresultat.einnahmen,
-          // vornamePia: r.vornamePia,
-          // vornamePartner: r.vornamePartner,
-        },
-        kosten: {
-          ...r.persoenlichesBudgetresultat.kosten,
-          // vornamePia: r.vornamePia,
-          // vornamePartner: r.vornamePartner,
-          anzahlPersonenImHaushalt:
-            r.persoenlichesBudgetresultat.anzahlPersonenImHaushalt,
-        },
       },
       familien: r.familienBudgetresultate.map((v) => ({
         ...v,
         typ: 'familien',
-        kosten: {
-          ...v.kosten,
-          anzahlKinderInAusbildung: v.anzahlKinderInAusbildung,
-          anzahlPersonenImHaushalt: v.anzahlPersonenImHaushalt,
-        },
       })),
       berechnung: r.berechnung,
       berechnungsStammdaten: r.berechnungsStammdaten,

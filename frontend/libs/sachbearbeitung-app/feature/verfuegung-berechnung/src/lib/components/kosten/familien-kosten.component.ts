@@ -25,15 +25,17 @@ import { PositionComponent } from '../position/position.component';
         prefix: 'sachbearbeitung-app.verfuegung.berechnung.familien.kosten'
       "
     >
+      @let budget = budgetSig();
+      @let kosten = budget.kosten;
       <!-- Grundbedarf  -->
       <dv-position
         [titleSig]="t('grundbedarf')"
         [infoSig]="
           t('anzahlPersonen.info', {
-            anzahlPersonen: kostenSig().anzahlPersonenImHaushalt,
+            anzahlPersonen: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kostenSig().grundbedarf | formatChfPositive"
+        [amountSig]="kosten.grundbedarf | formatChfPositive"
       >
       </dv-position>
 
@@ -42,10 +44,10 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('wohnkosten')"
         [infoSig]="
           t('anzahlPersonen.info', {
-            anzahlPersonen: kostenSig().anzahlPersonenImHaushalt,
+            anzahlPersonen: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kostenSig().wohnkosten | formatChfPositive"
+        [amountSig]="kosten.wohnkosten | formatChfPositive"
       >
       </dv-position>
 
@@ -54,12 +56,10 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('medizinischeGrundversorgung')"
         [infoSig]="
           t('anzahlPersonen.info', {
-            anzahlPersonen: kostenSig().anzahlPersonenImHaushalt,
+            anzahlPersonen: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="
-          kostenSig().medizinischeGrundversorgung | formatChfPositive
-        "
+        [amountSig]="kosten.medizinischeGrundversorgung | formatChfPositive"
       >
       </dv-position>
 
@@ -67,7 +67,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="
           t('integrationszulage', {
-            anzahlKinderInAusbildung: kostenSig().anzahlKinderInAusbildung,
+            anzahlKinderInAusbildung: budget.anzahlKinderInAusbildung,
           })
         "
         [infoSig]="
@@ -75,7 +75,7 @@ import { PositionComponent } from '../position/position.component';
             einkommensfreibetrag: stammdatenSig().einkommensfreibetrag,
           })
         "
-        [amountSig]="kostenSig().integrationszulage | formatChfPositive"
+        [amountSig]="kosten.integrationszulage | formatChfPositive"
       >
       </dv-position>
 
@@ -83,7 +83,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('kantonsGemeindesteuern')"
         [infoSig]="t('steuern.info')"
-        [amountSig]="kostenSig().kantonsGemeindesteuern | formatChfPositive"
+        [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
       >
       </dv-position>
 
@@ -91,25 +91,25 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('bundessteuern')"
         [infoSig]="t('steuern.info')"
-        [amountSig]="kostenSig().bundessteuern | formatChfPositive"
+        [amountSig]="kosten.bundessteuern | formatChfPositive"
       >
       </dv-position>
 
-      <!--  Fahrkosten -->
+      <!-- Fahrkosten -->
       <dv-position
         [titleSig]="t('fahrkosten')"
         [infoSig]="t('fahrkosten.info')"
-        [amountSig]="kostenSig().fahrkostenTotal | formatChfPositive"
-        [personValueItemsSig]="kostenSig().fahrkosten"
+        [amountSig]="kosten.fahrkostenTotal | formatChfPositive"
+        [personValueItemsSig]="kosten.fahrkosten"
       >
       </dv-position>
 
-      <!--  Verpflegung auswärts -->
+      <!-- Verpflegung auswärts -->
       <dv-position
         [titleSig]="t('verpflegung')"
         [infoSig]="t('verpflegung.info')"
-        [amountSig]="kostenSig().verpflegungTotal | formatChfPositive"
-        [personValueItemsSig]="kostenSig().verpflegung"
+        [amountSig]="kosten.verpflegungTotal | formatChfPositive"
+        [personValueItemsSig]="kosten.verpflegung"
       >
       </dv-position>
 
@@ -119,7 +119,7 @@ import { PositionComponent } from '../position/position.component';
           {{ t('total') }}
         </div>
         <div class="h4 flex-grow-1 text-end text-nowrap">
-          {{ kostenSig().total | formatChf }}
+          {{ kosten.total | formatChf }}
         </div>
       </div>
     </ng-container>
@@ -127,6 +127,6 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienKostenComponent {
-  kostenSig = input.required<FamilienBudgetresultatView['kosten']>();
+  budgetSig = input.required<FamilienBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }

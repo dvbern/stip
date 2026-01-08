@@ -25,6 +25,7 @@ import { PositionComponent } from '../position/position.component';
         prefix: 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen'
       "
     >
+      @let einnahmen = budgetSig().einnahmen;
       <!-- Nettoerwerbseinkommen -->
       <dv-position
         [titleSig]="t('nettoerwerbseinkommen')"
@@ -34,18 +35,16 @@ import { PositionComponent } from '../position/position.component';
               stammdatenSig().freibetragErwerbseinkommen | formatChf,
           })
         "
-        [personValueItemsSig]="einnahmenSig().nettoerwerbseinkommen"
-        [amountSig]="
-          einnahmenSig().nettoerwerbseinkommenTotal | formatChfPositive
-        "
+        [personValueItemsSig]="einnahmen.nettoerwerbseinkommen"
+        [amountSig]="einnahmen.nettoerwerbseinkommenTotal | formatChfPositive"
       >
       </dv-position>
 
       <!-- BGSA -->
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
-        [personValueItemsSig]="einnahmenSig().einnahmenBGSA"
-        [amountSig]="einnahmenSig().einnahmenBGSATotal | formatChfPositive"
+        [personValueItemsSig]="einnahmen.einnahmenBGSA"
+        [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
       >
         <a href="#1" class="tw:text-xs tw:align-text-top tw:no-underline!">
           1)
@@ -55,9 +54,9 @@ import { PositionComponent } from '../position/position.component';
       <!-- Kinder- und Ausbildungszulagen -->
       <dv-position
         [titleSig]="t('kinderUndAusbildungszulagen')"
-        [personValueItemsSig]="einnahmenSig().kinderAusbildungszulagen"
+        [personValueItemsSig]="einnahmen.kinderAusbildungszulagen"
         [amountSig]="
-          einnahmenSig().kinderAusbildungszulagenTotal | formatChfPositive
+          einnahmen.kinderAusbildungszulagenTotal | formatChfPositive
         "
       >
       </dv-position>
@@ -65,10 +64,8 @@ import { PositionComponent } from '../position/position.component';
       <!-- Unterhaltsbeiträge -->
       <dv-position
         [titleSig]="t('unterhaltsbeitraege')"
-        [personValueItemsSig]="einnahmenSig().unterhaltsbeitraege"
-        [amountSig]="
-          einnahmenSig().unterhaltsbeitraegeTotal | formatChfPositive
-        "
+        [personValueItemsSig]="einnahmen.unterhaltsbeitraege"
+        [amountSig]="einnahmen.unterhaltsbeitraegeTotal | formatChfPositive"
       >
       </dv-position>
 
@@ -76,8 +73,8 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('eoLeistungen')"
         [infoSig]="t('eoLeistungen.info')"
-        [personValueItemsSig]="einnahmenSig().eoLeistungen"
-        [amountSig]="einnahmenSig().eoLeistungenTotal | formatChfPositive"
+        [personValueItemsSig]="einnahmen.eoLeistungen"
+        [amountSig]="einnahmen.eoLeistungenTotal | formatChfPositive"
       >
       </dv-position>
 
@@ -85,8 +82,8 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('taggelderAHVIV')"
         [infoSig]="t('taggelderAHVIV.info')"
-        [personValueItemsSig]="einnahmenSig().taggelderAHVIV"
-        [amountSig]="einnahmenSig().taggelderAHVIVTotal | formatChfPositive"
+        [personValueItemsSig]="einnahmen.taggelderAHVIV"
+        [amountSig]="einnahmen.taggelderAHVIVTotal | formatChfPositive"
       >
       </dv-position>
 
@@ -94,18 +91,16 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('renten')"
         [infoSig]="t('renten.info')"
-        [personValueItemsSig]="einnahmenSig().renten"
-        [amountSig]="einnahmenSig().rentenTotal | formatChfPositive"
+        [personValueItemsSig]="einnahmen.renten"
+        [amountSig]="einnahmen.rentenTotal | formatChfPositive"
       >
       </dv-position>
 
       <!-- Ergänzungsleistungen -->
       <dv-position
         [titleSig]="t('ergaenzungsleistungen')"
-        [personValueItemsSig]="einnahmenSig().ergaenzungsleistungen"
-        [amountSig]="
-          einnahmenSig().ergaenzungsleistungenTotal | formatChfPositive
-        "
+        [personValueItemsSig]="einnahmen.ergaenzungsleistungen"
+        [amountSig]="einnahmen.ergaenzungsleistungenTotal | formatChfPositive"
       >
       </dv-position>
 
@@ -113,7 +108,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('beitraegeGemeindeInstitutionen')"
         [amountSig]="
-          einnahmenSig().beitraegeGemeindeInstitutionen | formatChfPositive
+          einnahmen.beitraegeGemeindeInstitutionen | formatChfPositive
         "
       >
       </dv-position>
@@ -122,23 +117,23 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('andereEinnahmen')"
         [infoSig]="t('andereEinnahmen.info')"
-        [personValueItemsSig]="einnahmenSig().andereEinnahmen"
-        [amountSig]="einnahmenSig().andereEinnahmenTotal | formatChfPositive"
+        [personValueItemsSig]="einnahmen.andereEinnahmen"
+        [amountSig]="einnahmen.andereEinnahmenTotal | formatChfPositive"
       >
       </dv-position>
 
       <!-- Anrechenbares Vermögen -->
       <dv-position
         [titleSig]="t('anrechenbaresVermoegen')"
-        [infoSig]="t('anrechenbaresVermoegen.info', einnahmenSig())"
-        [amountSig]="einnahmenSig().anrechenbaresVermoegen | formatChfPositive"
+        [infoSig]="t('anrechenbaresVermoegen.info', einnahmen)"
+        [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
       >
       </dv-position>
 
       <!-- Elterliche Leistung -->
       <dv-position
         [titleSig]="t('elterlicheLeistung')"
-        [amountSig]="einnahmenSig().elterlicheLeistung | formatChfPositive"
+        [amountSig]="einnahmen.elterlicheLeistung | formatChfPositive"
       >
       </dv-position>
 
@@ -148,7 +143,7 @@ import { PositionComponent } from '../position/position.component';
           {{ t('total') }}
         </div>
         <div class="h4 flex-grow-1 text-end text-nowrap">
-          {{ einnahmenSig().total | formatChf }}
+          {{ einnahmen.total | formatChf }}
         </div>
       </div>
     </ng-container>
@@ -156,6 +151,6 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {
-  einnahmenSig = input.required<PersoenlichesBudgetresultatView['einnahmen']>();
+  budgetSig = input.required<PersoenlichesBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }
