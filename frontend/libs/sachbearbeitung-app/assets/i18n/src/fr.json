@@ -468,6 +468,8 @@
   "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.berechnung.ausbildungsjahr": "Année de formation:",
   "sachbearbeitung-app.verfuegung.berechnung.months": "Mois",
+  "sachbearbeitung-app.verfuegung.berechnung.steuerjahr": "Année fiscale",
+  "sachbearbeitung-app.verfuegung.berechnung.veranlagungscode": "Code d'imposition",
   "sachbearbeitung-app.verfuegung.berechnung.from": "de",
   "sachbearbeitung-app.verfuegung.berechnung.to": "à",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Détails du calcul",

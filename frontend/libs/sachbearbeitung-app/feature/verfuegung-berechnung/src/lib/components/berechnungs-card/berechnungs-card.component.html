@@ -30,10 +30,31 @@
                 {{ t('sachbearbeitung-app.verfuegung.berechnung.ausbildungsjahr') }} {{ berechnung.yearRange }}
               </span>
             }
-            <!-- TODO -->
-            <!-- @case ('familien') {
-              {{ t(berechnung.nameKey, berechnung) }}
-            } -->
+            @case ('familien') {
+              <span>{{ berechnung.name }}</span>
+              <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4">
+                <span>
+                  {{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.sv-nummer') }}
+                  {{ berechnung.sozialversicherungsnummer }},
+                  {{ berechnung.geburtsdatum }}
+                </span>
+
+                <span>
+                  {{ t('sachbearbeitung-app.verfuegung.berechnung.from') }}:
+                  {{ berechnung.gueltigAb | date: 'MM.yyyy' }}
+
+                  {{ t('sachbearbeitung-app.verfuegung.berechnung.to') }}:
+                  {{ berechnung.gueltigBis | date: 'MM.yyyy' }}
+
+                  {{ t('sachbearbeitung-app.verfuegung.berechnung.months') }}: {{ berechnung.anzahlMonate }}
+                </span>
+              </span>
+              <span> {{ t('sachbearbeitung-app.verfuegung.berechnung.steuerjahr') }} {{ berechnung.steuerjahr }} </span>
+              <span>
+                {{ t('sachbearbeitung-app.verfuegung.berechnung.veranlagungscode') }}
+                {{ berechnung.veranlagungscode }}
+              </span>
+            }
           }
         </div>
       </mat-card-title>

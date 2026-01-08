@@ -28,6 +28,11 @@ export interface PersoenlichesBudgetresultatView
 
 export interface FamilienBudgetresultatView extends FamilienBudgetresultat {
   typ: 'familien';
+  yearRange: string;
+  name: string;
+  gueltigAb: string;
+  gueltigBis: string;
+  anzahlMonate: number;
 }
 
 export type BerechnungPersonalOrFam =

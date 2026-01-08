@@ -22,7 +22,7 @@ export interface FamilienBudgetresultat {
     nachname: string;
     vornamePartner?: string;
     nachnamePartner?: string;
-    sozialversicherungsnummer: string;
+    sozialversicherungsnummer?: string;
     sozialversicherungsnummerPartner?: string;
     /**
      * dd.MM.yyyy

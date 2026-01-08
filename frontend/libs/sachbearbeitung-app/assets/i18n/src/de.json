@@ -468,6 +468,8 @@
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.berechnung.ausbildungsjahr": "Ausbildungsjahr:",
   "sachbearbeitung-app.verfuegung.berechnung.months": "Monate",
+  "sachbearbeitung-app.verfuegung.berechnung.steuerjahr": "Steuerjahr",
+  "sachbearbeitung-app.verfuegung.berechnung.veranlagungscode": "Veranlagungscode",
   "sachbearbeitung-app.verfuegung.berechnung.from": "von",
   "sachbearbeitung-app.verfuegung.berechnung.to": "bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",

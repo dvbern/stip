@@ -68,7 +68,7 @@ export class BerechnungsExpansionPanelComponent {
       titleKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.title`,
       infoKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.total`,
       shouldChangeSize: berechnung.typ === 'persoenlich',
-      total: berechnung.total,
+      total: berechnung[variant].total,
     };
   });
 }
