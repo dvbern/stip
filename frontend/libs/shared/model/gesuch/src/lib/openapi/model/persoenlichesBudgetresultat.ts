@@ -16,6 +16,15 @@ import { PersoenlichesBudgetresultatEinnahmen } from './persoenlichesBudgetresul
  * Persoenliche Budget daten fuer und von der Berechnung
  */
 export interface PersoenlichesBudgetresultat { 
+    vorname: string;
+    nachname: string;
+    vornamePartner?: string;
+    nachnamePartner?: string;
+    sozialversicherungsnummer: string;
+    /**
+     * dd.MM.yyyy
+     */
+    geburtsdatum: string;
     total: number;
     einnahmenMinusKosten: number;
     fehlbetrag: number;

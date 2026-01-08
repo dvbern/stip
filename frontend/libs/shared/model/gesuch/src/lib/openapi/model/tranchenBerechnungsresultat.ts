@@ -17,15 +17,6 @@ import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
  * Resultat der Berechnung (eine Tranche)
  */
 export interface TranchenBerechnungsresultat { 
-    sozialversicherungsnummer: string;
-    vornamePia: string;
-    nachnamePia: string;
-    vornamePartner: string;
-    nachnamePartner: string;
-    /**
-     * dd.MM.yyyy
-     */
-    geburtsdatum: string;
     /**
      * Berechneter Stpendiumsanspruch für diese Tranche
      */

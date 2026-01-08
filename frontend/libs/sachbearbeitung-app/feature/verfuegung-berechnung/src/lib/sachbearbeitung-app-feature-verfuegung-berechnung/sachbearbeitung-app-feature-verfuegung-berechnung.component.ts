@@ -11,7 +11,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
@@ -81,11 +80,12 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         yearRange: [r.ausbildungAb, r.ausbildungBis]
           .map((d) => d.split('.')[1])
           .join('/'),
-        name: `${r.vornamePia} ${r.nachnamePia}`,
-        geburtsdatum: r.geburtsdatum,
+        name: `${r.persoenlichesBudgetresultat.vorname} ${r.persoenlichesBudgetresultat.nachname}`,
+        geburtsdatum: r.persoenlichesBudgetresultat.geburtsdatum,
         gueltigAb: r.gueltigAb,
         gueltigBis: r.gueltigBis,
-        sozialversicherungsnummer: r.sozialversicherungsnummer,
+        sozialversicherungsnummer:
+          r.persoenlichesBudgetresultat.sozialversicherungsnummer,
         geteilteBerechnung: r.type
           ? {
               berechnungsanteilKinder: Math.round(r.berechnungsanteilKinder),
@@ -119,106 +119,6 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     };
 
     return view;
-  });
-
-  // to be removed if not used
-  berechnungenSigOld = computed(() => {
-    const index = this.indexSig();
-    const view = this.berechnungStore.berechnungZusammenfassungViewSig();
-
-    if (view.loading || view.berechnungsresultate.length === 0) {
-      return { loading: view.loading };
-    }
-
-    const {
-      sozialversicherungsnummer,
-      geburtsdatum,
-      ausbildungAb,
-      ausbildungBis,
-      berechnung,
-      gueltigAb,
-      gueltigBis,
-      vornamePia,
-      nachnamePia,
-      vornamePartner,
-      berechnungsStammdaten: stammDaten,
-      persoenlichesBudgetresultat: p,
-      familienBudgetresultate,
-      berechnungsanteilKinder,
-      type: geteilteBerechnungsArt,
-    } = getBerechnungByIndex(view.berechnungsresultate, index);
-
-    const monate = differenceInMonths(addDays(gueltigBis, 2), gueltigAb);
-
-    return {
-      loading: false,
-      berechnung: {
-        total: view.berechnung,
-        persoenlich: {
-          typ: 'persoenlich' as const,
-          name: `${vornamePia} ${nachnamePia}`,
-          sozialversicherungsnummer,
-          geburtsdatum,
-          total: p.total,
-          yearRange: [ausbildungAb, ausbildungBis]
-            .map((d) => d.split('.')[1])
-            .join('/'),
-          gueltigAb: gueltigAb,
-          gueltigBis: gueltigBis,
-          monate,
-          berechnung,
-          totalVorTeilung: p.total,
-          totalEinnahmen: p.einnahmen.total,
-          totalKosten: p.kosten.total,
-          geteilteBerechnung: geteilteBerechnungsArt
-            ? {
-                berechnungsanteilKinder: Math.round(berechnungsanteilKinder),
-                anteil: berechnung,
-              }
-            : null,
-          einnahmen: {
-            vornamePia,
-            vornamePartner,
-            limiteAlterAntragsstellerHalbierungElternbeitrag:
-              stammDaten.limiteAlterAntragsstellerHalbierungElternbeitrag,
-            ...p.einnahmen,
-          },
-          kosten: {
-            vornamePia,
-            vornamePartner,
-            anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt,
-            ...p.kosten,
-          },
-        },
-        familien:
-          familienBudgetresultate.map((f) => ({
-            typ: 'familien' as const,
-            familienBudgetTyp: f.steuerdatenTyp,
-            name: `TODO: !!! TBD`, // TODO: find out which names to use here
-            sozialversicherungsnummer: `TODO: !!! TBD`, // TODO
-            geburtsdatum: `TODO: !!! TBD`, // TODO
-            steuerjahr: view.year - 1,
-            veranlagungsStatus: `TODO: !!! TBD`, // TODO
-            gueltigAb: gueltigAb,
-            gueltigBis: gueltigBis,
-            monate,
-            total: f.total,
-            totalEinnahmen: f.einnahmen.total,
-            totalKosten: f.kosten.total,
-            einnahmen: {
-              ...f.einnahmen,
-              einkommensfreibetrag: stammDaten.einkommensfreibetrag,
-              einkommensfreibetragLimite: stammDaten.abzugslimite, // TODO: check if this is correct
-              freibetragVermoegen: stammDaten.freibetragVermoegen,
-            },
-            kosten: {
-              ...f.kosten,
-              anzahlPersonenImHaushalt: f.anzahlPersonenImHaushalt,
-              integrationszulageLimite: stammDaten.abzugslimite, // TODO: check if this is correct
-            },
-          })) ?? [],
-      },
-    };
   });
 
   constructor() {

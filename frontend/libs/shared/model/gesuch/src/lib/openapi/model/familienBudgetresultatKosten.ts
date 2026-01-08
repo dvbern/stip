@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PersonValueItem } from './personValueItem';
 
 export interface FamilienBudgetresultatKosten { 
     total: number;
@@ -20,11 +21,9 @@ export interface FamilienBudgetresultatKosten {
     integrationszulageTotal: number;
     kantonsGemeindesteuern: number;
     bundessteuern: number;
-    fahrkosten: number;
-    fahrkostenPartner: number;
+    fahrkosten: Array<PersonValueItem>;
     fahrkostenTotal: number;
-    verpflegung: number;
-    verpflegungPartner: number;
+    verpflegung: Array<PersonValueItem>;
     verpflegungTotal: number;
 }
 

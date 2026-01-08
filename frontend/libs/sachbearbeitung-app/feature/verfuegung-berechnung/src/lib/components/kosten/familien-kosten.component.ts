@@ -63,7 +63,7 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- lntegrationszulage pro in Ausbildung stehendes Kind -->
+      <!-- Integrationszulage pro in Ausbildung stehendes Kind -->
       <dv-position
         [titleSig]="
           t('integrationszulage', {
@@ -95,19 +95,21 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- todo: @fabrice, besser Array? - Fahrkosten -->
+      <!--  Fahrkosten -->
       <dv-position
         [titleSig]="t('fahrkosten')"
         [infoSig]="t('fahrkosten.info')"
-        [amountSig]="kostenSig().fahrkosten | formatChfPositive"
+        [amountSig]="kostenSig().fahrkostenTotal | formatChfPositive"
+        [personValueItemsSig]="kostenSig().fahrkosten"
       >
       </dv-position>
 
-      <!-- todo: @fabrice, besser Array? - Verpflegung auswärts -->
+      <!--  Verpflegung auswärts -->
       <dv-position
         [titleSig]="t('verpflegung')"
         [infoSig]="t('verpflegung.info')"
-        [amountSig]="kostenSig().verpflegung | formatChfPositive"
+        [amountSig]="kostenSig().verpflegungTotal | formatChfPositive"
+        [personValueItemsSig]="kostenSig().verpflegung"
       >
       </dv-position>
 
