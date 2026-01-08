@@ -1758,7 +1758,6 @@ components:
         - steuerdatenTyp
         - vorname
         - nachname
-        - sozialversicherungsnummer
         - geburtsdatum
         - steuerjahr
         - veranlagungscode
