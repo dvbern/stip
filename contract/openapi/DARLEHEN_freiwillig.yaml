@@ -572,8 +572,6 @@ components:
       type: object
       required:
         - id
-        - gesuchId
-        - gesuchTrancheId
         - fallId
         - fallNummer
         - piaVorname
@@ -584,10 +582,6 @@ components:
         - letzteAktivitaet
       properties:
         id:
-          $ref: './components/common.yaml#/UUID'
-        gesuchId:
-          $ref: './components/common.yaml#/UUID'
-        gesuchTrancheId:
           $ref: './components/common.yaml#/UUID'
         fallId:
           $ref: './components/common.yaml#/UUID'

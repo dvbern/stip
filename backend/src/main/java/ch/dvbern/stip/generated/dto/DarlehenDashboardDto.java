@@ -22,8 +22,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DarlehenDashboardDto  implements Serializable {
   private @Valid UUID id;
-  private @Valid UUID gesuchId;
-  private @Valid UUID gesuchTrancheId;
   private @Valid UUID fallId;
   private @Valid String fallNummer;
   private @Valid String piaVorname;
@@ -50,44 +48,6 @@ public class DarlehenDashboardDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   **/
-  public DarlehenDashboardDto gesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchId")
-  @NotNull
-  public UUID getGesuchId() {
-    return gesuchId;
-  }
-
-  @JsonProperty("gesuchId")
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-  }
-
-  /**
-   **/
-  public DarlehenDashboardDto gesuchTrancheId(UUID gesuchTrancheId) {
-    this.gesuchTrancheId = gesuchTrancheId;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchTrancheId")
-  @NotNull
-  public UUID getGesuchTrancheId() {
-    return gesuchTrancheId;
-  }
-
-  @JsonProperty("gesuchTrancheId")
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
-    this.gesuchTrancheId = gesuchTrancheId;
   }
 
   /**
@@ -253,8 +213,6 @@ public class DarlehenDashboardDto  implements Serializable {
     }
     DarlehenDashboardDto darlehenDashboard = (DarlehenDashboardDto) o;
     return Objects.equals(this.id, darlehenDashboard.id) &&
-        Objects.equals(this.gesuchId, darlehenDashboard.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, darlehenDashboard.gesuchTrancheId) &&
         Objects.equals(this.fallId, darlehenDashboard.fallId) &&
         Objects.equals(this.fallNummer, darlehenDashboard.fallNummer) &&
         Objects.equals(this.piaVorname, darlehenDashboard.piaVorname) &&
@@ -267,7 +225,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchId, gesuchTrancheId, fallId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, fallId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -276,8 +234,6 @@ public class DarlehenDashboardDto  implements Serializable {
     sb.append("class DarlehenDashboardDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
-    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");

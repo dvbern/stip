@@ -6118,8 +6118,6 @@ components:
       type: object
       required:
         - id
-        - gesuchId
-        - gesuchTrancheId
         - fallId
         - fallNummer
         - piaVorname
@@ -6130,10 +6128,6 @@ components:
         - letzteAktivitaet
       properties:
         id:
-          $ref: '#/components/schemas/UUID'
-        gesuchId:
-          $ref: '#/components/schemas/UUID'
-        gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
         fallId:
           $ref: '#/components/schemas/UUID'
@@ -6246,6 +6240,8 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallId:
+          $ref: '#/components/schemas/UUID'
+        relatedGesuchId:
           $ref: '#/components/schemas/UUID'
         status:
           $ref: '#/components/schemas/DarlehenStatus'

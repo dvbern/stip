@@ -985,6 +985,8 @@ Darlehen:
       $ref: '#/UUID'
     fallId:
       $ref: '#/UUID'
+    relatedGesuchId:
+      $ref: '#/UUID'
     status:
       $ref: '#/DarlehenStatus'
     gewaehren:

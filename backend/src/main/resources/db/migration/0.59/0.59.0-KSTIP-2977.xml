@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="luca.fondo (generated)" id="1767802438036-3">
+    <addColumn tableName="darlehen">
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1767802438036-4">
+    <addColumn tableName="darlehen_aud">
+      <column name="gesuch_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1767802438036-5">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="darlehen" constraintName="FK4fdbbigqm8ht3u1of5qqegove" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1767802438036-1">
+    <modifyDataType columnName="kommentar" newDataType="varchar(2200)" tableName="darlehen"/>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1767802438036-2">
+    <modifyDataType columnName="kommentar" newDataType="varchar(2200)" tableName="darlehen_aud"/>
+  </changeSet>
+</databaseChangeLog>

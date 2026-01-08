@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.darlehen.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.QDarlehen;
@@ -41,7 +40,6 @@ public class DarlehenDashboardQueryBuilder {
     private static final QDarlehen darlehen = QDarlehen.darlehen;
     private static final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
-    private static final QAusbildung ausbildung = QAusbildung.ausbildung;
 
     private final DarlehenRepository darlehenRepository;
     private final BenutzerService benutzerService;
@@ -56,14 +54,9 @@ public class DarlehenDashboardQueryBuilder {
             case MEINE_BEARBEITBAR -> darlehenRepository.getMeineBearbeitbarQuery(benutzerId);
         };
 
-        // TODO KSTIP-2977: Currently the Darlehen list will probably "append" the oldest gesuch in a Fall
-        // this task KSTIP-2977 will add a gesuch FK and thus a complex query is no longer necessary
-
         query
-            .join(ausbildung)
-            .on(ausbildung.fall.id.eq(darlehen.fall.id))
             .join(tranche)
-            .on(tranche.gesuch.ausbildung.id.eq(ausbildung.id));
+            .on(tranche.gesuch.id.eq(darlehen.relatedGesuch.id));
 
         return query;
     }
