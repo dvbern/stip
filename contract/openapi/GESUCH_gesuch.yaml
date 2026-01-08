@@ -1468,12 +1468,6 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - sozialversicherungsnummer
-        - vornamePia
-        - nachnamePia
-        - vornamePartner
-        - nachnamePartner
-        - geburtsdatum
         - berechnung
         - gueltigAb
         - gueltigBis
@@ -1486,20 +1480,6 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        sozialversicherungsnummer:
-          type: string
-        vornamePia:
-          type: string
-        nachnamePia:
-          type: string
-        vornamePartner:
-          type: string
-        nachnamePartner:
-          type: string
-        geburtsdatum:
-          format: date
-          description: dd.MM.yyyy
-          type: string
         berechnung:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
           type: integer
@@ -1575,6 +1555,10 @@ components:
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
+        - vorname
+        - nachname
+        - sozialversicherungsnummer
+        - geburtsdatum
         - total
         - einnahmenMinusKosten
         - fehlbetrag
@@ -1588,6 +1572,20 @@ components:
         - einnahmen
         - kosten
       properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        vornamePartner:
+          type: string
+        nachnamePartner:
+          type: string
+        sozialversicherungsnummer:
+          type: string
+        geburtsdatum:
+          format: date
+          description: dd.MM.yyyy
+          type: string
         total:
           type: integer
         einnahmenMinusKosten:
@@ -1758,6 +1756,12 @@ components:
       description: Familien Budget daten fuer und von der Berechnung
       required:
         - steuerdatenTyp
+        - vorname
+        - nachname
+        - sozialversicherungsnummer
+        - geburtsdatum
+        - steuerjahr
+        - veranlagungscode
         - total
         - einnahmenMinusKosten
         - anzahlPersonenImHaushalt
@@ -1774,6 +1778,30 @@ components:
       properties:
         steuerdatenTyp:
           $ref: './components/common.yaml#/SteuerdatenTyp'
+        vorname:
+          type: string
+        nachname:
+          type: string
+        vornamePartner:
+          type: string
+        nachnamePartner:
+          type: string
+        sozialversicherungsnummer:
+          type: string
+        sozialversicherungsnummerPartner:
+          type: string
+        geburtsdatum:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        geburtsdatumPartner:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        steuerjahr:
+          type: integer
+        veranlagungscode:
+          type: string
         total:
           type: integer
         einnahmenMinusKosten:
@@ -1860,10 +1888,8 @@ components:
         - kantonsGemeindesteuern
         - bundessteuern
         - fahrkosten
-        - fahrkostenPartner
         - fahrkostenTotal
         - verpflegung
-        - verpflegungPartner
         - verpflegungTotal
       properties:
         total:
@@ -1885,15 +1911,15 @@ components:
         bundessteuern:
           type: integer
         fahrkosten:
-          type: integer
-        fahrkostenPartner:
-          type: integer
+          type: array
+          items:
+            $ref: './components/common.yaml#/PersonValueItem'
         fahrkostenTotal:
           type: integer
         verpflegung:
-          type: integer
-        verpflegungPartner:
-          type: integer
+          type: array
+          items:
+            $ref: './components/common.yaml#/PersonValueItem'
         verpflegungTotal:
           type: integer
 security:
