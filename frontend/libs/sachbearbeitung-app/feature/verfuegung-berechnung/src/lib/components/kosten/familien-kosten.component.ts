@@ -72,7 +72,8 @@ import { PositionComponent } from '../position/position.component';
         "
         [infoSig]="
           t('integrationszulage.info', {
-            einkommensfreibetrag: stammdatenSig().einkommensfreibetrag,
+            einkommensfreibetrag:
+              stammdatenSig().einkommensfreibetrag | formatChf,
           })
         "
         [amountSig]="kosten.integrationszulage | formatChfPositive"

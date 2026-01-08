@@ -31,7 +31,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('ausbildungskosten')"
         [infoSig]="
           t('ausbildungskosten.info', {
-            ausbildungskosten: kosten.ausbildungskosten,
+            ausbildungskosten: kosten.ausbildungskosten | formatChf,
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
@@ -44,7 +44,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('fahrkosten')"
         [infoSig]="
           t('fahrkosten.info', {
-            fahrkosten: kosten.fahrkosten,
+            fahrkosten: kosten.fahrkosten | formatChf,
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
@@ -104,7 +104,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('fahrkostenPartner')"
         [infoSig]="
           t('fahrkostenPartner.info', {
-            fahrkosten: kosten.fahrkosten,
+            fahrkosten: kosten.fahrkosten | formatChf,
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
@@ -117,7 +117,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('verpflegungPartner')"
         [infoSig]="
           t('verpflegungPartner.info', {
-            verpflegungPartner: kosten.verpflegungPartner,
+            verpflegungPartner: kosten.verpflegungPartner | formatChf,
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
@@ -165,8 +165,6 @@ import { PositionComponent } from '../position/position.component';
           {{ kosten.total | formatChf }}
         </div>
       </div>
-
-      <!-- Todo: Anpassungen an der Zusammenfassung, siehe Fuss teil excel?  -->
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

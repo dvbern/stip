@@ -40,7 +40,7 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- BGSA -->
+      <!-- todo: Anchor links? and projection - BGSA -->
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [personValueItemsSig]="einnahmen.einnahmenBGSA"
@@ -125,7 +125,13 @@ import { PositionComponent } from '../position/position.component';
       <!-- Anrechenbares Vermögen -->
       <dv-position
         [titleSig]="t('anrechenbaresVermoegen')"
-        [infoSig]="t('anrechenbaresVermoegen.info', einnahmen)"
+        [infoSig]="
+          t('anrechenbaresVermoegen.info', {
+            vermoegensanteilInProzent:
+              stammdatenSig().vermoegensanteilInProzent,
+            steuerbaresVermoegen: einnahmen.steuerbaresVermoegen | formatChf,
+          })
+        "
         [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
       >
       </dv-position>

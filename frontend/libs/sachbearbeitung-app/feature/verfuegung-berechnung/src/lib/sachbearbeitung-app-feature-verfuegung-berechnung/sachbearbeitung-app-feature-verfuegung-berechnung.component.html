@@ -5,7 +5,10 @@
   @if (berechnungenRawSig(); as berechnung) {
     <div class="row">
       <div class="col-12">
-        <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
+        <dv-berechnungs-card
+          [berechnungSig]="berechnung.persoenlich"
+          [stammdatenSig]="berechnung.berechnungsStammdaten"
+        >
           <dv-persoenliche-einnahmen
             class="d-flex flex-column gap-3 ps-4"
             [budgetSig]="berechnung.persoenlich"
@@ -21,10 +24,11 @@
     <div class="row mt-4 mb-4">
       @for (familienbudget of berechnung.familien; track $index) {
         <div class="col-12">
-          <dv-berechnungs-card [berechnungSig]="familienbudget">
+          <dv-berechnungs-card [berechnungSig]="familienbudget" [stammdatenSig]="berechnung.berechnungsStammdaten">
             <dv-familien-einnahmen
               class="d-flex flex-column gap-3 ps-4"
               [budgetSig]="familienbudget"
+              [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-einnahmen>
             <dv-familien-kosten
               class="d-flex flex-column gap-3 ps-4"

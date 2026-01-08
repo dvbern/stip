@@ -4,13 +4,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoDirective } from '@jsverse/transloco';
 
+import { BerechnungsStammdaten } from '@dv/shared/model/gesuch';
 import { BerechnungPersonalOrFam } from '@dv/shared/model/verfuegung';
-import {
-  SharedUiFormatChfNegativePipe,
-  SharedUiFormatChfPipe,
-} from '@dv/shared/ui/format-chf-pipe';
+import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 
 import { BerechnungsExpansionPanelComponent } from './berechnungs-expansion-panel.component';
+import { PositionComponent } from '../position/position.component';
 
 @Component({
   selector: 'dv-berechnungs-card',
@@ -20,14 +19,15 @@ import { BerechnungsExpansionPanelComponent } from './berechnungs-expansion-pane
     MatCardModule,
     MatExpansionModule,
     SharedUiFormatChfPipe,
-    SharedUiFormatChfNegativePipe,
     BerechnungsExpansionPanelComponent,
     TranslocoDirective,
+    PositionComponent,
   ],
   templateUrl: './berechnungs-card.component.html',
 })
 export class BerechnungsCardComponent {
   berechnungSig = input.required<BerechnungPersonalOrFam>();
+  stammdatenSig = input.required<BerechnungsStammdaten>();
 
   Math = Math;
 }

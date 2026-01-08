@@ -11,21 +11,20 @@ import { PersonValueItemComponent } from './person-value-item.component';
     <div class="tw:flex-1">
       {{ titleSig() }}
 
+      <!-- todo: improve projection handling -->
       @if (infoSig()) {
         <div class="tw:text-gray-500 tw:text-sm">
           <div>
             {{ infoSig() }}
           </div>
-
-          <!-- todo: improve -->
-          @if (personValueItemsSig()?.length) {
-            <dv-person-value-item
-              [itemsSig]="personValueItemsSig() ?? []"
-            ></dv-person-value-item>
-          }
         </div>
       } @else {
         <ng-content></ng-content>
+      }
+      @if (personValueItemsSig()?.length) {
+        <dv-person-value-item
+          [itemsSig]="personValueItemsSig() ?? []"
+        ></dv-person-value-item>
       }
     </div>
     <div class="tw:text-gray-500 tw:whitespace-nowrap">

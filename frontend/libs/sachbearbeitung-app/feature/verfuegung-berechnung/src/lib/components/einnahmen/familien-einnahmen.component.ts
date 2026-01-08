@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
+import { BerechnungsStammdaten } from '@dv/shared/model/gesuch';
 import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfNegativePipe,
@@ -28,6 +29,7 @@ import { PositionComponent } from '../position/position.component';
     >
       @let budget = budgetSig();
       @let einnahmen = budget.einnahmen;
+      @let stammdaten = stammdatenSig();
 
       <!-- Total Einkünfte -->
       <dv-position
@@ -105,18 +107,24 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- todo: Zwischentotal anrechenbare, jährliche Einnahmen, welcher betrag? -->
+      <!-- Zwischentotal anrechenbare, jährliche Einnahmen, welcher betrag? -->
       <dv-position
         [titleSig]="t('zwischentotal')"
         [infoSig]="t('zwischentotal.info')"
-        [amountSig]="'Betrag TBD'"
+        [amountSig]="einnahmen.zwischentotal | formatChf"
       >
       </dv-position>
 
       <!-- Anrechenbares Vermögen -->
       <dv-position
         [titleSig]="t('anrechenbaresVermoegen')"
-        [infoSig]="t('anrechenbaresVermoegen.info', einnahmen)"
+        [infoSig]="
+          t('anrechenbaresVermoegen.info', {
+            vermoegensanteilInProzent: stammdaten.vermoegensanteilInProzent,
+            steuerbaresVermoegen: einnahmen.steuerbaresVermoegen | formatChf,
+            freibetragVermoegen: stammdaten.freibetragVermoegen | formatChf,
+          })
+        "
         [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
       >
       </dv-position>
@@ -136,4 +144,5 @@ import { PositionComponent } from '../position/position.component';
 })
 export class FamilienEinnahmenComponent {
   budgetSig = input.required<FamilienBudgetresultatView>();
+  stammdatenSig = input.required<BerechnungsStammdaten>();
 }
