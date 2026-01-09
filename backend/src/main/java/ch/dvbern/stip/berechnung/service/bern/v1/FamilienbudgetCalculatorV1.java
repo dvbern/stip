@@ -95,9 +95,10 @@ public class FamilienbudgetCalculatorV1 {
 
         return new FamilienBudgetresultatDto(
             elternteil.getSteuerdatenTyp(),
-            elternteil.getVorname(),
-            elternteil.getNachname(),
-            elternteil.getGeburtsdatum(),
+            antragssteller.getVorname(),
+            antragssteller.getNachname(),
+            antragssteller.getSozialversicherungsnummer(),
+            antragssteller.getGeburtsdatum(),
             elternteil.getSteuerjahr(),
             elternteil.getVeranlagungscode(),
             roundHalfUp(total),
@@ -113,11 +114,8 @@ public class FamilienbudgetCalculatorV1 {
             roundHalfUp(ungedeckterAnteilLebenshaltungskosten),
             einnahmen,
             kosten,
-            elternteil.getVornamePartner(),
-            elternteil.getNachnamePartner(),
-            elternteil.getSozialversicherungsnummer(),
-            elternteil.getSozialversicherungsnummerPartner(),
-            elternteil.getGeburtsdatumPartner()
+            antragssteller.getVornamePartner(),
+            antragssteller.getNachnamePartner()
         );
     }
 
@@ -248,7 +246,8 @@ public class FamilienbudgetCalculatorV1 {
     ) {
         var saeule3a = 0;
         if (elternteil.isSelbststaendigErwerbend()) {
-            saeule3a = max(elternteil.getEinzahlungSaeule3a() - stammdaten.getMaxSaeule3a(), 0);
+            saeule3a =
+                max(Objects.requireNonNullElse(elternteil.getEinzahlungSaeule3a(), 0) - stammdaten.getMaxSaeule3a(), 0);
         }
         return saeule3a;
     }
@@ -258,7 +257,7 @@ public class FamilienbudgetCalculatorV1 {
     ) {
         var saeule2 = 0;
         if (elternteil.isSelbststaendigErwerbend()) {
-            saeule2 = elternteil.getEinzahlungSaeule2();
+            saeule2 = Objects.requireNonNullElse(elternteil.getEinzahlungSaeule2(), 0);
         }
         return saeule2;
     }

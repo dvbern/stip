@@ -60,7 +60,6 @@ public class AntragsstellerV1 {
     int alter;
     int piaWohntInElternHaushalt;
     int anzahlPersonenImHaushalt;
-    int fremdbetreuung;
     int anteilFamilienbudget;
     boolean verheiratetKonkubinat;
     boolean tertiaerstufe;
@@ -70,28 +69,29 @@ public class AntragsstellerV1 {
 
     // Einkommen
     List<PersonValueItemDto> einkommens;
-    List<PersonValueItemDto> rentens;
+    List<PersonValueItemDto> einnahmenBGSAs;
     List<PersonValueItemDto> kinderAusbildungszulagens;
     List<PersonValueItemDto> unterhaltsbeitraeges;
-    List<PersonValueItemDto> ergaenzungsleistungens;
     List<PersonValueItemDto> eoLeistungens;
     List<PersonValueItemDto> taggelds;
-    List<PersonValueItemDto> andereEinnahmens;
-    List<PersonValueItemDto> einnahmenBGSAs;
-    Integer vermoegen;
+    List<PersonValueItemDto> rentens;
+    List<PersonValueItemDto> ergaenzungsleistungens;
     Integer gemeindeInstitutionen;
+    List<PersonValueItemDto> andereEinnahmens;
+    Integer vermoegen;
 
     // Kosten
+    int ausbildungskosten;
+    int fahrkosten;
+    int auswaertigeMittagessenProWoche;
     int grundbedarf;
     int wohnkosten;
     List<PersonValueItemDto> medizinischeGrundversorgungs;
-    int ausbildungskosten;
+    Integer fahrkostenPartner;
+    Integer verpflegungskostenPartner;
+    int fremdbetreuung;
     int steuern;
     Integer steuernPartner;
-    int fahrkosten;
-    Integer fahrkostenPartner;
-    int auswaertigeMittagessenProWoche;
-    Integer verpflegungskostenPartner;
 
     public static AntragsstellerV1 buildFromDependants(
         final GesuchFormular gesuchFormular,

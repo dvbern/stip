@@ -37,9 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_VORNAME_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_NACHNAME_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
-  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
-  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_GEBURTSDATUM_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERJAHR,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_VERANLAGUNGSCODE,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_TOTAL,
@@ -77,14 +75,8 @@ public class FamilienBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
   private String sozialversicherungsnummer;
 
-  public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER = "sozialversicherungsnummerPartner";
-  private String sozialversicherungsnummerPartner;
-
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
   private LocalDate geburtsdatum;
-
-  public static final String JSON_PROPERTY_GEBURTSDATUM_PARTNER = "geburtsdatumPartner";
-  private LocalDate geburtsdatumPartner;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
@@ -274,9 +266,9 @@ public class FamilienBudgetresultatDtoSpec {
    * Get sozialversicherungsnummer
    * @return sozialversicherungsnummer
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getSozialversicherungsnummer() {
     return sozialversicherungsnummer;
@@ -284,35 +276,9 @@ public class FamilienBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
-  }
-
-
-  public FamilienBudgetresultatDtoSpec sozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
-    
-    this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
-    return this;
-  }
-
-   /**
-   * Get sozialversicherungsnummerPartner
-   * @return sozialversicherungsnummerPartner
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getSozialversicherungsnummerPartner() {
-    return sozialversicherungsnummerPartner;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
-    this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
   }
 
 
@@ -339,32 +305,6 @@ public class FamilienBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
-  }
-
-
-  public FamilienBudgetresultatDtoSpec geburtsdatumPartner(LocalDate geburtsdatumPartner) {
-    
-    this.geburtsdatumPartner = geburtsdatumPartner;
-    return this;
-  }
-
-   /**
-   * dd.MM.yyyy
-   * @return geburtsdatumPartner
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public LocalDate getGeburtsdatumPartner() {
-    return geburtsdatumPartner;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setGeburtsdatumPartner(LocalDate geburtsdatumPartner) {
-    this.geburtsdatumPartner = geburtsdatumPartner;
   }
 
 
@@ -772,9 +712,7 @@ public class FamilienBudgetresultatDtoSpec {
         Objects.equals(this.vornamePartner, familienBudgetresultat.vornamePartner) &&
         Objects.equals(this.nachnamePartner, familienBudgetresultat.nachnamePartner) &&
         Objects.equals(this.sozialversicherungsnummer, familienBudgetresultat.sozialversicherungsnummer) &&
-        Objects.equals(this.sozialversicherungsnummerPartner, familienBudgetresultat.sozialversicherungsnummerPartner) &&
         Objects.equals(this.geburtsdatum, familienBudgetresultat.geburtsdatum) &&
-        Objects.equals(this.geburtsdatumPartner, familienBudgetresultat.geburtsdatumPartner) &&
         Objects.equals(this.steuerjahr, familienBudgetresultat.steuerjahr) &&
         Objects.equals(this.veranlagungscode, familienBudgetresultat.veranlagungscode) &&
         Objects.equals(this.total, familienBudgetresultat.total) &&
@@ -794,7 +732,7 @@ public class FamilienBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, sozialversicherungsnummerPartner, geburtsdatum, geburtsdatumPartner, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten);
+    return Objects.hash(steuerdatenTyp, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten);
   }
 
   @Override
@@ -807,9 +745,7 @@ public class FamilienBudgetresultatDtoSpec {
     sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
     sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
-    sb.append("    sozialversicherungsnummerPartner: ").append(toIndentedString(sozialversicherungsnummerPartner)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
-    sb.append("    geburtsdatumPartner: ").append(toIndentedString(geburtsdatumPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
     sb.append("    total: ").append(toIndentedString(total)).append("\n");

@@ -27,6 +27,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
   private @Valid String vorname;
   private @Valid String nachname;
+  private @Valid String sozialversicherungsnummer;
   private @Valid LocalDate geburtsdatum;
   private @Valid Integer steuerjahr;
   private @Valid String veranlagungscode;
@@ -45,9 +46,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid FamilienBudgetresultatKostenDto kosten;
   private @Valid String vornamePartner;
   private @Valid String nachnamePartner;
-  private @Valid String sozialversicherungsnummer;
-  private @Valid String sozialversicherungsnummerPartner;
-  private @Valid LocalDate geburtsdatumPartner;
 
   /**
    **/
@@ -104,6 +102,25 @@ public class FamilienBudgetresultatDto  implements Serializable {
   @JsonProperty("nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto sozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialversicherungsnummer")
+  @NotNull
+  public String getSozialversicherungsnummer() {
+    return sozialversicherungsnummer;
+  }
+
+  @JsonProperty("sozialversicherungsnummer")
+  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
   }
 
   /**
@@ -447,61 +464,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
     this.nachnamePartner = nachnamePartner;
   }
 
-  /**
-   **/
-  public FamilienBudgetresultatDto sozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-    return this;
-  }
-
-  
-  @JsonProperty("sozialversicherungsnummer")
-  public String getSozialversicherungsnummer() {
-    return sozialversicherungsnummer;
-  }
-
-  @JsonProperty("sozialversicherungsnummer")
-  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
-    this.sozialversicherungsnummer = sozialversicherungsnummer;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto sozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
-    this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
-    return this;
-  }
-
-  
-  @JsonProperty("sozialversicherungsnummerPartner")
-  public String getSozialversicherungsnummerPartner() {
-    return sozialversicherungsnummerPartner;
-  }
-
-  @JsonProperty("sozialversicherungsnummerPartner")
-  public void setSozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
-    this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
-  }
-
-  /**
-   * dd.MM.yyyy
-   **/
-  public FamilienBudgetresultatDto geburtsdatumPartner(LocalDate geburtsdatumPartner) {
-    this.geburtsdatumPartner = geburtsdatumPartner;
-    return this;
-  }
-
-  
-  @JsonProperty("geburtsdatumPartner")
-  public LocalDate getGeburtsdatumPartner() {
-    return geburtsdatumPartner;
-  }
-
-  @JsonProperty("geburtsdatumPartner")
-  public void setGeburtsdatumPartner(LocalDate geburtsdatumPartner) {
-    this.geburtsdatumPartner = geburtsdatumPartner;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -515,6 +477,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
     return Objects.equals(this.steuerdatenTyp, familienBudgetresultat.steuerdatenTyp) &&
         Objects.equals(this.vorname, familienBudgetresultat.vorname) &&
         Objects.equals(this.nachname, familienBudgetresultat.nachname) &&
+        Objects.equals(this.sozialversicherungsnummer, familienBudgetresultat.sozialversicherungsnummer) &&
         Objects.equals(this.geburtsdatum, familienBudgetresultat.geburtsdatum) &&
         Objects.equals(this.steuerjahr, familienBudgetresultat.steuerjahr) &&
         Objects.equals(this.veranlagungscode, familienBudgetresultat.veranlagungscode) &&
@@ -532,15 +495,12 @@ public class FamilienBudgetresultatDto  implements Serializable {
         Objects.equals(this.einnahmen, familienBudgetresultat.einnahmen) &&
         Objects.equals(this.kosten, familienBudgetresultat.kosten) &&
         Objects.equals(this.vornamePartner, familienBudgetresultat.vornamePartner) &&
-        Objects.equals(this.nachnamePartner, familienBudgetresultat.nachnamePartner) &&
-        Objects.equals(this.sozialversicherungsnummer, familienBudgetresultat.sozialversicherungsnummer) &&
-        Objects.equals(this.sozialversicherungsnummerPartner, familienBudgetresultat.sozialversicherungsnummerPartner) &&
-        Objects.equals(this.geburtsdatumPartner, familienBudgetresultat.geburtsdatumPartner);
+        Objects.equals(this.nachnamePartner, familienBudgetresultat.nachnamePartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, vorname, nachname, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten, vornamePartner, nachnamePartner, sozialversicherungsnummer, sozialversicherungsnummerPartner, geburtsdatumPartner);
+    return Objects.hash(steuerdatenTyp, vorname, nachname, sozialversicherungsnummer, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten, vornamePartner, nachnamePartner);
   }
 
   @Override
@@ -551,6 +511,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
@@ -569,9 +530,6 @@ public class FamilienBudgetresultatDto  implements Serializable {
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");
     sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
     sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
-    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
-    sb.append("    sozialversicherungsnummerPartner: ").append(toIndentedString(sozialversicherungsnummerPartner)).append("\n");
-    sb.append("    geburtsdatumPartner: ").append(toIndentedString(geburtsdatumPartner)).append("\n");
     sb.append("}");
     return sb.toString();
   }

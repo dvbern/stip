@@ -65,27 +65,27 @@ public class ElternteilV1 {
 
     // Einnahmen
     int totalEinkuenfte;
-    int vermoegen;
-    int integrationszulage;
-    int integrationszulageAnzahl;
-    int integrationszulageTotal;
+    Integer einnahmenBGSA;
+    Integer ergaenzungsleistungen;
+    Integer andereEinnahmen;
+    int eigenmietwert;
     Integer unterhaltsbeitraege;
     Integer einzahlungSaeule3a;
     Integer einzahlungSaeule2;
-    Integer einnahmenBGSA;
-    Integer andereEinnahmen;
     Integer renten;
+    int vermoegen;
 
     // Kosten
     int grundbedarf;
-    List<PersonValueItemDto> verpflegungskostens;
-    List<PersonValueItemDto> fahrkostens;
+    int effektiveWohnkosten;
+    int medizinischeGrundversorgung;
+    int integrationszulage;
+    int integrationszulageAnzahl;
+    int integrationszulageTotal;
     int steuernKantonGemeinde;
     int steuernBund;
-    int medizinischeGrundversorgung;
-    int effektiveWohnkosten;
-    int eigenmietwert;
-    Integer ergaenzungsleistungen;
+    List<PersonValueItemDto> fahrkostens;
+    List<PersonValueItemDto> verpflegungskostens;
 
     public static ElternteilV1Builder builderWithDefaults() {
         return new ElternteilV1Builder().isInitialized(false);

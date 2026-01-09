@@ -44,11 +44,11 @@ public class PersonValueList {
     }
 
     public ArrayList<PersonValueItemDto> toList() {
+        final var list = new ArrayList<PersonValueItemDto>();
         if (Objects.isNull(person)) {
-            throw new IllegalStateException("At least a PiA value is required");
+            return list;
         }
 
-        final var list = new ArrayList<PersonValueItemDto>();
         list.add(person);
 
         if (Objects.nonNull(partner)) {

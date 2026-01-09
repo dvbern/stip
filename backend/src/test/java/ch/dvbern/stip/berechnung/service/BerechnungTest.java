@@ -45,6 +45,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
+import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -55,7 +56,6 @@ import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +112,7 @@ class BerechnungTest {
     @ParameterizedTest
     @CsvSource(
         {
-            "1, -11602",
+            "1, -11039",
         // "2, 0",
         // "3, -12357",
         // "4, 0",
@@ -127,10 +127,10 @@ class BerechnungTest {
     void testBerechnungFaelle(final int fall, final int expectedStipendien) throws JsonProcessingException {
         // Load Fall resources/berechnung/fall_{fall}.json, deserialize to a BerechnungRequestV1
         // and calculate Stipendien for it
-        ObjectMapper objectMapper = new ObjectMapper();
+        final var objectMapper = BerechnungUtil.createObjectMapper();
         final var result = berechnungService.calculateStipendien(BerechnungUtil.getRequest(fall));
         final var summary = objectMapper.writeValueAsString(result);
-        assertThat(result.getStipendien(), is(expectedStipendien));
+        assertThat("Value did not match, debug:\n" + summary, result.getStipendien(), is(expectedStipendien));
     }
 
     @Test
@@ -205,20 +205,20 @@ class BerechnungTest {
     void testFall11GesuchBerechnung() {
         // Arrange
         final var gesuch = TestUtil.getBaseGesuchForBerechnung(UUID.randomUUID());
-        final var ausbildungsBegin = LocalDate.now().withMonth(9);
+        final var ausbildungsBegin = LocalDate.of(2025, 9, 1);
+        final var abschluss = new Abschluss()
+            .setBfsKategorie(6)
+            .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
+            .setBildungsrichtung(Bildungsrichtung.HOEHERE_BERUFSBILDUNG);
 
         gesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
-                        .setAbschluss(
-                            new Abschluss().setBfsKategorie(6)
-                                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
-                                .setBildungsrichtung(Bildungsrichtung.HOCHSCHULE)
-                        )
+                        .setAbschluss(abschluss)
                 )
                 .setAusbildungBegin(ausbildungsBegin)
-                .setAusbildungEnd(ausbildungsBegin.plusYears(2))
+                .setAusbildungEnd(ausbildungsBegin.plusYears(3).minusDays(1))
         );
 
         final var gesuchFormular = gesuch.getNewestGesuchTranche().get().getGesuchFormular();
@@ -228,8 +228,8 @@ class BerechnungTest {
                     .get()
                     .setGueltigkeit(
                         new DateRange(
-                            LocalDate.of(2023, 8, 1),
-                            LocalDate.of(2024, 7, 31)
+                            LocalDate.of(2025, 8, 1),
+                            LocalDate.of(2026, 7, 31)
                         )
                     )
                     .setTyp(GesuchTrancheTyp.TRANCHE)
@@ -243,120 +243,81 @@ class BerechnungTest {
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)
             .setSozialhilfebeitraege(false)
-            .setWohnsitz(Wohnsitz.MUTTER_VATER)
-            .setWohnsitzAnteilMutter(BigDecimal.valueOf(0))
-            .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
-            .setGeburtsdatum(
-                // Was 2000-01-01, used LocalDate.now to ensure complicity in the future
-                LocalDate.now().minusYears(23).withDayOfMonth(1).withMonth(11)
-            );
+            .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
+            .setGeburtsdatum(LocalDate.of(2025, 8, 1));
 
-        gesuchFormular.setFamiliensituation(
-            new Familiensituation()
-                .setElternVerheiratetZusammen(false)
-                .setGerichtlicheAlimentenregelung(false)
-                .setElternteilUnbekanntVerstorben(false)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
-        );
+        gesuchFormular.setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(true));
 
         gesuchFormular.setElterns(
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
-                    .setWohnkosten(9_000)
+                    .setWohnkosten(833)
                     .setSozialhilfebeitraege(false)
-                    .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
+                    .setGeburtsdatum(LocalDate.of(1955, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
-                    .setWohnkosten(12_720)
+                    .setWohnkosten(833)
                     .setSozialhilfebeitraege(false)
-                    .setGeburtsdatum(LocalDate.of(1961, 1, 1))
-            )
-        );
-
-        gesuchFormular.setGeschwisters(
-            Set.of(
-                (Geschwister) new Geschwister()
-                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
-                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                    .setWohnsitzAnteilVater(BigDecimal.valueOf(100))
-                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(0))
-                    .setGeburtsdatum(LocalDate.now().minusYears(19)),
-                (Geschwister) new Geschwister()
-                    .setAusbildungssituation(Ausbildungssituation.IN_AUSBILDUNG)
-                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                    .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
-                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
-                    .setGeburtsdatum(LocalDate.now().minusYears(16)),
-                (Geschwister) new Geschwister()
-                    .setAusbildungssituation(Ausbildungssituation.KEINE)
-                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
-                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
-                    .setGeburtsdatum(LocalDate.now().minusYears(16)),
-                (Geschwister) new Geschwister()
-                    .setAusbildungssituation(Ausbildungssituation.KEINE)
-                    .setWohnsitz(Wohnsitz.MUTTER_VATER)
-                    .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
-                    .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
-                    .setGeburtsdatum(LocalDate.now().minusYears(16))
+                    .setGeburtsdatum(LocalDate.of(1970, 11, 4))
             )
         );
 
         gesuchFormular.setLebenslaufItems(
             Set.of(
                 new LebenslaufItem()
-                    .setVon(LocalDate.of(2016, 8, 1))
-                    .setBis(LocalDate.of(2023, 8, 1))
-                    .setTaetigkeitsart(Taetigkeitsart.ANDERE_TAETIGKEIT)
+                    .setVon(LocalDate.of(2020, 8, 1))
+                    .setBis(LocalDate.of(2024, 7, 1))
+                    .setWohnsitz(WohnsitzKanton.BE)
+                    .setAusbildungAbgeschlossen(true)
+                    .setAbschluss(abschluss),
+                new LebenslaufItem()
+                    .setVon(LocalDate.of(2024, 8, 1))
+                    .setBis(LocalDate.of(2025, 7, 1))
+                    .setTaetigkeitsart(Taetigkeitsart.ERWERBSTAETIGKEIT)
             )
         );
 
-        gesuchFormular.setKinds(Set.of());
+        gesuchFormular.setKinds(
+            Set.of(
+                (Kind) new Kind()
+                    .setWohnsitzAnteilPia(100)
+                    .setAusbildungssituation(Ausbildungssituation.SCHULPFLICHTIG)
+                    .setGeburtsdatum(LocalDate.of(2020, 8, 5))
+            )
+        );
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
                 .setNettoerwerbseinkommen(0)
-                .setVermoegen(0)
-                .setFahrkosten(925)
-                .setRenten(0)
-                .setAusbildungskosten(950)
-                .setAuswaertigeMittagessenProWoche(5)
+                .setZulagen(3_720)
+                .setAusbildungskosten(1_800)
+                .setFahrkosten(558)
+                .setWohnkosten(1_167)
+                .setVermoegen(10_000)
         );
 
         gesuchFormular.setSteuererklaerung(
             Set.of(
-                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.VATER),
-                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
+                new Steuererklaerung().setSteuerdatenTyp(SteuerdatenTyp.FAMILIE)
             )
         );
 
         gesuchFormular.setSteuerdaten(
             Set.of(
                 new Steuerdaten()
-                    .setSteuerdatenTyp(SteuerdatenTyp.VATER)
-                    .setSteuernKantonGemeinde(0)
-                    .setSteuernBund(0)
-                    .setFahrkosten(0)
-                    .setVerpflegung(0)
-                    .setTotalEinkuenfte(38_820)
-                    .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setVermoegen(2717)
+                    .setSteuerdatenTyp(SteuerdatenTyp.FAMILIE)
+                    .setSteuernKantonGemeinde(2_000)
+                    .setSteuernBund(500)
+                    .setFahrkosten(790)
+                    .setVerpflegung(3_200)
+                    .setTotalEinkuenfte(50_000)
+                    .setIsArbeitsverhaeltnisSelbstaendig(true)
+                    .setVermoegen(20_000)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
-                    .setEigenmietwert(0),
-                new Steuerdaten()
-                    .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
-                    .setSteuernKantonGemeinde(1_192)
-                    .setSteuernBund(0)
-                    .setFahrkosten(0)
-                    .setVerpflegung(0)
-                    .setTotalEinkuenfte(63_484)
-                    .setIsArbeitsverhaeltnisSelbstaendig(false)
-                    .setVermoegen(918)
-                    .setFahrkostenPartner(0)
-                    .setVerpflegungPartner(0)
+                    .setEigenmietwert(0)
+                    .setSteuerjahr(2024)
             )
         );
 
@@ -366,8 +327,8 @@ class BerechnungTest {
         LOG.info(berechnungsresultatDto.toString());
 
         // Assert
-        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(2));
-        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(11345)));
+        assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
+        assertThat(berechnungsresultatDto.getBerechnung(), is(equalTo(35_142)));
     }
 
     @Test
@@ -466,6 +427,9 @@ class BerechnungTest {
                     .setSteuernBund(0)
                     .setSteuernKantonGemeinde(0)
                     .setTotalEinkuenfte(1026)
+                    .setEigenmietwert(0)
+                    .setVermoegen(0)
+                    .setSteuerjahr(gesuchFormular.getTranche().getGueltigkeit().getGueltigAb().getYear() - 1)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
             )
         );
@@ -608,6 +572,7 @@ class BerechnungTest {
                     .setTotalEinkuenfte(87516)
                     .setSaeule2(1500)
                     .setVermoegen(100000)
+                    .setSteuerjahr(gesuchFormular.getTranche().getGueltigkeit().getGueltigAb().getYear() - 1)
                     .setIsArbeitsverhaeltnisSelbstaendig(true)
             )
         );
@@ -765,7 +730,9 @@ class BerechnungTest {
                     .setVermoegen(0)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
-                    .setEigenmietwert(0),
+                    .setEigenmietwert(0)
+                    .setVermoegen(0)
+                    .setSteuerjahr(gesuchFormular.getTranche().getGueltigkeit().getGueltigAb().getYear() - 1),
                 new Steuerdaten()
                     .setSteuerdatenTyp(SteuerdatenTyp.MUTTER)
                     .setTotalEinkuenfte(5_667)
@@ -777,6 +744,9 @@ class BerechnungTest {
                     .setVermoegen(0)
                     .setFahrkostenPartner(0)
                     .setVerpflegungPartner(0)
+                    .setEigenmietwert(0)
+                    .setVermoegen(0)
+                    .setSteuerjahr(gesuchFormular.getTranche().getGueltigkeit().getGueltigAb().getYear() - 1)
             )
         );
 
@@ -1065,9 +1035,12 @@ class BerechnungTest {
                     .setFahrkostenPartner(0)
                     .setSteuernBund(0)
                     .setSteuernKantonGemeinde(0)
-                    .setEigenmietwert(0),
+                    .setEigenmietwert(0)
+                    .setVermoegen(0)
+                    .setSteuerjahr(gesuchTranche.getGueltigkeit().getGueltigAb().getYear() - 1),
                 new Steuerdaten().setSteuerdatenTyp(SteuerdatenTyp.VATER)
                     .setIsArbeitsverhaeltnisSelbstaendig(false)
+                    .setTotalEinkuenfte(0)
                     .setVerpflegung(0)
                     .setVerpflegungPartner(0)
                     .setFahrkosten(0)
@@ -1075,6 +1048,8 @@ class BerechnungTest {
                     .setSteuernBund(0)
                     .setSteuernKantonGemeinde(0)
                     .setEigenmietwert(0)
+                    .setVermoegen(0)
+                    .setSteuerjahr(gesuchTranche.getGueltigkeit().getGueltigAb().getYear() - 1)
             )
         );
 

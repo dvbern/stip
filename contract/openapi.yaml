@@ -7416,6 +7416,7 @@ components:
         - steuerdatenTyp
         - vorname
         - nachname
+        - sozialversicherungsnummer
         - geburtsdatum
         - steuerjahr
         - veranlagungscode
@@ -7445,13 +7446,7 @@ components:
           type: string
         sozialversicherungsnummer:
           type: string
-        sozialversicherungsnummerPartner:
-          type: string
         geburtsdatum:
-          format: date
-          description: dd.MM.yyyy
-          type: string
-        geburtsdatumPartner:
           format: date
           description: dd.MM.yyyy
           type: string

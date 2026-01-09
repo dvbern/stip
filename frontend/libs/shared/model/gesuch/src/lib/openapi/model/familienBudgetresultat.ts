@@ -22,16 +22,11 @@ export interface FamilienBudgetresultat {
     nachname: string;
     vornamePartner?: string;
     nachnamePartner?: string;
-    sozialversicherungsnummer?: string;
-    sozialversicherungsnummerPartner?: string;
+    sozialversicherungsnummer: string;
     /**
      * dd.MM.yyyy
      */
     geburtsdatum: string;
-    /**
-     * dd.MM.yyyy
-     */
-    geburtsdatumPartner?: string;
     steuerjahr: number;
     veranlagungscode: string;
     total: number;

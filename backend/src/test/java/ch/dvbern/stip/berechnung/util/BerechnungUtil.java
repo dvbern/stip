@@ -49,13 +49,19 @@ import org.mockito.Mockito;
 
 @UtilityClass
 public class BerechnungUtil {
+    public ObjectMapper createObjectMapper() {
+        return new ObjectMapper()
+            .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
+    }
+
     public CalculatorRequest getRequest(final int fall) {
         try {
             final var resource =
                 BerechnungUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));
             assert resource != null;
             final var inputs = Files.readString(Paths.get(resource.toURI()));
-            final var mapper = new ObjectMapper();
+            final var mapper = createObjectMapper();
+
             return mapper.readValue(inputs, BerechnungRequestV1.class);
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
@@ -68,10 +74,9 @@ public class BerechnungUtil {
                 BerechnungUtil.class.getClassLoader().getResource(String.format("testcase/testcase_%d.json", no));
             assert resource != null;
             final var inputs = Files.readString(Paths.get(resource.toURI()));
-            final var mapper = new ObjectMapper()
+            final var mapper = createObjectMapper()
                 .registerModule(new ParameterNamesModule())
-                .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
+                .registerModule(new Jdk8Module());
 
             return mapper.readValue(inputs, BerechnungTestcase.class);
         } catch (IOException | URISyntaxException e) {
