@@ -6,50 +6,35 @@
           {{ t('' + berechnung.typ + '.title') }}
         </h1>
         <div class="tw:text-lg tw:flex tw:flex-col tw:pb-3">
+          <ng-template #commonInfo>
+            <span>{{ berechnung.name }}</span>
+            <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
+              <span>
+                {{ t('persoenlich.sv-nummer') }}
+                {{ berechnung.sozialversicherungsnummer }},
+                {{ berechnung.geburtsdatum }}
+              </span>
+
+              <span>
+                {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }},
+
+                {{ t('to') }}: {{ berechnung.gueltigBis | date: 'MM.yyyy' }},
+
+                {{ t('months') }}: {{ berechnung.anzahlMonate }}
+              </span>
+            </span>
+          </ng-template>
+
           @switch (berechnung.typ) {
             @case ('persoenlich') {
-              <span>{{ berechnung.name }}</span>
-              <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4">
-                <span>
-                  {{ t('persoenlich.sv-nummer') }}
-                  {{ berechnung.sozialversicherungsnummer }},
-                  {{ berechnung.geburtsdatum }}
-                </span>
-
-                <span>
-                  {{ t('from') }}:
-                  {{ berechnung.gueltigAb | date: 'MM.yyyy' }}
-
-                  {{ t('to') }}:
-                  {{ berechnung.gueltigBis | date: 'MM.yyyy' }}
-
-                  {{ t('months') }}: {{ berechnung.anzahlMonate }}
-                </span>
-              </span>
-              <span> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
+              <ng-container *ngTemplateOutlet="commonInfo"></ng-container>
+              <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
             }
             @case ('familien') {
-              <span>{{ berechnung.name }}</span>
-              <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4">
-                <span>
-                  {{ t('persoenlich.sv-nummer') }}
-                  {{ berechnung.sozialversicherungsnummer }},
-                  {{ berechnung.geburtsdatum }}
-                </span>
-
-                <span>
-                  {{ t('from') }}:
-                  {{ berechnung.gueltigAb | date: 'MM.yyyy' }}
-
-                  {{ t('to') }}:
-                  {{ berechnung.gueltigBis | date: 'MM.yyyy' }}
-
-                  {{ t('months') }}: {{ berechnung.anzahlMonate }}
-                </span>
-              </span>
-              <span> {{ t('steuerjahr') }} {{ berechnung.steuerjahr }} </span>
-              <span>
-                {{ t('veranlagungscode') }}
+              <ng-container *ngTemplateOutlet="commonInfo"></ng-container>
+              <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
+              <span class="tw:text-gray-500 tw:text-sm">
+                {{ t('veranlagungscode') }}:
                 {{ berechnung.veranlagungscode }}
               </span>
             }
@@ -74,6 +59,7 @@
           <div class="tw:mt-3">
             <!-- fehlbetrag -->
             <dv-position
+              type="title"
               [titleSig]="t('persoenlich.fehlbetrag')"
               [infoSig]="t('persoenlich.fehlbetrag.info')"
               [amountSig]="berechnung.fehlbetrag | formatChf"
@@ -85,33 +71,43 @@
               [amountSig]="berechnung.proKopfTeilung | formatChf"
             ></dv-position>
 
-            <!-- todo: check amount, Budget anzahlMonate -->
+            <!-- budgetTranche -->
             <dv-position
+              type="title"
               [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
-              [amountSig]="berechnung.total | formatChf"
+              [amountSig]="berechnung.budgetTranche | formatChf"
             ></dv-position>
 
             <!-- information studierende -->
-            <dv-position [titleSig]="t('persoenlich.informationStudierende')"></dv-position>
+            <div class="tw:mt-6 tw:font-semibold tw:text-lg">
+              {{ t('persoenlich.informationStudierende') }}
+              <span class="tw:text-xs tw:align-text-top">3)</span>
+            </div>
 
             <!-- stipendium -->
-            <dv-position [titleSig]="t('persoenlich.hinweis.zweiDrittel')"></dv-position>
+            <dv-position
+              [titleSig]="t('persoenlich.hinweis.zweiDrittel')"
+              [amountSig]="berechnung.gesetzlichesDarlehenStipendium"
+            ></dv-position>
 
             <!-- darlehen gesetzlich -->
-            <dv-position [titleSig]="t('persoenlich.hinweis.einDrittel')"></dv-position>
+            <dv-position
+              [titleSig]="t('persoenlich.hinweis.einDrittel')"
+              [amountSig]="berechnung.gesetzlichesDarlehen"
+            ></dv-position>
 
             <!-- Hinweis 1. schwarzarbeitBGSA -->
-            <div>
+            <div class="tw:mt-6 tw:text-gray-500 tw:text-sm">
               {{ t('hinweis.schwarzarbeitBGSA') }}
             </div>
 
             <!-- Hinweis 2. hoechstwerte -->
-            <div>
+            <div class="tw:text-gray-500 tw:text-sm">
               {{ t('hinweis.hoechstwerte') }}
             </div>
 
             <!-- Hinweis 3. Eigenverdienst -->
-            <div>
+            <div class="tw:text-gray-500 tw:text-sm">
               {{
                 t('hinweis.eigenverdienst', {
                   einkommensfreibetrag: stammdatenSig().einkommensfreibetrag | formatChf,
@@ -122,32 +118,38 @@
         }
         @case ('familien') {
           <div class="tw:mt-3">
-            <!-- todo: which amount - Einnahmeüberschuss -->
+            <!--  einnahmeUeberschuss -->
             <dv-position
+              type="title"
               [titleSig]="t('familien.einnahmeueberschuss')"
               [infoSig]="t('familien.einnahmeueberschuss.info')"
-              [amountSig]="berechnung.total | formatChf"
+              [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
             ></dv-position>
 
-            <!-- todo: which amount - Geteilt durch die anzahl Kinder -->
-            <dv-position [titleSig]="t('familien.anzahlKinderInAusbildung')" [amountSig]=""></dv-position>
+            <!-- proKopfTeilungKinderInAusbildung -->
+            <dv-position
+              [titleSig]="t('familien.anzahlKinderInAusbildung')"
+              [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
+            ></dv-position>
 
-            <!-- todo: which amount - Anrechenbare, elterliche Leistung -->
+            <!-- anrechenbareElterlicheLeistung -->
             <dv-position
               [titleSig]="t('familien.elterlicheLeistung')"
               [infoSig]="t('familien.elterlicheLeistung.info')"
-              [amountSig]=""
+              [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
             ></dv-position>
 
-            <!-- todo: which amount - 50% Reduktion gemäss Art. 15  Abs. 2 ABG -->
+            <!-- halbierungsReduktion -->
             <dv-position
               [titleSig]="t('familien.reduktionArt15Abs2ABG')"
               [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
-              [amountSig]=""
+              [amountSig]="berechnung.halbierungsReduktion | formatChf"
             ></dv-position>
 
-            <!-- todo: which amount - Fehlbetrag -->
+            <!-- Fehlbetrag -->
             <dv-position
+              type="title"
+              class="tw:mt-10 tw:block"
               [titleSig]="t('familien.fehlbetrag')"
               [infoSig]="t('familien.fehlbetrag.info')"
               [amountSig]="berechnung.fehlbetrag | formatChf"
@@ -163,15 +165,15 @@
             <dv-position
               [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
               [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
-              [amountSig]="berechnung.total | formatChf"
+              [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
             ></dv-position>
 
             <!-- Hinweis 1. schwarzarbeit BGSA -->
-            <div>
+            <div class="tw:mt-10 tw:text-gray-500 tw:text-sm">
               {{ t('hinweis.schwarzarbeitBGSA') }}
             </div>
             <!-- Hinweis 2. -->
-            <div>
+            <div class="tw:text-gray-500 tw:text-sm">
               {{ t('hinweis.hoechstwerte') }}
             </div>
           </div>

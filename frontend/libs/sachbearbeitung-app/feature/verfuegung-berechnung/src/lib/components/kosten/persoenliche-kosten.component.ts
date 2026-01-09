@@ -157,14 +157,12 @@ import { PositionComponent } from '../position/position.component';
       </dv-position>
 
       <!-- Total -->
-      <div class="tw:flex mt-3 tw:gap-2">
-        <div class="h4">
-          {{ t('total') }}
-        </div>
-        <div class="h4 flex-grow-1 text-end text-nowrap">
-          {{ kosten.total | formatChf }}
-        </div>
-      </div>
+      <dv-position
+        type="title"
+        [titleSig]="t('total')"
+        [amountSig]="kosten.total | formatChf"
+      >
+      </dv-position>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

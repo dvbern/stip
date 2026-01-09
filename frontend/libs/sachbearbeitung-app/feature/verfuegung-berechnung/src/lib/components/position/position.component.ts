@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 
 import { PersonValueItem } from '@dv/shared/model/gesuch';
@@ -6,12 +7,14 @@ import { PersonValueItemComponent } from './person-value-item.component';
 
 @Component({
   selector: 'dv-position',
-  imports: [PersonValueItemComponent],
+  imports: [PersonValueItemComponent, CommonModule],
   template: `<div class="tw:flex tw:gap-2">
     <div class="tw:flex-1">
-      {{ titleSig() }}
+      <div [ngClass]="{ 'tw:font-semibold tw:text-lg': type() === 'title' }">
+        {{ titleSig() }}
+        <ng-content select="title-appendix"></ng-content>
+      </div>
 
-      <!-- todo: improve projection handling -->
       @if (infoSig()) {
         <div class="tw:text-gray-500 tw:text-sm">
           <div>
@@ -27,7 +30,13 @@ import { PersonValueItemComponent } from './person-value-item.component';
         ></dv-person-value-item>
       }
     </div>
-    <div class="tw:text-gray-500 tw:whitespace-nowrap">
+    <div
+      class="tw:whitespace-nowrap"
+      [ngClass]="{
+        'tw:font-semibold tw:text-lg': type() === 'title',
+        'tw:text-gray-500': type() === 'default',
+      }"
+    >
       {{ amountSig() }}
     </div>
   </div>`,
@@ -44,5 +53,6 @@ export class PositionComponent {
   /**
    * Total value as string, formatted with currency pipe
    */
-  amountSig = input<string>();
+  amountSig = input<string | number>();
+  type = input<'default' | 'title'>('default');
 }

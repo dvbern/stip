@@ -9,7 +9,7 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
   template: `
     <div class="tw:flex tw:gap-1">
       @for (i of itemsSig(); track $index) {
-        <div>
+        <div class="tw:text-gray-500 tw:text-sm">
           <span>{{ i.vorname }}: </span>
           <span>{{ i.value | formatChf }}</span>
           @if (!$last) {

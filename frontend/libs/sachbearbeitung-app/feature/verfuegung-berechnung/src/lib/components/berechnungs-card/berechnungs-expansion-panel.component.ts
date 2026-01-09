@@ -30,11 +30,8 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
         [togglePosition]="'before'"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title
-            class="mb-0 me-0 d-flex py-3"
-            [ngClass]="panel.expanded && view.shouldChangeSize ? 'h3' : 'h4'"
-          >
-            <div class="d-flex flex-column flex-grow-1 fs-5">
+          <mat-panel-title class="mb-0 me-0 d-flex py-3 h5">
+            <div class="d-flex flex-column flex-grow-1 h5">
               {{ view.titleKey | transloco }}
               @if (!panel.expanded) {
                 <span class="row fw-normal mt-1 fs-6 text-muted">
@@ -67,7 +64,6 @@ export class BerechnungsExpansionPanelComponent {
     return {
       titleKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.title`,
       infoKey: `sachbearbeitung-app.verfuegung.berechnung.${berechnung.typ}.${variant}.total`,
-      shouldChangeSize: berechnung.typ === 'persoenlich',
       total: berechnung[variant].total,
     };
   });

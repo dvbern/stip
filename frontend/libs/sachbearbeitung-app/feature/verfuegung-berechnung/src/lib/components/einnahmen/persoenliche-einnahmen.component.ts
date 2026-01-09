@@ -46,9 +46,9 @@ import { PositionComponent } from '../position/position.component';
         [personValueItemsSig]="einnahmen.einnahmenBGSA"
         [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
       >
-        <a href="#1" class="tw:text-xs tw:align-text-top tw:no-underline!">
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           1)
-        </a>
+        </span>
       </dv-position>
 
       <!-- Kinder- und Ausbildungszulagen -->
@@ -144,14 +144,12 @@ import { PositionComponent } from '../position/position.component';
       </dv-position>
 
       <!-- Total -->
-      <div class="tw:flex mt-3 tw:gap-2">
-        <div class="h4">
-          {{ t('total') }}
-        </div>
-        <div class="h4 flex-grow-1 text-end text-nowrap">
-          {{ einnahmen.total | formatChf }}
-        </div>
-      </div>
+      <dv-position
+        type="title"
+        [titleSig]="t('total')"
+        [amountSig]="einnahmen.total | formatChf"
+      >
+      </dv-position>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
