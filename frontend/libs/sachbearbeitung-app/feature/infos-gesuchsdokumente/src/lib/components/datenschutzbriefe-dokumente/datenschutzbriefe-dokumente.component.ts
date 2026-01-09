@@ -10,8 +10,6 @@ import {
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltip } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
@@ -28,10 +26,8 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
-    MatTooltip,
     TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
-    RouterLink,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './datenschutzbriefe-dokumente.component.html',
