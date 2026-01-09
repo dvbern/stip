@@ -155,7 +155,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var anteilLebenshaltungskosten1 =
             familienbudget1.map(FamilienBudgetresultatDto::getUngedeckterAnteilLebenshaltungskosten);
         final var anteilLebenshaltungskosten2 =
-            familienbudget1.map(FamilienBudgetresultatDto::getUngedeckterAnteilLebenshaltungskosten);
+            familienbudget2.map(FamilienBudgetresultatDto::getUngedeckterAnteilLebenshaltungskosten);
         final var anteilLebenshaltungskosten =
             InputUtils.sumNullables(anteilLebenshaltungskosten1.orElse(null), anteilLebenshaltungskosten2.orElse(null));
 
