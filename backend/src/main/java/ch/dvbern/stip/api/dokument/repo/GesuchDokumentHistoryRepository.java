@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.dokument.repo;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -37,7 +38,7 @@ public class GesuchDokumentHistoryRepository {
         return (GesuchDokument) reader.createQuery()
             .forRevisionsOfEntity(GesuchDokument.class, true, false)
             .add(AuditEntity.id().eq(gesuchDokumentId))
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getSingleResult();
     }

@@ -27,6 +27,8 @@ import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ContextNotActiveException;
+import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -38,7 +40,7 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 public class TenantService {
     private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
 
-    private final RoutingContext context;
+    private final Instance<RoutingContext> context;
     private final ConfigService configService;
     private final List<PerTenantSubdomains> perTenantSubdomains;
 
@@ -50,7 +52,7 @@ public class TenantService {
     }
 
     public TenantInfoDto getCurrentTenant() {
-        final String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
+        final String tenantId = context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME);
 
         final TenantAuthConfigDto tenantAuthConfig = new TenantAuthConfigDto();
         tenantAuthConfig.setAuthServerUrl(keycloakFrontendUrl);
@@ -66,7 +68,20 @@ public class TenantService {
             return EXPLICIT_TENANT_ID.get();
         }
 
-        return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
+        return context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME);
+    }
+
+    public boolean canGetCurrentTenantIdentifier() {
+        if (EXPLICIT_TENANT_ID.get() != null) {
+            return true;
+        }
+
+        try {
+            context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME);
+            return true;
+        } catch (ContextNotActiveException e) {
+            return false;
+        }
     }
 
     public MandantIdentifier getCurrentMandantIdentifier() {
