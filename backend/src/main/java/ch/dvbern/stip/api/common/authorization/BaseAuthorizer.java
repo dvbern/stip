@@ -45,6 +45,10 @@ public class BaseAuthorizer {
         return currentBenutzer.hasRole(OidcConstants.ROLE_SACHBEARBEITER);
     }
 
+    protected boolean isFreigabestelle(final Benutzer currentBenutzer) {
+        return currentBenutzer.hasRole(OidcConstants.ROLE_FREIGABESTELLE);
+    }
+
     protected boolean isSachbearbeiterOrFreigabestelle(final Benutzer currentBenutzer) {
         return currentBenutzer.hasOneOfRoles(
             Set.of(OidcConstants.ROLE_SACHBEARBEITER, OidcConstants.ROLE_FREIGABESTELLE)

@@ -199,19 +199,7 @@
             "renten": 0,
             "einnahmenBGSA": 0
           }
-        ],
-        "darlehen": {
-          "willDarlehen": false,
-          "betragDarlehen": null,
-          "betragBezogenKanton": null,
-          "schulden": null,
-          "anzahlBetreibungen": null,
-          "grundNichtBerechtigt": null,
-          "grundAusbildungZwoelfJahre": null,
-          "grundHoheGebuehren": null,
-          "grundAnschaffungenFuerAusbildung": null,
-          "grundZweitausbildung": null
-        }
+        ]
       }
     }
   },

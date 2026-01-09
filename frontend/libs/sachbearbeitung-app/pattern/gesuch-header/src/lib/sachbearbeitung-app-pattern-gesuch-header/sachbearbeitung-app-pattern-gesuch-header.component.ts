@@ -27,6 +27,7 @@ import { filter, map } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
@@ -51,6 +52,7 @@ import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
 } from '@dv/shared/pattern/app-header';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
@@ -73,6 +75,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternAppHeaderComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiLoadingComponent,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -94,10 +97,12 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   );
   route = inject(ActivatedRoute);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  darlehenStore = inject(DarlehenStore);
 
   @Output() openSidenav = new EventEmitter<void>();
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
+
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
 
@@ -159,6 +164,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
+        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
         this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
         this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
       }

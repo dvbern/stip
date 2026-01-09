@@ -17,43 +17,105 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
-import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
-import org.mapstruct.AfterMapping;
+import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
+import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
-@Mapper(config = MappingConfig.class)
-public abstract class DarlehenMapper extends EntityUpdateMapper<DarlehenDto, Darlehen> {
+@Mapper(config = MappingConfig.class, uses = DarlehenDokumentMapper.class)
+public abstract class DarlehenMapper {
+    @Mapping(source = "fall.id", target = "fallId")
     public abstract DarlehenDto toDto(Darlehen darlehen);
+
+    @Mapping(source = "fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(source = ".", target = "gesuchId", qualifiedByName = "getGesuchId")
+    @Mapping(source = ".", target = "gesuchTrancheId", qualifiedByName = "getGesuchTrancheId")
+    @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
+    @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
+    @Mapping(source = ".", target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")
+    @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getBearbeiter")
+    @Mapping(source = "timestampMutiert", target = "letzteAktivitaet")
+    public abstract DarlehenDashboardDto toDashboardDto(Darlehen darlehen);
 
     public abstract Darlehen toEntity(DarlehenDto darlehenDto);
 
-    public abstract Darlehen partialUpdate(DarlehenDto darlehenDto, @MappingTarget Darlehen entity);
+    public abstract Darlehen partialUpdate(
+        DarlehenUpdateGsDto darlehenDto,
+        @MappingTarget Darlehen darlehen
+    );
 
-    @Override
-    @AfterMapping
-    protected void resetDependentDataBeforeUpdate(
-        final DarlehenDto newDarlehen,
-        @MappingTarget final Darlehen targetDarlehen
-    ) {
-        resetFieldIf(
-            () -> Boolean.FALSE.equals(newDarlehen.getWillDarlehen()),
-            "Clear Darlehen values because willDarlehen has changed",
-            () -> {
-                targetDarlehen.setWillDarlehen(false);
-                targetDarlehen.setBetragDarlehen(null);
-                targetDarlehen.setAnzahlBetreibungen(null);
-                targetDarlehen.setSchulden(null);
-                targetDarlehen.setBetragBezogenKanton(null);
-                targetDarlehen.setGrundAusbildungZwoelfJahre(null);
-                targetDarlehen.setGrundHoheGebuehren(null);
-                targetDarlehen.setGrundZweitausbildung(null);
-                targetDarlehen.setGrundNichtBerechtigt(null);
-                targetDarlehen.setGrundAnschaffungenFuerAusbildung(null);
-            }
-        );
+    public abstract Darlehen partialUpdate(
+        DarlehenUpdateSbDto darlehenDto,
+        @MappingTarget Darlehen darlehen
+    );
+
+    private Gesuch getGesuch(Darlehen darlehen) {
+        return darlehen
+            .getFall()
+            .getAusbildungs()
+            .stream()
+            .sorted(Comparator.comparing(Ausbildung::getTimestampErstellt).reversed())
+            .flatMap(a -> a.getGesuchs().stream().sorted(Comparator.comparing(Gesuch::getTimestampErstellt).reversed()))
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
+    }
+
+    @Named("getGesuchId")
+    public UUID getGesuchId(Darlehen darlehen) {
+        return getGesuch(darlehen).getId();
+    }
+
+    @Named("getGesuchTrancheId")
+    public UUID getGesuchTrancheId(Darlehen darlehen) {
+        return getGesuch(darlehen).getLatestGesuchTranche().getId();
+    }
+
+    @Named("getPiaNachname")
+    public String getPiaNachname(Darlehen darlehen) {
+        return getPia(darlehen)
+            .getNachname();
+    }
+
+    @Named("getPiaVorname")
+    public String getPiaVorname(Darlehen darlehen) {
+        return getPia(darlehen)
+            .getVorname();
+    }
+
+    @Named("getPiaGeburtsdatum")
+    public LocalDate getPiaGeburtsdatum(Darlehen darlehen) {
+        return getPia(darlehen)
+            .getGeburtsdatum();
+    }
+
+    private static PersonInAusbildung getPia(Darlehen darlehen) {
+        return darlehen.getFall()
+            .getLatestGesuch()
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+    }
+
+    @Named("getBearbeiter")
+    public String getBearbeiter(Darlehen darlehen) {
+        return darlehen.getFall()
+            .getSachbearbeiterZuordnung()
+            .getSachbearbeiter()
+            .getFullName();
     }
 }

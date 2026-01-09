@@ -1,21 +1,22 @@
 <div class="tw:flex tw:h-full tw:shadow-md tw:rounded-md" [ngClass]="{ 'tw:bg-dv-red': isSelectedSig() }">
   @let selected = selectedFilterSig();
+  @let baseKey = baseTranslationKey();
   <button
     type="button"
     (click)="filterChange.emit(selected)"
     class="tw:font-semibold tw:flex-1 tw:px-2 tw:py-1 tw:rounded-l-md! tw:flex tw:items-center tw:place-content-center"
-    [attr.data-testid]="'sachbearbeitung-app.cockpit.quick-filter.' + selected"
+    [attr.data-testid]="baseKey + selected"
     [ngClass]="isSelectedSig() ? 'tw:hover:bg-dv-red-hover tw:text-white' : 'tw:hover:bg-gray-200'"
   >
     <div class="tw:text-center flex-0">
-      {{ 'sachbearbeitung-app.cockpit.quick-filter.' + selected | transloco }}
+      {{ baseKey + selected | transloco }}
     </div>
   </button>
   <!-- quick filter menu -->
   <button
     type="button"
     class="tw:border-l tw:border-gray-300 tw:p-2 tw:flex tw:items-center tw:rounded-r-md!"
-    data-testid="sachbearbeitung-app.cockpit.quick-filter.menu"
+    [attr.data-testid]="baseKey + 'menu'"
     [ngClass]="isSelectedSig() ? 'tw:hover:bg-dv-red-hover tw:text-white' : 'tw:hover:bg-gray-200'"
     [matMenuTriggerFor]="gesuchMenu"
   >
@@ -30,10 +31,10 @@
           type="button"
           (click)="filterChange.emit(filter.typ)"
           class="tw:rounded-md!"
-          [attr.data-testid]="'sachbearbeitung-app.cockpit.quick-filter.' + filter.typ"
+          [attr.data-testid]="baseKey + filter.typ"
           [ngClass]="{ 'tw:bg-dv-red! tw:text-white!': activeFilter() === filter.typ }"
         >
-          {{ 'sachbearbeitung-app.cockpit.quick-filter.' + filter.typ | transloco }}
+          {{ baseKey + filter.typ | transloco }}
         </button>
       }
     </div>

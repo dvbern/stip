@@ -35,8 +35,6 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.darlehen.service.DarlehenMapperImpl;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -73,7 +71,6 @@ import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.AdresseDto;
-import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -81,7 +78,6 @@ import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
-import ch.dvbern.stip.generated.dto.PersonInAusbildungDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import org.junit.jupiter.api.Test;
@@ -700,8 +696,7 @@ class GesuchFormularMapperTest {
             new ElternMapperImpl(new MockAdresseMapperImpl()),
             new KindMapperImpl(),
             new EinnahmenKostenMapperImpl(),
-            new SteuererklaerungMapperImpl(),
-            new DarlehenMapperImpl()
+            new SteuererklaerungMapperImpl()
         );
 
         // Remove this once/ if SteuerdatenTabBerechnungsService is a DMN service and mock it
@@ -712,72 +707,6 @@ class GesuchFormularMapperTest {
         mapper.gesuchDokumentKommentarRepository = Mockito.mock(GesuchDokumentKommentarRepository.class);
 
         return mapper;
-    }
-
-    @Test
-    void darlehenShouldBeResetToNullIfAgeUnder18() {
-        GesuchFormularDto formularDto = new GesuchFormularDto();
-        formularDto.setDarlehen(new DarlehenDto());
-        formularDto.setPersonInAusbildung(new PersonInAusbildungDto());
-        formularDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
-        formularDto.setElterns(List.of());
-
-        final var mapper = createMapper();
-        var formular = mapper.toEntity(formularDto);
-        formular.setDarlehen(new Darlehen());
-        formular.setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
-
-        GesuchFormularUpdateDto updateDto = new GesuchFormularUpdateDto();
-        updateDto.setDarlehen(new DarlehenDto());
-        updateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
-        updateDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(16));
-
-        final var updatedFormular = mapper.partialUpdate(updateDto, formular);
-        assertThat(updatedFormular.getDarlehen(), is(nullValue()));
-    }
-
-    @Test
-    void darlehenValuesShouldBeResetWhenWillDarlehenIsSetToFalse() {
-        GesuchFormularDto formularDto = new GesuchFormularDto();
-        formularDto.setDarlehen(new DarlehenDto());
-        formularDto.setPersonInAusbildung(new PersonInAusbildungDto());
-        formularDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
-
-        final var mapper = createMapper();
-        var formular = mapper.toEntity(formularDto);
-        formular.setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
-
-        GesuchFormularUpdateDto updateDto = new GesuchFormularUpdateDto();
-        var darlehen = new DarlehenDto();
-        darlehen.setBetragDarlehen(1);
-        darlehen.setAnzahlBetreibungen(1);
-        darlehen.setSchulden(1);
-        darlehen.setBetragBezogenKanton(1);
-        darlehen.setGrundAnschaffungenFuerAusbildung(true);
-        darlehen.setGrundHoheGebuehren(true);
-        darlehen.setGrundNichtBerechtigt(true);
-        darlehen.setGrundZweitausbildung(true);
-        darlehen.setGrundAusbildungZwoelfJahre(true);
-
-        updateDto.setDarlehen(darlehen);
-        updateDto.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
-        updateDto.getPersonInAusbildung().setGeburtsdatum(LocalDate.now().minusYears(18));
-        updateDto.setElterns(List.of());
-        darlehen.setWillDarlehen(false);
-
-        final var updatedFormular = mapper.partialUpdate(updateDto, formular);
-        final var resetedDarlehen = updatedFormular.getDarlehen();
-
-        assertThat(resetedDarlehen.getBetragDarlehen(), is(nullValue()));
-        assertThat(resetedDarlehen.getAnzahlBetreibungen(), is(nullValue()));
-        assertThat(resetedDarlehen.getBetragBezogenKanton(), is(nullValue()));
-        assertThat(resetedDarlehen.getSchulden(), is(nullValue()));
-
-        assertThat(resetedDarlehen.getGrundHoheGebuehren(), is(nullValue()));
-        assertThat(resetedDarlehen.getGrundZweitausbildung(), is(nullValue()));
-        assertThat(resetedDarlehen.getGrundNichtBerechtigt(), is(nullValue()));
-        assertThat(resetedDarlehen.getGrundAnschaffungenFuerAusbildung(), is(nullValue()));
-        assertThat(resetedDarlehen.getGrundAusbildungZwoelfJahre(), is(nullValue()));
     }
 
     private GesuchFormular initTarget() {

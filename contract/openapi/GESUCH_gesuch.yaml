@@ -241,11 +241,11 @@ paths:
           in: path
           required: true
         - $ref: './components/parameters.yaml#/fallNummer'
-        - $ref: '#/components/parameters/piaNachname'
-        - $ref: '#/components/parameters/piaVorname'
-        - $ref: '#/components/parameters/piaGeburtsdatum'
-        - $ref: '#/components/parameters/status'
-        - $ref: '#/components/parameters/bearbeiter'
+        - $ref: './components/parameters.yaml#/piaNachname'
+        - $ref: './components/parameters.yaml#/piaVorname'
+        - $ref: './components/parameters.yaml#/piaGeburtsdatum'
+        - $ref: './components/parameters.yaml#/status'
+        - $ref: './components/parameters.yaml#/bearbeiter'
         - $ref: './components/parameters.yaml#/letzteAktivitaetFrom'
         - $ref: './components/parameters.yaml#/letzteAktivitaetTo'
         - $ref: '#/components/parameters/typ'
@@ -253,7 +253,7 @@ paths:
         - $ref: './components/parameters.yaml#/pageSize'
         - name: sortColumn
           schema:
-            $ref: '#/components/schemas/SbDashboardColumn'
+            $ref: '#/components/schemas/SbGesucheDashboardColumn'
           in: query
           required: false
         - $ref: './components/parameters.yaml#/sortOrder'
@@ -262,7 +262,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedSbDashboard'
+                $ref: '#/components/schemas/PaginatedSbGesucheDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -1046,32 +1046,6 @@ components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
   parameters:
-    piaVorname:
-      in: query
-      name: piaVorname
-      schema:
-        type: string
-    piaNachname:
-      in: query
-      name: piaNachname
-      schema:
-        type: string
-    piaGeburtsdatum:
-      in: query
-      name: piaGeburtsdatum
-      schema:
-        type: string
-        format: date
-    bearbeiter:
-      in: query
-      name: bearbeiter
-      schema:
-        type: string
-    status:
-      in: query
-      name: status
-      schema:
-        type: string
     typ:
       in: query
       name: typ
@@ -1158,7 +1132,7 @@ components:
             $ref: '#/components/schemas/GesuchDashboardItem'
       allOf:
         - $ref: './components/common.yaml#/Ausbildung'
-    SbDashboardColumn:
+    SbGesucheDashboardColumn:
       enum:
         - FALLNUMMER
         - TYP
@@ -1168,7 +1142,7 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    PaginatedSbDashboard:
+    PaginatedSbGesucheDashboard:
       allOf:
         - $ref: './components/common.yaml#/PaginatedResult'
       properties:
@@ -1328,8 +1302,6 @@ components:
           $ref: './components/gesuch-formular.yaml#/EinnahmenKostenUpdate'
         einnahmenKostenPartner:
           $ref: './components/gesuch-formular.yaml#/EinnahmenKostenUpdate'
-        darlehen:
-          $ref: './components/gesuch-formular.yaml#/Darlehen'
         steuererklaerung:
           type: array
           items:

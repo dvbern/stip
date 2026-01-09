@@ -1,0 +1,1 @@
+Ihr Darlehen wurde zurückgewiesen aus dem folgenden Grund: {kommentar}

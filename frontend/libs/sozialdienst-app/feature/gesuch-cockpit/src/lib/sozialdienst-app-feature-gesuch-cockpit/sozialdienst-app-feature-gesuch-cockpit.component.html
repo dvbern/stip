@@ -17,6 +17,26 @@
           <i class="material-symbols-rounded me-2 text-white">assignment_ind</i>
           <span>{{ 'sozialdienst-app.header.fall' | transloco }}</span>
         </div>
+
+        @let fallId = fallIdSig();
+        <a
+          [routerLink]="['/auszahlung', fallId]"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="header-nav-auszahlung"
+          [class.disabled]="!fallId"
+        >
+          <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
+          <span>{{ 'shared.menu.auszahlung' | transloco }}</span>
+        </a>
+
+        @if (showDarlehenMenuSig()) {
+          <dv-shared-ui-darlehen-menu
+            [dashboardViewSig]="dashboardStore.dashboardViewSig()"
+            [darlehenListSig]="darlehenStore.darlehenListSig()"
+            [fallIdSig]="fallId"
+            (createDarlehen)="darlehenStore.createDarlehen$($event)"
+          ></dv-shared-ui-darlehen-menu>
+        }
       </div>
     </dv-shared-pattern-app-header>
 

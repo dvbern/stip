@@ -15,7 +15,6 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDtoSpec;
@@ -49,7 +48,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_KINDS,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER,
-  GesuchFormularUpdateDtoSpec.JSON_PROPERTY_DARLEHEN,
   GesuchFormularUpdateDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG
 })
 @JsonTypeName("GesuchFormularUpdate")
@@ -81,9 +79,6 @@ public class GesuchFormularUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER = "einnahmenKostenPartner";
   private EinnahmenKostenUpdateDtoSpec einnahmenKostenPartner;
-
-  public static final String JSON_PROPERTY_DARLEHEN = "darlehen";
-  private DarlehenDtoSpec darlehen;
 
   public static final String JSON_PROPERTY_STEUERERKLAERUNG = "steuererklaerung";
   private List<SteuererklaerungUpdateDtoSpec> steuererklaerung;
@@ -357,32 +352,6 @@ public class GesuchFormularUpdateDtoSpec {
   }
 
 
-  public GesuchFormularUpdateDtoSpec darlehen(DarlehenDtoSpec darlehen) {
-    
-    this.darlehen = darlehen;
-    return this;
-  }
-
-   /**
-   * Get darlehen
-   * @return darlehen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public DarlehenDtoSpec getDarlehen() {
-    return darlehen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDarlehen(DarlehenDtoSpec darlehen) {
-    this.darlehen = darlehen;
-  }
-
-
   public GesuchFormularUpdateDtoSpec steuererklaerung(List<SteuererklaerungUpdateDtoSpec> steuererklaerung) {
     
     this.steuererklaerung = steuererklaerung;
@@ -434,13 +403,12 @@ public class GesuchFormularUpdateDtoSpec {
         Objects.equals(this.kinds, gesuchFormularUpdate.kinds) &&
         Objects.equals(this.einnahmenKosten, gesuchFormularUpdate.einnahmenKosten) &&
         Objects.equals(this.einnahmenKostenPartner, gesuchFormularUpdate.einnahmenKostenPartner) &&
-        Objects.equals(this.darlehen, gesuchFormularUpdate.darlehen) &&
         Objects.equals(this.steuererklaerung, gesuchFormularUpdate.steuererklaerung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, darlehen, steuererklaerung);
+    return Objects.hash(personInAusbildung, familiensituation, partner, elterns, geschwisters, lebenslaufItems, kinds, einnahmenKosten, einnahmenKostenPartner, steuererklaerung);
   }
 
   @Override
@@ -456,7 +424,6 @@ public class GesuchFormularUpdateDtoSpec {
     sb.append("    kinds: ").append(toIndentedString(kinds)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
     sb.append("    einnahmenKostenPartner: ").append(toIndentedString(einnahmenKostenPartner)).append("\n");
-    sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
     sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -64,7 +64,7 @@
     <a
       routerLink="/"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="gesuch-step-nav-dashboard"
+      data-testid="header-nav-dashboard"
     >
       <i class="material-symbols-rounded me-2 text-white">dashboard</i>
       <span>{{ t('shared.menu.dashboard') }}</span>
@@ -92,7 +92,7 @@
             <a
               [routerLink]="tranche.url"
               class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-              data-testid="gesuch-step-nav-overview"
+              data-testid="header-nav-overview"
               mat-menu-item
               [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
             >
@@ -110,7 +110,7 @@
       <a
         [routerLink]="tranche.url"
         class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-        data-testid="gesuch-step-nav-tranche"
+        data-testid="header-nav-tranche"
         [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
       >
         <i class="material-symbols-rounded me-2 text-white">checklist</i>
@@ -122,7 +122,7 @@
       [routerLink]="['/auszahlung', fallId]"
       [queryParams]="{ backlink: router.url, gesuchId, gesuchTrancheId: trancheId }"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="gesuch-step-nav-auszahlung"
+      data-testid="header-nav-auszahlung"
       [class.disabled]="!fallId"
     >
       <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>

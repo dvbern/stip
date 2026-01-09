@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.NegativeVerfuegungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
@@ -60,7 +59,6 @@ public class GesuchStatusConfigProducer {
     private final FehlendeDokumenteHandler fehlendeDokumenteHandler;
     private final VerfuegungDruckbereitHandler verfuegungDruckbereitHandler;
     private final VerfuegungVersendetHandler verfuegungVersendetHandler;
-    private final NegativeVerfuegungHandler negativeVerfuegungHandler;
     private final AenderungZurueckweisenHandler aenderungZurueckweisenHandler;
     private final AenderungFehlendeDokumenteNichtEingereichtHandler aenderungFehlendeDokumenteNichtEingereichtHandler;
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
@@ -235,11 +233,7 @@ public class GesuchStatusConfigProducer {
             );
 
         config.configure(Gesuchstatus.NEGATIVE_VERFUEGUNG)
-            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT)
-            .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG),
-                negativeVerfuegungHandler::handle
-            );
+            .permit(GesuchStatusChangeEvent.VERFUEGUNG_DRUCKBEREIT, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
         // These aren't strictly necessary, but the Statusdiagramm isn't 100% complete yet and these are likely needed
         config.configure(Gesuchstatus.NICHT_BEITRAGSBERECHTIGT);
 

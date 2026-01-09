@@ -27,7 +27,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
-import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
+import ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -157,7 +157,11 @@ public class SbDashboardQueryBuilder {
         query.where(tranche.gesuch.timestampMutiert.between(from.atStartOfDay(), to.atTime(LocalTime.MAX)));
     }
 
-    public void orderBy(final JPAQuery<Gesuch> query, final SbDashboardColumn column, final SortOrder sortOrder) {
+    public void orderBy(
+        final JPAQuery<Gesuch> query,
+        final SbGesucheDashboardColumn column,
+        final SortOrder sortOrder
+    ) {
         final var fieldSpecified = switch (column) {
             case FALLNUMMER -> ausbildung.fall.fallNummer;
             case TYP -> tranche.typ;

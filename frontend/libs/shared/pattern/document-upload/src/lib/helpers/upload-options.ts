@@ -8,13 +8,36 @@ import {
 } from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
+  Darlehen,
+  DarlehenDokumentType,
   Dokument,
   DokumentTyp,
   GesuchDokument,
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
-import { PermissionMap } from '@dv/shared/model/permission-state';
+import {
+  DarlehenPermissionMap,
+  PermissionMap,
+} from '@dv/shared/model/permission-state';
+
+export const DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
+  readonly [K in DarlehenDokumentType]: SharedTranslationKey;
+} & Partial<
+  Record<`${DarlehenDokumentType}_DESCRIPTION`, SharedTranslationKey>
+> = {
+  BETREIBUNGS_AUSZUG: 'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
+  AUFSTELLUNG_KOSTEN_ELTERN:
+    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN',
+  AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION:
+    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION',
+  KOPIE_SCHULGELDRECHNUNG: 'shared.form.darlehen.file.SCHULGELDRECHNUNG',
+  KOPIE_SCHULGELDRECHNUNG_DESCRIPTION:
+    'shared.form.darlehen.file.SCHULGELDRECHNUNG_DESCRIPTION',
+  BELEGE_ANSCHAFFUNGEN: 'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
+  BELEGE_ANSCHAFFUNGEN_DESCRIPTION:
+    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN_DESCRIPTION',
+};
 
 export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   readonly [K in DokumentTyp]: SharedTranslationKey;
@@ -188,20 +211,6 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
     'shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_VATER',
   ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER:
     'shared.form.eltern.file.LOHNABRECHNUNG_VERMOEGEN_MUTTER',
-  DARLEHEN_BETREIBUNGSREGISTERAUSZUG:
-    'shared.form.darlehen.file.BETREIBUNGSREGISTERAUSZUG',
-  DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN:
-    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN',
-  DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION:
-    'shared.form.darlehen.file.AUFSTELLUNG_KOSTEN_ELTERN_DESCRIPTION',
-  DARLEHEN_KOPIE_SCHULGELDRECHNUNG:
-    'shared.form.darlehen.file.SCHULGELDRECHNUNG',
-  DARLEHEN_KOPIE_SCHULGELDRECHNUNG_DESCRIPTION:
-    'shared.form.darlehen.file.SCHULGELDRECHNUNG_DESCRIPTION',
-  DARLEHEN_BELEGE_ANSCHAFFUNGEN:
-    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN',
-  DARLEHEN_BELEGE_ANSCHAFFUNGEN_DESCRIPTION:
-    'shared.form.darlehen.file.BELEGE_ANSCHAFFUNGEN_DESCRIPTION',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE:
     'shared.form.eltern-steuererklaerung.file.AUSBILDUNGSBEITRAEGE_FAMILIE',
   STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE_DESCRIPTION:
@@ -330,7 +339,6 @@ export function createUploadOptionsFactory<
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? {
-            permissions,
             allowTypes,
             info: {
               type: 'TRANSLATABLE',
@@ -339,11 +347,50 @@ export function createUploadOptionsFactory<
                 DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
             },
             dokument: {
+              permissions,
               trancheId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
             },
             initialDokumente: options?.initialDocuments,
+          }
+        : null;
+    });
+  };
+}
+
+export function createDarlehenUploadOptionsFactory<
+  T extends {
+    darlehen: Signal<Darlehen | null | undefined>;
+    allowTypes: string | undefined;
+    permissions: Signal<DarlehenPermissionMap | undefined>;
+  },
+>(view: T) {
+  return (
+    lazyDokumentTyp: (view: T) => DarlehenDokumentType | null | undefined,
+  ) => {
+    return computed<DokumentOptions | null>(() => {
+      const dokumentTyp = lazyDokumentTyp(view);
+      const darlehenId = view.darlehen()?.id;
+      const permissions = view.permissions();
+      const allowTypes = view.allowTypes;
+      return dokumentTyp && darlehenId && allowTypes && permissions
+        ? {
+            allowTypes,
+            info: {
+              type: 'TRANSLATABLE',
+              title: DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+              description:
+                DARLEHEN_DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[
+                  `${dokumentTyp}_DESCRIPTION`
+                ],
+            },
+            dokument: {
+              permissions,
+              darlehenId,
+              dokumentTyp,
+              art: 'DARLEHEN_DOKUMENT',
+            },
           }
         : null;
     });
@@ -368,7 +415,6 @@ export function createGesuchDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TRANSLATABLE',
       title: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
@@ -376,6 +422,7 @@ export function createGesuchDokumentOptions(options: {
         DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[`${dokumentTyp}_DESCRIPTION`],
     },
     dokument: {
+      permissions,
       dokumentTyp,
       trancheId,
       gesuchDokument,
@@ -405,12 +452,12 @@ export function createAdditionalDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TRANSLATABLE',
       title: `shared.dokumente.file.unterschriftenblatt.${dokumentTyp}`,
     },
     dokument: {
+      permissions,
       dokumentTyp,
       gesuchId,
       trancheId,
@@ -441,13 +488,13 @@ export function createCustomDokumentOptions(options: {
   } = options;
   return {
     allowTypes,
-    permissions,
     info: {
       type: 'TEXT',
       title: dokumentTyp.type,
       description: dokumentTyp.description,
     },
     dokument: {
+      permissions,
       dokumentTyp,
       gesuchId,
       trancheId,

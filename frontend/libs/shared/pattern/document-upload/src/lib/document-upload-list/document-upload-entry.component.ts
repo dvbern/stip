@@ -44,10 +44,9 @@ export class SharedPatternDocumentUploadEntryComponent {
   loadingSig = input.required<boolean>();
 
   isDeletableSig = computed(() => {
-    const { dokumentModel, permissions } = this.uploadViewSig();
+    const { dokumentModel } = this.uploadViewSig();
     return isUploadable(
       dokumentModel,
-      permissions,
       this.uploadViewSig().isSachbearbeitungApp,
     );
   });

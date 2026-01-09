@@ -47,7 +47,6 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateRange;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
@@ -1023,20 +1022,6 @@ public class TestUtil {
                     .setAuszahlungAnSozialdienst(false)
                     .setSapBusinessPartnerId(9887965)
             );
-
-        gesuchFormular.setDarlehen(
-            new Darlehen()
-                .setWillDarlehen(true)
-                .setBetragDarlehen(500)
-                .setBetragBezogenKanton(20)
-                .setSchulden(0)
-                .setAnzahlBetreibungen(0)
-                .setGrundNichtBerechtigt(false)
-                .setGrundAusbildungZwoelfJahre(true)
-                .setGrundHoheGebuehren(false)
-                .setGrundAnschaffungenFuerAusbildung(false)
-                .setGrundZweitausbildung(false)
-        );
 
         return gesuch;
     }

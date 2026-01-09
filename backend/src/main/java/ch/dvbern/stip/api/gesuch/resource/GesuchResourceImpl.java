@@ -36,7 +36,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
-import ch.dvbern.stip.api.gesuch.type.SbDashboardColumn;
+import ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -60,7 +60,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NachfristAendernRequestDto;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
 import ch.dvbern.stip.generated.dto.StatusprotokollEntryDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
@@ -340,7 +340,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public PaginatedSbDashboardDto getGesucheSb(
+    public PaginatedSbGesucheDashboardDto getGesucheSb(
         GetGesucheSBQueryType getGesucheSBQueryType,
         GesuchTrancheTyp typ,
         Integer page,
@@ -353,7 +353,7 @@ public class GesuchResourceImpl implements GesuchResource {
         String bearbeiter,
         LocalDate letzteAktivitaetFrom,
         LocalDate letzteAktivitaetTo,
-        SbDashboardColumn sortColumn,
+        SbGesucheDashboardColumn sortColumn,
         SortOrder sortOrder
     ) {
         gesuchAuthorizer.sbCanGetGesuche();

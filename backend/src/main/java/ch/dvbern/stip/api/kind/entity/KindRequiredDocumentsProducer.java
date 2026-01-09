@@ -61,4 +61,8 @@ public class KindRequiredDocumentsProducer implements RequiredDocumentsProducer 
 
         return ImmutablePair.of("kinds", requiredDocs);
     }
+
+    private static boolean greaterThanZero(final Integer base) {
+        return base != null && base > 0;
+    }
 }

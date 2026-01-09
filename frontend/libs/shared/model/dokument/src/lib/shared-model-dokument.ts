@@ -1,6 +1,8 @@
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentTyp,
+  DarlehenDokument,
+  DarlehenDokumentType,
   Dokument,
   DokumentArt,
   DokumentTyp,
@@ -10,69 +12,47 @@ import {
   UnterschriftenblattDokumentTyp,
 } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { PermissionMap } from '@dv/shared/model/permission-state';
+import {
+  DarlehenPermissionMap,
+  PermissionMap,
+} from '@dv/shared/model/permission-state';
 import { Extends } from '@dv/shared/model/type-util';
 
+type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT';
+
 export type SharedModelStandardGesuchDokument = {
-  art: Extends<DokumentArt, 'GESUCH_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'GESUCH_DOKUMENT'>;
   dokumentTyp: DokumentTyp;
+  permissions: PermissionMap;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
 };
 
 export type SharedModelAdditionalGesuchDokument = {
-  art: Extends<DokumentArt, 'UNTERSCHRIFTENBLATT'>;
+  art: Extends<AvailableDokumentArt, 'UNTERSCHRIFTENBLATT'>;
   dokumentTyp: UnterschriftenblattDokumentTyp;
+  permissions: PermissionMap;
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: UnterschriftenblattDokument;
 };
 
 export type SharedModelCustomGesuchDokument = {
-  art: Extends<DokumentArt, 'CUSTOM_DOKUMENT'>;
+  art: Extends<AvailableDokumentArt, 'CUSTOM_DOKUMENT'>;
   dokumentTyp: CustomDokumentTyp;
+  permissions: PermissionMap;
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
 };
 
-export type SharedModelGesuchDokument =
-  | SharedModelStandardGesuchDokument
-  | SharedModelAdditionalGesuchDokument
-  | SharedModelCustomGesuchDokument;
-
-export type SharedModelTableDokument =
-  | SharedModelTableRequiredDokument
-  | SharedModelTableCustomDokument;
-
-type DokumentInfoTranslatable = {
-  type: 'TRANSLATABLE';
-  title: SharedTranslationKey;
-  description?: SharedTranslationKey;
+export type SharedModelDarlehenDokument = {
+  art: Extends<AvailableDokumentArt, 'DARLEHEN_DOKUMENT'>;
+  dokumentTyp: DarlehenDokumentType;
+  permissions: DarlehenPermissionMap;
+  darlehenId: string;
+  gesuchDokument?: DarlehenDokument;
 };
-type DokumentInfoText = {
-  type: 'TEXT';
-  title: string;
-  description?: string;
-};
-export type DokumentInfo = DokumentInfoTranslatable | DokumentInfoText;
-
-interface BaseDocumentOptions {
-  permissions: PermissionMap;
-  allowTypes: string;
-  dokument: SharedModelGesuchDokument;
-  initialDokumente?: Dokument[];
-}
-
-export interface StandardDokumentOptions extends BaseDocumentOptions {
-  info: DokumentInfoTranslatable;
-}
-
-export interface CustomDokumentOptions extends BaseDocumentOptions {
-  info: DokumentInfoText;
-}
-
-export type DokumentOptions = StandardDokumentOptions | CustomDokumentOptions;
 
 export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
@@ -97,6 +77,53 @@ export type SharedModelTableAdditionalDokument = {
   gesuchDokument?: UnterschriftenblattDokument;
   dokumentOptions: StandardDokumentOptions;
 };
+
+export type SharedModelGesuchDokument =
+  | SharedModelStandardGesuchDokument
+  | SharedModelAdditionalGesuchDokument
+  | SharedModelCustomGesuchDokument
+  | SharedModelDarlehenDokument;
+
+export type SharedModelTableDokument =
+  | SharedModelTableRequiredDokument
+  | SharedModelTableCustomDokument;
+
+type DokumentInfoTranslatable = {
+  type: 'TRANSLATABLE';
+  title: SharedTranslationKey;
+  description?: SharedTranslationKey;
+};
+type DokumentInfoText = {
+  type: 'TEXT';
+  title: string;
+  description?: string;
+};
+export type DokumentInfo = DokumentInfoTranslatable | DokumentInfoText;
+
+interface BaseDocumentOptions {
+  allowTypes: string;
+  dokument: SharedModelGesuchDokument;
+  initialDokumente?: Dokument[];
+}
+
+export interface StandardDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoTranslatable;
+}
+
+export interface DarlehenDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoTranslatable;
+}
+
+export interface CustomDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoText;
+}
+
+export type DokumentOptions =
+  | StandardDokumentOptions
+  | CustomDokumentOptions
+  | DarlehenDokumentOptions;
+
+// Darlehen Dokument
 
 export interface DokumentUpload {
   file: Dokument;
@@ -126,7 +153,6 @@ export interface DokumentState {
 }
 
 export interface UploadView {
-  permissions: PermissionMap;
   dokumentModel: SharedModelGesuchDokument;
   initialDokuments?: Dokument[];
   hasEntries: boolean;
@@ -135,7 +161,6 @@ export interface UploadView {
 
 export const isUploadable = (
   dokumentModel: SharedModelGesuchDokument,
-  permission: PermissionMap,
   isSachbearbeitungApp: boolean,
 ) => {
   switch (dokumentModel.art) {
@@ -143,12 +168,18 @@ export const isUploadable = (
     case 'CUSTOM_DOKUMENT': {
       if (!isSachbearbeitungApp) {
         const status = dokumentModel.gesuchDokument?.status;
-        return status !== 'AKZEPTIERT' && permission.canUploadDocuments;
+        return (
+          status !== 'AKZEPTIERT' &&
+          dokumentModel.permissions.canUploadDocuments
+        );
       }
-      return permission.canUploadDocuments;
+      return dokumentModel.permissions.canUploadDocuments;
     }
     case 'UNTERSCHRIFTENBLATT': {
-      return permission.canUploadUnterschriftenblatt;
+      return dokumentModel.permissions.canUploadUnterschriftenblatt;
+    }
+    case 'DARLEHEN_DOKUMENT': {
+      return dokumentModel.permissions.canUploadDocuments;
     }
   }
 };
