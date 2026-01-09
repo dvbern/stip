@@ -12,7 +12,6 @@ export type VerminderteBerechnung = {
   berechnungReduziert: number;
 };
 
-// TODO: Is proKopfTeilung new for totalVorTeilung?
 export interface PersoenlichesBudgetresultatView
   extends PersoenlichesBudgetresultat {
   typ: 'persoenlich';
@@ -49,7 +48,3 @@ export type BerechnungView = {
   berechnung: number;
   berechnungsStammdaten: BerechnungsStammdaten;
 };
-
-// name: string; // TODO: what if Familie?
-//   sozialversicherungsnummer: string; // TODO: what if Familie?
-//   geburtsdatum: string; // TODO: what if Familie?

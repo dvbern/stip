@@ -40,7 +40,7 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- todo: Anchor links? and projection - BGSA -->
+      <!-- BGSA -->
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [personValueItemsSig]="einnahmen.einnahmenBGSA"
