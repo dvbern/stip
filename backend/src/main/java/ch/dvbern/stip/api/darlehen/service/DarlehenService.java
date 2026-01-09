@@ -424,16 +424,6 @@ public class DarlehenService {
         darlehenRepository.delete(darlehen);
     }
 
-    @Transactional
-    public void deleteAllDarlehenForGesuch(final UUID gesuchId) {
-        final var darlehens = darlehenRepository.findByGesuchId(gesuchId);
-        for (final var darlehen : darlehens) {
-            darlehenRepository.delete(darlehen);
-        }
-
-        darlehenRepository.flush();
-    }
-
     private static void assertDarlehenStatus(final Darlehen darlehen, final DarlehenStatus darlehenStatus) {
         if (darlehen.getStatus() != darlehenStatus) {
             throw new IllegalStateException(String.format("Darlehen not in status %s", darlehenStatus.name()));

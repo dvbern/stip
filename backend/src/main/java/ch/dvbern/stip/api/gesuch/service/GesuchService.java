@@ -517,7 +517,6 @@ public class GesuchService {
     public void deleteGesuch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
-        darlehenService.deleteAllDarlehenForGesuch(gesuchId);
         gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
