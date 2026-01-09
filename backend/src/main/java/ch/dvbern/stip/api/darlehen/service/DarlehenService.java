@@ -89,13 +89,15 @@ public class DarlehenService {
     public DarlehenDto createDarlehen(final UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
         final var gesuchs = gesuchRepository.findAllForFall(fallId);
-        final var gesuch =
-            gesuchs.max(Comparator.comparing((g -> g.getAusbildung().getAusbildungBegin()))).orElseThrow();
+        final var relatedGesuch =
+            gesuchs.filter(gesuch -> gesuch.getGesuchStatus().isEingereicht())
+                .max(Comparator.comparing(gesuch -> gesuch.getGesuchsperiode().getGesuchsperiodeStopp()))
+                .orElseThrow();
 
         final var darlehen = new Darlehen();
         darlehen.setFall(fall);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
-        darlehen.setRelatedGesuch(gesuch);
+        darlehen.setRelatedGesuch(relatedGesuch);
 
         darlehenRepository.persistAndFlush(darlehen);
         return darlehenMapper.toDto(darlehen);
