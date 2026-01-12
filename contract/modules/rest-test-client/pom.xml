@@ -25,7 +25,7 @@
         <jackson-databind-version>2.13.4.2</jackson-databind-version>
         <jackson-databind-nullable-version>0.2.4</jackson-databind-nullable-version>
         <jakarta-annotation-version>2.1.1</jakarta-annotation-version>
-        <okio-version>1.17.5</okio-version>
+        <okio-version>1.17.6</okio-version>
         <junit-version>4.13.2</junit-version>
     </properties>
 
