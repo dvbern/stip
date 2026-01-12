@@ -87,7 +87,7 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- Alimente/Renten -->
+      <!-- Renten -->
       <dv-position
         [titleSig]="t('renten')"
         [infoSig]="t('renten.info')"

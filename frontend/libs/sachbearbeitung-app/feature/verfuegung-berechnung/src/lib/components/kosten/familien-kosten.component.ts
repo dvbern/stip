@@ -37,6 +37,9 @@ import { PositionComponent } from '../position/position.component';
         "
         [amountSig]="kosten.grundbedarf | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Wohnkosten -->
@@ -49,6 +52,9 @@ import { PositionComponent } from '../position/position.component';
         "
         [amountSig]="kosten.wohnkosten | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Medizinische Grundversorgung -->
@@ -61,6 +67,9 @@ import { PositionComponent } from '../position/position.component';
         "
         [amountSig]="kosten.medizinischeGrundversorgung | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Integrationszulage pro in Ausbildung stehendes Kind -->
@@ -78,6 +87,9 @@ import { PositionComponent } from '../position/position.component';
         "
         [amountSig]="kosten.integrationszulage | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Kantons- und Gemeindesteuern -->

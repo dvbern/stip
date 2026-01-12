@@ -44,6 +44,9 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSA | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          1)
+        </span>
       </dv-position>
 
       <!-- Ergänzungsleistungen -->

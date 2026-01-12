@@ -6,36 +6,36 @@
           {{ t('' + berechnung.typ + '.title') }}
         </h1>
         <div class="tw:text-lg tw:flex tw:flex-col tw:pb-3">
-          <ng-template #commonInfo>
-            <span>{{ berechnung.name }}</span>
-            <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
-              <span>
-                {{ t('persoenlich.sv-nummer') }}
-                {{ berechnung.sozialversicherungsnummer }},
-                {{ berechnung.geburtsdatum }}
-              </span>
-
-              <span>
-                {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }},
-
-                {{ t('to') }}: {{ berechnung.gueltigBis | date: 'MM.yyyy' }},
-
-                {{ t('months') }}: {{ berechnung.anzahlMonate }}
-              </span>
+          <span>{{ berechnung.name }}</span>
+          <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
+            <span>
+              {{ t('persoenlich.sv-nummer') }}
+              {{ berechnung.sozialversicherungsnummer }},
+              {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
             </span>
-          </ng-template>
+
+            <span>
+              {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }},
+
+              {{ t('to') }}: {{ berechnung.gueltigBis | date: 'MM.yyyy' }},
+
+              {{ t('months') }}: {{ berechnung.anzahlMonate }}
+            </span>
+          </span>
 
           @switch (berechnung.typ) {
             @case ('persoenlich') {
-              <ng-container *ngTemplateOutlet="commonInfo"></ng-container>
               <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
             }
             @case ('familien') {
-              <ng-container *ngTemplateOutlet="commonInfo"></ng-container>
-              <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
-              <span class="tw:text-gray-500 tw:text-sm">
-                {{ t('veranlagungscode') }}:
-                {{ berechnung.veranlagungscode }}
+              <span
+                class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500"
+              >
+                <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
+                <span class="tw:text-gray-500 tw:text-sm">
+                  {{ t('veranlagungscode') }}:
+                  {{ berechnung.veranlagungscode }}
+                </span>
               </span>
             }
           }
@@ -67,6 +67,7 @@
 
             <!-- proKopfTeilung -->
             <dv-position
+              class="tw:mt-2"
               [titleSig]="t('persoenlich.proKopfTeilung')"
               [amountSig]="berechnung.proKopfTeilung | formatChf"
             ></dv-position>
@@ -74,6 +75,7 @@
             <!-- budgetTranche -->
             <dv-position
               type="title"
+              class="tw:mt-2"
               [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
               [amountSig]="berechnung.budgetTranche | formatChf"
             ></dv-position>
@@ -128,12 +130,14 @@
 
             <!-- proKopfTeilungKinderInAusbildung -->
             <dv-position
+              class="tw:mt-2"
               [titleSig]="t('familien.anzahlKinderInAusbildung')"
               [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
             ></dv-position>
 
             <!-- anrechenbareElterlicheLeistung -->
             <dv-position
+              class="tw:mt-2"
               [titleSig]="t('familien.elterlicheLeistung')"
               [infoSig]="t('familien.elterlicheLeistung.info')"
               [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
@@ -141,6 +145,7 @@
 
             <!-- halbierungsReduktion -->
             <dv-position
+              class="tw:mt-2"
               [titleSig]="t('familien.reduktionArt15Abs2ABG')"
               [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
               [amountSig]="berechnung.halbierungsReduktion | formatChf"
@@ -149,7 +154,7 @@
             <!-- Fehlbetrag -->
             <dv-position
               type="title"
-              class="tw:mt-10 tw:block"
+              class="tw:mt-10"
               [titleSig]="t('familien.fehlbetrag')"
               [infoSig]="t('familien.fehlbetrag.info')"
               [amountSig]="berechnung.fehlbetrag | formatChf"
@@ -157,12 +162,14 @@
 
             <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
             <dv-position
+              class="tw:mt-2"
               [titleSig]="t('familien.proKopfTeilung')"
               [amountSig]="berechnung.proKopfTeilung | formatChf"
             ></dv-position>
 
             <!-- Ungedeckter Anteil Lebenshaltungskosten -->
             <dv-position
+              class="tw:mt-2"
               [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
               [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
               [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"

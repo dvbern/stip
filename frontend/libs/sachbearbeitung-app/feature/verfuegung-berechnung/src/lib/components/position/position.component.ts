@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, HostBinding, input } from '@angular/core';
 
 import { PersonValueItem } from '@dv/shared/model/gesuch';
 
@@ -44,6 +44,8 @@ import { PersonValueItemComponent } from './person-value-item.component';
 export class PositionComponent {
   personValueItemsSig = input<PersonValueItem[]>();
   titleSig = input.required<string>();
+  @HostBinding('class')
+  readonly hostClass = 'tw:block';
   /**
    * Optional info text displayed below the title
    * If not provided, the content projection is used,

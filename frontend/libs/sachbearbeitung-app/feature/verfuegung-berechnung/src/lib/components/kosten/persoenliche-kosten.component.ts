@@ -37,6 +37,9 @@ import { PositionComponent } from '../position/position.component';
         "
         [amountSig]="kosten.ausbildungskosten | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Fahrkosten der/des Auszubildenden -->
@@ -58,6 +61,9 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('nurElternWohnend.info')"
         [amountSig]="kosten.verpflegungskosten | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Grundbedarf für 0 Personenhaushalt -->
@@ -70,6 +76,9 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kosten.grundbedarf | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Wohnkosten für anz Personenhaushalt -->
@@ -82,6 +91,9 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kosten.wohnkosten | formatChfPositive"
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Medizinische Grundversorgung für anz Personenhaushalt -->
@@ -97,6 +109,9 @@ import { PositionComponent } from '../position/position.component';
           kosten.medizinischeGrundversorgungTotal | formatChfPositive
         "
       >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
       </dv-position>
 
       <!-- Fahrkosten Ehepartnerin/Ehepartner -->
