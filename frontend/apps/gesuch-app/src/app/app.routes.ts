@@ -31,7 +31,7 @@ export const appRoutes: Route[] = [
       {
         path: 'darlehen',
         loadChildren: () =>
-          import('@dv/shared/feature/darlehen-feature').then(
+          import('@dv/shared/feature/darlehen').then(
             (m) => m.sharedFeatureDarlehenFeatureRoutes,
           ),
       },

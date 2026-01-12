@@ -91,7 +91,7 @@ import {
 
 type DarlehenFilter = keyof typeof GetDarlehenSbQueryType;
 
-const DEFAULT_FILTER: DarlehenFilter = 'ALLE_DARLEHEN';
+const DEFAULT_FILTER: DarlehenFilter = 'MEINE_BEARBEITBAR';
 
 type DashboardEntry = Omit<
   DarlehenDashboard,

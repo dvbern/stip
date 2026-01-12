@@ -1,1 +1,1 @@
-export * from './lib/gesuch-app-data-access-dashboard.store';
+export * from './lib/shared-data-access-dashboard.store';

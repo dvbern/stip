@@ -15,14 +15,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.validation;
+package ch.dvbern.stip.api.pdf.type;
 
-import java.util.Set;
+import lombok.Getter;
 
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import org.apache.commons.lang3.tuple.Pair;
+@Getter
+public enum Anhangs {
+    RECHTSMITTELBELEHRUNG("stip.pdf.rechtsmittelbelehrung.title"),
+    BERECHNUNGSBLAETTER("stip.pdf.anhangs.berechnungsblaetter");
 
-public interface RequiredDocumentsProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDocuments(final GesuchFormular formular);
+    private final String translationKey;
+
+    Anhangs(String translationKey) {
+        this.translationKey = translationKey;
+    }
 }

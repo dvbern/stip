@@ -144,14 +144,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto getDarlehenGs(final UUID darlehenId) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
-
-        return darlehenMapper.toDto(darlehen);
-    }
-
-    @Transactional
-    public DarlehenDto getDarlehenSb(final UUID darlehenId) {
+    public DarlehenDto getDarlehen(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
         return darlehenMapper.toDto(darlehen);
@@ -160,7 +153,6 @@ public class DarlehenService {
     @Transactional
     public List<DarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
         final var darlehenList = darlehenRepository.findByGesuchId(gesuchId);
-
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
@@ -229,7 +221,8 @@ public class DarlehenService {
         }
 
         darlehenDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.stream()
+        final var results = baseQuery.distinct()
+            .stream()
             .map(darlehenMapper::toDashboardDto)
             .toList();
 
@@ -244,6 +237,7 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenAblehnen(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
 
         darlehenRepository.persistAndFlush(darlehen);
@@ -256,6 +250,7 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenAkzeptieren(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
 
         darlehenRepository.persistAndFlush(darlehen);
@@ -268,6 +263,8 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenEingeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
+        removeSuperfluousDokumentsForDarlehen(darlehen);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
         darlehen.setEingabedatum(LocalDate.now());
 
@@ -282,6 +279,7 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenFreigeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.EINGEGEBEN);
         darlehen.setStatus(DarlehenStatus.IN_FREIGABE);
 
         darlehenRepository.persistAndFlush(darlehen);
@@ -291,6 +289,7 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenZurueckweisen(final UUID darlehenId, final KommentarDto kommentar) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.EINGEGEBEN);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
 
         darlehenRepository.persistAndFlush(darlehen);
@@ -303,6 +302,7 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenUpdateGs(final UUID darlehenId, final DarlehenUpdateGsDto darlehenUpdateGsDto) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
 
         darlehenMapper.partialUpdate(darlehenUpdateGsDto, darlehen);
         removeSuperfluousDokumentsForDarlehen(darlehen);
@@ -315,6 +315,7 @@ public class DarlehenService {
     @Transactional
     public DarlehenDto darlehenUpdateSb(final UUID darlehenId, final DarlehenUpdateSbDto darlehenUpdateSbDto) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, Set.of(DarlehenStatus.EINGEGEBEN, DarlehenStatus.IN_FREIGABE));
 
         darlehenMapper.partialUpdate(darlehenUpdateSbDto, darlehen);
 
@@ -462,6 +463,19 @@ public class DarlehenService {
     @Transactional
     public void deleteDarlehen(UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
+        assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
         darlehenRepository.delete(darlehen);
+    }
+
+    private static void assertDarlehenStatus(final Darlehen darlehen, final DarlehenStatus darlehenStatus) {
+        if (darlehen.getStatus() != darlehenStatus) {
+            throw new IllegalStateException(String.format("Darlehen not in status %s", darlehenStatus.name()));
+        }
+    }
+
+    private static void assertDarlehenStatus(final Darlehen darlehen, final Set<DarlehenStatus> darlehenStatuss) {
+        if (!darlehenStatuss.contains(darlehen.getStatus())) {
+            throw new IllegalStateException(String.format("Darlehen not in statuss %s", darlehenStatuss.toString()));
+        }
     }
 }

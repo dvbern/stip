@@ -29,14 +29,14 @@
           <span>{{ 'shared.menu.auszahlung' | transloco }}</span>
         </a>
 
-        @let darlehens = darlehenStore.darlehenListViewSig();
-        <dv-shared-ui-darlehen-menu
-          [dashboardViewSig]="dashboardStore.dashboardViewSig()"
-          [darlehenListSig]="darlehens.darlehenList"
-          [fallIdSig]="fallId"
-          [gesuchIdSig]="undefined"
-          (createDarlehen)="darlehenStore.createDarlehen$($event)"
-        ></dv-shared-ui-darlehen-menu>
+        @if (showDarlehenMenuSig()) {
+          <dv-shared-ui-darlehen-menu
+            [dashboardViewSig]="dashboardStore.dashboardViewSig()"
+            [darlehenListSig]="darlehenStore.darlehenListSig()"
+            [fallIdSig]="fallId"
+            (createDarlehen)="darlehenStore.createDarlehen$($event)"
+          ></dv-shared-ui-darlehen-menu>
+        }
       </div>
     </dv-shared-pattern-app-header>
 

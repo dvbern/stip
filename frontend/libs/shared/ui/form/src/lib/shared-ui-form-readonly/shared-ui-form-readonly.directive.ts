@@ -10,7 +10,7 @@ import {
 import { FormGroupDirective } from '@angular/forms';
 
 @Directive({
-  selector: '[dvSharedUiFormReadonly]',
+  selector: '[dvSharedUiFormReadonly],[dvSharedUiFormReadonlyToggle]',
   standalone: true,
 })
 export class SharedUiFormReadonlyDirective {
@@ -23,15 +23,34 @@ export class SharedUiFormReadonlyDirective {
 
   @Input() set dvSharedUiFormReadonly(readonly: boolean | undefined) {
     if (readonly) {
-      this.isReadonly.set(true);
-      this.formGroup.form.disable({ emitEvent: false });
-      this.renderer.addClass(this.elementRef.nativeElement, 'readonly');
+      this.disableForm();
       this.wasPreviouslyReadonly = true;
     } else if (this.wasPreviouslyReadonly) {
-      this.isReadonly.set(false);
-      this.formGroup.form.enable({ emitEvent: false });
-      this.renderer.removeClass(this.elementRef.nativeElement, 'readonly');
-      this.gotReenabledSig.emit({});
+      this.enableForm();
     }
+  }
+
+  @Input() set dvSharedUiFormReadonlyToggle(readonly: boolean | undefined) {
+    if (readonly === true) {
+      this.disableForm();
+      this.wasPreviouslyReadonly = true;
+    }
+    if (readonly === false) {
+      this.enableForm();
+      this.wasPreviouslyReadonly = false;
+    }
+  }
+
+  private disableForm() {
+    this.isReadonly.set(true);
+    this.formGroup.form.disable({ emitEvent: false });
+    this.renderer.addClass(this.elementRef.nativeElement, 'readonly');
+  }
+
+  private enableForm() {
+    this.isReadonly.set(false);
+    this.formGroup.form.enable({ emitEvent: false });
+    this.renderer.removeClass(this.elementRef.nativeElement, 'readonly');
+    this.gotReenabledSig.emit({});
   }
 }

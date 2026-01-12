@@ -5,6 +5,7 @@
   class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
   data-testid="header-nav-darlehen-menu"
   [matMenuTriggerFor]="darlehenMenu"
+  [disabled]="!darlehenListSig()?.length && gesuchIdSig()"
   [class.active]="darlehenRouteIdSig()"
 >
   <i class="material-symbols-rounded me-2 text-white">account_balance</i>
@@ -29,6 +30,7 @@
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="header-nav-darlehen-menu-item"
             [class.active]="darlehenRouteIdSig() === darlehen.id"
+            mat-menu-item
           >
             <span>
               {{
@@ -44,19 +46,19 @@
       }
     }
 
-    @if (darlehenListSig()?.length && !gesuchIdSig()) {
-      <hr class="flex-grow-1" />
-    }
-
-    @if (fallId) {
+    @if (fallId && canCreateDarlehenSig()) {
+      <hr class="flex-grow-1 tw:hidden tw:not-first:block" />
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="btn tw:font-normal tw:shadow-none!"
         data-testid="cockpit-gesuch-darlehen-create"
         (click)="createDarlehen.emit({ fallId })"
-        [disabled]="!canCreateDarlehenSig()"
+        mat-menu-item
       >
-        {{ 'shared.dashboard.darlehen.create' | transloco }}
+        <div class="tw:flex tw:items-center tw:gap-2">
+          <i class="material-symbols-rounded">add_circle</i>
+          {{ 'shared.dashboard.darlehen.create' | transloco }}
+        </div>
       </button>
     }
   </div>
