@@ -27,13 +27,10 @@ import ch.dvbern.stip.api.tenancy.service.MockTenantService;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
-import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
-import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1Builder;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungsStammdatenV1Mapper;
-import ch.dvbern.stip.berechnung.dto.v1.PersoenlichesBudgetResultatV1Mapper;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1Builder;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungTestcase;
@@ -52,13 +49,19 @@ import org.mockito.Mockito;
 
 @UtilityClass
 public class BerechnungUtil {
+    public ObjectMapper createObjectMapper() {
+        return new ObjectMapper()
+            .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
+    }
+
     public CalculatorRequest getRequest(final int fall) {
         try {
             final var resource =
                 BerechnungUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));
             assert resource != null;
             final var inputs = Files.readString(Paths.get(resource.toURI()));
-            final var mapper = new ObjectMapper();
+            final var mapper = createObjectMapper();
+
             return mapper.readValue(inputs, BerechnungRequestV1.class);
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
@@ -71,10 +74,9 @@ public class BerechnungUtil {
                 BerechnungUtil.class.getClassLoader().getResource(String.format("testcase/testcase_%d.json", no));
             assert resource != null;
             final var inputs = Files.readString(Paths.get(resource.toURI()));
-            final var mapper = new ObjectMapper()
+            final var mapper = createObjectMapper()
                 .registerModule(new ParameterNamesModule())
-                .registerModule(new Jdk8Module())
-                .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
+                .registerModule(new Jdk8Module());
 
             return mapper.readValue(inputs, BerechnungTestcase.class);
         } catch (IOException | URISyntaxException e) {
@@ -98,20 +100,8 @@ public class BerechnungUtil {
         final var calculators = (Instance<StipendienCalculator>) Mockito.mock(Instance.class);
         Mockito.doAnswer((ignored) -> Stream.of(new StipendienCalculatorV1())).when(calculators).stream();
 
-        final var persoenlichesBudgetRestultatMapper =
-            (Instance<PersoenlichesBudgetResultatMapper>) Mockito.mock(Instance.class);
-        Mockito.doAnswer((ignored) -> Stream.of(new PersoenlichesBudgetResultatV1Mapper()))
-            .when(persoenlichesBudgetRestultatMapper)
-            .stream();
-
-        final var familienBudgetRestultatMapper = (Instance<FamilienBudgetresultatMapper>) Mockito.mock(Instance.class);
-        // Mockito.doAnswer((ignored) -> Stream.of(new
-        // FamilienBudgetresultatV1Mapper())).when(familienBudgetRestultatMapper.stream());
-
         return new BerechnungService(
             requestBuilders,
-            persoenlichesBudgetRestultatMapper,
-            familienBudgetRestultatMapper,
             berechnungStammdatenMapper,
             calculators,
             new MockTenantService()

@@ -976,6 +976,13 @@ AusgewaehlterGrund:
       $ref: '#/UUID'
     kanton:
       $ref: '#/Kanton'
+PersonValueItem:
+  type: object
+  properties:
+    vorname:
+      type: string
+    value:
+      type: integer
 Darlehen:
   type: object
   required:

@@ -1,21 +1,44 @@
 @if (berechnungSig(); as berechnung) {
-  <mat-card class="rounded-4">
+  <mat-card class="rounded-4" *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.berechnung'">
     <mat-card-header>
       <mat-card-title>
-        <div class="d-flex flex-column ps-1">
-          <span class="text-muted mb-1">{{
-            'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.title' | transloco
-          }}</span>
-          <h3 class="fs-4 mb-4">
-            @switch (berechnung.typ) {
-              @case ('persoenlich') {
-                {{ berechnung.name }}
-              }
-              @case ('familien') {
-                {{ berechnung.nameKey | transloco: berechnung }}
-              }
+        <h1 class="tw:text-lg! tw:mb-1">
+          {{ t(titleKeySig()) }}
+        </h1>
+        <div class="tw:text-lg tw:flex tw:flex-col tw:pb-3">
+          <span>{{ berechnung.name }}</span>
+          <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
+            <span>
+              {{ t('persoenlich.sv-nummer') }}
+              {{ berechnung.sozialversicherungsnummer }},
+              {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
+            </span>
+
+            <span>
+              {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }},
+
+              {{ t('to') }}: {{ berechnung.gueltigBis | date: 'MM.yyyy' }},
+
+              {{ t('months') }}: {{ berechnung.anzahlMonate }}
+            </span>
+          </span>
+
+          @switch (berechnung.typ) {
+            @case ('persoenlich') {
+              <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
             }
-          </h3>
+            @case ('familien') {
+              <span
+                class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500"
+              >
+                <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
+                <span class="tw:text-gray-500 tw:text-sm">
+                  {{ t('veranlagungscode') }}:
+                  {{ berechnung.veranlagungscode }}
+                </span>
+              </span>
+            }
+          }
         </div>
       </mat-card-title>
     </mat-card-header>
@@ -29,108 +52,139 @@
         </dv-berechnungs-expansion-panel>
       </mat-accordion>
     </mat-card-content>
+
     <mat-card-footer class="px-3 py-4">
-      <!-- wenn verheiratet, geteilt durch anzahl personen im haushalt -->
-      @if (berechnung.typ === 'persoenlich' && berechnung.totalVorTeilung) {
-        <div class="d-flex justify-content-between fs-5 h4">
-          <div>
-            {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.total' | transloco }}
-          </div>
-          <div>
-            {{ berechnung.totalVorTeilung | formatChfNegative }}
-          </div>
-        </div>
-        <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
-          <div>
-            {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.anzahlPersonen' | transloco }}
-          </div>
-          <div>
-            {{ berechnung.einnahmen.anzahlPersonenImHaushalt }}
-          </div>
-        </div>
-        <div class="d-flex justify-content-between fs-4 h4">
-          <div>
-            {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.totalVorTeilung' | transloco }}
-          </div>
-          <div>{{ berechnung.total | formatChf }}</div>
-        </div>
+      @switch (berechnung.typ) {
+        @case ('persoenlich') {
+          <div class="tw:mt-3">
+            <!-- fehlbetrag -->
+            <dv-position
+              type="title"
+              [titleSig]="t('persoenlich.fehlbetrag')"
+              [infoSig]="t('persoenlich.fehlbetrag.info')"
+              [amountSig]="berechnung.fehlbetrag | formatChf"
+            ></dv-position>
 
-        @if (Math.sign(berechnung.total) === 1) {
-          <!-- nicht angerechnet  -->
-          <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
-            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.hinweis.positiverBetrag' | transloco }}</div>
-            <div>
-              {{ berechnung.total | formatChfNegative: true }}
+            <!-- proKopfTeilung -->
+            <dv-position
+              class="tw:mt-2"
+              [titleSig]="t('persoenlich.proKopfTeilung')"
+              [amountSig]="berechnung.proKopfTeilung | formatChf"
+            ></dv-position>
+
+            <!-- budgetTranche -->
+            <dv-position
+              type="title"
+              class="tw:mt-2"
+              [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
+              [amountSig]="berechnung.budgetTranche | formatChf"
+            ></dv-position>
+
+            <!-- information studierende -->
+            <div class="tw:mt-6 tw:font-semibold tw:text-lg">
+              {{ t('persoenlich.informationStudierende') }}
+              <span class="tw:text-xs tw:align-text-top">3)</span>
+            </div>
+
+            <!-- stipendium -->
+            <dv-position
+              [titleSig]="t('persoenlich.hinweis.zweiDrittel')"
+              [amountSig]="berechnung.gesetzlichesDarlehenStipendium"
+            ></dv-position>
+
+            <!-- darlehen gesetzlich -->
+            <dv-position
+              [titleSig]="t('persoenlich.hinweis.einDrittel')"
+              [amountSig]="berechnung.gesetzlichesDarlehen"
+            ></dv-position>
+
+            <!-- Hinweis 1. schwarzarbeitBGSA -->
+            <div class="tw:mt-6 tw:text-gray-500 tw:text-sm">
+              {{ t('hinweis.schwarzarbeitBGSA') }}
+            </div>
+
+            <!-- Hinweis 2. hoechstwerte -->
+            <div class="tw:text-gray-500 tw:text-sm">
+              {{ t('hinweis.hoechstwerte') }}
+            </div>
+
+            <!-- Hinweis 3. Eigenverdienst -->
+            <div class="tw:text-gray-500 tw:text-sm">
+              {{
+                t('hinweis.eigenverdienst', {
+                  einkommensfreibetrag: stammdatenSig().einkommensfreibetrag | formatChf,
+                })
+              }}
             </div>
           </div>
         }
+        @case ('familien') {
+          <div class="tw:mt-3">
+            <!--  einnahmeUeberschuss -->
+            <dv-position
+              type="title"
+              [titleSig]="t('familien.einnahmeueberschuss')"
+              [infoSig]="t('familien.einnahmeueberschuss.info')"
+              [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
+            ></dv-position>
 
-        <!-- Stipendienanspruch -->
-        <div class="d-flex justify-content-between fs-3 h4 mt-3">
-          <div>
-            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}</div>
-            @if (berechnung.monate !== 12) {
-              <div class="text-muted mt-1 fw-normal fs-6">
-                {{
-                  'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate'
-                    | transloco: { monate: berechnung.monate }
-                }}
-              </div>
-            }
-          </div>
-          <div>{{ berechnung.berechnung | formatChf }}</div>
-        </div>
-      } @else if (berechnung.typ === 'persoenlich') {
-        <div class="d-flex justify-content-between fs-4 h4">
-          {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.total' | transloco }}
-          <span class="text-nowrap" [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'">{{
-            berechnung.total | formatChfNegative
-          }}</span>
-        </div>
+            <!-- proKopfTeilungKinderInAusbildung -->
+            <dv-position
+              class="tw:mt-2"
+              [titleSig]="t('familien.anzahlKinderInAusbildung')"
+              [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
+            ></dv-position>
 
-        @if (Math.sign(berechnung.total) === 1) {
-          <!-- nicht angerechnet  -->
-          <div class="d-flex text-muted justify-content-between fs-5 tw:mb-2">
-            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.hinweis.positiverBetrag' | transloco }}</div>
-            <div>
-              {{ berechnung.total | formatChfNegative: true }}
+            <!-- anrechenbareElterlicheLeistung -->
+            <dv-position
+              class="tw:mt-2"
+              [titleSig]="t('familien.elterlicheLeistung')"
+              [infoSig]="t('familien.elterlicheLeistung.info')"
+              [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
+            ></dv-position>
+
+            <!-- halbierungsReduktion -->
+            <dv-position
+              class="tw:mt-2"
+              [titleSig]="t('familien.reduktionArt15Abs2ABG')"
+              [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
+              [amountSig]="berechnung.halbierungsReduktion | formatChf"
+            ></dv-position>
+
+            <!-- Fehlbetrag -->
+            <dv-position
+              type="title"
+              class="tw:mt-10"
+              [titleSig]="t('familien.fehlbetrag')"
+              [infoSig]="t('familien.fehlbetrag.info')"
+              [amountSig]="berechnung.fehlbetrag | formatChf"
+            ></dv-position>
+
+            <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
+            <dv-position
+              class="tw:mt-2"
+              [titleSig]="t('familien.proKopfTeilung')"
+              [amountSig]="berechnung.proKopfTeilung | formatChf"
+            ></dv-position>
+
+            <!-- Ungedeckter Anteil Lebenshaltungskosten -->
+            <dv-position
+              class="tw:mt-2"
+              [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
+              [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
+              [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
+            ></dv-position>
+
+            <!-- Hinweis 1. schwarzarbeit BGSA -->
+            <div class="tw:mt-10 tw:text-gray-500 tw:text-sm">
+              {{ t('hinweis.schwarzarbeitBGSA') }}
+            </div>
+            <!-- Hinweis 2. -->
+            <div class="tw:text-gray-500 tw:text-sm">
+              {{ t('hinweis.hoechstwerte') }}
             </div>
           </div>
         }
-
-        <!-- Stipendienanspruch -->
-        <div class="d-flex justify-content-between fs-3 h4 mt-3">
-          <div>
-            <div>{{ 'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch' | transloco }}</div>
-            @if (berechnung.monate !== 12) {
-              <div class="text-muted mt-1 fw-normal fs-6">
-                {{
-                  'sachbearbeitung-app.verfuegung.berechnung.persoenlich.stipendienanspruch.monate'
-                    | transloco: { monate: berechnung.monate }
-                }}
-              </div>
-            }
-          </div>
-          <div>{{ berechnung.berechnung | formatChf }}</div>
-        </div>
-      } @else {
-        <div class="d-flex justify-content-between fs-4 h4">
-          {{ 'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.total' | transloco }}
-          <span class="text-nowrap" [attr.data-testid]="'berechnung-' + berechnung.typ + '-total'">{{
-            berechnung.total | formatChfNegative
-          }}</span>
-        </div>
-      }
-      @if (berechnung.typ === 'persoenlich' && berechnung.geteilteBerechnung) {
-        <div class="mat-expansion-panel-header-title text-muted justify-content-between fs-4 me-0 mb-0 grid w-100">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.' + berechnung.typ + '.geteilteBerechnung'
-              | transloco: berechnung.geteilteBerechnung
-          }}
-          <span class="text-nowrap" [attr.data-testid]="'berechnung-' + berechnung.typ + '-geteilteBerechnung'">{{
-            berechnung.geteilteBerechnung.anteil | formatChfNegative
-          }}</span>
-        </div>
       }
     </mat-card-footer>
   </mat-card>

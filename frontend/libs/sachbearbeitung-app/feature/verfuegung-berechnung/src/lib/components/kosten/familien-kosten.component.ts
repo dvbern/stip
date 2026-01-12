@@ -1,162 +1,143 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
+import { BerechnungsStammdaten } from '@dv/shared/model/gesuch';
+import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { FamilienBerechnung } from '../../../models';
+import { PositionComponent } from '../position/position.component';
 
 @Component({
   selector: 'dv-familien-kosten',
   imports: [
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
+    PositionComponent,
   ],
   template: `
-    <!-- Anzahl anrechenbare Personen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.anzahlPersonen'
-          | transloco: kostenSig()
-      }}
-    </div>
+    <ng-container
+      *transloco="
+        let t;
+        prefix: 'sachbearbeitung-app.verfuegung.berechnung.familien.kosten'
+      "
+    >
+      @let budget = budgetSig();
+      @let kosten = budget.kosten;
+      <!-- Grundbedarf  -->
+      <dv-position
+        [titleSig]="t('grundbedarf')"
+        [infoSig]="
+          t('anzahlPersonen.info', {
+            anzahlPersonen: budget.anzahlPersonenImHaushalt,
+          })
+        "
+        [amountSig]="kosten.grundbedarf | formatChfPositive"
+      >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
+      </dv-position>
 
-    <!-- Grundbedarf  -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.grundbedarf'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().grundbedarf | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Wohnkosten -->
+      <dv-position
+        [titleSig]="t('wohnkosten')"
+        [infoSig]="
+          t('anzahlPersonen.info', {
+            anzahlPersonen: budget.anzahlPersonenImHaushalt,
+          })
+        "
+        [amountSig]="kosten.wohnkosten | formatChfPositive"
+      >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
+      </dv-position>
 
-    <!-- Wohnkosten -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.wohnkosten'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().wohnkosten | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Medizinische Grundversorgung -->
+      <dv-position
+        [titleSig]="t('medizinischeGrundversorgung')"
+        [infoSig]="
+          t('anzahlPersonen.info', {
+            anzahlPersonen: budget.anzahlPersonenImHaushalt,
+          })
+        "
+        [amountSig]="kosten.medizinischeGrundversorgung | formatChfPositive"
+      >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
+      </dv-position>
 
-    <!-- Medizinische Grundversorgung -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.medizinischeGrundversorgung'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().medizinischeGrundversorgung | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Integrationszulage pro in Ausbildung stehendes Kind -->
+      <dv-position
+        [titleSig]="
+          t('integrationszulage', {
+            anzahlKinderInAusbildung: budget.anzahlKinderInAusbildung,
+          })
+        "
+        [infoSig]="
+          t('integrationszulage.info', {
+            einkommensfreibetrag:
+              stammdatenSig().einkommensfreibetrag | formatChf,
+          })
+        "
+        [amountSig]="kosten.integrationszulage | formatChfPositive"
+      >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          2)
+        </span>
+      </dv-position>
 
-    <!-- lntegrationszulage pro in Ausbildung stehendes Kind -->
-    <div class="d-flex gap-5">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.integrationszulage.info'
-              | transloco: kostenSig()
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 ps-5 text-end text-nowrap">
-        {{ kostenSig().integrationszulage | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Kantons- und Gemeindesteuern -->
+      <dv-position
+        [titleSig]="t('kantonsGemeindesteuern')"
+        [infoSig]="t('steuern.info')"
+        [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Kantons- und Gemeindesteuern -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.kantonsGemeindesteuern'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().kantonsGemeindesteuern | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Bundessteuern -->
+      <dv-position
+        [titleSig]="t('bundessteuern')"
+        [infoSig]="t('steuern.info')"
+        [amountSig]="kosten.bundessteuern | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Bundessteuern -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.bundessteuern'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().bundessteuern | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Fahrkosten -->
+      <dv-position
+        [titleSig]="t('fahrkosten')"
+        [infoSig]="t('fahrkosten.info')"
+        [amountSig]="kosten.fahrkostenTotal | formatChfPositive"
+        [personValueItemsSig]="kosten.fahrkosten"
+      >
+      </dv-position>
 
-    <!-- Fahrkosten -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().fahrkosten | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Verpflegung auswärts -->
+      <dv-position
+        [titleSig]="t('verpflegung')"
+        [infoSig]="t('verpflegung.info')"
+        [amountSig]="kosten.verpflegungTotal | formatChfPositive"
+        [personValueItemsSig]="kosten.verpflegung"
+      >
+      </dv-position>
 
-    <!-- Fahrkosten Partner:in -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkostenPartner'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().fahrkostenPartner | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Verpflegung auswärts -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegung | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Verpflegung auswärts Partner:in -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegungPartner'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().verpflegungPartner | formatChfPositive }}
-      </div>
-    </div>
-
-    <!-- Total -->
-    <div class="d-flex mt-3 gap-2">
-      <div class="h4 m-0">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.kosten.total'
-            | transloco
-        }}
-      </div>
-      <div class="h4 flex-grow-1 text-end text-nowrap">
-        {{ kostenSig().total | formatChf }}
-      </div>
-    </div>
+      <!-- Total -->
+      <dv-position
+        type="title"
+        [titleSig]="t('total')"
+        [amountSig]="kosten.total | formatChf"
+      >
+      </dv-position>
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienKostenComponent {
-  kostenSig = input.required<FamilienBerechnung['kosten']>();
+  budgetSig = input.required<FamilienBudgetresultatView>();
+  stammdatenSig = input.required<BerechnungsStammdaten>();
 }

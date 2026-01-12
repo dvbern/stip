@@ -25,5 +25,6 @@ export interface BerechnungsStammdaten {
     preisProMahlzeit: number;
     stipLimiteMinimalstipendium: number;
     limiteAlterAntragsstellerHalbierungElternbeitrag: number;
+    anzahlMonate: number;
 }
 

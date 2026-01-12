@@ -11,10 +11,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { addDays, differenceInMonths } from 'date-fns';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { BerechnungView } from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 import {
@@ -64,132 +64,48 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   berechnungStore = inject(BerechnungStore);
 
-  berechnungenSig = computed(() => {
-    const index = this.indexSig();
-    const view = this.berechnungStore.berechnungZusammenfassungViewSig();
+  berechnungenRawSig = computed<BerechnungView>(() => {
+    const zusammenfassung =
+      this.berechnungStore.berechnungZusammenfassungViewSig();
 
-    if (view.loading || view.berechnungsresultate.length === 0) {
-      return { loading: view.loading, list: [] };
-    }
+    const r = getBerechnungByIndex(
+      zusammenfassung.berechnungsresultate,
+      this.indexSig(),
+    );
 
-    const {
-      berechnung,
-      gueltigAb,
-      gueltigBis,
-      nameGesuchsteller,
-      berechnungsStammdaten: sd,
-      persoenlichesBudgetresultat: p,
-      familienBudgetresultate,
-      berechnungsanteilKinder,
-      type: geteilteBerechnungsArt,
-    } = getBerechnungByIndex(view.berechnungsresultate, index);
+    const yearRange = [r.gueltigAb, r.gueltigBis]
+      .map((d) => d.split('-')[0])
+      .join('/');
 
-    const monate = differenceInMonths(addDays(gueltigBis, 2), gueltigAb);
-
-    return {
-      loading: false,
-      berechnung: {
-        total: view.totalBetragStipendium,
-        gueltigAb: gueltigAb,
-        gueltigBis: gueltigBis,
-        // Add 2 days as date-fns differenceInMonths does have issues with february
-        // 2024-07-01 to 2025-03-01 should be 8 months but is 7, with 2025-03-02 it is 8 months
-        monate,
-        persoenlich: {
-          typ: 'persoenlich' as const,
-          name: nameGesuchsteller,
-          monate,
-          berechnung,
-          total: p.persoenlichesbudgetBerechnet,
-          totalEinnahmen: p.einnahmenPersoenlichesBudget,
-          totalKosten: p.ausgabenPersoenlichesBudget,
-          totalVorTeilung: p.totalVorTeilung,
-          geteilteBerechnung: geteilteBerechnungsArt
-            ? {
-                berechnungsanteilKinder: Math.round(berechnungsanteilKinder),
-                anteil: berechnung,
-              }
-            : null,
-          einnahmen: {
-            anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
-            eigenerHaushalt: p.eigenerHaushalt,
-            total: p.einnahmenPersoenlichesBudget,
-            nettoerwerbseinkommen: p.einkommen,
-            alimente: p.alimente,
-            eoLeistungen: p.leistungenEO,
-            unterhaltsbeitraege: p.rente,
-            kinderUndAusbildungszulagen: p.kinderAusbildungszulagen,
-            ergaenzungsleistungen: p.ergaenzungsleistungen,
-            beitraegeGemeindeInstitution: p.gemeindeInstitutionen,
-            steuerbaresVermoegen: p.steuerbaresVermoegen,
-            anrechenbaresVermoegen: p.anrechenbaresVermoegen,
-            elterlicheLeistung: p.anteilFamilienbudget,
-            einkommenPartner: p.einkommenPartner,
-            freibetragErwerbseinkommen: sd.freibetragErwerbseinkommen,
-            vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
-            limiteAlterAntragsstellerHalbierungElternbeitrag:
-              sd.limiteAlterAntragsstellerHalbierungElternbeitrag,
-          },
-          kosten: {
-            anzahlPersonenImHaushalt: p.anzahlPersonenImHaushalt ?? 0,
-            total: p.ausgabenPersoenlichesBudget,
-            anteilLebenshaltungskosten: p.anteilLebenshaltungskosten,
-            mehrkostenVerpflegung: p.verpflegung,
-            grundbedarfPersonen: p.grundbedarf,
-            wohnkostenPersonen: p.wohnkosten,
-            medizinischeGrundversorgungPersonen: p.medizinischeGrundversorgung,
-            kantonsGemeindesteuern: p.steuern,
-            kantonsGemeindesteuernPartner: p.steuernPartner,
-            bundessteuern: 0,
-            fahrkosten: p.fahrkosten,
-            fahrkostenPartner: p.fahrkostenPartner,
-            verpflegungPartner: p.verpflegungPartner,
-            betreuungskostenKinder: p.fremdbetreuung,
-            ausbildungskosten: p.ausbildungskosten,
-          },
-        },
-        familien:
-          familienBudgetresultate.map((f) => ({
-            typ: 'familien' as const,
-            nameKey: `sachbearbeitung-app.verfuegung.berechnung.familien.typ.${f.familienBudgetTyp}`,
-            year: view.year - 1,
-            total: f.familienbudgetBerechnet,
-            totalEinnahmen: f.einnahmenFamilienbudget,
-            totalKosten: f.ausgabenFamilienbudget,
-            einnahmen: {
-              total: f.einnahmenFamilienbudget,
-              totalEinkuenfte: f.totalEinkuenfte,
-              ergaenzungsleistungen: f.ergaenzungsleistungen,
-              steuerbaresVermoegen: f.steuerbaresVermoegen,
-              anrechenbaresVermoegen: f.anrechenbaresVermoegen,
-              vermoegensaufrechnung: f.anrechenbaresVermoegen,
-              sauele2: f.saeule2,
-              sauele3: f.saeule3a,
-              mietwert: f.eigenmietwert,
-              kinderalimente: f.alimente,
-              einkommensfreibeitrag: sd.einkommensfreibetrag,
-              maxSaeule3a: sd.maxSaeule3a,
-              freibetragVermoegen: sd.freibetragVermoegen,
-              vermoegensanteilInProzent: sd.vermoegensanteilInProzent,
-            },
-            kosten: {
-              total: f.ausgabenFamilienbudget,
-              anzahlPersonen: f.anzahlPersonenImHaushalt,
-              grundbedarf: f.grundbedarf,
-              wohnkosten: f.effektiveWohnkosten,
-              medizinischeGrundversorgung: f.medizinischeGrundversorgung,
-              integrationszulage: f.integrationszulage,
-              abzugslimite: sd.abzugslimite,
-              kantonsGemeindesteuern: f.steuernKantonGemeinde,
-              bundessteuern: f.steuernBund,
-              fahrkosten: f.fahrkostenPerson1,
-              fahrkostenPartner: f.fahrkostenPerson2,
-              verpflegung: f.essenskostenPerson1,
-              verpflegungPartner: f.essenskostenPerson2,
-            },
-          })) ?? [],
+    const view: BerechnungView = {
+      persoenlich: {
+        ...r.persoenlichesBudgetresultat,
+        typ: 'persoenlich',
+        yearRange,
+        name: `${r.persoenlichesBudgetresultat.vorname} ${r.persoenlichesBudgetresultat.nachname}`,
+        gueltigAb: r.gueltigAb,
+        gueltigBis: r.gueltigBis,
+        geteilteBerechnung: r.type
+          ? {
+              berechnungsanteilKinder: Math.round(r.berechnungsanteilKinder),
+              anteil: r.berechnung,
+            }
+          : null,
       },
+      familien: r.familienBudgetresultate.map((v) => ({
+        ...v,
+        typ: 'familien',
+        name: `${v.vorname} ${v.nachname}`,
+        gueltigAb: r.gueltigAb,
+        gueltigBis: r.gueltigBis,
+        anzahlMonate: r.persoenlichesBudgetresultat.anzahlMonate,
+        yearRange,
+      })),
+      berechnung: r.berechnung,
+      berechnungsStammdaten: r.berechnungsStammdaten,
     };
+
+    return view;
   });
 
   constructor() {

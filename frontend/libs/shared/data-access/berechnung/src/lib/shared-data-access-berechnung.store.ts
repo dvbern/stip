@@ -8,10 +8,14 @@ import {
   GesuchService,
   TranchenBerechnungsresultat,
 } from '@dv/shared/model/gesuch';
-import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
+import {
+  TeilberechnungsArt,
+  VerminderteBerechnung,
+} from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
   cachedPending,
+  fromCachedDataSig,
   handleApiResponse,
   initial,
   isPending,
@@ -37,15 +41,14 @@ export class BerechnungStore extends signalStore(
    *
    * This computed signal:
    * - Groups `tranchenBerechnungsresultate` by `gesuchTrancheId`
-   * - Calculates the total stipend amount (`totalBetragStipendium`)
    * - Handles split calculations (type 'a' and 'b') when a tranche has multiple results
    * - Includes reduced calculation details (`verminderteBerechnung`) if applicable
    *
    * @returns An object containing:
-   * - `loading`: Boolean indicating if the data is being fetched
+   * - `loading`: Boolean indicating if the data is pending
    * - `year`: The calculation year
-   * - `totalBetragStipendium`: Total stipend amount calculated
-   * - `berechnungsresultate`: Array of tranche calculation results, grouped and mapped
+   * - `berechnung`: The total calculation amount
+   * - `berechnungsresultate`: Array of arrays of `TranchenBerechnungsresultat`, grouped by tranche ID and split type
    * - `verminderteBerechnung`: Optional reduced calculation details (months, reduction amount, reduced calculation)
    */
   berechnungZusammenfassungViewSig = computed(() => {
@@ -53,16 +56,12 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
-      totalBetragStipendium: number;
+      berechnung: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
-      verminderteBerechnung?: {
-        monate: number;
-        reduktionsBetrag: number;
-        berechnungReduziert: number;
-      };
+      verminderteBerechnung?: VerminderteBerechnung;
     } = {
       year: berechnungRd.data?.year ?? 0,
-      totalBetragStipendium: 0,
+      berechnung: 0,
       berechnungsresultate: {},
     };
 
@@ -77,16 +76,14 @@ export class BerechnungStore extends signalStore(
       : value;
 
     if (berechnungRd.data) {
-      byTrancheId.totalBetragStipendium = berechnungRd.data?.berechnung;
+      byTrancheId.berechnung = berechnungRd.data?.berechnung;
       const verminderteBerechnungMonate =
         berechnungRd.data?.verminderteBerechnungMonate;
       if (verminderteBerechnungMonate) {
         const berechnungReduziert = berechnungRd.data?.berechnungReduziert ?? 0;
         byTrancheId.verminderteBerechnung = {
           monate: 12 - verminderteBerechnungMonate,
-          reduktionsBetrag: -(
-            byTrancheId.totalBetragStipendium - berechnungReduziert
-          ),
+          reduktionsBetrag: -(byTrancheId.berechnung - berechnungReduziert),
           berechnungReduziert,
         };
       }
@@ -106,6 +103,13 @@ export class BerechnungStore extends signalStore(
                 : '',
           })),
       ),
+    };
+  });
+
+  berechnungsViewSig = computed(() => {
+    return {
+      loading: isPending(this.berechnung()),
+      berechnungen: fromCachedDataSig(this.berechnung),
     };
   });
 
