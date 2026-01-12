@@ -73,6 +73,7 @@ public class PersoenlichesBudgetCalculatorV1 {
                 total = total
                     .divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP);;
             }
+            budgetTranche = total;
             if (anzahlMonate != 12) {
                 budgetTranche = divideByTranchen(total, anzahlMonate);
             }
