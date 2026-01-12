@@ -21,7 +21,7 @@
         </dv-berechnungs-card>
       </div>
     </div>
-    <div class="row mt-4 mb-4">
+    <div class="tw:flex tw:flex-col tw:gap-6 row mt-4 mb-4">
       @for (familienbudget of berechnung.familien; track $index) {
         <div class="col-12">
           <dv-berechnungs-card [berechnungSig]="familienbudget" [stammdatenSig]="berechnung.berechnungsStammdaten">

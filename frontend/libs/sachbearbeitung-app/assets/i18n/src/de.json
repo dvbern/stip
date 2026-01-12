@@ -665,6 +665,10 @@
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kommentar": "Kommentar",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
+  "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Familienbudget",
+  "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Vaterbudget",
+  "sachbearbeitung-app.verfuegung.berechnung.mutter.title": "Mutterbudget",
+
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.sv-nummer": "SV-Nr.:",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Total anrechenbare, jährliche Einnahmen",
@@ -724,10 +728,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst": "3) Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen mit Bezug des Darlehens entspricht dem Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}. Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen ohne Bezug des Darlehens entspricht dem Darlehen + Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}.",
 
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.title": "Familien Budget",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.FAMILIE": "Familie {{ year }}",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.MUTTER": "Mutter {{ year }}",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.VATER": "Vater {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total": "Total anrechenbare, jährliche Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte": "Total der Einkünfte",

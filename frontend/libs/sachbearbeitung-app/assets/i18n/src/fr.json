@@ -665,6 +665,10 @@
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kommentar": "Commentaire",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",
+  "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Budget familial",
+  "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Budget du père",
+  "sachbearbeitung-app.verfuegung.berechnung.mutter.title": "Budget de la mère",
+
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.sv-nummer": "Numéro AVS:",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Revenu",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Total des revenus annuels reconnus",
@@ -724,10 +728,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst": "3) Le revenu propre maximal autorisé sur le revenu d'activité avec l'octroi du prêt correspond à l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}. Le revenu propre maximal autorisé sur le revenu d'activité sans octroi du prêt correspond au prêt + l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}.",
 
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.title": "Budget familial",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.FAMILIE": "Famille {{ year }}",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.MUTTER": "Mère {{ year }}",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.typ.VATER": "Père {{ year }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Revenu",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total": "Total des revenus annuels reconnus",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte": "Total des revenus",

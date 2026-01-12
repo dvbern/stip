@@ -1,10 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { BerechnungsStammdaten } from '@dv/shared/model/gesuch';
+import { lowercased } from '@dv/shared/model/type-util';
 import { BerechnungPersonalOrFam } from '@dv/shared/model/verfuegung';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 
@@ -28,6 +34,17 @@ import { PositionComponent } from '../position/position.component';
 export class BerechnungsCardComponent {
   berechnungSig = input.required<BerechnungPersonalOrFam>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
+
+  titleKeySig = computed(() => {
+    const berechnung = this.berechnungSig();
+    let key = 'persoenlich';
+
+    if (berechnung.typ === 'familien') {
+      key = lowercased(berechnung.steuerdatenTyp);
+    }
+
+    return `${key}.title`;
+  });
 
   Math = Math;
 }
