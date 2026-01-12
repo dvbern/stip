@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.berechnung.dto.InputUtils;
 import ch.dvbern.stip.berechnung.dto.PersonValueList;
-import ch.dvbern.stip.berechnung.util.MathUtil;
 import ch.dvbern.stip.generated.dto.PersonValueItemDto;
 import lombok.Builder;
 import lombok.Data;
@@ -107,10 +106,10 @@ public class ElternteilV1 {
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
         final var steuernElternTyp = InputUtils.fromSteuerdatenTyp(steuerdaten.getSteuerdatenTyp());
-        final var elternteileToUse =
+        final var elternteilsToUse =
             InputUtils.getElterteileToUse(eltern, familiensituation.getElternVerheiratetZusammen(), steuernElternTyp);
-        final var elternteil = elternteileToUse.getLeft();
-        final var elternteilPartner = elternteileToUse.getRight();
+        final var elternteil = elternteilsToUse.getLeft();
+        final var elternteilPartner = elternteilsToUse.getRight();
         final var elternteilPartnerName = elternteilPartner.map(Eltern::getVorname);
 
         final var verpflegungskostens = new PersonValueList();
@@ -215,7 +214,7 @@ public class ElternteilV1 {
 
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
-        final var integrationzulageAnzahl = anzahlGeschwisterInNachobligatorischerAusbildung + MathUtil.PIA_COUNT;
+        final var integrationzulageAnzahl = anzahlGeschwisterInNachobligatorischerAusbildung + InputUtils.PIA_COUNT;
         builder.integrationszulage(gesuchsperiode.getIntegrationszulage());
         builder.integrationszulageAnzahl(integrationzulageAnzahl);
         builder.integrationszulageTotal(

@@ -19,8 +19,6 @@ package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -59,14 +57,6 @@ public class BerechnungService {
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
 
-    private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
-        final BerechnungResult berechnungResult,
-        final int budgetToUse
-    ) {
-        // TODO DVSTIP-50: Replace this with something better?
-        return berechnungResult.getFamilienBudgetresultate().get(budgetToUse);
-    }
-
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
         final CalculatorRequest berechnungRequest,
         final int majorVersion,
@@ -86,13 +76,6 @@ public class BerechnungService {
         }
 
         return mapper.get().mapFromRequest(berechnungRequest);
-    }
-
-    private int calcMonthsBetween(final LocalDate from, final LocalDate to) {
-        return (int) ChronoUnit.MONTHS.between(
-            from,
-            to.plusDays(1)
-        );
     }
 
     public BerechnungsresultatDto getBerechnungsresultatFromGesuch(
@@ -134,7 +117,7 @@ public class BerechnungService {
                 minorVersion
             );
 
-            final var monthsValid = calcMonthsBetween(
+            final var monthsValid = DateUtil.getMonthsBetween(
                 gesuchTranche.getGueltigkeit().getGueltigAb(),
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
@@ -227,10 +210,7 @@ public class BerechnungService {
 
             for (int i = 0; i < steuerdatenList.size(); i++) {
                 familienBudgetresultatList.add(
-                    familienBudgetresultatFromRequest(
-                        stipendienCalculated,
-                        i
-                    )
+                    stipendienCalculated.getFamilienBudgetresultate().get(i)
                 );
             }
 
@@ -289,7 +269,6 @@ public class BerechnungService {
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
 
-                // TODO: Clean up this totally messed up tangle of code, duplications and pure chaos
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
                         Math.min(0, berechnung), // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen

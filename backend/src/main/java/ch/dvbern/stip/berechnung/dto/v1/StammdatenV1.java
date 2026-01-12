@@ -42,19 +42,21 @@ public class StammdatenV1 {
     private final int anzahlMonate;
 
     public static StammdatenV1 fromGesuchsperiode(final Gesuchsperiode gesuchsperiode, final int anzahlMonate) {
-        return new StammdatenV1(
-            gesuchsperiode.getMaxSaeule3a(),
-            gesuchsperiode.getEinkommensfreibetrag(),
-            gesuchsperiode.getLimiteEkFreibetragIntegrationszulage(),
-            gesuchsperiode.getFreibetragErwerbseinkommen(),
-            gesuchsperiode.getFreibetragVermoegen(),
-            gesuchsperiode.getVermoegensanteilInProzent(),
-            gesuchsperiode.getAnzahlWochenLehre(),
-            gesuchsperiode.getAnzahlWochenSchule(),
-            gesuchsperiode.getPreisProMahlzeit(),
-            gesuchsperiode.getStipLimiteMinimalstipendium(),
-            gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag(),
-            anzahlMonate
-        );
+        return new StammdatenV1Builder()
+            .maxSaeule3a(gesuchsperiode.getMaxSaeule3a())
+            .einkommensfreibetrag(gesuchsperiode.getEinkommensfreibetrag())
+            .abzugslimite(gesuchsperiode.getLimiteEkFreibetragIntegrationszulage())
+            .freibetragErwerbseinkommen(gesuchsperiode.getFreibetragErwerbseinkommen())
+            .freibetragVermoegen(gesuchsperiode.getFreibetragVermoegen())
+            .vermoegensanteilInProzent(gesuchsperiode.getVermoegensanteilInProzent())
+            .anzahlWochenLehre(gesuchsperiode.getAnzahlWochenLehre())
+            .anzahlWochenSchule(gesuchsperiode.getAnzahlWochenSchule())
+            .preisProMahlzeit(gesuchsperiode.getPreisProMahlzeit())
+            .stipLimiteMinimalstipendium(gesuchsperiode.getStipLimiteMinimalstipendium())
+            .limiteAlterAntragsstellerHalbierungElternbeitrag(
+                gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag()
+            )
+            .anzahlMonate(anzahlMonate)
+            .build();
     }
 }

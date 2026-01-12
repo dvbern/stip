@@ -158,14 +158,11 @@ public class AntragsstellerV1 {
 
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
-                medizinischeGrundversorgungs.setPartnerValue(
-                    partner.getVorname(),
-                    BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        partner.getGeburtsdatum(),
-                        ausbildung.getAusbildungBegin(),
-                        gesuchsperiode
-                    )
-                );
+            }
+            for (final var kind : gesuchFormular.getKinds()) {
+                if (kind.getWohnsitzAnteilPia() > 0) {
+                    anzahlPersonenImHaushalt += 1;
+                }
             }
 
             final var isWgWohnend = Boolean.TRUE.equals(einnahmenKosten.getWgWohnend());
@@ -209,7 +206,6 @@ public class AntragsstellerV1 {
             Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0)
         );
         builder.fremdbetreuung(Objects.requireNonNullElse(einnahmenKosten.getBetreuungskostenKinder(), 0));
-        // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
         final var abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
 
         final boolean isLehre = abschluss.getBildungsrichtung()
@@ -242,11 +238,8 @@ public class AntragsstellerV1 {
                 toJahresWert(ekPartner.getUnterhaltsbeitraege())
             );
             builder.steuernPartner(
-                EinnahmenKostenMappingUtil.calculateSteuern(
-                    ekPartner
-                        .setNettoerwerbseinkommen(ekPartner.getNettoerwerbseinkommen()),
-                    false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
-                )
+                // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
+                EinnahmenKostenMappingUtil.calculateSteuern(ekPartner, false)
             );
             builder.fahrkostenPartner(ekPartner.getFahrkosten());
             builder.verpflegungskostenPartner(ekPartner.getVerpflegungskosten());
@@ -254,11 +247,18 @@ public class AntragsstellerV1 {
             ergaenzungsleistungens.setPartnerValue(partnerName, ekPartner.getErgaenzungsleistungen());
             eoLeistungens.setPartnerValue(partnerName, ekPartner.getEoLeistungen());
             einnahmenBGSAs.setPartnerValue(partnerName, ekPartner.getEinnahmenBGSA());
+            medizinischeGrundversorgungs.setPartnerValue(
+                partner.getVorname(),
+                BerechnungRequestV1.getMedizinischeGrundversorgung(
+                    partner.getGeburtsdatum(),
+                    ausbildung.getAusbildungBegin(),
+                    gesuchsperiode
+                )
+            );
         }
 
         for (var kind : gesuchFormular.getKinds()) {
             if (kind.getWohnsitzAnteilPia() > 0) {
-                anzahlPersonenImHaushalt += 1;
                 kinderAusbildungszulagens.addKindValue(kind, kind.getKinderUndAusbildungszulagen());
                 unterhaltsbeitraeges.addKindValue(kind, kind.getKinderUndAusbildungszulagen());
                 rentens.addKindValue(kind, kind.getRenten());

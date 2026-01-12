@@ -26,7 +26,6 @@ import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputFamilienbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.ElternteilV1;
 import ch.dvbern.stip.berechnung.dto.v1.StammdatenV1;
-import ch.dvbern.stip.berechnung.util.MathUtil;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatEinnahmenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatKostenDto;
@@ -49,7 +48,7 @@ public class FamilienbudgetCalculatorV1 {
         final var elternteil = input.getElternteil();
 
         final var anzahlPersonenImHaushalt = elternteil.getAnzahlPersonenImHaushalt();
-        final var anzahlKinderInAusbildung = elternteil.getAnzahlGeschwisterInAusbildung() + MathUtil.PIA_COUNT;
+        final var anzahlKinderInAusbildung = elternteil.getAnzahlGeschwisterInAusbildung() + InputUtils.PIA_COUNT;
         final var einnahmen = calculateEinnahmen(elternteil, stammdaten);
         final var kosten = calculateKosten(elternteil);
         final var einnahmenMinusKosten =
@@ -67,7 +66,6 @@ public class FamilienbudgetCalculatorV1 {
         if (einnahmenMinusKosten.signum() < 0) {
             fehlbetrag = total.abs();
             proKopfTeilung = anzahlPersonenImHaushalt;
-            // TODO: check if correct
             ungedeckterAnteilLebenshaltungskosten =
                 calculateAnteilLebenshaltungskosten(
                     antragssteller,
@@ -75,7 +73,6 @@ public class FamilienbudgetCalculatorV1 {
                     anzahlPersonenImHaushalt,
                     elternteil.getElternhaushalt()
                 );
-            total = ungedeckterAnteilLebenshaltungskosten.negate();
         }
         // otherwise einnahmeUeberschuss values are filled
         else {
@@ -93,30 +90,29 @@ public class FamilienbudgetCalculatorV1 {
             }
         }
 
-        return new FamilienBudgetresultatDto(
-            elternteil.getSteuerdatenTyp(),
-            antragssteller.getVorname(),
-            antragssteller.getNachname(),
-            antragssteller.getSozialversicherungsnummer(),
-            antragssteller.getGeburtsdatum(),
-            elternteil.getSteuerjahr(),
-            elternteil.getVeranlagungscode(),
-            roundHalfUp(total),
-            roundHalfUp(einnahmenMinusKosten),
-            anzahlPersonenImHaushalt,
-            anzahlKinderInAusbildung,
-            roundHalfUp(einnahmeUeberschuss),
-            proKopfTeilungKinderInAusbildung,
-            roundHalfUp(anrechenbareElterlicheLeistung),
-            roundHalfUp(halbierungsReduktion),
-            roundHalfUp(fehlbetrag),
-            proKopfTeilung,
-            roundHalfUp(ungedeckterAnteilLebenshaltungskosten),
-            einnahmen,
-            kosten,
-            antragssteller.getVornamePartner(),
-            antragssteller.getNachnamePartner()
-        );
+        return new FamilienBudgetresultatDto()
+            .steuerdatenTyp(elternteil.getSteuerdatenTyp())
+            .vorname(antragssteller.getVorname())
+            .nachname(antragssteller.getNachname())
+            .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())
+            .geburtsdatum(antragssteller.getGeburtsdatum())
+            .steuerjahr(elternteil.getSteuerjahr())
+            .veranlagungscode(elternteil.getVeranlagungscode())
+            .total(roundHalfUp(total))
+            .einnahmenMinusKosten(roundHalfUp(einnahmenMinusKosten))
+            .anzahlPersonenImHaushalt(anzahlPersonenImHaushalt)
+            .anzahlKinderInAusbildung(anzahlKinderInAusbildung)
+            .einnahmeUeberschuss(roundHalfUp(einnahmeUeberschuss))
+            .proKopfTeilungKinderInAusbildung(proKopfTeilungKinderInAusbildung)
+            .anrechenbareElterlicheLeistung(roundHalfUp(anrechenbareElterlicheLeistung))
+            .halbierungsReduktion(roundHalfUp(halbierungsReduktion))
+            .fehlbetrag(roundHalfUp(fehlbetrag))
+            .proKopfTeilung(proKopfTeilung)
+            .ungedeckterAnteilLebenshaltungskosten(roundHalfUp(ungedeckterAnteilLebenshaltungskosten))
+            .einnahmen(einnahmen)
+            .kosten(kosten)
+            .vornamePartner(antragssteller.getVornamePartner())
+            .nachnamePartner(antragssteller.getNachnamePartner());
     }
 
     private FamilienBudgetresultatKostenDto calculateKosten(final ElternteilV1 elternteil) {
@@ -146,21 +142,20 @@ public class FamilienbudgetCalculatorV1 {
             );
 
         // Set calculated values on dto
-        return new FamilienBudgetresultatKostenDto(
-            ausgaben,
-            grundbedarf,
-            effektiveWohnkosten,
-            medizinischeGrundversorgung,
-            integrationszulage,
-            integrationszulageAnzahl,
-            integrationszulageTotal,
-            kantonsGemeindesteuern,
-            bundessteuern,
-            fahrkostens,
-            fahrkostenTotal,
-            verpflegungskostens,
-            verpflegungskostenTotal
-        );
+        return new FamilienBudgetresultatKostenDto()
+            .total(ausgaben)
+            .grundbedarf(grundbedarf)
+            .wohnkosten(effektiveWohnkosten)
+            .medizinischeGrundversorgung(medizinischeGrundversorgung)
+            .integrationszulage(integrationszulage)
+            .integrationszulageAnzahl(integrationszulageAnzahl)
+            .integrationszulageTotal(integrationszulageTotal)
+            .kantonsGemeindesteuern(kantonsGemeindesteuern)
+            .bundessteuern(bundessteuern)
+            .fahrkosten(fahrkostens)
+            .fahrkostenTotal(fahrkostenTotal)
+            .verpflegung(verpflegungskostens)
+            .verpflegungTotal(verpflegungskostenTotal);
     }
 
     private FamilienBudgetresultatEinnahmenDto calculateEinnahmen(
@@ -200,22 +195,21 @@ public class FamilienbudgetCalculatorV1 {
         final var einnahmen = einnahmenBeforeVermoegen + anrechenbaresVermoegen;
 
         // Set calculated values on dto
-        return new FamilienBudgetresultatEinnahmenDto(
-            einnahmen,
-            totalEinkuenfte,
-            einnahmenBGSA,
-            ergaenzungsleistungen,
-            andereEinnahmen,
-            eigenmietwert,
-            unterhaltsbeitraege,
-            saeule3a,
-            saeule2,
-            renten,
-            stammdaten.getEinkommensfreibetrag(),
-            einnahmenBeforeVermoegen,
-            anrechenbaresVermoegen,
-            steuerbaresVermoegen
-        );
+        return new FamilienBudgetresultatEinnahmenDto()
+            .total(einnahmen)
+            .totalEinkuenfte(totalEinkuenfte)
+            .einnahmenBGSA(einnahmenBGSA)
+            .ergaenzungsleistungen(ergaenzungsleistungen)
+            .andereEinnahmen(andereEinnahmen)
+            .eigenmietwert(eigenmietwert)
+            .unterhaltsbeitraege(unterhaltsbeitraege)
+            .sauele3(saeule3a)
+            .sauele2(saeule2)
+            .renten(renten)
+            .einkommensfreibetrag(stammdaten.getEinkommensfreibetrag())
+            .zwischentotal(einnahmenBeforeVermoegen)
+            .anrechenbaresVermoegen(anrechenbaresVermoegen)
+            .steuerbaresVermoegen(steuerbaresVermoegen);
     }
 
     private BigDecimal calculateAnteilLebenshaltungskosten(

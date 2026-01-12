@@ -21,8 +21,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public final class MathUtil {
-    public static final int PIA_COUNT = 1;
-
     private MathUtil() {
         throw new UnsupportedOperationException();
     }

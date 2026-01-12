@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.eltern.entity.Eltern;
@@ -32,6 +33,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @UtilityClass
 public class InputUtils {
+    public static final int PIA_COUNT = 1;
+
     public static ElternTyp fromSteuerdatenTyp(SteuerdatenTyp steuerdatenTyp) {
         return switch (steuerdatenTyp) {
             case SteuerdatenTyp.MUTTER -> ElternTyp.MUTTER;
@@ -44,10 +47,10 @@ public class InputUtils {
         boolean verheiratetOderZusammen,
         ElternTyp elternTyp
     ) {
-        final var elternsByType = eltern.stream().collect(Collectors.groupingBy(Eltern::getElternTyp));
+        final var elternsByType = eltern.stream().collect(Collectors.toMap(Eltern::getElternTyp, Function.identity()));
         return Pair.of(
-            elternsByType.remove(elternTyp).getFirst(),
-            verheiratetOderZusammen ? elternsByType.values().stream().findFirst().map(List::getFirst) : Optional.empty()
+            elternsByType.remove(elternTyp),
+            verheiratetOderZusammen ? elternsByType.values().stream().findFirst() : Optional.empty()
         );
     }
 

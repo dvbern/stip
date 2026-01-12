@@ -73,30 +73,31 @@ public class PersoenlichesBudgetCalculatorV1 {
                 total = total
                     .divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP);;
             }
-            budgetTranche = divideByTranchen(total, anzahlMonate);
+            if (anzahlMonate != 12) {
+                budgetTranche = divideByTranchen(total, anzahlMonate);
+            }
         }
         total = budgetTranche;
 
-        return new PersoenlichesBudgetresultatDto(
-            antragssteller.getVorname(),
-            antragssteller.getNachname(),
-            antragssteller.getSozialversicherungsnummer(),
-            antragssteller.getGeburtsdatum(),
-            roundHalfUp(total),
-            roundHalfUp(einnahmenMinusKosten),
-            roundHalfUp(fehlbetrag),
-            proKopfTeilung,
-            antragssteller.isEigenerHaushalt(),
-            roundHalfUp(budgetTranche),
-            anzahlMonate,
-            0, // TODO KSTIP-2584: will be definable once gesetztliche Darlehen are defined
-            0, // TODO KSTIP-2584: same as above
-            antragssteller.getAnzahlPersonenImHaushalt(),
-            einnahmen,
-            kosten,
-            antragssteller.getVornamePartner(),
-            antragssteller.getNachnamePartner()
-        );
+        return new PersoenlichesBudgetresultatDto()
+            .vorname(antragssteller.getVorname())
+            .nachname(antragssteller.getNachname())
+            .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())
+            .geburtsdatum(antragssteller.getGeburtsdatum())
+            .total(roundHalfUp(total)) // TODO Remove
+            .einnahmenMinusKosten(roundHalfUp(einnahmenMinusKosten))
+            .fehlbetrag(roundHalfUp(fehlbetrag))
+            .proKopfTeilung(proKopfTeilung)
+            .eigenerHaushalt(antragssteller.isEigenerHaushalt())
+            .budgetTranche(roundHalfUp(budgetTranche))
+            .anzahlMonate(anzahlMonate)
+            .gesetzlichesDarlehen(0) // TODO KSTIP-2584: will be definable once gesetztliche Darlehen are defined
+            .gesetzlichesDarlehenStipendium(0) // TODO KSTIP-2584: same as above
+            .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
+            .einnahmen(einnahmen)
+            .kosten(kosten)
+            .vornamePartner(antragssteller.getVornamePartner())
+            .nachnamePartner(antragssteller.getNachnamePartner());
     }
 
     private PersoenlichesBudgetresultatKostenDto calculateKosten(
@@ -176,22 +177,22 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
 
         // Set calculated values on dto
-        return new PersoenlichesBudgetresultatKostenDto(
-            ausgaben,
-            ausbildungskosten,
-            fahrkosten,
-            verpflegung,
-            grundbedarf,
-            wohnkosten,
-            medizinischeGrundversorgungs,
-            medizinischeGrundversorgungTotal,
-            fahrkostenPartner,
-            verpflegungPartner,
-            fremdbetreuung,
-            steuern,
-            0, // Momentan kann dieses Feld nicht gesetzt werden, wird wahrscheinlich entfernt werden via CR
-            anteilLebenshaltungskosten
-        );
+        return new PersoenlichesBudgetresultatKostenDto()
+            .total(ausgaben)
+            .ausbildungskosten(ausbildungskosten)
+            .fahrkosten(fahrkosten)
+            .verpflegungskosten(verpflegung)
+            .grundbedarf(grundbedarf)
+            .wohnkosten(wohnkosten)
+            .medizinischeGrundversorgung(medizinischeGrundversorgungs)
+            .medizinischeGrundversorgungTotal(medizinischeGrundversorgungTotal)
+            .fahrkostenPartner(fahrkostenPartner)
+            .verpflegungPartner(verpflegungPartner)
+            .betreuungskostenKinder(fremdbetreuung)
+            .kantonsGemeindesteuern(steuern)
+            .bundessteuern(0) // Momentan kann dieses Feld nicht gesetzt werden, wird wahrscheinlich entfernt werden via
+                              // CR
+            .anteilLebenshaltungskosten(anteilLebenshaltungskosten);
     }
 
     private PersoenlichesBudgetresultatEinnahmenDto calculateEinnahmen(
@@ -218,7 +219,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var andereEinnahmens = antragssteller.getAndereEinnahmens();
         final var andereEinnahmenTotal = InputUtils.sumValues(andereEinnahmens);
         final var anrechenbaresVermoegen = roundHalfUp(
-            BigDecimal.valueOf(antragssteller.getVermoegen())
+            BigDecimal.valueOf(Objects.requireNonNullElse(antragssteller.getVermoegen(), 0))
                 .multiply(BigDecimal.valueOf(stammdaten.getVermoegensanteilInProzent()))
                 .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
         );
@@ -246,34 +247,35 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
 
         // Set calculated values on dto
-        return new PersoenlichesBudgetresultatEinnahmenDto(
-            einnahmen,
-            einkommens,
-            einkommenTotal,
-            einnahmenBGSAs,
-            einnahmenBGSATotal,
-            kinderAusbildungszulagens,
-            kinderAusbildungszulagenTotal,
-            unterhaltsbeitraeges,
-            unterhaltsbeitraegeTotal,
-            eoLeistungens,
-            eoLeistungenTotal,
-            taggelderAHVIVs,
-            taggelderAHVIVTotal,
-            rentens,
-            rentenTotal,
-            ergaenzungsleistungens,
-            ergaenzungsleistungenTotal,
-            gemeindeInstitutionen,
-            andereEinnahmens,
-            andereEinnahmenTotal,
-            anrechenbaresVermoegen,
-            steuerbaresVermoegen,
-            InputUtils.sumNullables(
-                elternbeitrag1.orElse(null),
-                elternbeitrag2.orElse(null)
-            )
-        );
+        return new PersoenlichesBudgetresultatEinnahmenDto()
+            .total(einnahmen)
+            .nettoerwerbseinkommen(einkommens)
+            .nettoerwerbseinkommenTotal(einkommenTotal)
+            .einnahmenBGSA(einnahmenBGSAs)
+            .einnahmenBGSATotal(einnahmenBGSATotal)
+            .kinderAusbildungszulagen(kinderAusbildungszulagens)
+            .kinderAusbildungszulagenTotal(kinderAusbildungszulagenTotal)
+            .unterhaltsbeitraege(unterhaltsbeitraeges)
+            .unterhaltsbeitraegeTotal(unterhaltsbeitraegeTotal)
+            .eoLeistungen(eoLeistungens)
+            .eoLeistungenTotal(eoLeistungenTotal)
+            .taggelderAHVIV(taggelderAHVIVs)
+            .taggelderAHVIVTotal(taggelderAHVIVTotal)
+            .renten(rentens)
+            .rentenTotal(rentenTotal)
+            .ergaenzungsleistungen(ergaenzungsleistungens)
+            .ergaenzungsleistungenTotal(ergaenzungsleistungenTotal)
+            .beitraegeGemeindeInstitutionen(gemeindeInstitutionen)
+            .andereEinnahmen(andereEinnahmens)
+            .andereEinnahmenTotal(andereEinnahmenTotal)
+            .anrechenbaresVermoegen(anrechenbaresVermoegen)
+            .steuerbaresVermoegen(steuerbaresVermoegen)
+            .elterlicheLeistung(
+                InputUtils.sumNullables(
+                    elternbeitrag1.orElse(null),
+                    elternbeitrag2.orElse(null)
+                )
+            );
     }
 
     private Integer calculateElternbeitrag(
@@ -287,10 +289,10 @@ public class PersoenlichesBudgetCalculatorV1 {
             return 0;
         }
 
-        final var anzahlKinderInAusbildung =
+        final var anzahlGeschwisterInAusbildung =
             BigDecimal.valueOf(familienbudget.getAnzahlKinderInAusbildung());
         final var fractionalValue = BigDecimal.valueOf(familienbudget.getEinnahmeUeberschuss())
-            .divide(anzahlKinderInAusbildung, RoundingMode.HALF_UP);
+            .divide(anzahlGeschwisterInAusbildung, RoundingMode.HALF_UP);
         if (antragssteller.isHalbierungElternbeitrag()) {
             return fractionalValue.divide(BigDecimal.TWO, RoundingMode.HALF_UP).intValue();
         }
