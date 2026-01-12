@@ -70,7 +70,7 @@
   "shared.file.uploading": "Téléchargement en cours...",
   "shared.file.deleting": "Suppression du fichier en cours...",
   "shared.file.uploadDone": "Téléchargé le {{ date }} • {{ size }}",
-  "shared.file.dropZone": "Faire glisser le(s) fichier(s)<br>ou",
+  "shared.file.dropZone": "Faites glisser le fichier<br>ou",
   "shared.file.delete.title": "Supprimer le fichier",
   "shared.file.delete.message": "Voulez-vous vraiment supprimer ce fichier?",
   "shared.file.invalidFormat": "<b>{{file}}</b>: Format de fichier non valide, seuls les \"{{formats}}\" sont valides.",
