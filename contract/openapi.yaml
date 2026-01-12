@@ -6119,6 +6119,7 @@ components:
       required:
         - id
         - fallId
+        - relatedGesuchId
         - fallNummer
         - piaVorname
         - piaNachname
@@ -6130,6 +6131,8 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallId:
+          $ref: '#/components/schemas/UUID'
+        relatedGesuchId:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string

@@ -39,6 +39,7 @@ public abstract class DarlehenMapper {
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
     @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
     @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
     @Mapping(source = ".", target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")

@@ -15,6 +15,7 @@ import { DarlehenGrund } from './darlehenGrund';
 export interface Darlehen { 
     id: string;
     fallId?: string;
+    relatedGesuchId?: string;
     status?: DarlehenStatus;
     gewaehren?: boolean;
     betrag?: number;

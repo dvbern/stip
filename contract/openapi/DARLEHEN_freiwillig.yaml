@@ -573,6 +573,7 @@ components:
       required:
         - id
         - fallId
+        - relatedGesuchId
         - fallNummer
         - piaVorname
         - piaNachname
@@ -584,6 +585,8 @@ components:
         id:
           $ref: './components/common.yaml#/UUID'
         fallId:
+          $ref: './components/common.yaml#/UUID'
+        relatedGesuchId:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string

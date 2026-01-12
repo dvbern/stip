@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DarlehenDashboardDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID fallId;
+  private @Valid UUID relatedGesuchId;
   private @Valid String fallNummer;
   private @Valid String piaVorname;
   private @Valid String piaNachname;
@@ -67,6 +68,25 @@ public class DarlehenDashboardDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+  /**
+   **/
+  public DarlehenDashboardDto relatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+  
+  @JsonProperty("relatedGesuchId")
+  @NotNull
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+  @JsonProperty("relatedGesuchId")
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
   /**
@@ -214,6 +234,7 @@ public class DarlehenDashboardDto  implements Serializable {
     DarlehenDashboardDto darlehenDashboard = (DarlehenDashboardDto) o;
     return Objects.equals(this.id, darlehenDashboard.id) &&
         Objects.equals(this.fallId, darlehenDashboard.fallId) &&
+        Objects.equals(this.relatedGesuchId, darlehenDashboard.relatedGesuchId) &&
         Objects.equals(this.fallNummer, darlehenDashboard.fallNummer) &&
         Objects.equals(this.piaVorname, darlehenDashboard.piaVorname) &&
         Objects.equals(this.piaNachname, darlehenDashboard.piaNachname) &&
@@ -225,7 +246,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, fallId, relatedGesuchId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -235,6 +256,7 @@ public class DarlehenDashboardDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");

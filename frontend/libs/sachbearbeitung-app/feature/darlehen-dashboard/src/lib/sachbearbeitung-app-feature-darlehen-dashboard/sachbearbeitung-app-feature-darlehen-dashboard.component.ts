@@ -95,7 +95,7 @@ const DEFAULT_FILTER: DarlehenFilter = 'MEINE_BEARBEITBAR';
 
 type DashboardEntry = Omit<
   DarlehenDashboard,
-  'id' | 'fallId' | 'gesuchId' | 'gesuchTrancheId'
+  'id' | 'fallId' | 'relatedGesuchId'
 >;
 type DashboardEntryFields = keyof DashboardEntry;
 

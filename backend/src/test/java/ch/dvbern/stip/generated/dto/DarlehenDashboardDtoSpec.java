@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DarlehenDashboardDtoSpec.JSON_PROPERTY_ID,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_ID,
+  DarlehenDashboardDtoSpec.JSON_PROPERTY_RELATED_GESUCH_ID,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_VORNAME,
   DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
@@ -48,6 +49,9 @@ public class DarlehenDashboardDtoSpec {
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
+
+  public static final String JSON_PROPERTY_RELATED_GESUCH_ID = "relatedGesuchId";
+  private UUID relatedGesuchId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
@@ -122,6 +126,32 @@ public class DarlehenDashboardDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+
+  public DarlehenDashboardDtoSpec relatedGesuchId(UUID relatedGesuchId) {
+    
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+   /**
+   * Get relatedGesuchId
+   * @return relatedGesuchId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
 
@@ -317,6 +347,7 @@ public class DarlehenDashboardDtoSpec {
     DarlehenDashboardDtoSpec darlehenDashboard = (DarlehenDashboardDtoSpec) o;
     return Objects.equals(this.id, darlehenDashboard.id) &&
         Objects.equals(this.fallId, darlehenDashboard.fallId) &&
+        Objects.equals(this.relatedGesuchId, darlehenDashboard.relatedGesuchId) &&
         Objects.equals(this.fallNummer, darlehenDashboard.fallNummer) &&
         Objects.equals(this.piaVorname, darlehenDashboard.piaVorname) &&
         Objects.equals(this.piaNachname, darlehenDashboard.piaNachname) &&
@@ -328,7 +359,7 @@ public class DarlehenDashboardDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, fallId, relatedGesuchId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -337,6 +368,7 @@ public class DarlehenDashboardDtoSpec {
     sb.append("class DarlehenDashboardDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
