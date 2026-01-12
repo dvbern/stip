@@ -48,7 +48,7 @@ export class SharedUiDropFileComponent {
 
     const files = Array.from(evt.dataTransfer.files);
 
-    if (files.length > 0) {
+    if (files.length == 1) {
       this.filesDropped.emit(files);
     }
   }
