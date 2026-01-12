@@ -60,13 +60,13 @@ class V1StructureTest {
                 "sozialversicherungsnummer": "756.1111.1114.10",
                 "sozialversicherungsnummerPartner": null,
                 "geburtsdatum": {
-                  "year": 1996,
+                  "year": 1990,
                   "month": "JANUARY",
                   "monthValue": 1,
-                  "dayOfMonth": 9,
-                  "leapYear": true,
-                  "dayOfWeek": "TUESDAY",
-                  "dayOfYear": 9,
+                  "dayOfMonth": 1,
+                  "leapYear": false,
+                  "dayOfWeek": "MONDAY",
+                  "dayOfYear": 1,
                   "era": "CE",
                   "chronology": {
                     "id": "ISO",
@@ -114,13 +114,13 @@ class V1StructureTest {
                 "sozialversicherungsnummer": "756.1111.1111.13",
                 "sozialversicherungsnummerPartner": null,
                 "geburtsdatum": {
-                  "year": 1996,
+                  "year": 1990,
                   "month": "JANUARY",
                   "monthValue": 1,
-                  "dayOfMonth": 9,
-                  "leapYear": true,
-                  "dayOfWeek": "TUESDAY",
-                  "dayOfYear": 9,
+                  "dayOfMonth": 1,
+                  "leapYear": false,
+                  "dayOfWeek": "MONDAY",
+                  "dayOfYear": 1,
                   "era": "CE",
                   "chronology": {
                     "id": "ISO",
@@ -169,10 +169,10 @@ class V1StructureTest {
                   "year": 2008,
                   "month": "JANUARY",
                   "monthValue": 1,
-                  "dayOfMonth": 8,
+                  "dayOfMonth": 1,
                   "leapYear": true,
                   "dayOfWeek": "TUESDAY",
-                  "dayOfYear": 8,
+                  "dayOfYear": 1,
                   "era": "CE",
                   "chronology": {
                     "id": "ISO",
@@ -253,6 +253,39 @@ class V1StructureTest {
     @Test
     void test() throws JsonProcessingException {
         final var gesuch = TestUtil.getGesuchForBerechnung(trancheUuid);
+        final var formular = gesuch.getGesuchTranchen().getFirst().getGesuchFormular();
+        formular.getPersonInAusbildung()
+            .setGeburtsdatum(
+                formular.getPersonInAusbildung().getGeburtsdatum().withYear(2008).withMonth(1).withDayOfMonth(1)
+            );
+        formular.getElterns()
+            .stream()
+            .toList()
+            .get(0)
+            .setGeburtsdatum(
+                formular.getElterns()
+                    .stream()
+                    .toList()
+                    .get(0)
+                    .getGeburtsdatum()
+                    .withYear(1990)
+                    .withMonth(1)
+                    .withDayOfMonth(1)
+            );
+        formular.getElterns()
+            .stream()
+            .toList()
+            .get(1)
+            .setGeburtsdatum(
+                formular.getElterns()
+                    .stream()
+                    .toList()
+                    .get(1)
+                    .getGeburtsdatum()
+                    .withYear(1990)
+                    .withMonth(1)
+                    .withDayOfMonth(1)
+            );
 
         final var request = BerechnungRequestV1.createRequest(
             gesuch,
