@@ -174,7 +174,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
-            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 darlehen.getFall(),
                 benutzer,
                 sozialdienstService
