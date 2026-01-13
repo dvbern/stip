@@ -28,6 +28,7 @@
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="tranche-nav-menu-item"
             [class.active]="isTrancheRouteSig() && trancheId === tranche.id"
+            mat-menu-item
           >
             <span>
               {{
@@ -41,18 +42,6 @@
         }
       </div>
     </mat-menu>
-
-    <!-- Verfuegung-->
-    <a
-      [routerLink]="['/', 'verfuegung', gesuchId]"
-      routerLinkActive="active"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="sb-gesuch-header-verfuegung-link"
-      [class.disabled]="!canViewBerechnungSig()"
-    >
-      <i class="material-symbols-rounded me-2 text-white">equal</i>
-      <span>{{ 'sachbearbeitung-app.header.verfuegung' | transloco }}</span>
-    </a>
 
     <!-- Änderungen -->
     @let aenderungen = gesuchAenderungStore.aenderungenViewSig();
@@ -106,6 +95,18 @@
       </div>
     </mat-menu>
 
+    <!-- Verfuegung-->
+    <a
+      [routerLink]="['/', 'verfuegung', gesuchId]"
+      routerLinkActive="active"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="sb-gesuch-header-verfuegung-link"
+      [class.disabled]="!canViewBerechnungSig()"
+    >
+      <i class="material-symbols-rounded me-2 text-white">equal</i>
+      <span>{{ 'sachbearbeitung-app.header.verfuegung' | transloco }}</span>
+    </a>
+
     <!-- Infos-->
     <a
       [routerLink]="['/', 'infos', gesuchId]"
@@ -120,9 +121,17 @@
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let availableTrancheInteraction = availableTrancheInteractionSig();
 
+    <div class="text-body-tertiary vr my-1"></div>
+
+    <!-- Darlehen Menu -->
+    @let darlehens = darlehenStore.darlehenListViewSig();
+    <dv-shared-ui-darlehen-menu
+      [darlehenListSig]="darlehens.darlehenList"
+      [gesuchIdSig]="gesuchId"
+    ></dv-shared-ui-darlehen-menu>
+
     @if (isTrancheRouteSig()) {
       <!-- Separator -->
-      <div class="text-body-tertiary vr my-1"></div>
 
       <div class="tw:relative">
         @if (isLoadingSig()) {

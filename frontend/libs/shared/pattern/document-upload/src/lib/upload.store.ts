@@ -22,9 +22,11 @@ import {
   DokumentState,
   SharedModelAdditionalGesuchDokument,
   SharedModelCustomGesuchDokument,
+  SharedModelDarlehenDokument,
   SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
 import {
+  DarlehenService,
   Dokument,
   DokumentService,
   DokumentTyp,
@@ -100,6 +102,7 @@ export class UploadStore {
   });
 
   private documentService = inject(DokumentService);
+  private darlehenService = inject(DarlehenService);
   private config = inject(SharedModelCompileTimeConfig);
   private loadDocuments$ = new Subject<DokumentOptions>();
   private removeDocument$ = new Subject<
@@ -226,6 +229,25 @@ export class UploadStore {
           (() => {
             const dokument = options.dokument;
             switch (dokument.art) {
+              case 'DARLEHEN_DOKUMENT': {
+                return this.darlehenService
+                  .getDarlehenDokument$({
+                    darlehenId: dokument.darlehenId,
+                    dokumentType: dokument.dokumentTyp,
+                  })
+                  .pipe(
+                    map(
+                      ({ value }) =>
+                        ({
+                          art: 'DARLEHEN_DOKUMENT',
+                          gesuchDokument: value,
+                          dokumentTyp: dokument.dokumentTyp,
+                          darlehenId: dokument.darlehenId,
+                          permissions: dokument.permissions,
+                        }) satisfies SharedModelDarlehenDokument,
+                    ),
+                  );
+              }
               case 'GESUCH_DOKUMENT': {
                 return this.getRequiredGesuchDokumenteByAppType({
                   dokumentTyp: dokument.dokumentTyp,
@@ -238,6 +260,7 @@ export class UploadStore {
                         gesuchDokument: value,
                         dokumentTyp: dokument.dokumentTyp,
                         trancheId: dokument.trancheId,
+                        permissions: dokument.permissions,
                       }) satisfies SharedModelStandardGesuchDokument,
                   ),
                 );
@@ -254,6 +277,7 @@ export class UploadStore {
                         dokumentTyp: dokument.dokumentTyp,
                         gesuchId: dokument.gesuchId,
                         trancheId: dokument.trancheId,
+                        permissions: dokument.permissions,
                       }) satisfies SharedModelCustomGesuchDokument,
                   ),
                 );
@@ -275,6 +299,7 @@ export class UploadStore {
                           dokumentTyp: dokument.dokumentTyp,
                           gesuchId: dokument.gesuchId,
                           trancheId: dokument.trancheId,
+                          permissions: dokument.permissions,
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );
@@ -343,6 +368,10 @@ export class UploadStore {
                   action.dokumentId,
                   !!dokumentToDelete?.error,
                 );
+              case 'DARLEHEN_DOKUMENT':
+                return this.darlehenService.deleteDarlehenDokument$(
+                  ...deleteCallParams,
+                );
               case 'UNTERSCHRIFTENBLATT':
                 return this.documentService.deleteUnterschriftenblattDokument$(
                   ...deleteCallParams,
@@ -351,10 +380,7 @@ export class UploadStore {
                 assertUnreachable(action.dokument);
             }
           })();
-          return serviceCall$.pipe(
-            map(() => action),
-            tap(() => this.documentChangedSig.set({ hasChanged: true })),
-          );
+          return serviceCall$.pipe(map(() => action));
         }),
         takeUntilDestroyed(),
       )
@@ -368,6 +394,7 @@ export class UploadStore {
               ({ file }) => file.id !== action.dokumentId,
             ),
           }));
+          this.documentChangedSig.set({ hasChanged: true });
         },
       });
 
@@ -517,6 +544,15 @@ export class UploadStore {
 
     const uploadByType = () => {
       switch (dokument.art) {
+        case 'DARLEHEN_DOKUMENT':
+          return this.darlehenService.createDarlehenDokument$(
+            {
+              fileUpload,
+              darlehenId: dokument.darlehenId,
+              dokumentType: dokument.dokumentTyp,
+            },
+            ...serviceDefaultParams,
+          );
         case 'GESUCH_DOKUMENT':
           return this.createDokumentByAppType$(
             fileUpload,

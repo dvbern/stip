@@ -9,6 +9,7 @@ import { Modify } from '@dv/shared/model/type-util';
 export type SharedModelGsGesuchView = Modify<
   Exclude<AusbildungDashboardItem['gesuchs'], undefined>[number],
   {
+    fallId: string;
     isActive: boolean;
     isErstgesuch: boolean;
     canEdit: boolean;

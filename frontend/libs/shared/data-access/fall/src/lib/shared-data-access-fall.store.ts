@@ -22,7 +22,7 @@ const initialState: FallState = {
   cachedCurrentFall: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FallStore extends signalStore(
   { protectedState: false },
   withState(initialState),

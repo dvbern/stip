@@ -28,32 +28,35 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Jacksonized
 public class StammdatenV1 {
-    int maxSaeule3a;
-    int einkommensfreibetrag;
-    int abzugslimite;
-    int freibetragErwerbseinkommen;
-    int freibetragVermoegen;
-    int vermoegensanteilInProzent;
-    int anzahlWochenLehre;
-    int anzahlWochenSchule;
-    int preisProMahlzeit;
-    int stipLimiteMinimalstipendium;
-    int limiteAlterAntragsstellerHalbierungElternbeitrag;
+    private final int maxSaeule3a;
+    private final int einkommensfreibetrag;
+    private final int abzugslimite;
+    private final int freibetragErwerbseinkommen;
+    private final int freibetragVermoegen;
+    private final int vermoegensanteilInProzent;
+    private final int anzahlWochenLehre;
+    private final int anzahlWochenSchule;
+    private final int preisProMahlzeit;
+    private final int stipLimiteMinimalstipendium;
+    private final int limiteAlterAntragsstellerHalbierungElternbeitrag;
+    private final int anzahlMonate;
 
-    public static StammdatenV1 fromGesuchsperiode(final Gesuchsperiode gesuchsperiode) {
+    public static StammdatenV1 fromGesuchsperiode(final Gesuchsperiode gesuchsperiode, final int anzahlMonate) {
         return new StammdatenV1Builder()
             .maxSaeule3a(gesuchsperiode.getMaxSaeule3a())
-            .abzugslimite(gesuchsperiode.getLimiteEkFreibetragIntegrationszulage())
             .einkommensfreibetrag(gesuchsperiode.getEinkommensfreibetrag())
+            .abzugslimite(gesuchsperiode.getLimiteEkFreibetragIntegrationszulage())
             .freibetragErwerbseinkommen(gesuchsperiode.getFreibetragErwerbseinkommen())
             .freibetragVermoegen(gesuchsperiode.getFreibetragVermoegen())
             .vermoegensanteilInProzent(gesuchsperiode.getVermoegensanteilInProzent())
             .anzahlWochenLehre(gesuchsperiode.getAnzahlWochenLehre())
             .anzahlWochenSchule(gesuchsperiode.getAnzahlWochenSchule())
             .preisProMahlzeit(gesuchsperiode.getPreisProMahlzeit())
-            .stipLimiteMinimalstipendium(0) // set to zero as we don't apply this limit in the DMN model TODO: remove
-                                            // from model
-            .limiteAlterAntragsstellerHalbierungElternbeitrag(25)
+            .stipLimiteMinimalstipendium(gesuchsperiode.getStipLimiteMinimalstipendium())
+            .limiteAlterAntragsstellerHalbierungElternbeitrag(
+                gesuchsperiode.getLimiteAlterAntragsstellerHalbierungElternbeitrag()
+            )
+            .anzahlMonate(anzahlMonate)
             .build();
     }
 }

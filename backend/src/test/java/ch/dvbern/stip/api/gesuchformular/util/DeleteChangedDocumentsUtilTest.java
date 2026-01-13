@@ -134,20 +134,6 @@ class DeleteChangedDocumentsUtilTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(GetDocumentsForDarlehenArgumentsProvider.class)
-    void getDocumentsForDarlehenTest(
-        final DarlehenDto newDarlehen,
-        final Darlehen oldDarlehen,
-        final DokumentTyp expected
-    ) {
-        // Act
-        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForDarlehen(newDarlehen, oldDarlehen);
-
-        // Assert
-        assertExpectedResult(actual, expected);
-    }
-
-    @ParameterizedTest
     @ArgumentsSource(GetDocumentsForElternArgumentsProvider.class)
     void getDocumentsForElternTest(
         final ElternUpdateDto newEltern,

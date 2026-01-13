@@ -1,6 +1,9 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatEinnahmenDto;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatKostenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -21,68 +24,199 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class FamilienBudgetresultatDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp familienBudgetTyp;
-  private @Valid Boolean selbststaendigErwerbend;
+  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+  private @Valid String vorname;
+  private @Valid String nachname;
+  private @Valid String sozialversicherungsnummer;
+  private @Valid LocalDate geburtsdatum;
+  private @Valid Integer steuerjahr;
+  private @Valid String veranlagungscode;
+  private @Valid Integer total;
+  private @Valid Integer einnahmenMinusKosten;
   private @Valid Integer anzahlPersonenImHaushalt;
-  private @Valid Integer anzahlGeschwisterInAusbildung;
-  private @Valid Integer totalEinkuenfte;
-  private @Valid Integer ergaenzungsleistungen;
-  private @Valid Integer steuerbaresVermoegen;
-  private @Valid Integer anrechenbaresVermoegen;
-  private @Valid Integer saeule2;
-  private @Valid Integer saeule3a;
-  private @Valid Integer eigenmietwert;
-  private @Valid Integer alimente;
-  private @Valid Integer einnahmenFamilienbudget;
-  private @Valid Integer grundbedarf;
-  private @Valid Integer effektiveWohnkosten;
-  private @Valid Integer medizinischeGrundversorgung;
-  private @Valid Integer integrationszulage;
-  private @Valid Integer steuernBund;
-  private @Valid Integer steuernKantonGemeinde;
-  private @Valid Integer fahrkostenPerson1;
-  private @Valid Integer fahrkostenPerson2;
-  private @Valid Integer essenskostenPerson1;
-  private @Valid Integer essenskostenPerson2;
-  private @Valid Integer ausgabenFamilienbudget;
-  private @Valid Integer familienbudgetBerechnet;
+  private @Valid Integer anzahlKinderInAusbildung;
+  private @Valid Integer einnahmeUeberschuss;
+  private @Valid Integer proKopfTeilungKinderInAusbildung;
+  private @Valid Integer anrechenbareElterlicheLeistung;
+  private @Valid Integer halbierungsReduktion;
+  private @Valid Integer fehlbetrag;
+  private @Valid Integer proKopfTeilung;
+  private @Valid Integer ungedeckterAnteilLebenshaltungskosten;
+  private @Valid FamilienBudgetresultatEinnahmenDto einnahmen;
+  private @Valid FamilienBudgetresultatKostenDto kosten;
+  private @Valid String vornamePartner;
+  private @Valid String nachnamePartner;
 
   /**
    **/
-  public FamilienBudgetresultatDto familienBudgetTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp familienBudgetTyp) {
-    this.familienBudgetTyp = familienBudgetTyp;
+  public FamilienBudgetresultatDto steuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
+    this.steuerdatenTyp = steuerdatenTyp;
     return this;
   }
 
   
-  @JsonProperty("familienBudgetTyp")
+  @JsonProperty("steuerdatenTyp")
   @NotNull
-  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getFamilienBudgetTyp() {
-    return familienBudgetTyp;
+  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getSteuerdatenTyp() {
+    return steuerdatenTyp;
   }
 
-  @JsonProperty("familienBudgetTyp")
-  public void setFamilienBudgetTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp familienBudgetTyp) {
-    this.familienBudgetTyp = familienBudgetTyp;
+  @JsonProperty("steuerdatenTyp")
+  public void setSteuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
+    this.steuerdatenTyp = steuerdatenTyp;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto selbststaendigErwerbend(Boolean selbststaendigErwerbend) {
-    this.selbststaendigErwerbend = selbststaendigErwerbend;
+  public FamilienBudgetresultatDto vorname(String vorname) {
+    this.vorname = vorname;
     return this;
   }
 
   
-  @JsonProperty("selbststaendigErwerbend")
+  @JsonProperty("vorname")
   @NotNull
-  public Boolean getSelbststaendigErwerbend() {
-    return selbststaendigErwerbend;
+  public String getVorname() {
+    return vorname;
   }
 
-  @JsonProperty("selbststaendigErwerbend")
-  public void setSelbststaendigErwerbend(Boolean selbststaendigErwerbend) {
-    this.selbststaendigErwerbend = selbststaendigErwerbend;
+  @JsonProperty("vorname")
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto nachname(String nachname) {
+    this.nachname = nachname;
+    return this;
+  }
+
+  
+  @JsonProperty("nachname")
+  @NotNull
+  public String getNachname() {
+    return nachname;
+  }
+
+  @JsonProperty("nachname")
+  public void setNachname(String nachname) {
+    this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto sozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialversicherungsnummer")
+  @NotNull
+  public String getSozialversicherungsnummer() {
+    return sozialversicherungsnummer;
+  }
+
+  @JsonProperty("sozialversicherungsnummer")
+  public void setSozialversicherungsnummer(String sozialversicherungsnummer) {
+    this.sozialversicherungsnummer = sozialversicherungsnummer;
+  }
+
+  /**
+   * dd.MM.yyyy
+   **/
+  public FamilienBudgetresultatDto geburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+    return this;
+  }
+
+  
+  @JsonProperty("geburtsdatum")
+  @NotNull
+  public LocalDate getGeburtsdatum() {
+    return geburtsdatum;
+  }
+
+  @JsonProperty("geburtsdatum")
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
+    this.geburtsdatum = geburtsdatum;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto steuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+    return this;
+  }
+
+  
+  @JsonProperty("steuerjahr")
+  @NotNull
+  public Integer getSteuerjahr() {
+    return steuerjahr;
+  }
+
+  @JsonProperty("steuerjahr")
+  public void setSteuerjahr(Integer steuerjahr) {
+    this.steuerjahr = steuerjahr;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto veranlagungscode(String veranlagungscode) {
+    this.veranlagungscode = veranlagungscode;
+    return this;
+  }
+
+  
+  @JsonProperty("veranlagungscode")
+  @NotNull
+  public String getVeranlagungscode() {
+    return veranlagungscode;
+  }
+
+  @JsonProperty("veranlagungscode")
+  public void setVeranlagungscode(String veranlagungscode) {
+    this.veranlagungscode = veranlagungscode;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto total(Integer total) {
+    this.total = total;
+    return this;
+  }
+
+  
+  @JsonProperty("total")
+  @NotNull
+  public Integer getTotal() {
+    return total;
+  }
+
+  @JsonProperty("total")
+  public void setTotal(Integer total) {
+    this.total = total;
+  }
+
+  /**
+   **/
+  public FamilienBudgetresultatDto einnahmenMinusKosten(Integer einnahmenMinusKosten) {
+    this.einnahmenMinusKosten = einnahmenMinusKosten;
+    return this;
+  }
+
+  
+  @JsonProperty("einnahmenMinusKosten")
+  @NotNull
+  public Integer getEinnahmenMinusKosten() {
+    return einnahmenMinusKosten;
+  }
+
+  @JsonProperty("einnahmenMinusKosten")
+  public void setEinnahmenMinusKosten(Integer einnahmenMinusKosten) {
+    this.einnahmenMinusKosten = einnahmenMinusKosten;
   }
 
   /**
@@ -106,420 +240,228 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   /**
    **/
-  public FamilienBudgetresultatDto anzahlGeschwisterInAusbildung(Integer anzahlGeschwisterInAusbildung) {
-    this.anzahlGeschwisterInAusbildung = anzahlGeschwisterInAusbildung;
+  public FamilienBudgetresultatDto anzahlKinderInAusbildung(Integer anzahlKinderInAusbildung) {
+    this.anzahlKinderInAusbildung = anzahlKinderInAusbildung;
     return this;
   }
 
   
-  @JsonProperty("anzahlGeschwisterInAusbildung")
+  @JsonProperty("anzahlKinderInAusbildung")
   @NotNull
-  public Integer getAnzahlGeschwisterInAusbildung() {
-    return anzahlGeschwisterInAusbildung;
+  public Integer getAnzahlKinderInAusbildung() {
+    return anzahlKinderInAusbildung;
   }
 
-  @JsonProperty("anzahlGeschwisterInAusbildung")
-  public void setAnzahlGeschwisterInAusbildung(Integer anzahlGeschwisterInAusbildung) {
-    this.anzahlGeschwisterInAusbildung = anzahlGeschwisterInAusbildung;
+  @JsonProperty("anzahlKinderInAusbildung")
+  public void setAnzahlKinderInAusbildung(Integer anzahlKinderInAusbildung) {
+    this.anzahlKinderInAusbildung = anzahlKinderInAusbildung;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto totalEinkuenfte(Integer totalEinkuenfte) {
-    this.totalEinkuenfte = totalEinkuenfte;
+  public FamilienBudgetresultatDto einnahmeUeberschuss(Integer einnahmeUeberschuss) {
+    this.einnahmeUeberschuss = einnahmeUeberschuss;
     return this;
   }
 
   
-  @JsonProperty("totalEinkuenfte")
+  @JsonProperty("einnahmeUeberschuss")
   @NotNull
-  public Integer getTotalEinkuenfte() {
-    return totalEinkuenfte;
+  public Integer getEinnahmeUeberschuss() {
+    return einnahmeUeberschuss;
   }
 
-  @JsonProperty("totalEinkuenfte")
-  public void setTotalEinkuenfte(Integer totalEinkuenfte) {
-    this.totalEinkuenfte = totalEinkuenfte;
+  @JsonProperty("einnahmeUeberschuss")
+  public void setEinnahmeUeberschuss(Integer einnahmeUeberschuss) {
+    this.einnahmeUeberschuss = einnahmeUeberschuss;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto ergaenzungsleistungen(Integer ergaenzungsleistungen) {
-    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  public FamilienBudgetresultatDto proKopfTeilungKinderInAusbildung(Integer proKopfTeilungKinderInAusbildung) {
+    this.proKopfTeilungKinderInAusbildung = proKopfTeilungKinderInAusbildung;
     return this;
   }
 
   
-  @JsonProperty("ergaenzungsleistungen")
+  @JsonProperty("proKopfTeilungKinderInAusbildung")
   @NotNull
-  public Integer getErgaenzungsleistungen() {
-    return ergaenzungsleistungen;
+  public Integer getProKopfTeilungKinderInAusbildung() {
+    return proKopfTeilungKinderInAusbildung;
   }
 
-  @JsonProperty("ergaenzungsleistungen")
-  public void setErgaenzungsleistungen(Integer ergaenzungsleistungen) {
-    this.ergaenzungsleistungen = ergaenzungsleistungen;
+  @JsonProperty("proKopfTeilungKinderInAusbildung")
+  public void setProKopfTeilungKinderInAusbildung(Integer proKopfTeilungKinderInAusbildung) {
+    this.proKopfTeilungKinderInAusbildung = proKopfTeilungKinderInAusbildung;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto steuerbaresVermoegen(Integer steuerbaresVermoegen) {
-    this.steuerbaresVermoegen = steuerbaresVermoegen;
+  public FamilienBudgetresultatDto anrechenbareElterlicheLeistung(Integer anrechenbareElterlicheLeistung) {
+    this.anrechenbareElterlicheLeistung = anrechenbareElterlicheLeistung;
     return this;
   }
 
   
-  @JsonProperty("steuerbaresVermoegen")
+  @JsonProperty("anrechenbareElterlicheLeistung")
   @NotNull
-  public Integer getSteuerbaresVermoegen() {
-    return steuerbaresVermoegen;
+  public Integer getAnrechenbareElterlicheLeistung() {
+    return anrechenbareElterlicheLeistung;
   }
 
-  @JsonProperty("steuerbaresVermoegen")
-  public void setSteuerbaresVermoegen(Integer steuerbaresVermoegen) {
-    this.steuerbaresVermoegen = steuerbaresVermoegen;
+  @JsonProperty("anrechenbareElterlicheLeistung")
+  public void setAnrechenbareElterlicheLeistung(Integer anrechenbareElterlicheLeistung) {
+    this.anrechenbareElterlicheLeistung = anrechenbareElterlicheLeistung;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto anrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
-    this.anrechenbaresVermoegen = anrechenbaresVermoegen;
+  public FamilienBudgetresultatDto halbierungsReduktion(Integer halbierungsReduktion) {
+    this.halbierungsReduktion = halbierungsReduktion;
     return this;
   }
 
   
-  @JsonProperty("anrechenbaresVermoegen")
+  @JsonProperty("halbierungsReduktion")
   @NotNull
-  public Integer getAnrechenbaresVermoegen() {
-    return anrechenbaresVermoegen;
+  public Integer getHalbierungsReduktion() {
+    return halbierungsReduktion;
   }
 
-  @JsonProperty("anrechenbaresVermoegen")
-  public void setAnrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
-    this.anrechenbaresVermoegen = anrechenbaresVermoegen;
+  @JsonProperty("halbierungsReduktion")
+  public void setHalbierungsReduktion(Integer halbierungsReduktion) {
+    this.halbierungsReduktion = halbierungsReduktion;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto saeule2(Integer saeule2) {
-    this.saeule2 = saeule2;
+  public FamilienBudgetresultatDto fehlbetrag(Integer fehlbetrag) {
+    this.fehlbetrag = fehlbetrag;
     return this;
   }
 
   
-  @JsonProperty("saeule2")
+  @JsonProperty("fehlbetrag")
   @NotNull
-  public Integer getSaeule2() {
-    return saeule2;
+  public Integer getFehlbetrag() {
+    return fehlbetrag;
   }
 
-  @JsonProperty("saeule2")
-  public void setSaeule2(Integer saeule2) {
-    this.saeule2 = saeule2;
+  @JsonProperty("fehlbetrag")
+  public void setFehlbetrag(Integer fehlbetrag) {
+    this.fehlbetrag = fehlbetrag;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto saeule3a(Integer saeule3a) {
-    this.saeule3a = saeule3a;
+  public FamilienBudgetresultatDto proKopfTeilung(Integer proKopfTeilung) {
+    this.proKopfTeilung = proKopfTeilung;
     return this;
   }
 
   
-  @JsonProperty("saeule3a")
+  @JsonProperty("proKopfTeilung")
   @NotNull
-  public Integer getSaeule3a() {
-    return saeule3a;
+  public Integer getProKopfTeilung() {
+    return proKopfTeilung;
   }
 
-  @JsonProperty("saeule3a")
-  public void setSaeule3a(Integer saeule3a) {
-    this.saeule3a = saeule3a;
+  @JsonProperty("proKopfTeilung")
+  public void setProKopfTeilung(Integer proKopfTeilung) {
+    this.proKopfTeilung = proKopfTeilung;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto eigenmietwert(Integer eigenmietwert) {
-    this.eigenmietwert = eigenmietwert;
+  public FamilienBudgetresultatDto ungedeckterAnteilLebenshaltungskosten(Integer ungedeckterAnteilLebenshaltungskosten) {
+    this.ungedeckterAnteilLebenshaltungskosten = ungedeckterAnteilLebenshaltungskosten;
     return this;
   }
 
   
-  @JsonProperty("eigenmietwert")
+  @JsonProperty("ungedeckterAnteilLebenshaltungskosten")
   @NotNull
-  public Integer getEigenmietwert() {
-    return eigenmietwert;
+  public Integer getUngedeckterAnteilLebenshaltungskosten() {
+    return ungedeckterAnteilLebenshaltungskosten;
   }
 
-  @JsonProperty("eigenmietwert")
-  public void setEigenmietwert(Integer eigenmietwert) {
-    this.eigenmietwert = eigenmietwert;
+  @JsonProperty("ungedeckterAnteilLebenshaltungskosten")
+  public void setUngedeckterAnteilLebenshaltungskosten(Integer ungedeckterAnteilLebenshaltungskosten) {
+    this.ungedeckterAnteilLebenshaltungskosten = ungedeckterAnteilLebenshaltungskosten;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto alimente(Integer alimente) {
-    this.alimente = alimente;
+  public FamilienBudgetresultatDto einnahmen(FamilienBudgetresultatEinnahmenDto einnahmen) {
+    this.einnahmen = einnahmen;
     return this;
   }
 
   
-  @JsonProperty("alimente")
+  @JsonProperty("einnahmen")
   @NotNull
-  public Integer getAlimente() {
-    return alimente;
+  public FamilienBudgetresultatEinnahmenDto getEinnahmen() {
+    return einnahmen;
   }
 
-  @JsonProperty("alimente")
-  public void setAlimente(Integer alimente) {
-    this.alimente = alimente;
+  @JsonProperty("einnahmen")
+  public void setEinnahmen(FamilienBudgetresultatEinnahmenDto einnahmen) {
+    this.einnahmen = einnahmen;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto einnahmenFamilienbudget(Integer einnahmenFamilienbudget) {
-    this.einnahmenFamilienbudget = einnahmenFamilienbudget;
+  public FamilienBudgetresultatDto kosten(FamilienBudgetresultatKostenDto kosten) {
+    this.kosten = kosten;
     return this;
   }
 
   
-  @JsonProperty("einnahmenFamilienbudget")
+  @JsonProperty("kosten")
   @NotNull
-  public Integer getEinnahmenFamilienbudget() {
-    return einnahmenFamilienbudget;
+  public FamilienBudgetresultatKostenDto getKosten() {
+    return kosten;
   }
 
-  @JsonProperty("einnahmenFamilienbudget")
-  public void setEinnahmenFamilienbudget(Integer einnahmenFamilienbudget) {
-    this.einnahmenFamilienbudget = einnahmenFamilienbudget;
+  @JsonProperty("kosten")
+  public void setKosten(FamilienBudgetresultatKostenDto kosten) {
+    this.kosten = kosten;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto grundbedarf(Integer grundbedarf) {
-    this.grundbedarf = grundbedarf;
+  public FamilienBudgetresultatDto vornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
     return this;
   }
 
   
-  @JsonProperty("grundbedarf")
-  @NotNull
-  public Integer getGrundbedarf() {
-    return grundbedarf;
+  @JsonProperty("vornamePartner")
+  public String getVornamePartner() {
+    return vornamePartner;
   }
 
-  @JsonProperty("grundbedarf")
-  public void setGrundbedarf(Integer grundbedarf) {
-    this.grundbedarf = grundbedarf;
+  @JsonProperty("vornamePartner")
+  public void setVornamePartner(String vornamePartner) {
+    this.vornamePartner = vornamePartner;
   }
 
   /**
    **/
-  public FamilienBudgetresultatDto effektiveWohnkosten(Integer effektiveWohnkosten) {
-    this.effektiveWohnkosten = effektiveWohnkosten;
+  public FamilienBudgetresultatDto nachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
     return this;
   }
 
   
-  @JsonProperty("effektiveWohnkosten")
-  @NotNull
-  public Integer getEffektiveWohnkosten() {
-    return effektiveWohnkosten;
+  @JsonProperty("nachnamePartner")
+  public String getNachnamePartner() {
+    return nachnamePartner;
   }
 
-  @JsonProperty("effektiveWohnkosten")
-  public void setEffektiveWohnkosten(Integer effektiveWohnkosten) {
-    this.effektiveWohnkosten = effektiveWohnkosten;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto medizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
-    this.medizinischeGrundversorgung = medizinischeGrundversorgung;
-    return this;
-  }
-
-  
-  @JsonProperty("medizinischeGrundversorgung")
-  @NotNull
-  public Integer getMedizinischeGrundversorgung() {
-    return medizinischeGrundversorgung;
-  }
-
-  @JsonProperty("medizinischeGrundversorgung")
-  public void setMedizinischeGrundversorgung(Integer medizinischeGrundversorgung) {
-    this.medizinischeGrundversorgung = medizinischeGrundversorgung;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto integrationszulage(Integer integrationszulage) {
-    this.integrationszulage = integrationszulage;
-    return this;
-  }
-
-  
-  @JsonProperty("integrationszulage")
-  @NotNull
-  public Integer getIntegrationszulage() {
-    return integrationszulage;
-  }
-
-  @JsonProperty("integrationszulage")
-  public void setIntegrationszulage(Integer integrationszulage) {
-    this.integrationszulage = integrationszulage;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto steuernBund(Integer steuernBund) {
-    this.steuernBund = steuernBund;
-    return this;
-  }
-
-  
-  @JsonProperty("steuernBund")
-  @NotNull
-  public Integer getSteuernBund() {
-    return steuernBund;
-  }
-
-  @JsonProperty("steuernBund")
-  public void setSteuernBund(Integer steuernBund) {
-    this.steuernBund = steuernBund;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto steuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
-    return this;
-  }
-
-  
-  @JsonProperty("steuernKantonGemeinde")
-  @NotNull
-  public Integer getSteuernKantonGemeinde() {
-    return steuernKantonGemeinde;
-  }
-
-  @JsonProperty("steuernKantonGemeinde")
-  public void setSteuernKantonGemeinde(Integer steuernKantonGemeinde) {
-    this.steuernKantonGemeinde = steuernKantonGemeinde;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto fahrkostenPerson1(Integer fahrkostenPerson1) {
-    this.fahrkostenPerson1 = fahrkostenPerson1;
-    return this;
-  }
-
-  
-  @JsonProperty("fahrkostenPerson1")
-  @NotNull
-  public Integer getFahrkostenPerson1() {
-    return fahrkostenPerson1;
-  }
-
-  @JsonProperty("fahrkostenPerson1")
-  public void setFahrkostenPerson1(Integer fahrkostenPerson1) {
-    this.fahrkostenPerson1 = fahrkostenPerson1;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto fahrkostenPerson2(Integer fahrkostenPerson2) {
-    this.fahrkostenPerson2 = fahrkostenPerson2;
-    return this;
-  }
-
-  
-  @JsonProperty("fahrkostenPerson2")
-  @NotNull
-  public Integer getFahrkostenPerson2() {
-    return fahrkostenPerson2;
-  }
-
-  @JsonProperty("fahrkostenPerson2")
-  public void setFahrkostenPerson2(Integer fahrkostenPerson2) {
-    this.fahrkostenPerson2 = fahrkostenPerson2;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto essenskostenPerson1(Integer essenskostenPerson1) {
-    this.essenskostenPerson1 = essenskostenPerson1;
-    return this;
-  }
-
-  
-  @JsonProperty("essenskostenPerson1")
-  @NotNull
-  public Integer getEssenskostenPerson1() {
-    return essenskostenPerson1;
-  }
-
-  @JsonProperty("essenskostenPerson1")
-  public void setEssenskostenPerson1(Integer essenskostenPerson1) {
-    this.essenskostenPerson1 = essenskostenPerson1;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto essenskostenPerson2(Integer essenskostenPerson2) {
-    this.essenskostenPerson2 = essenskostenPerson2;
-    return this;
-  }
-
-  
-  @JsonProperty("essenskostenPerson2")
-  @NotNull
-  public Integer getEssenskostenPerson2() {
-    return essenskostenPerson2;
-  }
-
-  @JsonProperty("essenskostenPerson2")
-  public void setEssenskostenPerson2(Integer essenskostenPerson2) {
-    this.essenskostenPerson2 = essenskostenPerson2;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto ausgabenFamilienbudget(Integer ausgabenFamilienbudget) {
-    this.ausgabenFamilienbudget = ausgabenFamilienbudget;
-    return this;
-  }
-
-  
-  @JsonProperty("ausgabenFamilienbudget")
-  @NotNull
-  public Integer getAusgabenFamilienbudget() {
-    return ausgabenFamilienbudget;
-  }
-
-  @JsonProperty("ausgabenFamilienbudget")
-  public void setAusgabenFamilienbudget(Integer ausgabenFamilienbudget) {
-    this.ausgabenFamilienbudget = ausgabenFamilienbudget;
-  }
-
-  /**
-   **/
-  public FamilienBudgetresultatDto familienbudgetBerechnet(Integer familienbudgetBerechnet) {
-    this.familienbudgetBerechnet = familienbudgetBerechnet;
-    return this;
-  }
-
-  
-  @JsonProperty("familienbudgetBerechnet")
-  @NotNull
-  public Integer getFamilienbudgetBerechnet() {
-    return familienbudgetBerechnet;
-  }
-
-  @JsonProperty("familienbudgetBerechnet")
-  public void setFamilienbudgetBerechnet(Integer familienbudgetBerechnet) {
-    this.familienbudgetBerechnet = familienbudgetBerechnet;
+  @JsonProperty("nachnamePartner")
+  public void setNachnamePartner(String nachnamePartner) {
+    this.nachnamePartner = nachnamePartner;
   }
 
 
@@ -532,36 +474,33 @@ public class FamilienBudgetresultatDto  implements Serializable {
       return false;
     }
     FamilienBudgetresultatDto familienBudgetresultat = (FamilienBudgetresultatDto) o;
-    return Objects.equals(this.familienBudgetTyp, familienBudgetresultat.familienBudgetTyp) &&
-        Objects.equals(this.selbststaendigErwerbend, familienBudgetresultat.selbststaendigErwerbend) &&
+    return Objects.equals(this.steuerdatenTyp, familienBudgetresultat.steuerdatenTyp) &&
+        Objects.equals(this.vorname, familienBudgetresultat.vorname) &&
+        Objects.equals(this.nachname, familienBudgetresultat.nachname) &&
+        Objects.equals(this.sozialversicherungsnummer, familienBudgetresultat.sozialversicherungsnummer) &&
+        Objects.equals(this.geburtsdatum, familienBudgetresultat.geburtsdatum) &&
+        Objects.equals(this.steuerjahr, familienBudgetresultat.steuerjahr) &&
+        Objects.equals(this.veranlagungscode, familienBudgetresultat.veranlagungscode) &&
+        Objects.equals(this.total, familienBudgetresultat.total) &&
+        Objects.equals(this.einnahmenMinusKosten, familienBudgetresultat.einnahmenMinusKosten) &&
         Objects.equals(this.anzahlPersonenImHaushalt, familienBudgetresultat.anzahlPersonenImHaushalt) &&
-        Objects.equals(this.anzahlGeschwisterInAusbildung, familienBudgetresultat.anzahlGeschwisterInAusbildung) &&
-        Objects.equals(this.totalEinkuenfte, familienBudgetresultat.totalEinkuenfte) &&
-        Objects.equals(this.ergaenzungsleistungen, familienBudgetresultat.ergaenzungsleistungen) &&
-        Objects.equals(this.steuerbaresVermoegen, familienBudgetresultat.steuerbaresVermoegen) &&
-        Objects.equals(this.anrechenbaresVermoegen, familienBudgetresultat.anrechenbaresVermoegen) &&
-        Objects.equals(this.saeule2, familienBudgetresultat.saeule2) &&
-        Objects.equals(this.saeule3a, familienBudgetresultat.saeule3a) &&
-        Objects.equals(this.eigenmietwert, familienBudgetresultat.eigenmietwert) &&
-        Objects.equals(this.alimente, familienBudgetresultat.alimente) &&
-        Objects.equals(this.einnahmenFamilienbudget, familienBudgetresultat.einnahmenFamilienbudget) &&
-        Objects.equals(this.grundbedarf, familienBudgetresultat.grundbedarf) &&
-        Objects.equals(this.effektiveWohnkosten, familienBudgetresultat.effektiveWohnkosten) &&
-        Objects.equals(this.medizinischeGrundversorgung, familienBudgetresultat.medizinischeGrundversorgung) &&
-        Objects.equals(this.integrationszulage, familienBudgetresultat.integrationszulage) &&
-        Objects.equals(this.steuernBund, familienBudgetresultat.steuernBund) &&
-        Objects.equals(this.steuernKantonGemeinde, familienBudgetresultat.steuernKantonGemeinde) &&
-        Objects.equals(this.fahrkostenPerson1, familienBudgetresultat.fahrkostenPerson1) &&
-        Objects.equals(this.fahrkostenPerson2, familienBudgetresultat.fahrkostenPerson2) &&
-        Objects.equals(this.essenskostenPerson1, familienBudgetresultat.essenskostenPerson1) &&
-        Objects.equals(this.essenskostenPerson2, familienBudgetresultat.essenskostenPerson2) &&
-        Objects.equals(this.ausgabenFamilienbudget, familienBudgetresultat.ausgabenFamilienbudget) &&
-        Objects.equals(this.familienbudgetBerechnet, familienBudgetresultat.familienbudgetBerechnet);
+        Objects.equals(this.anzahlKinderInAusbildung, familienBudgetresultat.anzahlKinderInAusbildung) &&
+        Objects.equals(this.einnahmeUeberschuss, familienBudgetresultat.einnahmeUeberschuss) &&
+        Objects.equals(this.proKopfTeilungKinderInAusbildung, familienBudgetresultat.proKopfTeilungKinderInAusbildung) &&
+        Objects.equals(this.anrechenbareElterlicheLeistung, familienBudgetresultat.anrechenbareElterlicheLeistung) &&
+        Objects.equals(this.halbierungsReduktion, familienBudgetresultat.halbierungsReduktion) &&
+        Objects.equals(this.fehlbetrag, familienBudgetresultat.fehlbetrag) &&
+        Objects.equals(this.proKopfTeilung, familienBudgetresultat.proKopfTeilung) &&
+        Objects.equals(this.ungedeckterAnteilLebenshaltungskosten, familienBudgetresultat.ungedeckterAnteilLebenshaltungskosten) &&
+        Objects.equals(this.einnahmen, familienBudgetresultat.einnahmen) &&
+        Objects.equals(this.kosten, familienBudgetresultat.kosten) &&
+        Objects.equals(this.vornamePartner, familienBudgetresultat.vornamePartner) &&
+        Objects.equals(this.nachnamePartner, familienBudgetresultat.nachnamePartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(familienBudgetTyp, selbststaendigErwerbend, anzahlPersonenImHaushalt, anzahlGeschwisterInAusbildung, totalEinkuenfte, ergaenzungsleistungen, steuerbaresVermoegen, anrechenbaresVermoegen, saeule2, saeule3a, eigenmietwert, alimente, einnahmenFamilienbudget, grundbedarf, effektiveWohnkosten, medizinischeGrundversorgung, integrationszulage, steuernBund, steuernKantonGemeinde, fahrkostenPerson1, fahrkostenPerson2, essenskostenPerson1, essenskostenPerson2, ausgabenFamilienbudget, familienbudgetBerechnet);
+    return Objects.hash(steuerdatenTyp, vorname, nachname, sozialversicherungsnummer, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten, vornamePartner, nachnamePartner);
   }
 
   @Override
@@ -569,31 +508,28 @@ public class FamilienBudgetresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class FamilienBudgetresultatDto {\n");
     
-    sb.append("    familienBudgetTyp: ").append(toIndentedString(familienBudgetTyp)).append("\n");
-    sb.append("    selbststaendigErwerbend: ").append(toIndentedString(selbststaendigErwerbend)).append("\n");
+    sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
+    sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
+    sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
+    sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
+    sb.append("    total: ").append(toIndentedString(total)).append("\n");
+    sb.append("    einnahmenMinusKosten: ").append(toIndentedString(einnahmenMinusKosten)).append("\n");
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
-    sb.append("    anzahlGeschwisterInAusbildung: ").append(toIndentedString(anzahlGeschwisterInAusbildung)).append("\n");
-    sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
-    sb.append("    ergaenzungsleistungen: ").append(toIndentedString(ergaenzungsleistungen)).append("\n");
-    sb.append("    steuerbaresVermoegen: ").append(toIndentedString(steuerbaresVermoegen)).append("\n");
-    sb.append("    anrechenbaresVermoegen: ").append(toIndentedString(anrechenbaresVermoegen)).append("\n");
-    sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
-    sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
-    sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
-    sb.append("    alimente: ").append(toIndentedString(alimente)).append("\n");
-    sb.append("    einnahmenFamilienbudget: ").append(toIndentedString(einnahmenFamilienbudget)).append("\n");
-    sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
-    sb.append("    effektiveWohnkosten: ").append(toIndentedString(effektiveWohnkosten)).append("\n");
-    sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
-    sb.append("    integrationszulage: ").append(toIndentedString(integrationszulage)).append("\n");
-    sb.append("    steuernBund: ").append(toIndentedString(steuernBund)).append("\n");
-    sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
-    sb.append("    fahrkostenPerson1: ").append(toIndentedString(fahrkostenPerson1)).append("\n");
-    sb.append("    fahrkostenPerson2: ").append(toIndentedString(fahrkostenPerson2)).append("\n");
-    sb.append("    essenskostenPerson1: ").append(toIndentedString(essenskostenPerson1)).append("\n");
-    sb.append("    essenskostenPerson2: ").append(toIndentedString(essenskostenPerson2)).append("\n");
-    sb.append("    ausgabenFamilienbudget: ").append(toIndentedString(ausgabenFamilienbudget)).append("\n");
-    sb.append("    familienbudgetBerechnet: ").append(toIndentedString(familienbudgetBerechnet)).append("\n");
+    sb.append("    anzahlKinderInAusbildung: ").append(toIndentedString(anzahlKinderInAusbildung)).append("\n");
+    sb.append("    einnahmeUeberschuss: ").append(toIndentedString(einnahmeUeberschuss)).append("\n");
+    sb.append("    proKopfTeilungKinderInAusbildung: ").append(toIndentedString(proKopfTeilungKinderInAusbildung)).append("\n");
+    sb.append("    anrechenbareElterlicheLeistung: ").append(toIndentedString(anrechenbareElterlicheLeistung)).append("\n");
+    sb.append("    halbierungsReduktion: ").append(toIndentedString(halbierungsReduktion)).append("\n");
+    sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
+    sb.append("    proKopfTeilung: ").append(toIndentedString(proKopfTeilung)).append("\n");
+    sb.append("    ungedeckterAnteilLebenshaltungskosten: ").append(toIndentedString(ungedeckterAnteilLebenshaltungskosten)).append("\n");
+    sb.append("    einnahmen: ").append(toIndentedString(einnahmen)).append("\n");
+    sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");
+    sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
+    sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
     sb.append("}");
     return sb.toString();
   }

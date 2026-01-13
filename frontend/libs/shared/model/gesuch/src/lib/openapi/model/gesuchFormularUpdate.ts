@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { ElternUpdate } from './elternUpdate';
-import { Darlehen } from './darlehen';
 import { EinnahmenKostenUpdate } from './einnahmenKostenUpdate';
 import { KindUpdate } from './kindUpdate';
 import { FamiliensituationUpdate } from './familiensituationUpdate';
@@ -30,7 +29,6 @@ export interface GesuchFormularUpdate {
     kinds?: Array<KindUpdate>;
     einnahmenKosten?: EinnahmenKostenUpdate;
     einnahmenKostenPartner?: EinnahmenKostenUpdate;
-    darlehen?: Darlehen;
     steuererklaerung?: Array<SteuererklaerungUpdate>;
 }
 

@@ -1,236 +1,49 @@
-@let view = viewSig();
+<dv-shared-pattern-main-layout *transloco="let t">
+  <div class="tw:relative tw:my-12 tw:justify-between container">
+    <h1 class="tw:!mb-8">
+      {{ t('shared.darlehen.title') }}
+    </h1>
+    <dv-shared-pattern-darlehen-form
+      (formIsUnsavedSig)="hasUnsavedChanges = $event"
+      (darlehenDeletedSig)="redirectToHome()"
+    ></dv-shared-pattern-darlehen-form>
+  </div>
 
-<!-- loading -->
-@if (view.loading) {
-  <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
-} @else {
-  <form
-    [formGroup]="form"
-    [dvSharedUiFormReadonly]="view.readonly"
-    (gotReenabledSig)="gotReenabled$.next({})"
-    novalidate
-    data-testid="form-darlehen-form"
-    (ngSubmit)="handleSave()"
-  >
-    <!-- willDarlehen -->
-    <mat-radio-group
-      class="will-darlehen-radio-group tw:flex tw:flex-col tw:pt-12"
-      formControlName="willDarlehen"
-      data-testid="form-darlehen-willDarlehen"
-      dvSharedUiFormField
+  <!-- MOBILE NAV -->
+  <div dvHeaderMobileAddons></div>
+  <div dvMobileNavContent></div>
+
+  <!-- DESKTOP HEADER (LEFT) -->
+  <div dvHeaderDesktopLeft class="tw:flex tw:grow tw:items-center tw:gap-4">
+    <a
+      [routerLink]="['/']"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="header-nav-dashboard"
     >
-      <mat-label>{{ 'shared.form.darlehen.willDarlehen.label' | transloco }}</mat-label>
-      <mat-radio-button data-testid="yes" [value]="true"> {{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
-      <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
-      <dv-shared-ui-form-zuvor-hint
-        [changes]="view.formChanges.willDarlehen | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
-      ></dv-shared-ui-form-zuvor-hint>
-      <div class="group-errors">
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </div>
-    </mat-radio-group>
+      <i class="material-symbols-rounded me-2 text-white">dashboard</i>
+      <span>{{ t('shared.menu.dashboard') }}</span>
+    </a>
 
-    @if (willDarlehenChangedSig() && !view.loading) {
-      <div class="tw:dv-form-half tw:pt-4">
-        <!-- Darlehensbetrag -->
-        <mat-form-field dvSharedUiFormField class="tw:mt-4 tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
-          <input
-            formControlName="betragDarlehen"
-            data-testid="form-darlehen-betragDarlehen"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges.betragDarlehen"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
+    @let fallId = fallIdSig();
+    <a
+      [routerLink]="['/auszahlung', fallId]"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="header-nav-auszahlung"
+      [class.disabled]="!fallId"
+    >
+      <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
+      <span>{{ t('shared.menu.auszahlung') }}</span>
+    </a>
 
-        <!-- betragBezogenKanton -->
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.betragBezogenKanton.label' | transloco }}</mat-label>
-          <input
-            formControlName="betragBezogenKanton"
-            data-testid="form-darlehen-betragBezogenKanton"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges.betragBezogenKanton"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
+    @let darlehens = darlehenStore.darlehenListViewSig();
+    <dv-shared-ui-darlehen-menu
+      [dashboardViewSig]="dashboardStore.dashboardViewSig()"
+      [darlehenListSig]="darlehens.darlehenList"
+      [fallIdSig]="fallId"
+      (createDarlehen)="darlehenStore.createDarlehen$($event)"
+    ></dv-shared-ui-darlehen-menu>
+  </div>
 
-        <!-- schulden -->
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.schulden.label' | transloco }}</mat-label>
-          <input
-            formControlName="schulden"
-            data-testid="form-darlehen-schulden"
-            matInput
-            type="text"
-            [maskito]="maskitoNumber"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges.schulden"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-
-        <!-- anzahlBetreibungen mit upload-->
-        <div class="tw:flex tw:w-full tw:gap-2">
-          <mat-form-field dvSharedUiFormField class="tw:w-full">
-            <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | transloco }}</mat-label>
-            <input
-              formControlName="anzahlBetreibungen"
-              data-testid="form-darlehen-anzahlBetreibungen"
-              matInput
-              type="number"
-              min="0"
-            />
-            <mat-hint *dvZuvorHint="view.formChanges.anzahlBetreibungen"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </mat-form-field>
-          @if (anzahlBetreibungenDocSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-        </div>
-
-        <fieldset
-          class="tw:col-span-2 tw:grid tw:grid-cols-[1fr_56px] tw:gap-x-6 tw:gap-y-4 tw:rounded-sm"
-          formGroupName="gruende"
-        >
-          <legend class="tw:col-span-2">
-            <h3 class="tw:!mb-0">
-              {{ 'shared.form.darlehen.gruende.label' | transloco }}
-            </h3>
-          </legend>
-          <!-- grundNichtBerechtigt -->
-          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-            <mat-checkbox
-              class="tw:w-full"
-              formControlName="grundNichtBerechtigt"
-              data-testid="form-darlehen-grundNichtBerechtigt"
-            >
-              {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | transloco }}
-            </mat-checkbox>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges.grundNichtBerechtigt | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
-          </div>
-          @if (grundNichtBerechtigtDocSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-
-          <!-- grundAusbildungZwoelfJahre -->
-          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-            <mat-checkbox
-              class="tw:w-full"
-              formControlName="grundAusbildungZwoelfJahre"
-              data-testid="form-darlehen-grundAusbildungZwoelfJahre"
-            >
-              {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | transloco }}
-            </mat-checkbox>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges.grundAusbildungZwoelfJahre
-                  | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
-                  | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
-          </div>
-
-          <!-- grundHoheGebuehren -->
-          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-            <mat-checkbox
-              class="tw:w-full"
-              formControlName="grundHoheGebuehren"
-              data-testid="form-darlehen-grundHoheGebuehren"
-            >
-              {{ 'shared.form.darlehen.grundHoheGebuehren.label' | transloco }}
-            </mat-checkbox>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges.grundHoheGebuehren | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
-          </div>
-          @if (grundHoheGebuehrenDocSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-
-          <!-- grundAnschaffungenFuerAusbildung -->
-          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-            <mat-checkbox
-              class="tw:w-full"
-              formControlName="grundAnschaffungenFuerAusbildung"
-              data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
-            >
-              {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | transloco }}
-            </mat-checkbox>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges.grundAnschaffungenFuerAusbildung
-                  | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE'
-                  | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
-          </div>
-          @if (grundAnschaffungenFuerAusbildungDocSig(); as options) {
-            <dv-shared-pattern-document-upload
-              class="flex-shrink-1"
-              [optionsSig]="options"
-            ></dv-shared-pattern-document-upload>
-          }
-
-          <!-- grundZweitausbildung -->
-          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-            <mat-checkbox
-              class="tw:w-full"
-              formControlName="grundZweitausbildung"
-              data-testid="form-darlehen-grundZweitausbildung"
-            >
-              {{ 'shared.form.darlehen.grundZweitausbildung.label' | transloco }}
-            </mat-checkbox>
-            <dv-shared-ui-form-zuvor-hint
-              [changes]="
-                view.formChanges.grundZweitausbildung | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-              "
-            ></dv-shared-ui-form-zuvor-hint>
-          </div>
-        </fieldset>
-      </div>
-    }
-
-    <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons class="tw:col-span-2">
-      @if (!view.readonly) {
-        <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
-          {{ 'shared.form.save-and-continue' | transloco }}
-        </button>
-      } @else {
-        <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
-          {{ 'shared.form.gonext' | transloco }}
-        </button>
-      }
-    </dv-shared-ui-step-form-buttons>
-  </form>
-}
+  <!-- DESKTOP HEADER (RIGHT) -->
+  <div dvHeaderDesktopRight class="d-flex align-items-center gap-4"></div>
+</dv-shared-pattern-main-layout>

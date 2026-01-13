@@ -43,6 +43,7 @@ public class BerechnungsStammdatenV1Mapper implements BerechnungsStammdatenMappe
             .stipLimiteMinimalstipendium(berechnungsRequest.getStammdaten().getStipLimiteMinimalstipendium())
             .limiteAlterAntragsstellerHalbierungElternbeitrag(
                 berechnungsRequest.getStammdaten().getLimiteAlterAntragsstellerHalbierungElternbeitrag()
-            );
+            )
+            .anzahlMonate(berechnungsRequest.getStammdaten().getAnzahlMonate());
     }
 }

@@ -20,6 +20,12 @@ export class SharedUiFilterMenuButtonComponent<T> {
   activeFilter = input.required<T | undefined>();
   defaultFilter = input.required<T>();
   filterChange = output<T>();
+  /**
+   * Base translation key for the filters.
+   * @example 'sachbearbeitung-app.cockpit.quick-filter.'
+   * Make sure to include the trailing dot.
+   */
+  baseTranslationKey = input.required<string>();
 
   selectedFilterSig = computed(() => {
     return (

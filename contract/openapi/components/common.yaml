@@ -125,10 +125,6 @@ DokumentTyp:
     - EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
     - EK_PARTNER_LOHNABRECHNUNG
     - EK_PARTNER_VERMOEGEN
-    - DARLEHEN_BETREIBUNGSREGISTERAUSZUG
-    - DARLEHEN_AUFSTELLUNG_KOSTEN_ELTERN
-    - DARLEHEN_KOPIE_SCHULGELDRECHNUNG
-    - DARLEHEN_BELEGE_ANSCHAFFUNGEN
     - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER
     - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER
     - STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE
@@ -926,6 +922,11 @@ NotificationType:
     - FAILED_AUSZAHLUNG
     - DELEGIERUNG_ANGENOMMEN
     - DELEGIERUNG_ABGELEHNT
+    - DELEGIERUNG_AUFGELOEST
+    - DARLEHEN_EINGEGEBEN
+    - DARLEHEN_ZURUECKGEWIESEN
+    - DARLEHEN_AKZEPTIERT
+    - DARLEHEN_ABGELEHNT
 Kommentar:
   type: object
   required:
@@ -975,3 +976,57 @@ AusgewaehlterGrund:
       $ref: '#/UUID'
     kanton:
       $ref: '#/Kanton'
+PersonValueItem:
+  type: object
+  properties:
+    vorname:
+      type: string
+    value:
+      type: integer
+Darlehen:
+  type: object
+  required:
+    - id
+  properties:
+    id:
+      $ref: '#/UUID'
+    fallId:
+      $ref: '#/UUID'
+    status:
+      $ref: '#/DarlehenStatus'
+    gewaehren:
+      type: boolean
+    betrag:
+      type: integer
+      minimum: 0
+    kommentar:
+      type: string
+    betragGewuenscht:
+      type: integer
+      minimum: 0
+    schulden:
+      type: integer
+      minimum: 0
+    anzahlBetreibungen:
+      type: integer
+      minimum: 0
+    gruende:
+      type: array
+      items:
+        $ref: '#/DarlehenGrund'
+    timestampErstellt:
+      type: string
+DarlehenGrund:
+  enum:
+    - NICHT_BERECHTIGT
+    - AUSBILDUNG_ZWOELF_JAHRE
+    - HOHE_GEBUEHREN
+    - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+    - ZWEITAUSBILDUNG
+DarlehenStatus:
+  enum:
+    - IN_BEARBEITUNG_GS
+    - EINGEGEBEN
+    - IN_FREIGABE
+    - AKZEPTIERT
+    - ABGELEHNT

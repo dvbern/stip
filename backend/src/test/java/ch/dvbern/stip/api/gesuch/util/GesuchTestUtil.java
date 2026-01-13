@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -150,8 +149,7 @@ public class GesuchTestUtil {
             .setFamiliensituation(new Familiensituation())
             .setPartner(new Partner().setAdresse(new Adresse()))
             .setEinnahmenKosten(new EinnahmenKosten())
-            .setEinnahmenKostenPartner(new EinnahmenKosten())
-            .setDarlehen(new Darlehen().setWillDarlehen(false));
+            .setEinnahmenKostenPartner(new EinnahmenKosten());
         return formular;
     }
 }

@@ -17,15 +17,30 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
+import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
+import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
+import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,9 +48,13 @@ import org.hibernate.envers.Audited;
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
 
-@DarlehenValidationConstraint
-@Audited
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+
 @Entity
+@Audited
+@DarlehenDocumentsRequiredConstraint(
+    groups = { DarlehenEinreichenValidationGroup.class }
+)
 @Table(
     name = "darlehen",
     indexes = {
@@ -49,47 +68,55 @@ import org.jilt.BuilderStyle;
 @AllArgsConstructor
 public class Darlehen extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "will_darlehen", nullable = false)
-    private Boolean willDarlehen;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "fall_id", nullable = false)
+    private Fall fall;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private DarlehenStatus status = DarlehenStatus.IN_BEARBEITUNG_GS;
+
+    @NullableUnlessGenerated
+    @Column(name = "gewaehren")
+    private Boolean gewaehren;
 
     @NullableUnlessGenerated
     @Min(value = 0)
-    @Column(name = "betrag_darlehen", nullable = true)
-    private Integer betragDarlehen;
+    @Column(name = "betrag")
+    private Integer betrag;
 
     @NullableUnlessGenerated
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "kommentar", length = DB_DEFAULT_STRING_MAX_LENGTH)
+    private String kommentar;
+
+    @NullableUnlessGenerated
+    @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Min(value = 0)
-    @Column(name = "betrag_bezogen_kanton", nullable = true)
-    private Integer betragBezogenKanton;
+    @Column(name = "betrag_gewuenscht")
+    private Integer betragGewuenscht;
 
     @Min(value = 0)
     @NullableUnlessGenerated
-    @Column(name = "schulden", nullable = true)
+    @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
+    @Column(name = "schulden")
     private Integer schulden;
 
     @Min(value = 0)
     @NullableUnlessGenerated
-    @Column(name = "anzahl_betreibungen", nullable = true)
+    @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
+    @Column(name = "anzahl_betreibungen")
     private Integer anzahlBetreibungen;
 
-    @NullableUnlessGenerated
-    @Column(name = "grund_nicht_berechtigt", nullable = true)
-    private Boolean grundNichtBerechtigt;
+    @Size(min = 1, groups = { DarlehenEinreichenValidationGroup.class })
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @Column(name = "darlehen_grund")
+    @CollectionTable(name = "darlehen_darlehen_grund", joinColumns = @JoinColumn(name = "darlehen_id"))
+    private Set<DarlehenGrund> gruende = new LinkedHashSet<>();
 
-    @NullableUnlessGenerated
-    @Column(name = "grund_ausbildung_zwoelf_jahre", nullable = true)
-    private Boolean grundAusbildungZwoelfJahre;
-
-    @NullableUnlessGenerated
-    @Column(name = "grund_hohe_gebuehren", nullable = true)
-    private Boolean grundHoheGebuehren;
-
-    @NullableUnlessGenerated
-    @Column(name = "grund_anschaffungen_fuer_ausbildung", nullable = true)
-    private Boolean grundAnschaffungenFuerAusbildung;
-
-    @NullableUnlessGenerated
-    @Column(name = "grund_zweitausbildung", nullable = true)
-    private Boolean grundZweitausbildung;
+    @OneToMany(mappedBy = "darlehen", orphanRemoval = true)
+    private Set<DarlehenDokument> dokumente = new LinkedHashSet<>();
 
 }

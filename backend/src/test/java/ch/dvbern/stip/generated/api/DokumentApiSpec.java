@@ -706,7 +706,7 @@ public class DokumentApiSpec {
         }
     }
     /**
-     * deletes a Dokument
+     * deletes a Unterschriftenblatt Dokument
      * 
      *
      * @see #dokumentIdPath  (required)

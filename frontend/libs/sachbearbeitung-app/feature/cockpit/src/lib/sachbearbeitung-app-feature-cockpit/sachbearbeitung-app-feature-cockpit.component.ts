@@ -51,8 +51,8 @@ import {
   GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
-  SbDashboardColumn,
   SbDashboardGesuch,
+  SbGesucheDashboardColumn,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
@@ -184,7 +184,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
   implements
     OnInit,
     Record<DashboardFormFields, InputSignal<string | undefined>>,
-    SortAndPageInputs<SbDashboardColumn>
+    SortAndPageInputs<SbGesucheDashboardColumn>
 {
   private store = inject(Store);
   private router = inject(Router);
@@ -203,7 +203,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
   bearbeiter = input<string | undefined>(undefined);
   letzteAktivitaetFrom = input<string | undefined>(undefined);
   letzteAktivitaetTo = input<string | undefined>(undefined);
-  sortColumn = input<SbDashboardColumn | undefined>(undefined);
+  sortColumn = input<SbGesucheDashboardColumn | undefined>(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
@@ -217,7 +217,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = Object.keys(SbDashboardColumn);
+  displayedColumns = Object.keys(SbGesucheDashboardColumn);
 
   refreshQuickfilterSig = signal<unknown>(null);
 
@@ -511,6 +511,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       });
 
       this.router.navigate(['.'], {
+        relativeTo: this.route,
         queryParams: makeEmptyStringPropertiesNull(query),
         queryParamsHandling: 'merge',
         replaceUrl: true,
@@ -528,6 +529,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
         return;
       }
       this.router.navigate(['.'], {
+        relativeTo: this.route,
         queryParams: {
           show: query,
         },

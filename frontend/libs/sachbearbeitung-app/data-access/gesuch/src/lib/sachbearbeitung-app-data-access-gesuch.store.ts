@@ -10,7 +10,7 @@ import {
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
   Kanton,
-  PaginatedSbDashboard,
+  PaginatedSbGesucheDashboard,
   SharedModelGesuch,
 } from '@dv/shared/model/gesuch';
 import { StatusUebergang } from '@dv/shared/util/gesuch';
@@ -27,7 +27,7 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type GesuchState = {
-  gesuche: CachedRemoteData<PaginatedSbDashboard>;
+  gesuche: CachedRemoteData<PaginatedSbGesucheDashboard>;
   lastStatusChange: RemoteData<null>;
 };
 

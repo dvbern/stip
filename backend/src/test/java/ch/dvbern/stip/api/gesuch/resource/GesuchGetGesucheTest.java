@@ -45,7 +45,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GetGesucheSBQueryTypeDtoSpec;
-import ch.dvbern.stip.generated.dto.PaginatedSbDashboardDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDtoSpec;
 import ch.dvbern.stip.generated.dto.SbDashboardGesuchDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -322,7 +322,7 @@ class GesuchGetGesucheTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(PaginatedSbDashboardDtoSpec.class)
+            .as(PaginatedSbGesucheDashboardDtoSpec.class)
             .getEntries();
     }
 }

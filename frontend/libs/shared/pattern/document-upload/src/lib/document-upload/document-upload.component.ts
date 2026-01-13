@@ -7,7 +7,6 @@ import {
   effect,
   inject,
   input,
-  output,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -51,7 +50,8 @@ export class SharedPatternDocumentUploadComponent {
   private uploadStore = inject(UploadStore);
   private einreichStore = inject(EinreichenStore);
   optionsSig = input.required<DokumentOptions>();
-  documentsChanged = output();
+
+  hasEntriesSig = this.uploadStore.hasEntriesSig;
 
   gesuchDokumentSig = computed(() => {
     const { gesuchDokument } = this.uploadStore.dokumentListView();
@@ -122,6 +122,10 @@ export class SharedPatternDocumentUploadComponent {
     initialDokumente: Dokument[] | undefined,
     dokument: SharedModelGesuchDokument,
   ): void {
+    if (dokument.art === 'DARLEHEN_DOKUMENT') {
+      return;
+    }
+
     this.einreichStore.validateSteps$({
       gesuchTrancheId: dokument.trancheId,
     });

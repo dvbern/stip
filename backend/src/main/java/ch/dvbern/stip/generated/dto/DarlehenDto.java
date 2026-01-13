@@ -1,6 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -19,79 +23,148 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DarlehenDto  implements Serializable {
-  private @Valid Boolean willDarlehen;
-  private @Valid Integer betragDarlehen;
-  private @Valid Integer betragBezogenKanton;
+  private @Valid UUID id;
+  private @Valid UUID fallId;
+  private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
+  private @Valid Boolean gewaehren;
+  private @Valid Integer betrag;
+  private @Valid String kommentar;
+  private @Valid Integer betragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
-  private @Valid Boolean grundNichtBerechtigt;
-  private @Valid Boolean grundAusbildungZwoelfJahre;
-  private @Valid Boolean grundHoheGebuehren;
-  private @Valid Boolean grundAnschaffungenFuerAusbildung;
-  private @Valid Boolean grundZweitausbildung;
+  private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+  private @Valid String timestampErstellt;
 
   /**
-   * Required wenn volljährig, sonst nicht moeglich!
    **/
-  public DarlehenDto willDarlehen(Boolean willDarlehen) {
-    this.willDarlehen = willDarlehen;
+  public DarlehenDto id(UUID id) {
+    this.id = id;
     return this;
   }
 
   
-  @JsonProperty("willDarlehen")
+  @JsonProperty("id")
   @NotNull
-  public Boolean getWillDarlehen() {
-    return willDarlehen;
+  public UUID getId() {
+    return id;
   }
 
-  @JsonProperty("willDarlehen")
-  public void setWillDarlehen(Boolean willDarlehen) {
-    this.willDarlehen = willDarlehen;
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
-   * Required wenn willDarlehen &#x3D; true
-   * minimum: 0
    **/
-  public DarlehenDto betragDarlehen(Integer betragDarlehen) {
-    this.betragDarlehen = betragDarlehen;
+  public DarlehenDto fallId(UUID fallId) {
+    this.fallId = fallId;
     return this;
   }
 
   
-  @JsonProperty("betragDarlehen")
- @Min(0)  public Integer getBetragDarlehen() {
-    return betragDarlehen;
+  @JsonProperty("fallId")
+  public UUID getFallId() {
+    return fallId;
   }
 
-  @JsonProperty("betragDarlehen")
-  public void setBetragDarlehen(Integer betragDarlehen) {
-    this.betragDarlehen = betragDarlehen;
+  @JsonProperty("fallId")
+  public void setFallId(UUID fallId) {
+    this.fallId = fallId;
   }
 
   /**
-   * Required wenn willDarlehen &#x3D; true
-   * minimum: 0
    **/
-  public DarlehenDto betragBezogenKanton(Integer betragBezogenKanton) {
-    this.betragBezogenKanton = betragBezogenKanton;
+  public DarlehenDto status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+    this.status = status;
     return this;
   }
 
   
-  @JsonProperty("betragBezogenKanton")
- @Min(0)  public Integer getBetragBezogenKanton() {
-    return betragBezogenKanton;
+  @JsonProperty("status")
+  public ch.dvbern.stip.api.darlehen.type.DarlehenStatus getStatus() {
+    return status;
   }
 
-  @JsonProperty("betragBezogenKanton")
-  public void setBetragBezogenKanton(Integer betragBezogenKanton) {
-    this.betragBezogenKanton = betragBezogenKanton;
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+    this.status = status;
   }
 
   /**
-   * Required wenn willDarlehen &#x3D; true
+   **/
+  public DarlehenDto gewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
+    return this;
+  }
+
+  
+  @JsonProperty("gewaehren")
+  public Boolean getGewaehren() {
+    return gewaehren;
+  }
+
+  @JsonProperty("gewaehren")
+  public void setGewaehren(Boolean gewaehren) {
+    this.gewaehren = gewaehren;
+  }
+
+  /**
+   * minimum: 0
+   **/
+  public DarlehenDto betrag(Integer betrag) {
+    this.betrag = betrag;
+    return this;
+  }
+
+  
+  @JsonProperty("betrag")
+ @Min(0)  public Integer getBetrag() {
+    return betrag;
+  }
+
+  @JsonProperty("betrag")
+  public void setBetrag(Integer betrag) {
+    this.betrag = betrag;
+  }
+
+  /**
+   **/
+  public DarlehenDto kommentar(String kommentar) {
+    this.kommentar = kommentar;
+    return this;
+  }
+
+  
+  @JsonProperty("kommentar")
+  public String getKommentar() {
+    return kommentar;
+  }
+
+  @JsonProperty("kommentar")
+  public void setKommentar(String kommentar) {
+    this.kommentar = kommentar;
+  }
+
+  /**
+   * minimum: 0
+   **/
+  public DarlehenDto betragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
+    return this;
+  }
+
+  
+  @JsonProperty("betragGewuenscht")
+ @Min(0)  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
+  }
+
+  @JsonProperty("betragGewuenscht")
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
+  }
+
+  /**
    * minimum: 0
    **/
   public DarlehenDto schulden(Integer schulden) {
@@ -111,7 +184,6 @@ public class DarlehenDto  implements Serializable {
   }
 
   /**
-   * Required wenn willDarlehen &#x3D; true - mit Fileupload
    * minimum: 0
    **/
   public DarlehenDto anzahlBetreibungen(Integer anzahlBetreibungen) {
@@ -131,97 +203,55 @@ public class DarlehenDto  implements Serializable {
   }
 
   /**
-   * Keine Stipendienberechtigung, auf Grund der tatsächlichen Kosten können die Mittel der Eltern jedoch nicht einbezogen werden - Falls Ja mit Fileupload
    **/
-  public DarlehenDto grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
-    this.grundNichtBerechtigt = grundNichtBerechtigt;
+  public DarlehenDto gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+    this.gruende = gruende;
     return this;
   }
 
   
-  @JsonProperty("grundNichtBerechtigt")
-  public Boolean getGrundNichtBerechtigt() {
-    return grundNichtBerechtigt;
+  @JsonProperty("gruende")
+  public List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> getGruende() {
+    return gruende;
   }
 
-  @JsonProperty("grundNichtBerechtigt")
-  public void setGrundNichtBerechtigt(Boolean grundNichtBerechtigt) {
-    this.grundNichtBerechtigt = grundNichtBerechtigt;
+  @JsonProperty("gruende")
+  public void setGruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+    this.gruende = gruende;
   }
 
-  /**
-   * Keine Stipendienberechtigung wegen Überschreitens der Ausbildungsdauer von 12 Jahren.
-   **/
-  public DarlehenDto grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
-    this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
+  public DarlehenDto addGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+    if (this.gruende == null) {
+      this.gruende = new ArrayList<>();
+    }
+
+    this.gruende.add(gruendeItem);
     return this;
   }
 
-  
-  @JsonProperty("grundAusbildungZwoelfJahre")
-  public Boolean getGrundAusbildungZwoelfJahre() {
-    return grundAusbildungZwoelfJahre;
-  }
+  public DarlehenDto removeGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+    if (gruendeItem != null && this.gruende != null) {
+      this.gruende.remove(gruendeItem);
+    }
 
-  @JsonProperty("grundAusbildungZwoelfJahre")
-  public void setGrundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
-    this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
-  }
-
-  /**
-   * Falls ja mit Fileupload
-   **/
-  public DarlehenDto grundHoheGebuehren(Boolean grundHoheGebuehren) {
-    this.grundHoheGebuehren = grundHoheGebuehren;
     return this;
   }
-
-  
-  @JsonProperty("grundHoheGebuehren")
-  public Boolean getGrundHoheGebuehren() {
-    return grundHoheGebuehren;
-  }
-
-  @JsonProperty("grundHoheGebuehren")
-  public void setGrundHoheGebuehren(Boolean grundHoheGebuehren) {
-    this.grundHoheGebuehren = grundHoheGebuehren;
-  }
-
-  /**
-   * Falls ja mit Fileupload
-   **/
-  public DarlehenDto grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
-    this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
-    return this;
-  }
-
-  
-  @JsonProperty("grundAnschaffungenFuerAusbildung")
-  public Boolean getGrundAnschaffungenFuerAusbildung() {
-    return grundAnschaffungenFuerAusbildung;
-  }
-
-  @JsonProperty("grundAnschaffungenFuerAusbildung")
-  public void setGrundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
-    this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
-  }
-
   /**
    **/
-  public DarlehenDto grundZweitausbildung(Boolean grundZweitausbildung) {
-    this.grundZweitausbildung = grundZweitausbildung;
+  public DarlehenDto timestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
     return this;
   }
 
   
-  @JsonProperty("grundZweitausbildung")
-  public Boolean getGrundZweitausbildung() {
-    return grundZweitausbildung;
+  @JsonProperty("timestampErstellt")
+  public String getTimestampErstellt() {
+    return timestampErstellt;
   }
 
-  @JsonProperty("grundZweitausbildung")
-  public void setGrundZweitausbildung(Boolean grundZweitausbildung) {
-    this.grundZweitausbildung = grundZweitausbildung;
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(String timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
   }
 
 
@@ -234,21 +264,22 @@ public class DarlehenDto  implements Serializable {
       return false;
     }
     DarlehenDto darlehen = (DarlehenDto) o;
-    return Objects.equals(this.willDarlehen, darlehen.willDarlehen) &&
-        Objects.equals(this.betragDarlehen, darlehen.betragDarlehen) &&
-        Objects.equals(this.betragBezogenKanton, darlehen.betragBezogenKanton) &&
+    return Objects.equals(this.id, darlehen.id) &&
+        Objects.equals(this.fallId, darlehen.fallId) &&
+        Objects.equals(this.status, darlehen.status) &&
+        Objects.equals(this.gewaehren, darlehen.gewaehren) &&
+        Objects.equals(this.betrag, darlehen.betrag) &&
+        Objects.equals(this.kommentar, darlehen.kommentar) &&
+        Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.grundNichtBerechtigt, darlehen.grundNichtBerechtigt) &&
-        Objects.equals(this.grundAusbildungZwoelfJahre, darlehen.grundAusbildungZwoelfJahre) &&
-        Objects.equals(this.grundHoheGebuehren, darlehen.grundHoheGebuehren) &&
-        Objects.equals(this.grundAnschaffungenFuerAusbildung, darlehen.grundAnschaffungenFuerAusbildung) &&
-        Objects.equals(this.grundZweitausbildung, darlehen.grundZweitausbildung);
+        Objects.equals(this.gruende, darlehen.gruende) &&
+        Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(willDarlehen, betragDarlehen, betragBezogenKanton, schulden, anzahlBetreibungen, grundNichtBerechtigt, grundAusbildungZwoelfJahre, grundHoheGebuehren, grundAnschaffungenFuerAusbildung, grundZweitausbildung);
+    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
   }
 
   @Override
@@ -256,16 +287,17 @@ public class DarlehenDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DarlehenDto {\n");
     
-    sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
-    sb.append("    betragDarlehen: ").append(toIndentedString(betragDarlehen)).append("\n");
-    sb.append("    betragBezogenKanton: ").append(toIndentedString(betragBezogenKanton)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
+    sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    grundNichtBerechtigt: ").append(toIndentedString(grundNichtBerechtigt)).append("\n");
-    sb.append("    grundAusbildungZwoelfJahre: ").append(toIndentedString(grundAusbildungZwoelfJahre)).append("\n");
-    sb.append("    grundHoheGebuehren: ").append(toIndentedString(grundHoheGebuehren)).append("\n");
-    sb.append("    grundAnschaffungenFuerAusbildung: ").append(toIndentedString(grundAnschaffungenFuerAusbildung)).append("\n");
-    sb.append("    grundZweitausbildung: ").append(toIndentedString(grundZweitausbildung)).append("\n");
+    sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

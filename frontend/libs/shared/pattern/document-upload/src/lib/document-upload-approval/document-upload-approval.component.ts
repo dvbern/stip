@@ -4,6 +4,7 @@ import {
   DestroyRef,
   OnDestroy,
   OnInit,
+  computed,
   inject,
   input,
 } from '@angular/core';
@@ -14,6 +15,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import {
   SharedModelGesuchDokument,
+  SharedModelStandardGesuchDokument,
   UploadView,
 } from '@dv/shared/model/dokument';
 import { SharedUiIconBadgeComponent } from '@dv/shared/ui/icon-badge';
@@ -46,6 +48,17 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
 
   isInitial = isInitial;
+
+  gesuchDokumentViewSig = computed<
+    SharedModelStandardGesuchDokument | undefined
+  >(() => {
+    const { dokumentModel, hasEntries } = this.uploadViewSig();
+    if (!hasEntries || dokumentModel.art !== 'GESUCH_DOKUMENT') {
+      return undefined;
+    }
+
+    return dokumentModel;
+  });
 
   public ngOnInit(): void {
     const { dokumentModel, hasEntries } = this.uploadViewSig();

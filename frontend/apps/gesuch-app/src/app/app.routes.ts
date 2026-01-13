@@ -1,11 +1,13 @@
 import { Route } from '@angular/router';
 
+import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
   {
     path: '',
     canActivate: [hasBenutzer],
+    providers: [DashboardStore],
     children: [
       {
         path: 'gesuch-app-feature-cockpit',
@@ -24,6 +26,13 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/gesuch-app/feature/gesuch-form').then(
             (m) => m.gesuchAppFeatureGesuchFormRoutes,
+          ),
+      },
+      {
+        path: 'darlehen',
+        loadChildren: () =>
+          import('@dv/shared/feature/darlehen').then(
+            (m) => m.sharedFeatureDarlehenFeatureRoutes,
           ),
       },
       {
