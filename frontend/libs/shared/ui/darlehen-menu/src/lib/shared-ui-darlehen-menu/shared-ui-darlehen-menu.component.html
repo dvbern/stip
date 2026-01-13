@@ -5,7 +5,7 @@
   class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
   data-testid="header-nav-darlehen-menu"
   [matMenuTriggerFor]="darlehenMenu"
-  [disabled]="!darlehenListSig()?.length && gesuchIdSig()"
+  [disabled]="!darlehenListSig()?.darlehenList?.length && gesuchIdSig()"
   [class.active]="darlehenRouteIdSig()"
 >
   <i class="material-symbols-rounded me-2 text-white">account_balance</i>
@@ -25,7 +25,9 @@
         @for (darlehen of darlehens[state]; track $index) {
           <a
             [routerLink]="
-              gesuchIdSig() ? ['/', 'darlehen', darlehen.id, 'gesuch', gesuchIdSig()] : ['/', 'darlehen', darlehen.id]
+              gesuchIdSig()
+                ? ['/', 'darlehen', darlehen.id, 'gesuch', gesuchIdSig()]
+                : ['/', 'darlehen', darlehen.id, 'fall', fallId]
             "
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="header-nav-darlehen-menu-item"

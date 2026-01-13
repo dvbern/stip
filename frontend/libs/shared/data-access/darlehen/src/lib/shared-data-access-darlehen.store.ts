@@ -7,6 +7,7 @@ import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Darlehen,
+  DarlehenGsResponse,
   DarlehenService,
   DarlehenServiceCreateDarlehenRequestParams,
   DarlehenServiceDarlehenUpdateGsRequestParams,
@@ -30,13 +31,13 @@ import {
 
 type DarlehenState = {
   cachedDarlehen: CachedRemoteData<Darlehen>;
-  darlehenList: CachedRemoteData<Darlehen[]>;
+  allDarlehen: CachedRemoteData<DarlehenGsResponse>;
   paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
   cachedDarlehen: initial(),
-  darlehenList: initial(),
+  allDarlehen: initial(),
   paginatedSbDarlehenDashboard: initial(),
 };
 
@@ -64,13 +65,13 @@ export class DarlehenStore extends signalStore(
   });
 
   darlehenListSig = computed(() => {
-    return fromCachedDataSig(this.darlehenList);
+    return fromCachedDataSig(this.allDarlehen);
   });
 
   darlehenListViewSig = computed(() => {
     return {
-      darlehenList: fromCachedDataSig(this.darlehenList),
-      loading: isPending(this.darlehenList()),
+      allDarlehen: fromCachedDataSig(this.allDarlehen),
+      loading: isPending(this.allDarlehen()),
     };
   });
 
@@ -101,15 +102,15 @@ export class DarlehenStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, () => ({
-          darlehenList: pending(),
+          allDarlehen: pending(),
         }));
       }),
       switchMap((req) =>
         this.darlehenService
           .getAllDarlehenGs$(req)
           .pipe(
-            handleApiResponse((darlehen) =>
-              patchState(this, { darlehenList: darlehen }),
+            handleApiResponse((allDarlehen) =>
+              patchState(this, { allDarlehen }),
             ),
           ),
       ),
@@ -259,23 +260,26 @@ export class DarlehenStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, () => ({
-          darlehenList: pending(),
+          allDarlehen: pending(),
         }));
       }),
       switchMap((req) =>
-        this.darlehenService
-          .getAllDarlehenSb$(req)
-          .pipe(
-            handleApiResponse((darlehen) =>
-              patchState(this, { darlehenList: darlehen }),
-            ),
+        this.darlehenService.getAllDarlehenSb$(req).pipe(
+          handleApiResponse((rd) =>
+            patchState(this, () => {
+              const data: DarlehenGsResponse = {
+                darlehenList: rd.data ?? [],
+                canCreateDarlehen: false,
+              };
+              return { allDarlehen: { ...rd, data } };
+            }),
           ),
+        ),
       ),
     ),
   );
 
   // SB Methoden
-
   darlehenUpdateAndFreigebenSb$ = rxMethod<{
     data: DarlehenServiceDarlehenUpdateSbRequestParams;
     onSuccess: () => void;

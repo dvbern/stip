@@ -37,8 +37,7 @@
 
     @let darlehens = darlehenStore.darlehenListViewSig();
     <dv-shared-ui-darlehen-menu
-      [dashboardViewSig]="dashboardStore.dashboardViewSig()"
-      [darlehenListSig]="darlehens.darlehenList"
+      [darlehenListSig]="darlehens.allDarlehen"
       [fallIdSig]="fallId"
       (createDarlehen)="darlehenStore.createDarlehen$($event)"
     ></dv-shared-ui-darlehen-menu>

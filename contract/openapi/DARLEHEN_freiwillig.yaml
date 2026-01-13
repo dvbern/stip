@@ -439,9 +439,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './components/common.yaml#/Darlehen'
+                $ref: '#/components/schemas/DarlehenGsResponse'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -647,6 +645,19 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/DarlehenDokument'
+
+    DarlehenGsResponse:
+      type: object
+      required:
+        - darlehenList
+        - canCreateDarlehen
+      properties:
+        darlehenList:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Darlehen'
+        canCreateDarlehen:
+          type: boolean
 
     DarlehenDokument:
       type: object

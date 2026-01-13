@@ -56,6 +56,7 @@ export * from './darlehenDashboard';
 export * from './darlehenDokument';
 export * from './darlehenDokumentType';
 export * from './darlehenGrund';
+export * from './darlehenGsResponse';
 export * from './darlehenStatus';
 export * from './darlehenUpdateGs';
 export * from './darlehenUpdateSb';

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
   input,
@@ -43,24 +42,15 @@ export class SharedFeatureDarlehenFeatureComponent {
   private formUtils = inject(SharedUtilFormService);
   hasUnsavedChanges = false;
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
-
-  fallIdSig = computed(() => {
-    return this.fallStore.currentFallViewSig()?.id;
-  });
+  fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
-    effect(() => {
-      if (!this.fallIdSig()) {
-        this.fallStore.loadCurrentFall$();
-      }
-    });
 
     effect(() => {
       const fallId = this.fallIdSig();
 
       if (fallId) {
-        this.dashboardStore.loadDashboard$();
         this.darlehenStore.getAllDarlehenGs$({ fallId });
       }
     });

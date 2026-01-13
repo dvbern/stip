@@ -44,6 +44,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
+import ch.dvbern.stip.generated.dto.DarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -107,10 +108,39 @@ public class DarlehenService {
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
+    public boolean canCreateDarlehen(UUID fallId) {
+        final var fall = fallRepository.requireById(fallId);
+        final var ausbildungs = fall.getAusbildungs();
+
+        final var hasNoOpenDarlehen =
+            fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);
+        if (!hasNoOpenDarlehen) {
+            return false;
+        }
+
+        final var atLeastOneGesuchEingereicht = ausbildungs
+            .stream()
+            .anyMatch(
+                // has more than one Gesuch
+                ausbildung -> ausbildung.getGesuchs().size() > 1
+                // or has at least one eingereicht gesuch
+                || ausbildung.getGesuchs().stream().anyMatch(g -> g.getGesuchStatus().isEingereicht())
+            );
+        if (!atLeastOneGesuchEingereicht) {
+            return false;
+        }
+        return true;
+    }
+
     @Transactional
-    public List<DarlehenDto> getDarlehenAllGs(final UUID fallId) {
+    public DarlehenGsResponseDto getDarlehenAllGs(final UUID fallId) {
         final var darlehenList = darlehenRepository.findByFallId(fallId);
-        return darlehenList.stream().map(darlehenMapper::toDto).toList();
+        final var darlehenDto = new DarlehenGsResponseDto();
+        darlehenDto.setCanCreateDarlehen(canCreateDarlehen(fallId));
+        darlehenDto.setDarlehenList(
+            darlehenList.stream().map(darlehenMapper::toDto).toList()
+        );
+        return darlehenDto;
     }
 
     @Transactional

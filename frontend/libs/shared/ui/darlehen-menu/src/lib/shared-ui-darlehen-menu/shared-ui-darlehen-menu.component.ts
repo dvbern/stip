@@ -14,7 +14,11 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
 import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
-import { Darlehen, DarlehenStatus } from '@dv/shared/model/gesuch';
+import {
+  Darlehen,
+  DarlehenGsResponse,
+  DarlehenStatus,
+} from '@dv/shared/model/gesuch';
 
 type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
 const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
@@ -38,10 +42,10 @@ export class SharedUiDarlehenMenuComponent {
    */
   fallIdSig = input<string | undefined>();
   /**
-   * Set in SB app, so link is correct!
+   * Set in SB app, so link is correct, but not in GS and Sozialdienst app!
    */
   gesuchIdSig = input<string | undefined>();
-  darlehenListSig = input.required<Darlehen[] | undefined>();
+  darlehenListSig = input.required<DarlehenGsResponse | undefined>();
   dashboardViewSig = input<SharedModelGsDashboardView | undefined>();
   createDarlehen = output<{ fallId: string }>();
   router = inject(Router);
@@ -60,7 +64,7 @@ export class SharedUiDarlehenMenuComponent {
   ];
 
   darlehenListByStatusSig = computed(() => {
-    const darlehenList = this.darlehenListSig() ?? [];
+    const darlehenList = this.darlehenListSig()?.darlehenList ?? [];
 
     return darlehenList.reduce(
       (acc, darlehen) => {
@@ -77,27 +81,7 @@ export class SharedUiDarlehenMenuComponent {
     );
   });
 
-  canCreateDarlehenSig = computed((): boolean => {
-    const dashboardView = this.dashboardViewSig();
-    const darlehenList = this.darlehenListSig() ?? [];
-
-    if (!dashboardView) {
-      return false;
-    }
-
-    const hasActiveAusbildungWithGesuchNotInBearbeitung =
-      dashboardView.activeAusbildungen.some((ausbildung) =>
-        ausbildung.gesuchs.some(
-          (gesuch) => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS',
-        ),
-      );
-
-    const hasNoOpenDarlehen = darlehenList.every((darlehen) => {
-      return (
-        darlehen.status === 'ABGELEHNT' || darlehen.status === 'AKZEPTIERT'
-      );
-    });
-
-    return hasActiveAusbildungWithGesuchNotInBearbeitung && hasNoOpenDarlehen;
+  canCreateDarlehenSig = computed(() => {
+    return this.darlehenListSig()?.canCreateDarlehen ?? false;
   });
 }

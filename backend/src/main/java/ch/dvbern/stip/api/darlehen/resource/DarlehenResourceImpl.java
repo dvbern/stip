@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DarlehenResource;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
+import ch.dvbern.stip.generated.dto.DarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
@@ -223,7 +224,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Override
     @RolesAllowed(DARLEHEN_READ)
-    public List<DarlehenDto> getAllDarlehenGs(UUID fallId) {
+    public DarlehenGsResponseDto getAllDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenByFallId(fallId);
         return darlehenService.getDarlehenAllGs(fallId);
     }
