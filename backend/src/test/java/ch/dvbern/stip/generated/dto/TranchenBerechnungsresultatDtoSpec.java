@@ -36,10 +36,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Resultat der Berechnung (eine Tranche)
  */
 @JsonPropertyOrder({
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_NAME_GESUCHSTELLER,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_AB,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_BIS,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
@@ -49,9 +50,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("TranchenBerechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TranchenBerechnungsresultatDtoSpec {
-  public static final String JSON_PROPERTY_NAME_GESUCHSTELLER = "nameGesuchsteller";
-  private String nameGesuchsteller;
-
   public static final String JSON_PROPERTY_BERECHNUNG = "berechnung";
   private Integer berechnung;
 
@@ -60,6 +58,12 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
   private LocalDate gueltigBis;
+
+  public static final String JSON_PROPERTY_AUSBILDUNG_AB = "ausbildungAb";
+  private String ausbildungAb;
+
+  public static final String JSON_PROPERTY_AUSBILDUNG_BIS = "ausbildungBis";
+  private String ausbildungBis;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
   private UUID gesuchTrancheId;
@@ -78,32 +82,6 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   public TranchenBerechnungsresultatDtoSpec() {
   }
-
-  public TranchenBerechnungsresultatDtoSpec nameGesuchsteller(String nameGesuchsteller) {
-    
-    this.nameGesuchsteller = nameGesuchsteller;
-    return this;
-  }
-
-   /**
-   * Get nameGesuchsteller
-   * @return nameGesuchsteller
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NAME_GESUCHSTELLER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getNameGesuchsteller() {
-    return nameGesuchsteller;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NAME_GESUCHSTELLER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNameGesuchsteller(String nameGesuchsteller) {
-    this.nameGesuchsteller = nameGesuchsteller;
-  }
-
 
   public TranchenBerechnungsresultatDtoSpec berechnung(Integer berechnung) {
     
@@ -180,6 +158,58 @@ public class TranchenBerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGueltigBis(LocalDate gueltigBis) {
     this.gueltigBis = gueltigBis;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec ausbildungAb(String ausbildungAb) {
+    
+    this.ausbildungAb = ausbildungAb;
+    return this;
+  }
+
+   /**
+   * Get ausbildungAb
+   * @return ausbildungAb
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungAb() {
+    return ausbildungAb;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungAb(String ausbildungAb) {
+    this.ausbildungAb = ausbildungAb;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec ausbildungBis(String ausbildungBis) {
+    
+    this.ausbildungBis = ausbildungBis;
+    return this;
+  }
+
+   /**
+   * Get ausbildungBis
+   * @return ausbildungBis
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getAusbildungBis() {
+    return ausbildungBis;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungBis(String ausbildungBis) {
+    this.ausbildungBis = ausbildungBis;
   }
 
 
@@ -329,10 +359,11 @@ public class TranchenBerechnungsresultatDtoSpec {
       return false;
     }
     TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultat = (TranchenBerechnungsresultatDtoSpec) o;
-    return Objects.equals(this.nameGesuchsteller, tranchenBerechnungsresultat.nameGesuchsteller) &&
-        Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
+    return Objects.equals(this.berechnung, tranchenBerechnungsresultat.berechnung) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
+        Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
+        Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
         Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
@@ -342,17 +373,18 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nameGesuchsteller, berechnung, gueltigAb, gueltigBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnung, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDtoSpec {\n");
-    sb.append("    nameGesuchsteller: ").append(toIndentedString(nameGesuchsteller)).append("\n");
     sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
+    sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");

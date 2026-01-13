@@ -20,7 +20,8 @@ import * as fs from 'node:fs';
 import { PathLike } from 'node:fs';
 import path from 'node:path';
 
-const yaml = '../contract/openapi.yaml';
+const contractDir = '../contract';
+const yaml = `${contractDir}/openapi.yaml`;
 const dependencies = require('../package.json').dependencies;
 
 // Add more APIs as you go
@@ -196,6 +197,7 @@ async function sleep(msec: number) {
   const apiPath = path.join(generatorPath, 'api');
   const modelsPath = path.join(generatorPath, 'model');
 
+  await executeAndLog('npm run build', { cwd: contractDir });
   await generateOpenApi(generatorPath, generatedApis);
 
   deleteOldFilesSync(apiPath, timestamp);

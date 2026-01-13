@@ -160,7 +160,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setEinreichefristReduziert(einreichefristReduziert)
             .setAusbKostenSekII(2000)
             .setAusbKostenTertiaer(3000)
-            .setFreibetragVermoegen(0)
+            .setFreibetragVermoegen(30000)
             .setFreibetragErwerbseinkommen(6000)
             .setEinkommensfreibetrag(6000)
             .setElternbeteiligungssatz(50)

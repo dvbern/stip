@@ -70,7 +70,7 @@
   "shared.file.uploading": "Datei wird hochgeladen...",
   "shared.file.deleting": "Datei wird gelöscht...",
   "shared.file.uploadDone": "Hochgeladen am {{ date }} • {{ size }}",
-  "shared.file.dropZone": "Datei(en) hineinziehen<br>oder",
+  "shared.file.dropZone": "Datei hineinziehen<br>oder",
   "shared.file.delete.title": "Datei löschen",
   "shared.file.delete.message": "Sind Sie sicher, dass Sie diese Datei löschen möchten?",
   "shared.file.invalidFormat": "<b>{{file}}</b>: Ungültiges Dateiformat, nur \"{{formats}}\" sind gültig.",

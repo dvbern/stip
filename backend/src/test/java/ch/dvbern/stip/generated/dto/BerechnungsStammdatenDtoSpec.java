@@ -37,7 +37,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_ANZAHL_WOCHEN_SCHULE,
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_PREIS_PRO_MAHLZEIT,
   BerechnungsStammdatenDtoSpec.JSON_PROPERTY_STIP_LIMITE_MINIMALSTIPENDIUM,
-  BerechnungsStammdatenDtoSpec.JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG
+  BerechnungsStammdatenDtoSpec.JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG,
+  BerechnungsStammdatenDtoSpec.JSON_PROPERTY_ANZAHL_MONATE
 })
 @JsonTypeName("BerechnungsStammdaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -74,6 +75,9 @@ public class BerechnungsStammdatenDtoSpec {
 
   public static final String JSON_PROPERTY_LIMITE_ALTER_ANTRAGSSTELLER_HALBIERUNG_ELTERNBEITRAG = "limiteAlterAntragsstellerHalbierungElternbeitrag";
   private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+
+  public static final String JSON_PROPERTY_ANZAHL_MONATE = "anzahlMonate";
+  private Integer anzahlMonate;
 
   public BerechnungsStammdatenDtoSpec() {
   }
@@ -363,6 +367,32 @@ public class BerechnungsStammdatenDtoSpec {
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
 
+
+  public BerechnungsStammdatenDtoSpec anzahlMonate(Integer anzahlMonate) {
+    
+    this.anzahlMonate = anzahlMonate;
+    return this;
+  }
+
+   /**
+   * Get anzahlMonate
+   * @return anzahlMonate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAnzahlMonate() {
+    return anzahlMonate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAnzahlMonate(Integer anzahlMonate) {
+    this.anzahlMonate = anzahlMonate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -382,12 +412,13 @@ public class BerechnungsStammdatenDtoSpec {
         Objects.equals(this.anzahlWochenSchule, berechnungsStammdaten.anzahlWochenSchule) &&
         Objects.equals(this.preisProMahlzeit, berechnungsStammdaten.preisProMahlzeit) &&
         Objects.equals(this.stipLimiteMinimalstipendium, berechnungsStammdaten.stipLimiteMinimalstipendium) &&
-        Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, berechnungsStammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag);
+        Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, berechnungsStammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag) &&
+        Objects.equals(this.anzahlMonate, berechnungsStammdaten.anzahlMonate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(maxSaeule3a, einkommensfreibetrag, abzugslimite, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag);
+    return Objects.hash(maxSaeule3a, einkommensfreibetrag, abzugslimite, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag, anzahlMonate);
   }
 
   @Override
@@ -405,6 +436,7 @@ public class BerechnungsStammdatenDtoSpec {
     sb.append("    preisProMahlzeit: ").append(toIndentedString(preisProMahlzeit)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
     sb.append("    limiteAlterAntragsstellerHalbierungElternbeitrag: ").append(toIndentedString(limiteAlterAntragsstellerHalbierungElternbeitrag)).append("\n");
+    sb.append("    anzahlMonate: ").append(toIndentedString(anzahlMonate)).append("\n");
     sb.append("}");
     return sb.toString();
   }
