@@ -60,11 +60,11 @@ export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 
 // prettier-ignore
 export const darlehenPermissionTableByAppType = {
-  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
-  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm(' RK  F ', ['sb']) },
-  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm(' RK   A', ['fe']) },
-  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
-  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
+  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: perm(' R     ', ['sb']) },
+  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm(' RK  F ', ['sb']) },
+  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm(' RK   A', ['fe']) },
+  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: perm(' R     ', ['sb']) },
+  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: perm(' R     ', ['sb']) },
 } as const satisfies Record<
   DarlehenStatus,
   Record<AppType, PermissionCheck>

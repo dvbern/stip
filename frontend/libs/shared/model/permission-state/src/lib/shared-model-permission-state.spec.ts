@@ -1,6 +1,9 @@
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
-import { getGesuchPermissions } from './shared-model-permission-state';
+import {
+  getGesuchPermissions,
+  isNotReadonly,
+} from './shared-model-permission-state';
 
 const gesuch: SharedModelGesuch = {
   fallId: '',
@@ -62,5 +65,73 @@ describe('when App Sachbearbeitung', () => {
         V0_Sachbearbeiter: true,
       }).permissions.canWrite,
     ).toBe(false);
+  });
+});
+
+describe('isNotReadonly', () => {
+  describe('when appType is sachbearbeitung-app', () => {
+    it('should return true if user has V0_Sachbearbeiter role', () => {
+      const rolesMap = { V0_Sachbearbeiter: true } as const;
+      expect(isNotReadonly('sachbearbeitung-app', rolesMap, undefined)).toBe(
+        true,
+      );
+    });
+
+    it('should return true if user has V0_Jurist role', () => {
+      const rolesMap = { V0_Jurist: true } as const;
+      expect(isNotReadonly('sachbearbeitung-app', rolesMap, undefined)).toBe(
+        true,
+      );
+    });
+
+    it('should return false if user has neither V0_Sachbearbeiter nor V0_Jurist role', () => {
+      const rolesMap = { V0_Gesuchsteller: true } as const;
+      expect(isNotReadonly('sachbearbeitung-app', rolesMap, undefined)).toBe(
+        false,
+      );
+    });
+  });
+
+  describe('when appType is gesuch-app', () => {
+    it('should return true if not delegated (delegierung is undefined)', () => {
+      const rolesMap = {};
+      expect(isNotReadonly('gesuch-app', rolesMap, undefined)).toBe(true);
+    });
+
+    it('should return true if delegated (delegierung is boolean false)', () => {
+      const rolesMap = {};
+      const delegierung = false;
+      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+    });
+
+    it('should return false if delegated (delegierung is boolean true)', () => {
+      const rolesMap = {};
+      const delegierung = true;
+      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(false);
+    });
+
+    it('should return true if delegated but not angenommen', () => {
+      const rolesMap = {};
+      const delegierung = { delegierungAngenommen: false };
+      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+    });
+
+    it('should return true if delegated and user has V0_Sozialdienst-Mitarbeiter role', () => {
+      const rolesMap = { 'V0_Sozialdienst-Mitarbeiter': true } as const;
+      const delegierung = { delegierungAngenommen: true };
+      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+    });
+
+    it('should return true if delegated but not angenommen and user has V0_Sozialdienst-Mitarbeiter role', () => {
+      const rolesMap = { 'V0_Sozialdienst-Mitarbeiter': true } as const;
+      const delegierung = { delegierungAngenommen: false };
+      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+    });
+
+    it('should return false if delegated and user does not have V0_Sozialdienst-Mitarbeiter role', () => {
+      const rolesMap = { V0_Gesuchsteller: true } as const;
+      const delegierung = { delegierungAngenommen: true };
+      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(false);
+    });
   });
 });
