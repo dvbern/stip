@@ -1,5 +1,9 @@
 import { RolesMap } from '@dv/shared/model/benutzer';
-import { AppType } from '@dv/shared/model/config';
+import {
+  AppType,
+  BusinessAppType,
+  ensureIsBusinessAppType,
+} from '@dv/shared/model/config';
 import { DarlehenStatus, DelegierungSlim } from '@dv/shared/model/gesuch';
 import { capitalized } from '@dv/shared/model/type-util';
 
@@ -33,8 +37,8 @@ const hasPermission = (
   perm: keyof typeof DarlehenPermissions,
 ) => p.charAt(DarlehenPermissions[perm].index) === perm;
 
-const GS_APP = 'gesuch-app' satisfies AppType;
-const SB_APP = 'sachbearbeitung-app' satisfies AppType;
+const GS_APP = 'gesuch-app' satisfies BusinessAppType;
+const SB_APP = 'sachbearbeitung-app' satisfies BusinessAppType;
 
 const perm = (flags: DarlehenPermissionFlags, roles: ShortRole[]) => {
   return (rolesMap: RolesMap): DarlehenPermissionFlags =>
@@ -67,7 +71,7 @@ export const darlehenPermissionTableByAppType = {
   ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
 } as const satisfies Record<
   DarlehenStatus,
-  Record<AppType, PermissionCheck>
+  Record<BusinessAppType, PermissionCheck>
 >;
 
 const applyDelegatedDarlehenPermissions = (
@@ -97,6 +101,7 @@ export const getDarlehenPermissions = (
   if (!status) {
     return { permissions: undefined, status };
   }
+  ensureIsBusinessAppType(appType);
   const state = darlehenPermissionTableByAppType[status][appType](rolesMap);
   const permissions = parsePermissions(state);
 

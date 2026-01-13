@@ -1,0 +1,140 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-1">
+        <createTable tableName="demo_data">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="demo_dataPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="erfasser" type="VARCHAR(255)"/>
+            <column name="gesuchseingang" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gesuchsjahr" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jsondata" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_fall" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-2">
+        <createTable tableName="demo_data_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="erfasser" type="VARCHAR(255)"/>
+            <column name="gesuchseingang" type="VARCHAR(255)"/>
+            <column name="gesuchsjahr" type="VARCHAR(255)"/>
+            <column name="jsondata" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="test_fall" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-3">
+        <createTable tableName="demo_data_import">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="demo_data_importPK"/>
+            </column>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_erstellt" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_mutiert" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT"/>
+            <column name="mandant" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="kommentar" type="VARCHAR(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dokument_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-4">
+        <createTable tableName="demo_data_import_aud">
+            <column name="id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rev" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="revtype" type="SMALLINT"/>
+            <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="user_erstellt" type="VARCHAR(255)"/>
+            <column name="user_mutiert" type="VARCHAR(255)"/>
+            <column name="mandant" type="VARCHAR(255)"/>
+            <column name="kommentar" type="VARCHAR(2000)"/>
+            <column name="dokument_id" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-5">
+        <addPrimaryKey columnNames="rev, id" constraintName="demo_data_audPK" tableName="demo_data_aud"/>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-6">
+        <addPrimaryKey columnNames="rev, id" constraintName="demo_data_import_audPK" tableName="demo_data_import_aud"/>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-7">
+        <createIndex indexName="IX_demo_data_import_mandant" tableName="demo_data_import">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-8">
+        <createIndex indexName="IX_demo_data_mandant" tableName="demo_data">
+            <column name="mandant"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-9">
+        <addForeignKeyConstraint baseColumnNames="dokument_id" baseTableName="demo_data_import" constraintName="FK_demo_data_import_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dokument" validate="true"/>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-10">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="demo_data_aud" constraintName="FKf3kc15ud98bws3k8o3y7f68am" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+    <changeSet author="philipp.schaerer (generated)" id="1767606063704-11">
+        <addForeignKeyConstraint baseColumnNames="rev" baseTableName="demo_data_import_aud" constraintName="FKolbs4gwv3oj5iypcstgmjmnvp" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

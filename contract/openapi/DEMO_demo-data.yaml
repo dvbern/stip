@@ -20,9 +20,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DemoDataSlim'
+                $ref: '#/components/schemas/DemoDataList'
           description: Returns the created Ausbildung
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -34,6 +32,70 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getAllDemoData
       summary: Returns a list of available demo data
+    post:
+      tags:
+        - DemoData
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DemoDataImport'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoDataList'
+          description: Returns the created DemoDataList
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createNewDemoDataImport
+      summary: Creates a new demo data list
+  /demo-data/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - DemoData
+      responses:
+        200:
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returns the latest demo data file
+      operationId: getDemoDataDokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  /demo-data/dokument/token:
+    get:
+      tags:
+        - DemoData
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDemoDataDokumentDownloadToken
+      summary: get the Token to download the latest DemoData
   /demo-data/{id}:
     post:
       parameters:
@@ -65,6 +127,57 @@ components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
   schemas:
+    DemoDataList:
+      required:
+        - importiertVon
+        - letzteAktivitaet
+        - kommentar
+        - filename
+        - filepath
+        - filesize
+        - objectId
+        - demoDatas
+      type: object
+      properties:
+        importiertVon:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date-time
+        kommentar:
+          type: string
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: integer
+        objectId:
+          type: string
+        demoDatas:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoDataSlim'
+    DemoDataImport:
+      required:
+        - kommentar
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
+    DemoDataError:
+      required:
+        - internalMessage
+        - errorClass
+      type: object
+      properties:
+        internalMessage:
+          type: string
+        errorClass:
+          type: string
     DemoDataSlim:
       required:
         - id

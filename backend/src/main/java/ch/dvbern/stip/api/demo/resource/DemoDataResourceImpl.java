@@ -1,32 +1,79 @@
-package ch.dvbern.stip.api.demo.resource;
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 
-import java.util.List;
+package ch.dvbern.stip.api.demo.resource;
 
 import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
+import ch.dvbern.stip.api.demo.service.DemoDataService;
 import ch.dvbern.stip.generated.api.DemoDataResource;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
-import ch.dvbern.stip.generated.dto.DemoDataSlimDto;
+import ch.dvbern.stip.generated.dto.DemoDataListDto;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.RestMulti;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 @Validated
 @RequestScoped
 @RequiredArgsConstructor
 public class DemoDataResourceImpl implements DemoDataResource {
     private final DemoDataAuthorizer demoDataAuthorizer;
+    private final DemoDataService demoDataService;
 
     @Override
-    @RolesAllowed(OidcPermissions.SB_GESUCH_UPDATE)
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
     public ApplyDemoDataResponseDto applyDemoData(String id) {
         demoDataAuthorizer.canRead();
         return null;
     }
 
     @Override
-    public List<DemoDataSlimDto> getAllDemoData() {
-        return List.of();
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
+    public DemoDataListDto createNewDemoDataImport(String kommentar, FileUpload fileUpload) {
+        demoDataAuthorizer.canCreateDemoDataList();
+        return demoDataService.createNewDemoDataImport(
+            kommentar,
+            fileUpload
+        );
+    }
+
+    @Override
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
+    public DemoDataListDto getAllDemoData() {
+        demoDataAuthorizer.canRead();
+        return demoDataService.getAllDemoData();
+    }
+
+    @Override
+    @PermitAll
+    public RestMulti<Buffer> getDemoDataDokument(String token) {
+        return null;
+    }
+
+    @Override
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
+    public FileDownloadTokenDto getDemoDataDokumentDownloadToken() {
+        demoDataAuthorizer.canRead();
+        return null;
     }
 }

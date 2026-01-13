@@ -206,6 +206,7 @@
       "@dv/shared/ui/dashboard": ["libs/shared/ui/dashboard/src/index.ts"],
       "@dv/shared/ui/download-button": ["libs/shared/ui/download-button/src/index.ts"],
       "@dv/shared/ui/drop-file": ["libs/shared/ui/drop-file/src/index.ts"],
+      "@dv/shared/ui/file-upload": ["libs/shared/ui/file-upload/src/index.ts"],
       "@dv/shared/ui/filesize-pipe": ["libs/shared/ui/filesize-pipe/src/index.ts"],
       "@dv/shared/ui/filter-menu-button": ["libs/shared/ui/filter-menu-button/src/index.ts"],
       "@dv/shared/ui/focusable-list": ["libs/shared/ui/focusable-list/src/index.ts"],

@@ -132,7 +132,6 @@ export class VerwaltungComponent {
       placeholderKey:
         'sachbearbeitung-app.infos.beschwerde.create.placeholder.' +
         beschwerdeHaengig,
-      entityId: gesuchId,
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

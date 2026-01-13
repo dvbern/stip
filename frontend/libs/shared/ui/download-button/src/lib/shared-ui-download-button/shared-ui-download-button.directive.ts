@@ -10,6 +10,7 @@ import { firstValueFrom, map } from 'rxjs';
 import {
   DarlehenService,
   DatenschutzbriefService,
+  DemoDataService,
   DokumentArt,
   DokumentService,
   GesuchService,
@@ -44,6 +45,9 @@ type DownloadOptions =
   | {
       type: 'massendruck';
       id: string;
+    }
+  | {
+      type: 'demoData';
     };
 
 @Directive({
@@ -58,6 +62,7 @@ export class SharedUiDownloadButtonDirective {
   private gesuchService = inject(GesuchService);
   private verfuegungService = inject(VerfuegungService);
   private massendruckService = inject(MassendruckService);
+  private demoDataService = inject(DemoDataService);
   private dcmnt = inject(DOCUMENT, { optional: true });
 
   @HostListener('click')
@@ -71,6 +76,7 @@ export class SharedUiDownloadButtonDirective {
         this.gesuchService,
         this.verfuegungService,
         this.massendruckService,
+        this.demoDataService,
       ),
     ).then((href) => {
       this.dcmnt?.defaultView?.open(href, '_blank');
@@ -86,13 +92,14 @@ const getDownloadObservable$ = (
   gesuchService: GesuchService,
   verfuegungService: VerfuegungService,
   massendruckService: MassendruckService,
+  demoDataService: DemoDataService,
 ) => {
-  const { type, id } = downloadOptions;
+  const type = downloadOptions.type;
   switch (type) {
     case 'datenschutzbrief': {
       return datenschutzbriefService
         .getDatenschutzbriefDownloadToken$({
-          elternId: id,
+          elternId: downloadOptions.id,
         })
         .pipe(
           map(
@@ -104,7 +111,7 @@ const getDownloadObservable$ = (
     case 'darlehen': {
       return darlehenService
         .getDarlehenDownloadToken$({
-          dokumentId: id,
+          dokumentId: downloadOptions.id,
         })
         .pipe(
           map(
@@ -115,7 +122,7 @@ const getDownloadObservable$ = (
     case 'berechnungsblatt': {
       return gesuchService
         .getBerechnungsblattDownloadToken$({
-          gesuchId: id,
+          gesuchId: downloadOptions.id,
         })
         .pipe(
           map(({ token }) => `/api/v1/gesuch/berechnungsblatt?token=${token}`),
@@ -124,7 +131,7 @@ const getDownloadObservable$ = (
     case 'dokument': {
       return dokumentService
         .getDokumentDownloadToken$({
-          dokumentId: id,
+          dokumentId: downloadOptions.id,
         })
         .pipe(
           map(
@@ -136,7 +143,7 @@ const getDownloadObservable$ = (
     case 'verfuegung': {
       return verfuegungService
         .getVerfuegungDokumentDownloadToken$({
-          verfuegungDokumentId: id,
+          verfuegungDokumentId: downloadOptions.id,
         })
         .pipe(
           map(
@@ -148,11 +155,16 @@ const getDownloadObservable$ = (
     case 'massendruck': {
       return massendruckService
         .getMassendruckDownloadToken$({
-          massendruckId: id,
+          massendruckId: downloadOptions.id,
         })
         .pipe(
           map(({ token }) => `/api/v1/massendruck/download?token=${token}`),
         );
+    }
+    case 'demoData': {
+      return demoDataService
+        .getDemoDataDokumentDownloadToken$()
+        .pipe(map(({ token }) => `/api/v1/demo-data/download?token=${token}`));
     }
     default: {
       assertUnreachable(type);

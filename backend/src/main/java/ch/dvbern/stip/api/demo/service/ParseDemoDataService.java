@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.demo.service;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,27 +37,62 @@ import ch.dvbern.stip.generated.dto.DemoLebenslaufDto;
 import ch.dvbern.stip.generated.dto.DemoLebenslaufTaetigkeitDto;
 import ch.dvbern.stip.generated.dto.DemoPartnerDto;
 import ch.dvbern.stip.generated.dto.DemoPersonInAusbildungDto;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.NoArgsConstructor;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+@ApplicationScoped
+@NoArgsConstructor
 public class ParseDemoDataService {
+    private final int UNUSED_START_LINES = 2;
+    private final int FIRST_VALUE_COLOUMN = 5;
     private final int ANZAHL_LEBENSLAUF_ITEMS = 4;
-    private final Iterator<Row> rowIterator;
-    private final int firstValueCol;
+    private Iterator<Row> rowIterator;
+    private int amountOfCells = 0;
 
-    public ParseDemoDataService(Sheet sheet, int firstValueCol) {
-        this.rowIterator = sheet.rowIterator();
-        this.firstValueCol = firstValueCol;
+    public List<DemoData> parseList(final Path file) {
+        try (XSSFWorkbook workbook = new XSSFWorkbook(file.toFile())) {
+            final var sheet = workbook.getSheetAt(0);
+            rowIterator = sheet.iterator();
+            amountOfCells = ParseDemoDataUtil.getNumberOfCells(sheet.getRow(UNUSED_START_LINES), FIRST_VALUE_COLOUMN);
+        } catch (IOException | InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
+
+        skipRows(UNUSED_START_LINES);
+        final var demoDataList = prepareInfo();
+        final var ausbildungen = prepareAusbildung();
+        final var pias = preparePersonInAusbildung();
+        final var lebenslaeufe = prepareLebenslauf();
+        final var partners = preparePartnerin();
+
+        for (int i = 0; i < demoDataList.size(); i++) {
+            final var demoData = demoDataList.get(i);
+            demoData.getDemoDataDto().setAusbildung(ausbildungen.get(i));
+            demoData.getDemoDataDto().setPersonInAusbildung(pias.get(i));
+            demoData.getDemoDataDto().setLebenslauf(lebenslaeufe.get(i));
+            partners.get(i).ifPresent(partnerin -> demoData.getDemoDataDto().setPartner(partnerin));
+
+            demoData.persistDemoData();
+            final var recoveredDemoData = demoData.parseDemoDataDto();
+        }
+
+        System.out.println(ausbildungen);
+
+        return demoDataList;
     }
 
     private <T> void initList(List<T> list, String pattern, int column, Function<Cell, T> createValue) {
         ParseDemoDataUtil.initListEntries(
             rowIterator.next(),
             list,
-            firstValueCol,
-            pattern,
+            FIRST_VALUE_COLOUMN,
             column,
+            amountOfCells,
+            pattern,
             createValue
         );
     }
@@ -64,19 +101,20 @@ public class ParseDemoDataService {
         ParseDemoDataUtil.updateListEntries(
             rowIterator.next(),
             list,
-            firstValueCol,
-            pattern,
+            FIRST_VALUE_COLOUMN,
             column,
+            amountOfCells,
+            pattern,
             updateValue
         );
     }
 
-    public Row skipRows(int amount) {
+    private Row skipRows(int amount) {
         return ParseDemoDataUtil.skipEntries(rowIterator, amount);
     }
 
-    public List<DemoData> prepareInfo() {
-        final List<DemoData> list = new ArrayList<>();
+    private List<DemoData> prepareInfo() {
+        final List<DemoData> list = new ArrayList<>(amountOfCells);
         initList(list, "Testfall-ID", 0, c -> {
             final var demoData = new DemoData().setTestFall(c.getStringCellValue());
             return demoData;
@@ -101,7 +139,7 @@ public class ParseDemoDataService {
         return list;
     }
 
-    public List<DemoAusbildungDto> prepareAusbildung() {
+    private List<DemoAusbildungDto> prepareAusbildung() {
         ParseDemoDataUtil.skipEntries(rowIterator, 3);
 
         final List<DemoAusbildungDto> list = new ArrayList<>();
@@ -122,7 +160,7 @@ public class ParseDemoDataService {
         return list;
     }
 
-    public List<DemoPersonInAusbildungDto> preparePersonInAusbildung() {
+    private List<DemoPersonInAusbildungDto> preparePersonInAusbildung() {
         final List<DemoPersonInAusbildungDto> list = new ArrayList<>();
         // spotless:off
         initList(list, "Person in Ausbildung", 0, c -> new DemoPersonInAusbildungDto());
@@ -172,7 +210,7 @@ public class ParseDemoDataService {
         return list;
     }
 
-    public List<DemoLebenslaufDto> prepareLebenslauf() {
+    private List<DemoLebenslaufDto> prepareLebenslauf() {
         // region Ausbildungen
         final List<List<Optional<DemoLebenslaufAusbildungDto>>> ausbildungen = new ArrayList<>(new ArrayList<>());
         skipRows(2);
@@ -280,14 +318,15 @@ public class ParseDemoDataService {
         return list;
     }
 
-    public List<Optional<DemoPartnerDto>> preparePartnerin() {
+    private List<Optional<DemoPartnerDto>> preparePartnerin() {
         ParseDemoDataUtil.checkCellContains(rowIterator.next(), "Partner/in", 0);
         final List<Optional<DemoPartnerDto>> list = new ArrayList<>();
         initList(
             list,
             "Sozialversicherungsnummer",
             1,
-            c -> ParseDemoDataUtil.isBlank(c) ? Optional.empty() : Optional.of(new DemoPartnerDto().sozialversicherungsnummer(c.getStringCellValue()))
+            c -> ParseDemoDataUtil.isBlank(c) ? Optional.empty()
+                : Optional.of(new DemoPartnerDto().sozialversicherungsnummer(c.getStringCellValue()))
         );
         // spotless:off
         updateList(list, "Nachname", 1, (c, o) -> o.ifPresent(d -> d.setNachname(c.getStringCellValue())));

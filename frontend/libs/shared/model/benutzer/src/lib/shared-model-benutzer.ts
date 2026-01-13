@@ -7,7 +7,6 @@ export const GESUCHSTELLER_ROLES = ['V0_Gesuchsteller'] as const;
 
 export const SPECIAL_PERMISSIONS = [
   'V0_Super-User',
-  'V0_DEMO_DATA_READ',
   'V0_DEMO_DATA_APPLY',
 ] as const;
 

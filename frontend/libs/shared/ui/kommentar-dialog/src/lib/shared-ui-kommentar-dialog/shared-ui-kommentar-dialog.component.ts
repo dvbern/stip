@@ -19,21 +19,18 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
-export interface KommentarDialogData {
-  entityId: string;
-  titleKey: string;
-  labelKey?: string;
-  messageKey?: string;
-  placeholderKey: string;
-  confirmKey: string;
+export interface KommentarDialogData<T extends string> {
+  titleKey: T;
+  labelKey?: T;
+  messageKey?: T;
+  placeholderKey: T;
+  confirmKey: T;
 }
 
 export interface KommentarDialogResult {
-  entityId: string;
   kommentar: string;
 }
 export interface OptionalKommentarDialogResult {
-  entityId: string;
   kommentar?: string;
 }
 
@@ -52,16 +49,16 @@ export interface OptionalKommentarDialogResult {
   styleUrls: ['./shared-ui-kommentar-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiKommentarDialogComponent {
+export class SharedUiKommentarDialogComponent<T extends string> {
   private dialogRef =
     inject<
       MatDialogRef<
-        SharedUiKommentarDialogComponent,
+        SharedUiKommentarDialogComponent<T>,
         KommentarDialogResult | OptionalKommentarDialogResult
       >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
-  dialogData = inject<KommentarDialogData & { optional: boolean }>(
+  dialogData = inject<KommentarDialogData<T> & { optional: boolean }>(
     MAT_DIALOG_DATA,
   );
 
@@ -75,30 +72,35 @@ export class SharedUiKommentarDialogComponent {
     }
   }
 
-  static open(dialog: MatDialog, data: KommentarDialogData) {
+  static open<T extends string>(
+    dialog: MatDialog,
+    data: KommentarDialogData<T>,
+  ) {
     return dialog.open<
-      SharedUiKommentarDialogComponent,
-      KommentarDialogData & { optional: false },
+      SharedUiKommentarDialogComponent<T>,
+      KommentarDialogData<T> & { optional: false },
       KommentarDialogResult
     >(SharedUiKommentarDialogComponent, { data: { ...data, optional: false } });
   }
 
-  static openOptional(dialog: MatDialog, data: KommentarDialogData) {
+  static openOptional<T extends string>(
+    dialog: MatDialog,
+    data: KommentarDialogData<T>,
+  ) {
     return dialog.open<
-      SharedUiKommentarDialogComponent,
-      KommentarDialogData & { optional: true },
+      SharedUiKommentarDialogComponent<T>,
+      KommentarDialogData<T> & { optional: true },
       OptionalKommentarDialogResult
     >(SharedUiKommentarDialogComponent, { data: { ...data, optional: true } });
   }
 
   confirm() {
     this.form.markAllAsTouched();
-    const entityId = this.dialogData.entityId;
     const kommentar = this.form.value.kommentar;
-    if (!entityId || this.form.invalid) {
+    if (this.form.invalid) {
       return;
     }
-    this.dialogRef.close({ entityId, kommentar });
+    this.dialogRef.close({ kommentar });
   }
 
   cancel() {

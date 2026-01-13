@@ -1,4 +1,18 @@
 {
   "app-name": "Stipendien Online",
-  "demo-data-app.overview.title": "Testcase Daten"
+  "demo-data-app.overview.title": "Testcase Daten",
+  "demo-data-app.overview.no-data": "Keine Testdaten vorhanden",
+  "demo-data-app.overview.import-details.title": "Import Details",
+  "demo-data-app.overview.import-details.imported-by": "Importiert von",
+  "demo-data-app.overview.import-details.last-updated": "Zuletzt aktualisiert",
+  "demo-data-app.overview.import-details.total": "Testcase Anzahl",
+  "demo-data-app.overview.import-details.comment": "Kommentar",
+  "demo-data-app.overview.import-details.download": "Letzte Import Datei herunterladen",
+  "demo-data-app.overview.file-upload.label": "Neue Datei hochladen",
+  "demo-data-app.overview.file-upload.confirm.title": "Datei hochladen",
+  "demo-data-app.overview.file-upload.confirm.description": "Sind Sie sicher, dass Sie die Datei hochladen möchten? Die aktuelle Datei wird überschrieben.",
+  "demo-data-app.overview.file-upload.confirm.placeholder": "Kommentar",
+  "demo-data-app.overview.file-upload.confirm.button": "Hochladen",
+  "demo-data-app.overview.file-upload.error": "Fehler beim Hochladen der Datei",
+  "demo-data-app.overview.file-upload.success": "Datei erfolgreich hochgeladen"
 }

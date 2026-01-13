@@ -1,0 +1,49 @@
+<ng-container *dvTranslocoShared="let t">
+  <dv-shared-ui-drop-file
+    class="tw:flex tw:flex-col tw:items-center tw:rounded-lg tw:border-2 tw:bg-white tw:p-4 tw:shadow-sm tw:grow"
+  >
+    <label class="tw:flex tw:flex-col tw:items-center">
+      <div
+        class="text-muted text-italic d-md-block d-none my-4 text-center"
+        [innerHTML]="t('shared.file.dropZone')"
+      ></div>
+      <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
+        {{ t('shared.file.upload') }}
+      </button>
+      <input
+        #fileInput
+        [formControl]="fileControl"
+        class="cdk-visually-hidden mb-2"
+        type="file"
+        tabindex="-1"
+        data-testid="file-input"
+        [attr.accept]="allowedFileTypesSig()"
+        (change)="updateFileList($event)"
+      />
+    </label>
+  </dv-shared-ui-drop-file>
+  @let file = latestValueSig();
+  @if (file) {
+    <div class="tw:flex">
+      <div>
+        <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
+      </div>
+      <button
+        type="button"
+        class="dv-icon-button tw:ml-2 tw:h-auto tw:w-auto tw:self-end flex-shrink-0"
+        [attr.aria-label]="t('shared.form.delete')"
+        (click)="resetSelectedFile()"
+      >
+        <span class="material-symbols-rounded text-muted tw:!text-xl/none align-middle">delete</span>
+      </button>
+    </div>
+  } @else {
+    <div class="group-errors tw:mb-[3px] tw:text-sm">
+      <mat-error>
+        @if (fileControl.touched && fileInput.files?.length === 0) {
+          {{ t('shared.form.error.required') }}
+        }
+      </mat-error>
+    </div>
+  }
+</ng-container>

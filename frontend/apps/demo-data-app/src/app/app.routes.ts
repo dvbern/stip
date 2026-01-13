@@ -8,7 +8,7 @@ export const appRoutes: Route[] = [
     path: '',
     canActivate: [
       hasBenutzer,
-      hasRoles(['V0_DEMO_DATA_READ', 'V0_DEMO_DATA_APPLY'], '/unauthorized'),
+      hasRoles(['V0_DEMO_DATA_APPLY'], '/unauthorized'),
     ],
     children: [
       {

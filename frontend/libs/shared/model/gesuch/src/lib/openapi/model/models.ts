@@ -69,6 +69,8 @@ export * from './demoAuszahlung';
 export * from './demoDarlehen';
 export * from './demoDarlehenGruendeDarlehen';
 export * from './demoData';
+export * from './demoDataError';
+export * from './demoDataList';
 export * from './demoDataSlim';
 export * from './demoDataStipendienanspruch';
 export * from './demoEinnahmenKosten';

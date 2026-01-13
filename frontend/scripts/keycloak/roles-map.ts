@@ -150,7 +150,4 @@ export const PERMISSION_ROLE_LIST = [
   ],
 ] as const satisfies [Role[], ...string[]][];
 
-export const DEMO_DATA_PERMISSIONS = [
-  'DEMO_DATA_READ',
-  'DEMO_DATA_APPLY',
-] as const;
+export const DEMO_DATA_PERMISSIONS = ['DEMO_DATA_APPLY'] as const;

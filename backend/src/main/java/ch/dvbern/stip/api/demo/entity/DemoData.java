@@ -31,49 +31,62 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 import software.amazon.awssdk.annotations.NotNull;
 
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+
 @Audited
 @Entity
 @Table(
-    name = "darlehen",
+    name = "demo_data",
     indexes = {
-        @Index(name = "IX_darlehen_mandant", columnList = "mandant")
+        @Index(name = "IX_demo_data_mandant", columnList = "mandant")
     }
 )
 @Getter
 @Setter
 public class DemoData extends AbstractMandantEntity {
     @NotNull
-    @Column(name = "test_fall", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "test_fall", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String testFall;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "name", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String name;
 
     @NotNull
-    @Column(name = "description", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
+    @Column(name = "description", nullable = false, length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String description;
 
     @Nullable
-    @Column(name = "erfasser", nullable = true)
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "erfasser", nullable = true, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String erfasser;
 
     @NotNull
-    @Column(name = "gesuchsjahr", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "gesuchsjahr", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String gesuchsjahr;
 
     @NotNull
-    @Column(name = "gesuchseingang", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "gesuchseingang", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String gesuchseingang;
 
     @NotNull
-    @Column(name = "jsonData", nullable = false)
+    @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
+    @Column(name = "jsonData", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     private String jsonData;
 
     @Transient

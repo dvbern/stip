@@ -36,6 +36,16 @@ import org.apache.poi.ss.usermodel.Row;
 public class ParseDemoDataUtil {
     private final DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    public int getNumberOfCells(Row row, int startCol) {
+        for (var i = startCol; i < row.getLastCellNum(); i++) {
+            final var cell = row.getCell(i);
+            if (isBlank(cell) || cell.getStringCellValue().trim().isEmpty()) {
+                return i - startCol;
+            }
+        }
+        return 0;
+    }
+
     public boolean isBlank(Cell cell) {
         return cell == null || cell.getCellType() == CellType.BLANK;
     }
@@ -93,43 +103,54 @@ public class ParseDemoDataUtil {
         Row currentRow,
         List<T> list,
         int firstValueColumn,
-        String pattern,
         int column,
+        int amountOfEntries,
+        String pattern,
         Function<Cell, T> createValue
     ) {
         final var listIterator = list.listIterator();
-        ParseDemoDataUtil.cellsWithName(currentRow, pattern, firstValueColumn, column).forEachRemaining(entry -> {
-            if (listIterator.hasNext()) {
-                throw new IllegalStateException("List already has entries");
-            }
-            listIterator.add(createValue.apply(entry));
-        });
+        final var cellIterator = ParseDemoDataUtil.cellsWithName(currentRow, pattern, firstValueColumn, column);
+        for (int i = 0; i < amountOfEntries; i++) {
+            final var cell = cellIterator.next();
+            tryParseData(() -> {
+                listIterator.add(createValue.apply(cell));
+            }, cell);
+        }
     }
 
     public <T> void updateListEntries(
         Row currentRow,
         List<T> list,
         int firstValueColumn,
-        String pattern,
         int column,
+        int amountOfEntries,
+        String pattern,
         BiConsumer<Cell, T> updateValue
     ) {
         final var listIterator = list.listIterator();
-        ParseDemoDataUtil.cellsWithName(currentRow, pattern, firstValueColumn, column).forEachRemaining(cell -> {
+        final var cellIterator = ParseDemoDataUtil.cellsWithName(currentRow, pattern, firstValueColumn, column);
+        for (int i = 0; i < amountOfEntries; i++) {
+            final var cell = cellIterator.next();
             if (!listIterator.hasNext()) {
                 throw new IllegalStateException("List hast not enough entries");
             }
             final var listItem = listIterator.next();
-            try {
+            tryParseData(() -> {
                 updateValue.accept(cell, listItem);
-            } catch (Exception e) {
-                final var formatter = new DataFormatter();
-                throw new IllegalStateException(
-                    "Cell was not accessed correctly, value: %s [%s]"
-                        .formatted(formatter.formatCellValue(cell), cell.getAddress().formatAsString()),
-                    e
-                );
-            }
-        });
+            }, cell);
+        }
+    }
+
+    private void tryParseData(Runnable parser, Cell cell) {
+        try {
+            parser.run();
+        } catch (Exception e) {
+            final var formatter = new DataFormatter();
+            throw new IllegalStateException(
+                "Cell was not accessed correctly, value: '%s' [%s]"
+                    .formatted(formatter.formatCellValue(cell), cell.getAddress().formatAsString()),
+                e
+            );
+        }
     }
 }

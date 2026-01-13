@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import {
+  EMPTY,
   catchError,
   combineLatestWith,
   concatMap,
@@ -263,6 +264,7 @@ const getUpdateGesuchServiceCalls = (
         gesuchId,
         gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
       }),
+    'demo-data-app': () => EMPTY,
   } satisfies Record<AppType, unknown>;
 };
 

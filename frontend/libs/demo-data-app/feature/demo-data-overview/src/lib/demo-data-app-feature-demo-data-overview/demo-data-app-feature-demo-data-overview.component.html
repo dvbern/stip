@@ -1,9 +1,81 @@
-<dv-shared-pattern-basic-layout>
-  <div class="tw:p-8" *transloco="let t">
-    <h1 class="tw:!mb-4 tw:!text-2xl tw:font-bold">{{ t('demo-data-app.overview.title') }}</h1>
+<dv-shared-pattern-basic-layout *dvTranslocoDemo="let t">
+  <div class="tw:p-8 tw:flex">
+    <dv-shared-ui-icon-chip class="tw:mr-3">
+      <i class="material-symbols-rounded title-icon">science</i>
+    </dv-shared-ui-icon-chip>
+    <h1 class="tw:mb-4! tw:font-bold">
+      {{ t('demo-data-app.overview.title') }}
+    </h1>
   </div>
-  <div class="tw:grid tw:grid-cols-2 tw:gap-4 tw:px-8">
-    <div class="tw:bg-blue-300 tw:h-80"></div>
-    <div class="tw:bg-blue-300 tw:h-80"></div>
+  @let demoDataList = demoDataStore.cachedDemoDataListViewSig();
+  <div class="tw:grid tw:grid-cols-3 tw:gap-6 tw:px-8">
+    <ul class="tw:mb-4 tw:list-none tw:font-bold tw:col-span-2 tw:px-0!">
+      @for (demoData of demoDataList?.demoDatas; track $index) {
+      } @empty {
+        <li>
+          <dv-shared-ui-info-container [type]="'info'">
+            <span class="text-info material-symbols-rounded me-3">info</span>
+            <div class="ms-3">{{ t('demo-data-app.overview.no-data') }}</div>
+          </dv-shared-ui-info-container>
+        </li>
+      }
+    </ul>
+    <aside>
+      @if (demoDataList) {
+        <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.import-details.title') }}</h2>
+        <dl class="tw:grid tw:grid-cols-2 tw:gap-2">
+          <dt>{{ t('demo-data-app.overview.import-details.imported-by') }}</dt>
+          <dd>{{ demoDataList.importiertVon }}</dd>
+          <dt>{{ t('demo-data-app.overview.import-details.last-updated') }}</dt>
+          <dd>{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
+          <dt>{{ t('demo-data-app.overview.import-details.total') }}</dt>
+          <dd>{{ demoDataList.demoDatas.length }}</dd>
+          <dt>{{ t('demo-data-app.overview.import-details.comment') }}</dt>
+          <dd>{{ demoDataList.kommentar }}</dd>
+        </dl>
+        <button
+          type="button"
+          class="btn btn-link tw:flex tw:max-w-full tw:p-0!"
+          [attr.aria-label]="t('demo-data-app.overview.import-details.download')"
+          [dvDownloadButton]="{
+            type: 'demoData',
+          }"
+        >
+          <span class="tw:truncate" [title]="demoDataList.filename">
+            {{ demoDataList.filename }} {{ demoDataList.filesize | filesize }}
+          </span>
+          <span class="material-symbols-rounded tw:ml-1 tw:align-middle">download</span>
+        </button>
+      }
+      <dv-shared-ui-file-upload
+        class="tw:mb-6"
+        [allowedFileTypesSig]="['xlsx']"
+        (selectedFileSig)="selectedFileSig.set($event)"
+      ></dv-shared-ui-file-upload>
+
+      @if (selectedFileSig()?.size) {
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-testid="button-save"
+          (click)="createDemoDataImport()"
+          [disabled]="selectedFileSig()?.size === 0"
+        >
+          {{ t('demo-data-app.overview.file-upload.confirm.button') }}
+        </button>
+      }
+
+      @if (demoDataStore.demoDataImportErrorViewSig(); as error) {
+        <div class="tw:mt-4">
+          <dv-shared-ui-info-container [type]="'danger'" class="tw:flex-col">
+            <div class="tw:flex tw:font-bold">
+              <span class="material-symbols-rounded tw:mr-3">error</span>
+              <div class="tw:mr-3">{{ t('demo-data-app.overview.file-upload.error') }}</div>
+            </div>
+            <div class="tw:mr-3">{{ error.internalMessage }}</div>
+          </dv-shared-ui-info-container>
+        </div>
+      }
+    </aside>
   </div>
 </dv-shared-pattern-basic-layout>

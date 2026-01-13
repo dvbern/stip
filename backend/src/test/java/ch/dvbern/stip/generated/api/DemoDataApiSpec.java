@@ -14,7 +14,9 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDtoSpec;
-import ch.dvbern.stip.generated.dto.DemoDataSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoDataListDtoSpec;
+import java.io.File;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +60,10 @@ public class DemoDataApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 applyDemoData(),
-                getAllDemoData()
+                createNewDemoDataImport(),
+                getAllDemoData(),
+                getDemoDataDokument(),
+                getDemoDataDokumentDownloadToken()
         );
     }
 
@@ -66,8 +71,20 @@ public class DemoDataApiSpec {
         return new ApplyDemoDataOper(createReqSpec());
     }
 
+    public CreateNewDemoDataImportOper createNewDemoDataImport() {
+        return new CreateNewDemoDataImportOper(createReqSpec());
+    }
+
     public GetAllDemoDataOper getAllDemoData() {
         return new GetAllDemoDataOper(createReqSpec());
+    }
+
+    public GetDemoDataDokumentOper getDemoDataDokument() {
+        return new GetDemoDataDokumentOper(createReqSpec());
+    }
+
+    public GetDemoDataDokumentDownloadTokenOper getDemoDataDokumentDownloadToken() {
+        return new GetDemoDataDokumentDownloadTokenOper(createReqSpec());
     }
 
     /**
@@ -154,10 +171,96 @@ public class DemoDataApiSpec {
         }
     }
     /**
+     * Creates a new demo data list
+     * 
+     *
+     * @see #kommentarForm  (required)
+     * @see #fileUploadMultiPart  (required)
+     * return DemoDataListDtoSpec
+     */
+    public static class CreateNewDemoDataImportOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/demo-data";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateNewDemoDataImportOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /demo-data
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /demo-data
+         * @param handler handler
+         * @return DemoDataListDtoSpec
+         */
+        public DemoDataListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DemoDataListDtoSpec> type = new TypeRef<DemoDataListDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         public static final String KOMMENTAR_FORM = "kommentar";
+
+         /**
+         * @param kommentar (String)  (required)
+         * @return operation
+         */
+         public CreateNewDemoDataImportOper kommentarForm(Object... kommentar) {
+            reqSpec.addFormParam(KOMMENTAR_FORM, kommentar);
+            return this;
+         }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public CreateNewDemoDataImportOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateNewDemoDataImportOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateNewDemoDataImportOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Returns a list of available demo data
      * 
      *
-     * return List&lt;DemoDataSlimDtoSpec&gt;
+     * return DemoDataListDtoSpec
      */
     public static class GetAllDemoDataOper implements Oper {
 
@@ -187,10 +290,10 @@ public class DemoDataApiSpec {
         /**
          * GET /demo-data
          * @param handler handler
-         * @return List&lt;DemoDataSlimDtoSpec&gt;
+         * @return DemoDataListDtoSpec
          */
-        public List<DemoDataSlimDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<DemoDataSlimDtoSpec>> type = new TypeRef<List<DemoDataSlimDtoSpec>>(){};
+        public DemoDataListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DemoDataListDtoSpec> type = new TypeRef<DemoDataListDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -210,6 +313,140 @@ public class DemoDataApiSpec {
          * @return operation
          */
         public GetAllDemoDataOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #tokenQuery  (required)
+     * return File
+     */
+    public static class GetDemoDataDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/demo-data/dokument/download";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDemoDataDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/octet-stream");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /demo-data/dokument/download
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /demo-data/dokument/download
+         * @param handler handler
+         * @return File
+         */
+        public File executeAs(Function<Response, Response> handler) {
+            TypeRef<File> type = new TypeRef<File>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String TOKEN_QUERY = "token";
+
+        /**
+         * @param token (String)  (required)
+         * @return operation
+         */
+        public GetDemoDataDokumentOper tokenQuery(Object... token) {
+            reqSpec.addQueryParam(TOKEN_QUERY, token);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDemoDataDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDemoDataDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * get the Token to download the latest DemoData
+     * 
+     *
+     * return FileDownloadTokenDtoSpec
+     */
+    public static class GetDemoDataDokumentDownloadTokenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/demo-data/dokument/token";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDemoDataDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /demo-data/dokument/token
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /demo-data/dokument/token
+         * @param handler handler
+         * @return FileDownloadTokenDtoSpec
+         */
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDemoDataDokumentDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDemoDataDokumentDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

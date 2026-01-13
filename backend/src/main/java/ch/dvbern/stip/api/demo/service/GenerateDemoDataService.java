@@ -26,7 +26,6 @@ import ch.dvbern.stip.api.auszahlung.entity.AuszahlungBuilder;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntityBuilder;
 import ch.dvbern.stip.api.common.entity.AbstractPersonBuilder;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenBuilder;
 import ch.dvbern.stip.api.demo.entity.DemoPerson;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenBuilder;
 import ch.dvbern.stip.api.eltern.entity.ElternBuilder;
@@ -62,6 +61,7 @@ public class GenerateDemoDataService {
             .gesuchsteller(benutzer)
             .ausbildungs(null)
             .buchhaltungs(null)
+            .darlehens(null)
             .delegierung(null)
             .auszahlung(auszahlung)
             .build();
@@ -272,26 +272,12 @@ public class GenerateDemoDataService {
                 .vorname(null)
                 .geburtsdatum(null)
         );
-        // Handle Dokumente
-        final var darlehen = DarlehenBuilder.darlehen()
-            .willDarlehen(null)
-            .betragDarlehen(null)
-            .betragBezogenKanton(null)
-            .schulden(null)
-            .anzahlBetreibungen(null)
-            .grundNichtBerechtigt(null)
-            .grundAusbildungZwoelfJahre(null)
-            .grundHoheGebuehren(null)
-            .grundAnschaffungenFuerAusbildung(null)
-            .grundZweitausbildung(null)
-            .build();
         final var gesuchFormular = GesuchFormularBuilder.gesuchFormular()
             .personInAusbildung(pia)
             .familiensituation(familiensituation)
             .partner(partner)
             .einnahmenKosten(einnahmenKosten)
             .einnahmenKostenPartner(einnahmenKostenPartner)
-            .darlehen(darlehen)
             .lebenslaufItems(Set.of(lebenslauf))
             .geschwisters(Set.of(geschwister))
             .elterns(Set.of(eltern))
@@ -299,6 +285,7 @@ public class GenerateDemoDataService {
             .tranche(null)
             .steuerdaten(null)
             .steuererklaerung(Set.of(steuererklaerung))
+            .versteckteEltern(null)
             .build();
         final var gesuchTranche = GesuchTrancheBuilder.gesuchTranche()
             .gueltigkeit(null)

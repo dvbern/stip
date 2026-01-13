@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { z } from 'zod';
 
 import {
+  DemoDataError as DvDemoDataError,
   NeskoError as DvNeskoError,
   ValidationMessage as DvValidationMessage,
   ValidationReport,
@@ -56,12 +57,24 @@ export const NeskoError = z.object({
 });
 export type NeskoError = Extends<z.infer<typeof NeskoError>, DvNeskoError>;
 
+export const DemoDataError = z.object({
+  internalMessage: z.string(),
+  errorClass: z.string(),
+});
+export type DemoDataError = Extends<
+  z.infer<typeof DemoDataError>,
+  DvDemoDataError
+>;
+
 export const ParseError = z.instanceof(z.ZodError);
 export type ParseError = z.infer<typeof ParseError>;
 
 const ErrorTypes = {
   neskoError: z.object({
     error: NeskoError,
+  }),
+  demoDataError: z.object({
+    error: DemoDataError,
   }),
   validationError: z.object({
     error: z.object({
@@ -107,6 +120,13 @@ export const SharedModelError = z.intersection(
           validationWarnings,
           hasDocuments,
         }),
+    ),
+    ErrorTypes.demoDataError.transform(({ error }) =>
+      createError('demoDataError', {
+        messageKey: 'demo-data-app.genericError.demoData',
+        internalMessage: error.internalMessage,
+        errorClass: error.errorClass,
+      }),
     ),
     ErrorTypes.unknownHttpError.transform(({ error, ...http }) => {
       return createError('unknownHttpError', {
