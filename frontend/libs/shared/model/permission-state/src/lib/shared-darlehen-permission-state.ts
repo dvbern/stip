@@ -43,7 +43,7 @@ type PermArg = Partial<Record<ShortRole, DarlehenPermissionFlags>>;
  * Permissions are combined, since picking the first matching role would lead to
  * unexpected results if a user has multiple roles.
  */
-const multiPerm = (arg: PermArg) => {
+const mPerm = (arg: PermArg) => {
   return (rolesMap: RolesMap): DarlehenPermissionFlags => {
     let combinedPermissions: DarlehenPermissionFlags = '       ';
 
@@ -90,11 +90,16 @@ export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 
 // prettier-ignore
 export const darlehenPermissionTableByAppType = {
-  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: multiPerm({sb: ' R     ', fe: ' R     '}) },
-  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: multiPerm({sb: ' RK  F ', fe: ' R     '}) },
-  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: multiPerm({sb: ' R     ', fe: ' RK   A'}) },
-  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: multiPerm({sb: ' R     ', fe: ' R     '}) },
-  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: multiPerm({sb: ' R     ', fe: ' R     '}) },
+  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
+                                                                                                 fe: ' R     '}) },
+  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' RK  F ',
+                                                                                                 fe: ' R     '}) },
+  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
+                                                                                                 fe: ' RK   A'}) },
+  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
+                                                                                                 fe: ' R     '}) },
+  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
+                                                                                                 fe: ' R     '}) },
 } as const satisfies Record<
   DarlehenStatus,
   Record<AppType, PermissionCheck>
