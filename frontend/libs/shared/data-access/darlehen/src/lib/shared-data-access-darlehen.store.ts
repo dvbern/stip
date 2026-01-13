@@ -132,7 +132,12 @@ export class DarlehenStore extends signalStore(
             },
             {
               onSuccess: (data) => {
-                this.router.navigate(['/darlehen', data.id]);
+                this.router.navigate([
+                  '/darlehen',
+                  data.id,
+                  'fall',
+                  req.fallId,
+                ]);
               },
             },
           ),
