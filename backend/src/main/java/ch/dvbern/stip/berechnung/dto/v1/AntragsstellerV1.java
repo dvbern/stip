@@ -247,14 +247,16 @@ public class AntragsstellerV1 {
             ergaenzungsleistungens.setPartnerValue(partnerName, ekPartner.getErgaenzungsleistungen());
             eoLeistungens.setPartnerValue(partnerName, ekPartner.getEoLeistungen());
             einnahmenBGSAs.setPartnerValue(partnerName, ekPartner.getEinnahmenBGSA());
-            medizinischeGrundversorgungs.setPartnerValue(
-                partner.getVorname(),
-                BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    partner.getGeburtsdatum(),
-                    ausbildung.getAusbildungBegin(),
-                    gesuchsperiode
-                )
-            );
+            if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+                medizinischeGrundversorgungs.setPartnerValue(
+                    partner.getVorname(),
+                    BerechnungRequestV1.getMedizinischeGrundversorgung(
+                        partner.getGeburtsdatum(),
+                        ausbildung.getAusbildungBegin(),
+                        gesuchsperiode
+                    )
+                );
+            }
         }
 
         for (var kind : gesuchFormular.getKinds()) {
