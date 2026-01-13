@@ -26,6 +26,7 @@ import java.util.Comparator;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.ws.rs.NotFoundException;
 import lombok.experimental.UtilityClass;
 
@@ -182,5 +183,19 @@ public class DateUtil {
     public boolean wasEingereichtAfterDueDate(final Gesuch gesuch) {
         final var einreichefrist = gesuch.getGesuchsperiode().getEinreichefristNormal();
         return gesuch.getEinreichedatum().isAfter(einreichefrist);
+    }
+
+    public static DateRange getGesuchDateRange(Gesuch gesuch) {
+        final var tranchenStartEnd = gesuch.getTranchenTranchen().map(GesuchTranche::getGueltigkeit).toList();
+        final var startDatum = tranchenStartEnd.stream()
+            .min(Comparator.comparing(DateRange::getGueltigAb))
+            .map(DateRange::getGueltigAb)
+            .orElseThrow(IllegalStateException::new);
+        final var endDatum = tranchenStartEnd.stream()
+            .max(Comparator.comparing(DateRange::getGueltigBis))
+            .map(DateRange::getGueltigBis)
+            .orElseThrow(IllegalStateException::new);
+
+        return new DateRange(startDatum, endDatum);
     }
 }

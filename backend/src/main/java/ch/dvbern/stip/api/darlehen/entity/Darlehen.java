@@ -135,9 +135,10 @@ public class Darlehen extends AbstractMandantEntity {
     public String getDarlehenNr() {
         // remove everything except numbers from fallNr.
         // and fill missing spots with zeros (total length of 8 required)
+        final var fallNummer = this.getFall().getFallNummer();
+        final int darlehenNo = Integer.parseInt(fallNummer.substring(fallNummer.lastIndexOf('.') + 1));
 
-        var fallNrDigitsOnly = this.getFall().getFallNummer().replaceAll("\\D+", "");
-        return String.format("%s%s", "0".repeat(8 - fallNrDigitsOnly.length()), fallNrDigitsOnly);
+        return String.format("%08d", darlehenNo);
     }
 
 }

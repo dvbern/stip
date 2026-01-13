@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
-import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
@@ -212,10 +211,9 @@ public class VerfuegungPdfService {
             .get()
             .getGueltigBis();
 
-        final String ausbildungsjahr = String.format(
-            " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+        final String ausbildungsjahr = PdfUtils.formatAusbildungsjahr(
+            ausbildungsjahrVon,
+            ausbildungsjahrBis
         );
         document.add(
             PdfUtils.createParagraph(
@@ -239,19 +237,13 @@ public class VerfuegungPdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
 
-        final String translateKey = personInAusbildung
-            .getAnrede()
-            .equals(Anrede.HERR)
-                ? "stip.pdf.begruessung.mann"
-                : "stip.pdf.begruessung.frau";
-
         document.add(
-            PdfUtils.createParagraph(
+            PdfUtils.getAnredeParagraph(
+                personInAusbildung,
                 pdfFont,
+                translator,
                 FONT_SIZE_BIG,
-                leftMargin,
-                translator.translate(translateKey) + " ",
-                personInAusbildung.getNachname()
+                leftMargin
             )
         );
 
@@ -355,10 +347,9 @@ public class VerfuegungPdfService {
             .get()
             .getGueltigBis();
 
-        final String ausbildungsjahr = String.format(
-            " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+        final String ausbildungsjahr = PdfUtils.formatAusbildungsjahr(
+            ausbildungsjahrVon,
+            ausbildungsjahrBis
         );
 
         final String fullAusbildungsjahr = String.format(
@@ -657,10 +648,9 @@ public class VerfuegungPdfService {
             .get()
             .getGueltigBis();
 
-        final String ausbildungsjahr = String.format(
-            " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+        final String ausbildungsjahr = PdfUtils.formatAusbildungsjahr(
+            ausbildungsjahrVon,
+            ausbildungsjahrBis
         );
         document.add(
             PdfUtils.createParagraph(
@@ -681,17 +671,14 @@ public class VerfuegungPdfService {
             .getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung();
-        final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.begruessung.mann"
-            : "stip.pdf.begruessung.frau";
 
         document.add(
-            PdfUtils.createParagraph(
+            PdfUtils.getAnredeParagraph(
+                personInAusbildung,
                 pdfFont,
+                translator,
                 FONT_SIZE_BIG,
-                leftMargin,
-                translator.translate(translateKey) + " ",
-                personInAusbildung.getNachname()
+                leftMargin
             )
         );
 

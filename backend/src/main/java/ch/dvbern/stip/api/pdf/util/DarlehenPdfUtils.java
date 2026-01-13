@@ -17,20 +17,13 @@
 
 package ch.dvbern.stip.api.pdf.util;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DarlehenPdfUtils {
-    public LocalDate getEndOfGesuchsjahr(final Gesuch gesuch, final GesuchMapper gesuchMapper) {
-        return gesuchMapper.toInfoDto(gesuch).getEndDate();
-    }
-
     public String getKopieAnSozialdienstRezipientString(final Fall fall, final String kopieAnTemplate) {
         if (Objects.isNull(fall.getDelegierung())) {
             return "";
