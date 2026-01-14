@@ -76,7 +76,6 @@ public class DarlehensVerfuegungPdfService {
 
     private PdfFont pdfFont = null;
     private PdfFont pdfFontBold = null;
-    private Link ausbildungsbeitraegeUri = null;
 
     private void generateFonts() {
         final FontProgram font;
@@ -122,6 +121,8 @@ public class DarlehensVerfuegungPdfService {
         logo.setMarginTop(-35);
 
         document.add(logo);
+        final Link ausbildungsbeitraegeUri =
+            new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
         PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
     }
 
@@ -150,9 +151,7 @@ public class DarlehensVerfuegungPdfService {
     }
 
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final Darlehen darlehen) {
-
         generateFonts();
-        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
         final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
         final TL translator = getTranslator(gesuch);
 
@@ -228,7 +227,6 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // todo KSTIP-2697: display darlehen detail table correctly
             addDetailsForDarlehenTable(document, darlehen, translator);
 
             document.add(
@@ -269,8 +267,7 @@ public class DarlehensVerfuegungPdfService {
                     "- ",
                     translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
                     "\n",
-                    kopieAnTextZeile2,
-                    "\n"
+                    kopieAnTextZeile2
                 )
             );
             document.add(
@@ -283,7 +280,6 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            // todo KSTIP-2697: add wichtige infos to rechtsmittelbelehurng (flag)
             PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
             addWichtigeHinweiseTable(translator, document, leftMargin, pdfFont, pdfFontBold);
             PdfUtils.makePageNumberEven(document);
@@ -435,7 +431,6 @@ public class DarlehensVerfuegungPdfService {
     public ByteArrayOutputStream generateNegativeDarlehensVerfuegungPdf(final Darlehen darlehen) {
         final var out = new ByteArrayOutputStream();
         generateFonts();
-        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
         final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
         final TL translator = getTranslator(gesuch);
         try (
