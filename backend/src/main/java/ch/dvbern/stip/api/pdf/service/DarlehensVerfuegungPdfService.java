@@ -47,10 +47,13 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Link;
+import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +64,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
@@ -170,11 +174,11 @@ public class DarlehensVerfuegungPdfService {
 
             final String ausbildungsjahr = getAusbildungsJahr(gesuch);
 
-            final var titelZeile1 =
-                String.format(translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile1"), ausbildungsjahr);
-            final var titelZeile2 =
+            final var titleZeile1 =
+                String.format(translator.translate("stip.darlehen.verfuegung.positiv.title.zeile1"), ausbildungsjahr);
+            final var titleZeile2 =
                 String.format(
-                    translator.translate("stip.darlehen.verfuegung.positiv.titel.zeile2"),
+                    translator.translate("stip.darlehen.verfuegung.positiv.title.zeile2"),
                     darlehen.getDarlehenNr()
                 );
             document.add(
@@ -184,8 +188,8 @@ public class DarlehensVerfuegungPdfService {
                     leftMargin,
                     String.format(
                         "%s \n %s",
-                        titelZeile1,
-                        titelZeile2
+                        titleZeile1,
+                        titleZeile2
                     )
                 )
             );
@@ -281,12 +285,151 @@ public class DarlehensVerfuegungPdfService {
 
             // todo KSTIP-2697: add wichtige infos to rechtsmittelbelehurng (flag)
             PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
+            addWichtigeHinweiseTable(translator, document, leftMargin, pdfFont, pdfFontBold);
             PdfUtils.makePageNumberEven(document);
 
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
         return out;
+    }
+
+    private void addWichtigeHinweiseTable(
+        final TL translator,
+        final Document document,
+        final float leftMargin,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold
+    ) {
+        final Table mainTable = PdfUtils.createTable(new float[] { 100 }, leftMargin);
+        mainTable.setBorder(new SolidBorder(1));
+
+        final Paragraph titleParagraph = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        titleParagraph.add(
+            PdfUtils.createText(
+                pdfFontBold,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.title")
+            ).setUnderline()
+        );
+
+        final Cell titleCell = new Cell();
+        titleCell.add(titleParagraph);
+        titleCell.setBorderBottom(null);
+        mainTable.addCell(titleCell);
+
+        final Paragraph idParagraph = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        idParagraph.add(
+            PdfUtils.createText(
+                pdfFontBold,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.identifikation.title")
+            )
+        );
+        idParagraph.add(new Text(" "));
+
+        idParagraph.add(
+            PdfUtils.createText(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.identifikation.text")
+            )
+        );
+        final Cell idCell = new Cell();
+        idCell.add(idParagraph);
+        idCell.setBorderBottom(null);
+        idCell.setBorderTop(null);
+        mainTable.addCell(idCell);
+
+        final Paragraph wohnsitzParagraph = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        wohnsitzParagraph.add(
+            PdfUtils.createText(
+                pdfFontBold,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.wohnsitz.title")
+            )
+        );
+        wohnsitzParagraph.add(new Text(" "));
+
+        wohnsitzParagraph.add(
+            PdfUtils.createText(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.wohnsitz.text")
+            )
+        );
+        final Cell wohnsitzCell = new Cell();
+        wohnsitzCell.add(wohnsitzParagraph);
+        wohnsitzCell.setBorderTop(null);
+        wohnsitzCell.setBorderBottom(null);
+        mainTable.addCell(wohnsitzCell);
+
+        final Paragraph rueckzahlungParagraph1 = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        rueckzahlungParagraph1.add(
+            PdfUtils.createText(
+                pdfFontBold,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.rueckzahlungsbedingungen.title")
+            )
+        );
+        rueckzahlungParagraph1.add(new Text(" "));
+
+        rueckzahlungParagraph1.add(
+            PdfUtils.createText(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.rueckzahlungsbedingungen.text1")
+            )
+        );
+        final Cell rueckzahlungCell1 = new Cell();
+        rueckzahlungCell1.add(rueckzahlungParagraph1);
+        rueckzahlungCell1.setBorderTop(null);
+        rueckzahlungCell1.setBorderBottom(null);
+        mainTable.addCell(rueckzahlungCell1);
+
+        final Paragraph rueckzahlungParagraph2 = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        rueckzahlungParagraph2.add(
+            PdfUtils.createText(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.rueckzahlungsbedingungen.text2")
+            )
+        );
+        final Cell rueckzahlungCell2 = new Cell();
+        rueckzahlungCell2.add(rueckzahlungParagraph2);
+        rueckzahlungCell2.setBorderTop(null);
+        rueckzahlungCell2.setBorderBottom(null);
+        mainTable.addCell(rueckzahlungCell2);
+
+        final Paragraph rueckzahlungParagraph3 = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        rueckzahlungParagraph3.add(
+            PdfUtils.createText(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.rueckzahlungsbedingungen.text3")
+            )
+        );
+        final Cell rueckzahlungCell3 = new Cell();
+        rueckzahlungCell3.add(rueckzahlungParagraph3);
+        rueckzahlungCell3.setBorderTop(null);
+        rueckzahlungCell3.setBorderBottom(null);
+        mainTable.addCell(rueckzahlungCell3);
+
+        final Paragraph rueckzahlungParagraph4 = PdfUtils.createParagraph(FONT_SIZE_MEDIUM, leftMargin / 4);
+        rueckzahlungParagraph4.add(
+            PdfUtils.createText(
+                pdfFont,
+                FONT_SIZE_MEDIUM,
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigeHinweise.rueckzahlungsbedingungen.text4")
+            )
+        );
+        final Cell rueckzahlungCell4 = new Cell();
+        rueckzahlungCell4.add(rueckzahlungParagraph4);
+        rueckzahlungCell4.setBorderTop(null);
+        rueckzahlungCell4.setBorderBottom(null);
+        mainTable.addCell(rueckzahlungCell4);
+
+        document.add(mainTable);
     }
 
     public ByteArrayOutputStream generateNegativeDarlehensVerfuegungPdf(final Darlehen darlehen) {
@@ -312,14 +455,14 @@ public class DarlehensVerfuegungPdfService {
 
             final String ausbildungsjahr = getAusbildungsJahr(gesuch);
 
-            final var titel =
-                String.format(translator.translate("stip.darlehen.verfuegung.negativ.titel.zeile1"), ausbildungsjahr);
+            final var title =
+                String.format(translator.translate("stip.darlehen.verfuegung.negativ.title.zeile1"), ausbildungsjahr);
             document.add(
                 PdfUtils.createParagraph(
                     pdfFontBold,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    titel
+                    title
                 )
             );
 

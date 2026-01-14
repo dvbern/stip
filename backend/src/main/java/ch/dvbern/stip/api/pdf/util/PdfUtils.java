@@ -178,6 +178,28 @@ public class PdfUtils {
         return paragraph;
     }
 
+    public Paragraph createParagraph(
+        float fontSize,
+        float leftMargin
+    ) {
+        final Paragraph paragraph = new Paragraph();
+        paragraph.setFontSize(fontSize);
+        paragraph.setMultipliedLeading(1f);
+        paragraph.setMarginLeft(leftMargin);
+        return paragraph;
+    }
+
+    public Text createText(
+        final PdfFont font,
+        float fontSize,
+        final String text
+    ) {
+        final Text textOut = new Text(text);
+        textOut.setFontSize(fontSize);
+        textOut.setFont(font);
+        return textOut;
+    }
+
     public Table createTable(
         final float[] columnWidths,
         final float leftMargin
