@@ -26,6 +26,7 @@ import java.util.ListIterator;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -168,10 +169,11 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             elternteilerequests.set(
                 currentIdx,
                 ElternteilV1.buildFromDependants(
+                    currentIdx + 1,
                     gesuch.getGesuchsperiode(),
                     elternteile,
-                    steuerdatenToUse,
                     steuererklaerungToUse,
+                    steuerdatenToUse,
                     personenImHaushaltList.get(currentIdx),
                     kinderDerElternInHaushalten,
                     (int) gesuchFormular.getGeschwisters()
@@ -194,9 +196,13 @@ public class BerechnungRequestV1 implements CalculatorRequest {
         }
 
         final var antragssteller = AntragsstellerV1.buildFromDependants(gesuchFormular, piaWohntInElternHaushalt);
+        final var anzahlMonate = DateUtil.getMonthsBetween(
+            gesuchTranche.getGueltigkeit().getGueltigAb(),
+            gesuchTranche.getGueltigkeit().getGueltigBis()
+        );
 
         return new BerechnungRequestV1(
-            StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode()),
+            StammdatenV1.fromGesuchsperiode(gesuch.getGesuchsperiode(), anzahlMonate),
             new InputFamilienbudgetV1(elternteilerequests.get(0)),
             new InputFamilienbudgetV1(elternteilerequests.get(1)),
             new InputPersoenlichesbudgetV1(antragssteller)
@@ -228,7 +234,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
     }
 
     public static int getEffektiveWohnkosten(
-        final int eingegebeneWohnkosten,
+        final int wohnkostenJahreswert,
         final Gesuchsperiode gesuchsperiode,
         int anzahlPersonenImHaushalt
     ) {
@@ -240,7 +246,8 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             case 4 -> gesuchsperiode.getWohnkostenFam4pers();
             default -> gesuchsperiode.getWohnkostenFam5pluspers();
         };
-        return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
+
+        return Integer.min(wohnkostenJahreswert, maxWohnkosten);
     }
 
     public static int getMedizinischeGrundversorgung(

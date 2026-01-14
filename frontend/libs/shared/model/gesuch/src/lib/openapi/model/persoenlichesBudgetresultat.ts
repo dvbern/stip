@@ -9,41 +9,33 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PersoenlichesBudgetresultatKosten } from './persoenlichesBudgetresultatKosten';
+import { PersoenlichesBudgetresultatEinnahmen } from './persoenlichesBudgetresultatEinnahmen';
 
 /**
  * Persoenliche Budget daten fuer und von der Berechnung
  */
 export interface PersoenlichesBudgetresultat { 
-    anzahlPersonenImHaushalt: number;
-    totalVorTeilung?: number;
+    vorname: string;
+    nachname: string;
+    vornamePartner?: string;
+    nachnamePartner?: string;
+    sozialversicherungsnummer: string;
+    /**
+     * dd.MM.yyyy
+     */
+    geburtsdatum: string;
+    total: number;
+    einnahmenMinusKosten: number;
+    fehlbetrag: number;
+    proKopfTeilung: number;
     eigenerHaushalt: boolean;
-    anteilFamilienbudget: number;
-    einkommen: number;
-    alimente: number;
-    leistungenEO: number;
-    rente: number;
-    kinderAusbildungszulagen: number;
-    ergaenzungsleistungen: number;
-    gemeindeInstitutionen: number;
-    steuerbaresVermoegen: number;
-    anrechenbaresVermoegen: number;
-    einkommenPartner: number;
-    einnahmenPersoenlichesBudget: number;
-    anteilLebenshaltungskosten: number;
-    grundbedarf: number;
-    wohnkosten: number;
-    medizinischeGrundversorgung: number;
-    steuern: number;
-    steuernPartner: number;
-    fahrkosten: number;
-    fahrkostenPartner: number;
-    verpflegung: number;
-    verpflegungPartner: number;
-    fremdbetreuung: number;
-    ausbildungskosten: number;
-    ausgabenPersoenlichesBudget: number;
-    persoenlichesbudgetBerechnet: number;
-    elternbeitrag1?: number;
-    elternbeitrag2?: number;
+    budgetTranche: number;
+    anzahlMonate: number;
+    gesetzlichesDarlehen: number;
+    gesetzlichesDarlehenStipendium: number;
+    anzahlPersonenImHaushalt: number;
+    einnahmen: PersoenlichesBudgetresultatEinnahmen;
+    kosten: PersoenlichesBudgetresultatKosten;
 }
 

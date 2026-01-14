@@ -19,8 +19,6 @@ package ch.dvbern.stip.berechnung.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -41,12 +39,9 @@ import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.dto.FamilienBudgetresultatMapper;
-import ch.dvbern.stip.berechnung.dto.PersoenlichesBudgetResultatMapper;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -58,57 +53,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BerechnungService {
     private final Instance<BerechnungRequestBuilder> berechnungRequests;
-    private final Instance<PersoenlichesBudgetResultatMapper> persoenlichesBudgetResultatMappers;
-    private final Instance<FamilienBudgetresultatMapper> familienBudgetresultatMappers;
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
-
-    private PersoenlichesBudgetresultatDto persoenlichesBudgetresultatFromRequest(
-        final CalculatorRequest berechnungRequest,
-        final BerechnungResult berechnungResult,
-        final List<FamilienBudgetresultatDto> familienBudgetresultatList,
-        final int majorVersion,
-        final int minorVersion
-    ) {
-        final var mapper = persoenlichesBudgetResultatMappers.stream().filter(persoenlichesBudgetResultatMapper -> {
-            final var versionAnnotation =
-                persoenlichesBudgetResultatMapper.getClass().getAnnotation(CalculatorVersion.class);
-            return (versionAnnotation != null) &&
-            (versionAnnotation.major() == majorVersion) &&
-            (versionAnnotation.minor() == minorVersion);
-        }).findFirst();
-
-        if (mapper.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Cannot find a PersoenlichesBudgetResultatMapper for version " + majorVersion + '.' + minorVersion
-            );
-        }
-        final var persoenlichesBudgetResultatDto = berechnungResult.getPersoenlichesBudgetresultat();
-
-        final int einnahmenPersoenlichesBudget = persoenlichesBudgetResultatDto.getEinnahmenPersoenlichesBudget();
-
-        final int ausgabenPersoenlichesBudget = persoenlichesBudgetResultatDto.getAusgabenPersoenlichesBudget();
-
-        final int persoenlichesbudgetBerechnet = persoenlichesBudgetResultatDto.getPersoenlichesbudgetBerechnet();
-
-        return mapper.get()
-            .mapFromRequest(
-                berechnungRequest,
-                einnahmenPersoenlichesBudget,
-                ausgabenPersoenlichesBudget,
-                persoenlichesbudgetBerechnet,
-                familienBudgetresultatList
-            );
-    }
-
-    private FamilienBudgetresultatDto familienBudgetresultatFromRequest(
-        final BerechnungResult berechnungResult,
-        final int budgetToUse
-    ) {
-        // TODO DVSTIP-50: Replace this with something better?
-        return berechnungResult.getFamilienBudgetresultate().get(budgetToUse);
-    }
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
         final CalculatorRequest berechnungRequest,
@@ -129,13 +76,6 @@ public class BerechnungService {
         }
 
         return mapper.get().mapFromRequest(berechnungRequest);
-    }
-
-    private int calcMonthsBetween(final LocalDate from, final LocalDate to) {
-        return (int) ChronoUnit.MONTHS.between(
-            from,
-            to.plusDays(1)
-        );
     }
 
     public BerechnungsresultatDto getBerechnungsresultatFromGesuch(
@@ -177,7 +117,7 @@ public class BerechnungService {
                 minorVersion
             );
 
-            final var monthsValid = calcMonthsBetween(
+            final var monthsValid = DateUtil.getMonthsBetween(
                 gesuchTranche.getGueltigkeit().getGueltigAb(),
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
@@ -270,10 +210,7 @@ public class BerechnungService {
 
             for (int i = 0; i < steuerdatenList.size(); i++) {
                 familienBudgetresultatList.add(
-                    familienBudgetresultatFromRequest(
-                        stipendienCalculated,
-                        i
-                    )
+                    stipendienCalculated.getFamilienBudgetresultate().get(i)
                 );
             }
 
@@ -284,14 +221,16 @@ public class BerechnungService {
                 if (!berechnungsresultatDtoList.isEmpty()) {
                     continue;
                 }
+
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getFullName(),
                         Math.min(0, stipendienCalculated.getStipendien()), // KSTIP-2548: positive
                                                                            // Zwischenbeiträge/Teilrechnungen auf 0
                                                                            // setzen
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
+                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
+                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
                         gesuchTranche.getId(),
                         BigDecimal.ONE,
                         berechnungsStammdatenFromRequest(
@@ -299,14 +238,7 @@ public class BerechnungService {
                             majorVersion,
                             minorVersion
                         ),
-                        persoenlichesBudgetresultatFromRequest(
-                            berechnungsRequest,
-                            stipendienCalculated,
-                            familienBudgetresultatList,
-                            majorVersion,
-                            minorVersion
-                        ),
-                        // stipendienCalculated.getPersoenlichesBudgetresultat(),
+                        stipendienCalculated.getPersoenlichesBudgetresultat(),
                         familienBudgetresultatList
                     )
                 );
@@ -339,10 +271,11 @@ public class BerechnungService {
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        gesuchTranche.getGesuchFormular().getPersonInAusbildung().getFullName(),
                         Math.min(0, berechnung), // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
+                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
+                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
                         gesuchTranche.getId(),
                         kinderProzenteNormalized,
                         berechnungsStammdatenFromRequest(
@@ -350,14 +283,7 @@ public class BerechnungService {
                             majorVersion,
                             minorVersion
                         ),
-                        // stipendienCalculated.getPersoenlichesBudgetresultat(),
-                        persoenlichesBudgetresultatFromRequest(
-                            berechnungsRequest,
-                            stipendienCalculated,
-                            familienBudgetresultatList,
-                            majorVersion,
-                            minorVersion
-                        ),
+                        stipendienCalculated.getPersoenlichesBudgetresultat(),
                         familienBudgetresultatList
                     )
                 );

@@ -32,6 +32,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
   private @Valid Integer preisProMahlzeit;
   private @Valid Integer stipLimiteMinimalstipendium;
   private @Valid Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+  private @Valid Integer anzahlMonate;
 
   /**
    **/
@@ -242,6 +243,25 @@ public class BerechnungsStammdatenDto  implements Serializable {
     this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
   }
 
+  /**
+   **/
+  public BerechnungsStammdatenDto anzahlMonate(Integer anzahlMonate) {
+    this.anzahlMonate = anzahlMonate;
+    return this;
+  }
+
+  
+  @JsonProperty("anzahlMonate")
+  @NotNull
+  public Integer getAnzahlMonate() {
+    return anzahlMonate;
+  }
+
+  @JsonProperty("anzahlMonate")
+  public void setAnzahlMonate(Integer anzahlMonate) {
+    this.anzahlMonate = anzahlMonate;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -262,12 +282,13 @@ public class BerechnungsStammdatenDto  implements Serializable {
         Objects.equals(this.anzahlWochenSchule, berechnungsStammdaten.anzahlWochenSchule) &&
         Objects.equals(this.preisProMahlzeit, berechnungsStammdaten.preisProMahlzeit) &&
         Objects.equals(this.stipLimiteMinimalstipendium, berechnungsStammdaten.stipLimiteMinimalstipendium) &&
-        Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, berechnungsStammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag);
+        Objects.equals(this.limiteAlterAntragsstellerHalbierungElternbeitrag, berechnungsStammdaten.limiteAlterAntragsstellerHalbierungElternbeitrag) &&
+        Objects.equals(this.anzahlMonate, berechnungsStammdaten.anzahlMonate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(maxSaeule3a, einkommensfreibetrag, abzugslimite, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag);
+    return Objects.hash(maxSaeule3a, einkommensfreibetrag, abzugslimite, freibetragErwerbseinkommen, freibetragVermoegen, vermoegensanteilInProzent, anzahlWochenLehre, anzahlWochenSchule, preisProMahlzeit, stipLimiteMinimalstipendium, limiteAlterAntragsstellerHalbierungElternbeitrag, anzahlMonate);
   }
 
   @Override
@@ -286,6 +307,7 @@ public class BerechnungsStammdatenDto  implements Serializable {
     sb.append("    preisProMahlzeit: ").append(toIndentedString(preisProMahlzeit)).append("\n");
     sb.append("    stipLimiteMinimalstipendium: ").append(toIndentedString(stipLimiteMinimalstipendium)).append("\n");
     sb.append("    limiteAlterAntragsstellerHalbierungElternbeitrag: ").append(toIndentedString(limiteAlterAntragsstellerHalbierungElternbeitrag)).append("\n");
+    sb.append("    anzahlMonate: ").append(toIndentedString(anzahlMonate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

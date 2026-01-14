@@ -525,8 +525,6 @@ public class GesuchTrancheService {
                 gesuchDokument.getStatus() == GesuchDokumentStatus.AUSSTEHEND
             ) {
                 existingDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
-                existingDokument.getGesuchDokumentKommentare().clear();
-                gesuchDokumentKommentarService.deleteForGesuchDokument(existingDokument.getId());
             }
         }
 

@@ -8,6 +8,7 @@
   <include file="db/migration/quartz.init.xml" />
   
   <!-- <editor-fold desc="v0.59" defaultstate="collapsed" -->
+  <include file="db/migration/0.59/0.59.0-KSTIP-2942.xml" />
   <!--  </editor-fold> -->
   
   <!-- <editor-fold desc="v0.58" defaultstate="collapsed" -->

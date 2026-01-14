@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
@@ -637,6 +638,7 @@ public class TestUtil {
     }
 
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
+        final var gueltigkeit = DateRange.getFruehlingOrHerbst(LocalDate.now());
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
                 .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(Year.now().getValue()))
@@ -646,9 +648,9 @@ public class TestUtil {
                 .setFreibetragVermoegen(30000)
                 .setStipLimiteMinimalstipendium(500)
                 .setVermoegensanteilInProzent(15)
-                .setAnzahlWochenLehre(42)
-                .setAnzahlWochenSchule(37)
-                .setPreisProMahlzeit(7)
+                .setAnzahlWochenLehre(47)
+                .setAnzahlWochenSchule(38)
+                .setPreisProMahlzeit(10)
                 .setIntegrationszulage(2400)
                 .setLimiteEkFreibetragIntegrationszulage(13200)
                 .setPerson1(11724)
@@ -676,12 +678,19 @@ public class TestUtil {
                 .setKinder0017(1400)
                 .setEinreichefristNormal(LocalDate.now().plusMonths(5))
                 .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
+                .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
                 .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(Year.now().getValue(), 12, 31))
         )
             .setGesuchTranchen(
                 List.of(
                     (GesuchTranche) new GesuchTranche()
                         .setTyp(GesuchTrancheTyp.TRANCHE)
+                        .setGueltigkeit(
+                            new DateRange(
+                                gueltigkeit.getGueltigAb(),
+                                gueltigkeit.getGueltigAb().plusYears(1).minusDays(1)
+                            )
+                        )
                         .setGesuchFormular(
                             new GesuchFormular()
                                 .setPersonInAusbildung(

@@ -1,42 +1,39 @@
 <p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | transloco }}</p>
-@if (berechnungenSig().loading) {
+@if (berechnungStore.berechnungsViewSig().loading) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  @if (berechnungenSig().berechnung; as berechnung) {
-    <dl class="d-flex g-2">
-      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.from' | transloco }}:</dt>
-      <dd class="me-4">{{ berechnung.gueltigAb | date: 'MM.yyyy' }}</dd>
-      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.to' | transloco }}:</dt>
-      <dd class="me-4">{{ berechnung.gueltigBis | date: 'MM.yyyy' }}</dd>
-      <dt class="me-2 fw-normal text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.months' | transloco }}:</dt>
-      <dd class="me-4">{{ berechnung.monate }}</dd>
-    </dl>
-
+  @if (berechnungenRawSig(); as berechnung) {
     <div class="row">
       <div class="col-12">
-        <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich">
+        <dv-berechnungs-card
+          [berechnungSig]="berechnung.persoenlich"
+          [stammdatenSig]="berechnung.berechnungsStammdaten"
+        >
           <dv-persoenliche-einnahmen
             class="d-flex flex-column gap-3 ps-4"
-            [einnahmenSig]="berechnung.persoenlich.einnahmen"
+            [budgetSig]="berechnung.persoenlich"
+            [stammdatenSig]="berechnung.berechnungsStammdaten"
           ></dv-persoenliche-einnahmen>
           <dv-persoenliche-kosten
             class="d-flex flex-column gap-3 ps-4"
-            [kostenSig]="berechnung.persoenlich.kosten"
+            [budgetSig]="berechnung.persoenlich"
           ></dv-persoenliche-kosten>
         </dv-berechnungs-card>
       </div>
     </div>
-    <div class="row mt-4 mb-4">
+    <div class="tw:flex tw:flex-col tw:gap-6 row mt-4 mb-4">
       @for (familienbudget of berechnung.familien; track $index) {
-        <div class="col-6">
-          <dv-berechnungs-card [berechnungSig]="familienbudget">
+        <div class="col-12">
+          <dv-berechnungs-card [berechnungSig]="familienbudget" [stammdatenSig]="berechnung.berechnungsStammdaten">
             <dv-familien-einnahmen
               class="d-flex flex-column gap-3 ps-4"
-              [einnahmenSig]="familienbudget.einnahmen"
+              [budgetSig]="familienbudget"
+              [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-einnahmen>
             <dv-familien-kosten
               class="d-flex flex-column gap-3 ps-4"
-              [kostenSig]="familienbudget.kosten"
+              [budgetSig]="familienbudget"
+              [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-kosten>
           </dv-berechnungs-card>
         </div>

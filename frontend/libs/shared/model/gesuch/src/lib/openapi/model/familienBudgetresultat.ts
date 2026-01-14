@@ -9,37 +9,39 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { FamilienBudgetresultatKosten } from './familienBudgetresultatKosten';
 import { SteuerdatenTyp } from './steuerdatenTyp';
+import { FamilienBudgetresultatEinnahmen } from './familienBudgetresultatEinnahmen';
 
 /**
  * Familien Budget daten fuer und von der Berechnung
  */
 export interface FamilienBudgetresultat { 
-    familienBudgetTyp: SteuerdatenTyp;
-    selbststaendigErwerbend: boolean;
+    steuerdatenTyp: SteuerdatenTyp;
+    vorname: string;
+    nachname: string;
+    vornamePartner?: string;
+    nachnamePartner?: string;
+    sozialversicherungsnummer: string;
+    /**
+     * dd.MM.yyyy
+     */
+    geburtsdatum: string;
+    steuerjahr: number;
+    veranlagungscode: string;
+    total: number;
+    einnahmenMinusKosten: number;
     anzahlPersonenImHaushalt: number;
-    anzahlGeschwisterInAusbildung: number;
-    totalEinkuenfte: number;
-    ergaenzungsleistungen: number;
-    steuerbaresVermoegen: number;
-    anrechenbaresVermoegen: number;
-    saeule2: number;
-    saeule3a: number;
-    eigenmietwert: number;
-    alimente: number;
-    einnahmenFamilienbudget: number;
-    grundbedarf: number;
-    effektiveWohnkosten: number;
-    medizinischeGrundversorgung: number;
-    integrationszulage: number;
-    steuernBund: number;
-    steuernKantonGemeinde: number;
-    fahrkostenPerson1: number;
-    fahrkostenPerson2: number;
-    essenskostenPerson1: number;
-    essenskostenPerson2: number;
-    ausgabenFamilienbudget: number;
-    familienbudgetBerechnet: number;
+    anzahlKinderInAusbildung: number;
+    einnahmeUeberschuss: number;
+    proKopfTeilungKinderInAusbildung: number;
+    anrechenbareElterlicheLeistung: number;
+    halbierungsReduktion: number;
+    fehlbetrag: number;
+    proKopfTeilung: number;
+    ungedeckterAnteilLebenshaltungskosten: number;
+    einnahmen: FamilienBudgetresultatEinnahmen;
+    kosten: FamilienBudgetresultatKosten;
 }
 
 

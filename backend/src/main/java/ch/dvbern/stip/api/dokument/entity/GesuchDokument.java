@@ -37,6 +37,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,6 +53,12 @@ import org.hibernate.envers.Audited;
             name = "IX_gesuch_dokument_gesuch_tranche_id_dokument_typ", columnList = "gesuch_tranche_id,dokument_typ"
         ),
         @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
+    },
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UC_gesuch_dokument_gesuch_tranche_id_dokument_typ",
+            columnNames = { "gesuch_tranche_id", "dokument_typ" }
+        )
     }
 )
 @Getter

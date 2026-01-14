@@ -1,158 +1,149 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
+import { BerechnungsStammdaten } from '@dv/shared/model/gesuch';
+import { FamilienBudgetresultatView } from '@dv/shared/model/verfuegung';
 import {
   SharedUiFormatChfNegativePipe,
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { FamilienBerechnung } from '../../../models';
+import { PositionComponent } from '../position/position.component';
 
 @Component({
   selector: 'dv-familien-einnahmen',
   imports: [
-    TranslocoPipe,
+    TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfNegativePipe,
     SharedUiFormatChfPositivePipe,
+    PositionComponent,
   ],
   template: `
-    <!-- Total Einkünfte -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.totalEinkuenfte'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().totalEinkuenfte | formatChfPositive }}
-      </div>
-    </div>
+    <ng-container
+      *transloco="
+        let t;
+        prefix: 'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen'
+      "
+    >
+      @let budget = budgetSig();
+      @let einnahmen = budget.einnahmen;
+      @let stammdaten = stammdatenSig();
 
-    <!-- Ergänzungsleistungen -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.ergaenzungsleistungen'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().ergaenzungsleistungen | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Total Einkünfte -->
+      <dv-position
+        [titleSig]="t('totalEinkuenfte')"
+        [infoSig]="t('totalEinkuenfte.info')"
+        [amountSig]="einnahmen.totalEinkuenfte | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Abzüglich Mietwert -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.mietwert'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().mietwert | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Einkünfte nach BGSA 1) -->
+      <dv-position
+        [titleSig]="t('einnahmenBGSA')"
+        [amountSig]="einnahmen.einnahmenBGSA | formatChfPositive"
+      >
+        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
+          1)
+        </span>
+      </dv-position>
 
-    <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
-    <div class="d-flex gap-2">
-      {{
-        'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.kinderalimente'
-          | transloco
-      }}
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().kinderalimente | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Ergänzungsleistungen -->
+      <dv-position
+        [titleSig]="t('ergaenzungsleistungen')"
+        [amountSig]="einnahmen.ergaenzungsleistungen | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule3a.info'
-              | transloco: einnahmenSig()
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().sauele3 | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Andere Einnahmen -->
+      <dv-position
+        [titleSig]="t('andereEinnahmen')"
+        [amountSig]="einnahmen.andereEinnahmen | formatChfPositive"
+      >
+      </dv-position>
 
-    <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.beitraegeSaule2.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().sauele2 | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Abzüglich Mietwert -->
+      <dv-position
+        [titleSig]="t('mietwert')"
+        [amountSig]="einnahmen.eigenmietwert | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- Einkommensfreibetrag -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info'
-              | transloco
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().einkommensfreibeitrag | formatChfNegative: true }}
-      </div>
-    </div>
+      <!-- Abzüglich Unterhaltsbeträge  -->
+      <dv-position
+        [titleSig]="t('unterhaltsbeitraege')"
+        [infoSig]="t('unterhaltsbeitraege.info')"
+        [amountSig]="einnahmen.unterhaltsbeitraege | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- Anrechenbares Vermögen -->
-    <div class="d-flex gap-2">
-      <div classs="d-flex flex-column">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen'
-            | transloco
-        }}
-        <div class="text-muted fs-7">
-          {{
-            'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.anrechenbaresVermoegen.info'
-              | transloco: einnahmenSig()
-          }}
-        </div>
-      </div>
-      <div class="text-muted flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().anrechenbaresVermoegen | formatChfPositive }}
-      </div>
-    </div>
+      <!-- Beiträge von Selbständigerwerbenden in die Säule 3a -->
+      <dv-position
+        [titleSig]="t('beitraegeSaule3a')"
+        [infoSig]="t('beitraegeSaule3a.info')"
+        [amountSig]="einnahmen.sauele3 | formatChfNegative: true"
+      >
+      </dv-position>
 
-    <!-- Total -->
-    <div class="d-flex mt-3 gap-2">
-      <div class="h4 m-0">
-        {{
-          'sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total'
-            | transloco
-        }}
-      </div>
-      <div class="h4 flex-grow-1 text-end text-nowrap">
-        {{ einnahmenSig().total | formatChf }}
-      </div>
-    </div>
+      <!-- Beiträge von Selbständigerwerbenden in die 2.Säule -->
+      <dv-position
+        [titleSig]="t('beitraegeSaule2')"
+        [infoSig]="t('beitraegeSaule2.info')"
+        [amountSig]="einnahmen.sauele2 | formatChfNegative: true"
+      >
+      </dv-position>
+
+      <!-- Abzüglich Alimente/Renten für in Ausbildung stehende Person -->
+      <dv-position
+        [titleSig]="t('renten')"
+        [infoSig]="t('renten.info')"
+        [amountSig]="einnahmen.renten | formatChfNegative: true"
+      >
+      </dv-position>
+
+      <!--  Einkommensfreibetrag  -->
+      <dv-position
+        [titleSig]="t('einkommensfreibeitrag')"
+        [infoSig]="einnahmen.einkommensfreibetrag | formatChf"
+        [amountSig]="einnahmen.einkommensfreibetrag | formatChfNegative: true"
+      >
+      </dv-position>
+
+      <!-- Zwischentotal anrechenbare, jährliche Einnahmen, welcher betrag? -->
+      <dv-position
+        [titleSig]="t('zwischentotal')"
+        [infoSig]="t('zwischentotal.info')"
+        [amountSig]="einnahmen.zwischentotal | formatChf"
+      >
+      </dv-position>
+
+      <!-- Anrechenbares Vermögen -->
+      <dv-position
+        [titleSig]="t('anrechenbaresVermoegen')"
+        [infoSig]="
+          t('anrechenbaresVermoegen.info', {
+            vermoegensanteilInProzent: stammdaten.vermoegensanteilInProzent,
+            steuerbaresVermoegen: einnahmen.steuerbaresVermoegen | formatChf,
+            freibetragVermoegen: stammdaten.freibetragVermoegen | formatChf,
+          })
+        "
+        [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
+      >
+      </dv-position>
+
+      <!-- Total -->
+      <dv-position
+        type="title"
+        [titleSig]="t('total')"
+        [amountSig]="einnahmen.total | formatChf"
+      >
+      </dv-position>
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienEinnahmenComponent {
-  einnahmenSig = input.required<FamilienBerechnung['einnahmen']>();
+  budgetSig = input.required<FamilienBudgetresultatView>();
+  stammdatenSig = input.required<BerechnungsStammdaten>();
 }

@@ -35,11 +35,15 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.berechnung.dto.PersonValueList;
+import ch.dvbern.stip.generated.dto.PersonValueItemDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import lombok.extern.slf4j.Slf4j;
+
+import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 
 @Data
 @Builder
@@ -47,92 +51,117 @@ import lombok.extern.slf4j.Slf4j;
 @Value
 @Slf4j
 public class AntragsstellerV1 {
-    int piaWohntInElternHaushalt;
-    boolean tertiaerstufe;
-    int einkommen;
-    int einkommenPartner;
-    int vermoegen;
-    int alimente;
-    int rente;
-    int kinderAusbildungszulagen;
-    int ergaenzungsleistungen;
-    int leistungenEO;
-    int gemeindeInstitutionen;
+    String vorname;
+    String nachname;
+    String vornamePartner;
+    String nachnamePartner;
+    String sozialversicherungsnummer;
+    LocalDate geburtsdatum;
     int alter;
-    int grundbedarf;
-    int wohnkosten;
-    int medizinischeGrundversorgung;
-    int ausbildungskosten;
-    int steuern;
-    int steuernPartner;
-    int fahrkosten;
-    int fahrkostenPartner;
-    int verpflegung;
-    int verpflegungPartner;
-    int fremdbetreuung;
+    int piaWohntInElternHaushalt;
+    int anzahlPersonenImHaushalt;
     int anteilFamilienbudget;
+    boolean verheiratetKonkubinat;
+    boolean tertiaerstufe;
     boolean lehre;
     boolean eigenerHaushalt;
     boolean halbierungElternbeitrag;
-    int anzahlPersonenImHaushalt;
-    boolean verheiratetKonkubinat;
+
+    // Einkommen
+    List<PersonValueItemDto> einkommens;
+    List<PersonValueItemDto> einnahmenBGSAs;
+    List<PersonValueItemDto> kinderAusbildungszulagens;
+    List<PersonValueItemDto> unterhaltsbeitraeges;
+    List<PersonValueItemDto> eoLeistungens;
+    List<PersonValueItemDto> taggelds;
+    List<PersonValueItemDto> rentens;
+    List<PersonValueItemDto> ergaenzungsleistungens;
+    Integer gemeindeInstitutionen;
+    List<PersonValueItemDto> andereEinnahmens;
+    Integer vermoegen;
+
+    // Kosten
+    int ausbildungskosten;
+    int fahrkosten;
+    int auswaertigeMittagessenProWoche;
+    int grundbedarf;
+    int wohnkosten;
+    List<PersonValueItemDto> medizinischeGrundversorgungs;
+    Integer fahrkostenPartner;
+    Integer verpflegungskostenPartner;
+    int fremdbetreuung;
+    int steuern;
+    Integer steuernPartner;
 
     public static AntragsstellerV1 buildFromDependants(
         final GesuchFormular gesuchFormular,
         final int piaWohntInElternHaushalt
     ) {
         final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
+        final var piaName = personInAusbildung.getVorname();
         final var partner = gesuchFormular.getPartner();
         final var einnahmenKosten = gesuchFormular.getEinnahmenKosten();
         final var gesuchsperiode = gesuchFormular.getTranche().getGesuch().getGesuchsperiode();
         final var ausbildung = gesuchFormular.getAusbildung();
 
+        final var einkommens = new PersonValueList();
+        final var medizinischeGrundversorgungs = new PersonValueList();
+        final var kinderAusbildungszulagens = new PersonValueList();
+        final var unterhaltsbeitraeges = new PersonValueList();
+        final var rentens = new PersonValueList();
+        final var eoLeistungens = new PersonValueList();
+        final var taggelds = new PersonValueList();
+        final var ergaenzungsleistungens = new PersonValueList();
+        final var andereEinnahmens = new PersonValueList();
+        final var einnahmenBGSAs = new PersonValueList();
+
+        int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
         builder
+            .vorname(personInAusbildung.getVorname())
+            .nachname(personInAusbildung.getNachname())
+            .sozialversicherungsnummer(personInAusbildung.getSozialversicherungsnummer())
+            .geburtsdatum(personInAusbildung.getGeburtsdatum())
+            .alter(alter)
             .piaWohntInElternHaushalt(piaWohntInElternHaushalt)
             .tertiaerstufe(
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()
             )
-            .einkommen(einnahmenKosten.getNettoerwerbseinkommen())
-            .vermoegen(Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0))
-            .alimente(Objects.requireNonNullElse(einnahmenKosten.getUnterhaltsbeitraege(), 0))
-            .rente(Objects.requireNonNullElse(einnahmenKosten.getRenten(), 0))
-            .kinderAusbildungszulagen(Objects.requireNonNullElse(einnahmenKosten.getZulagen(), 0))
-            .ergaenzungsleistungen(Objects.requireNonNullElse(einnahmenKosten.getErgaenzungsleistungen(), 0))
-            .leistungenEO(Objects.requireNonNullElse(einnahmenKosten.getEoLeistungen(), 0))
-            .gemeindeInstitutionen(Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0));
+            .vermoegen(einnahmenKosten.getVermoegen())
+            .gemeindeInstitutionen(einnahmenKosten.getBeitraege());
 
-        int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
-        builder.alter(alter);
+        einkommens.setPersonValue(piaName, einnahmenKosten.getNettoerwerbseinkommen());
+        kinderAusbildungszulagens.setPersonValue(piaName, einnahmenKosten.getZulagen());
+        andereEinnahmens.setPersonValue(piaName, einnahmenKosten.getAndereEinnahmen());
+        taggelds.setPersonValue(piaName, einnahmenKosten.getTaggelderAHVIV());
+        unterhaltsbeitraeges.setPersonValue(
+            piaName,
+            toJahresWert(einnahmenKosten.getUnterhaltsbeitraege())
+        );
+        rentens.setPersonValue(piaName, einnahmenKosten.getRenten());
+        ergaenzungsleistungens.setPersonValue(piaName, einnahmenKosten.getErgaenzungsleistungen());
+        eoLeistungens.setPersonValue(piaName, einnahmenKosten.getEoLeistungen());
+        einnahmenBGSAs.setPersonValue(piaName, einnahmenKosten.getEinnahmenBGSA());
 
-        int medizinischeGrundversorgung = 0;
         int anzahlPersonenImHaushalt = 0;
         if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
             anzahlPersonenImHaushalt = 1;
-            medizinischeGrundversorgung +=
+            medizinischeGrundversorgungs.setPersonValue(
+                piaName,
                 BerechnungRequestV1
                     .getMedizinischeGrundversorgung(
                         personInAusbildung.getGeburtsdatum(),
                         ausbildung.getAusbildungBegin(),
                         gesuchsperiode
-                    );
+                    )
+            );
+
             if (partner != null) {
                 anzahlPersonenImHaushalt += 1;
-                medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                    partner.getGeburtsdatum(),
-                    ausbildung.getAusbildungBegin(),
-                    gesuchsperiode
-                );
             }
             for (final var kind : gesuchFormular.getKinds()) {
-                // if child does still live with the parents/ a parent
                 if (kind.getWohnsitzAnteilPia() > 0) {
                     anzahlPersonenImHaushalt += 1;
-                    medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
-                        kind.getGeburtsdatum(),
-                        ausbildung.getAusbildungBegin(),
-                        gesuchsperiode
-                    );
                 }
             }
 
@@ -149,20 +178,17 @@ public class AntragsstellerV1 {
         } else {
             builder.grundbedarf(0);
         }
-        builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
         builder.wohnkosten(0);
         if (einnahmenKosten.getWohnkosten() != null && anzahlPersonenImHaushalt > 0) {
             builder.wohnkosten(
                 getEffektiveWohnkosten(
-                    einnahmenKosten.getWohnkosten(),
+                    toJahresWert(einnahmenKosten.getWohnkosten()),
                     gesuchsperiode,
                     anzahlPersonenImHaushalt
                 )
             );
         }
-
-        builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
 
         builder.ausbildungskosten(
             getAusbildungskosten(
@@ -174,12 +200,12 @@ public class AntragsstellerV1 {
         final var isPiaQuellenbesteuert = EinnahmenKostenMappingUtil.isQuellenBesteuert(personInAusbildung);
         builder.steuern(
             EinnahmenKostenMappingUtil.calculateSteuern(einnahmenKosten, isPiaQuellenbesteuert)
-            // TODO: + einnahmenKosten.getSteuernStaat() + einnahmenKosten.getSteuernBund()
         );
         builder.fahrkosten(Objects.requireNonNullElse(einnahmenKosten.getFahrkosten(), 0));
-        builder.verpflegung(Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0));
+        builder.auswaertigeMittagessenProWoche(
+            Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0)
+        );
         builder.fremdbetreuung(Objects.requireNonNullElse(einnahmenKosten.getBetreuungskostenKinder(), 0));
-        // TODO: builder.anteilFamilienbudget(Objects.requireNonNullElse());
         final var abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
 
         final boolean isLehre = abschluss.getBildungsrichtung()
@@ -198,23 +224,78 @@ public class AntragsstellerV1 {
             )
         );
 
-        if (partner != null) {
-            final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
-            builder.einkommenPartner(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0));
-            builder.steuernPartner(
-                EinnahmenKostenMappingUtil.calculateSteuern(
-                    ekPartner
-                        .setNettoerwerbseinkommen(Objects.requireNonNullElse(ekPartner.getNettoerwerbseinkommen(), 0)),
-                    false // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
-                )
+        final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
+        if (Objects.nonNull(partner) && Objects.nonNull(ekPartner)) {
+            final var partnerName = partner.getVorname();
+            builder.vornamePartner(partnerName);
+            builder.nachnamePartner(partner.getNachname());
+            kinderAusbildungszulagens.setPartnerValue(partnerName, ekPartner.getZulagen());
+            andereEinnahmens.setPartnerValue(partnerName, ekPartner.getAndereEinnahmen());
+            taggelds.setPartnerValue(partnerName, ekPartner.getTaggelderAHVIV());
+            einkommens.setPartnerValue(partnerName, ekPartner.getNettoerwerbseinkommen());
+            unterhaltsbeitraeges.setPartnerValue(
+                partnerName,
+                toJahresWert(ekPartner.getUnterhaltsbeitraege())
             );
-            builder.fahrkostenPartner(Objects.requireNonNullElse(ekPartner.getFahrkosten(), 0));
-            builder.verpflegungPartner(Objects.requireNonNullElse(ekPartner.getVerpflegungskosten(), 0));
+            builder.steuernPartner(
+                // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
+                EinnahmenKostenMappingUtil.calculateSteuern(ekPartner, false)
+            );
+            builder.fahrkostenPartner(ekPartner.getFahrkosten());
+            builder.verpflegungskostenPartner(ekPartner.getVerpflegungskosten());
+            rentens.setPartnerValue(partnerName, ekPartner.getRenten());
+            ergaenzungsleistungens.setPartnerValue(partnerName, ekPartner.getErgaenzungsleistungen());
+            eoLeistungens.setPartnerValue(partnerName, ekPartner.getEoLeistungen());
+            einnahmenBGSAs.setPartnerValue(partnerName, ekPartner.getEinnahmenBGSA());
+            if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+                medizinischeGrundversorgungs.setPartnerValue(
+                    partner.getVorname(),
+                    BerechnungRequestV1.getMedizinischeGrundversorgung(
+                        partner.getGeburtsdatum(),
+                        ausbildung.getAusbildungBegin(),
+                        gesuchsperiode
+                    )
+                );
+            }
         }
+
+        for (var kind : gesuchFormular.getKinds()) {
+            if (kind.getWohnsitzAnteilPia() > 0) {
+                kinderAusbildungszulagens.addKindValue(kind, kind.getKinderUndAusbildungszulagen());
+                unterhaltsbeitraeges.addKindValue(kind, kind.getKinderUndAusbildungszulagen());
+                rentens.addKindValue(kind, kind.getRenten());
+                ergaenzungsleistungens.addKindValue(kind, kind.getErgaenzungsleistungen());
+                andereEinnahmens.addKindValue(kind, kind.getAndereEinnahmen());
+                if (personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+                    medizinischeGrundversorgungs.addKindValue(
+                        kind,
+                        BerechnungRequestV1.getMedizinischeGrundversorgung(
+                            kind.getGeburtsdatum(),
+                            ausbildung.getAusbildungBegin(),
+                            gesuchsperiode
+                        )
+                    );
+                }
+            }
+        }
+
         builder.verheiratetKonkubinat(
             List.of(Zivilstand.EINGETRAGENE_PARTNERSCHAFT, Zivilstand.VERHEIRATET, Zivilstand.KONKUBINAT)
                 .contains(personInAusbildung.getZivilstand())
         );
+
+        builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
+
+        builder.einkommens = einkommens.toList();
+        builder.medizinischeGrundversorgungs = medizinischeGrundversorgungs.toList();
+        builder.kinderAusbildungszulagens = kinderAusbildungszulagens.toList();
+        builder.unterhaltsbeitraeges = unterhaltsbeitraeges.toList();
+        builder.eoLeistungens = eoLeistungens.toList();
+        builder.taggelds = taggelds.toList();
+        builder.rentens = rentens.toList();
+        builder.ergaenzungsleistungens = ergaenzungsleistungens.toList();
+        builder.andereEinnahmens = andereEinnahmens.toList();
+        builder.einnahmenBGSAs = einnahmenBGSAs.toList();
 
         return builder.build();
     }
@@ -261,6 +342,7 @@ public class AntragsstellerV1 {
         final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
             .filter(
                 lebenslaufItem -> lebenslaufItem.isAusbildung()
+                && Objects.nonNull(lebenslaufItem.getAbschluss())
                 && lebenslaufItem.getAbschluss().isBerufsbefaehigenderAbschluss()
                 && lebenslaufItem.isAusbildungAbgeschlossen()
             )
