@@ -66,7 +66,6 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_SMALL;
@@ -79,9 +78,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
 
 @UtilityClass
 public class PdfUtils {
-    public static final Link AUSBILDUNGSBEITRAEGE_URI =
-        new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
-
     public static String formatNumber(Number number) {
         return NUMBER_FORMAT.format(number);
     }
@@ -249,7 +245,8 @@ public class PdfUtils {
         final float leftMargin,
         final TL translator,
         final boolean isDeckblatt,
-        final PdfFont pdfFont
+        final PdfFont pdfFont,
+        final Link ausbildungsbeitraegeUri
     ) {
         header(
             gesuch,
@@ -260,6 +257,7 @@ public class PdfUtils {
             isDeckblatt,
             pdfFont,
             null,
+            ausbildungsbeitraegeUri,
             Optional.empty()
         );
     }
@@ -273,6 +271,7 @@ public class PdfUtils {
         final boolean isDeckblatt,
         final PdfFont pdfFont,
         final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri,
         final Optional<Eltern> elternteilOptional
     ) {
 
@@ -322,7 +321,7 @@ public class PdfUtils {
         );
         headerTable.addCell(address);
 
-        final Paragraph uriParagraph = new Paragraph().add(AUSBILDUNGSBEITRAEGE_URI);
+        final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
 
         final Cell url = PdfUtils.createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
         headerTable.addCell(url);

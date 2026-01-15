@@ -38,10 +38,12 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
@@ -50,6 +52,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
@@ -94,7 +97,10 @@ public class DarlehensVerfuegungPdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont);
+            final Link ausbildungsbeitraegeUri =
+                new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+            PdfUtils
+                .header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
             final String ausbildungsjahr = getAusbildungsJahr(gesuch);
 
@@ -123,20 +129,8 @@ public class DarlehensVerfuegungPdfService {
                 .getGesuchFormular()
                 .getPersonInAusbildung();
 
-            final String translateKey = personInAusbildung
-                .getAnrede()
-                .equals(Anrede.HERR)
-                    ? "stip.pdf.begruessung.mann"
-                    : "stip.pdf.begruessung.frau";
-
             document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate(translateKey) + " ",
-                    personInAusbildung.getNachname()
-                )
+                PdfUtils.getAnredeParagraph(personInAusbildung, pdfFont, translator, FONT_SIZE_BIG, leftMargin)
             );
 
             final var text1 = String.format(
@@ -366,7 +360,10 @@ public class DarlehensVerfuegungPdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont);
+            final Link ausbildungsbeitraegeUri =
+                new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+            PdfUtils
+                .header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
             final String ausbildungsjahr = getAusbildungsJahr(gesuch);
 

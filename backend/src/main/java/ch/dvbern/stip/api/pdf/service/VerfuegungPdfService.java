@@ -52,9 +52,11 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.kernel.utils.PdfMerger;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.TextAlignment;
@@ -64,6 +66,7 @@ import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
@@ -127,6 +130,8 @@ public class VerfuegungPdfService {
             final Document document = new Document(pdfDocument, PAGE_SIZE);
         ) {
             final float leftMargin = document.getLeftMargin();
+            final Link ausbildungsbeitraegeUri =
+                new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
                 addVerfuegung(
@@ -138,11 +143,21 @@ public class VerfuegungPdfService {
                     translator,
                     anhangs,
                     pdfFont,
-                    pdfFontBold
+                    pdfFontBold,
+                    ausbildungsbeitraegeUri
                 );
 
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, true, pdfFont);
+                PdfUtils.header(
+                    gesuch,
+                    document,
+                    pdfDocument,
+                    leftMargin,
+                    translator,
+                    true,
+                    pdfFont,
+                    ausbildungsbeitraegeUri
+                );
             }
 
             addVerfuegung(
@@ -154,7 +169,8 @@ public class VerfuegungPdfService {
                 translator,
                 anhangs,
                 pdfFont,
-                pdfFontBold
+                pdfFontBold,
+                ausbildungsbeitraegeUri
             );
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -172,13 +188,14 @@ public class VerfuegungPdfService {
         final TL translator,
         final List<Anhangs> anhangs,
         final PdfFont pdfFont,
-        final PdfFont pdfFontBold
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) throws IOException {
         final var gesuch = verfuegung.getGesuch();
-        PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont);
+        PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
         // Add the main content and footer sections.
-        section.render(verfuegung, document, leftMargin, translator, pdfFont, pdfFontBold);
+        section.render(verfuegung, document, leftMargin, translator, pdfFont, pdfFontBold, ausbildungsbeitraegeUri);
         anhangs.addFirst(Anhangs.RECHTSMITTELBELEHRUNG);
         PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, true);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
@@ -191,7 +208,8 @@ public class VerfuegungPdfService {
         final float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
-        final PdfFont pdfFontBold
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) {
 
         final DateRange ausbildungsJahrDateRange = DateUtil.getGesuchDateRange(verfuegung.getGesuch());
@@ -300,7 +318,7 @@ public class VerfuegungPdfService {
                 translator.translate(
                     "stip.pdf.verfuegungOhneAnspruch.textBlock.fuenf"
                 )
-            ).add(PdfUtils.AUSBILDUNGSBEITRAEGE_URI)
+            ).add(ausbildungsbeitraegeUri)
         );
     }
 
@@ -310,7 +328,8 @@ public class VerfuegungPdfService {
         final float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
-        final PdfFont pdfFontBold
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) {
         final var relevantBuchhaltung =
             buchhaltungService.getLatestBuchhaltungEntry(verfuegung.getGesuch().getAusbildung().getFall().getId());
@@ -602,7 +621,8 @@ public class VerfuegungPdfService {
         final float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
-        final PdfFont pdfFontBold
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) {
         final var gesuch = verfuegung.getGesuch();
 
@@ -672,7 +692,7 @@ public class VerfuegungPdfService {
         document.add(
             PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
                 .add(translator.translate("stip.pdf.verfuegung.entschuldigung") + " ")
-                .add(PdfUtils.AUSBILDUNGSBEITRAEGE_URI)
+                .add(ausbildungsbeitraegeUri)
                 .add(".")
         );
 
@@ -819,7 +839,8 @@ public class VerfuegungPdfService {
             float leftMargin,
             TL translator,
             PdfFont pdfFont,
-            PdfFont pdfFontBold
+            PdfFont pdfFontBold,
+            Link ausbildungsbeitraegeUri
         )
         throws IOException;
     }

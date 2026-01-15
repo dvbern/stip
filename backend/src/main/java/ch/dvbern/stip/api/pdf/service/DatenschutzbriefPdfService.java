@@ -39,11 +39,13 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.DottedBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.VerticalAlignment;
@@ -51,6 +53,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
@@ -90,6 +93,9 @@ public class DatenschutzbriefPdfService {
 
             final var leftMargin = document.getLeftMargin();
 
+            final Link ausbildungsbeitraegeUri =
+                new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+
             PdfUtils.header(
                 gesuch,
                 document,
@@ -99,6 +105,7 @@ public class DatenschutzbriefPdfService {
                 false,
                 pdfFont,
                 pdfFontBold,
+                ausbildungsbeitraegeUri,
                 Optional.of(elternteil)
             );
 
