@@ -14,10 +14,7 @@ import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
-import {
-  SharedUiFormatChfNegativePipe,
-  SharedUiFormatChfPipe,
-} from '@dv/shared/ui/format-chf-pipe';
+import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -30,7 +27,6 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     RouterLink,
     SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
-    SharedUiFormatChfNegativePipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,

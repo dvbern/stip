@@ -85,12 +85,6 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         name: `${r.persoenlichesBudgetresultat.vorname} ${r.persoenlichesBudgetresultat.nachname}`,
         gueltigAb: r.gueltigAb,
         gueltigBis: r.gueltigBis,
-        geteilteBerechnung: r.type
-          ? {
-              berechnungsanteilKinder: Math.round(r.berechnungsanteilKinder),
-              anteil: r.berechnung,
-            }
-          : null,
       },
       familien: r.familienBudgetresultate.map((v) => ({
         ...v,
@@ -101,7 +95,6 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
         anzahlMonate: r.persoenlichesBudgetresultat.anzahlMonate,
         yearRange,
       })),
-      berechnung: r.berechnung,
       berechnungsStammdaten: r.berechnungsStammdaten,
     };
 

@@ -7843,14 +7843,18 @@ components:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
         - year
-        - berechnung
+        - berechnungStipendium
+        - berechnungDarlehen
         - tranchenBerechnungsresultate
       type: object
       properties:
         year:
           type: integer
-        berechnung:
+        berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
+          type: integer
+        berechnungDarlehen:
+          description: Berechneter Darlehensanspruch für das Gesuch
           type: integer
         berechnungReduziert:
           description: >-
@@ -7868,7 +7872,8 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - berechnung
+        - berechnungAnteilStipendium
+        - berechnungAnteilDarlehen
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -7880,8 +7885,11 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        berechnung:
+        berechnungAnteilStipendium:
           description: Berechneter Stpendiumsanspruch für diese Tranche
+          type: integer
+        berechnungAnteilDarlehen:
+          description: Berechneter Darlehensanspruch für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'

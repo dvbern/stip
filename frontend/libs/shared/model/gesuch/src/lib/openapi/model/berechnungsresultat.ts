@@ -19,7 +19,11 @@ export interface Berechnungsresultat {
     /**
      * Berechneter Stpendiumsanspruch für das Gesuch
      */
-    berechnung: number;
+    berechnungStipendium: number;
+    /**
+     * Berechneter Darlehensanspruch für das Gesuch
+     */
+    berechnungDarlehen: number;
     /**
      * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
      */

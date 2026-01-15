@@ -781,16 +781,15 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Montant total du budget",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Résultat",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Résultat : Bourse accordée",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.vermindert": "Resultat: Bourse accordée (réduit)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Résultat : Bourse refusée",
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Résumé",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.subtitle": "Détails du calcul",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderteSubtitle": "Détails du calcul réduit",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.totalBetragStipendium": "Montant total de la bourse",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.verminderungsBetrag": "Déduction ({{ months }}/12) pour dépôt tardif de la demande de bourse.",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.effektiverBetragStipendium": "Montant effective",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.total": "Montant total de calcul {{ index }}{{ type }} à la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
+
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Part de la bourse",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Part du prêt",
+
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Montant total de la bourse",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Montant total du prêt",
 
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Commentaire",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Télécharger la décision manuelle",

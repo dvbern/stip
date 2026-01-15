@@ -8,10 +8,7 @@ import {
   GesuchService,
   TranchenBerechnungsresultat,
 } from '@dv/shared/model/gesuch';
-import {
-  TeilberechnungsArt,
-  VerminderteBerechnung,
-} from '@dv/shared/model/verfuegung';
+import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
   cachedPending,
@@ -47,21 +44,22 @@ export class BerechnungStore extends signalStore(
    * @returns An object containing:
    * - `loading`: Boolean indicating if the data is pending
    * - `year`: The calculation year
-   * - `berechnung`: The total calculation amount
+   * - `berechnungStipendium`: Total betrag Stipendium
+   * - `berechnungDarlehen`: Total betrag Darlehen
    * - `berechnungsresultate`: Array of arrays of `TranchenBerechnungsresultat`, grouped by tranche ID and split type
-   * - `verminderteBerechnung`: Optional reduced calculation details (months, reduction amount, reduced calculation)
    */
   berechnungZusammenfassungViewSig = computed(() => {
     const berechnungRd = this.berechnung();
 
     const value: {
       year: number;
-      berechnung: number;
+      berechnungStipendium: number;
+      berechnungDarlehen: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
-      verminderteBerechnung?: VerminderteBerechnung;
     } = {
       year: berechnungRd.data?.year ?? 0,
-      berechnung: 0,
+      berechnungStipendium: berechnungRd.data?.berechnungStipendium ?? 0,
+      berechnungDarlehen: berechnungRd.data?.berechnungDarlehen ?? 0,
       berechnungsresultate: {},
     };
 
@@ -74,20 +72,6 @@ export class BerechnungStore extends signalStore(
           return acc;
         }, value)
       : value;
-
-    if (berechnungRd.data) {
-      byTrancheId.berechnung = berechnungRd.data?.berechnung;
-      const verminderteBerechnungMonate =
-        berechnungRd.data?.verminderteBerechnungMonate;
-      if (verminderteBerechnungMonate) {
-        const berechnungReduziert = berechnungRd.data?.berechnungReduziert ?? 0;
-        byTrancheId.verminderteBerechnung = {
-          monate: 12 - verminderteBerechnungMonate,
-          reduktionsBetrag: -(byTrancheId.berechnung - berechnungReduziert),
-          berechnungReduziert,
-        };
-      }
-    }
 
     return {
       loading: isPending(berechnungRd),

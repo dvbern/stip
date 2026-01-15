@@ -20,7 +20,11 @@ export interface TranchenBerechnungsresultat {
     /**
      * Berechneter Stpendiumsanspruch für diese Tranche
      */
-    berechnung: number;
+    berechnungAnteilStipendium: number;
+    /**
+     * Berechneter Darlehensanspruch für diese Tranche
+     */
+    berechnungAnteilDarlehen: number;
     gueltigAb: string;
     gueltigBis: string;
     ausbildungAb: string;
