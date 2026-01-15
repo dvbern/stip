@@ -83,12 +83,6 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
-  showDarlehenMenuSig = computed(() => {
-    const darlehen = this.darlehenStore.darlehenListSig();
-
-    return darlehen?.canCreateDarlehen || darlehen?.darlehenList.length;
-  });
-
   constructor() {
     effect(() => {
       if (this.closeMenuSig()?.value) {

@@ -31,13 +31,15 @@ import {
 
 type DarlehenState = {
   cachedDarlehen: CachedRemoteData<Darlehen>;
-  allDarlehen: CachedRemoteData<DarlehenGsResponse>;
+  darlehenGs: CachedRemoteData<DarlehenGsResponse>;
+  darlehenListSb: CachedRemoteData<Darlehen[]>;
   paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
   cachedDarlehen: initial(),
-  allDarlehen: initial(),
+  darlehenGs: initial(),
+  darlehenListSb: initial(),
   paginatedSbDarlehenDashboard: initial(),
 };
 
@@ -64,14 +66,20 @@ export class DarlehenStore extends signalStore(
     };
   });
 
-  darlehenListSig = computed(() => {
-    return fromCachedDataSig(this.allDarlehen);
+  darlehenListSbViewSig = computed(() => {
+    return {
+      list: fromCachedDataSig(this.darlehenListSb),
+      loading: isPending(this.darlehenListSb()),
+    };
   });
 
-  darlehenListViewSig = computed(() => {
+  darlehenGsViewSig = computed(() => {
+    const data = fromCachedDataSig(this.darlehenGs);
+
     return {
-      allDarlehen: fromCachedDataSig(this.allDarlehen),
-      loading: isPending(this.allDarlehen()),
+      list: data?.darlehenList ?? [],
+      canCreateDarlehen: data?.canCreateDarlehen ?? false,
+      loading: isPending(this.darlehenGs()),
     };
   });
 
@@ -102,16 +110,14 @@ export class DarlehenStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, () => ({
-          allDarlehen: pending(),
+          darlehenGs: pending(),
         }));
       }),
       switchMap((req) =>
         this.darlehenService
           .getAllDarlehenGs$(req)
           .pipe(
-            handleApiResponse((allDarlehen) =>
-              patchState(this, { allDarlehen }),
-            ),
+            handleApiResponse((darlehenGs) => patchState(this, { darlehenGs })),
           ),
       ),
     ),
@@ -265,21 +271,17 @@ export class DarlehenStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, () => ({
-          allDarlehen: pending(),
+          darlehenListSb: pending(),
         }));
       }),
       switchMap((req) =>
-        this.darlehenService.getAllDarlehenSb$(req).pipe(
-          handleApiResponse((rd) =>
-            patchState(this, () => {
-              const data: DarlehenGsResponse = {
-                darlehenList: rd.data ?? [],
-                canCreateDarlehen: false,
-              };
-              return { allDarlehen: { ...rd, data } };
-            }),
+        this.darlehenService
+          .getAllDarlehenSb$(req)
+          .pipe(
+            handleApiResponse((darlehenListSb) =>
+              patchState(this, { darlehenListSb }),
+            ),
           ),
-        ),
       ),
     ),
   );

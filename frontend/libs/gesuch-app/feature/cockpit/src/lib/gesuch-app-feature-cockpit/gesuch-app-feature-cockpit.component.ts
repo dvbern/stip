@@ -104,12 +104,6 @@ export class GesuchAppFeatureCockpitComponent {
     );
   });
 
-  showDarlehenMenuSig = computed(() => {
-    const darlehen = this.darlehenStore.darlehenListSig();
-
-    return darlehen?.canCreateDarlehen || darlehen?.darlehenList.length;
-  });
-
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;
   });

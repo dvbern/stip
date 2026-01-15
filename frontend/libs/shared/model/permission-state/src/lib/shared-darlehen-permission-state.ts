@@ -36,28 +36,22 @@ const hasPermission = (
 const GS_APP = 'gesuch-app' satisfies AppType;
 const SB_APP = 'sachbearbeitung-app' satisfies AppType;
 
-type PermArg = Partial<Record<ShortRole, DarlehenPermissionFlags>>;
+type MultiplePermissionFlags = [DarlehenPermissionFlags, ShortRole][];
 
 /**
- * A permission assignement for cases where roles have different permissions
- * Permissions are combined, since picking the first matching role would lead to
- * unexpected results if a user has multiple roles.
+ * Check the permission for multiple roles, merging flags that are matching the rolesMap.
  */
-const mPerm = (arg: PermArg) => {
+const mPerm = (flagsByRoles: MultiplePermissionFlags) => {
   return (rolesMap: RolesMap): DarlehenPermissionFlags => {
     let combinedPermissions: DarlehenPermissionFlags = '       ';
 
-    for (const shortRole in arg) {
-      if (rolesMap[shortRoleMap[shortRole as ShortRole]]) {
-        const rolePermissions = arg[shortRole as ShortRole];
-        if (rolePermissions) {
-          combinedPermissions = combinedPermissions
-            .split('')
-            .map((char, index) =>
-              char !== ' ' ? char : rolePermissions.charAt(index),
-            )
-            .join('') as DarlehenPermissionFlags;
-        }
+    for (const [flags, shortRole] of flagsByRoles) {
+      // If the rolesMap contains the shortRole, merge the flags into combinedPermissions.
+      if (rolesMap[shortRoleMap[shortRole]]) {
+        combinedPermissions = combinedPermissions
+          .split('')
+          .map((char, index) => (char !== ' ' ? char : flags.charAt(index)))
+          .join('') as DarlehenPermissionFlags;
       }
     }
 
@@ -90,16 +84,16 @@ export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 
 // prettier-ignore
 export const darlehenPermissionTableByAppType = {
-  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
-                                                                                                 fe: ' R     '}) },
-  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' RK  F ',
-                                                                                                 fe: ' R     '}) },
-  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
-                                                                                                 fe: ' RK   A'}) },
-  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
-                                                                                                 fe: ' R     '}) },
-  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm({sb: ' R     ',
-                                                                                                 fe: ' R     '}) },
+  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
+  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm([[' RK  F ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
+  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' RK   A', 'fe']]) },
+  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
+  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
 } as const satisfies Record<
   DarlehenStatus,
   Record<AppType, PermissionCheck>

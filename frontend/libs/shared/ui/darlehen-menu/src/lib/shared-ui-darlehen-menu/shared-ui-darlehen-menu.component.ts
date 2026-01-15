@@ -13,12 +13,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
-import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
-import {
-  Darlehen,
-  DarlehenGsResponse,
-  DarlehenStatus,
-} from '@dv/shared/model/gesuch';
+import { Darlehen, DarlehenStatus } from '@dv/shared/model/gesuch';
+
+export type IdType = 'gesuch' | 'fall';
 
 type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
 const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
@@ -38,15 +35,13 @@ const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
 })
 export class SharedUiDarlehenMenuComponent {
   /**
-   * If undefined, no create button is shown.
+   * A tuple containing
+   * - Type of ID to be used in the routes (either 'gesuch' or 'fall').
+   * - The actual ID value.
    */
-  fallIdSig = input<string | undefined>();
-  /**
-   * Set in SB app, so link is correct, but not in GS and Sozialdienst app!
-   */
-  gesuchIdSig = input<string | undefined>();
-  darlehenListSig = input.required<DarlehenGsResponse | undefined>();
-  dashboardViewSig = input<SharedModelGsDashboardView | undefined>();
+  idTypeSig = input.required<[IdType, string | undefined]>();
+  darlehenListSig = input.required<Darlehen[] | undefined>();
+  canCreateDarlehenSig = input<boolean | undefined>();
   createDarlehen = output<{ fallId: string }>();
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -63,8 +58,13 @@ export class SharedUiDarlehenMenuComponent {
     'accepted',
   ];
 
+  idTypeValueSig = computed(() => {
+    const [type, id] = this.idTypeSig();
+    return { type, id };
+  });
+
   darlehenListByStatusSig = computed(() => {
-    const darlehenList = this.darlehenListSig()?.darlehenList ?? [];
+    const darlehenList = this.darlehenListSig() ?? [];
 
     return darlehenList.reduce(
       (acc, darlehen) => {
@@ -79,9 +79,5 @@ export class SharedUiDarlehenMenuComponent {
       },
       {} as Record<DarlehenCompleteStates, Darlehen[]>,
     );
-  });
-
-  canCreateDarlehenSig = computed(() => {
-    return this.darlehenListSig()?.canCreateDarlehen ?? false;
   });
 }
