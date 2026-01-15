@@ -55,6 +55,14 @@
       <mat-card-content class="d-flex flex-column gap-2">
         @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
           @for (teilBerechnung of berechnungen; track $index) {
+            <div class="d-flex justify-content-between fs-4 h4">
+              {{
+                t('sachbearbeitung-app.verfuegung.zusammenfassung.item.title', {
+                  index: berechnungsIndex + 1,
+                  type: teilBerechnung.type,
+                })
+              }}
+            </div>
             <div class="d-flex justify-content-between fs-5">
               <div>{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium') }}</div>
               <div>

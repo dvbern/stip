@@ -784,10 +784,9 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Resultat: Stipendium abgelehnt",
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Link Berechnung {{ index }}{{ type }}",
-
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Anteil an Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Anteil an Darlehen",
-
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Total Betrag Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Total Betrag Darlehen",
 
