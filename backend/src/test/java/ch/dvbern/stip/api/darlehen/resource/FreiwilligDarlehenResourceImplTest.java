@@ -32,10 +32,10 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -54,7 +54,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DarlehenResourceImplTest {
+public class FreiwilligDarlehenResourceImplTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
@@ -63,7 +63,7 @@ public class DarlehenResourceImplTest {
     private final DarlehenApiSpec darlehenApiSpec = DarlehenApiSpec.darlehen(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
-    private DarlehenDtoSpec darlehen;
+    private FreiwilligDarlehenDtoSpec darlehen;
 
     @Test
     @TestAsGesuchsteller
@@ -77,7 +77,7 @@ public class DarlehenResourceImplTest {
     @TestAsGesuchsteller
     @Order(2)
     void darlehenErstellenFailGesuchNichtFreigegeben() {
-        darlehenApiSpec.createDarlehen()
+        darlehenApiSpec.createFreiwilligDarlehen()
             .fallIdPath(gesuch.getFallId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -103,7 +103,7 @@ public class DarlehenResourceImplTest {
     @TestAsGesuchsteller
     @Order(4)
     void darlehenErstellen() {
-        darlehen = darlehenApiSpec.createDarlehen()
+        darlehen = darlehenApiSpec.createFreiwilligDarlehen()
             .fallIdPath(gesuch.getFallId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -113,14 +113,14 @@ public class DarlehenResourceImplTest {
             )
             .extract()
             .body()
-            .as(DarlehenDtoSpec.class);
+            .as(FreiwilligDarlehenDtoSpec.class);
     }
 
     @Test
     @TestAsGesuchsteller
     @Order(5)
     void darlehenEingebenFail() {
-        darlehenApiSpec.darlehenEingeben()
+        darlehenApiSpec.freiwilligDarlehenEingeben()
             .darlehenIdPath(darlehen.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -134,12 +134,12 @@ public class DarlehenResourceImplTest {
     @TestAsGesuchsteller
     @Order(6)
     void darlehenUpdatenMissingFile() {
-        final var darlehenUpdateDtoSpec = new DarlehenUpdateGsDtoSpec();
+        final var darlehenUpdateDtoSpec = new FreiwilligDarlehenUpdateGsDtoSpec();
         darlehenUpdateDtoSpec.setBetragGewuenscht(2000);
         darlehenUpdateDtoSpec.setSchulden(0);
         darlehenUpdateDtoSpec.setAnzahlBetreibungen(0);
         darlehenUpdateDtoSpec.setGruende(List.of(DarlehenGrundDtoSpec.HOHE_GEBUEHREN));
-        darlehenApiSpec.darlehenUpdateGs()
+        darlehenApiSpec.freiwilligDarlehenUpdateGs()
             .darlehenIdPath(darlehen.getId())
             .body(darlehenUpdateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -166,12 +166,12 @@ public class DarlehenResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Status.CREATED.getStatusCode());
-        final var darlehenUpdateDtoSpec = new DarlehenUpdateGsDtoSpec();
+        final var darlehenUpdateDtoSpec = new FreiwilligDarlehenUpdateGsDtoSpec();
         darlehenUpdateDtoSpec.setBetragGewuenscht(2000);
         darlehenUpdateDtoSpec.setSchulden(0);
         darlehenUpdateDtoSpec.setAnzahlBetreibungen(0);
         darlehenUpdateDtoSpec.setGruende(List.of(DarlehenGrundDtoSpec.AUSBILDUNG_ZWOELF_JAHRE));
-        darlehenApiSpec.darlehenUpdateGs()
+        darlehenApiSpec.freiwilligDarlehenUpdateGs()
             .darlehenIdPath(darlehen.getId())
             .body(darlehenUpdateDtoSpec)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -184,7 +184,7 @@ public class DarlehenResourceImplTest {
     @TestAsGesuchsteller
     @Order(8)
     void darlehenEingeben() {
-        darlehenApiSpec.darlehenEingeben()
+        darlehenApiSpec.freiwilligDarlehenEingeben()
             .darlehenIdPath(darlehen.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -196,11 +196,11 @@ public class DarlehenResourceImplTest {
     @TestAsSachbearbeiter
     @Order(9)
     void darlehenUpdateSb() {
-        final var updateDto = new DarlehenUpdateSbDtoSpec();
+        final var updateDto = new FreiwilligDarlehenUpdateSbDtoSpec();
         updateDto.setBetrag(0);
         updateDto.setGewaehren(false);
         updateDto.setKommentar("asd");
-        darlehenApiSpec.darlehenUpdateSb()
+        darlehenApiSpec.freiwilligDarlehenUpdateSb()
             .darlehenIdPath(darlehen.getId())
             .body(updateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -215,7 +215,7 @@ public class DarlehenResourceImplTest {
     void darlehenZurueckweisen() {
         final var kommentarDto = new KommentarDtoSpec();
         kommentarDto.setText("Test");
-        darlehenApiSpec.darlehenZurueckweisen()
+        darlehenApiSpec.freiwilligDarlehenZurueckweisen()
             .darlehenIdPath(darlehen.getId())
             .body(kommentarDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)

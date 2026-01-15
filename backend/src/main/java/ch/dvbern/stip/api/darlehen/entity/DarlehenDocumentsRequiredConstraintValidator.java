@@ -25,14 +25,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DarlehenDocumentsRequiredConstraintValidator
-    implements ConstraintValidator<DarlehenDocumentsRequiredConstraint, Darlehen> {
+    implements ConstraintValidator<DarlehenDocumentsRequiredConstraint, FreiwilligDarlehen> {
     @Inject
     DarlehenService darlehenService;
 
     @Override
-    public boolean isValid(Darlehen darlehen, ConstraintValidatorContext context) {
-        final var missingDocumentTypes = darlehenService.getRequiredDokumentsForDarlehen(darlehen.getId());
-        final var currentDocumentTypes = darlehen.getDokumente()
+    public boolean isValid(FreiwilligDarlehen freiwilligDarlehen, ConstraintValidatorContext context) {
+        final var missingDocumentTypes = darlehenService.getRequiredDokumentsForDarlehen(freiwilligDarlehen.getId());
+        final var currentDocumentTypes = freiwilligDarlehen.getDokumente()
             .stream()
             .filter(d -> !d.getDokumente().isEmpty())
             .map(DarlehenDokument::getDokumentType)

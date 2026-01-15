@@ -17,12 +17,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("Darlehen")
+@JsonTypeName("FreiwilligDarlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DarlehenDto  implements Serializable {
+public class FreiwilligDarlehenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID fallId;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
@@ -37,7 +37,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto id(UUID id) {
+  public FreiwilligDarlehenDto id(UUID id) {
     this.id = id;
     return this;
   }
@@ -56,7 +56,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto fallId(UUID fallId) {
+  public FreiwilligDarlehenDto fallId(UUID fallId) {
     this.fallId = fallId;
     return this;
   }
@@ -74,7 +74,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+  public FreiwilligDarlehenDto status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
     this.status = status;
     return this;
   }
@@ -92,7 +92,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto gewaehren(Boolean gewaehren) {
+  public FreiwilligDarlehenDto gewaehren(Boolean gewaehren) {
     this.gewaehren = gewaehren;
     return this;
   }
@@ -111,7 +111,7 @@ public class DarlehenDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenDto betrag(Integer betrag) {
+  public FreiwilligDarlehenDto betrag(Integer betrag) {
     this.betrag = betrag;
     return this;
   }
@@ -129,7 +129,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto kommentar(String kommentar) {
+  public FreiwilligDarlehenDto kommentar(String kommentar) {
     this.kommentar = kommentar;
     return this;
   }
@@ -148,7 +148,7 @@ public class DarlehenDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenDto betragGewuenscht(Integer betragGewuenscht) {
+  public FreiwilligDarlehenDto betragGewuenscht(Integer betragGewuenscht) {
     this.betragGewuenscht = betragGewuenscht;
     return this;
   }
@@ -167,7 +167,7 @@ public class DarlehenDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenDto schulden(Integer schulden) {
+  public FreiwilligDarlehenDto schulden(Integer schulden) {
     this.schulden = schulden;
     return this;
   }
@@ -186,7 +186,7 @@ public class DarlehenDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenDto anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public FreiwilligDarlehenDto anzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
   }
@@ -204,7 +204,7 @@ public class DarlehenDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDto gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+  public FreiwilligDarlehenDto gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
     this.gruende = gruende;
     return this;
   }
@@ -220,7 +220,7 @@ public class DarlehenDto  implements Serializable {
     this.gruende = gruende;
   }
 
-  public DarlehenDto addGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+  public FreiwilligDarlehenDto addGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
     if (this.gruende == null) {
       this.gruende = new ArrayList<>();
     }
@@ -229,7 +229,7 @@ public class DarlehenDto  implements Serializable {
     return this;
   }
 
-  public DarlehenDto removeGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+  public FreiwilligDarlehenDto removeGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
     if (gruendeItem != null && this.gruende != null) {
       this.gruende.remove(gruendeItem);
     }
@@ -238,7 +238,7 @@ public class DarlehenDto  implements Serializable {
   }
   /**
    **/
-  public DarlehenDto timestampErstellt(String timestampErstellt) {
+  public FreiwilligDarlehenDto timestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
   }
@@ -263,18 +263,18 @@ public class DarlehenDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenDto darlehen = (DarlehenDto) o;
-    return Objects.equals(this.id, darlehen.id) &&
-        Objects.equals(this.fallId, darlehen.fallId) &&
-        Objects.equals(this.status, darlehen.status) &&
-        Objects.equals(this.gewaehren, darlehen.gewaehren) &&
-        Objects.equals(this.betrag, darlehen.betrag) &&
-        Objects.equals(this.kommentar, darlehen.kommentar) &&
-        Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
-        Objects.equals(this.schulden, darlehen.schulden) &&
-        Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.gruende, darlehen.gruende) &&
-        Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
+    FreiwilligDarlehenDto freiwilligDarlehen = (FreiwilligDarlehenDto) o;
+    return Objects.equals(this.id, freiwilligDarlehen.id) &&
+        Objects.equals(this.fallId, freiwilligDarlehen.fallId) &&
+        Objects.equals(this.status, freiwilligDarlehen.status) &&
+        Objects.equals(this.gewaehren, freiwilligDarlehen.gewaehren) &&
+        Objects.equals(this.betrag, freiwilligDarlehen.betrag) &&
+        Objects.equals(this.kommentar, freiwilligDarlehen.kommentar) &&
+        Objects.equals(this.betragGewuenscht, freiwilligDarlehen.betragGewuenscht) &&
+        Objects.equals(this.schulden, freiwilligDarlehen.schulden) &&
+        Objects.equals(this.anzahlBetreibungen, freiwilligDarlehen.anzahlBetreibungen) &&
+        Objects.equals(this.gruende, freiwilligDarlehen.gruende) &&
+        Objects.equals(this.timestampErstellt, freiwilligDarlehen.timestampErstellt);
   }
 
   @Override
@@ -285,7 +285,7 @@ public class DarlehenDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenDto {\n");
+    sb.append("class FreiwilligDarlehenDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");

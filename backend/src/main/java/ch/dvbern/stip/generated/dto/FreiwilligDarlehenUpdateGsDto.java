@@ -16,12 +16,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DarlehenUpdateGs")
+@JsonTypeName("FreiwilligDarlehenUpdateGs")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DarlehenUpdateGsDto  implements Serializable {
+public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
   private @Valid Integer betragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
@@ -30,7 +30,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenUpdateGsDto betragGewuenscht(Integer betragGewuenscht) {
+  public FreiwilligDarlehenUpdateGsDto betragGewuenscht(Integer betragGewuenscht) {
     this.betragGewuenscht = betragGewuenscht;
     return this;
   }
@@ -49,7 +49,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenUpdateGsDto schulden(Integer schulden) {
+  public FreiwilligDarlehenUpdateGsDto schulden(Integer schulden) {
     this.schulden = schulden;
     return this;
   }
@@ -68,7 +68,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenUpdateGsDto anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public FreiwilligDarlehenUpdateGsDto anzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
   }
@@ -86,7 +86,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
 
   /**
    **/
-  public DarlehenUpdateGsDto gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+  public FreiwilligDarlehenUpdateGsDto gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
     this.gruende = gruende;
     return this;
   }
@@ -102,7 +102,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
     this.gruende = gruende;
   }
 
-  public DarlehenUpdateGsDto addGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+  public FreiwilligDarlehenUpdateGsDto addGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
     if (this.gruende == null) {
       this.gruende = new ArrayList<>();
     }
@@ -111,7 +111,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
     return this;
   }
 
-  public DarlehenUpdateGsDto removeGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
+  public FreiwilligDarlehenUpdateGsDto removeGruendeItem(ch.dvbern.stip.api.darlehen.type.DarlehenGrund gruendeItem) {
     if (gruendeItem != null && this.gruende != null) {
       this.gruende.remove(gruendeItem);
     }
@@ -127,11 +127,11 @@ public class DarlehenUpdateGsDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenUpdateGsDto darlehenUpdateGs = (DarlehenUpdateGsDto) o;
-    return Objects.equals(this.betragGewuenscht, darlehenUpdateGs.betragGewuenscht) &&
-        Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
-        Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
-        Objects.equals(this.gruende, darlehenUpdateGs.gruende);
+    FreiwilligDarlehenUpdateGsDto freiwilligDarlehenUpdateGs = (FreiwilligDarlehenUpdateGsDto) o;
+    return Objects.equals(this.betragGewuenscht, freiwilligDarlehenUpdateGs.betragGewuenscht) &&
+        Objects.equals(this.schulden, freiwilligDarlehenUpdateGs.schulden) &&
+        Objects.equals(this.anzahlBetreibungen, freiwilligDarlehenUpdateGs.anzahlBetreibungen) &&
+        Objects.equals(this.gruende, freiwilligDarlehenUpdateGs.gruende);
   }
 
   @Override
@@ -142,7 +142,7 @@ public class DarlehenUpdateGsDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenUpdateGsDto {\n");
+    sb.append("class FreiwilligDarlehenUpdateGsDto {\n");
     
     sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");

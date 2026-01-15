@@ -15,12 +15,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DarlehenDashboard")
+@JsonTypeName("FreiwilligDarlehenDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DarlehenDashboardDto  implements Serializable {
+public class FreiwilligDarlehenDashboardDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID gesuchId;
   private @Valid UUID gesuchTrancheId;
@@ -35,7 +35,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto id(UUID id) {
+  public FreiwilligDarlehenDashboardDto id(UUID id) {
     this.id = id;
     return this;
   }
@@ -54,7 +54,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto gesuchId(UUID gesuchId) {
+  public FreiwilligDarlehenDashboardDto gesuchId(UUID gesuchId) {
     this.gesuchId = gesuchId;
     return this;
   }
@@ -73,7 +73,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto gesuchTrancheId(UUID gesuchTrancheId) {
+  public FreiwilligDarlehenDashboardDto gesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
   }
@@ -92,7 +92,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto fallId(UUID fallId) {
+  public FreiwilligDarlehenDashboardDto fallId(UUID fallId) {
     this.fallId = fallId;
     return this;
   }
@@ -111,7 +111,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto fallNummer(String fallNummer) {
+  public FreiwilligDarlehenDashboardDto fallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
     return this;
   }
@@ -130,7 +130,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto piaVorname(String piaVorname) {
+  public FreiwilligDarlehenDashboardDto piaVorname(String piaVorname) {
     this.piaVorname = piaVorname;
     return this;
   }
@@ -149,7 +149,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto piaNachname(String piaNachname) {
+  public FreiwilligDarlehenDashboardDto piaNachname(String piaNachname) {
     this.piaNachname = piaNachname;
     return this;
   }
@@ -168,7 +168,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto piaGeburtsdatum(String piaGeburtsdatum) {
+  public FreiwilligDarlehenDashboardDto piaGeburtsdatum(String piaGeburtsdatum) {
     this.piaGeburtsdatum = piaGeburtsdatum;
     return this;
   }
@@ -187,7 +187,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+  public FreiwilligDarlehenDashboardDto status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
     this.status = status;
     return this;
   }
@@ -206,7 +206,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto bearbeiter(String bearbeiter) {
+  public FreiwilligDarlehenDashboardDto bearbeiter(String bearbeiter) {
     this.bearbeiter = bearbeiter;
     return this;
   }
@@ -225,7 +225,7 @@ public class DarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public DarlehenDashboardDto letzteAktivitaet(LocalDate letzteAktivitaet) {
+  public FreiwilligDarlehenDashboardDto letzteAktivitaet(LocalDate letzteAktivitaet) {
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
   }
@@ -251,18 +251,18 @@ public class DarlehenDashboardDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenDashboardDto darlehenDashboard = (DarlehenDashboardDto) o;
-    return Objects.equals(this.id, darlehenDashboard.id) &&
-        Objects.equals(this.gesuchId, darlehenDashboard.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, darlehenDashboard.gesuchTrancheId) &&
-        Objects.equals(this.fallId, darlehenDashboard.fallId) &&
-        Objects.equals(this.fallNummer, darlehenDashboard.fallNummer) &&
-        Objects.equals(this.piaVorname, darlehenDashboard.piaVorname) &&
-        Objects.equals(this.piaNachname, darlehenDashboard.piaNachname) &&
-        Objects.equals(this.piaGeburtsdatum, darlehenDashboard.piaGeburtsdatum) &&
-        Objects.equals(this.status, darlehenDashboard.status) &&
-        Objects.equals(this.bearbeiter, darlehenDashboard.bearbeiter) &&
-        Objects.equals(this.letzteAktivitaet, darlehenDashboard.letzteAktivitaet);
+    FreiwilligDarlehenDashboardDto freiwilligDarlehenDashboard = (FreiwilligDarlehenDashboardDto) o;
+    return Objects.equals(this.id, freiwilligDarlehenDashboard.id) &&
+        Objects.equals(this.gesuchId, freiwilligDarlehenDashboard.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, freiwilligDarlehenDashboard.gesuchTrancheId) &&
+        Objects.equals(this.fallId, freiwilligDarlehenDashboard.fallId) &&
+        Objects.equals(this.fallNummer, freiwilligDarlehenDashboard.fallNummer) &&
+        Objects.equals(this.piaVorname, freiwilligDarlehenDashboard.piaVorname) &&
+        Objects.equals(this.piaNachname, freiwilligDarlehenDashboard.piaNachname) &&
+        Objects.equals(this.piaGeburtsdatum, freiwilligDarlehenDashboard.piaGeburtsdatum) &&
+        Objects.equals(this.status, freiwilligDarlehenDashboard.status) &&
+        Objects.equals(this.bearbeiter, freiwilligDarlehenDashboard.bearbeiter) &&
+        Objects.equals(this.letzteAktivitaet, freiwilligDarlehenDashboard.letzteAktivitaet);
   }
 
   @Override
@@ -273,7 +273,7 @@ public class DarlehenDashboardDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenDashboardDto {\n");
+    sb.append("class FreiwilligDarlehenDashboardDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");

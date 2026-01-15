@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.type;
 
-public enum SbDarlehenDashboardColumn {
+public enum SbFreiwilligDarlehenDashboardColumn {
     FALLNUMMER,
     PIA_NACHNAME,
     PIA_VORNAME,

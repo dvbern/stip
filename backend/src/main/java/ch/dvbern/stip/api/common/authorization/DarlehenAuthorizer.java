@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -80,7 +80,10 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         }
 
         final var hasNoOpenDarlehen =
-            fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);
+            fall.getFreiwilligDarlehens()
+                .stream()
+                .map(FreiwilligDarlehen::getStatus)
+                .allMatch(DarlehenStatus::isCompleted);
         if (!hasNoOpenDarlehen) {
             forbidden();
         }
@@ -183,12 +186,12 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         assertStatus(darlehenId, DarlehenStatus.IN_BEARBEITUNG_GS);
     }
 
-    private void canGetDarlehenDokument(Darlehen darlehen) {
+    private void canGetDarlehenDokument(FreiwilligDarlehen freiwilligDarlehen) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
             !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                darlehen.getFall(),
+                freiwilligDarlehen.getFall(),
                 benutzer,
                 sozialdienstService
             ) && !isSachbearbeiterOrFreigabestelle(benutzer)

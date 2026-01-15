@@ -1,14 +1,14 @@
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.DarlehenDto;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
-import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbFreiwilligDarlehenDashboardDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
@@ -30,53 +30,15 @@ import jakarta.validation.Valid;
 public interface DarlehenResource {
 
     @POST
-    @Path("/{fallId}")
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto createDarlehen(@PathParam("fallId") UUID fallId);
-
-    @POST
     @Path("/dokument/{darlehenId}/{dokumentType}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> createDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @POST
-    @Path("/{darlehenId}/ablehnen")
+    @Path("/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenAblehen(@PathParam("darlehenId") UUID darlehenId);
-
-    @POST
-    @Path("/{darlehenId}/akzeptieren")
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenAkzeptieren(@PathParam("darlehenId") UUID darlehenId);
-
-    @POST
-    @Path("/{darlehenId}/eingeben")
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenEingeben(@PathParam("darlehenId") UUID darlehenId);
-
-    @POST
-    @Path("/{darlehenId}/freigeben")
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenFreigeben(@PathParam("darlehenId") UUID darlehenId);
-
-    @PATCH
-    @Path("/{darlehenId}/gs")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenUpdateGs(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull DarlehenUpdateGsDto darlehenUpdateGsDto);
-
-    @PATCH
-    @Path("/{darlehenId}/sb")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenUpdateSb(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull DarlehenUpdateSbDto darlehenUpdateSbDto);
-
-    @POST
-    @Path("/{darlehenId}/zurueckweisen")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    DarlehenDto darlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull KommentarDto kommentarDto);
+    FreiwilligDarlehenDto createFreiwilligDarlehen(@PathParam("fallId") UUID fallId);
 
     @DELETE
     @Path("/dokument/{dokumentId}")
@@ -86,27 +48,60 @@ public interface DarlehenResource {
     @DELETE
     @Path("/{darlehenId}/gs")
     @Produces({ "application/json", "text/plain" })
-    void deleteDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
+    void deleteFreiwilligDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
 
     @GET
     @Path("/dokument/download")
     @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenDokument(@QueryParam("token") @NotNull   String token);
 
+    @POST
+    @Path("/{darlehenId}/ablehnen")
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenAblehen(@PathParam("darlehenId") UUID darlehenId);
+
+    @POST
+    @Path("/{darlehenId}/akzeptieren")
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(@PathParam("darlehenId") UUID darlehenId);
+
+    @POST
+    @Path("/{darlehenId}/eingeben")
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenEingeben(@PathParam("darlehenId") UUID darlehenId);
+
+    @POST
+    @Path("/{darlehenId}/freigeben")
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenFreigeben(@PathParam("darlehenId") UUID darlehenId);
+
+    @PATCH
+    @Path("/{darlehenId}/gs")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenUpdateGs(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull FreiwilligDarlehenUpdateGsDto freiwilligDarlehenUpdateGsDto);
+
+    @PATCH
+    @Path("/{darlehenId}/sb")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull FreiwilligDarlehenUpdateSbDto freiwilligDarlehenUpdateSbDto);
+
+    @POST
+    @Path("/{darlehenId}/zurueckweisen")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    FreiwilligDarlehenDto freiwilligDarlehenZurueckweisen(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull KommentarDto kommentarDto);
+
     @GET
     @Path("/getAllDarlehenGs/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    List<DarlehenDto> getAllDarlehenGs(@PathParam("fallId") UUID fallId);
+    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenGs(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/getAllDarlehenSb/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    List<DarlehenDto> getAllDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/dashboard/{getDarlehenSbQueryType}")
-    @Produces({ "application/json", "text/plain" })
-    PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(@PathParam("getDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType getDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/dokument/{darlehenId}/{dokumentType}")
@@ -119,12 +114,17 @@ public interface DarlehenResource {
     FileDownloadTokenDto getDarlehenDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
+    @Path("/dashboard/{getFreiwilligDarlehenSbQueryType}")
+    @Produces({ "application/json", "text/plain" })
+    PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(@PathParam("getFreiwilligDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
+
+    @GET
     @Path("/{darlehenId}/gs")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto getDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
+    FreiwilligDarlehenDto getFreiwilligDarlehenGs(@PathParam("darlehenId") UUID darlehenId);
 
     @GET
     @Path("/{darlehenId}/sb")
     @Produces({ "application/json", "text/plain" })
-    DarlehenDto getDarlehenSb(@PathParam("darlehenId") UUID darlehenId);
+    FreiwilligDarlehenDto getFreiwilligDarlehenSb(@PathParam("darlehenId") UUID darlehenId);
 }

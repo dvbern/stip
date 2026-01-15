@@ -20,10 +20,9 @@ package ch.dvbern.stip.api.darlehen.repo;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.entity.QSachbearbeiter;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.darlehen.entity.QDarlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
+import ch.dvbern.stip.api.darlehen.entity.QFreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -35,58 +34,55 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DarlehenRepository implements BaseRepository<Darlehen> {
-    private static final QDarlehen darlehen = QDarlehen.darlehen;
-    private static final QSachbearbeiter sachbearbeiter = QSachbearbeiter.sachbearbeiter;
+public class DarlehenRepository implements BaseRepository<FreiwilligDarlehen> {
+    private static final QFreiwilligDarlehen freiwilligDarlehen = QFreiwilligDarlehen.freiwilligDarlehen;
     private static final QZuordnung zuordnung = QZuordnung.zuordnung;
 
     private final EntityManager entityManager;
 
-    public List<Darlehen> findByFallId(final UUID fallId) {
+    public List<FreiwilligDarlehen> findByFallId(final UUID fallId) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var darlehen = QDarlehen.darlehen;
         var query = queryFactory
-            .selectFrom(darlehen)
+            .selectFrom(freiwilligDarlehen)
             .where(
-                darlehen.fall.id.eq(fallId)
+                freiwilligDarlehen.fall.id.eq(fallId)
             );
         return query.stream().toList();
     }
 
-    public List<Darlehen> findByGesuchId(final UUID gesuchId) {
+    public List<FreiwilligDarlehen> findByGesuchId(final UUID gesuchId) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var darlehen = QDarlehen.darlehen;
         var query = queryFactory
-            .selectFrom(darlehen)
+            .selectFrom(freiwilligDarlehen)
             .where(
-                darlehen.fall.ausbildungs.any().gesuchs.any().id.eq(gesuchId)
+                freiwilligDarlehen.fall.ausbildungs.any().gesuchs.any().id.eq(gesuchId)
             );
         return query.stream().toList();
     }
 
-    public JPAQuery<Darlehen> getAlleQuery() {
+    public JPAQuery<FreiwilligDarlehen> getAlleQuery() {
         return new JPAQueryFactory(entityManager)
-            .selectFrom(darlehen);
+            .selectFrom(freiwilligDarlehen);
     }
 
-    public JPAQuery<Darlehen> getMeineQuery(final UUID benutzerId) {
+    public JPAQuery<FreiwilligDarlehen> getMeineQuery(final UUID benutzerId) {
         return getAlleQuery()
             .join(zuordnung)
-            .on(darlehen.fall.sachbearbeiterZuordnung.id.eq(zuordnung.id))
+            .on(freiwilligDarlehen.fall.sachbearbeiterZuordnung.id.eq(zuordnung.id))
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
     }
 
-    public JPAQuery<Darlehen> getAlleBearbeitbarQuery() {
-        return getAlleQuery().where(darlehen.status.eq(DarlehenStatus.EINGEGEBEN));
+    public JPAQuery<FreiwilligDarlehen> getAlleBearbeitbarQuery() {
+        return getAlleQuery().where(freiwilligDarlehen.status.eq(DarlehenStatus.EINGEGEBEN));
     }
 
-    public JPAQuery<Darlehen> getMeineBearbeitbarQuery(final UUID benutzerId) {
-        return getMeineQuery(benutzerId).where(darlehen.status.eq(DarlehenStatus.EINGEGEBEN));
+    public JPAQuery<FreiwilligDarlehen> getMeineBearbeitbarQuery(final UUID benutzerId) {
+        return getMeineQuery(benutzerId).where(freiwilligDarlehen.status.eq(DarlehenStatus.EINGEGEBEN));
     }
 
-    public Darlehen requireByDokumentId(final UUID dokumentId) {
+    public FreiwilligDarlehen requireByDokumentId(final UUID dokumentId) {
         return getAlleQuery()
-            .where(darlehen.dokumente.any().dokumente.any().id.eq(dokumentId))
+            .where(freiwilligDarlehen.dokumente.any().dokumente.any().id.eq(dokumentId))
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);

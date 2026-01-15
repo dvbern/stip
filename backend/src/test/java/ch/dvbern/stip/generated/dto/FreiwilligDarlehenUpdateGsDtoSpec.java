@@ -28,17 +28,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * DarlehenUpdateGsDtoSpec
+ * FreiwilligDarlehenUpdateGsDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_SCHULDEN,
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUENDE
+  FreiwilligDarlehenUpdateGsDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
+  FreiwilligDarlehenUpdateGsDtoSpec.JSON_PROPERTY_SCHULDEN,
+  FreiwilligDarlehenUpdateGsDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
+  FreiwilligDarlehenUpdateGsDtoSpec.JSON_PROPERTY_GRUENDE
 })
-@JsonTypeName("DarlehenUpdateGs")
+@JsonTypeName("FreiwilligDarlehenUpdateGs")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class DarlehenUpdateGsDtoSpec {
+public class FreiwilligDarlehenUpdateGsDtoSpec {
   public static final String JSON_PROPERTY_BETRAG_GEWUENSCHT = "betragGewuenscht";
   private Integer betragGewuenscht;
 
@@ -51,10 +51,10 @@ public class DarlehenUpdateGsDtoSpec {
   public static final String JSON_PROPERTY_GRUENDE = "gruende";
   private List<DarlehenGrundDtoSpec> gruende;
 
-  public DarlehenUpdateGsDtoSpec() {
+  public FreiwilligDarlehenUpdateGsDtoSpec() {
   }
 
-  public DarlehenUpdateGsDtoSpec betragGewuenscht(Integer betragGewuenscht) {
+  public FreiwilligDarlehenUpdateGsDtoSpec betragGewuenscht(Integer betragGewuenscht) {
     
     this.betragGewuenscht = betragGewuenscht;
     return this;
@@ -81,7 +81,7 @@ public class DarlehenUpdateGsDtoSpec {
   }
 
 
-  public DarlehenUpdateGsDtoSpec schulden(Integer schulden) {
+  public FreiwilligDarlehenUpdateGsDtoSpec schulden(Integer schulden) {
     
     this.schulden = schulden;
     return this;
@@ -108,7 +108,7 @@ public class DarlehenUpdateGsDtoSpec {
   }
 
 
-  public DarlehenUpdateGsDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public FreiwilligDarlehenUpdateGsDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
     
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
@@ -135,13 +135,13 @@ public class DarlehenUpdateGsDtoSpec {
   }
 
 
-  public DarlehenUpdateGsDtoSpec gruende(List<DarlehenGrundDtoSpec> gruende) {
+  public FreiwilligDarlehenUpdateGsDtoSpec gruende(List<DarlehenGrundDtoSpec> gruende) {
     
     this.gruende = gruende;
     return this;
   }
 
-  public DarlehenUpdateGsDtoSpec addGruendeItem(DarlehenGrundDtoSpec gruendeItem) {
+  public FreiwilligDarlehenUpdateGsDtoSpec addGruendeItem(DarlehenGrundDtoSpec gruendeItem) {
     if (this.gruende == null) {
       this.gruende = new ArrayList<>();
     }
@@ -176,11 +176,11 @@ public class DarlehenUpdateGsDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenUpdateGsDtoSpec darlehenUpdateGs = (DarlehenUpdateGsDtoSpec) o;
-    return Objects.equals(this.betragGewuenscht, darlehenUpdateGs.betragGewuenscht) &&
-        Objects.equals(this.schulden, darlehenUpdateGs.schulden) &&
-        Objects.equals(this.anzahlBetreibungen, darlehenUpdateGs.anzahlBetreibungen) &&
-        Objects.equals(this.gruende, darlehenUpdateGs.gruende);
+    FreiwilligDarlehenUpdateGsDtoSpec freiwilligDarlehenUpdateGs = (FreiwilligDarlehenUpdateGsDtoSpec) o;
+    return Objects.equals(this.betragGewuenscht, freiwilligDarlehenUpdateGs.betragGewuenscht) &&
+        Objects.equals(this.schulden, freiwilligDarlehenUpdateGs.schulden) &&
+        Objects.equals(this.anzahlBetreibungen, freiwilligDarlehenUpdateGs.anzahlBetreibungen) &&
+        Objects.equals(this.gruende, freiwilligDarlehenUpdateGs.gruende);
   }
 
   @Override
@@ -191,7 +191,7 @@ public class DarlehenUpdateGsDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenUpdateGsDtoSpec {\n");
+    sb.append("class FreiwilligDarlehenUpdateGsDtoSpec {\n");
     sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");

@@ -27,24 +27,24 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * DarlehenDashboardDtoSpec
+ * FreiwilligDarlehenDashboardDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_ID,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_ID,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_ID,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_NUMMER,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_VORNAME,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_GEBURTSDATUM,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_STATUS,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_BEARBEITER,
-  DarlehenDashboardDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_ID,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_ID,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_NUMMER,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_VORNAME,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_GEBURTSDATUM,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_STATUS,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_BEARBEITER,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET
 })
-@JsonTypeName("DarlehenDashboard")
+@JsonTypeName("FreiwilligDarlehenDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class DarlehenDashboardDtoSpec {
+public class FreiwilligDarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
@@ -78,10 +78,10 @@ public class DarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_LETZTE_AKTIVITAET = "letzteAktivitaet";
   private LocalDate letzteAktivitaet;
 
-  public DarlehenDashboardDtoSpec() {
+  public FreiwilligDarlehenDashboardDtoSpec() {
   }
 
-  public DarlehenDashboardDtoSpec id(UUID id) {
+  public FreiwilligDarlehenDashboardDtoSpec id(UUID id) {
     
     this.id = id;
     return this;
@@ -107,7 +107,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec gesuchId(UUID gesuchId) {
+  public FreiwilligDarlehenDashboardDtoSpec gesuchId(UUID gesuchId) {
     
     this.gesuchId = gesuchId;
     return this;
@@ -133,7 +133,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
+  public FreiwilligDarlehenDashboardDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
@@ -159,7 +159,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec fallId(UUID fallId) {
+  public FreiwilligDarlehenDashboardDtoSpec fallId(UUID fallId) {
     
     this.fallId = fallId;
     return this;
@@ -185,7 +185,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec fallNummer(String fallNummer) {
+  public FreiwilligDarlehenDashboardDtoSpec fallNummer(String fallNummer) {
     
     this.fallNummer = fallNummer;
     return this;
@@ -211,7 +211,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec piaVorname(String piaVorname) {
+  public FreiwilligDarlehenDashboardDtoSpec piaVorname(String piaVorname) {
     
     this.piaVorname = piaVorname;
     return this;
@@ -237,7 +237,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec piaNachname(String piaNachname) {
+  public FreiwilligDarlehenDashboardDtoSpec piaNachname(String piaNachname) {
     
     this.piaNachname = piaNachname;
     return this;
@@ -263,7 +263,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec piaGeburtsdatum(String piaGeburtsdatum) {
+  public FreiwilligDarlehenDashboardDtoSpec piaGeburtsdatum(String piaGeburtsdatum) {
     
     this.piaGeburtsdatum = piaGeburtsdatum;
     return this;
@@ -289,7 +289,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec status(DarlehenStatusDtoSpec status) {
+  public FreiwilligDarlehenDashboardDtoSpec status(DarlehenStatusDtoSpec status) {
     
     this.status = status;
     return this;
@@ -315,7 +315,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec bearbeiter(String bearbeiter) {
+  public FreiwilligDarlehenDashboardDtoSpec bearbeiter(String bearbeiter) {
     
     this.bearbeiter = bearbeiter;
     return this;
@@ -341,7 +341,7 @@ public class DarlehenDashboardDtoSpec {
   }
 
 
-  public DarlehenDashboardDtoSpec letzteAktivitaet(LocalDate letzteAktivitaet) {
+  public FreiwilligDarlehenDashboardDtoSpec letzteAktivitaet(LocalDate letzteAktivitaet) {
     
     this.letzteAktivitaet = letzteAktivitaet;
     return this;
@@ -374,18 +374,18 @@ public class DarlehenDashboardDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenDashboardDtoSpec darlehenDashboard = (DarlehenDashboardDtoSpec) o;
-    return Objects.equals(this.id, darlehenDashboard.id) &&
-        Objects.equals(this.gesuchId, darlehenDashboard.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, darlehenDashboard.gesuchTrancheId) &&
-        Objects.equals(this.fallId, darlehenDashboard.fallId) &&
-        Objects.equals(this.fallNummer, darlehenDashboard.fallNummer) &&
-        Objects.equals(this.piaVorname, darlehenDashboard.piaVorname) &&
-        Objects.equals(this.piaNachname, darlehenDashboard.piaNachname) &&
-        Objects.equals(this.piaGeburtsdatum, darlehenDashboard.piaGeburtsdatum) &&
-        Objects.equals(this.status, darlehenDashboard.status) &&
-        Objects.equals(this.bearbeiter, darlehenDashboard.bearbeiter) &&
-        Objects.equals(this.letzteAktivitaet, darlehenDashboard.letzteAktivitaet);
+    FreiwilligDarlehenDashboardDtoSpec freiwilligDarlehenDashboard = (FreiwilligDarlehenDashboardDtoSpec) o;
+    return Objects.equals(this.id, freiwilligDarlehenDashboard.id) &&
+        Objects.equals(this.gesuchId, freiwilligDarlehenDashboard.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, freiwilligDarlehenDashboard.gesuchTrancheId) &&
+        Objects.equals(this.fallId, freiwilligDarlehenDashboard.fallId) &&
+        Objects.equals(this.fallNummer, freiwilligDarlehenDashboard.fallNummer) &&
+        Objects.equals(this.piaVorname, freiwilligDarlehenDashboard.piaVorname) &&
+        Objects.equals(this.piaNachname, freiwilligDarlehenDashboard.piaNachname) &&
+        Objects.equals(this.piaGeburtsdatum, freiwilligDarlehenDashboard.piaGeburtsdatum) &&
+        Objects.equals(this.status, freiwilligDarlehenDashboard.status) &&
+        Objects.equals(this.bearbeiter, freiwilligDarlehenDashboard.bearbeiter) &&
+        Objects.equals(this.letzteAktivitaet, freiwilligDarlehenDashboard.letzteAktivitaet);
   }
 
   @Override
@@ -396,7 +396,7 @@ public class DarlehenDashboardDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenDashboardDtoSpec {\n");
+    sb.append("class FreiwilligDarlehenDashboardDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");

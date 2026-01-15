@@ -23,13 +23,13 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
-import ch.dvbern.stip.generated.dto.DarlehenDto;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDashboardDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,7 +39,7 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class, uses = DarlehenDokumentMapper.class)
 public abstract class DarlehenMapper {
     @Mapping(source = "fall.id", target = "fallId")
-    public abstract DarlehenDto toDto(Darlehen darlehen);
+    public abstract FreiwilligDarlehenDto toDto(FreiwilligDarlehen freiwilligDarlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
     @Mapping(source = "fall.id", target = "fallId")
@@ -50,22 +50,22 @@ public abstract class DarlehenMapper {
     @Mapping(source = ".", target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")
     @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getBearbeiter")
     @Mapping(source = "timestampMutiert", target = "letzteAktivitaet")
-    public abstract DarlehenDashboardDto toDashboardDto(Darlehen darlehen);
+    public abstract FreiwilligDarlehenDashboardDto toDashboardDto(FreiwilligDarlehen freiwilligDarlehen);
 
-    public abstract Darlehen toEntity(DarlehenDto darlehenDto);
+    public abstract FreiwilligDarlehen toEntity(FreiwilligDarlehenDto darlehenDto);
 
-    public abstract Darlehen partialUpdate(
-        DarlehenUpdateGsDto darlehenDto,
-        @MappingTarget Darlehen darlehen
+    public abstract FreiwilligDarlehen partialUpdate(
+        FreiwilligDarlehenUpdateGsDto darlehenDto,
+        @MappingTarget FreiwilligDarlehen freiwilligDarlehen
     );
 
-    public abstract Darlehen partialUpdate(
-        DarlehenUpdateSbDto darlehenDto,
-        @MappingTarget Darlehen darlehen
+    public abstract FreiwilligDarlehen partialUpdate(
+        FreiwilligDarlehenUpdateSbDto darlehenDto,
+        @MappingTarget FreiwilligDarlehen freiwilligDarlehen
     );
 
-    private Gesuch getGesuch(Darlehen darlehen) {
-        return darlehen
+    private Gesuch getGesuch(FreiwilligDarlehen freiwilligDarlehen) {
+        return freiwilligDarlehen
             .getFall()
             .getAusbildungs()
             .stream()
@@ -76,35 +76,35 @@ public abstract class DarlehenMapper {
     }
 
     @Named("getGesuchId")
-    public UUID getGesuchId(Darlehen darlehen) {
-        return getGesuch(darlehen).getId();
+    public UUID getGesuchId(FreiwilligDarlehen freiwilligDarlehen) {
+        return getGesuch(freiwilligDarlehen).getId();
     }
 
     @Named("getGesuchTrancheId")
-    public UUID getGesuchTrancheId(Darlehen darlehen) {
-        return getGesuch(darlehen).getLatestGesuchTranche().getId();
+    public UUID getGesuchTrancheId(FreiwilligDarlehen freiwilligDarlehen) {
+        return getGesuch(freiwilligDarlehen).getLatestGesuchTranche().getId();
     }
 
     @Named("getPiaNachname")
-    public String getPiaNachname(Darlehen darlehen) {
-        return getPia(darlehen)
+    public String getPiaNachname(FreiwilligDarlehen freiwilligDarlehen) {
+        return getPia(freiwilligDarlehen)
             .getNachname();
     }
 
     @Named("getPiaVorname")
-    public String getPiaVorname(Darlehen darlehen) {
-        return getPia(darlehen)
+    public String getPiaVorname(FreiwilligDarlehen freiwilligDarlehen) {
+        return getPia(freiwilligDarlehen)
             .getVorname();
     }
 
     @Named("getPiaGeburtsdatum")
-    public LocalDate getPiaGeburtsdatum(Darlehen darlehen) {
-        return getPia(darlehen)
+    public LocalDate getPiaGeburtsdatum(FreiwilligDarlehen freiwilligDarlehen) {
+        return getPia(freiwilligDarlehen)
             .getGeburtsdatum();
     }
 
-    private static PersonInAusbildung getPia(Darlehen darlehen) {
-        return darlehen.getFall()
+    private static PersonInAusbildung getPia(FreiwilligDarlehen freiwilligDarlehen) {
+        return freiwilligDarlehen.getFall()
             .getLatestGesuch()
             .getLatestGesuchTranche()
             .getGesuchFormular()
@@ -112,8 +112,8 @@ public abstract class DarlehenMapper {
     }
 
     @Named("getBearbeiter")
-    public String getBearbeiter(Darlehen darlehen) {
-        return darlehen.getFall()
+    public String getBearbeiter(FreiwilligDarlehen freiwilligDarlehen) {
+        return freiwilligDarlehen.getFall()
             .getSachbearbeiterZuordnung()
             .getSachbearbeiter()
             .getFullName();

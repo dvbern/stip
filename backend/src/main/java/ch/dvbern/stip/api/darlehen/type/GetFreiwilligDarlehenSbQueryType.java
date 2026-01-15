@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.type;
 
-public enum GetDarlehenSbQueryType {
+public enum GetFreiwilligDarlehenSbQueryType {
     ALLE_DARLEHEN,
     MEINE_DARLEHEN,
     ALLE_BEARBEITBAR,

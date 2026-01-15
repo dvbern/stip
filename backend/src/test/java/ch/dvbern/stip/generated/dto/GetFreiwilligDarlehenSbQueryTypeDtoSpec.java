@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Gets or Sets GetDarlehenSbQueryType
+ * Gets or Sets GetFreiwilligDarlehenSbQueryType
  */
-public enum GetDarlehenSbQueryTypeDtoSpec {
+public enum GetFreiwilligDarlehenSbQueryTypeDtoSpec {
   
   ALLE_DARLEHEN("ALLE_DARLEHEN"),
   
@@ -36,7 +36,7 @@ public enum GetDarlehenSbQueryTypeDtoSpec {
 
   private String value;
 
-  GetDarlehenSbQueryTypeDtoSpec(String value) {
+  GetFreiwilligDarlehenSbQueryTypeDtoSpec(String value) {
     this.value = value;
   }
 
@@ -51,8 +51,8 @@ public enum GetDarlehenSbQueryTypeDtoSpec {
   }
 
   @JsonCreator
-  public static GetDarlehenSbQueryTypeDtoSpec fromValue(String value) {
-    for (GetDarlehenSbQueryTypeDtoSpec b : GetDarlehenSbQueryTypeDtoSpec.values()) {
+  public static GetFreiwilligDarlehenSbQueryTypeDtoSpec fromValue(String value) {
+    for (GetFreiwilligDarlehenSbQueryTypeDtoSpec b : GetFreiwilligDarlehenSbQueryTypeDtoSpec.values()) {
       if (b.value.equals(value)) {
         return b;
       }

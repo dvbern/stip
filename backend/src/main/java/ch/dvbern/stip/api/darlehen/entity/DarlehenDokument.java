@@ -57,6 +57,6 @@ public class DarlehenDokument extends AbstractMandantEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "darlehen_id", nullable = false)
-    private Darlehen darlehen;
+    private FreiwilligDarlehen freiwilligDarlehen;
 
 }

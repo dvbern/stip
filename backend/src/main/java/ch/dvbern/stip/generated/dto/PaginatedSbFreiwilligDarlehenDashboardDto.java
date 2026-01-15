@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDashboardDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,20 +17,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("PaginatedSbDarlehenDashboard")
+@JsonTypeName("PaginatedSbFreiwilligDarlehenDashboard")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class PaginatedSbDarlehenDashboardDto  implements Serializable {
+public class PaginatedSbFreiwilligDarlehenDashboardDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
-  private @Valid List<DarlehenDashboardDto> entries;
+  private @Valid List<FreiwilligDarlehenDashboardDto> entries;
 
   /**
    **/
-  public PaginatedSbDarlehenDashboardDto page(Integer page) {
+  public PaginatedSbFreiwilligDarlehenDashboardDto page(Integer page) {
     this.page = page;
     return this;
   }
@@ -48,7 +48,7 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDarlehenDashboardDto pageSize(Integer pageSize) {
+  public PaginatedSbFreiwilligDarlehenDashboardDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -66,7 +66,7 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDarlehenDashboardDto totalEntries(Integer totalEntries) {
+  public PaginatedSbFreiwilligDarlehenDashboardDto totalEntries(Integer totalEntries) {
     this.totalEntries = totalEntries;
     return this;
   }
@@ -84,23 +84,23 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSbDarlehenDashboardDto entries(List<DarlehenDashboardDto> entries) {
+  public PaginatedSbFreiwilligDarlehenDashboardDto entries(List<FreiwilligDarlehenDashboardDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<DarlehenDashboardDto> getEntries() {
+  public List<FreiwilligDarlehenDashboardDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<DarlehenDashboardDto> entries) {
+  public void setEntries(List<FreiwilligDarlehenDashboardDto> entries) {
     this.entries = entries;
   }
 
-  public PaginatedSbDarlehenDashboardDto addEntriesItem(DarlehenDashboardDto entriesItem) {
+  public PaginatedSbFreiwilligDarlehenDashboardDto addEntriesItem(FreiwilligDarlehenDashboardDto entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -109,7 +109,7 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
     return this;
   }
 
-  public PaginatedSbDarlehenDashboardDto removeEntriesItem(DarlehenDashboardDto entriesItem) {
+  public PaginatedSbFreiwilligDarlehenDashboardDto removeEntriesItem(FreiwilligDarlehenDashboardDto entriesItem) {
     if (entriesItem != null && this.entries != null) {
       this.entries.remove(entriesItem);
     }
@@ -125,11 +125,11 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PaginatedSbDarlehenDashboardDto paginatedSbDarlehenDashboard = (PaginatedSbDarlehenDashboardDto) o;
-    return Objects.equals(this.page, paginatedSbDarlehenDashboard.page) &&
-        Objects.equals(this.pageSize, paginatedSbDarlehenDashboard.pageSize) &&
-        Objects.equals(this.totalEntries, paginatedSbDarlehenDashboard.totalEntries) &&
-        Objects.equals(this.entries, paginatedSbDarlehenDashboard.entries);
+    PaginatedSbFreiwilligDarlehenDashboardDto paginatedSbFreiwilligDarlehenDashboard = (PaginatedSbFreiwilligDarlehenDashboardDto) o;
+    return Objects.equals(this.page, paginatedSbFreiwilligDarlehenDashboard.page) &&
+        Objects.equals(this.pageSize, paginatedSbFreiwilligDarlehenDashboard.pageSize) &&
+        Objects.equals(this.totalEntries, paginatedSbFreiwilligDarlehenDashboard.totalEntries) &&
+        Objects.equals(this.entries, paginatedSbFreiwilligDarlehenDashboard.entries);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class PaginatedSbDarlehenDashboardDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PaginatedSbDarlehenDashboardDto {\n");
+    sb.append("class PaginatedSbFreiwilligDarlehenDashboardDto {\n");
     
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");

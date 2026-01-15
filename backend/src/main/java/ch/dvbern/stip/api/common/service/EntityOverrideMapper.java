@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -70,7 +70,7 @@ public abstract class EntityOverrideMapper {
     public abstract void overrideFromTo(EinnahmenKosten source, @MappingTarget EinnahmenKosten target);
 
     @IgnoreStandardFields
-    public abstract void overrideFromTo(Darlehen source, @MappingTarget Darlehen target);
+    public abstract void overrideFromTo(FreiwilligDarlehen source, @MappingTarget FreiwilligDarlehen target);
 
     @IgnoreStandardFields
     public abstract void overrideFromTo(Eltern source, @MappingTarget Eltern target);

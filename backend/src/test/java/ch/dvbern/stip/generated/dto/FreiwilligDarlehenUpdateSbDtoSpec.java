@@ -24,16 +24,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * DarlehenUpdateSbDtoSpec
+ * FreiwilligDarlehenUpdateSbDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_GEWAEHREN,
-  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_BETRAG,
-  DarlehenUpdateSbDtoSpec.JSON_PROPERTY_KOMMENTAR
+  FreiwilligDarlehenUpdateSbDtoSpec.JSON_PROPERTY_GEWAEHREN,
+  FreiwilligDarlehenUpdateSbDtoSpec.JSON_PROPERTY_BETRAG,
+  FreiwilligDarlehenUpdateSbDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
-@JsonTypeName("DarlehenUpdateSb")
+@JsonTypeName("FreiwilligDarlehenUpdateSb")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class DarlehenUpdateSbDtoSpec {
+public class FreiwilligDarlehenUpdateSbDtoSpec {
   public static final String JSON_PROPERTY_GEWAEHREN = "gewaehren";
   private Boolean gewaehren;
 
@@ -43,10 +43,10 @@ public class DarlehenUpdateSbDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
 
-  public DarlehenUpdateSbDtoSpec() {
+  public FreiwilligDarlehenUpdateSbDtoSpec() {
   }
 
-  public DarlehenUpdateSbDtoSpec gewaehren(Boolean gewaehren) {
+  public FreiwilligDarlehenUpdateSbDtoSpec gewaehren(Boolean gewaehren) {
     
     this.gewaehren = gewaehren;
     return this;
@@ -72,7 +72,7 @@ public class DarlehenUpdateSbDtoSpec {
   }
 
 
-  public DarlehenUpdateSbDtoSpec betrag(Integer betrag) {
+  public FreiwilligDarlehenUpdateSbDtoSpec betrag(Integer betrag) {
     
     this.betrag = betrag;
     return this;
@@ -99,7 +99,7 @@ public class DarlehenUpdateSbDtoSpec {
   }
 
 
-  public DarlehenUpdateSbDtoSpec kommentar(String kommentar) {
+  public FreiwilligDarlehenUpdateSbDtoSpec kommentar(String kommentar) {
     
     this.kommentar = kommentar;
     return this;
@@ -132,10 +132,10 @@ public class DarlehenUpdateSbDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenUpdateSbDtoSpec darlehenUpdateSb = (DarlehenUpdateSbDtoSpec) o;
-    return Objects.equals(this.gewaehren, darlehenUpdateSb.gewaehren) &&
-        Objects.equals(this.betrag, darlehenUpdateSb.betrag) &&
-        Objects.equals(this.kommentar, darlehenUpdateSb.kommentar);
+    FreiwilligDarlehenUpdateSbDtoSpec freiwilligDarlehenUpdateSb = (FreiwilligDarlehenUpdateSbDtoSpec) o;
+    return Objects.equals(this.gewaehren, freiwilligDarlehenUpdateSb.gewaehren) &&
+        Objects.equals(this.betrag, freiwilligDarlehenUpdateSb.betrag) &&
+        Objects.equals(this.kommentar, freiwilligDarlehenUpdateSb.kommentar);
   }
 
   @Override
@@ -146,7 +146,7 @@ public class DarlehenUpdateSbDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenUpdateSbDtoSpec {\n");
+    sb.append("class FreiwilligDarlehenUpdateSbDtoSpec {\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");

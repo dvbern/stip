@@ -26,14 +26,14 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenDokumentRepository;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
-import ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType;
-import ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn;
+import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
+import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
@@ -43,12 +43,12 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.generated.dto.DarlehenDto;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
-import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDto;
+import ch.dvbern.stip.generated.dto.PaginatedSbFreiwilligDarlehenDashboardDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -83,10 +83,10 @@ public class DarlehenService {
     private final Validator validator;
 
     @Transactional
-    public DarlehenDto createDarlehen(final UUID fallId) {
+    public FreiwilligDarlehenDto createDarlehen(final UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
 
-        final var darlehen = new Darlehen();
+        final var darlehen = new FreiwilligDarlehen();
         darlehen.setFall(fall);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
 
@@ -95,27 +95,27 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto getDarlehen(final UUID darlehenId) {
+    public FreiwilligDarlehenDto getDarlehen(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
 
         return darlehenMapper.toDto(darlehen);
     }
 
     @Transactional
-    public List<DarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
+    public List<FreiwilligDarlehenDto> getDarlehenAllSb(final UUID gesuchId) {
         final var darlehenList = darlehenRepository.findByGesuchId(gesuchId);
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
     @Transactional
-    public List<DarlehenDto> getDarlehenAllGs(final UUID fallId) {
+    public List<FreiwilligDarlehenDto> getDarlehenAllGs(final UUID fallId) {
         final var darlehenList = darlehenRepository.findByFallId(fallId);
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
     @Transactional
-    public PaginatedSbDarlehenDashboardDto getDarlehenDashboardSb(
-        final GetDarlehenSbQueryType getDarlehenSbQueryType,
+    public PaginatedSbFreiwilligDarlehenDashboardDto getDarlehenDashboardSb(
+        final GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,
         final Integer page,
         final Integer pageSize,
         final String fallNummer,
@@ -126,14 +126,14 @@ public class DarlehenService {
         final String bearbeiter,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
-        final SbDarlehenDashboardColumn sortColumn,
+        final SbFreiwilligDarlehenDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
         if (pageSize > configService.getMaxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery(getDarlehenSbQueryType);
+        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery(getFreiwilligDarlehenSbQueryType);
 
         if (fallNummer != null) {
             darlehenDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -177,7 +177,7 @@ public class DarlehenService {
             .map(darlehenMapper::toDashboardDto)
             .toList();
 
-        return new PaginatedSbDarlehenDashboardDto(
+        return new PaginatedSbFreiwilligDarlehenDashboardDto(
             page,
             results.size(),
             Math.toIntExact(countQuery.fetchFirst()),
@@ -186,7 +186,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenAblehnen(final UUID darlehenId) {
+    public FreiwilligDarlehenDto darlehenAblehnen(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
@@ -199,7 +199,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenAkzeptieren(final UUID darlehenId) {
+    public FreiwilligDarlehenDto darlehenAkzeptieren(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
@@ -212,7 +212,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenEingeben(final UUID darlehenId) {
+    public FreiwilligDarlehenDto darlehenEingeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
         removeSuperfluousDokumentsForDarlehen(darlehen);
@@ -227,7 +227,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenFreigeben(final UUID darlehenId) {
+    public FreiwilligDarlehenDto darlehenFreigeben(final UUID darlehenId) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.EINGEGEBEN);
         darlehen.setStatus(DarlehenStatus.IN_FREIGABE);
@@ -237,7 +237,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenZurueckweisen(final UUID darlehenId, final KommentarDto kommentar) {
+    public FreiwilligDarlehenDto darlehenZurueckweisen(final UUID darlehenId, final KommentarDto kommentar) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.EINGEGEBEN);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
@@ -250,7 +250,10 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenUpdateGs(final UUID darlehenId, final DarlehenUpdateGsDto darlehenUpdateGsDto) {
+    public FreiwilligDarlehenDto darlehenUpdateGs(
+        final UUID darlehenId,
+        final FreiwilligDarlehenUpdateGsDto darlehenUpdateGsDto
+    ) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
 
@@ -263,7 +266,10 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenDto darlehenUpdateSb(final UUID darlehenId, final DarlehenUpdateSbDto darlehenUpdateSbDto) {
+    public FreiwilligDarlehenDto darlehenUpdateSb(
+        final UUID darlehenId,
+        final FreiwilligDarlehenUpdateSbDto darlehenUpdateSbDto
+    ) {
         final var darlehen = darlehenRepository.requireById(darlehenId);
         assertDarlehenStatus(darlehen, Set.of(DarlehenStatus.EINGEGEBEN, DarlehenStatus.IN_FREIGABE));
 
@@ -320,9 +326,9 @@ public class DarlehenService {
         return requiredDokumentTypes;
     }
 
-    private void removeSuperfluousDokumentsForDarlehen(final Darlehen darlehen) {
-        final var requiredDokumentTypes = getRequiredDokumentsForDarlehen(darlehen.getId());
-        darlehen.getDokumente().removeIf(darlehenDokument -> {
+    private void removeSuperfluousDokumentsForDarlehen(final FreiwilligDarlehen freiwilligDarlehen) {
+        final var requiredDokumentTypes = getRequiredDokumentsForDarlehen(freiwilligDarlehen.getId());
+        freiwilligDarlehen.getDokumente().removeIf(darlehenDokument -> {
             if (!requiredDokumentTypes.contains(darlehenDokument.getDokumentType())) {
                 // Create a copy of the dokumente list to preserve the iteration count
                 darlehenDokument.getDokumente().stream().toList().forEach(this::removeDokumentAndFromS3);
@@ -330,7 +336,7 @@ public class DarlehenService {
             }
             return false;
         });
-        darlehenRepository.persistAndFlush(darlehen);
+        darlehenRepository.persistAndFlush(freiwilligDarlehen);
     }
 
     private void uploadDokument(
@@ -354,11 +360,11 @@ public class DarlehenService {
     }
 
     private DarlehenDokument createDarlehenDokument(
-        final Darlehen darlehen,
+        final FreiwilligDarlehen freiwilligDarlehen,
         final DarlehenDokumentType type
     ) {
         final var darlehenDokument = new DarlehenDokument()
-            .setDarlehen(darlehen)
+            .setFreiwilligDarlehen(freiwilligDarlehen)
             .setDokumentType(type);
 
         darlehenDokumentRepository.persistAndFlush(darlehenDokument);
@@ -417,14 +423,20 @@ public class DarlehenService {
         darlehenRepository.delete(darlehen);
     }
 
-    private static void assertDarlehenStatus(final Darlehen darlehen, final DarlehenStatus darlehenStatus) {
-        if (darlehen.getStatus() != darlehenStatus) {
+    private static void assertDarlehenStatus(
+        final FreiwilligDarlehen freiwilligDarlehen,
+        final DarlehenStatus darlehenStatus
+    ) {
+        if (freiwilligDarlehen.getStatus() != darlehenStatus) {
             throw new IllegalStateException(String.format("Darlehen not in status %s", darlehenStatus.name()));
         }
     }
 
-    private static void assertDarlehenStatus(final Darlehen darlehen, final Set<DarlehenStatus> darlehenStatuss) {
-        if (!darlehenStatuss.contains(darlehen.getStatus())) {
+    private static void assertDarlehenStatus(
+        final FreiwilligDarlehen freiwilligDarlehen,
+        final Set<DarlehenStatus> darlehenStatuss
+    ) {
+        if (!darlehenStatuss.contains(freiwilligDarlehen.getStatus())) {
             throw new IllegalStateException(String.format("Darlehen not in statuss %s", darlehenStatuss.toString()));
         }
     }

@@ -59,7 +59,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 )
 @Getter
 @Setter
-public class Darlehen extends AbstractMandantEntity {
+public class FreiwilligDarlehen extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "fall_id", nullable = false)

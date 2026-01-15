@@ -13,19 +13,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DarlehenUpdateSb")
+@JsonTypeName("FreiwilligDarlehenUpdateSb")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DarlehenUpdateSbDto  implements Serializable {
+public class FreiwilligDarlehenUpdateSbDto  implements Serializable {
   private @Valid Boolean gewaehren;
   private @Valid Integer betrag;
   private @Valid String kommentar;
 
   /**
    **/
-  public DarlehenUpdateSbDto gewaehren(Boolean gewaehren) {
+  public FreiwilligDarlehenUpdateSbDto gewaehren(Boolean gewaehren) {
     this.gewaehren = gewaehren;
     return this;
   }
@@ -44,7 +44,7 @@ public class DarlehenUpdateSbDto  implements Serializable {
   /**
    * minimum: 0
    **/
-  public DarlehenUpdateSbDto betrag(Integer betrag) {
+  public FreiwilligDarlehenUpdateSbDto betrag(Integer betrag) {
     this.betrag = betrag;
     return this;
   }
@@ -62,7 +62,7 @@ public class DarlehenUpdateSbDto  implements Serializable {
 
   /**
    **/
-  public DarlehenUpdateSbDto kommentar(String kommentar) {
+  public FreiwilligDarlehenUpdateSbDto kommentar(String kommentar) {
     this.kommentar = kommentar;
     return this;
   }
@@ -87,10 +87,10 @@ public class DarlehenUpdateSbDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenUpdateSbDto darlehenUpdateSb = (DarlehenUpdateSbDto) o;
-    return Objects.equals(this.gewaehren, darlehenUpdateSb.gewaehren) &&
-        Objects.equals(this.betrag, darlehenUpdateSb.betrag) &&
-        Objects.equals(this.kommentar, darlehenUpdateSb.kommentar);
+    FreiwilligDarlehenUpdateSbDto freiwilligDarlehenUpdateSb = (FreiwilligDarlehenUpdateSbDto) o;
+    return Objects.equals(this.gewaehren, freiwilligDarlehenUpdateSb.gewaehren) &&
+        Objects.equals(this.betrag, freiwilligDarlehenUpdateSb.betrag) &&
+        Objects.equals(this.kommentar, freiwilligDarlehenUpdateSb.kommentar);
   }
 
   @Override
@@ -101,7 +101,7 @@ public class DarlehenUpdateSbDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenUpdateSbDto {\n");
+    sb.append("class FreiwilligDarlehenUpdateSbDto {\n");
     
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");

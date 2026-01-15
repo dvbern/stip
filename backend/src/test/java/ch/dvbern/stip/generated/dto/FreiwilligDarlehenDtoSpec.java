@@ -30,24 +30,24 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * DarlehenDtoSpec
+ * FreiwilligDarlehenDtoSpec
  */
 @JsonPropertyOrder({
-  DarlehenDtoSpec.JSON_PROPERTY_ID,
-  DarlehenDtoSpec.JSON_PROPERTY_FALL_ID,
-  DarlehenDtoSpec.JSON_PROPERTY_STATUS,
-  DarlehenDtoSpec.JSON_PROPERTY_GEWAEHREN,
-  DarlehenDtoSpec.JSON_PROPERTY_BETRAG,
-  DarlehenDtoSpec.JSON_PROPERTY_KOMMENTAR,
-  DarlehenDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
-  DarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
-  DarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DarlehenDtoSpec.JSON_PROPERTY_GRUENDE,
-  DarlehenDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_ID,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_FALL_ID,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_STATUS,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_GEWAEHREN,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_BETRAG,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_KOMMENTAR,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_GRUENDE,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
-@JsonTypeName("Darlehen")
+@JsonTypeName("FreiwilligDarlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class DarlehenDtoSpec {
+public class FreiwilligDarlehenDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
@@ -81,10 +81,10 @@ public class DarlehenDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private String timestampErstellt;
 
-  public DarlehenDtoSpec() {
+  public FreiwilligDarlehenDtoSpec() {
   }
 
-  public DarlehenDtoSpec id(UUID id) {
+  public FreiwilligDarlehenDtoSpec id(UUID id) {
     
     this.id = id;
     return this;
@@ -110,7 +110,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec fallId(UUID fallId) {
+  public FreiwilligDarlehenDtoSpec fallId(UUID fallId) {
     
     this.fallId = fallId;
     return this;
@@ -136,7 +136,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec status(DarlehenStatusDtoSpec status) {
+  public FreiwilligDarlehenDtoSpec status(DarlehenStatusDtoSpec status) {
     
     this.status = status;
     return this;
@@ -162,7 +162,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec gewaehren(Boolean gewaehren) {
+  public FreiwilligDarlehenDtoSpec gewaehren(Boolean gewaehren) {
     
     this.gewaehren = gewaehren;
     return this;
@@ -188,7 +188,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec betrag(Integer betrag) {
+  public FreiwilligDarlehenDtoSpec betrag(Integer betrag) {
     
     this.betrag = betrag;
     return this;
@@ -215,7 +215,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec kommentar(String kommentar) {
+  public FreiwilligDarlehenDtoSpec kommentar(String kommentar) {
     
     this.kommentar = kommentar;
     return this;
@@ -241,7 +241,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec betragGewuenscht(Integer betragGewuenscht) {
+  public FreiwilligDarlehenDtoSpec betragGewuenscht(Integer betragGewuenscht) {
     
     this.betragGewuenscht = betragGewuenscht;
     return this;
@@ -268,7 +268,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec schulden(Integer schulden) {
+  public FreiwilligDarlehenDtoSpec schulden(Integer schulden) {
     
     this.schulden = schulden;
     return this;
@@ -295,7 +295,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
+  public FreiwilligDarlehenDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
     
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
@@ -322,13 +322,13 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec gruende(List<DarlehenGrundDtoSpec> gruende) {
+  public FreiwilligDarlehenDtoSpec gruende(List<DarlehenGrundDtoSpec> gruende) {
     
     this.gruende = gruende;
     return this;
   }
 
-  public DarlehenDtoSpec addGruendeItem(DarlehenGrundDtoSpec gruendeItem) {
+  public FreiwilligDarlehenDtoSpec addGruendeItem(DarlehenGrundDtoSpec gruendeItem) {
     if (this.gruende == null) {
       this.gruende = new ArrayList<>();
     }
@@ -356,7 +356,7 @@ public class DarlehenDtoSpec {
   }
 
 
-  public DarlehenDtoSpec timestampErstellt(String timestampErstellt) {
+  public FreiwilligDarlehenDtoSpec timestampErstellt(String timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
     return this;
@@ -389,18 +389,18 @@ public class DarlehenDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DarlehenDtoSpec darlehen = (DarlehenDtoSpec) o;
-    return Objects.equals(this.id, darlehen.id) &&
-        Objects.equals(this.fallId, darlehen.fallId) &&
-        Objects.equals(this.status, darlehen.status) &&
-        Objects.equals(this.gewaehren, darlehen.gewaehren) &&
-        Objects.equals(this.betrag, darlehen.betrag) &&
-        Objects.equals(this.kommentar, darlehen.kommentar) &&
-        Objects.equals(this.betragGewuenscht, darlehen.betragGewuenscht) &&
-        Objects.equals(this.schulden, darlehen.schulden) &&
-        Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
-        Objects.equals(this.gruende, darlehen.gruende) &&
-        Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
+    FreiwilligDarlehenDtoSpec freiwilligDarlehen = (FreiwilligDarlehenDtoSpec) o;
+    return Objects.equals(this.id, freiwilligDarlehen.id) &&
+        Objects.equals(this.fallId, freiwilligDarlehen.fallId) &&
+        Objects.equals(this.status, freiwilligDarlehen.status) &&
+        Objects.equals(this.gewaehren, freiwilligDarlehen.gewaehren) &&
+        Objects.equals(this.betrag, freiwilligDarlehen.betrag) &&
+        Objects.equals(this.kommentar, freiwilligDarlehen.kommentar) &&
+        Objects.equals(this.betragGewuenscht, freiwilligDarlehen.betragGewuenscht) &&
+        Objects.equals(this.schulden, freiwilligDarlehen.schulden) &&
+        Objects.equals(this.anzahlBetreibungen, freiwilligDarlehen.anzahlBetreibungen) &&
+        Objects.equals(this.gruende, freiwilligDarlehen.gruende) &&
+        Objects.equals(this.timestampErstellt, freiwilligDarlehen.timestampErstellt);
   }
 
   @Override
@@ -411,7 +411,7 @@ public class DarlehenDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DarlehenDtoSpec {\n");
+    sb.append("class FreiwilligDarlehenDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
