@@ -66,10 +66,11 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_SMALL;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.NUMBER_FORMAT;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.RECHTSMITTELBELEHRUNG_TITLE_KEY;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_BIG;
@@ -78,6 +79,9 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
 
 @UtilityClass
 public class PdfUtils {
+    public static final Link AUSBILDUNGSBEITRAEGE_URI =
+        new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+
     public static String formatNumber(Number number) {
         return NUMBER_FORMAT.format(number);
     }
@@ -129,7 +133,7 @@ public class PdfUtils {
     }
 
     public PdfFont createFontBold() {
-        return getPdfFont(FONT_BOLD_PATH);
+        return getPdfFont(PdfConstants.FONT_BOLD_PATH);
     }
 
     private static PdfFont getPdfFont(String fontPath) {
@@ -147,17 +151,26 @@ public class PdfUtils {
     public Image getLogo(
         final PdfDocument pdfDocument,
         final String pathToSvg
-    ) throws IOException {
+    ) {
         final ByteArrayOutputStream svgOut = new ByteArrayOutputStream();
         try (final InputStream svgStream = PdfUtils.class.getResourceAsStream(pathToSvg)) {
             SvgConverter.createPdf(svgStream, svgOut);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
+
         try (
             final PdfReader reader = new PdfReader(new ByteArrayInputStream(svgOut.toByteArray()));
             final PdfDocument tempSvgDoc = new PdfDocument(reader)
         ) {
             final PdfFormXObject xObject = tempSvgDoc.getFirstPage().copyAsFormXObject(pdfDocument);
-            return new Image(xObject).scaleToFit(150, 87);
+            final Image logo = new Image(xObject);
+            logo.scaleToFit(150, 87);
+            logo.setMarginLeft(-25);
+            logo.setMarginTop(-35);
+            return logo;
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
         }
     }
 
@@ -232,21 +245,21 @@ public class PdfUtils {
     public void header(
         final Gesuch gesuch,
         final Document document,
+        final PdfDocument pdfDocument,
         final float leftMargin,
         final TL translator,
         final boolean isDeckblatt,
-        final PdfFont pdfFont,
-        final Link ausbildungsbeitraegeUri
+        final PdfFont pdfFont
     ) {
         header(
             gesuch,
             document,
+            pdfDocument,
             leftMargin,
             translator,
             isDeckblatt,
             pdfFont,
             null,
-            ausbildungsbeitraegeUri,
             Optional.empty()
         );
     }
@@ -254,14 +267,17 @@ public class PdfUtils {
     public void header(
         final Gesuch gesuch,
         final Document document,
+        final PdfDocument pdfDocument,
         final float leftMargin,
         final TL translator,
         final boolean isDeckblatt,
         final PdfFont pdfFont,
         final PdfFont pdfFontBold,
-        final Link ausbildungsbeitraegeUri,
         final Optional<Eltern> elternteilOptional
     ) {
+
+        final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
+        document.add(logo);
         final float[] columnWidths = { 50, 50 };
         final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
 
@@ -306,7 +322,7 @@ public class PdfUtils {
         );
         headerTable.addCell(address);
 
-        final Paragraph uriParagraph = new Paragraph().add(ausbildungsbeitraegeUri);
+        final Paragraph uriParagraph = new Paragraph().add(AUSBILDUNGSBEITRAEGE_URI);
 
         final Cell url = PdfUtils.createCell(pdfFont, FONT_SIZE_MEDIUM, 1, 1).setPaddingBottom(0).add(uriParagraph);
         headerTable.addCell(url);

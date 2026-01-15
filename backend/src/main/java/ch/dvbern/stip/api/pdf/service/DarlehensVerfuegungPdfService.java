@@ -19,8 +19,6 @@ package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -33,39 +31,27 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.DarlehenPdfUtils;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import com.itextpdf.io.font.FontProgram;
-import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 
@@ -73,31 +59,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 @RequiredArgsConstructor
 public class DarlehensVerfuegungPdfService {
     private static final float[] TABLE_WIDTH_PERCENTAGES = { 30, 60 };
-
-    private PdfFont pdfFont = null;
-    private PdfFont pdfFontBold = null;
-
-    private void generateFonts() {
-        final FontProgram font;
-        final FontProgram fontBold;
-        try {
-            final byte[] fontBytes =
-                IOUtils.toByteArray(Objects.requireNonNull(getClass().getResourceAsStream(FONT_PATH)));
-            final byte[] fontBoldBytes = IOUtils.toByteArray(
-                Objects.requireNonNull(
-                    getClass().getResourceAsStream(
-                        FONT_BOLD_PATH
-                    )
-                )
-            );
-            font = FontProgramFactory.createFont(fontBytes);
-            fontBold = FontProgramFactory.createFont(fontBoldBytes);
-        } catch (IOException ex) {
-            throw new InternalServerErrorException(ex);
-        }
-        pdfFont = PdfFontFactory.createFont(font);
-        pdfFontBold = PdfFontFactory.createFont(fontBold);
-    }
 
     private TL getTranslator(final Gesuch gesuch) {
         final Locale locale = gesuch
@@ -109,49 +70,19 @@ public class DarlehensVerfuegungPdfService {
         return TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
     }
 
-    private void addHeader(
-        final Gesuch gesuch,
-        final PdfDocument pdfDocument,
-        final Document document,
-        final float leftMargin,
-        final TL translator
-    ) throws IOException {
-        final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
-        logo.setMarginLeft(-25);
-        logo.setMarginTop(-35);
-
-        document.add(logo);
-        final Link ausbildungsbeitraegeUri =
-            new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
-        PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
-    }
-
     private String getAusbildungsJahr(final Gesuch gesuch) {
-        final LocalDate ausbildungsjahrVon = gesuch
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .min(Comparator.comparing(DateRange::getGueltigAb))
-            .get()
-            .getGueltigAb();
-
-        final LocalDate ausbildungsjahrBis = gesuch
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .max(Comparator.comparing(DateRange::getGueltigBis))
-            .get()
-            .getGueltigBis();
+        final DateRange ausbildungsJahrDateRange = DateUtil.getGesuchDateRange(gesuch);
 
         return String.format(
             " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+            ausbildungsJahrDateRange.getGueltigAb().getYear(),
+            ausbildungsJahrDateRange.getGueltigBis().getYear()
         );
     }
 
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final Darlehen darlehen) {
-        generateFonts();
+        final PdfFont pdfFont = PdfUtils.createFont();
+        final PdfFont pdfFontBold = PdfUtils.createFontBold();
         final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
         final TL translator = getTranslator(gesuch);
 
@@ -163,13 +94,7 @@ public class DarlehensVerfuegungPdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            addHeader(
-                gesuch,
-                pdfDocument,
-                document,
-                leftMargin,
-                translator
-            );
+            PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont);
 
             final String ausbildungsjahr = getAusbildungsJahr(gesuch);
 
@@ -227,7 +152,7 @@ public class DarlehensVerfuegungPdfService {
                 )
             );
 
-            addDetailsForDarlehenTable(document, darlehen, translator);
+            addDetailsForDarlehenTable(document, darlehen, translator, pdfFont, pdfFontBold);
 
             document.add(
                 PdfUtils.createParagraph(
@@ -430,7 +355,8 @@ public class DarlehensVerfuegungPdfService {
 
     public ByteArrayOutputStream generateNegativeDarlehensVerfuegungPdf(final Darlehen darlehen) {
         final var out = new ByteArrayOutputStream();
-        generateFonts();
+        final PdfFont pdfFont = PdfUtils.createFont();
+        final PdfFont pdfFontBold = PdfUtils.createFontBold();
         final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
         final TL translator = getTranslator(gesuch);
         try (
@@ -440,13 +366,7 @@ public class DarlehensVerfuegungPdfService {
         ) {
             final float leftMargin = document.getLeftMargin();
 
-            addHeader(
-                gesuch,
-                pdfDocument,
-                document,
-                leftMargin,
-                translator
-            );
+            PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont);
 
             final String ausbildungsjahr = getAusbildungsJahr(gesuch);
 
@@ -548,7 +468,13 @@ public class DarlehensVerfuegungPdfService {
         return out;
     }
 
-    private void addDetailsForDarlehenTable(Document document, final Darlehen darlehen, final TL translator) {
+    private void addDetailsForDarlehenTable(
+        Document document,
+        final Darlehen darlehen,
+        final TL translator,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold
+    ) {
         final var leftMargin = document.getLeftMargin();
         final Table calculationTable = PdfUtils.createTable(TABLE_WIDTH_PERCENTAGES, leftMargin);
         calculationTable.useAllAvailableWidth();
@@ -636,7 +562,6 @@ public class DarlehensVerfuegungPdfService {
             ).setPadding(1).setTextAlignment(TextAlignment.LEFT)
         );
 
-        // todo KSTIP-2697: refine definition of "ende gesuchsjahr" for gueltigkeit of darlehen
         final var gueltigBis = DateUtil
             .formatDate(DateUtil.getGesuchDateRange(darlehen.getFall().getLatestGesuch()).getGueltigBis());
 

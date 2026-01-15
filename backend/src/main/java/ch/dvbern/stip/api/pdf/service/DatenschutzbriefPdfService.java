@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
@@ -40,13 +39,11 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.DottedBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
 import com.itextpdf.layout.properties.VerticalAlignment;
@@ -54,7 +51,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
@@ -67,20 +63,14 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 public class DatenschutzbriefPdfService {
     private final GesuchTrancheService gesuchTrancheService;
 
-    private PdfFont pdfFont = null;
-    private PdfFont pdfFontBold = null;
-    private Link ausbildungsbeitraegeUri = null;
-
     public ByteArrayOutputStream createDatenschutzbriefForElternteil(
         final Eltern elternteil,
         final UUID gesuchtrancheId
     ) {
         final var out = new ByteArrayOutputStream();
 
-        pdfFont = PdfUtils.createFont();
-        pdfFontBold = PdfUtils.createFontBold();
-
-        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+        final PdfFont pdfFont = PdfUtils.createFont();
+        final PdfFont pdfFontBold = PdfUtils.createFontBold();
 
         final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchtrancheId);
         final Gesuch gesuch = gesuchTranche.getGesuch();
@@ -95,8 +85,7 @@ public class DatenschutzbriefPdfService {
             final var document = new Document(pdfDocument, PAGE_SIZE);
         ) {
             final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
-            logo.setMarginLeft(-25);
-            logo.setMarginTop(-35);
+
             document.add(logo);
 
             final var leftMargin = document.getLeftMargin();
@@ -104,12 +93,12 @@ public class DatenschutzbriefPdfService {
             PdfUtils.header(
                 gesuch,
                 document,
+                pdfDocument,
                 leftMargin,
                 translator,
                 false,
                 pdfFont,
                 pdfFontBold,
-                ausbildungsbeitraegeUri,
                 Optional.of(elternteil)
             );
 
@@ -200,7 +189,7 @@ public class DatenschutzbriefPdfService {
 
             document.add(logo);
 
-            returnLetter(gesuch, document, leftMargin, translator, pdfFont, elternteil, pia);
+            returnLetter(gesuch, document, leftMargin, translator, pdfFont, pdfFontBold, elternteil, pia);
 
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -215,13 +204,12 @@ public class DatenschutzbriefPdfService {
         final float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
         final Eltern elternteil,
         final PersonInAusbildung pia
     ) {
         float[] columnWidths = { 50, 50 };
         final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
-
-        final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
 
         final Cell sender = PdfUtils.createCell(
             pdfFont,
