@@ -108,9 +108,14 @@ public class DarlehenService {
         return darlehenList.stream().map(darlehenMapper::toDto).toList();
     }
 
+    @Transactional
     public boolean canCreateDarlehen(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
         final var ausbildungs = fall.getAusbildungs();
+
+        if (!fall.isDelegiert()) {
+            return false;
+        }
 
         final var hasNoOpenDarlehen =
             fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);

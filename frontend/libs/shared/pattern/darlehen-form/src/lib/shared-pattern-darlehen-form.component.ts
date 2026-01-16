@@ -35,7 +35,6 @@ import { merge } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -104,7 +103,6 @@ export class SharedPatternDarlehenFormComponent {
   private elementRef = inject(ElementRef);
   private compileTimeConfig = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
-  private gesuchDashboardStore = inject(DashboardStore, { optional: true });
 
   private store = inject(Store);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
@@ -119,14 +117,13 @@ export class SharedPatternDarlehenFormComponent {
   maskitoNumber = maskitoNumber;
 
   darlehenPermissionsSig = computed(() => {
-    const delegierung =
-      this.gesuchDashboardStore?.dashboardViewSig()?.delegierung;
+    const darlehen = this.darlehenSig();
 
     return getDarlehenPermissions(
-      this.darlehenSig()?.status,
+      darlehen?.status,
       this.compileTimeConfig.appType,
       this.permissionStore.rolesMapSig(),
-      delegierung,
+      darlehen?.isDelegiert,
     ).permissions;
   });
 

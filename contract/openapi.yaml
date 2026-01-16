@@ -6279,6 +6279,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DarlehenGrund'
+        isDelegiert:
+          type: boolean
         timestampErstellt:
           type: string
     FileDownloadToken:

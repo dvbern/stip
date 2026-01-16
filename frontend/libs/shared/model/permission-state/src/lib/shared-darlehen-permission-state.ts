@@ -103,7 +103,7 @@ const applyDelegatedDarlehenPermissions = (
   permissions: DarlehenPermissionMap,
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung?: DelegierungSlim,
+  delegierung?: DelegierungSlim | boolean | undefined,
 ): DarlehenPermissionMap => {
   if (isNotReadonly(appType, rolesMap, delegierung)) {
     return permissions;
@@ -121,7 +121,7 @@ export const getDarlehenPermissions = (
   status: DarlehenStatus | undefined,
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung?: DelegierungSlim,
+  delegierung?: DelegierungSlim | boolean | undefined,
 ) => {
   if (!status) {
     return { permissions: undefined, status };
