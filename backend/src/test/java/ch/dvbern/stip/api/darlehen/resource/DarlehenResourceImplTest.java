@@ -22,6 +22,7 @@ import java.util.List;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -40,6 +41,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +66,8 @@ public class DarlehenResourceImplTest {
 
     private GesuchDtoSpec gesuch;
     private DarlehenDtoSpec darlehen;
+
+    private final DarlehenRepository darlehenRepository;
 
     @Test
     @TestAsGesuchsteller
@@ -222,6 +226,13 @@ public class DarlehenResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @Order(98)
+    @Transactional
+    void deleteDarlehen() {
+        darlehenRepository.deleteById(darlehen.getId());
     }
 
     @Test
