@@ -152,7 +152,7 @@ export class SharedPatternDarlehenFormComponent {
 
   formSb = this.formBuilder.group({
     gewaehren: [<boolean | null>null, [Validators.required]],
-    betrag: [<string | null>null, [Validators.required]],
+    betrag: [<string | undefined>undefined],
     kommentar: [<string | null>null, [Validators.required]],
   });
 
@@ -260,10 +260,15 @@ export class SharedPatternDarlehenFormComponent {
 
     effect(() => {
       const gewaehren = this.showBetragFieldSig();
-      this.formService.setDisabledState(
-        this.formSb.controls.betrag,
-        !gewaehren,
-      );
+      const betragControl = this.formSb.controls.betrag;
+
+      this.formService.setDisabledState(betragControl, !gewaehren);
+      if (gewaehren) {
+        betragControl.setValidators([Validators.required]);
+      } else {
+        betragControl.clearValidators();
+      }
+      betragControl.updateValueAndValidity();
     });
   }
 
@@ -357,7 +362,6 @@ export class SharedPatternDarlehenFormComponent {
 
   private buildUpdatedSbFrom(): DarlehenUpdateSb {
     const realValues = convertTempFormToRealValues(this.formSb, [
-      'betrag',
       'kommentar',
       'gewaehren',
     ]);
