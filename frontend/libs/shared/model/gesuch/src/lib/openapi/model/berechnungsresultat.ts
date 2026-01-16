@@ -17,6 +17,10 @@ import { TranchenBerechnungsresultat } from './tranchenBerechnungsresultat';
 export interface Berechnungsresultat { 
     year: number;
     /**
+     * Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch
+     */
+    berechnungTotal: number;
+    /**
      * Berechneter Stpendiumsanspruch für das Gesuch
      */
     berechnungStipendium: number;

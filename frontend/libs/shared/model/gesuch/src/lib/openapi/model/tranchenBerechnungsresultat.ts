@@ -18,6 +18,10 @@ import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
  */
 export interface TranchenBerechnungsresultat { 
     /**
+     * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
+     */
+    berechnungAnteilTotal: number;
+    /**
      * Berechneter Stpendiumsanspruch für diese Tranche
      */
     berechnungAnteilStipendium: number;

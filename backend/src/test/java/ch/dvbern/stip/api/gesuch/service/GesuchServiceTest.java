@@ -1150,7 +1150,7 @@ class GesuchServiceTest {
             .thenReturn(true);
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
@@ -1180,7 +1180,7 @@ class GesuchServiceTest {
         gesuch.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
         assertEquals(
             Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
@@ -1196,7 +1196,7 @@ class GesuchServiceTest {
         final var gesuch = Mockito.spy(gesuchOrig);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnung(1).year(Year.now().getValue()));
+            .thenReturn(new BerechnungsresultatDto().berechnungTotal(1).year(Year.now().getValue()));
         QuarkusMock.installMockForType(Mockito.mock(SapService.class), SapService.class);
         assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
         assertEquals(
@@ -1215,7 +1215,7 @@ class GesuchServiceTest {
         doNothing().when(gesuchValidatorService).validateGesuchForTransition(any(), any());
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
 
         var verfuegung = new Verfuegung();
         verfuegung.setTimestampErstellt(LocalDateTime.now());
@@ -1920,7 +1920,7 @@ class GesuchServiceTest {
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnung(0).year(Year.now().getValue()));
+            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
 
         gesuchFormular
             .getFamiliensituation()

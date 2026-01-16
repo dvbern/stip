@@ -600,7 +600,7 @@ public class GesuchService {
             configService.getCurrentDmnMinorVersion()
         );
 
-        if (stipendien.getBerechnung() <= 0) {
+        if (stipendien.getBerechnungTotal() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
             gesuchStatusToVerfuegt(gesuchId);
         } else {
@@ -721,7 +721,7 @@ public class GesuchService {
                 configService.getCurrentDmnMinorVersion()
             );
 
-            if (stipendien.getBerechnung() > 0) {
+            if (stipendien.getBerechnungTotal() > 0) {
                 status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
             }
         }

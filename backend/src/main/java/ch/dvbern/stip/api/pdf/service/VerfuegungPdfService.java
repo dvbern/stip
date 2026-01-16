@@ -740,7 +740,7 @@ public class VerfuegungPdfService {
     public void createVerfuegungsDocuments(final Gesuch gesuch, final BerechnungsresultatDto stipendien) {
         final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
             ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnung();
+            : stipendien.getBerechnungTotal();
 
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 

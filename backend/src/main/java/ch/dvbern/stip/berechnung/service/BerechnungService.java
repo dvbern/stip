@@ -122,25 +122,32 @@ public class BerechnungService {
                 gesuchTranche.getGueltigkeit().getGueltigBis()
             );
             for (final var berechnungsresultat : trancheBerechnungsresultate) {
-                berechnungsresultat.setBerechnung(
-                    berechnungsresultat.getBerechnung() * monthsValid / 12
+                berechnungsresultat.setBerechnungAnteilTotal(
+                    berechnungsresultat.getBerechnungAnteilTotal() * monthsValid / 12
                 );
             }
             berechnungsresultate.addAll(trancheBerechnungsresultate);
         }
 
-        int berechnungsresultat =
-            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnung).sum();
-        if (berechnungsresultat < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
-            berechnungsresultat = 0;
+        int berechnungStipendium = -berechnungsresultate.stream()
+            .mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilStipendium)
+            .sum();
+        int berechnungDarlehen =
+            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilDarlehen).sum();
+        int berechnungTotal =
+            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilTotal).sum();
+        if (berechnungTotal < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+            berechnungTotal = 0;
         }
 
         Integer berechnungsresultatReduziert =
-            actualDuration != null ? berechnungsresultat * actualDuration / 12 : null;
+            actualDuration != null ? berechnungTotal * actualDuration / 12 : null;
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
-            berechnungsresultat,
+            berechnungTotal,
+            berechnungStipendium,
+            berechnungDarlehen,
             berechnungsresultate,
             berechnungsresultatReduziert,
             actualDuration
@@ -222,11 +229,15 @@ public class BerechnungService {
                     continue;
                 }
 
+                // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
+                final var berechnungAnteilStipendium = Math.min(0, stipendienCalculated.getStipendien());
+                final var berechnungAnteilDarlehen = stipendienCalculated.getDarlehen();
+
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        Math.min(0, stipendienCalculated.getStipendien()), // KSTIP-2548: positive
-                                                                           // Zwischenbeiträge/Teilrechnungen auf 0
-                                                                           // setzen
+                        berechnungAnteilStipendium + berechnungAnteilDarlehen,
+                        berechnungAnteilStipendium,
+                        berechnungAnteilDarlehen,
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
@@ -269,9 +280,15 @@ public class BerechnungService {
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
 
+                // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
+                final var berechnungAnteilStipendium = Math.min(0, stipendienCalculated.getStipendien());
+                final var berechnungAnteilDarlehen = stipendienCalculated.getDarlehen();
+
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        Math.min(0, berechnung), // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
+                        berechnungAnteilStipendium + berechnungAnteilDarlehen,
+                        berechnungAnteilStipendium,
+                        berechnungAnteilDarlehen,
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),

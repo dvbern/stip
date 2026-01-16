@@ -172,7 +172,7 @@ public class FamilienbudgetCalculatorV1 {
         final var anrechenbaresVermoegen = getAnrechenbaresVermoegen(elternteil, stammdaten);
         final var einnahmenBGSA = Objects.requireNonNullElse(elternteil.getEinnahmenBGSA(), 0);
         final var andereEinnahmen = Objects.requireNonNullElse(elternteil.getAndereEinnahmen(), 0);
-        final var renten = elternteil.getRenten();
+        final var renten = Objects.requireNonNullElse(elternteil.getRenten(), 0);
 
         final var einnahmenBeforeVermoegen = max(
             totalEinkuenfte
