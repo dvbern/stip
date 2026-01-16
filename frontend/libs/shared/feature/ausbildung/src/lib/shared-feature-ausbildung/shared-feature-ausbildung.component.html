@@ -26,7 +26,6 @@
             [testIdSig]="'form-education-ausbildungsstaette'"
             [labelKeySig]="'shared.form.ausbildung.ausbildungsstaette.label'"
             [valuesSig]="ausbildungsstaettenOptionsSig()"
-            [sortByValueSig]="true"
             [languageSig]="languageSig()"
             [invalidValueLabelKeySig]="'shared.form.ausbildung.ausbildungsstaette.error.invalid' | transloco"
           ></dv-shared-ui-select-search>
@@ -77,7 +76,6 @@
             [testIdSig]="'form-education-ausbildungsgang'"
             [labelKeySig]="'shared.form.ausbildung.ausbildungsgang.label'"
             [valuesSig]="ausbildungsgangOptionsSig()"
-            [sortByValueSig]="true"
             [languageSig]="languageSig()"
             [invalidValueLabelKeySig]="'shared.form.ausbildung.ausbildungsgang.error.invalid' | transloco"
           ></dv-shared-ui-select-search>
@@ -171,6 +169,7 @@
           [labelKeySig]="'shared.form.shared.address.country.label'"
           [valuesSig]="laenderSig()"
           [languageSig]="languageSig()"
+          [firstItemSig]="{ propName: 'iso3code', value: 'CHE' }"
           [panelWidthSig]="'auto'"
           [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
         ></dv-shared-ui-select-search>

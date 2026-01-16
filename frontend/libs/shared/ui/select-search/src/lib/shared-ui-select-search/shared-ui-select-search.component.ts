@@ -130,7 +130,14 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
   /**
    * Enables sorting of the values by their display value.
    */
-  sortByValueSig = input<boolean>(false);
+  sortByValueSig = input<boolean>(true);
+  /**
+   * The first value to display in the autocomplete input.
+   * Disabled on search.
+   */
+  firstItemSig = input<{ propName: keyof T; value: string } | undefined>(
+    undefined,
+  );
   /**
    * The width of the panel in pixels or as a percentage string.
    * Default is '100%' to fill the width of the parent container.
@@ -201,6 +208,8 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     const valueInput = this.autocompleteSearchValueChangesSig();
     const shouldSort = this.sortByValueSig();
     const displayValue = this.displayValueWithSig();
+    const firstItem = this.firstItemSig();
+
     let values = this.valuesSig();
 
     if (!values) {
@@ -217,6 +226,20 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
           ?.toLowerCase()
           .includes(valueInput.toLowerCase()),
       );
+    }
+
+    if (firstItem && !valueInput) {
+      const firstItemValue = values.find(
+        (v) => v[firstItem.propName] === firstItem.value,
+      );
+      if (firstItemValue) {
+        values = [
+          ...values.filter((v) => v[firstItem.propName] !== firstItem.value),
+        ];
+        if (firstItemValue) {
+          values.unshift(firstItemValue);
+        }
+      }
     }
 
     return values;
