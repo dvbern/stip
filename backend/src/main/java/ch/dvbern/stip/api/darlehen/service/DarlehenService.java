@@ -24,6 +24,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -43,6 +45,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
@@ -82,6 +85,8 @@ public class DarlehenService {
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
     private final NotificationService notificationService;
     private final Validator validator;
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
 
     @Transactional
     public DarlehenDto createDarlehen(final UUID fallId) {
@@ -112,8 +117,12 @@ public class DarlehenService {
     public boolean canCreateDarlehen(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
         final var ausbildungs = fall.getAusbildungs();
+        final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!fall.isDelegiert()) {
+        // Check if user is authorized (either delegated Sozialdienst mitarbeiter or Gesuchsteller)
+        if (
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, benutzer, sozialdienstService)
+        ) {
             return false;
         }
 
