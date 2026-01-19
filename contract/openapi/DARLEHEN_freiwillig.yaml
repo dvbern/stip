@@ -536,11 +536,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: darlehenUpdateSb
       summary: Update darlehen as sb
-
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
-
   schemas:
     SbDarlehenDashboardColumn:
       enum:

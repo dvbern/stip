@@ -23,14 +23,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.beschwerdeentscheid.service.BeschwerdeEntscheidService;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
-import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
@@ -87,7 +85,6 @@ public class DokumentResourceImpl implements DokumentResource {
     private final BenutzerService benutzerService;
     private final CustomDokumentTypService customDokumentTypService;
     private final UnterschriftenblattAuthorizer unterschriftenblattAuthorizer;
-    private final DarlehenAuthorizer darlehenAuthorizer;
     private final DokumentAuthorizer dokumentAuthorizer;
     private final CustomGesuchDokumentTypAuthorizer customGesuchDokumentTypAuthorizer;
     private final GesuchDokumentAuthorizer gesuchDokumentAuthorizer;
@@ -95,7 +92,6 @@ public class DokumentResourceImpl implements DokumentResource {
     private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final DarlehenService darlehenService;
 
     @Override
     @RolesAllowed(CUSTOM_DOKUMENT_CREATE)

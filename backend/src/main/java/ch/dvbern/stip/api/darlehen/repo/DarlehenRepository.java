@@ -84,9 +84,23 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
 
     public Darlehen requireByDokumentId(final UUID dokumentId) {
         return getAlleQuery()
-            .where(darlehen.dokumente.any().dokumente.any().id.eq(dokumentId))
+            .where(
+                darlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
+            )
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
     }
+
+    public Darlehen requireByDokumentOrDarlehensVerfuegungId(final UUID dokumentId) {
+        return getAlleQuery()
+            .where(
+                darlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
+                    .or(darlehen.darlehenVerfuegung.id.eq(dokumentId))
+            )
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
+    }
+
 }
