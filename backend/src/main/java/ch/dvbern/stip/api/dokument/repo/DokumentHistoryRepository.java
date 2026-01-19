@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,7 +44,7 @@ public class DokumentHistoryRepository {
         return (Dokument) reader.createQuery()
             .forRevisionsOfEntity(Dokument.class, true, true)
             .add(AuditEntity.id().eq(dokumentId))
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getSingleResult();
     }

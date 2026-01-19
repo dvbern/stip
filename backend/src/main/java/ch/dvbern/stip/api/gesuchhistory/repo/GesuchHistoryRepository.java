@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -88,7 +89,7 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -108,7 +109,7 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -128,7 +129,7 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").in(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -145,7 +146,7 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -165,7 +166,7 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").in(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -185,7 +186,7 @@ public class GesuchHistoryRepository {
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.revisionNumber().gt(revisionNumber))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getResultList()
             .stream()
