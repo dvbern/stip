@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BerechnungResult {
     private final Integer stipendien;
+    private final Integer darlehen;
     private final List<FamilienBudgetresultatDto> familienBudgetresultate;
     private final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
 }

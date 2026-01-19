@@ -26,7 +26,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer year;
-  private @Valid Integer berechnung;
+  private @Valid Integer berechnungTotal;
+  private @Valid Integer berechnungStipendium;
+  private @Valid Integer berechnungDarlehen;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
   private @Valid Integer berechnungReduziert;
   private @Valid Integer verminderteBerechnungMonate;
@@ -51,23 +53,63 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
-   * Berechneter Stpendiumsanspruch für das Gesuch
+   * Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch
    **/
-  public BerechnungsresultatDto berechnung(Integer berechnung) {
-    this.berechnung = berechnung;
+  public BerechnungsresultatDto berechnungTotal(Integer berechnungTotal) {
+    this.berechnungTotal = berechnungTotal;
     return this;
   }
 
   
-  @JsonProperty("berechnung")
+  @JsonProperty("berechnungTotal")
   @NotNull
-  public Integer getBerechnung() {
-    return berechnung;
+  public Integer getBerechnungTotal() {
+    return berechnungTotal;
   }
 
-  @JsonProperty("berechnung")
-  public void setBerechnung(Integer berechnung) {
-    this.berechnung = berechnung;
+  @JsonProperty("berechnungTotal")
+  public void setBerechnungTotal(Integer berechnungTotal) {
+    this.berechnungTotal = berechnungTotal;
+  }
+
+  /**
+   * Berechneter Stpendiumsanspruch für das Gesuch
+   **/
+  public BerechnungsresultatDto berechnungStipendium(Integer berechnungStipendium) {
+    this.berechnungStipendium = berechnungStipendium;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungStipendium")
+  @NotNull
+  public Integer getBerechnungStipendium() {
+    return berechnungStipendium;
+  }
+
+  @JsonProperty("berechnungStipendium")
+  public void setBerechnungStipendium(Integer berechnungStipendium) {
+    this.berechnungStipendium = berechnungStipendium;
+  }
+
+  /**
+   * Berechneter Darlehensanspruch für das Gesuch
+   **/
+  public BerechnungsresultatDto berechnungDarlehen(Integer berechnungDarlehen) {
+    this.berechnungDarlehen = berechnungDarlehen;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungDarlehen")
+  @NotNull
+  public Integer getBerechnungDarlehen() {
+    return berechnungDarlehen;
+  }
+
+  @JsonProperty("berechnungDarlehen")
+  public void setBerechnungDarlehen(Integer berechnungDarlehen) {
+    this.berechnungDarlehen = berechnungDarlehen;
   }
 
   /**
@@ -155,7 +197,9 @@ public class BerechnungsresultatDto  implements Serializable {
     }
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
-        Objects.equals(this.berechnung, berechnungsresultat.berechnung) &&
+        Objects.equals(this.berechnungTotal, berechnungsresultat.berechnungTotal) &&
+        Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
+        Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
         Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
         Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
@@ -163,7 +207,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnung, tranchenBerechnungsresultate, berechnungReduziert, verminderteBerechnungMonate);
+    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, berechnungReduziert, verminderteBerechnungMonate);
   }
 
   @Override
@@ -172,7 +216,9 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("class BerechnungsresultatDto {\n");
     
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
-    sb.append("    berechnung: ").append(toIndentedString(berechnung)).append("\n");
+    sb.append("    berechnungTotal: ").append(toIndentedString(berechnungTotal)).append("\n");
+    sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
+    sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
     sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");

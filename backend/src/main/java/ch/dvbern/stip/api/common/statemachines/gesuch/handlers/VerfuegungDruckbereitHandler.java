@@ -47,7 +47,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
         final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
             ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnung();
+            : stipendien.getBerechnungTotal();
 
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 

@@ -6,12 +6,6 @@ import {
 
 export type TeilberechnungsArt = 'a' | 'b' | '';
 
-export type VerminderteBerechnung = {
-  monate: number;
-  reduktionsBetrag: number;
-  berechnungReduziert: number;
-};
-
 export interface PersoenlichesBudgetresultatView
   extends PersoenlichesBudgetresultat {
   typ: 'persoenlich';
@@ -19,10 +13,6 @@ export interface PersoenlichesBudgetresultatView
   name: string;
   gueltigAb: string;
   gueltigBis: string;
-  geteilteBerechnung: {
-    berechnungsanteilKinder: number;
-    anteil: number;
-  } | null;
 }
 
 export interface FamilienBudgetresultatView extends FamilienBudgetresultat {
@@ -45,6 +35,5 @@ export type BerechnungsValue = keyof Pick<
 export type BerechnungView = {
   persoenlich: PersoenlichesBudgetresultatView;
   familien: FamilienBudgetresultatView[];
-  berechnung: number;
   berechnungsStammdaten: BerechnungsStammdaten;
 };
