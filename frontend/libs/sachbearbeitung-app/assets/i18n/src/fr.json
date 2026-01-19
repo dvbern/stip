@@ -783,7 +783,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Résultat : Bourse accordée",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt": "Résultat : Bourse refusée",
   "sachbearbeitung-app.verfuegung.zusammenfassung.title": "Résumé",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Lien du calcul {{ index }}{{ type }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Detail",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Calcul {{ index }}{{ type }} pour la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Part de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Part du prêt",
