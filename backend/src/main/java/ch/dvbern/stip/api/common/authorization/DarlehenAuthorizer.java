@@ -192,7 +192,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canGetDarlehenDokumentByDokumentId(UUID dokumentId) {
-        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        final var darlehen = darlehenRepository.requireByDokumentOrDarlehensVerfuegungId(dokumentId);
         canGetDarlehenDokument(darlehen);
     }
 

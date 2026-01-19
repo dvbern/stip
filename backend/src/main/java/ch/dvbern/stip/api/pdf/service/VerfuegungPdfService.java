@@ -32,12 +32,10 @@ import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
-import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -58,7 +56,6 @@ import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.kernel.utils.PdfMerger;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
-import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.AreaBreakType;
@@ -71,7 +68,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
@@ -86,10 +82,6 @@ public class VerfuegungPdfService {
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
     private final BerechnungsblattService berechnungsblattService;
-
-    private PdfFont pdfFont = null;
-    private PdfFont pdfFontBold = null;
-    private Link ausbildungsbeitraegeUri = null;
 
     private ByteArrayOutputStream createNegativeVerfuegungPdf(
         final Verfuegung verfuegung,
@@ -125,10 +117,8 @@ public class VerfuegungPdfService {
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        pdfFont = PdfUtils.createFont();
-        pdfFontBold = PdfUtils.createFontBold();
-
-        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+        final PdfFont pdfFont = PdfUtils.createFont();
+        final PdfFont pdfFontBold = PdfUtils.createFontBold();
 
         final Gesuch gesuch = verfuegung.getGesuch();
         final Locale locale = LocaleUtil.getLocale(gesuch);
@@ -140,28 +130,48 @@ public class VerfuegungPdfService {
             final Document document = new Document(pdfDocument, PAGE_SIZE);
         ) {
             final float leftMargin = document.getLeftMargin();
-
-            final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
-            logo.setMarginLeft(-25);
-            logo.setMarginTop(-35);
+            final Link ausbildungsbeitraegeUri =
+                new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
                 addVerfuegung(
                     verfuegung,
                     document,
+                    pdfDocument,
                     section,
-                    logo,
                     leftMargin,
                     translator,
-                    anhangs
+                    anhangs,
+                    pdfFont,
+                    pdfFontBold,
+                    ausbildungsbeitraegeUri
                 );
 
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                document.add(logo);
-                PdfUtils.header(gesuch, document, leftMargin, translator, true, pdfFont, ausbildungsbeitraegeUri);
+                PdfUtils.header(
+                    gesuch,
+                    document,
+                    pdfDocument,
+                    leftMargin,
+                    translator,
+                    true,
+                    pdfFont,
+                    ausbildungsbeitraegeUri
+                );
             }
 
-            addVerfuegung(verfuegung, document, section, logo, leftMargin, translator, anhangs);
+            addVerfuegung(
+                verfuegung,
+                document,
+                pdfDocument,
+                section,
+                leftMargin,
+                translator,
+                anhangs,
+                pdfFont,
+                pdfFontBold,
+                ausbildungsbeitraegeUri
+            );
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
@@ -172,18 +182,20 @@ public class VerfuegungPdfService {
     private void addVerfuegung(
         final Verfuegung verfuegung,
         final Document document,
+        final PdfDocument pdfDocument,
         final VerfuegungPdfSection section,
-        final Image logo,
         final float leftMargin,
         final TL translator,
-        final List<Anhangs> anhangs
+        final List<Anhangs> anhangs,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) throws IOException {
         final var gesuch = verfuegung.getGesuch();
-        document.add(logo);
-        PdfUtils.header(gesuch, document, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
+        PdfUtils.header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
         // Add the main content and footer sections.
-        section.render(verfuegung, document, leftMargin, translator);
+        section.render(verfuegung, document, leftMargin, translator, pdfFont, pdfFontBold, ausbildungsbeitraegeUri);
         anhangs.addFirst(Anhangs.RECHTSMITTELBELEHRUNG);
         PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, true);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
@@ -194,28 +206,17 @@ public class VerfuegungPdfService {
         final Verfuegung verfuegung,
         final Document document,
         final float leftMargin,
-        final TL translator
+        final TL translator,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) {
-        final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .min(Comparator.comparing(DateRange::getGueltigAb))
-            .get()
-            .getGueltigAb();
 
-        final LocalDate ausbildungsjahrBis = verfuegung.getGesuch()
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .max(Comparator.comparing(DateRange::getGueltigBis))
-            .get()
-            .getGueltigBis();
+        final DateRange ausbildungsJahrDateRange = DateUtil.getGesuchDateRange(verfuegung.getGesuch());
 
-        final String ausbildungsjahr = String.format(
-            " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+        final String ausbildungsjahr = PdfUtils.formatAusbildungsjahr(
+            ausbildungsJahrDateRange.getGueltigAb(),
+            ausbildungsJahrDateRange.getGueltigBis()
         );
         document.add(
             PdfUtils.createParagraph(
@@ -228,8 +229,8 @@ public class VerfuegungPdfService {
                 ausbildungsjahr,
                 String.format(
                     " (%s - %s)",
-                    DateUtil.formatDate(ausbildungsjahrVon),
-                    DateUtil.formatDate(ausbildungsjahrBis)
+                    DateUtil.formatDate(ausbildungsJahrDateRange.getGueltigAb()),
+                    DateUtil.formatDate(ausbildungsJahrDateRange.getGueltigBis())
                 )
             )
         );
@@ -239,19 +240,13 @@ public class VerfuegungPdfService {
             .getGesuchFormular()
             .getPersonInAusbildung();
 
-        final String translateKey = personInAusbildung
-            .getAnrede()
-            .equals(Anrede.HERR)
-                ? "stip.pdf.begruessung.mann"
-                : "stip.pdf.begruessung.frau";
-
         document.add(
-            PdfUtils.createParagraph(
+            PdfUtils.getAnredeParagraph(
+                personInAusbildung,
                 pdfFont,
+                translator,
                 FONT_SIZE_BIG,
-                leftMargin,
-                translator.translate(translateKey) + " ",
-                personInAusbildung.getNachname()
+                leftMargin
             )
         );
 
@@ -331,7 +326,10 @@ public class VerfuegungPdfService {
         final Verfuegung verfuegung,
         final Document document,
         final float leftMargin,
-        final TL translator
+        final TL translator,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) {
         final var relevantBuchhaltung =
             buchhaltungService.getLatestBuchhaltungEntry(verfuegung.getGesuch().getAusbildung().getFall().getId());
@@ -339,32 +337,17 @@ public class VerfuegungPdfService {
         final boolean isAenderung = VerfuegungUtil.isAenderung(verfuegung);
         final boolean isRueckforderung = VerfuegungUtil.isRueckforderung(verfuegung, buchhaltungService);
 
-        final LocalDate ausbildungsjahrVon = verfuegung.getGesuch()
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .min(Comparator.comparing(DateRange::getGueltigAb))
-            .get()
-            .getGueltigAb();
+        final DateRange ausbildungsJahrDateRange = DateUtil.getGesuchDateRange(verfuegung.getGesuch());
 
-        final LocalDate ausbildungsjahrBis = verfuegung.getGesuch()
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .max(Comparator.comparing(DateRange::getGueltigBis))
-            .get()
-            .getGueltigBis();
-
-        final String ausbildungsjahr = String.format(
-            " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+        final String ausbildungsjahr = PdfUtils.formatAusbildungsjahr(
+            ausbildungsJahrDateRange.getGueltigAb(),
+            ausbildungsJahrDateRange.getGueltigBis()
         );
 
         final String fullAusbildungsjahr = String.format(
             " (%s - %s)",
-            DateUtil.formatDate(ausbildungsjahrVon),
-            DateUtil.formatDate(ausbildungsjahrBis)
+            DateUtil.formatDate(ausbildungsJahrDateRange.getGueltigAb()),
+            DateUtil.formatDate(ausbildungsJahrDateRange.getGueltigBis())
         );
 
         String fullTitle = ausbildungsjahr + fullAusbildungsjahr;
@@ -636,31 +619,20 @@ public class VerfuegungPdfService {
         final Verfuegung verfuegung,
         final Document document,
         final float leftMargin,
-        final TL translator
+        final TL translator,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
     ) {
         final var gesuch = verfuegung.getGesuch();
 
         final Locale locale = LocaleUtil.getLocale(gesuch);
 
-        final LocalDate ausbildungsjahrVon = gesuch
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .min(Comparator.comparing(DateRange::getGueltigAb))
-            .get()
-            .getGueltigAb();
-        final LocalDate ausbildungsjahrBis = gesuch
-            .getGesuchTranchen()
-            .stream()
-            .map(GesuchTranche::getGueltigkeit)
-            .max(Comparator.comparing(DateRange::getGueltigBis))
-            .get()
-            .getGueltigBis();
+        final DateRange ausbildungsJahrDateRange = DateUtil.getGesuchDateRange(gesuch);
 
-        final String ausbildungsjahr = String.format(
-            " %d/%d",
-            ausbildungsjahrVon.getYear(),
-            ausbildungsjahrBis.getYear()
+        final String ausbildungsjahr = PdfUtils.formatAusbildungsjahr(
+            ausbildungsJahrDateRange.getGueltigAb(),
+            ausbildungsJahrDateRange.getGueltigBis()
         );
         document.add(
             PdfUtils.createParagraph(
@@ -671,8 +643,8 @@ public class VerfuegungPdfService {
                 ausbildungsjahr,
                 String.format(
                     " (%s - %s)",
-                    DateUtil.formatDate(ausbildungsjahrVon),
-                    DateUtil.formatDate(ausbildungsjahrBis)
+                    DateUtil.formatDate(ausbildungsJahrDateRange.getGueltigAb()),
+                    DateUtil.formatDate(ausbildungsJahrDateRange.getGueltigBis())
                 )
             )
         );
@@ -681,17 +653,14 @@ public class VerfuegungPdfService {
             .getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung();
-        final String translateKey = personInAusbildung.getAnrede().equals(Anrede.HERR)
-            ? "stip.pdf.begruessung.mann"
-            : "stip.pdf.begruessung.frau";
 
         document.add(
-            PdfUtils.createParagraph(
+            PdfUtils.getAnredeParagraph(
+                personInAusbildung,
                 pdfFont,
+                translator,
                 FONT_SIZE_BIG,
-                leftMargin,
-                translator.translate(translateKey) + " ",
-                personInAusbildung.getNachname()
+                leftMargin
             )
         );
 
@@ -740,7 +709,7 @@ public class VerfuegungPdfService {
     public void createVerfuegungsDocuments(final Gesuch gesuch, final BerechnungsresultatDto stipendien) {
         final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
             ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnung();
+            : stipendien.getBerechnungTotal();
 
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
@@ -864,7 +833,15 @@ public class VerfuegungPdfService {
 
     @FunctionalInterface
     private interface VerfuegungPdfSection {
-        void render(Verfuegung verfuegung, Document document, float leftMargin, TL translator)
+        void render(
+            Verfuegung verfuegung,
+            Document document,
+            float leftMargin,
+            TL translator,
+            PdfFont pdfFont,
+            PdfFont pdfFontBold,
+            Link ausbildungsbeitraegeUri
+        )
         throws IOException;
     }
 

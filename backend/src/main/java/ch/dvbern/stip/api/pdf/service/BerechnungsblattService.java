@@ -192,7 +192,7 @@ public class BerechnungsblattService {
 
         persoenlichesBudgetTableTotal.addCell(
             getDefaultParagraphNumber(
-                tranchenBerechnungsResultat.getBerechnung()
+                tranchenBerechnungsResultat.getBerechnungAnteilTotal()
             ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
         );
 
@@ -389,7 +389,7 @@ public class BerechnungsblattService {
 
                 persoenlichesBudgetTableTotal.addCell(
                     getDefaultParagraphNumber(
-                        tranchenBerechnungsResultat.getBerechnung()
+                        tranchenBerechnungsResultat.getBerechnungAnteilTotal()
                     ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
                 );
 

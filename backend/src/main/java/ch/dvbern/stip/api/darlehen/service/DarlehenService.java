@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.pdf.service.DarlehensVerfuegungPdfService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenGsResponseDto;
@@ -90,6 +92,53 @@ public class DarlehenService {
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
+    private final DarlehensVerfuegungPdfService darlehensVerfuegungPdfService;
+
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
+    private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
+
+    @Transactional
+    public void createPositiveDarlehensVerfuegung(Darlehen darlehen) {
+        final ByteArrayOutputStream out =
+            darlehensVerfuegungPdfService.generatePositiveDarlehensVerfuegungPdf(darlehen);
+
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+        );
+
+        var darlehensVerfuegung = new Dokument();
+        darlehensVerfuegung.setObjectId(objectId);
+        darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
+    }
+
+    @Transactional
+    public void createNegativeDarlehensVerfuegung(Darlehen darlehen) {
+        final ByteArrayOutputStream out =
+            darlehensVerfuegungPdfService.generateNegativeDarlehensVerfuegungPdf(darlehen);
+
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+        );
+
+        var darlehensVerfuegung = new Dokument();
+        darlehensVerfuegung.setObjectId(objectId);
+        darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
+    }
 
     @Transactional
     public DarlehenDto createDarlehen(final UUID fallId) {
@@ -245,7 +294,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
 
         darlehenRepository.persistAndFlush(darlehen);
-
+        createNegativeDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAbgelehntNotification(darlehen);
 
         return darlehenMapper.toDto(darlehen);
@@ -258,7 +307,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
 
         darlehenRepository.persistAndFlush(darlehen);
-
+        createPositiveDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAkzeptiertNotification(darlehen);
 
         return darlehenMapper.toDto(darlehen);
@@ -270,6 +319,7 @@ public class DarlehenService {
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
         removeSuperfluousDokumentsForDarlehen(darlehen);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
+        darlehen.setEingabedatum(LocalDate.now());
 
         ValidatorUtil.validate(validator, darlehen, DarlehenEinreichenValidationGroup.class);
         darlehenRepository.persistAndFlush(darlehen);
@@ -442,7 +492,7 @@ public class DarlehenService {
     @Transactional
     public void removeDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
-        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        final var darlehen = darlehenRepository.requireByDokumentOrDarlehensVerfuegungId(dokumentId);
         final var darlehenDokumente = darlehen.getDokumente();
 
         for (var darlehenDokument : darlehenDokumente) {

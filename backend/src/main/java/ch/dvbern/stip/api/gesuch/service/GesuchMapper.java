@@ -18,17 +18,15 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
@@ -95,12 +93,12 @@ public abstract class GesuchMapper {
 
     @Named("getStartDate")
     static LocalDate getStartDate(Gesuch gesuch) {
-        return getGesuchDateRange(gesuch).getGueltigAb();
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigAb();
     }
 
     @Named("getEndDate")
     static LocalDate getEndDate(Gesuch gesuch) {
-        return getGesuchDateRange(gesuch).getGueltigBis();
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigBis();
     }
 
     @Named("getCanTriggerManuellPruefen")
@@ -118,17 +116,4 @@ public abstract class GesuchMapper {
         return gesuchStatusService.canChangeGesuchsperiode(gesuch);
     }
 
-    static DateRange getGesuchDateRange(Gesuch gesuch) {
-        final var tranchenStartEnd = gesuch.getTranchenTranchen().map(GesuchTranche::getGueltigkeit).toList();
-        final var startDatum = tranchenStartEnd.stream()
-            .min(Comparator.comparing(DateRange::getGueltigAb))
-            .map(DateRange::getGueltigAb)
-            .orElseThrow(IllegalStateException::new);
-        final var endDatum = tranchenStartEnd.stream()
-            .max(Comparator.comparing(DateRange::getGueltigBis))
-            .map(DateRange::getGueltigBis)
-            .orElseThrow(IllegalStateException::new);
-
-        return new DateRange(startDatum, endDatum);
-    }
 }

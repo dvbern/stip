@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
@@ -67,12 +68,12 @@ public abstract class GesuchDashboardItemMapper {
 
     @Named("getStartDate")
     static LocalDate getStartDate(Gesuch gesuch) {
-        return GesuchMapper.getGesuchDateRange(gesuch).getGueltigAb();
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigAb();
     }
 
     @Named("getEndDate")
     static LocalDate getEndDate(Gesuch gesuch) {
-        return GesuchMapper.getGesuchDateRange(gesuch).getGueltigBis();
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigBis();
     }
 
     @Named("getCurrentGesuchTrancheId")
