@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DarlehenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID fallId;
+  private @Valid UUID relatedGesuchId;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
   private @Valid Boolean gewaehren;
   private @Valid Integer betrag;
@@ -71,6 +72,24 @@ public class DarlehenDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+  /**
+   **/
+  public DarlehenDto relatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+  
+  @JsonProperty("relatedGesuchId")
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+  @JsonProperty("relatedGesuchId")
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
   /**
@@ -285,6 +304,7 @@ public class DarlehenDto  implements Serializable {
     DarlehenDto darlehen = (DarlehenDto) o;
     return Objects.equals(this.id, darlehen.id) &&
         Objects.equals(this.fallId, darlehen.fallId) &&
+        Objects.equals(this.relatedGesuchId, darlehen.relatedGesuchId) &&
         Objects.equals(this.status, darlehen.status) &&
         Objects.equals(this.gewaehren, darlehen.gewaehren) &&
         Objects.equals(this.betrag, darlehen.betrag) &&
@@ -299,7 +319,7 @@ public class DarlehenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
   }
 
   @Override
@@ -309,6 +329,7 @@ public class DarlehenDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");

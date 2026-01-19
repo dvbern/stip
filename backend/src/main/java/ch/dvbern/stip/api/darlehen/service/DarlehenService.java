@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +43,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -85,16 +87,23 @@ public class DarlehenService {
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
     private final NotificationService notificationService;
     private final Validator validator;
+    private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
 
     @Transactional
     public DarlehenDto createDarlehen(final UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
+        final var gesuchs = gesuchRepository.findAllForFall(fallId);
+        final var relatedGesuch =
+            gesuchs.filter(gesuch -> gesuch.getGesuchStatus().isEingereicht())
+                .max(Comparator.comparing(gesuch -> gesuch.getGesuchsperiode().getGesuchsperiodeStopp()))
+                .orElseThrow();
 
         final var darlehen = new Darlehen();
         darlehen.setFall(fall);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
+        darlehen.setRelatedGesuch(relatedGesuch);
 
         darlehenRepository.persistAndFlush(darlehen);
         return darlehenMapper.toDto(darlehen);

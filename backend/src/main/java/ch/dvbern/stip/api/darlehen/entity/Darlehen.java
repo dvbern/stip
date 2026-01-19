@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CollectionTable;
@@ -64,6 +65,11 @@ public class Darlehen extends AbstractMandantEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "fall_id", nullable = false)
     private Fall fall;
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "gesuch_id", nullable = false)
+    private Gesuch relatedGesuch;
 
     @NotNull
     @Enumerated(EnumType.STRING)
