@@ -44,12 +44,12 @@ import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { BenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  DarlehenDashboard,
-  DarlehenServiceGetDarlehenDashboardSbRequestParams,
+  DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams,
   DarlehenStatus,
+  FreiwilligDarlehenDashboard,
   GesuchTrancheTyp,
-  GetDarlehenSbQueryType,
-  SbDarlehenDashboardColumn,
+  GetFreiwilligDarlehenSbQueryType,
+  SbFreiwilligDarlehenDashboardColumn,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
@@ -89,12 +89,12 @@ import {
   toBackendLocalDate,
 } from '@dv/shared/util/validator-date';
 
-type DarlehenFilter = keyof typeof GetDarlehenSbQueryType;
+type DarlehenFilter = keyof typeof GetFreiwilligDarlehenSbQueryType;
 
 const DEFAULT_FILTER: DarlehenFilter = 'MEINE_BEARBEITBAR';
 
 type DashboardEntry = Omit<
-  DarlehenDashboard,
+  FreiwilligDarlehenDashboard,
   'id' | 'fallId' | 'gesuchId' | 'gesuchTrancheId'
 >;
 type DashboardEntryFields = keyof DashboardEntry;
@@ -160,7 +160,7 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
   implements
     OnInit,
     Record<DashboardFormFields, InputSignal<string | undefined>>,
-    SortAndPageInputs<SbDarlehenDashboardColumn>
+    SortAndPageInputs<SbFreiwilligDarlehenDashboardColumn>
 {
   private store = inject(Store);
   private router = inject(Router);
@@ -178,7 +178,9 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
   bearbeiter = input<string | undefined>(undefined);
   letzteAktivitaetFrom = input<string | undefined>(undefined);
   letzteAktivitaetTo = input<string | undefined>(undefined);
-  sortColumn = input<SbDarlehenDashboardColumn | undefined>(undefined);
+  sortColumn = input<SbFreiwilligDarlehenDashboardColumn | undefined>(
+    undefined,
+  );
   sortOrder = input<SortOrder | undefined>(undefined);
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
@@ -191,7 +193,7 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
   });
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = Object.keys(SbDarlehenDashboardColumn);
+  displayedColumns = Object.keys(SbFreiwilligDarlehenDashboardColumn);
   refreshQuickfilterSig = signal<unknown>(null);
   private defaultFilterSig = computed(() => {
     return DEFAULT_FILTER;
@@ -327,7 +329,7 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
         return {
           ...entry,
           translationKey,
-        } satisfies DarlehenDashboard & {
+        } satisfies FreiwilligDarlehenDashboard & {
           translationKey: string;
         };
       });
@@ -406,7 +408,7 @@ export class SachbearbeitungAppFeatureDarlehenDashboardComponent
       this.refreshQuickfilterSig();
       const { query, filter, startEndFilter } = this.getInputs();
       this.darlehenStore.getDarlehenDashboardSb$({
-        getDarlehenSbQueryType: query,
+        getFreiwilligDarlehenSbQueryType: query,
         ...filter,
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -474,7 +476,8 @@ const parseStatus = (
 };
 
 const createQuery = <
-  T extends Partial<DarlehenServiceGetDarlehenDashboardSbRequestParams>,
+  T extends
+    Partial<DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams>,
 >(
   value: T,
 ) => {

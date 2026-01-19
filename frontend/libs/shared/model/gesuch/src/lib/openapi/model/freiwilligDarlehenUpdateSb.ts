@@ -9,12 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DarlehenDashboard } from './darlehenDashboard';
 
-export interface PaginatedSbDarlehenDashboard { 
-    page?: number;
-    pageSize?: number;
-    totalEntries?: number;
-    entries?: Array<DarlehenDashboard>;
+export interface FreiwilligDarlehenUpdateSb { 
+    gewaehren?: boolean;
+    betrag?: number;
+    kommentar?: string;
 }
 

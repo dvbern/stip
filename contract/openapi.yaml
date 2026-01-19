@@ -6211,6 +6211,21 @@ components:
       properties:
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
+    DarlehenBuchhaltungEntryKategorie:
+      enum:
+        - FREIWILLIG
+        - GESETZLICH
+        - MANUELLE_KORREKTUR
+    DarlehenBuchhaltungEntry:
+      type: object
+      required:
+        - timestampErstellt
+      properties:
+        timestampErstellt:
+          type: string
+          format: date-time
+        kategorie:
+          $ref: '#/components/schemas/DarlehenBuchhaltungEntryKategorie'
     SortOrder:
       enum:
         - ASCENDING

@@ -11,7 +11,7 @@
  */
 import { DarlehenGrund } from './darlehenGrund';
 
-export interface DarlehenUpdateGs { 
+export interface FreiwilligDarlehenUpdateGs { 
     betragGewuenscht?: number;
     schulden?: number;
     anzahlBetreibungen?: number;

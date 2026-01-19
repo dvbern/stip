@@ -11,7 +11,7 @@
  */
 import { DarlehenStatus } from './darlehenStatus';
 
-export interface DarlehenDashboard { 
+export interface FreiwilligDarlehenDashboard { 
     id: string;
     gesuchId: string;
     gesuchTrancheId: string;

@@ -12,7 +12,7 @@
 import { DarlehenStatus } from './darlehenStatus';
 import { DarlehenGrund } from './darlehenGrund';
 
-export interface Darlehen { 
+export interface FreiwilligDarlehen { 
     id: string;
     fallId?: string;
     status?: DarlehenStatus;
