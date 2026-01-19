@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
-import ch.dvbern.stip.api.pdf.util.DarlehenPdfUtils;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.kernel.font.PdfFont;
@@ -40,13 +39,15 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.AreaBreakType;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +87,7 @@ public class DarlehensVerfuegungPdfService {
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final Darlehen darlehen) {
         final PdfFont pdfFont = PdfUtils.createFont();
         final PdfFont pdfFontBold = PdfUtils.createFontBold();
+        final PdfFont pdfFontItalic = PdfUtils.createFontItalic();
         final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
         final TL translator = getTranslator(gesuch);
 
@@ -99,114 +101,184 @@ public class DarlehensVerfuegungPdfService {
 
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
-            PdfUtils
-                .header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
-            final String ausbildungsjahr = getAusbildungsJahr(gesuch);
-
-            final var titleZeile1 =
-                String.format(translator.translate("stip.darlehen.verfuegung.positiv.title.zeile1"), ausbildungsjahr);
-            final var titleZeile2 =
-                String.format(
-                    translator.translate("stip.darlehen.verfuegung.positiv.title.zeile2"),
-                    darlehen.getDarlehenNr()
-                );
-            document.add(
-                PdfUtils.createParagraph(
+            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+                addPositiveDarlehensVerfuegung(
+                    darlehen,
+                    gesuch,
+                    translator,
+                    document,
+                    pdfDocument,
+                    leftMargin,
+                    pdfFont,
                     pdfFontBold,
-                    FONT_SIZE_BIG,
+                    pdfFontItalic,
+                    ausbildungsbeitraegeUri
+                );
+                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                PdfUtils.header(
+                    gesuch,
+                    document,
+                    pdfDocument,
                     leftMargin,
-                    String.format(
-                        "%s \n %s",
-                        titleZeile1,
-                        titleZeile2
-                    )
-                )
-            );
-
-            final PersonInAusbildung personInAusbildung = gesuch
-                .getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung();
-
-            document.add(
-                PdfUtils.getAnredeParagraph(personInAusbildung, pdfFont, translator, FONT_SIZE_BIG, leftMargin)
-            );
-
-            final var text1 = String.format(
-                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins"),
-                DateUtil.formatDate(darlehen.getEingabedatum())
-            );
-            document.add(
-                PdfUtils.createParagraph(
+                    translator,
+                    true,
                     pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    text1
-                )
+                    ausbildungsbeitraegeUri
+                );
+            }
+
+            addPositiveDarlehensVerfuegung(
+                darlehen,
+                gesuch,
+                translator,
+                document,
+                pdfDocument,
+                leftMargin,
+                pdfFont,
+                pdfFontBold,
+                pdfFontItalic,
+                ausbildungsbeitraegeUri
             );
-
-            addDetailsForDarlehenTable(document, darlehen, translator, pdfFont, pdfFontBold);
-
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.zwei"),
-                    "\n",
-                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.drei"),
-                    "\n"
-                )
-            );
-
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.vier")
-                )
-            );
-
-            final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
-
-            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
-
-            final var kopieAnTextZeile2 = DarlehenPdfUtils.getKopieAnSozialdienstRezipientString(
-                darlehen.getFall(),
-                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2")
-            );
-
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
-                    "\n",
-                    kopieAnTextZeile2
-                )
-            );
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis")
-                )
-            );
-
-            PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
-            addWichtigeHinweiseTable(translator, document, leftMargin, pdfFont, pdfFontBold);
-            PdfUtils.makePageNumberEven(document);
 
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
         return out;
+    }
+
+    private String getKopieAnSozialdienstString(
+        final Darlehen darlehen,
+        final TL translator
+    ) {
+        if (Objects.isNull(darlehen.getFall().getDelegierung())) {
+            return "";
+        }
+
+        String kopieAnSozialdienst =
+            String.format(
+                String.format(
+                    " %s",
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2")
+                ),
+                PdfUtils.getDelegierungKopieAnText(darlehen.getFall().getDelegierung())
+            );
+
+        return kopieAnSozialdienst;
+    }
+
+    private void addPositiveDarlehensVerfuegung(
+        final Darlehen darlehen,
+        final Gesuch gesuch,
+        final TL translator,
+        final Document document,
+        final PdfDocument pdfDocument,
+        final float leftMargin,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
+        final PdfFont pdfFontItalic,
+        final Link ausbildungsbeitraegeUri
+    ) {
+
+        PdfUtils
+            .header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
+
+        final String ausbildungsjahr = getAusbildungsJahr(gesuch);
+
+        final var titleZeile1 =
+            String.format(translator.translate("stip.darlehen.verfuegung.positiv.title.zeile1"), ausbildungsjahr);
+        final var titleZeile2 =
+            String.format(
+                translator.translate("stip.darlehen.verfuegung.positiv.title.zeile2"),
+                darlehen.getDarlehenNr()
+            );
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFontBold,
+                FONT_SIZE_BIG,
+                leftMargin,
+                String.format(
+                    "%s \n %s",
+                    titleZeile1,
+                    titleZeile2
+                )
+            )
+        );
+
+        final PersonInAusbildung personInAusbildung = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+
+        document.add(
+            PdfUtils.getAnredeParagraph(personInAusbildung, pdfFont, translator, FONT_SIZE_BIG, leftMargin)
+        );
+
+        final var text1 = String.format(
+            translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins"),
+            DateUtil.formatDate(darlehen.getEingabedatum())
+        );
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                text1
+            )
+        );
+
+        addDetailsForDarlehenTable(document, darlehen, translator, pdfFont, pdfFontBold);
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.zwei"),
+                "\n",
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.drei"),
+                "\n"
+            )
+        );
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.vier")
+            )
+        );
+
+        final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
+
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
+
+        String kopieAnSozialdienst = getKopieAnSozialdienstString(darlehen, translator);
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
+                kopieAnSozialdienst
+            )
+        );
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFontItalic,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis")
+            )
+        );
+
+        PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
+        addWichtigeHinweiseTable(translator, document, leftMargin, pdfFont, pdfFontBold);
+        PdfUtils.makePageNumberEven(document);
     }
 
     private void addWichtigeHinweiseTable(
@@ -362,107 +434,157 @@ public class DarlehensVerfuegungPdfService {
 
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
-            PdfUtils
-                .header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
 
-            final String ausbildungsjahr = getAusbildungsJahr(gesuch);
-
-            final var title =
-                String.format(translator.translate("stip.darlehen.verfuegung.negativ.title.zeile1"), ausbildungsjahr);
-            document.add(
-                PdfUtils.createParagraph(
+            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+                addNegativeDarlehensVerfuegung(
+                    darlehen,
+                    gesuch,
+                    translator,
+                    document,
+                    pdfDocument,
+                    leftMargin,
+                    pdfFont,
                     pdfFontBold,
-                    FONT_SIZE_BIG,
+                    ausbildungsbeitraegeUri
+                );
+                document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                PdfUtils.header(
+                    gesuch,
+                    document,
+                    pdfDocument,
                     leftMargin,
-                    title
-                )
-            );
-
-            final PersonInAusbildung personInAusbildung = gesuch
-                .getLatestGesuchTranche()
-                .getGesuchFormular()
-                .getPersonInAusbildung();
-
-            final String translateKey = personInAusbildung
-                .getAnrede()
-                .equals(Anrede.HERR)
-                    ? "stip.pdf.begruessung.mann"
-                    : "stip.pdf.begruessung.frau";
-
-            document.add(
-                PdfUtils.createParagraph(
+                    translator,
+                    true,
                     pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate(translateKey) + " ",
-                    personInAusbildung.getNachname()
-                )
-            );
+                    ausbildungsbeitraegeUri
+                );
+            }
 
-            final var text1 = String.format(
-                translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins"),
-                DateUtil.formatDate(darlehen.getEingabedatum())
+            addNegativeDarlehensVerfuegung(
+                darlehen,
+                gesuch,
+                translator,
+                document,
+                pdfDocument,
+                leftMargin,
+                pdfFont,
+                pdfFontBold,
+                ausbildungsbeitraegeUri
             );
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    text1
-                )
-            );
-
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.zwei")
-                )
-            );
-
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.drei")
-                )
-            );
-
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.negativ.textBlock.vier")
-                )
-            );
-
-            final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
-
-            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
-
-            final var kopieAnText = DarlehenPdfUtils.getKopieAnSozialdienstRezipientString(
-                darlehen.getFall(),
-                String.format("- %s", translator.translate("stip.darlehen.verfuegung.negativ.textBlock.kopieAn"))
-            );
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    kopieAnText
-                )
-            );
-
-            PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
-            PdfUtils.makePageNumberEven(document);
 
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
         }
         return out;
+    }
+
+    private void addNegativeDarlehensVerfuegung(
+        final Darlehen darlehen,
+        final Gesuch gesuch,
+        final TL translator,
+        final Document document,
+        final PdfDocument pdfDocument,
+        final float leftMargin,
+        final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
+        final Link ausbildungsbeitraegeUri
+    ) {
+        PdfUtils
+            .header(gesuch, document, pdfDocument, leftMargin, translator, false, pdfFont, ausbildungsbeitraegeUri);
+
+        final String ausbildungsjahr = getAusbildungsJahr(gesuch);
+
+        final var title =
+            String.format(translator.translate("stip.darlehen.verfuegung.negativ.title.zeile1"), ausbildungsjahr);
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFontBold,
+                FONT_SIZE_BIG,
+                leftMargin,
+                title
+            )
+        );
+
+        final PersonInAusbildung personInAusbildung = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+
+        final String translateKey = personInAusbildung
+            .getAnrede()
+            .equals(Anrede.HERR)
+                ? "stip.pdf.begruessung.mann"
+                : "stip.pdf.begruessung.frau";
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate(translateKey) + " ",
+                personInAusbildung.getNachname()
+            )
+        );
+
+        final var text1 = String.format(
+            translator.translate("stip.darlehen.verfuegung.negativ.textBlock.eins"),
+            DateUtil.formatDate(darlehen.getEingabedatum())
+        );
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                text1
+            )
+        );
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.darlehen.verfuegung.negativ.textBlock.zwei")
+            )
+        );
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.darlehen.verfuegung.negativ.textBlock.drei")
+            )
+        );
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                translator.translate("stip.darlehen.verfuegung.negativ.textBlock.vier")
+            )
+        );
+
+        final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
+
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
+
+        String kopieAnSozialdienst = getKopieAnSozialdienstString(darlehen, translator);
+
+        document.add(
+            PdfUtils.createParagraph(
+                pdfFont,
+                FONT_SIZE_BIG,
+                leftMargin,
+                "- ",
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
+                kopieAnSozialdienst
+            )
+        );
+
+        PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
+        PdfUtils.makePageNumberEven(document);
     }
 
     private void addDetailsForDarlehenTable(
@@ -472,26 +594,21 @@ public class DarlehensVerfuegungPdfService {
         final PdfFont pdfFont,
         final PdfFont pdfFontBold
     ) {
+        final Paragraph darlehenParagraph = PdfUtils.createParagraph(FONT_SIZE_BIG, document.getLeftMargin());
+        darlehenParagraph.setFont(pdfFontBold);
+        darlehenParagraph.add(
+            new Text(
+                String.format("CHF %s.-", PdfUtils.formatNumber(Objects.requireNonNullElse(darlehen.getBetrag(), 0)))
+            ).setTextAlignment(TextAlignment.CENTER).setHorizontalAlignment(HorizontalAlignment.CENTER)
+        );
+        darlehenParagraph.setHorizontalAlignment(HorizontalAlignment.CENTER).setTextAlignment(TextAlignment.CENTER);
+        document.add(darlehenParagraph);
         final var leftMargin = document.getLeftMargin();
         final Table calculationTable = PdfUtils.createTable(TABLE_WIDTH_PERCENTAGES, leftMargin);
         calculationTable.useAllAvailableWidth();
         calculationTable.setMarginTop(SPACING_MEDIUM);
         calculationTable.setMarginBottom(SPACING_MEDIUM);
         calculationTable.setPaddingRight(SPACING_MEDIUM);
-
-        calculationTable.addCell(
-            new Cell().setBorder(Border.NO_BORDER)
-        );
-
-        calculationTable.addCell(
-            PdfUtils.createCell(
-                pdfFontBold,
-                FONT_SIZE_BIG,
-                1,
-                1,
-                String.format("CHF %s.-", PdfUtils.formatNumber(Objects.requireNonNullElse(darlehen.getBetrag(), 0)))
-            ).setPadding(1).setTextAlignment(TextAlignment.LEFT)
-        );
 
         calculationTable.addCell(
             PdfUtils.createCell(

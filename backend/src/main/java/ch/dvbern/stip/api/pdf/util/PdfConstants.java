@@ -28,6 +28,7 @@ public class PdfConstants {
     public static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance(Locale.of("de", "CH"));
     public static final String FONT_PATH = "/fonts/arial.ttf";
     public static final String FONT_BOLD_PATH = "/fonts/arial_bold.ttf";
+    public static final String FONT_ITALIC_PATH = "/fonts/arial_italic.ttf";
     public static final PageSize PAGE_SIZE = PageSize.A4;
 
     public static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";

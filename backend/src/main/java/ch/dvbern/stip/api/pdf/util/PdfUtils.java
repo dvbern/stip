@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -130,6 +131,10 @@ public class PdfUtils {
 
     public PdfFont createFontBold() {
         return getPdfFont(PdfConstants.FONT_BOLD_PATH);
+    }
+
+    public PdfFont createFontItalic() {
+        return getPdfFont(PdfConstants.FONT_ITALIC_PATH);
     }
 
     private static PdfFont getPdfFont(String fontPath) {
@@ -525,6 +530,28 @@ public class PdfUtils {
         }
     }
 
+    public String getDelegierungKopieAnText(
+        final Delegierung delegierung
+    ) {
+        if (Objects.isNull(delegierung)) {
+            return "";
+        }
+        final List<String> kopieAn = new ArrayList<>();
+        final var sozialdienstName = delegierung.getSozialdienst().getName();
+        final var sozialdienstAdresse = delegierung
+            .getSozialdienst()
+            .getZahlungsverbindung()
+            .getAdresse();
+
+        kopieAn.add(sozialdienstName);
+        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
+            kopieAn.add(sozialdienstAdresse.getCoAdresse());
+        }
+        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
+        return String.join(", ", kopieAn);
+    }
+
     private void addCopieAnParagraph(
         final Gesuch gesuch,
         final TL translator,
@@ -536,22 +563,7 @@ public class PdfUtils {
             return;
         }
 
-        final List<String> kopieAn = new ArrayList<>();
-        final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
-        final var sozialdienstAdresse = gesuch.getAusbildung()
-            .getFall()
-            .getDelegierung()
-            .getSozialdienst()
-            .getZahlungsverbindung()
-            .getAdresse();
-
-        kopieAn.add(sozialdienstName);
-        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
-            kopieAn.add(sozialdienstAdresse.getCoAdresse());
-        }
-        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
-        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
-
+        final String kopieAn = getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getDelegierung());
         document.add(
             PdfUtils.createParagraph(
                 pdfFont,
@@ -559,7 +571,7 @@ public class PdfUtils {
                 leftMargin,
                 "- ",
                 translator.translate("stip.pdf.footer.kopieAn") + " ",
-                String.join(", ", kopieAn)
+                kopieAn
             )
         );
     }
