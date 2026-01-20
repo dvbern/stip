@@ -190,7 +190,7 @@ class V1StructureTest {
                 "eigenerHaushalt": true,
                 "halbierungElternbeitrag": false,
                 "einkommens": [
-                  { "vorname": "a", "value": 12916 },
+                  { "vorname": "a", "value": 6916 },
                   { "vorname": "a", "value": 12916 }
                 ],
                 "einnahmenBGSAs": [

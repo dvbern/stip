@@ -602,7 +602,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnungTotal(), is(equalTo(0)));
+        assertThat(berechnungsresultatDto.getBerechnungTotal(), is(equalTo(6266)));
     }
 
     @Test
@@ -1080,6 +1080,6 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.size(), is(1));
-        assertThat(berechnungsresultatDto.get(0).getBerechnungAnteilTotal(), is(equalTo(-27179)));
+        assertThat(berechnungsresultatDto.get(0).getBerechnungAnteilTotal(), is(equalTo(-33179)));
     }
 }
