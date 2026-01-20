@@ -4,7 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
-  DarlehenBuchhaltungEntry,
+  DarlehenBuchhaltungOverview,
   DarlehenService,
   DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams,
   Verfuegung,
@@ -19,17 +19,6 @@ import {
   isPending,
 } from '@dv/shared/util/remote-data';
 
-// Todo KSTIP-2697 Dummy types until the contract is updated
-export interface DarlehenDokument {
-  id: string;
-  datum: string;
-  kategorie: string;
-  darlehensverfuegung?: string;
-  gesetzlichesDarlehen?: string;
-  freiwilligesDarlehen?: string;
-  kommentar?: string;
-}
-
 // Todo: Dummy types until the contract is updated Task unkown
 export interface DatenschutzbriefDokument {
   id: string;
@@ -42,13 +31,13 @@ export interface DatenschutzbriefDokument {
 
 type InfosAdminState = {
   verfuegungen: CachedRemoteData<Verfuegung[]>;
-  darlehenBuchhaltungEntrys: CachedRemoteData<DarlehenBuchhaltungEntry[]>;
+  darlehenBuchhaltung: CachedRemoteData<DarlehenBuchhaltungOverview>;
   datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefDokument[]>;
 };
 
 const initialState: InfosAdminState = {
   verfuegungen: initial(),
-  darlehenBuchhaltungEntrys: initial(),
+  darlehenBuchhaltung: initial(),
   datenschutzbriefeDokumente: initial(),
 };
 
@@ -67,10 +56,10 @@ export class InfosGesuchsdokumenteStore extends signalStore(
     };
   });
 
-  darlehenDokumenteViewSig = computed(() => {
+  darlehenBuchhaltungViewSig = computed(() => {
     return {
-      darlehenDokumente: fromCachedDataSig(this.darlehenBuchhaltungEntrys),
-      loading: isPending(this.darlehenBuchhaltungEntrys()),
+      darlehenBuchhaltung: fromCachedDataSig(this.darlehenBuchhaltung),
+      loading: isPending(this.darlehenBuchhaltung()),
     };
   });
 
@@ -107,15 +96,13 @@ export class InfosGesuchsdokumenteStore extends signalStore(
       pipe(
         tap(() => {
           patchState(this, (state) => ({
-            darlehenBuchhaltungEntrys: cachedPending(
-              state.darlehenBuchhaltungEntrys,
-            ),
+            darlehenBuchhaltung: cachedPending(state.darlehenBuchhaltung),
           }));
         }),
         switchMap((req) =>
           this.darlehenService.getDarlehenBuchhaltungEntrys$(req).pipe(
-            handleApiResponse((darlehenBuchhaltungEntrys) => {
-              patchState(this, { darlehenBuchhaltungEntrys });
+            handleApiResponse((darlehenBuchhaltung) => {
+              patchState(this, { darlehenBuchhaltung });
             }),
           ),
         ),

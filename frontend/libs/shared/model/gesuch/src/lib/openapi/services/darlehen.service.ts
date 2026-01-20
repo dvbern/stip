@@ -19,6 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { DarlehenBuchhaltungEntry } from '../model/darlehenBuchhaltungEntry';
+import { DarlehenBuchhaltungOverview } from '../model/darlehenBuchhaltungOverview';
 import { DarlehenBuchhaltungSaldokorrektur } from '../model/darlehenBuchhaltungSaldokorrektur';
 import { DarlehenDokumentType } from '../model/darlehenDokumentType';
 import { FileDownloadToken } from '../model/fileDownloadToken';
@@ -1399,9 +1400,9 @@ export class DarlehenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<DarlehenBuchhaltungEntry>>;
-     public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<DarlehenBuchhaltungEntry>>>;
-     public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<DarlehenBuchhaltungEntry>>>;
+     public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<DarlehenBuchhaltungOverview>;
+     public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<DarlehenBuchhaltungOverview>>;
+     public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<DarlehenBuchhaltungOverview>>;
      public getDarlehenBuchhaltungEntrys$(requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
@@ -1454,7 +1455,7 @@ export class DarlehenService {
         }
 
         const localVarPath = `/darlehen/buchhaltung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<DarlehenBuchhaltungEntry>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<DarlehenBuchhaltungOverview>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
