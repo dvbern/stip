@@ -536,6 +536,59 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenUpdateSb
       summary: Update darlehen as sb
+
+  /darlehen/buchhaltung/{fallId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/fallId'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenBuchhaltungEntrys
+      summary: Gets all darlehen buchhaltungsentrys
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DarlehenBuchhaltungSaldokorrektur'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
+          description: Create a darlehen buchhaltungsentry from a saldokorrektur
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createDarlehenBuchhaltungSaldokorrektur
+      summary: Create a darlehen buchhaltungsentry from a saldokorrektur
+
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
@@ -677,12 +730,34 @@ components:
       type: object
       required:
         - timestampErstellt
+        - kategorie
+        - betrag
       properties:
         timestampErstellt:
           type: string
           format: date-time
         kategorie:
-         $ref: '#/components/schemas/DarlehenBuchhaltungEntryKategorie'
+          $ref: '#/components/schemas/DarlehenBuchhaltungEntryKategorie'
+        verfuegung:
+          $ref: './components/common.yaml#/Dokument'
+        betrag:
+          type: integer
+          minimum: 0
+        userErstellt:
+          type: string
+        kommentar:
+          type: string
+
+    DarlehenBuchhaltungSaldokorrektur:
+      type: object
+      required:
+        - betrag
+        - comment
+      properties:
+        betrag:
+          type: integer
+        comment:
+          type: string
 
 security:
   $ref: './components/security.yaml#/security'
