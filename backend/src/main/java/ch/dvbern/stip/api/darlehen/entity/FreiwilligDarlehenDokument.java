@@ -39,24 +39,23 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(
-    name = "darlehen_dokument",
+    name = "freiwillig_darlehen_dokument",
     indexes = {
-        @Index(name = "IX_darlehen_dokument_mandant", columnList = "mandant")
+        @Index(name = "IX_freiwillig_darlehen_dokument_mandant", columnList = "mandant")
     }
 )
 @Getter
 @Setter
-public class DarlehenDokument extends AbstractMandantEntity {
+public class FreiwilligDarlehenDokument extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "dokument_type")
     private DarlehenDokumentType dokumentType;
 
     @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "darlehen_dokument_id")
+    @JoinColumn(name = "freiwillig_darlehen_dokument_id")
     private Set<Dokument> dokumente = new LinkedHashSet<>();
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "darlehen_id", nullable = false)
+    @JoinColumn(name = "freiwillig_darlehen_id", nullable = false)
     private FreiwilligDarlehen freiwilligDarlehen;
-
 }

@@ -82,7 +82,7 @@
         </createTable>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-7">
-        <addColumn tableName="freiwilligDarlehen">
+        <addColumn tableName="darlehen">
             <column name="betrag" type="INTEGER"/>
         </addColumn>
     </changeSet>
@@ -92,7 +92,7 @@
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-9">
-        <addColumn tableName="freiwilligDarlehen">
+        <addColumn tableName="darlehen">
             <column name="betrag_gewuenscht" type="INTEGER"/>
         </addColumn>
     </changeSet>
@@ -107,7 +107,7 @@
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-12">
-        <addColumn tableName="freiwilligDarlehen">
+        <addColumn tableName="darlehen">
             <column name="fall_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
@@ -119,7 +119,7 @@
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-14">
-        <addColumn tableName="freiwilligDarlehen">
+        <addColumn tableName="darlehen">
             <column name="gewaehren" type="BOOLEAN"/>
         </addColumn>
     </changeSet>
@@ -129,7 +129,7 @@
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-16">
-        <addColumn tableName="freiwilligDarlehen">
+        <addColumn tableName="darlehen">
             <column name="kommentar" type="VARCHAR(2000)"/>
         </addColumn>
     </changeSet>
@@ -139,7 +139,7 @@
         </addColumn>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-18">
-        <addColumn tableName="freiwilligDarlehen">
+        <addColumn tableName="darlehen">
             <column name="status" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
@@ -172,13 +172,13 @@
         <addForeignKeyConstraint baseColumnNames="rev" baseTableName="darlehendokument_dokument_aud" constraintName="FK9ya0t53nj205mab8k76e6917m" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-29">
-        <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="freiwilligDarlehen" constraintName="FKfvw7gh5aytrr5lc0vrta1bev6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="darlehen" constraintName="FKfvw7gh5aytrr5lc0vrta1bev6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-30">
-        <addForeignKeyConstraint baseColumnNames="darlehen_id" baseTableName="darlehen_dokument" constraintName="FKoh23kac7ix5s104tecojehv9f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="freiwilligDarlehen" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="darlehen_id" baseTableName="darlehen_dokument" constraintName="FKoh23kac7ix5s104tecojehv9f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="darlehen" validate="true"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-31">
-        <addForeignKeyConstraint baseColumnNames="darlehen_id" baseTableName="darlehen_darlehen_grund" constraintName="FKs36qkin0q9c98hj5bdsxlt88o" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="freiwilligDarlehen" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="darlehen_id" baseTableName="darlehen_darlehen_grund" constraintName="FKs36qkin0q9c98hj5bdsxlt88o" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="darlehen" validate="true"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-32">
         <addForeignKeyConstraint baseColumnNames="darlehen_dokument_id" baseTableName="dokument" constraintName="FKt9sm7ynusivybbhgrrvgr6571" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="darlehen_dokument" validate="true"/>
@@ -187,13 +187,13 @@
         <dropUniqueConstraint constraintName="uc_gesuch_formulardarlehen_id_col" tableName="gesuch_formular"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-53">
-        <dropColumn columnName="betrag_bezogen_kanton" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="betrag_bezogen_kanton" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-54">
         <dropColumn columnName="betrag_bezogen_kanton" tableName="darlehen_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-55">
-        <dropColumn columnName="betrag_darlehen" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="betrag_darlehen" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-56">
         <dropColumn columnName="betrag_darlehen" tableName="darlehen_aud"/>
@@ -205,37 +205,37 @@
         <dropColumn columnName="darlehen_id" tableName="gesuch_formular_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-59">
-        <dropColumn columnName="grund_anschaffungen_fuer_ausbildung" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="grund_anschaffungen_fuer_ausbildung" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-60">
         <dropColumn columnName="grund_anschaffungen_fuer_ausbildung" tableName="darlehen_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-61">
-        <dropColumn columnName="grund_ausbildung_zwoelf_jahre" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="grund_ausbildung_zwoelf_jahre" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-62">
         <dropColumn columnName="grund_ausbildung_zwoelf_jahre" tableName="darlehen_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-63">
-        <dropColumn columnName="grund_hohe_gebuehren" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="grund_hohe_gebuehren" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-64">
         <dropColumn columnName="grund_hohe_gebuehren" tableName="darlehen_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-65">
-        <dropColumn columnName="grund_nicht_berechtigt" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="grund_nicht_berechtigt" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-66">
         <dropColumn columnName="grund_nicht_berechtigt" tableName="darlehen_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-67">
-        <dropColumn columnName="grund_zweitausbildung" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="grund_zweitausbildung" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-68">
         <dropColumn columnName="grund_zweitausbildung" tableName="darlehen_aud"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-69">
-        <dropColumn columnName="will_darlehen" tableName="freiwilligDarlehen"/>
+        <dropColumn columnName="will_darlehen" tableName="darlehen"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1765283465461-70">
         <dropColumn columnName="will_darlehen" tableName="darlehen_aud"/>

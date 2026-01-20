@@ -23,7 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
-import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
+import ch.dvbern.stip.api.darlehen.repo.FreiwilligDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -36,13 +36,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DarlehenAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
-    private final DarlehenRepository darlehenRepository;
+    private final FreiwilligDarlehenRepository freiwilligDarlehenRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
 
     @Transactional
     public void canGetDarlehenGs(UUID darlehenId) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
 
         canGetDarlehenByFallId(darlehen.getFall().getId());
     }
@@ -141,7 +141,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canDarlehenUpdateGs(UUID darlehenId) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
@@ -170,7 +170,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canCreateDarlehenDokument(UUID darlehenId) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
@@ -202,18 +202,18 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canGetDarlehenDokument(UUID darlehenId) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
         canGetDarlehenDokument(darlehen);
     }
 
     @Transactional
     public void canGetDarlehenDokumentByDokumentId(UUID dokumentId) {
-        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        final var darlehen = freiwilligDarlehenRepository.requireByDokumentOrDarlehensVerfuegungId(dokumentId);
         canGetDarlehenDokument(darlehen);
     }
 
     public void canDeleteDarlehenDokument(UUID dokumentId) {
-        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        final var darlehen = freiwilligDarlehenRepository.requireByDokumentId(dokumentId);
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
@@ -230,7 +230,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     public void assertStatus(UUID darlehenId, DarlehenStatus... darlehenStatus) {
-        final var darlehen = darlehenRepository.requireById(darlehenId);
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
 
         if (Arrays.stream(darlehenStatus).anyMatch(status -> darlehen.getStatus().equals(status))) {
             return;

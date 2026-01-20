@@ -746,7 +746,7 @@
         </createTable>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1766050518210-30">
-        <createTable tableName="freiwilligDarlehen">
+        <createTable tableName="darlehen">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="darlehenPK"/>
             </column>
@@ -4136,7 +4136,7 @@
         </createIndex>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1766050518210-254">
-        <createIndex indexName="IX_darlehen_mandant" tableName="freiwilligDarlehen">
+        <createIndex indexName="IX_darlehen_mandant" tableName="darlehen">
             <column name="mandant"/>
         </createIndex>
     </changeSet>
@@ -4599,7 +4599,7 @@
         <addForeignKeyConstraint baseColumnNames="gesuch_dokument_id" baseTableName="gesuch_dokument_kommentar" constraintName="FK_gesuch_dokument_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch_dokument" validate="true"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1766050518210-372">
-        <addForeignKeyConstraint baseColumnNames="darlehen_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_darlehen_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="freiwilligDarlehen" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="darlehen_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_darlehen_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="darlehen" validate="true"/>
     </changeSet>
     <changeSet author="luca.fondo (generated)" id="1766050518210-373">
         <addForeignKeyConstraint baseColumnNames="einnahmen_kosten_id" baseTableName="gesuch_formular" constraintName="FK_gesuch_formular_einnahmen_kosten_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="einnahmen_kosten" validate="true"/>

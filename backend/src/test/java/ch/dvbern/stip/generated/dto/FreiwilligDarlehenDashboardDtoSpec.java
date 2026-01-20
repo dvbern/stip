@@ -31,9 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_ID,
-  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_ID,
-  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_ID,
+  FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_RELATED_GESUCH_ID,
   FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_VORNAME,
   FreiwilligDarlehenDashboardDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
@@ -48,14 +47,11 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
 
-  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
-  private UUID gesuchId;
-
-  public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
-  private UUID gesuchTrancheId;
-
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
+
+  public static final String JSON_PROPERTY_RELATED_GESUCH_ID = "relatedGesuchId";
+  private UUID relatedGesuchId;
 
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
@@ -107,58 +103,6 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   }
 
 
-  public FreiwilligDarlehenDashboardDtoSpec gesuchId(UUID gesuchId) {
-    
-    this.gesuchId = gesuchId;
-    return this;
-  }
-
-   /**
-   * Get gesuchId
-   * @return gesuchId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getGesuchId() {
-    return gesuchId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchId(UUID gesuchId) {
-    this.gesuchId = gesuchId;
-  }
-
-
-  public FreiwilligDarlehenDashboardDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
-    
-    this.gesuchTrancheId = gesuchTrancheId;
-    return this;
-  }
-
-   /**
-   * Get gesuchTrancheId
-   * @return gesuchTrancheId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public UUID getGesuchTrancheId() {
-    return gesuchTrancheId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(UUID gesuchTrancheId) {
-    this.gesuchTrancheId = gesuchTrancheId;
-  }
-
-
   public FreiwilligDarlehenDashboardDtoSpec fallId(UUID fallId) {
     
     this.fallId = fallId;
@@ -182,6 +126,32 @@ public class FreiwilligDarlehenDashboardDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+
+  public FreiwilligDarlehenDashboardDtoSpec relatedGesuchId(UUID relatedGesuchId) {
+    
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+   /**
+   * Get relatedGesuchId
+   * @return relatedGesuchId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
 
@@ -376,9 +346,8 @@ public class FreiwilligDarlehenDashboardDtoSpec {
     }
     FreiwilligDarlehenDashboardDtoSpec freiwilligDarlehenDashboard = (FreiwilligDarlehenDashboardDtoSpec) o;
     return Objects.equals(this.id, freiwilligDarlehenDashboard.id) &&
-        Objects.equals(this.gesuchId, freiwilligDarlehenDashboard.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, freiwilligDarlehenDashboard.gesuchTrancheId) &&
         Objects.equals(this.fallId, freiwilligDarlehenDashboard.fallId) &&
+        Objects.equals(this.relatedGesuchId, freiwilligDarlehenDashboard.relatedGesuchId) &&
         Objects.equals(this.fallNummer, freiwilligDarlehenDashboard.fallNummer) &&
         Objects.equals(this.piaVorname, freiwilligDarlehenDashboard.piaVorname) &&
         Objects.equals(this.piaNachname, freiwilligDarlehenDashboard.piaNachname) &&
@@ -390,7 +359,7 @@ public class FreiwilligDarlehenDashboardDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchId, gesuchTrancheId, fallId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
+    return Objects.hash(id, fallId, relatedGesuchId, fallNummer, piaVorname, piaNachname, piaGeburtsdatum, status, bearbeiter, letzteAktivitaet);
   }
 
   @Override
@@ -398,9 +367,8 @@ public class FreiwilligDarlehenDashboardDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class FreiwilligDarlehenDashboardDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
-    sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
     sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");

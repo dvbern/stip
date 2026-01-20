@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_ID,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_FALL_ID,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_RELATED_GESUCH_ID,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_STATUS,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_GEWAEHREN,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_BETRAG,
@@ -53,6 +54,9 @@ public class FreiwilligDarlehenDtoSpec {
 
   public static final String JSON_PROPERTY_FALL_ID = "fallId";
   private UUID fallId;
+
+  public static final String JSON_PROPERTY_RELATED_GESUCH_ID = "relatedGesuchId";
+  private UUID relatedGesuchId;
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private DarlehenStatusDtoSpec status;
@@ -133,6 +137,32 @@ public class FreiwilligDarlehenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+
+  public FreiwilligDarlehenDtoSpec relatedGesuchId(UUID relatedGesuchId) {
+    
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+   /**
+   * Get relatedGesuchId
+   * @return relatedGesuchId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_RELATED_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
 
@@ -392,6 +422,7 @@ public class FreiwilligDarlehenDtoSpec {
     FreiwilligDarlehenDtoSpec freiwilligDarlehen = (FreiwilligDarlehenDtoSpec) o;
     return Objects.equals(this.id, freiwilligDarlehen.id) &&
         Objects.equals(this.fallId, freiwilligDarlehen.fallId) &&
+        Objects.equals(this.relatedGesuchId, freiwilligDarlehen.relatedGesuchId) &&
         Objects.equals(this.status, freiwilligDarlehen.status) &&
         Objects.equals(this.gewaehren, freiwilligDarlehen.gewaehren) &&
         Objects.equals(this.betrag, freiwilligDarlehen.betrag) &&
@@ -405,7 +436,7 @@ public class FreiwilligDarlehenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
   }
 
   @Override
@@ -414,6 +445,7 @@ public class FreiwilligDarlehenDtoSpec {
     sb.append("class FreiwilligDarlehenDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");

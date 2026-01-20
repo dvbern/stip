@@ -20,11 +20,10 @@ package ch.dvbern.stip.api.darlehen.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.entity.QFreiwilligDarlehen;
-import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
+import ch.dvbern.stip.api.darlehen.repo.FreiwilligDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
@@ -41,29 +40,23 @@ public class DarlehenDashboardQueryBuilder {
     private static final QFreiwilligDarlehen freiwilligDarlehen = QFreiwilligDarlehen.freiwilligDarlehen;
     private static final QGesuchTranche tranche = QGesuchTranche.gesuchTranche;
     private static final QGesuchFormular formular = QGesuchFormular.gesuchFormular;
-    private static final QAusbildung ausbildung = QAusbildung.ausbildung;
 
-    private final DarlehenRepository darlehenRepository;
+    private final FreiwilligDarlehenRepository freiwilligDarlehenRepository;
     private final BenutzerService benutzerService;
 
     public JPAQuery<FreiwilligDarlehen> baseQuery(final GetFreiwilligDarlehenSbQueryType queryType) {
         final var benutzerId = benutzerService.getCurrentBenutzer().getId();
 
         final var query = switch (queryType) {
-            case ALLE_DARLEHEN -> darlehenRepository.getAlleQuery();
-            case MEINE_DARLEHEN -> darlehenRepository.getMeineQuery(benutzerId);
-            case ALLE_BEARBEITBAR -> darlehenRepository.getAlleBearbeitbarQuery();
-            case MEINE_BEARBEITBAR -> darlehenRepository.getMeineBearbeitbarQuery(benutzerId);
+            case ALLE_DARLEHEN -> freiwilligDarlehenRepository.getAlleQuery();
+            case MEINE_DARLEHEN -> freiwilligDarlehenRepository.getMeineQuery(benutzerId);
+            case ALLE_BEARBEITBAR -> freiwilligDarlehenRepository.getAlleBearbeitbarQuery();
+            case MEINE_BEARBEITBAR -> freiwilligDarlehenRepository.getMeineBearbeitbarQuery(benutzerId);
         };
 
-        // TODO KSTIP-2977: Currently the Darlehen list will probably "append" the oldest gesuch in a Fall
-        // this task KSTIP-2977 will add a gesuch FK and thus a complex query is no longer necessary
-
         query
-            .join(ausbildung)
-            .on(ausbildung.fall.id.eq(freiwilligDarlehen.fall.id))
             .join(tranche)
-            .on(tranche.gesuch.ausbildung.id.eq(ausbildung.id));
+            .on(tranche.gesuch.id.eq(freiwilligDarlehen.relatedGesuch.id));
 
         return query;
     }

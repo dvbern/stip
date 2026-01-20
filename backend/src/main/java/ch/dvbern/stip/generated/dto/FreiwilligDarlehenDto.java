@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class FreiwilligDarlehenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID fallId;
+  private @Valid UUID relatedGesuchId;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
   private @Valid Boolean gewaehren;
   private @Valid Integer betrag;
@@ -70,6 +71,24 @@ public class FreiwilligDarlehenDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+  /**
+   **/
+  public FreiwilligDarlehenDto relatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+  
+  @JsonProperty("relatedGesuchId")
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+  @JsonProperty("relatedGesuchId")
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
   /**
@@ -266,6 +285,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
     FreiwilligDarlehenDto freiwilligDarlehen = (FreiwilligDarlehenDto) o;
     return Objects.equals(this.id, freiwilligDarlehen.id) &&
         Objects.equals(this.fallId, freiwilligDarlehen.fallId) &&
+        Objects.equals(this.relatedGesuchId, freiwilligDarlehen.relatedGesuchId) &&
         Objects.equals(this.status, freiwilligDarlehen.status) &&
         Objects.equals(this.gewaehren, freiwilligDarlehen.gewaehren) &&
         Objects.equals(this.betrag, freiwilligDarlehen.betrag) &&
@@ -279,7 +299,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
   }
 
   @Override
@@ -289,6 +309,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");

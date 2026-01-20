@@ -15,7 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchformular.validation;
+package ch.dvbern.stip.api.darlehen.service;
 
-public interface DarlehenEinreichenValidationGroup {
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehenDokument;
+import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(config = MappingConfig.class)
+public interface FreiwilligDarlehenDokumentMapper {
+    @Mapping(source = "freiwilligDarlehenDokument", target = "value")
+    NullableDarlehenDokumentDto toDto(FreiwilligDarlehenDokument freiwilligDarlehenDokument);
 }

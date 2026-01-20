@@ -24,8 +24,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DarlehenDocumentsRequiredConstraintValidator
-    implements ConstraintValidator<DarlehenDocumentsRequiredConstraint, FreiwilligDarlehen> {
+public class FreiwilligDarlehenDocumentsRequiredConstraintValidator
+    implements ConstraintValidator<FreiwilligDarlehenDocumentsRequiredConstraint, FreiwilligDarlehen> {
     @Inject
     DarlehenService darlehenService;
 
@@ -35,7 +35,7 @@ public class DarlehenDocumentsRequiredConstraintValidator
         final var currentDocumentTypes = freiwilligDarlehen.getDokumente()
             .stream()
             .filter(d -> !d.getDokumente().isEmpty())
-            .map(DarlehenDokument::getDokumentType)
+            .map(FreiwilligDarlehenDokument::getDokumentType)
             .toList();
         if (!currentDocumentTypes.isEmpty()) {
             missingDocumentTypes.removeIf(currentDocumentTypes::contains);

@@ -31,10 +31,10 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DarlehenDocumentsRequiredConstraintValidator.class)
+@Constraint(validatedBy = FreiwilligDarlehenDocumentsRequiredConstraintValidator.class)
 @Documented
-@Repeatable(DarlehenDocumentsRequiredConstraint.List.class)
-public @interface DarlehenDocumentsRequiredConstraint {
+@Repeatable(FreiwilligDarlehenDocumentsRequiredConstraint.List.class)
+public @interface FreiwilligDarlehenDocumentsRequiredConstraint {
     String message() default VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 
     Class<?>[] groups() default {};
@@ -45,6 +45,6 @@ public @interface DarlehenDocumentsRequiredConstraint {
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List {
-        DarlehenDocumentsRequiredConstraint[] value();
+        FreiwilligDarlehenDocumentsRequiredConstraint[] value();
     }
 }

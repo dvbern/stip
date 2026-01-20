@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
@@ -67,20 +66,14 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 public class DatenschutzbriefPdfService {
     private final GesuchTrancheService gesuchTrancheService;
 
-    private PdfFont pdfFont = null;
-    private PdfFont pdfFontBold = null;
-    private Link ausbildungsbeitraegeUri = null;
-
     public ByteArrayOutputStream createDatenschutzbriefForElternteil(
         final Eltern elternteil,
         final UUID gesuchtrancheId
     ) {
         final var out = new ByteArrayOutputStream();
 
-        pdfFont = PdfUtils.createFont();
-        pdfFontBold = PdfUtils.createFontBold();
-
-        ausbildungsbeitraegeUri = new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+        final PdfFont pdfFont = PdfUtils.createFont();
+        final PdfFont pdfFontBold = PdfUtils.createFontBold();
 
         final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchtrancheId);
         final Gesuch gesuch = gesuchTranche.getGesuch();
@@ -95,15 +88,18 @@ public class DatenschutzbriefPdfService {
             final var document = new Document(pdfDocument, PAGE_SIZE);
         ) {
             final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
-            logo.setMarginLeft(-25);
-            logo.setMarginTop(-35);
+
             document.add(logo);
 
             final var leftMargin = document.getLeftMargin();
 
+            final Link ausbildungsbeitraegeUri =
+                new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
+
             PdfUtils.header(
                 gesuch,
                 document,
+                pdfDocument,
                 leftMargin,
                 translator,
                 false,
@@ -200,7 +196,7 @@ public class DatenschutzbriefPdfService {
 
             document.add(logo);
 
-            returnLetter(gesuch, document, leftMargin, translator, pdfFont, elternteil, pia);
+            returnLetter(gesuch, document, leftMargin, translator, pdfFont, pdfFontBold, elternteil, pia);
 
         } catch (IOException e) {
             throw new InternalServerErrorException(e);
@@ -215,13 +211,12 @@ public class DatenschutzbriefPdfService {
         final float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
+        final PdfFont pdfFontBold,
         final Eltern elternteil,
         final PersonInAusbildung pia
     ) {
         float[] columnWidths = { 50, 50 };
         final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
-
-        final GesuchFormular gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
 
         final Cell sender = PdfUtils.createCell(
             pdfFont,

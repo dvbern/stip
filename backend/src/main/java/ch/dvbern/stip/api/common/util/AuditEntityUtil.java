@@ -15,16 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.darlehen.service;
+package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
-import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import lombok.experimental.UtilityClass;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditProperty;
 
-@Mapper(config = MappingConfig.class)
-public interface DarlehenDokumentMapper {
-    @Mapping(source = "darlehenDokument", target = "value")
-    NullableDarlehenDokumentDto toDto(DarlehenDokument darlehenDokument);
+@UtilityClass
+public class AuditEntityUtil {
+    public AuditProperty<Object> revisionTimestamp() {
+        return AuditEntity.revisionProperty("timestamp");
+    }
 }

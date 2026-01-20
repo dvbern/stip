@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DarlehenRepository implements BaseRepository<FreiwilligDarlehen> {
+public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDarlehen> {
     private static final QFreiwilligDarlehen freiwilligDarlehen = QFreiwilligDarlehen.freiwilligDarlehen;
     private static final QZuordnung zuordnung = QZuordnung.zuordnung;
 
@@ -55,7 +55,7 @@ public class DarlehenRepository implements BaseRepository<FreiwilligDarlehen> {
         var query = queryFactory
             .selectFrom(freiwilligDarlehen)
             .where(
-                freiwilligDarlehen.fall.ausbildungs.any().gesuchs.any().id.eq(gesuchId)
+                freiwilligDarlehen.relatedGesuch.id.eq(gesuchId)
             );
         return query.stream().toList();
     }
@@ -82,9 +82,23 @@ public class DarlehenRepository implements BaseRepository<FreiwilligDarlehen> {
 
     public FreiwilligDarlehen requireByDokumentId(final UUID dokumentId) {
         return getAlleQuery()
-            .where(freiwilligDarlehen.dokumente.any().dokumente.any().id.eq(dokumentId))
+            .where(
+                freiwilligDarlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
+            )
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
     }
+
+    public FreiwilligDarlehen requireByDokumentOrDarlehensVerfuegungId(final UUID dokumentId) {
+        return getAlleQuery()
+            .where(
+                freiwilligDarlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
+                    .or(freiwilligDarlehen.darlehenVerfuegung.id.eq(dokumentId))
+            )
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
+    }
+
 }
