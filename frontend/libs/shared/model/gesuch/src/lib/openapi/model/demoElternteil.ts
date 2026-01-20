@@ -9,8 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ElternTyp } from './elternTyp';
 
-export interface DemoEltern { 
+export interface DemoElternteil { 
+    type: ElternTyp;
     sozialversicherungsnummer: string;
     nachname: string;
     vorname: string;
@@ -29,4 +31,6 @@ export interface DemoEltern {
     sozialhilfebeitraege: boolean;
     ausweisbFluechtling: boolean;
 }
+
+
 

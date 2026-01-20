@@ -34,10 +34,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataListDtoSpec.JSON_PROPERTY_IMPORTIERT_VON,
   DemoDataListDtoSpec.JSON_PROPERTY_LETZTE_AKTIVITAET,
   DemoDataListDtoSpec.JSON_PROPERTY_KOMMENTAR,
+  DemoDataListDtoSpec.JSON_PROPERTY_DOCUMENT_ID,
   DemoDataListDtoSpec.JSON_PROPERTY_FILENAME,
   DemoDataListDtoSpec.JSON_PROPERTY_FILEPATH,
   DemoDataListDtoSpec.JSON_PROPERTY_FILESIZE,
-  DemoDataListDtoSpec.JSON_PROPERTY_OBJECT_ID,
   DemoDataListDtoSpec.JSON_PROPERTY_DEMO_DATAS
 })
 @JsonTypeName("DemoDataList")
@@ -52,6 +52,9 @@ public class DemoDataListDtoSpec {
   public static final String JSON_PROPERTY_KOMMENTAR = "kommentar";
   private String kommentar;
 
+  public static final String JSON_PROPERTY_DOCUMENT_ID = "documentId";
+  private String documentId;
+
   public static final String JSON_PROPERTY_FILENAME = "filename";
   private String filename;
 
@@ -60,9 +63,6 @@ public class DemoDataListDtoSpec {
 
   public static final String JSON_PROPERTY_FILESIZE = "filesize";
   private Integer filesize;
-
-  public static final String JSON_PROPERTY_OBJECT_ID = "objectId";
-  private String objectId;
 
   public static final String JSON_PROPERTY_DEMO_DATAS = "demoDatas";
   private List<DemoDataSlimDtoSpec> demoDatas;
@@ -148,6 +148,32 @@ public class DemoDataListDtoSpec {
   }
 
 
+  public DemoDataListDtoSpec documentId(String documentId) {
+    
+    this.documentId = documentId;
+    return this;
+  }
+
+   /**
+   * Get documentId
+   * @return documentId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_DOCUMENT_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getDocumentId() {
+    return documentId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_DOCUMENT_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setDocumentId(String documentId) {
+    this.documentId = documentId;
+  }
+
+
   public DemoDataListDtoSpec filename(String filename) {
     
     this.filename = filename;
@@ -226,32 +252,6 @@ public class DemoDataListDtoSpec {
   }
 
 
-  public DemoDataListDtoSpec objectId(String objectId) {
-    
-    this.objectId = objectId;
-    return this;
-  }
-
-   /**
-   * Get objectId
-   * @return objectId
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_OBJECT_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getObjectId() {
-    return objectId;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_OBJECT_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setObjectId(String objectId) {
-    this.objectId = objectId;
-  }
-
-
   public DemoDataListDtoSpec demoDatas(List<DemoDataSlimDtoSpec> demoDatas) {
     
     this.demoDatas = demoDatas;
@@ -297,16 +297,16 @@ public class DemoDataListDtoSpec {
     return Objects.equals(this.importiertVon, demoDataList.importiertVon) &&
         Objects.equals(this.letzteAktivitaet, demoDataList.letzteAktivitaet) &&
         Objects.equals(this.kommentar, demoDataList.kommentar) &&
+        Objects.equals(this.documentId, demoDataList.documentId) &&
         Objects.equals(this.filename, demoDataList.filename) &&
         Objects.equals(this.filepath, demoDataList.filepath) &&
         Objects.equals(this.filesize, demoDataList.filesize) &&
-        Objects.equals(this.objectId, demoDataList.objectId) &&
         Objects.equals(this.demoDatas, demoDataList.demoDatas);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(importiertVon, letzteAktivitaet, kommentar, filename, filepath, filesize, objectId, demoDatas);
+    return Objects.hash(importiertVon, letzteAktivitaet, kommentar, documentId, filename, filepath, filesize, demoDatas);
   }
 
   @Override
@@ -316,10 +316,10 @@ public class DemoDataListDtoSpec {
     sb.append("    importiertVon: ").append(toIndentedString(importiertVon)).append("\n");
     sb.append("    letzteAktivitaet: ").append(toIndentedString(letzteAktivitaet)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    documentId: ").append(toIndentedString(documentId)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filepath: ").append(toIndentedString(filepath)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
-    sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
     sb.append("    demoDatas: ").append(toIndentedString(demoDatas)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ElternUnbekanntheitsGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternschaftsteilungDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -75,13 +76,13 @@ public class DemoFamiliensituationDtoSpec {
   private Boolean mutterUnbekannt;
 
   public static final String JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND = "mutterUnbekanntGrund";
-  private String mutterUnbekanntGrund;
+  private ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund;
 
   public static final String JSON_PROPERTY_MUTTER_KEINE_OPTIONEN = "mutterKeineOptionen";
-  private String mutterKeineOptionen;
+  private Boolean mutterKeineOptionen;
 
   public static final String JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT = "mutterWiederverheiratetUnbekannt";
-  private String mutterWiederverheiratetUnbekannt;
+  private Boolean mutterWiederverheiratetUnbekannt;
 
   public static final String JSON_PROPERTY_VATER_VERSTORBEN = "vaterVerstorben";
   private Boolean vaterVerstorben;
@@ -90,13 +91,13 @@ public class DemoFamiliensituationDtoSpec {
   private Boolean vaterUnbekannt;
 
   public static final String JSON_PROPERTY_VATER_UNBEKANNT_GRUND = "vaterUnbekanntGrund";
-  private String vaterUnbekanntGrund;
+  private ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund;
 
   public static final String JSON_PROPERTY_VATER_KEINE_OPTIONEN = "vaterKeineOptionen";
-  private String vaterKeineOptionen;
+  private Boolean vaterKeineOptionen;
 
   public static final String JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT = "vaterWiederverheiratetUnbekannt";
-  private String vaterWiederverheiratetUnbekannt;
+  private Boolean vaterWiederverheiratetUnbekannt;
 
   public static final String JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS = "mutterWiederverheiratetUngewiss";
   private Boolean mutterWiederverheiratetUngewiss;
@@ -143,9 +144,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get gerichtlicheAlimentenregelung
    * @return gerichtlicheAlimentenregelung
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getGerichtlicheAlimentenregelung() {
     return gerichtlicheAlimentenregelung;
@@ -153,7 +154,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setGerichtlicheAlimentenregelung(Boolean gerichtlicheAlimentenregelung) {
     this.gerichtlicheAlimentenregelung = gerichtlicheAlimentenregelung;
   }
@@ -169,9 +170,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get werZahltAlimente
    * @return werZahltAlimente
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_WER_ZAHLT_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public ElternschaftsteilungDtoSpec getWerZahltAlimente() {
     return werZahltAlimente;
@@ -179,7 +180,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_WER_ZAHLT_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setWerZahltAlimente(ElternschaftsteilungDtoSpec werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
   }
@@ -195,9 +196,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get mutterWiederverheiratetAlimente
    * @return mutterWiederverheiratetAlimente
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getMutterWiederverheiratetAlimente() {
     return mutterWiederverheiratetAlimente;
@@ -205,7 +206,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMutterWiederverheiratetAlimente(Boolean mutterWiederverheiratetAlimente) {
     this.mutterWiederverheiratetAlimente = mutterWiederverheiratetAlimente;
   }
@@ -221,9 +222,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get vaterWiederverheiratetAlimente
    * @return vaterWiederverheiratetAlimente
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getVaterWiederverheiratetAlimente() {
     return vaterWiederverheiratetAlimente;
@@ -231,7 +232,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVaterWiederverheiratetAlimente(Boolean vaterWiederverheiratetAlimente) {
     this.vaterWiederverheiratetAlimente = vaterWiederverheiratetAlimente;
   }
@@ -247,9 +248,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get elternteilUnbekanntVerstorben
    * @return elternteilUnbekanntVerstorben
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getElternteilUnbekanntVerstorben() {
     return elternteilUnbekanntVerstorben;
@@ -257,7 +258,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setElternteilUnbekanntVerstorben(Boolean elternteilUnbekanntVerstorben) {
     this.elternteilUnbekanntVerstorben = elternteilUnbekanntVerstorben;
   }
@@ -273,9 +274,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get mutterVerstorben
    * @return mutterVerstorben
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_MUTTER_VERSTORBEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getMutterVerstorben() {
     return mutterVerstorben;
@@ -283,7 +284,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_VERSTORBEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMutterVerstorben(Boolean mutterVerstorben) {
     this.mutterVerstorben = mutterVerstorben;
   }
@@ -299,9 +300,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get mutterUnbekannt
    * @return mutterUnbekannt
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getMutterUnbekannt() {
     return mutterUnbekannt;
@@ -309,13 +310,13 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMutterUnbekannt(Boolean mutterUnbekannt) {
     this.mutterUnbekannt = mutterUnbekannt;
   }
 
 
-  public DemoFamiliensituationDtoSpec mutterUnbekanntGrund(String mutterUnbekanntGrund) {
+  public DemoFamiliensituationDtoSpec mutterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund) {
     
     this.mutterUnbekanntGrund = mutterUnbekanntGrund;
     return this;
@@ -329,19 +330,19 @@ public class DemoFamiliensituationDtoSpec {
   @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getMutterUnbekanntGrund() {
+  public ElternUnbekanntheitsGrundDtoSpec getMutterUnbekanntGrund() {
     return mutterUnbekanntGrund;
   }
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterUnbekanntGrund(String mutterUnbekanntGrund) {
+  public void setMutterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec mutterUnbekanntGrund) {
     this.mutterUnbekanntGrund = mutterUnbekanntGrund;
   }
 
 
-  public DemoFamiliensituationDtoSpec mutterKeineOptionen(String mutterKeineOptionen) {
+  public DemoFamiliensituationDtoSpec mutterKeineOptionen(Boolean mutterKeineOptionen) {
     
     this.mutterKeineOptionen = mutterKeineOptionen;
     return this;
@@ -355,19 +356,19 @@ public class DemoFamiliensituationDtoSpec {
   @JsonProperty(JSON_PROPERTY_MUTTER_KEINE_OPTIONEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getMutterKeineOptionen() {
+  public Boolean getMutterKeineOptionen() {
     return mutterKeineOptionen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_KEINE_OPTIONEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterKeineOptionen(String mutterKeineOptionen) {
+  public void setMutterKeineOptionen(Boolean mutterKeineOptionen) {
     this.mutterKeineOptionen = mutterKeineOptionen;
   }
 
 
-  public DemoFamiliensituationDtoSpec mutterWiederverheiratetUnbekannt(String mutterWiederverheiratetUnbekannt) {
+  public DemoFamiliensituationDtoSpec mutterWiederverheiratetUnbekannt(Boolean mutterWiederverheiratetUnbekannt) {
     
     this.mutterWiederverheiratetUnbekannt = mutterWiederverheiratetUnbekannt;
     return this;
@@ -381,14 +382,14 @@ public class DemoFamiliensituationDtoSpec {
   @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getMutterWiederverheiratetUnbekannt() {
+  public Boolean getMutterWiederverheiratetUnbekannt() {
     return mutterWiederverheiratetUnbekannt;
   }
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterWiederverheiratetUnbekannt(String mutterWiederverheiratetUnbekannt) {
+  public void setMutterWiederverheiratetUnbekannt(Boolean mutterWiederverheiratetUnbekannt) {
     this.mutterWiederverheiratetUnbekannt = mutterWiederverheiratetUnbekannt;
   }
 
@@ -403,9 +404,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get vaterVerstorben
    * @return vaterVerstorben
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VATER_VERSTORBEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getVaterVerstorben() {
     return vaterVerstorben;
@@ -413,7 +414,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VATER_VERSTORBEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVaterVerstorben(Boolean vaterVerstorben) {
     this.vaterVerstorben = vaterVerstorben;
   }
@@ -429,9 +430,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get vaterUnbekannt
    * @return vaterUnbekannt
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getVaterUnbekannt() {
     return vaterUnbekannt;
@@ -439,13 +440,13 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVaterUnbekannt(Boolean vaterUnbekannt) {
     this.vaterUnbekannt = vaterUnbekannt;
   }
 
 
-  public DemoFamiliensituationDtoSpec vaterUnbekanntGrund(String vaterUnbekanntGrund) {
+  public DemoFamiliensituationDtoSpec vaterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund) {
     
     this.vaterUnbekanntGrund = vaterUnbekanntGrund;
     return this;
@@ -459,19 +460,19 @@ public class DemoFamiliensituationDtoSpec {
   @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT_GRUND)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getVaterUnbekanntGrund() {
+  public ElternUnbekanntheitsGrundDtoSpec getVaterUnbekanntGrund() {
     return vaterUnbekanntGrund;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VATER_UNBEKANNT_GRUND)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterUnbekanntGrund(String vaterUnbekanntGrund) {
+  public void setVaterUnbekanntGrund(ElternUnbekanntheitsGrundDtoSpec vaterUnbekanntGrund) {
     this.vaterUnbekanntGrund = vaterUnbekanntGrund;
   }
 
 
-  public DemoFamiliensituationDtoSpec vaterKeineOptionen(String vaterKeineOptionen) {
+  public DemoFamiliensituationDtoSpec vaterKeineOptionen(Boolean vaterKeineOptionen) {
     
     this.vaterKeineOptionen = vaterKeineOptionen;
     return this;
@@ -485,19 +486,19 @@ public class DemoFamiliensituationDtoSpec {
   @JsonProperty(JSON_PROPERTY_VATER_KEINE_OPTIONEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getVaterKeineOptionen() {
+  public Boolean getVaterKeineOptionen() {
     return vaterKeineOptionen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VATER_KEINE_OPTIONEN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterKeineOptionen(String vaterKeineOptionen) {
+  public void setVaterKeineOptionen(Boolean vaterKeineOptionen) {
     this.vaterKeineOptionen = vaterKeineOptionen;
   }
 
 
-  public DemoFamiliensituationDtoSpec vaterWiederverheiratetUnbekannt(String vaterWiederverheiratetUnbekannt) {
+  public DemoFamiliensituationDtoSpec vaterWiederverheiratetUnbekannt(Boolean vaterWiederverheiratetUnbekannt) {
     
     this.vaterWiederverheiratetUnbekannt = vaterWiederverheiratetUnbekannt;
     return this;
@@ -511,14 +512,14 @@ public class DemoFamiliensituationDtoSpec {
   @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getVaterWiederverheiratetUnbekannt() {
+  public Boolean getVaterWiederverheiratetUnbekannt() {
     return vaterWiederverheiratetUnbekannt;
   }
 
 
   @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterWiederverheiratetUnbekannt(String vaterWiederverheiratetUnbekannt) {
+  public void setVaterWiederverheiratetUnbekannt(Boolean vaterWiederverheiratetUnbekannt) {
     this.vaterWiederverheiratetUnbekannt = vaterWiederverheiratetUnbekannt;
   }
 
@@ -533,9 +534,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get mutterWiederverheiratetUngewiss
    * @return mutterWiederverheiratetUngewiss
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getMutterWiederverheiratetUngewiss() {
     return mutterWiederverheiratetUngewiss;
@@ -543,7 +544,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMutterWiederverheiratetUngewiss(Boolean mutterWiederverheiratetUngewiss) {
     this.mutterWiederverheiratetUngewiss = mutterWiederverheiratetUngewiss;
   }
@@ -559,9 +560,9 @@ public class DemoFamiliensituationDtoSpec {
    * Get vaterWiederverheiratetUngewiss
    * @return vaterWiederverheiratetUngewiss
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getVaterWiederverheiratetUngewiss() {
     return vaterWiederverheiratetUngewiss;
@@ -569,7 +570,7 @@ public class DemoFamiliensituationDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setVaterWiederverheiratetUngewiss(Boolean vaterWiederverheiratetUngewiss) {
     this.vaterWiederverheiratetUngewiss = vaterWiederverheiratetUngewiss;
   }

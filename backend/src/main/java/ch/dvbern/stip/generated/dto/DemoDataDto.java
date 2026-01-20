@@ -5,7 +5,7 @@ import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDto;
 import ch.dvbern.stip.generated.dto.DemoDataStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDto;
-import ch.dvbern.stip.generated.dto.DemoElternDto;
+import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
 import ch.dvbern.stip.generated.dto.DemoGeschwisterDto;
 import ch.dvbern.stip.generated.dto.DemoKindDto;
@@ -39,16 +39,17 @@ public class DemoDataDto  implements Serializable {
   private @Valid DemoAusbildungDto ausbildung;
   private @Valid DemoPersonInAusbildungDto personInAusbildung;
   private @Valid DemoLebenslaufDto lebenslauf;
-  private @Valid DemoPartnerDto partner;
   private @Valid List<DemoKindDto> kinder = new ArrayList<>();
   private @Valid DemoEinnahmenKostenDto einnahmenKosten;
   private @Valid DemoFamiliensituationDto familiensituation;
-  private @Valid DemoElternDto eltern;
-  private @Valid DemoSteuererklaerungDto steuererklaerung;
-  private @Valid DemoSteuerdatenDto steuerdaten;
+  private @Valid List<DemoElternteilDto> elterns = new ArrayList<>();
+  private @Valid List<DemoSteuererklaerungDto> steuererklaerung = new ArrayList<>();
+  private @Valid List<DemoSteuerdatenDto> steuerdaten = new ArrayList<>();
   private @Valid List<DemoGeschwisterDto> geschwister = new ArrayList<>();
   private @Valid DemoAuszahlungDto auszahlung;
   private @Valid DemoDarlehenDto darlehen;
+  private @Valid DemoPartnerDto partner;
+  private @Valid DemoEinnahmenKostenDto einnahmenKostenPartner;
   private @Valid DemoDataStipendienanspruchDto stipendienanspruch;
 
   /**
@@ -106,25 +107,6 @@ public class DemoDataDto  implements Serializable {
   @JsonProperty("lebenslauf")
   public void setLebenslauf(DemoLebenslaufDto lebenslauf) {
     this.lebenslauf = lebenslauf;
-  }
-
-  /**
-   **/
-  public DemoDataDto partner(DemoPartnerDto partner) {
-    this.partner = partner;
-    return this;
-  }
-
-  
-  @JsonProperty("partner")
-  @NotNull
-  public DemoPartnerDto getPartner() {
-    return partner;
-  }
-
-  @JsonProperty("partner")
-  public void setPartner(DemoPartnerDto partner) {
-    this.partner = partner;
   }
 
   /**
@@ -202,26 +184,42 @@ public class DemoDataDto  implements Serializable {
 
   /**
    **/
-  public DemoDataDto eltern(DemoElternDto eltern) {
-    this.eltern = eltern;
+  public DemoDataDto elterns(List<DemoElternteilDto> elterns) {
+    this.elterns = elterns;
     return this;
   }
 
   
-  @JsonProperty("eltern")
+  @JsonProperty("elterns")
   @NotNull
-  public DemoElternDto getEltern() {
-    return eltern;
+  public List<DemoElternteilDto> getElterns() {
+    return elterns;
   }
 
-  @JsonProperty("eltern")
-  public void setEltern(DemoElternDto eltern) {
-    this.eltern = eltern;
+  @JsonProperty("elterns")
+  public void setElterns(List<DemoElternteilDto> elterns) {
+    this.elterns = elterns;
   }
 
+  public DemoDataDto addElternsItem(DemoElternteilDto elternsItem) {
+    if (this.elterns == null) {
+      this.elterns = new ArrayList<>();
+    }
+
+    this.elterns.add(elternsItem);
+    return this;
+  }
+
+  public DemoDataDto removeElternsItem(DemoElternteilDto elternsItem) {
+    if (elternsItem != null && this.elterns != null) {
+      this.elterns.remove(elternsItem);
+    }
+
+    return this;
+  }
   /**
    **/
-  public DemoDataDto steuererklaerung(DemoSteuererklaerungDto steuererklaerung) {
+  public DemoDataDto steuererklaerung(List<DemoSteuererklaerungDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
     return this;
   }
@@ -229,18 +227,34 @@ public class DemoDataDto  implements Serializable {
   
   @JsonProperty("steuererklaerung")
   @NotNull
-  public DemoSteuererklaerungDto getSteuererklaerung() {
+  public List<DemoSteuererklaerungDto> getSteuererklaerung() {
     return steuererklaerung;
   }
 
   @JsonProperty("steuererklaerung")
-  public void setSteuererklaerung(DemoSteuererklaerungDto steuererklaerung) {
+  public void setSteuererklaerung(List<DemoSteuererklaerungDto> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
   }
 
+  public DemoDataDto addSteuererklaerungItem(DemoSteuererklaerungDto steuererklaerungItem) {
+    if (this.steuererklaerung == null) {
+      this.steuererklaerung = new ArrayList<>();
+    }
+
+    this.steuererklaerung.add(steuererklaerungItem);
+    return this;
+  }
+
+  public DemoDataDto removeSteuererklaerungItem(DemoSteuererklaerungDto steuererklaerungItem) {
+    if (steuererklaerungItem != null && this.steuererklaerung != null) {
+      this.steuererklaerung.remove(steuererklaerungItem);
+    }
+
+    return this;
+  }
   /**
    **/
-  public DemoDataDto steuerdaten(DemoSteuerdatenDto steuerdaten) {
+  public DemoDataDto steuerdaten(List<DemoSteuerdatenDto> steuerdaten) {
     this.steuerdaten = steuerdaten;
     return this;
   }
@@ -248,15 +262,31 @@ public class DemoDataDto  implements Serializable {
   
   @JsonProperty("steuerdaten")
   @NotNull
-  public DemoSteuerdatenDto getSteuerdaten() {
+  public List<DemoSteuerdatenDto> getSteuerdaten() {
     return steuerdaten;
   }
 
   @JsonProperty("steuerdaten")
-  public void setSteuerdaten(DemoSteuerdatenDto steuerdaten) {
+  public void setSteuerdaten(List<DemoSteuerdatenDto> steuerdaten) {
     this.steuerdaten = steuerdaten;
   }
 
+  public DemoDataDto addSteuerdatenItem(DemoSteuerdatenDto steuerdatenItem) {
+    if (this.steuerdaten == null) {
+      this.steuerdaten = new ArrayList<>();
+    }
+
+    this.steuerdaten.add(steuerdatenItem);
+    return this;
+  }
+
+  public DemoDataDto removeSteuerdatenItem(DemoSteuerdatenDto steuerdatenItem) {
+    if (steuerdatenItem != null && this.steuerdaten != null) {
+      this.steuerdaten.remove(steuerdatenItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public DemoDataDto geschwister(List<DemoGeschwisterDto> geschwister) {
@@ -332,6 +362,42 @@ public class DemoDataDto  implements Serializable {
 
   /**
    **/
+  public DemoDataDto partner(DemoPartnerDto partner) {
+    this.partner = partner;
+    return this;
+  }
+
+  
+  @JsonProperty("partner")
+  public DemoPartnerDto getPartner() {
+    return partner;
+  }
+
+  @JsonProperty("partner")
+  public void setPartner(DemoPartnerDto partner) {
+    this.partner = partner;
+  }
+
+  /**
+   **/
+  public DemoDataDto einnahmenKostenPartner(DemoEinnahmenKostenDto einnahmenKostenPartner) {
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+    return this;
+  }
+
+  
+  @JsonProperty("einnahmenKostenPartner")
+  public DemoEinnahmenKostenDto getEinnahmenKostenPartner() {
+    return einnahmenKostenPartner;
+  }
+
+  @JsonProperty("einnahmenKostenPartner")
+  public void setEinnahmenKostenPartner(DemoEinnahmenKostenDto einnahmenKostenPartner) {
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+  }
+
+  /**
+   **/
   public DemoDataDto stipendienanspruch(DemoDataStipendienanspruchDto stipendienanspruch) {
     this.stipendienanspruch = stipendienanspruch;
     return this;
@@ -361,22 +427,23 @@ public class DemoDataDto  implements Serializable {
     return Objects.equals(this.ausbildung, demoData.ausbildung) &&
         Objects.equals(this.personInAusbildung, demoData.personInAusbildung) &&
         Objects.equals(this.lebenslauf, demoData.lebenslauf) &&
-        Objects.equals(this.partner, demoData.partner) &&
         Objects.equals(this.kinder, demoData.kinder) &&
         Objects.equals(this.einnahmenKosten, demoData.einnahmenKosten) &&
         Objects.equals(this.familiensituation, demoData.familiensituation) &&
-        Objects.equals(this.eltern, demoData.eltern) &&
+        Objects.equals(this.elterns, demoData.elterns) &&
         Objects.equals(this.steuererklaerung, demoData.steuererklaerung) &&
         Objects.equals(this.steuerdaten, demoData.steuerdaten) &&
         Objects.equals(this.geschwister, demoData.geschwister) &&
         Objects.equals(this.auszahlung, demoData.auszahlung) &&
         Objects.equals(this.darlehen, demoData.darlehen) &&
+        Objects.equals(this.partner, demoData.partner) &&
+        Objects.equals(this.einnahmenKostenPartner, demoData.einnahmenKostenPartner) &&
         Objects.equals(this.stipendienanspruch, demoData.stipendienanspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, familiensituation, eltern, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, stipendienanspruch);
+    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, kinder, einnahmenKosten, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, partner, einnahmenKostenPartner, stipendienanspruch);
   }
 
   @Override
@@ -387,16 +454,17 @@ public class DemoDataDto  implements Serializable {
     sb.append("    ausbildung: ").append(toIndentedString(ausbildung)).append("\n");
     sb.append("    personInAusbildung: ").append(toIndentedString(personInAusbildung)).append("\n");
     sb.append("    lebenslauf: ").append(toIndentedString(lebenslauf)).append("\n");
-    sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
     sb.append("    kinder: ").append(toIndentedString(kinder)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
-    sb.append("    eltern: ").append(toIndentedString(eltern)).append("\n");
+    sb.append("    elterns: ").append(toIndentedString(elterns)).append("\n");
     sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
     sb.append("    geschwister: ").append(toIndentedString(geschwister)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
+    sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
+    sb.append("    einnahmenKostenPartner: ").append(toIndentedString(einnahmenKostenPartner)).append("\n");
     sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
     sb.append("}");
     return sb.toString();

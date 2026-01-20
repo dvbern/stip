@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -70,7 +71,7 @@ public class DemoAusbildungDtoSpec {
   private LocalDate ausbildungEnd;
 
   public static final String JSON_PROPERTY_PENSUM = "pensum";
-  private Integer pensum;
+  private AusbildungsPensumDtoSpec pensum;
 
   public DemoAusbildungDtoSpec() {
   }
@@ -309,7 +310,7 @@ public class DemoAusbildungDtoSpec {
   }
 
 
-  public DemoAusbildungDtoSpec pensum(Integer pensum) {
+  public DemoAusbildungDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
     
     this.pensum = pensum;
     return this;
@@ -323,14 +324,14 @@ public class DemoAusbildungDtoSpec {
   @JsonProperty(JSON_PROPERTY_PENSUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getPensum() {
+  public AusbildungsPensumDtoSpec getPensum() {
     return pensum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PENSUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPensum(Integer pensum) {
+  public void setPensum(AusbildungsPensumDtoSpec pensum) {
     this.pensum = pensum;
   }
 

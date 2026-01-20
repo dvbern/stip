@@ -88,6 +88,18 @@ export class StipDecisionService {
         return httpParams;
     }
 
+    public getAllPath = () => {
+        let path = `/api/v1/stip-decision/all`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 
 
 export interface DemoDataServiceApplyDemoDataRequestParams {
-    id: string;
+    demoDataId: string;
 }
 
 export interface DemoDataServiceCreateNewDemoDataImportRequestParams {
@@ -37,6 +37,10 @@ export interface DemoDataServiceCreateNewDemoDataImportRequestParams {
 
 export interface DemoDataServiceGetDemoDataDokumentRequestParams {
     token: string;
+}
+
+export interface DemoDataServiceGetDemoDataDokumentDownloadTokenRequestParams {
+    dokumentId: string;
 }
 
 
@@ -116,6 +120,22 @@ export class DemoDataService {
         return httpParams;
     }
 
+    public applyDemoDataPath = (requestParameters: DemoDataServiceApplyDemoDataRequestParams) => {
+        const demoDataId = requestParameters.demoDataId;
+        if (demoDataId === null || demoDataId === undefined) {
+            throw new Error('Required parameter demoDataId was null or undefined when calling applyDemoData$.');
+        }
+        let path = `/api/v1/demo-data/${this.configuration.encodeParam({name: "demoDataId", value: demoDataId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns the created data after applying demo data
      * @param requestParameters
@@ -126,9 +146,9 @@ export class DemoDataService {
      public applyDemoData$(requestParameters: DemoDataServiceApplyDemoDataRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<ApplyDemoDataResponse>>;
      public applyDemoData$(requestParameters: DemoDataServiceApplyDemoDataRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<ApplyDemoDataResponse>>;
      public applyDemoData$(requestParameters: DemoDataServiceApplyDemoDataRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const id = requestParameters.id;
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling applyDemoData$.');
+        const demoDataId = requestParameters.demoDataId;
+        if (demoDataId === null || demoDataId === undefined) {
+            throw new Error('Required parameter demoDataId was null or undefined when calling applyDemoData$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -176,7 +196,7 @@ export class DemoDataService {
             }
         }
 
-        const localVarPath = `/demo-data/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const localVarPath = `/demo-data/${this.configuration.encodeParam({name: "demoDataId", value: demoDataId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<ApplyDemoDataResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -187,6 +207,26 @@ export class DemoDataService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createNewDemoDataImportPath = (requestParameters: DemoDataServiceCreateNewDemoDataImportRequestParams) => {
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling createNewDemoDataImport$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createNewDemoDataImport$.');
+        }
+        let path = `/api/v1/demo-data`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -292,6 +332,18 @@ export class DemoDataService {
         );
     }
 
+    public getAllDemoDataPath = () => {
+        let path = `/api/v1/demo-data`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns a list of available demo data
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -358,6 +410,26 @@ export class DemoDataService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getDemoDataDokumentPath = (requestParameters: DemoDataServiceGetDemoDataDokumentRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling getDemoDataDokument$.');
+        }
+        let path = `/api/v1/demo-data/dokument/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -427,15 +499,36 @@ export class DemoDataService {
         );
     }
 
+    public getDemoDataDokumentDownloadTokenPath = (requestParameters: DemoDataServiceGetDemoDataDokumentDownloadTokenRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDemoDataDokumentDownloadToken$.');
+        }
+        let path = `/api/v1/demo-data/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * get the Token to download the latest DemoData
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getDemoDataDokumentDownloadToken$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
-     public getDemoDataDokumentDownloadToken$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
-     public getDemoDataDokumentDownloadToken$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
-     public getDemoDataDokumentDownloadToken$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public getDemoDataDokumentDownloadToken$(requestParameters: DemoDataServiceGetDemoDataDokumentDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getDemoDataDokumentDownloadToken$(requestParameters: DemoDataServiceGetDemoDataDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getDemoDataDokumentDownloadToken$(requestParameters: DemoDataServiceGetDemoDataDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getDemoDataDokumentDownloadToken$(requestParameters: DemoDataServiceGetDemoDataDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDemoDataDokumentDownloadToken$.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -482,7 +575,7 @@ export class DemoDataService {
             }
         }
 
-        const localVarPath = `/demo-data/dokument/token`;
+        const localVarPath = `/demo-data/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
         return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

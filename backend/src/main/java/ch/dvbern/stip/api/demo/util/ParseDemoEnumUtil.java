@@ -19,7 +19,12 @@ package ch.dvbern.stip.api.demo.util;
 
 import java.util.Arrays;
 
+import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.type.Anrede;
+import ch.dvbern.stip.api.common.type.Ausbildungssituation;
+import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
@@ -38,6 +43,18 @@ public class ParseDemoEnumUtil {
         return switch (cell.getStringCellValue()) {
             case "Herr" -> Anrede.HERR;
             case "Frau" -> Anrede.FRAU;
+            default -> throw invalidValue(cell);
+        };
+    }
+
+    public Wohnsitz parseWohnsitz(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getStringCellValue()) {
+            case "Familie" -> Wohnsitz.FAMILIE;
+            case "Vater und/oder Mutter" -> Wohnsitz.MUTTER_VATER;
+            case "eigener Haushalt" -> Wohnsitz.EIGENER_HAUSHALT;
             default -> throw invalidValue(cell);
         };
     }
@@ -103,6 +120,29 @@ public class ParseDemoEnumUtil {
         };
     }
 
+    public AusbildungsPensum parseAusbildungsPensum(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch ((int) cell.getNumericCellValue()) {
+            case 100 -> AusbildungsPensum.VOLLZEIT;
+            default -> AusbildungsPensum.TEILZEIT;
+        };
+    }
+
+    public Ausbildungssituation parseAusbildungssituation(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getStringCellValue()) {
+            case "Vorschulpflichtig" -> Ausbildungssituation.VORSCHULPFLICHTIG;
+            case "Schulpflichtig" -> Ausbildungssituation.SCHULPFLICHTIG;
+            case "in nachobligatorischer Ausbildung" -> Ausbildungssituation.IN_AUSBILDUNG;
+            case "keine der Optionen" -> Ausbildungssituation.KEINE;
+            default -> throw invalidValue(cell);
+        };
+    }
+
     public WohnsitzKanton parseWohnsitzKanton(Cell cell) {
         if (ParseDemoDataUtil.isBlank(cell)) {
             return null;
@@ -112,6 +152,40 @@ public class ParseDemoEnumUtil {
             .filter(w -> w.name().equals(cell.getStringCellValue()))
             .findFirst()
             .orElseThrow(() -> invalidValue(cell));
+    }
+
+    public static Elternschaftsteilung parseElternschaftsteilung(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getStringCellValue()) {
+            case "Vater" -> Elternschaftsteilung.VATER;
+            case "Mutter" -> Elternschaftsteilung.MUTTER;
+            case "Gemeinsam" -> Elternschaftsteilung.GEMEINSAM;
+            default -> throw invalidValue(cell);
+        };
+    }
+
+    public static ElternUnbekanntheitsGrund parseElternUnbekanntheitsGrund(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getStringCellValue()) {
+            case "fehlende Mutterschaftsanerkennung", "fehlende Vaterschaftsanerkennung" -> ElternUnbekanntheitsGrund.FEHLENDE_ANERKENNUNG;
+            case "unbekannter Aufenthaltsort" -> ElternUnbekanntheitsGrund.UNBEKANNTER_AUFENTHALTSORT;
+            default -> throw invalidValue(cell);
+        };
+    }
+
+    public static Boolean parseArbeitsverhaeltnisSelbstaendig(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getStringCellValue()) {
+            case "selbständig" -> Boolean.TRUE;
+            case "unselbständig" -> Boolean.FALSE;
+            default -> throw invalidValue(cell);
+        };
     }
 
     private IllegalStateException invalidValue(Cell cell) {

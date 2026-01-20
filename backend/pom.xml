@@ -199,7 +199,7 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-core</artifactId>
-      <version>2.8.0</version>
+      <version>3.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -721,6 +721,7 @@
                     GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
                     SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
                     SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
+                    AusbildungsPensum=ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum,
                     AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
                     GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,

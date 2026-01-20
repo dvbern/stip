@@ -74,7 +74,7 @@ export * from './demoDataList';
 export * from './demoDataSlim';
 export * from './demoDataStipendienanspruch';
 export * from './demoEinnahmenKosten';
-export * from './demoEltern';
+export * from './demoElternteil';
 export * from './demoFamiliensituation';
 export * from './demoGeschwister';
 export * from './demoKind';

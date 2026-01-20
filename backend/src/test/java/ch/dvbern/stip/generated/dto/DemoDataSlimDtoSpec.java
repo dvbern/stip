@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoDataSlimDtoSpec.JSON_PROPERTY_ID,
+  DemoDataSlimDtoSpec.JSON_PROPERTY_TEST_FALL,
   DemoDataSlimDtoSpec.JSON_PROPERTY_NAME,
   DemoDataSlimDtoSpec.JSON_PROPERTY_DESCRIPTION
 })
@@ -36,6 +37,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoDataSlimDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private String id;
+
+  public static final String JSON_PROPERTY_TEST_FALL = "testFall";
+  private String testFall;
 
   public static final String JSON_PROPERTY_NAME = "name";
   private String name;
@@ -69,6 +73,32 @@ public class DemoDataSlimDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(String id) {
     this.id = id;
+  }
+
+
+  public DemoDataSlimDtoSpec testFall(String testFall) {
+    
+    this.testFall = testFall;
+    return this;
+  }
+
+   /**
+   * Get testFall
+   * @return testFall
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getTestFall() {
+    return testFall;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTestFall(String testFall) {
+    this.testFall = testFall;
   }
 
 
@@ -133,13 +163,14 @@ public class DemoDataSlimDtoSpec {
     }
     DemoDataSlimDtoSpec demoDataSlim = (DemoDataSlimDtoSpec) o;
     return Objects.equals(this.id, demoDataSlim.id) &&
+        Objects.equals(this.testFall, demoDataSlim.testFall) &&
         Objects.equals(this.name, demoDataSlim.name) &&
         Objects.equals(this.description, demoDataSlim.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description);
+    return Objects.hash(id, testFall, name, description);
   }
 
   @Override
@@ -147,6 +178,7 @@ public class DemoDataSlimDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoDataSlimDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");

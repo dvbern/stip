@@ -19,12 +19,32 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DemoSteuererklaerungDto  implements Serializable {
+  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp type;
   private @Valid Boolean steuererklaerungInBern;
   private @Valid Integer unterhaltsbeitraege;
   private @Valid Integer renten;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer einnahmenBGSA;
   private @Valid Integer andereEinnahmen;
+
+  /**
+   **/
+  public DemoSteuererklaerungDto type(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+    this.type = type;
+    return this;
+  }
+
+  
+  @JsonProperty("type")
+  @NotNull
+  public ch.dvbern.stip.api.eltern.type.ElternTyp getType() {
+    return type;
+  }
+
+  @JsonProperty("type")
+  public void setType(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+    this.type = type;
+  }
 
   /**
    **/
@@ -150,7 +170,8 @@ public class DemoSteuererklaerungDto  implements Serializable {
       return false;
     }
     DemoSteuererklaerungDto demoSteuererklaerung = (DemoSteuererklaerungDto) o;
-    return Objects.equals(this.steuererklaerungInBern, demoSteuererklaerung.steuererklaerungInBern) &&
+    return Objects.equals(this.type, demoSteuererklaerung.type) &&
+        Objects.equals(this.steuererklaerungInBern, demoSteuererklaerung.steuererklaerungInBern) &&
         Objects.equals(this.unterhaltsbeitraege, demoSteuererklaerung.unterhaltsbeitraege) &&
         Objects.equals(this.renten, demoSteuererklaerung.renten) &&
         Objects.equals(this.ergaenzungsleistungen, demoSteuererklaerung.ergaenzungsleistungen) &&
@@ -160,7 +181,7 @@ public class DemoSteuererklaerungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuererklaerungInBern, unterhaltsbeitraege, renten, ergaenzungsleistungen, einnahmenBGSA, andereEinnahmen);
+    return Objects.hash(type, steuererklaerungInBern, unterhaltsbeitraege, renten, ergaenzungsleistungen, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
@@ -168,6 +189,7 @@ public class DemoSteuererklaerungDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoSteuererklaerungDto {\n");
     
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    steuererklaerungInBern: ").append(toIndentedString(steuererklaerungInBern)).append("\n");
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");

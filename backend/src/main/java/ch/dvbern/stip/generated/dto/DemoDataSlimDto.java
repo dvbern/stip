@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DemoDataSlimDto  implements Serializable {
   private @Valid String id;
+  private @Valid String testFall;
   private @Valid String name;
   private @Valid String description;
 
@@ -40,6 +41,25 @@ public class DemoDataSlimDto  implements Serializable {
   @JsonProperty("id")
   public void setId(String id) {
     this.id = id;
+  }
+
+  /**
+   **/
+  public DemoDataSlimDto testFall(String testFall) {
+    this.testFall = testFall;
+    return this;
+  }
+
+  
+  @JsonProperty("testFall")
+  @NotNull
+  public String getTestFall() {
+    return testFall;
+  }
+
+  @JsonProperty("testFall")
+  public void setTestFall(String testFall) {
+    this.testFall = testFall;
   }
 
   /**
@@ -91,13 +111,14 @@ public class DemoDataSlimDto  implements Serializable {
     }
     DemoDataSlimDto demoDataSlim = (DemoDataSlimDto) o;
     return Objects.equals(this.id, demoDataSlim.id) &&
+        Objects.equals(this.testFall, demoDataSlim.testFall) &&
         Objects.equals(this.name, demoDataSlim.name) &&
         Objects.equals(this.description, demoDataSlim.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description);
+    return Objects.hash(id, testFall, name, description);
   }
 
   @Override
@@ -106,6 +127,7 @@ public class DemoDataSlimDto  implements Serializable {
     sb.append("class DemoDataSlimDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");

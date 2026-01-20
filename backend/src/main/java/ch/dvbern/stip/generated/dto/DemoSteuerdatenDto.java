@@ -19,9 +19,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DemoSteuerdatenDto  implements Serializable {
+  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp type;
   private @Valid Integer totalEinkuenfte;
   private @Valid Integer eigenmietwert;
-  private @Valid String arbeitsverhaeltnis;
+  private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
   private @Valid Integer saeule3a;
   private @Valid Integer saeule2;
   private @Valid Integer vermoegen;
@@ -33,6 +34,25 @@ public class DemoSteuerdatenDto  implements Serializable {
   private @Valid Integer verpflegungPartner;
   private @Valid Integer steuerjahr;
   private @Valid String veranlagungsStatus;
+
+  /**
+   **/
+  public DemoSteuerdatenDto type(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+    this.type = type;
+    return this;
+  }
+
+  
+  @JsonProperty("type")
+  @NotNull
+  public ch.dvbern.stip.api.eltern.type.ElternTyp getType() {
+    return type;
+  }
+
+  @JsonProperty("type")
+  public void setType(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+    this.type = type;
+  }
 
   /**
    **/
@@ -74,21 +94,21 @@ public class DemoSteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public DemoSteuerdatenDto arbeitsverhaeltnis(String arbeitsverhaeltnis) {
-    this.arbeitsverhaeltnis = arbeitsverhaeltnis;
+  public DemoSteuerdatenDto isArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
+    this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
     return this;
   }
 
   
-  @JsonProperty("arbeitsverhaeltnis")
+  @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
   @NotNull
-  public String getArbeitsverhaeltnis() {
-    return arbeitsverhaeltnis;
+  public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
+    return isArbeitsverhaeltnisSelbstaendig;
   }
 
-  @JsonProperty("arbeitsverhaeltnis")
-  public void setArbeitsverhaeltnis(String arbeitsverhaeltnis) {
-    this.arbeitsverhaeltnis = arbeitsverhaeltnis;
+  @JsonProperty("isArbeitsverhaeltnisSelbstaendig")
+  public void setIsArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
+    this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
   }
 
   /**
@@ -310,9 +330,10 @@ public class DemoSteuerdatenDto  implements Serializable {
       return false;
     }
     DemoSteuerdatenDto demoSteuerdaten = (DemoSteuerdatenDto) o;
-    return Objects.equals(this.totalEinkuenfte, demoSteuerdaten.totalEinkuenfte) &&
+    return Objects.equals(this.type, demoSteuerdaten.type) &&
+        Objects.equals(this.totalEinkuenfte, demoSteuerdaten.totalEinkuenfte) &&
         Objects.equals(this.eigenmietwert, demoSteuerdaten.eigenmietwert) &&
-        Objects.equals(this.arbeitsverhaeltnis, demoSteuerdaten.arbeitsverhaeltnis) &&
+        Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, demoSteuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.saeule3a, demoSteuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, demoSteuerdaten.saeule2) &&
         Objects.equals(this.vermoegen, demoSteuerdaten.vermoegen) &&
@@ -328,7 +349,7 @@ public class DemoSteuerdatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalEinkuenfte, eigenmietwert, arbeitsverhaeltnis, saeule3a, saeule2, vermoegen, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus);
+    return Objects.hash(type, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, vermoegen, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus);
   }
 
   @Override
@@ -336,9 +357,10 @@ public class DemoSteuerdatenDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoSteuerdatenDto {\n");
     
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
-    sb.append("    arbeitsverhaeltnis: ").append(toIndentedString(arbeitsverhaeltnis)).append("\n");
+    sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");

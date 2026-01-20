@@ -17,14 +17,22 @@
 
 package ch.dvbern.stip.api.demo.resource;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.demo.service.DemoDataService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.DemoDataResource;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import io.smallrye.common.annotation.Blocking;
+import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -39,12 +47,16 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 public class DemoDataResourceImpl implements DemoDataResource {
     private final DemoDataAuthorizer demoDataAuthorizer;
     private final DemoDataService demoDataService;
+    private final BenutzerService benutzerService;
+    private final ConfigService configService;
+    private final JWTParser jwtParser;
+    private final DokumentDownloadService dokumentDownloadService;
 
     @Override
     @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
-    public ApplyDemoDataResponseDto applyDemoData(String id) {
+    public ApplyDemoDataResponseDto applyDemoData(UUID demoDataId) {
         demoDataAuthorizer.canRead();
-        return null;
+        return demoDataService.applyDemoData(demoDataId);
     }
 
     @Override
@@ -64,16 +76,28 @@ public class DemoDataResourceImpl implements DemoDataResource {
         return demoDataService.getAllDemoData();
     }
 
+    @Blocking
     @Override
     @PermitAll
     public RestMulti<Buffer> getDemoDataDokument(String token) {
-        return null;
+        final var dokumentId = dokumentDownloadService.getClaimId(
+            jwtParser,
+            token,
+            configService.getSecret(),
+            DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM
+        );
+        return demoDataService.getDokument(dokumentId);
     }
 
     @Override
     @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
-    public FileDownloadTokenDto getDemoDataDokumentDownloadToken() {
+    public FileDownloadTokenDto getDemoDataDokumentDownloadToken(UUID dokumentId) {
         demoDataAuthorizer.canRead();
-        return null;
+        return dokumentDownloadService.getFileDownloadToken(
+            dokumentId,
+            DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM,
+            benutzerService,
+            configService
+        );
     }
 }

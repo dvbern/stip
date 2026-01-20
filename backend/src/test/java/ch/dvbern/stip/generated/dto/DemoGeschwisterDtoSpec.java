@@ -16,11 +16,13 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
+import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -32,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoGeschwisterDtoSpec.JSON_PROPERTY_VORNAME,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_BEI,
-  DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL,
+  DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
+  DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_AUSBILDUNGSSITUATION
 })
 @JsonTypeName("DemoGeschwister")
@@ -45,13 +48,16 @@ public class DemoGeschwisterDtoSpec {
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private String geburtsdatum;
+  private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_WOHNSITZ_BEI = "wohnsitzBei";
-  private String wohnsitzBei;
+  private WohnsitzDtoSpec wohnsitzBei;
 
-  public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL = "wohnsitzAnteil";
-  private Integer wohnsitzAnteil;
+  public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER = "wohnsitzAnteilVater";
+  private Integer wohnsitzAnteilVater;
+
+  public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER = "wohnsitzAnteilMutter";
+  private Integer wohnsitzAnteilMutter;
 
   public static final String JSON_PROPERTY_AUSBILDUNGSSITUATION = "ausbildungssituation";
   private AusbildungssituationDtoSpec ausbildungssituation;
@@ -111,7 +117,7 @@ public class DemoGeschwisterDtoSpec {
   }
 
 
-  public DemoGeschwisterDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoGeschwisterDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -125,19 +131,19 @@ public class DemoGeschwisterDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
 
-  public DemoGeschwisterDtoSpec wohnsitzBei(String wohnsitzBei) {
+  public DemoGeschwisterDtoSpec wohnsitzBei(WohnsitzDtoSpec wohnsitzBei) {
     
     this.wohnsitzBei = wohnsitzBei;
     return this;
@@ -151,41 +157,67 @@ public class DemoGeschwisterDtoSpec {
   @JsonProperty(JSON_PROPERTY_WOHNSITZ_BEI)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getWohnsitzBei() {
+  public WohnsitzDtoSpec getWohnsitzBei() {
     return wohnsitzBei;
   }
 
 
   @JsonProperty(JSON_PROPERTY_WOHNSITZ_BEI)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitzBei(String wohnsitzBei) {
+  public void setWohnsitzBei(WohnsitzDtoSpec wohnsitzBei) {
     this.wohnsitzBei = wohnsitzBei;
   }
 
 
-  public DemoGeschwisterDtoSpec wohnsitzAnteil(Integer wohnsitzAnteil) {
+  public DemoGeschwisterDtoSpec wohnsitzAnteilVater(Integer wohnsitzAnteilVater) {
     
-    this.wohnsitzAnteil = wohnsitzAnteil;
+    this.wohnsitzAnteilVater = wohnsitzAnteilVater;
     return this;
   }
 
    /**
-   * Get wohnsitzAnteil
-   * @return wohnsitzAnteil
+   * Get wohnsitzAnteilVater
+   * @return wohnsitzAnteilVater
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getWohnsitzAnteil() {
-    return wohnsitzAnteil;
+  public Integer getWohnsitzAnteilVater() {
+    return wohnsitzAnteilVater;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setWohnsitzAnteil(Integer wohnsitzAnteil) {
-    this.wohnsitzAnteil = wohnsitzAnteil;
+  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWohnsitzAnteilVater(Integer wohnsitzAnteilVater) {
+    this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+  }
+
+
+  public DemoGeschwisterDtoSpec wohnsitzAnteilMutter(Integer wohnsitzAnteilMutter) {
+    
+    this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
+    return this;
+  }
+
+   /**
+   * Get wohnsitzAnteilMutter
+   * @return wohnsitzAnteilMutter
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getWohnsitzAnteilMutter() {
+    return wohnsitzAnteilMutter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWohnsitzAnteilMutter(Integer wohnsitzAnteilMutter) {
+    this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
   }
 
 
@@ -227,13 +259,14 @@ public class DemoGeschwisterDtoSpec {
         Objects.equals(this.vorname, demoGeschwister.vorname) &&
         Objects.equals(this.geburtsdatum, demoGeschwister.geburtsdatum) &&
         Objects.equals(this.wohnsitzBei, demoGeschwister.wohnsitzBei) &&
-        Objects.equals(this.wohnsitzAnteil, demoGeschwister.wohnsitzAnteil) &&
+        Objects.equals(this.wohnsitzAnteilVater, demoGeschwister.wohnsitzAnteilVater) &&
+        Objects.equals(this.wohnsitzAnteilMutter, demoGeschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.ausbildungssituation, demoGeschwister.ausbildungssituation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, geburtsdatum, wohnsitzBei, wohnsitzAnteil, ausbildungssituation);
+    return Objects.hash(nachname, vorname, geburtsdatum, wohnsitzBei, wohnsitzAnteilVater, wohnsitzAnteilMutter, ausbildungssituation);
   }
 
   @Override
@@ -244,7 +277,8 @@ public class DemoGeschwisterDtoSpec {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    wohnsitzBei: ").append(toIndentedString(wohnsitzBei)).append("\n");
-    sb.append("    wohnsitzAnteil: ").append(toIndentedString(wohnsitzAnteil)).append("\n");
+    sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
     sb.append("}");
     return sb.toString();

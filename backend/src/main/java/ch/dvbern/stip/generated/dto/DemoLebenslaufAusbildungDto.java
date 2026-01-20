@@ -25,6 +25,7 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   private @Valid LocalDate bis;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
   private @Valid Boolean ausbildungAbgeschlossen;
+  private @Valid String berufsbezeichnungFachrichtung;
 
   /**
    **/
@@ -121,6 +122,24 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
     this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
   }
 
+  /**
+   **/
+  public DemoLebenslaufAusbildungDto berufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+    this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
+    return this;
+  }
+
+  
+  @JsonProperty("berufsbezeichnungFachrichtung")
+  public String getBerufsbezeichnungFachrichtung() {
+    return berufsbezeichnungFachrichtung;
+  }
+
+  @JsonProperty("berufsbezeichnungFachrichtung")
+  public void setBerufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+    this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -135,12 +154,13 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
         Objects.equals(this.von, demoLebenslaufAusbildung.von) &&
         Objects.equals(this.bis, demoLebenslaufAusbildung.bis) &&
         Objects.equals(this.wohnsitz, demoLebenslaufAusbildung.wohnsitz) &&
-        Objects.equals(this.ausbildungAbgeschlossen, demoLebenslaufAusbildung.ausbildungAbgeschlossen);
+        Objects.equals(this.ausbildungAbgeschlossen, demoLebenslaufAusbildung.ausbildungAbgeschlossen) &&
+        Objects.equals(this.berufsbezeichnungFachrichtung, demoLebenslaufAusbildung.berufsbezeichnungFachrichtung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(abschluss, von, bis, wohnsitz, ausbildungAbgeschlossen);
+    return Objects.hash(abschluss, von, bis, wohnsitz, ausbildungAbgeschlossen, berufsbezeichnungFachrichtung);
   }
 
   @Override
@@ -153,6 +173,7 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
     sb.append("    bis: ").append(toIndentedString(bis)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    ausbildungAbgeschlossen: ").append(toIndentedString(ausbildungAbgeschlossen)).append("\n");
+    sb.append("    berufsbezeichnungFachrichtung: ").append(toIndentedString(berufsbezeichnungFachrichtung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoKindDto  implements Serializable {
   private @Valid String nachname;
   private @Valid String vorname;
-  private @Valid String geburtsdatum;
+  private @Valid LocalDate geburtsdatum;
   private @Valid Integer wohnsitzAnteilPia;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
   private @Valid Integer unterhaltsbeitraege;
@@ -70,7 +71,7 @@ public class DemoKindDto  implements Serializable {
 
   /**
    **/
-  public DemoKindDto geburtsdatum(String geburtsdatum) {
+  public DemoKindDto geburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -78,12 +79,12 @@ public class DemoKindDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 

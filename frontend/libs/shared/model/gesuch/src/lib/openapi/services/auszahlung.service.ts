@@ -103,6 +103,26 @@ export class AuszahlungService {
         return httpParams;
     }
 
+    public createAuszahlungForGesuchPath = (requestParameters: AuszahlungServiceCreateAuszahlungForGesuchRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling createAuszahlungForGesuch$.');
+        }
+        const auszahlungUpdate = requestParameters.auszahlungUpdate;
+        if (auszahlungUpdate === null || auszahlungUpdate === undefined) {
+            throw new Error('Required parameter auszahlungUpdate was null or undefined when calling createAuszahlungForGesuch$.');
+        }
+        let path = `/api/v1/auszahlung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Creates a new Auszahlung for a Gesuch
      * @param requestParameters
@@ -190,6 +210,22 @@ export class AuszahlungService {
         );
     }
 
+    public getAuszahlungForGesuchPath = (requestParameters: AuszahlungServiceGetAuszahlungForGesuchRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAuszahlungForGesuch$.');
+        }
+        let path = `/api/v1/auszahlung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Get Auszahlung
      * @param requestParameters
@@ -261,6 +297,26 @@ export class AuszahlungService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateAuszahlungForGesuchPath = (requestParameters: AuszahlungServiceUpdateAuszahlungForGesuchRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling updateAuszahlungForGesuch$.');
+        }
+        const auszahlungUpdate = requestParameters.auszahlungUpdate;
+        if (auszahlungUpdate === null || auszahlungUpdate === undefined) {
+            throw new Error('Required parameter auszahlungUpdate was null or undefined when calling updateAuszahlungForGesuch$.');
+        }
+        let path = `/api/v1/auszahlung/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

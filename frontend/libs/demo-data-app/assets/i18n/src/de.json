@@ -7,12 +7,20 @@
   "demo-data-app.overview.import-details.last-updated": "Zuletzt aktualisiert",
   "demo-data-app.overview.import-details.total": "Testcase Anzahl",
   "demo-data-app.overview.import-details.comment": "Kommentar",
+  "demo-data-app.overview.import-details.file": "Datei",
   "demo-data-app.overview.import-details.download": "Letzte Import Datei herunterladen",
+  "demo-data-app.overview.apply-demo-data.confirm.title": "Testdaten anwenden",
+  "demo-data-app.overview.apply-demo-data.confirm.description": "Sind Sie sicher, dass Sie die Testdaten für den aktuellen Benutzer anwenden möchten?",
+  "demo-data-app.overview.apply-demo-data.button": "Testdaten anwenden",
+  "demo-data-app.overview.apply-demo-data.error": "Fehler beim Anwenden der Testdaten",
+  "demo-data-app.overview.apply-demo-data.error.validation": "Validierungsfehler:",
+  "demo-data-app.overview.apply-demo-data.success": "Testdaten erfolgreich angewendet",
+  "demo-data-app.overview.file-upload.title": "Neuer Import",
   "demo-data-app.overview.file-upload.label": "Neue Datei hochladen",
   "demo-data-app.overview.file-upload.confirm.title": "Datei hochladen",
   "demo-data-app.overview.file-upload.confirm.description": "Sind Sie sicher, dass Sie die Datei hochladen möchten? Die aktuelle Datei wird überschrieben.",
   "demo-data-app.overview.file-upload.confirm.placeholder": "Kommentar",
   "demo-data-app.overview.file-upload.confirm.button": "Hochladen",
   "demo-data-app.overview.file-upload.error": "Fehler beim Hochladen der Datei",
-  "demo-data-app.overview.file-upload.success": "Datei erfolgreich hochgeladen"
+  "demo-data-app.overview.file-upload.success": "Die Testdaten wurden erfolgreich hochgeladen"
 }

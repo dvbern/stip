@@ -21,33 +21,54 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
+import ch.dvbern.stip.generated.dto.DemoElternteilDto;
+import ch.dvbern.stip.generated.dto.DemoPartnerDto;
+import ch.dvbern.stip.generated.dto.DemoSteuerdatenDto;
+import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
+
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @UtilityClass
 public class ParseDemoDataUtil {
     private final DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public int getNumberOfCells(Row row, int startCol) {
-        for (var i = startCol; i < row.getLastCellNum(); i++) {
+        int i;
+        for (i = startCol; i < row.getLastCellNum(); i++) {
             final var cell = row.getCell(i);
             if (isBlank(cell) || cell.getStringCellValue().trim().isEmpty()) {
-                return i - startCol;
+                break;
             }
         }
-        return 0;
+        return i - startCol;
     }
 
     public boolean isBlank(Cell cell) {
         return cell == null || cell.getCellType() == CellType.BLANK;
+    }
+
+    public Boolean parseBoolean(Cell cell) {
+        return cell.getStringCellValue().equals("Ja");
+    }
+
+    public Integer parseInteger(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return (int) cell.getNumericCellValue();
     }
 
     public String parseDateString(Cell cell) {
@@ -58,16 +79,30 @@ public class ParseDemoDataUtil {
         return DateUtil.getLocalDateTime(cell.getNumericCellValue()).toLocalDate();
     }
 
-    public Boolean parseBoolean(Cell cell) {
-        return cell.getStringCellValue().equals("Ja");
+    public Boolean parseBooleanNullable(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return parseBoolean(cell);
     }
 
-    public LocalDate parseMonthYear(Cell cell) {
+    public String parseStringNullable(Cell cell) {
+        if (isBlank(cell)) {
+            return null;
+        }
+        return cell.getStringCellValue();
+    }
+
+    public LocalDate parseMonthYear(Cell cell, boolean endOfMonth) {
         if (isBlank(cell)) {
             return null;
         }
         final var parts = String.valueOf(cell.getNumericCellValue()).split("\\.");
-        return LocalDate.of(Integer.parseInt(parts[1]), Integer.parseInt(parts[0]), 1);
+        final var date = LocalDate.of(Integer.parseInt(parts[1]), Integer.parseInt(parts[0]), 1);
+        if (endOfMonth) {
+            return date.with(lastDayOfMonth());
+        }
+        return date;
     }
 
     public <T> T skipEntries(Iterator<T> iterator, int amount) {
@@ -91,14 +126,6 @@ public class ParseDemoDataUtil {
         }
     }
 
-    public Iterator<Cell> cellsWithName(Row currentRow, String pattern, int firstValueCol, int column) {
-        checkCellContains(currentRow, pattern, column);
-
-        final var iterator = currentRow.cellIterator();
-        skipEntries(iterator, firstValueCol);
-        return iterator;
-    }
-
     public <T> void initListEntries(
         Row currentRow,
         List<T> list,
@@ -109,9 +136,9 @@ public class ParseDemoDataUtil {
         Function<Cell, T> createValue
     ) {
         final var listIterator = list.listIterator();
-        final var cellIterator = ParseDemoDataUtil.cellsWithName(currentRow, pattern, firstValueColumn, column);
-        for (int i = 0; i < amountOfEntries; i++) {
-            final var cell = cellIterator.next();
+        checkCellContains(currentRow, pattern, column);
+        for (int i = firstValueColumn; i < amountOfEntries; i++) {
+            final var cell = currentRow.getCell(i);
             tryParseData(() -> {
                 listIterator.add(createValue.apply(cell));
             }, cell);
@@ -128,9 +155,9 @@ public class ParseDemoDataUtil {
         BiConsumer<Cell, T> updateValue
     ) {
         final var listIterator = list.listIterator();
-        final var cellIterator = ParseDemoDataUtil.cellsWithName(currentRow, pattern, firstValueColumn, column);
-        for (int i = 0; i < amountOfEntries; i++) {
-            final var cell = cellIterator.next();
+        checkCellContains(currentRow, pattern, column);
+        for (int i = firstValueColumn; i < amountOfEntries; i++) {
+            final var cell = currentRow.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
             if (!listIterator.hasNext()) {
                 throw new IllegalStateException("List hast not enough entries");
             }
@@ -139,6 +166,26 @@ public class ParseDemoDataUtil {
                 updateValue.accept(cell, listItem);
             }, cell);
         }
+    }
+
+    public boolean hasValue(DemoPartnerDto partnerDto) {
+        return Objects.nonNull(partnerDto.getSozialversicherungsnummer());
+    }
+
+    public boolean hasValue(DemoElternteilDto elternteilDto) {
+        return Objects.nonNull(elternteilDto.getNachname());
+    }
+
+    public boolean hasValue(DemoSteuererklaerungDto steuernerklaerungDto) {
+        return Objects.nonNull(steuernerklaerungDto.getErgaenzungsleistungen());
+    }
+
+    public boolean hasValue(DemoSteuerdatenDto steuerdatenDto) {
+        return Objects.nonNull(steuerdatenDto.getTotalEinkuenfte());
+    }
+
+    public static boolean hasValue(DemoAuszahlungDto demoAuszahlungDto) {
+        return Objects.nonNull(demoAuszahlungDto.getIban());
     }
 
     private void tryParseData(Runnable parser, Cell cell) {

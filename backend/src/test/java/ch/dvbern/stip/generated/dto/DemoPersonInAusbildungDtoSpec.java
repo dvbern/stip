@@ -111,7 +111,7 @@ public class DemoPersonInAusbildungDtoSpec {
   private String telefonnummer;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private String geburtsdatum;
+  private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_ZIVILSTAND = "zivilstand";
   private ZivilstandDtoSpec zivilstand;
@@ -542,7 +542,7 @@ public class DemoPersonInAusbildungDtoSpec {
   }
 
 
-  public DemoPersonInAusbildungDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoPersonInAusbildungDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -556,14 +556,14 @@ public class DemoPersonInAusbildungDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 

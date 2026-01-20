@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -13,12 +14,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DemoEltern")
+@JsonTypeName("DemoElternteil")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DemoElternDto  implements Serializable {
+public class DemoElternteilDto  implements Serializable {
+  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp type;
   private @Valid String sozialversicherungsnummer;
   private @Valid String nachname;
   private @Valid String vorname;
@@ -28,17 +30,37 @@ public class DemoElternDto  implements Serializable {
   private @Valid String ort;
   private @Valid String land;
   private @Valid Boolean identischerZivilrechtlicherWohnsitz;
-  private @Valid String geburtsdatum;
+  private @Valid LocalDate geburtsdatum;
   private @Valid String telefonnummer;
   private @Valid Boolean sozialhilfebeitraege;
   private @Valid Boolean ausweisbFluechtling;
   private @Valid String coAdresse;
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
+  private @Valid Integer wohnkosten;
 
   /**
    **/
-  public DemoElternDto sozialversicherungsnummer(String sozialversicherungsnummer) {
+  public DemoElternteilDto type(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+    this.type = type;
+    return this;
+  }
+
+  
+  @JsonProperty("type")
+  @NotNull
+  public ch.dvbern.stip.api.eltern.type.ElternTyp getType() {
+    return type;
+  }
+
+  @JsonProperty("type")
+  public void setType(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+    this.type = type;
+  }
+
+  /**
+   **/
+  public DemoElternteilDto sozialversicherungsnummer(String sozialversicherungsnummer) {
     this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
   }
@@ -57,7 +79,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto nachname(String nachname) {
+  public DemoElternteilDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
   }
@@ -76,7 +98,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto vorname(String vorname) {
+  public DemoElternteilDto vorname(String vorname) {
     this.vorname = vorname;
     return this;
   }
@@ -95,7 +117,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto strasse(String strasse) {
+  public DemoElternteilDto strasse(String strasse) {
     this.strasse = strasse;
     return this;
   }
@@ -114,7 +136,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto hausnummer(String hausnummer) {
+  public DemoElternteilDto hausnummer(String hausnummer) {
     this.hausnummer = hausnummer;
     return this;
   }
@@ -133,7 +155,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto plz(String plz) {
+  public DemoElternteilDto plz(String plz) {
     this.plz = plz;
     return this;
   }
@@ -152,7 +174,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto ort(String ort) {
+  public DemoElternteilDto ort(String ort) {
     this.ort = ort;
     return this;
   }
@@ -171,7 +193,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto land(String land) {
+  public DemoElternteilDto land(String land) {
     this.land = land;
     return this;
   }
@@ -190,7 +212,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+  public DemoElternteilDto identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
     this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
     return this;
   }
@@ -209,7 +231,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto geburtsdatum(String geburtsdatum) {
+  public DemoElternteilDto geburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -217,18 +239,18 @@ public class DemoElternDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
   /**
    **/
-  public DemoElternDto telefonnummer(String telefonnummer) {
+  public DemoElternteilDto telefonnummer(String telefonnummer) {
     this.telefonnummer = telefonnummer;
     return this;
   }
@@ -247,7 +269,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+  public DemoElternteilDto sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     this.sozialhilfebeitraege = sozialhilfebeitraege;
     return this;
   }
@@ -266,7 +288,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto ausweisbFluechtling(Boolean ausweisbFluechtling) {
+  public DemoElternteilDto ausweisbFluechtling(Boolean ausweisbFluechtling) {
     this.ausweisbFluechtling = ausweisbFluechtling;
     return this;
   }
@@ -285,7 +307,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto coAdresse(String coAdresse) {
+  public DemoElternteilDto coAdresse(String coAdresse) {
     this.coAdresse = coAdresse;
     return this;
   }
@@ -303,7 +325,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+  public DemoElternteilDto identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
     this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
     return this;
   }
@@ -321,7 +343,7 @@ public class DemoElternDto  implements Serializable {
 
   /**
    **/
-  public DemoElternDto identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+  public DemoElternteilDto identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
     this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
     return this;
   }
@@ -337,6 +359,24 @@ public class DemoElternDto  implements Serializable {
     this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
   }
 
+  /**
+   **/
+  public DemoElternteilDto wohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+  
+  @JsonProperty("wohnkosten")
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+  @JsonProperty("wohnkosten")
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -346,35 +386,38 @@ public class DemoElternDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemoElternDto demoEltern = (DemoElternDto) o;
-    return Objects.equals(this.sozialversicherungsnummer, demoEltern.sozialversicherungsnummer) &&
-        Objects.equals(this.nachname, demoEltern.nachname) &&
-        Objects.equals(this.vorname, demoEltern.vorname) &&
-        Objects.equals(this.strasse, demoEltern.strasse) &&
-        Objects.equals(this.hausnummer, demoEltern.hausnummer) &&
-        Objects.equals(this.plz, demoEltern.plz) &&
-        Objects.equals(this.ort, demoEltern.ort) &&
-        Objects.equals(this.land, demoEltern.land) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitz, demoEltern.identischerZivilrechtlicherWohnsitz) &&
-        Objects.equals(this.geburtsdatum, demoEltern.geburtsdatum) &&
-        Objects.equals(this.telefonnummer, demoEltern.telefonnummer) &&
-        Objects.equals(this.sozialhilfebeitraege, demoEltern.sozialhilfebeitraege) &&
-        Objects.equals(this.ausweisbFluechtling, demoEltern.ausweisbFluechtling) &&
-        Objects.equals(this.coAdresse, demoEltern.coAdresse) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, demoEltern.identischerZivilrechtlicherWohnsitzPLZ) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, demoEltern.identischerZivilrechtlicherWohnsitzOrt);
+    DemoElternteilDto demoElternteil = (DemoElternteilDto) o;
+    return Objects.equals(this.type, demoElternteil.type) &&
+        Objects.equals(this.sozialversicherungsnummer, demoElternteil.sozialversicherungsnummer) &&
+        Objects.equals(this.nachname, demoElternteil.nachname) &&
+        Objects.equals(this.vorname, demoElternteil.vorname) &&
+        Objects.equals(this.strasse, demoElternteil.strasse) &&
+        Objects.equals(this.hausnummer, demoElternteil.hausnummer) &&
+        Objects.equals(this.plz, demoElternteil.plz) &&
+        Objects.equals(this.ort, demoElternteil.ort) &&
+        Objects.equals(this.land, demoElternteil.land) &&
+        Objects.equals(this.identischerZivilrechtlicherWohnsitz, demoElternteil.identischerZivilrechtlicherWohnsitz) &&
+        Objects.equals(this.geburtsdatum, demoElternteil.geburtsdatum) &&
+        Objects.equals(this.telefonnummer, demoElternteil.telefonnummer) &&
+        Objects.equals(this.sozialhilfebeitraege, demoElternteil.sozialhilfebeitraege) &&
+        Objects.equals(this.ausweisbFluechtling, demoElternteil.ausweisbFluechtling) &&
+        Objects.equals(this.coAdresse, demoElternteil.coAdresse) &&
+        Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, demoElternteil.identischerZivilrechtlicherWohnsitzPLZ) &&
+        Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, demoElternteil.identischerZivilrechtlicherWohnsitzOrt) &&
+        Objects.equals(this.wohnkosten, demoElternteil.wohnkosten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, land, identischerZivilrechtlicherWohnsitz, geburtsdatum, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling, coAdresse, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt);
+    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, land, identischerZivilrechtlicherWohnsitz, geburtsdatum, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling, coAdresse, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemoElternDto {\n");
+    sb.append("class DemoElternteilDto {\n");
     
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
@@ -391,6 +434,7 @@ public class DemoElternDto  implements Serializable {
     sb.append("    coAdresse: ").append(toIndentedString(coAdresse)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("}");
     return sb.toString();
   }

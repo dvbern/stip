@@ -11,6 +11,10 @@
  */
 
 export interface ApplyDemoDataResponse { 
+    gesuchId: string;
     gesuchTrancheId: string;
+    gueltigAb: string;
+    gueltigBis: string;
+    gesuchStatus: string;
 }
 

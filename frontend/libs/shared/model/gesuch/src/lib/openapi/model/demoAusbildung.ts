@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface DemoAusbildung { 
     ausbildungsstaette: string;
@@ -20,6 +21,8 @@ export interface DemoAusbildung {
     ausbildungNichtGefunden?: boolean;
     ausbildungBeginn: string;
     ausbildungEnd: string;
-    pensum: number;
+    pensum: AusbildungsPensum;
 }
+
+
 

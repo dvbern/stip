@@ -10,13 +10,15 @@
  * Do not edit the class manually.
  */
 import { Ausbildungssituation } from './ausbildungssituation';
+import { Wohnsitz } from './wohnsitz';
 
 export interface DemoGeschwister { 
     nachname: string;
     vorname: string;
     geburtsdatum: string;
-    wohnsitzBei: string;
-    wohnsitzAnteil: number;
+    wohnsitzBei: Wohnsitz;
+    wohnsitzAnteilVater?: number;
+    wohnsitzAnteilMutter?: number;
     ausbildungssituation: Ausbildungssituation;
 }
 

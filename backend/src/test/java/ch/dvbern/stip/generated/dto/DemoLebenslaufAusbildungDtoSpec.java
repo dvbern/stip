@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoLebenslaufAusbildungDtoSpec.JSON_PROPERTY_ABSCHLUSS,
+  DemoLebenslaufAusbildungDtoSpec.JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG,
   DemoLebenslaufAusbildungDtoSpec.JSON_PROPERTY_VON,
   DemoLebenslaufAusbildungDtoSpec.JSON_PROPERTY_BIS,
   DemoLebenslaufAusbildungDtoSpec.JSON_PROPERTY_WOHNSITZ,
@@ -40,6 +41,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoLebenslaufAusbildungDtoSpec {
   public static final String JSON_PROPERTY_ABSCHLUSS = "abschluss";
   private String abschluss;
+
+  public static final String JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG = "berufsbezeichnungFachrichtung";
+  private String berufsbezeichnungFachrichtung;
 
   public static final String JSON_PROPERTY_VON = "von";
   private LocalDate von;
@@ -79,6 +83,32 @@ public class DemoLebenslaufAusbildungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAbschluss(String abschluss) {
     this.abschluss = abschluss;
+  }
+
+
+  public DemoLebenslaufAusbildungDtoSpec berufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+    
+    this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
+    return this;
+  }
+
+   /**
+   * Get berufsbezeichnungFachrichtung
+   * @return berufsbezeichnungFachrichtung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getBerufsbezeichnungFachrichtung() {
+    return berufsbezeichnungFachrichtung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BERUFSBEZEICHNUNG_FACHRICHTUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBerufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+    this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
   }
 
 
@@ -195,6 +225,7 @@ public class DemoLebenslaufAusbildungDtoSpec {
     }
     DemoLebenslaufAusbildungDtoSpec demoLebenslaufAusbildung = (DemoLebenslaufAusbildungDtoSpec) o;
     return Objects.equals(this.abschluss, demoLebenslaufAusbildung.abschluss) &&
+        Objects.equals(this.berufsbezeichnungFachrichtung, demoLebenslaufAusbildung.berufsbezeichnungFachrichtung) &&
         Objects.equals(this.von, demoLebenslaufAusbildung.von) &&
         Objects.equals(this.bis, demoLebenslaufAusbildung.bis) &&
         Objects.equals(this.wohnsitz, demoLebenslaufAusbildung.wohnsitz) &&
@@ -203,7 +234,7 @@ public class DemoLebenslaufAusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(abschluss, von, bis, wohnsitz, ausbildungAbgeschlossen);
+    return Objects.hash(abschluss, berufsbezeichnungFachrichtung, von, bis, wohnsitz, ausbildungAbgeschlossen);
   }
 
   @Override
@@ -211,6 +242,7 @@ public class DemoLebenslaufAusbildungDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoLebenslaufAusbildungDtoSpec {\n");
     sb.append("    abschluss: ").append(toIndentedString(abschluss)).append("\n");
+    sb.append("    berufsbezeichnungFachrichtung: ").append(toIndentedString(berufsbezeichnungFachrichtung)).append("\n");
     sb.append("    von: ").append(toIndentedString(von)).append("\n");
     sb.append("    bis: ").append(toIndentedString(bis)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");

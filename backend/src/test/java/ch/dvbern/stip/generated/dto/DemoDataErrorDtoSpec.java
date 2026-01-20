@@ -15,11 +15,15 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ValidationMessageDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -28,7 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoDataErrorDtoSpec.JSON_PROPERTY_INTERNAL_MESSAGE,
-  DemoDataErrorDtoSpec.JSON_PROPERTY_ERROR_CLASS
+  DemoDataErrorDtoSpec.JSON_PROPERTY_ERROR_CLASS,
+  DemoDataErrorDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS
 })
 @JsonTypeName("DemoDataError")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -38,6 +43,9 @@ public class DemoDataErrorDtoSpec {
 
   public static final String JSON_PROPERTY_ERROR_CLASS = "errorClass";
   private String errorClass;
+
+  public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
+  private List<ValidationMessageDtoSpec> validationErrors;
 
   public DemoDataErrorDtoSpec() {
   }
@@ -93,6 +101,40 @@ public class DemoDataErrorDtoSpec {
     this.errorClass = errorClass;
   }
 
+
+  public DemoDataErrorDtoSpec validationErrors(List<ValidationMessageDtoSpec> validationErrors) {
+    
+    this.validationErrors = validationErrors;
+    return this;
+  }
+
+  public DemoDataErrorDtoSpec addValidationErrorsItem(ValidationMessageDtoSpec validationErrorsItem) {
+    if (this.validationErrors == null) {
+      this.validationErrors = new ArrayList<>();
+    }
+    this.validationErrors.add(validationErrorsItem);
+    return this;
+  }
+
+   /**
+   * Get validationErrors
+   * @return validationErrors
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<ValidationMessageDtoSpec> getValidationErrors() {
+    return validationErrors;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VALIDATION_ERRORS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setValidationErrors(List<ValidationMessageDtoSpec> validationErrors) {
+    this.validationErrors = validationErrors;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -103,12 +145,13 @@ public class DemoDataErrorDtoSpec {
     }
     DemoDataErrorDtoSpec demoDataError = (DemoDataErrorDtoSpec) o;
     return Objects.equals(this.internalMessage, demoDataError.internalMessage) &&
-        Objects.equals(this.errorClass, demoDataError.errorClass);
+        Objects.equals(this.errorClass, demoDataError.errorClass) &&
+        Objects.equals(this.validationErrors, demoDataError.validationErrors);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(internalMessage, errorClass);
+    return Objects.hash(internalMessage, errorClass, validationErrors);
   }
 
   @Override
@@ -117,6 +160,7 @@ public class DemoDataErrorDtoSpec {
     sb.append("class DemoDataErrorDtoSpec {\n");
     sb.append("    internalMessage: ").append(toIndentedString(internalMessage)).append("\n");
     sb.append("    errorClass: ").append(toIndentedString(errorClass)).append("\n");
+    sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("}");
     return sb.toString();
   }

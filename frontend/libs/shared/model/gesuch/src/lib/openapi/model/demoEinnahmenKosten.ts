@@ -21,11 +21,12 @@ export interface DemoEinnahmenKosten {
     einnahmenBGSA: number;
     taggelderAHVIV: number;
     andereEinnahmen: number;
-    ausbildungskosten: number;
-    betreuungskostenKinder: number;
+    ausbildungskosten?: number;
+    betreuungskostenKinder?: number;
     fahrkosten: number;
-    auswaertigeMittagessenProWoche: number;
-    wohnkosten: number;
+    verpflegungskosten?: number;
+    auswaertigeMittagessenProWoche?: number;
+    wohnkosten?: number;
     vermoegen: number;
     steuernKantonGemeinde: number;
 }

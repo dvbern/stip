@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,9 +28,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DemoSteuerdatenDtoSpec
  */
 @JsonPropertyOrder({
+  DemoSteuerdatenDtoSpec.JSON_PROPERTY_TYPE,
   DemoSteuerdatenDtoSpec.JSON_PROPERTY_TOTAL_EINKUENFTE,
   DemoSteuerdatenDtoSpec.JSON_PROPERTY_EIGENMIETWERT,
-  DemoSteuerdatenDtoSpec.JSON_PROPERTY_ARBEITSVERHAELTNIS,
+  DemoSteuerdatenDtoSpec.JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG,
   DemoSteuerdatenDtoSpec.JSON_PROPERTY_SAEULE3A,
   DemoSteuerdatenDtoSpec.JSON_PROPERTY_SAEULE2,
   DemoSteuerdatenDtoSpec.JSON_PROPERTY_VERMOEGEN,
@@ -45,14 +47,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("DemoSteuerdaten")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DemoSteuerdatenDtoSpec {
+  public static final String JSON_PROPERTY_TYPE = "type";
+  private ElternTypDtoSpec type;
+
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
   private Integer totalEinkuenfte;
 
   public static final String JSON_PROPERTY_EIGENMIETWERT = "eigenmietwert";
   private Integer eigenmietwert;
 
-  public static final String JSON_PROPERTY_ARBEITSVERHAELTNIS = "arbeitsverhaeltnis";
-  private String arbeitsverhaeltnis;
+  public static final String JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG = "isArbeitsverhaeltnisSelbstaendig";
+  private Boolean isArbeitsverhaeltnisSelbstaendig;
 
   public static final String JSON_PROPERTY_SAEULE3A = "saeule3a";
   private Integer saeule3a;
@@ -89,6 +94,32 @@ public class DemoSteuerdatenDtoSpec {
 
   public DemoSteuerdatenDtoSpec() {
   }
+
+  public DemoSteuerdatenDtoSpec type(ElternTypDtoSpec type) {
+    
+    this.type = type;
+    return this;
+  }
+
+   /**
+   * Get type
+   * @return type
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public ElternTypDtoSpec getType() {
+    return type;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setType(ElternTypDtoSpec type) {
+    this.type = type;
+  }
+
 
   public DemoSteuerdatenDtoSpec totalEinkuenfte(Integer totalEinkuenfte) {
     
@@ -142,29 +173,29 @@ public class DemoSteuerdatenDtoSpec {
   }
 
 
-  public DemoSteuerdatenDtoSpec arbeitsverhaeltnis(String arbeitsverhaeltnis) {
+  public DemoSteuerdatenDtoSpec isArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
     
-    this.arbeitsverhaeltnis = arbeitsverhaeltnis;
+    this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
     return this;
   }
 
    /**
-   * Get arbeitsverhaeltnis
-   * @return arbeitsverhaeltnis
+   * Get isArbeitsverhaeltnisSelbstaendig
+   * @return isArbeitsverhaeltnisSelbstaendig
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ARBEITSVERHAELTNIS)
+  @JsonProperty(JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getArbeitsverhaeltnis() {
-    return arbeitsverhaeltnis;
+  public Boolean getIsArbeitsverhaeltnisSelbstaendig() {
+    return isArbeitsverhaeltnisSelbstaendig;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ARBEITSVERHAELTNIS)
+  @JsonProperty(JSON_PROPERTY_IS_ARBEITSVERHAELTNIS_SELBSTAENDIG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setArbeitsverhaeltnis(String arbeitsverhaeltnis) {
-    this.arbeitsverhaeltnis = arbeitsverhaeltnis;
+  public void setIsArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
+    this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
   }
 
 
@@ -462,9 +493,10 @@ public class DemoSteuerdatenDtoSpec {
       return false;
     }
     DemoSteuerdatenDtoSpec demoSteuerdaten = (DemoSteuerdatenDtoSpec) o;
-    return Objects.equals(this.totalEinkuenfte, demoSteuerdaten.totalEinkuenfte) &&
+    return Objects.equals(this.type, demoSteuerdaten.type) &&
+        Objects.equals(this.totalEinkuenfte, demoSteuerdaten.totalEinkuenfte) &&
         Objects.equals(this.eigenmietwert, demoSteuerdaten.eigenmietwert) &&
-        Objects.equals(this.arbeitsverhaeltnis, demoSteuerdaten.arbeitsverhaeltnis) &&
+        Objects.equals(this.isArbeitsverhaeltnisSelbstaendig, demoSteuerdaten.isArbeitsverhaeltnisSelbstaendig) &&
         Objects.equals(this.saeule3a, demoSteuerdaten.saeule3a) &&
         Objects.equals(this.saeule2, demoSteuerdaten.saeule2) &&
         Objects.equals(this.vermoegen, demoSteuerdaten.vermoegen) &&
@@ -480,16 +512,17 @@ public class DemoSteuerdatenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalEinkuenfte, eigenmietwert, arbeitsverhaeltnis, saeule3a, saeule2, vermoegen, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus);
+    return Objects.hash(type, totalEinkuenfte, eigenmietwert, isArbeitsverhaeltnisSelbstaendig, saeule3a, saeule2, vermoegen, steuernKantonGemeinde, steuernBund, fahrkosten, fahrkostenPartner, verpflegung, verpflegungPartner, steuerjahr, veranlagungsStatus);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoSteuerdatenDtoSpec {\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    totalEinkuenfte: ").append(toIndentedString(totalEinkuenfte)).append("\n");
     sb.append("    eigenmietwert: ").append(toIndentedString(eigenmietwert)).append("\n");
-    sb.append("    arbeitsverhaeltnis: ").append(toIndentedString(arbeitsverhaeltnis)).append("\n");
+    sb.append("    isArbeitsverhaeltnisSelbstaendig: ").append(toIndentedString(isArbeitsverhaeltnisSelbstaendig)).append("\n");
     sb.append("    saeule3a: ").append(toIndentedString(saeule3a)).append("\n");
     sb.append("    saeule2: ").append(toIndentedString(saeule2)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");

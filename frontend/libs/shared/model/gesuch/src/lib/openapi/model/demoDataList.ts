@@ -15,10 +15,10 @@ export interface DemoDataList {
     importiertVon: string;
     letzteAktivitaet: string;
     kommentar: string;
+    documentId: string;
     filename: string;
     filepath: string;
     filesize: number;
-    objectId: string;
     demoDatas: Array<DemoDataSlim>;
 }
 

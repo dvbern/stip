@@ -31,7 +31,7 @@
             <column name="gesuchsjahr" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="jsondata" type="VARCHAR(255)">
+            <column name="json_data" type="VARCHAR(100000)">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -60,7 +60,7 @@
             <column name="erfasser" type="VARCHAR(255)"/>
             <column name="gesuchseingang" type="VARCHAR(255)"/>
             <column name="gesuchsjahr" type="VARCHAR(255)"/>
-            <column name="jsondata" type="VARCHAR(255)"/>
+            <column name="json_data" type="VARCHAR(100000)"/>
             <column name="name" type="VARCHAR(255)"/>
             <column name="test_fall" type="VARCHAR(255)"/>
         </createTable>

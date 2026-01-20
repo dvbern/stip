@@ -20,7 +20,7 @@ import ch.dvbern.stip.generated.dto.DemoAuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataStipendienanspruchDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDtoSpec;
-import ch.dvbern.stip.generated.dto.DemoElternDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoElternteilDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoGeschwisterDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoKindDtoSpec;
@@ -50,8 +50,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataDtoSpec.JSON_PROPERTY_PARTNER,
   DemoDataDtoSpec.JSON_PROPERTY_KINDER,
   DemoDataDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN,
+  DemoDataDtoSpec.JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER,
   DemoDataDtoSpec.JSON_PROPERTY_FAMILIENSITUATION,
-  DemoDataDtoSpec.JSON_PROPERTY_ELTERN,
+  DemoDataDtoSpec.JSON_PROPERTY_ELTERNS,
   DemoDataDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG,
   DemoDataDtoSpec.JSON_PROPERTY_STEUERDATEN,
   DemoDataDtoSpec.JSON_PROPERTY_GESCHWISTER,
@@ -80,17 +81,20 @@ public class DemoDataDtoSpec {
   public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN = "einnahmenKosten";
   private DemoEinnahmenKostenDtoSpec einnahmenKosten;
 
+  public static final String JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER = "einnahmenKostenPartner";
+  private DemoEinnahmenKostenDtoSpec einnahmenKostenPartner;
+
   public static final String JSON_PROPERTY_FAMILIENSITUATION = "familiensituation";
   private DemoFamiliensituationDtoSpec familiensituation;
 
-  public static final String JSON_PROPERTY_ELTERN = "eltern";
-  private DemoElternDtoSpec eltern;
+  public static final String JSON_PROPERTY_ELTERNS = "elterns";
+  private List<DemoElternteilDtoSpec> elterns;
 
   public static final String JSON_PROPERTY_STEUERERKLAERUNG = "steuererklaerung";
-  private DemoSteuererklaerungDtoSpec steuererklaerung;
+  private List<DemoSteuererklaerungDtoSpec> steuererklaerung;
 
   public static final String JSON_PROPERTY_STEUERDATEN = "steuerdaten";
-  private DemoSteuerdatenDtoSpec steuerdaten;
+  private List<DemoSteuerdatenDtoSpec> steuerdaten;
 
   public static final String JSON_PROPERTY_GESCHWISTER = "geschwister";
   private List<DemoGeschwisterDtoSpec> geschwister;
@@ -195,9 +199,9 @@ public class DemoDataDtoSpec {
    * Get partner
    * @return partner
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public DemoPartnerDtoSpec getPartner() {
     return partner;
@@ -205,7 +209,7 @@ public class DemoDataDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PARTNER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setPartner(DemoPartnerDtoSpec partner) {
     this.partner = partner;
   }
@@ -271,6 +275,32 @@ public class DemoDataDtoSpec {
   }
 
 
+  public DemoDataDtoSpec einnahmenKostenPartner(DemoEinnahmenKostenDtoSpec einnahmenKostenPartner) {
+    
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+    return this;
+  }
+
+   /**
+   * Get einnahmenKostenPartner
+   * @return einnahmenKostenPartner
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DemoEinnahmenKostenDtoSpec getEinnahmenKostenPartner() {
+    return einnahmenKostenPartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EINNAHMEN_KOSTEN_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEinnahmenKostenPartner(DemoEinnahmenKostenDtoSpec einnahmenKostenPartner) {
+    this.einnahmenKostenPartner = einnahmenKostenPartner;
+  }
+
+
   public DemoDataDtoSpec familiensituation(DemoFamiliensituationDtoSpec familiensituation) {
     
     this.familiensituation = familiensituation;
@@ -297,35 +327,51 @@ public class DemoDataDtoSpec {
   }
 
 
-  public DemoDataDtoSpec eltern(DemoElternDtoSpec eltern) {
+  public DemoDataDtoSpec elterns(List<DemoElternteilDtoSpec> elterns) {
     
-    this.eltern = eltern;
+    this.elterns = elterns;
+    return this;
+  }
+
+  public DemoDataDtoSpec addElternsItem(DemoElternteilDtoSpec elternsItem) {
+    if (this.elterns == null) {
+      this.elterns = new ArrayList<>();
+    }
+    this.elterns.add(elternsItem);
     return this;
   }
 
    /**
-   * Get eltern
-   * @return eltern
+   * Get elterns
+   * @return elterns
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ELTERN)
+  @JsonProperty(JSON_PROPERTY_ELTERNS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public DemoElternDtoSpec getEltern() {
-    return eltern;
+  public List<DemoElternteilDtoSpec> getElterns() {
+    return elterns;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_ELTERN)
+  @JsonProperty(JSON_PROPERTY_ELTERNS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEltern(DemoElternDtoSpec eltern) {
-    this.eltern = eltern;
+  public void setElterns(List<DemoElternteilDtoSpec> elterns) {
+    this.elterns = elterns;
   }
 
 
-  public DemoDataDtoSpec steuererklaerung(DemoSteuererklaerungDtoSpec steuererklaerung) {
+  public DemoDataDtoSpec steuererklaerung(List<DemoSteuererklaerungDtoSpec> steuererklaerung) {
     
     this.steuererklaerung = steuererklaerung;
+    return this;
+  }
+
+  public DemoDataDtoSpec addSteuererklaerungItem(DemoSteuererklaerungDtoSpec steuererklaerungItem) {
+    if (this.steuererklaerung == null) {
+      this.steuererklaerung = new ArrayList<>();
+    }
+    this.steuererklaerung.add(steuererklaerungItem);
     return this;
   }
 
@@ -337,21 +383,29 @@ public class DemoDataDtoSpec {
   @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public DemoSteuererklaerungDtoSpec getSteuererklaerung() {
+  public List<DemoSteuererklaerungDtoSpec> getSteuererklaerung() {
     return steuererklaerung;
   }
 
 
   @JsonProperty(JSON_PROPERTY_STEUERERKLAERUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuererklaerung(DemoSteuererklaerungDtoSpec steuererklaerung) {
+  public void setSteuererklaerung(List<DemoSteuererklaerungDtoSpec> steuererklaerung) {
     this.steuererklaerung = steuererklaerung;
   }
 
 
-  public DemoDataDtoSpec steuerdaten(DemoSteuerdatenDtoSpec steuerdaten) {
+  public DemoDataDtoSpec steuerdaten(List<DemoSteuerdatenDtoSpec> steuerdaten) {
     
     this.steuerdaten = steuerdaten;
+    return this;
+  }
+
+  public DemoDataDtoSpec addSteuerdatenItem(DemoSteuerdatenDtoSpec steuerdatenItem) {
+    if (this.steuerdaten == null) {
+      this.steuerdaten = new ArrayList<>();
+    }
+    this.steuerdaten.add(steuerdatenItem);
     return this;
   }
 
@@ -363,14 +417,14 @@ public class DemoDataDtoSpec {
   @JsonProperty(JSON_PROPERTY_STEUERDATEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public DemoSteuerdatenDtoSpec getSteuerdaten() {
+  public List<DemoSteuerdatenDtoSpec> getSteuerdaten() {
     return steuerdaten;
   }
 
 
   @JsonProperty(JSON_PROPERTY_STEUERDATEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSteuerdaten(DemoSteuerdatenDtoSpec steuerdaten) {
+  public void setSteuerdaten(List<DemoSteuerdatenDtoSpec> steuerdaten) {
     this.steuerdaten = steuerdaten;
   }
 
@@ -501,8 +555,9 @@ public class DemoDataDtoSpec {
         Objects.equals(this.partner, demoData.partner) &&
         Objects.equals(this.kinder, demoData.kinder) &&
         Objects.equals(this.einnahmenKosten, demoData.einnahmenKosten) &&
+        Objects.equals(this.einnahmenKostenPartner, demoData.einnahmenKostenPartner) &&
         Objects.equals(this.familiensituation, demoData.familiensituation) &&
-        Objects.equals(this.eltern, demoData.eltern) &&
+        Objects.equals(this.elterns, demoData.elterns) &&
         Objects.equals(this.steuererklaerung, demoData.steuererklaerung) &&
         Objects.equals(this.steuerdaten, demoData.steuerdaten) &&
         Objects.equals(this.geschwister, demoData.geschwister) &&
@@ -513,7 +568,7 @@ public class DemoDataDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, familiensituation, eltern, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, stipendienanspruch);
+    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, einnahmenKostenPartner, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, stipendienanspruch);
   }
 
   @Override
@@ -526,8 +581,9 @@ public class DemoDataDtoSpec {
     sb.append("    partner: ").append(toIndentedString(partner)).append("\n");
     sb.append("    kinder: ").append(toIndentedString(kinder)).append("\n");
     sb.append("    einnahmenKosten: ").append(toIndentedString(einnahmenKosten)).append("\n");
+    sb.append("    einnahmenKostenPartner: ").append(toIndentedString(einnahmenKostenPartner)).append("\n");
     sb.append("    familiensituation: ").append(toIndentedString(familiensituation)).append("\n");
-    sb.append("    eltern: ").append(toIndentedString(eltern)).append("\n");
+    sb.append("    elterns: ").append(toIndentedString(elterns)).append("\n");
     sb.append("    steuererklaerung: ").append(toIndentedString(steuererklaerung)).append("\n");
     sb.append("    steuerdaten: ").append(toIndentedString(steuerdaten)).append("\n");
     sb.append("    geschwister: ").append(toIndentedString(geschwister)).append("\n");

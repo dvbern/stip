@@ -9,11 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DemoElternteil } from './demoElternteil';
 
-export interface DemoDataSlim { 
-    id: string;
-    testFall: string;
-    name: string;
-    description: string;
+export interface DemoElterns { 
+    vater?: DemoElternteil;
+    mutter?: DemoElternteil;
 }
 

@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -27,10 +28,10 @@ public class DemoPartnerDto  implements Serializable {
   private @Valid String plz;
   private @Valid String ort;
   private @Valid String land;
-  private @Valid String geburtsdatum;
+  private @Valid LocalDate geburtsdatum;
   private @Valid Boolean inAusbildung;
   private @Valid String coAdresse;
-  private @Valid Integer pensum;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
 
   /**
    **/
@@ -186,7 +187,7 @@ public class DemoPartnerDto  implements Serializable {
 
   /**
    **/
-  public DemoPartnerDto geburtsdatum(String geburtsdatum) {
+  public DemoPartnerDto geburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -194,12 +195,12 @@ public class DemoPartnerDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
@@ -242,19 +243,19 @@ public class DemoPartnerDto  implements Serializable {
 
   /**
    **/
-  public DemoPartnerDto pensum(Integer pensum) {
+  public DemoPartnerDto pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
     return this;
   }
 
   
   @JsonProperty("pensum")
-  public Integer getPensum() {
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
     return pensum;
   }
 
   @JsonProperty("pensum")
-  public void setPensum(Integer pensum) {
+  public void setPensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
   }
 

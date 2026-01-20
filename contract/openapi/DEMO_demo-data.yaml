@@ -77,8 +77,14 @@ paths:
           description: Returns the latest demo data file
       operationId: getDemoDataDokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  /demo-data/dokument/token:
+  /demo-data/dokument/{dokumentId}/token:
     get:
+      parameters:
+        - name: dokumentId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
       tags:
         - DemoData
       responses:
@@ -96,14 +102,14 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getDemoDataDokumentDownloadToken
       summary: get the Token to download the latest DemoData
-  /demo-data/{id}:
+  /demo-data/{demoDataId}:
     post:
       parameters:
-        - name: id
+        - name: demoDataId
           in: path
           required: true
           schema:
-            type: string
+            $ref: './components/common.yaml#/UUID'
       tags:
         - DemoData
       responses:
@@ -132,10 +138,10 @@ components:
         - importiertVon
         - letzteAktivitaet
         - kommentar
+        - documentId
         - filename
         - filepath
         - filesize
-        - objectId
         - demoDatas
       type: object
       properties:
@@ -146,14 +152,14 @@ components:
           format: date-time
         kommentar:
           type: string
+        documentId:
+          type: string
         filename:
           type: string
         filepath:
           type: string
         filesize:
           type: integer
-        objectId:
-          type: string
         demoDatas:
           type: array
           items:
@@ -178,14 +184,21 @@ components:
           type: string
         errorClass:
           type: string
+        validationErrors:
+          type: array
+          items:
+            $ref: './components/common.yaml#/ValidationMessage'
     DemoDataSlim:
       required:
         - id
+        - testFall
         - name
         - description
       type: object
       properties:
         id:
+          type: string
+        testFall:
           type: string
         name:
           type: string
@@ -225,7 +238,7 @@ components:
           type: string
           format: date
         pensum:
-          type: integer
+          $ref: './components/common.yaml#/AusbildungsPensum'
     DemoPersonInAusbildung:
       required:
         - sozialversicherungsnummer
@@ -281,6 +294,7 @@ components:
           type: string
         geburtsdatum:
           type: string
+          format: date
         zivilstand:
           $ref: './components/gesuch-formular.yaml#/Zivilstand'
         nationalitaet:
@@ -317,6 +331,8 @@ components:
       type: object
       properties:
         abschluss:
+          type: string
+        berufsbezeichnungFachrichtung:
           type: string
         von:
           type: string
@@ -397,10 +413,11 @@ components:
           type: string
         geburtsdatum:
           type: string
+          format: date
         inAusbildung:
           type: boolean
         pensum:
-          type: integer
+          $ref: './components/common.yaml#/AusbildungsPensum'
     DemoKind:
       required:
         - nachname
@@ -421,6 +438,7 @@ components:
           type: string
         geburtsdatum:
           type: string
+          format: date
         wohnsitzAnteilPia:
           type: integer
         ausbildungssituation:
@@ -447,11 +465,7 @@ components:
         - einnahmenBGSA
         - taggelderAHVIV
         - andereEinnahmen
-        - ausbildungskosten
-        - betreuungskostenKinder
         - fahrkosten
-        - auswaertigeMittagessenProWoche
-        - wohnkosten
         - vermoegen
         - steuernKantonGemeinde
       type: object
@@ -482,6 +496,8 @@ components:
           type: integer
         fahrkosten:
           type: integer
+        verpflegungskosten:
+          type: integer
         auswaertigeMittagessenProWoche:
           type: integer
         wohnkosten:
@@ -493,17 +509,6 @@ components:
     DemoFamiliensituation:
       required:
         - elternVerheiratetZusammen
-        - gerichtlicheAlimentenregelung
-        - werZahltAlimente
-        - mutterWiederverheiratetAlimente
-        - vaterWiederverheiratetAlimente
-        - elternteilUnbekanntVerstorben
-        - mutterVerstorben
-        - mutterUnbekannt
-        - vaterVerstorben
-        - vaterUnbekannt
-        - mutterWiederverheiratetUngewiss
-        - vaterWiederverheiratetUngewiss
       type: object
       properties:
         elternVerheiratetZusammen:
@@ -523,27 +528,28 @@ components:
         mutterUnbekannt:
           type: boolean
         mutterUnbekanntGrund:
-          type: string
+          $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
         mutterKeineOptionen:
-          type: string
+          type: boolean
         mutterWiederverheiratetUnbekannt:
-          type: string
+          type: boolean
         vaterVerstorben:
           type: boolean
         vaterUnbekannt:
           type: boolean
         vaterUnbekanntGrund:
-          type: string
+          $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
         vaterKeineOptionen:
-          type: string
+          type: boolean
         vaterWiederverheiratetUnbekannt:
-          type: string
+          type: boolean
         mutterWiederverheiratetUngewiss:
           type: boolean
         vaterWiederverheiratetUngewiss:
           type: boolean
-    DemoEltern:
+    DemoElternteil:
       required:
+        - type
         - sozialversicherungsnummer
         - nachname
         - vorname
@@ -559,6 +565,8 @@ components:
         - ausweisbFluechtling
       type: object
       properties:
+        type:
+          $ref: './components/common.yaml#/ElternTyp'
         sozialversicherungsnummer:
           type: string
         nachname:
@@ -583,8 +591,11 @@ components:
           type: string
         identischerZivilrechtlicherWohnsitzOrt:
           type: string
+        wohnkosten:
+          type: integer
         geburtsdatum:
           type: string
+          format: date
         telefonnummer:
           type: string
         sozialhilfebeitraege:
@@ -593,6 +604,7 @@ components:
           type: boolean
     DemoSteuererklaerung:
       required:
+        - type
         - steuererklaerungInBern
         - unterhaltsbeitraege
         - renten
@@ -601,6 +613,8 @@ components:
         - andereEinnahmen
       type: object
       properties:
+        type:
+          $ref: './components/common.yaml#/ElternTyp'
         steuererklaerungInBern:
           type: boolean
         unterhaltsbeitraege:
@@ -615,9 +629,10 @@ components:
           type: integer
     DemoSteuerdaten:
       required:
+        - type
         - totalEinkuenfte
         - eigenmietwert
-        - arbeitsverhaeltnis
+        - isArbeitsverhaeltnisSelbstaendig
         - saeule3a
         - saeule2
         - vermoegen
@@ -631,12 +646,14 @@ components:
         - veranlagungsStatus
       type: object
       properties:
+        type:
+          $ref: './components/common.yaml#/ElternTyp'
         totalEinkuenfte:
           type: integer
         eigenmietwert:
           type: integer
-        arbeitsverhaeltnis:
-          type: string
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
         saeule3a:
           type: integer
         saeule2:
@@ -665,7 +682,6 @@ components:
         - vorname
         - geburtsdatum
         - wohnsitzBei
-        - wohnsitzAnteil
         - ausbildungssituation
       type: object
       properties:
@@ -675,9 +691,12 @@ components:
           type: string
         geburtsdatum:
           type: string
+          format: date
         wohnsitzBei:
-          type: string
-        wohnsitzAnteil:
+          $ref: './components/gesuch-formular.yaml#/Wohnsitz'
+        wohnsitzAnteilVater:
+          type: integer
+        wohnsitzAnteilMutter:
           type: integer
         ausbildungssituation:
           $ref: './components/gesuch-formular.yaml#/Ausbildungssituation'
@@ -746,11 +765,10 @@ components:
         - ausbildung
         - personInAusbildung
         - lebenslauf
-        - partner
         - kinder
         - einnahmenKosten
         - familiensituation
-        - eltern
+        - elterns
         - steuererklaerung
         - steuerdaten
         - geschwister
@@ -772,14 +790,22 @@ components:
             $ref: '#/components/schemas/DemoKind'
         einnahmenKosten:
           $ref: '#/components/schemas/DemoEinnahmenKosten'
+        einnahmenKostenPartner:
+          $ref: '#/components/schemas/DemoEinnahmenKosten'
         familiensituation:
           $ref: '#/components/schemas/DemoFamiliensituation'
-        eltern:
-          $ref: '#/components/schemas/DemoEltern'
+        elterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoElternteil'
         steuererklaerung:
-          $ref: '#/components/schemas/DemoSteuererklaerung'
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoSteuererklaerung'
         steuerdaten:
-          $ref: '#/components/schemas/DemoSteuerdaten'
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoSteuerdaten'
         geschwister:
           type: array
           items:
@@ -800,10 +826,24 @@ components:
               type: integer
     ApplyDemoDataResponse:
       required:
+        - gesuchId
         - gesuchTrancheId
+        - gueltigAb
+        - gueltigBis
+        - gesuchStatus
       type: object
       properties:
+        gesuchId:
+          $ref: './components/common.yaml#/UUID'
         gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
+        gueltigAb:
+          type: string
+          format: date
+        gueltigBis:
+          type: string
+          format: date
+        gesuchStatus:
           type: string
 security:
   $ref: './components/security.yaml#/security'

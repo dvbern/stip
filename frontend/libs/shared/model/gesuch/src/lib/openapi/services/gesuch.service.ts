@@ -312,6 +312,22 @@ export class GesuchService {
         return httpParams;
     }
 
+    public bearbeitungAbschliessenPath = (requestParameters: GesuchServiceBearbeitungAbschliessenRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling bearbeitungAbschliessen$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/bearbeitungAbschliessen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Die Bearbeitung des Gesuch durch den SB abschliessen
      * @param requestParameters
@@ -383,6 +399,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public canEinreichedatumAendernPath = (requestParameters: GesuchServiceCanEinreichedatumAendernRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling canEinreichedatumAendern$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/einreichedatum`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -457,6 +489,22 @@ export class GesuchService {
         );
     }
 
+    public changeGesuchStatusToBereitFuerBearbeitungPath = (requestParameters: GesuchServiceChangeGesuchStatusToBereitFuerBearbeitungRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToBereitFuerBearbeitung$.');
+        }
+        let path = `/api/v1/gesuch/status/bereit-fuer-bearbeitung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -527,6 +575,26 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public changeGesuchStatusToDatenschutzbriefDruckbereitPath = (requestParameters: GesuchServiceChangeGesuchStatusToDatenschutzbriefDruckbereitRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToDatenschutzbriefDruckbereit$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling changeGesuchStatusToDatenschutzbriefDruckbereit$.');
+        }
+        let path = `/api/v1/gesuch/status/datenschutzbrief-druckbereit/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -615,6 +683,22 @@ export class GesuchService {
         );
     }
 
+    public changeGesuchStatusToInBearbeitungPath = (requestParameters: GesuchServiceChangeGesuchStatusToInBearbeitungRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToInBearbeitung$.');
+        }
+        let path = `/api/v1/gesuch/status/in-bearbeitung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -685,6 +769,26 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public changeGesuchStatusToNegativeVerfuegungPath = (requestParameters: GesuchServiceChangeGesuchStatusToNegativeVerfuegungRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToNegativeVerfuegung$.');
+        }
+        const ausgewaehlterGrund = requestParameters.ausgewaehlterGrund;
+        if (ausgewaehlterGrund === null || ausgewaehlterGrund === undefined) {
+            throw new Error('Required parameter ausgewaehlterGrund was null or undefined when calling changeGesuchStatusToNegativeVerfuegung$.');
+        }
+        let path = `/api/v1/gesuch/status/negative-verfuegung/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -773,6 +877,22 @@ export class GesuchService {
         );
     }
 
+    public changeGesuchStatusToVerfuegtPath = (requestParameters: GesuchServiceChangeGesuchStatusToVerfuegtRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVerfuegt$.');
+        }
+        let path = `/api/v1/gesuch/status/verfuegt/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -843,6 +963,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public changeGesuchStatusToVerfuegungDruckbereitPath = (requestParameters: GesuchServiceChangeGesuchStatusToVerfuegungDruckbereitRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVerfuegungDruckbereit$.');
+        }
+        let path = `/api/v1/gesuch/status/unterschriftenblatt-erhalten/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -917,6 +1053,22 @@ export class GesuchService {
         );
     }
 
+    public changeGesuchStatusToVersendetPath = (requestParameters: GesuchServiceChangeGesuchStatusToVersendetRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling changeGesuchStatusToVersendet$.');
+        }
+        let path = `/api/v1/gesuch/status/versendet/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -987,6 +1139,34 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createBeschwerdeEntscheidPath = (requestParameters: GesuchServiceCreateBeschwerdeEntscheidRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling createBeschwerdeEntscheid$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling createBeschwerdeEntscheid$.');
+        }
+        const beschwerdeErfolgreich = requestParameters.beschwerdeErfolgreich;
+        if (beschwerdeErfolgreich === null || beschwerdeErfolgreich === undefined) {
+            throw new Error('Required parameter beschwerdeErfolgreich was null or undefined when calling createBeschwerdeEntscheid$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createBeschwerdeEntscheid$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/beschwerde-entscheid`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1101,6 +1281,23 @@ export class GesuchService {
         );
     }
 
+    public createBeschwerdeVerlaufEntryPath = (requestParameters: GesuchServiceCreateBeschwerdeVerlaufEntryRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling createBeschwerdeVerlaufEntry$.');
+        }
+        const beschwerdeVerlaufEntryCreate = requestParameters.beschwerdeVerlaufEntryCreate;
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/beschwerde`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1184,6 +1381,22 @@ export class GesuchService {
         );
     }
 
+    public createGesuchPath = (requestParameters: GesuchServiceCreateGesuchRequestParams) => {
+        const gesuchCreate = requestParameters.gesuchCreate;
+        if (gesuchCreate === null || gesuchCreate === undefined) {
+            throw new Error('Required parameter gesuchCreate was null or undefined when calling createGesuch$.');
+        }
+        let path = `/api/v1/gesuch`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Creates a new Gesuch
      * @param requestParameters
@@ -1265,6 +1478,27 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createManuelleVerfuegungPath = (requestParameters: GesuchServiceCreateManuelleVerfuegungRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createManuelleVerfuegung$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createManuelleVerfuegung$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/manuelle-verfuegung`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1370,6 +1604,22 @@ export class GesuchService {
         );
     }
 
+    public deleteGesuchPath = (requestParameters: GesuchServiceDeleteGesuchRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling deleteGesuch$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * delete a Gesuch
      * @param requestParameters
@@ -1440,6 +1690,23 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public einreichedatumManuellAendernPath = (requestParameters: GesuchServiceEinreichedatumManuellAendernRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling einreichedatumManuellAendern$.');
+        }
+        const einreichedatumAendernRequest = requestParameters.einreichedatumAendernRequest;
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/einreichedatum`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1525,6 +1792,22 @@ export class GesuchService {
         );
     }
 
+    public gesuchEinreichenGsPath = (requestParameters: GesuchServiceGesuchEinreichenGsRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchEinreichenGs$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/einreichen/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Das Gesuch einreichen als Gesuchsteller
      * @param requestParameters
@@ -1596,6 +1879,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public gesuchFehlendeDokumenteUebermittelnPath = (requestParameters: GesuchServiceGesuchFehlendeDokumenteUebermittelnRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchFehlendeDokumenteUebermitteln$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/fehlendeDokumente`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1671,6 +1970,22 @@ export class GesuchService {
         );
     }
 
+    public gesuchManuellPruefenJurPath = (requestParameters: GesuchServiceGesuchManuellPruefenJurRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchManuellPruefenJur$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pruefen/jur`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Das Gesuch manuell pruefen als Jurist
      * @param requestParameters
@@ -1742,6 +2057,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public gesuchManuellPruefenSBPath = (requestParameters: GesuchServiceGesuchManuellPruefenSBRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchManuellPruefenSB$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/pruefen/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1817,6 +2148,22 @@ export class GesuchService {
         );
     }
 
+    public gesuchTrancheFehlendeDokumenteEinreichenPath = (requestParameters: GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchTrancheFehlendeDokumenteEinreichen$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/fehlendeDokumenteEinreichen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Dem SB übermitteln das fehlende Dokumente hochgeladen wurden
      * @param requestParameters
@@ -1888,6 +2235,23 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public gesuchZurueckweisenPath = (requestParameters: GesuchServiceGesuchZurueckweisenRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchZurueckweisen$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1974,6 +2338,22 @@ export class GesuchService {
         );
     }
 
+    public getAllBeschwerdeVerlaufEntrysPath = (requestParameters: GesuchServiceGetAllBeschwerdeVerlaufEntrysRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllBeschwerdeVerlaufEntrys$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/beschwerde`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -2044,6 +2424,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getBerechnungForGesuchPath = (requestParameters: GesuchServiceGetBerechnungForGesuchRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getBerechnungForGesuch$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/berechnung`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -2119,6 +2515,22 @@ export class GesuchService {
         );
     }
 
+    public getBerechnungsblattDownloadTokenPath = (requestParameters: GesuchServiceGetBerechnungsblattDownloadTokenRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getBerechnungsblattDownloadToken$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/berechnungsblatt/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * get Berechnungsblatt Download Token
      * @param requestParameters
@@ -2190,6 +2602,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getGesuchGSPath = (requestParameters: GesuchServiceGetGesuchGSRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchGS$.');
+        }
+        let path = `/api/v1/gesuch/gs/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -2265,6 +2693,22 @@ export class GesuchService {
         );
     }
 
+    public getGesuchInfoPath = (requestParameters: GesuchServiceGetGesuchInfoRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getGesuchInfo$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/info`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns the basic Gesuch info with the given Id
      * @param requestParameters
@@ -2336,6 +2780,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getGesuchSBPath = (requestParameters: GesuchServiceGetGesuchSBRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchSB$.');
+        }
+        let path = `/api/v1/gesuch/sb/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -2411,6 +2871,18 @@ export class GesuchService {
         );
     }
 
+    public getGesucheGsPath = () => {
+        let path = `/api/v1/gesuch/benutzer/me/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns gesuche filtered by gs
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -2477,6 +2949,96 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getGesucheSbPath = (requestParameters: GesuchServiceGetGesucheSbRequestParams) => {
+        const getGesucheSBQueryType = requestParameters.getGesucheSBQueryType;
+        if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
+            throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling getGesucheSb$.');
+        }
+        const fallNummer = requestParameters.fallNummer;
+        const piaNachname = requestParameters.piaNachname;
+        const piaVorname = requestParameters.piaVorname;
+        const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
+        const status = requestParameters.status;
+        const bearbeiter = requestParameters.bearbeiter;
+        const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
+        const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
+        const typ = requestParameters.typ;
+        if (typ === null || typ === undefined) {
+            throw new Error('Required parameter typ was null or undefined when calling getGesucheSb$.');
+        }
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getGesucheSb$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getGesucheSb$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+        let path = `/api/v1/gesuch/benutzer/me/sb/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (fallNummer !== undefined && fallNummer !== null) {
+          queryParams.append('fallNummer', fallNummer.toString());
+        }
+
+        if (piaNachname !== undefined && piaNachname !== null) {
+          queryParams.append('piaNachname', piaNachname.toString());
+        }
+
+        if (piaVorname !== undefined && piaVorname !== null) {
+          queryParams.append('piaVorname', piaVorname.toString());
+        }
+
+        if (piaGeburtsdatum !== undefined && piaGeburtsdatum !== null) {
+          queryParams.append('piaGeburtsdatum', piaGeburtsdatum.toString());
+        }
+
+        if (status !== undefined && status !== null) {
+          queryParams.append('status', status.toString());
+        }
+
+        if (bearbeiter !== undefined && bearbeiter !== null) {
+          queryParams.append('bearbeiter', bearbeiter.toString());
+        }
+
+        if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
+          queryParams.append('letzteAktivitaetFrom', letzteAktivitaetFrom.toString());
+        }
+
+        if (letzteAktivitaetTo !== undefined && letzteAktivitaetTo !== null) {
+          queryParams.append('letzteAktivitaetTo', letzteAktivitaetTo.toString());
+        }
+
+        if (typ !== undefined && typ !== null) {
+          queryParams.append('typ', typ.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -2629,6 +3191,22 @@ export class GesuchService {
         );
     }
 
+    public getGsAenderungChangesInBearbeitungPath = (requestParameters: GesuchServiceGetGsAenderungChangesInBearbeitungRequestParams) => {
+        const aenderungId = requestParameters.aenderungId;
+        if (aenderungId === null || aenderungId === undefined) {
+            throw new Error('Required parameter aenderungId was null or undefined when calling getGsAenderungChangesInBearbeitung$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "aenderungId", value: aenderungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/aenderung/gs/changes`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -2701,6 +3279,18 @@ export class GesuchService {
         );
     }
 
+    public getGsDashboardPath = () => {
+        let path = `/api/v1/gesuch/benutzer/me/gs-dashboard`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns gesuche for dashboard filtered by gs
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -2767,6 +3357,22 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getInitialTrancheChangesPath = (requestParameters: GesuchServiceGetInitialTrancheChangesRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getInitialTrancheChanges$.');
+        }
+        let path = `/api/v1/gesuch/changes/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -2840,6 +3446,27 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getSbAenderungChangesPath = (requestParameters: GesuchServiceGetSbAenderungChangesRequestParams) => {
+        const aenderungId = requestParameters.aenderungId;
+        if (aenderungId === null || aenderungId === undefined) {
+            throw new Error('Required parameter aenderungId was null or undefined when calling getSbAenderungChanges$.');
+        }
+        const revision = requestParameters.revision;
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "aenderungId", value: aenderungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/aenderung/sb/changes`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (revision !== undefined && revision !== null) {
+          queryParams.append('revision', revision.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -2922,6 +3549,22 @@ export class GesuchService {
         );
     }
 
+    public getSozialdienstMitarbeiterDashboardPath = (requestParameters: GesuchServiceGetSozialdienstMitarbeiterDashboardRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getSozialdienstMitarbeiterDashboard$.');
+        }
+        let path = `/api/v1/gesuch/benutzer/me/sozialdienst-mitarbeiter-dashboard/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns gesuche for dashboard filtered by gs
      * @param requestParameters
@@ -2995,6 +3638,22 @@ export class GesuchService {
         );
     }
 
+    public getStatusProtokollPath = (requestParameters: GesuchServiceGetStatusProtokollRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getStatusProtokoll$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/statusprotokoll`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Holt das Statusprotokoll für ein Gesuch
      * @param requestParameters
@@ -3066,6 +3725,30 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public setGesuchsperiodeForGesuchPath = (requestParameters: GesuchServiceSetGesuchsperiodeForGesuchRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling setGesuchsperiodeForGesuch$.');
+        }
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling setGesuchsperiodeForGesuch$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/set-gesuchsperiode`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (gesuchsperiodeId !== undefined && gesuchsperiodeId !== null) {
+          queryParams.append('gesuchsperiodeId', gesuchsperiodeId.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -3150,6 +3833,26 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateGesuchGSPath = (requestParameters: GesuchServiceUpdateGesuchGSRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling updateGesuchGS$.');
+        }
+        const gesuchUpdate = requestParameters.gesuchUpdate;
+        if (gesuchUpdate === null || gesuchUpdate === undefined) {
+            throw new Error('Required parameter gesuchUpdate was null or undefined when calling updateGesuchGS$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -3239,6 +3942,26 @@ export class GesuchService {
         );
     }
 
+    public updateGesuchSBPath = (requestParameters: GesuchServiceUpdateGesuchSBRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling updateGesuchSB$.');
+        }
+        const gesuchUpdate = requestParameters.gesuchUpdate;
+        if (gesuchUpdate === null || gesuchUpdate === undefined) {
+            throw new Error('Required parameter gesuchUpdate was null or undefined when calling updateGesuchSB$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Updates the Gesuch with the given Id
      * @param requestParameters
@@ -3324,6 +4047,23 @@ export class GesuchService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateNachfristDokumentePath = (requestParameters: GesuchServiceUpdateNachfristDokumenteRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling updateNachfristDokumente$.');
+        }
+        const nachfristAendernRequest = requestParameters.nachfristAendernRequest;
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/nachfristDokumente`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

@@ -9,27 +9,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ElternUnbekanntheitsGrund } from './elternUnbekanntheitsGrund';
 import { Elternschaftsteilung } from './elternschaftsteilung';
 
 export interface DemoFamiliensituation { 
     elternVerheiratetZusammen: boolean;
-    gerichtlicheAlimentenregelung: boolean;
-    werZahltAlimente: Elternschaftsteilung;
-    mutterWiederverheiratetAlimente: boolean;
-    vaterWiederverheiratetAlimente: boolean;
-    elternteilUnbekanntVerstorben: boolean;
-    mutterVerstorben: boolean;
-    mutterUnbekannt: boolean;
-    mutterUnbekanntGrund?: string;
-    mutterKeineOptionen?: string;
-    mutterWiederverheiratetUnbekannt?: string;
-    vaterVerstorben: boolean;
-    vaterUnbekannt: boolean;
-    vaterUnbekanntGrund?: string;
-    vaterKeineOptionen?: string;
-    vaterWiederverheiratetUnbekannt?: string;
-    mutterWiederverheiratetUngewiss: boolean;
-    vaterWiederverheiratetUngewiss: boolean;
+    gerichtlicheAlimentenregelung?: boolean;
+    werZahltAlimente?: Elternschaftsteilung;
+    mutterWiederverheiratetAlimente?: boolean;
+    vaterWiederverheiratetAlimente?: boolean;
+    elternteilUnbekanntVerstorben?: boolean;
+    mutterVerstorben?: boolean;
+    mutterUnbekannt?: boolean;
+    mutterUnbekanntGrund?: ElternUnbekanntheitsGrund;
+    mutterKeineOptionen?: boolean;
+    mutterWiederverheiratetUnbekannt?: boolean;
+    vaterVerstorben?: boolean;
+    vaterUnbekannt?: boolean;
+    vaterUnbekanntGrund?: ElternUnbekanntheitsGrund;
+    vaterKeineOptionen?: boolean;
+    vaterWiederverheiratetUnbekannt?: boolean;
+    mutterWiederverheiratetUngewiss?: boolean;
+    vaterWiederverheiratetUngewiss?: boolean;
 }
 
 

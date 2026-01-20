@@ -9,6 +9,7 @@ kstip:
   default-tenant: 'bern'
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
+    testcase-mimetypes: 'application/x-tika-ooxml'
   pre-signed-request:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
@@ -18,6 +19,8 @@ kstip:
     auth-header-value: '${STIP_SAP_AUTH_HEADER_VALUE}'
     connectionTimeout: 6000
     receiveTimeout: 1000
+  demo:
+    smallest-png: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAACklEQVR4AWNgAAAAAgABc3UBGAAAAABJRU5ErkJggg=='
   seeding:
     seed-on:
       - 'dev'

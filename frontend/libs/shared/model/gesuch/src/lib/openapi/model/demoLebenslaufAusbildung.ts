@@ -13,6 +13,7 @@ import { WohnsitzKanton } from './wohnsitzKanton';
 
 export interface DemoLebenslaufAusbildung { 
     abschluss: string;
+    berufsbezeichnungFachrichtung?: string;
     von: string;
     bis: string;
     wohnsitz: WohnsitzKanton;

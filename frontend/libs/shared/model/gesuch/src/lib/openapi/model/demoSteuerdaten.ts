@@ -9,11 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ElternTyp } from './elternTyp';
 
 export interface DemoSteuerdaten { 
+    type: ElternTyp;
     totalEinkuenfte: number;
     eigenmietwert: number;
-    arbeitsverhaeltnis: string;
+    isArbeitsverhaeltnisSelbstaendig: boolean;
     saeule3a: number;
     saeule2: number;
     vermoegen: number;
@@ -26,4 +28,6 @@ export interface DemoSteuerdaten {
     steuerjahr: number;
     veranlagungsStatus: string;
 }
+
+
 

@@ -1,6 +1,10 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.ValidationMessageDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -21,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoDataErrorDto  implements Serializable {
   private @Valid String internalMessage;
   private @Valid String errorClass;
+  private @Valid List<ValidationMessageDto> validationErrors;
 
   /**
    **/
@@ -60,6 +65,40 @@ public class DemoDataErrorDto  implements Serializable {
     this.errorClass = errorClass;
   }
 
+  /**
+   **/
+  public DemoDataErrorDto validationErrors(List<ValidationMessageDto> validationErrors) {
+    this.validationErrors = validationErrors;
+    return this;
+  }
+
+  
+  @JsonProperty("validationErrors")
+  public List<ValidationMessageDto> getValidationErrors() {
+    return validationErrors;
+  }
+
+  @JsonProperty("validationErrors")
+  public void setValidationErrors(List<ValidationMessageDto> validationErrors) {
+    this.validationErrors = validationErrors;
+  }
+
+  public DemoDataErrorDto addValidationErrorsItem(ValidationMessageDto validationErrorsItem) {
+    if (this.validationErrors == null) {
+      this.validationErrors = new ArrayList<>();
+    }
+
+    this.validationErrors.add(validationErrorsItem);
+    return this;
+  }
+
+  public DemoDataErrorDto removeValidationErrorsItem(ValidationMessageDto validationErrorsItem) {
+    if (validationErrorsItem != null && this.validationErrors != null) {
+      this.validationErrors.remove(validationErrorsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -71,12 +110,13 @@ public class DemoDataErrorDto  implements Serializable {
     }
     DemoDataErrorDto demoDataError = (DemoDataErrorDto) o;
     return Objects.equals(this.internalMessage, demoDataError.internalMessage) &&
-        Objects.equals(this.errorClass, demoDataError.errorClass);
+        Objects.equals(this.errorClass, demoDataError.errorClass) &&
+        Objects.equals(this.validationErrors, demoDataError.validationErrors);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(internalMessage, errorClass);
+    return Objects.hash(internalMessage, errorClass, validationErrors);
   }
 
   @Override
@@ -86,6 +126,7 @@ public class DemoDataErrorDto  implements Serializable {
     
     sb.append("    internalMessage: ").append(toIndentedString(internalMessage)).append("\n");
     sb.append("    errorClass: ").append(toIndentedString(errorClass)).append("\n");
+    sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("}");
     return sb.toString();
   }

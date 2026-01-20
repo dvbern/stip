@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DemoSteuererklaerungDtoSpec
  */
 @JsonPropertyOrder({
+  DemoSteuererklaerungDtoSpec.JSON_PROPERTY_TYPE,
   DemoSteuererklaerungDtoSpec.JSON_PROPERTY_STEUERERKLAERUNG_IN_BERN,
   DemoSteuererklaerungDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE,
   DemoSteuererklaerungDtoSpec.JSON_PROPERTY_RENTEN,
@@ -37,6 +39,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("DemoSteuererklaerung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DemoSteuererklaerungDtoSpec {
+  public static final String JSON_PROPERTY_TYPE = "type";
+  private ElternTypDtoSpec type;
+
   public static final String JSON_PROPERTY_STEUERERKLAERUNG_IN_BERN = "steuererklaerungInBern";
   private Boolean steuererklaerungInBern;
 
@@ -57,6 +62,32 @@ public class DemoSteuererklaerungDtoSpec {
 
   public DemoSteuererklaerungDtoSpec() {
   }
+
+  public DemoSteuererklaerungDtoSpec type(ElternTypDtoSpec type) {
+    
+    this.type = type;
+    return this;
+  }
+
+   /**
+   * Get type
+   * @return type
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public ElternTypDtoSpec getType() {
+    return type;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setType(ElternTypDtoSpec type) {
+    this.type = type;
+  }
+
 
   public DemoSteuererklaerungDtoSpec steuererklaerungInBern(Boolean steuererklaerungInBern) {
     
@@ -222,7 +253,8 @@ public class DemoSteuererklaerungDtoSpec {
       return false;
     }
     DemoSteuererklaerungDtoSpec demoSteuererklaerung = (DemoSteuererklaerungDtoSpec) o;
-    return Objects.equals(this.steuererklaerungInBern, demoSteuererklaerung.steuererklaerungInBern) &&
+    return Objects.equals(this.type, demoSteuererklaerung.type) &&
+        Objects.equals(this.steuererklaerungInBern, demoSteuererklaerung.steuererklaerungInBern) &&
         Objects.equals(this.unterhaltsbeitraege, demoSteuererklaerung.unterhaltsbeitraege) &&
         Objects.equals(this.renten, demoSteuererklaerung.renten) &&
         Objects.equals(this.ergaenzungsleistungen, demoSteuererklaerung.ergaenzungsleistungen) &&
@@ -232,13 +264,14 @@ public class DemoSteuererklaerungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuererklaerungInBern, unterhaltsbeitraege, renten, ergaenzungsleistungen, einnahmenBGSA, andereEinnahmen);
+    return Objects.hash(type, steuererklaerungInBern, unterhaltsbeitraege, renten, ergaenzungsleistungen, einnahmenBGSA, andereEinnahmen);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoSteuererklaerungDtoSpec {\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    steuererklaerungInBern: ").append(toIndentedString(steuererklaerungInBern)).append("\n");
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");
     sb.append("    renten: ").append(toIndentedString(renten)).append("\n");

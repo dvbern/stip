@@ -15,38 +15,45 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * DemoElternDtoSpec
+ * DemoElternteilDtoSpec
  */
 @JsonPropertyOrder({
-  DemoElternDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
-  DemoElternDtoSpec.JSON_PROPERTY_NACHNAME,
-  DemoElternDtoSpec.JSON_PROPERTY_VORNAME,
-  DemoElternDtoSpec.JSON_PROPERTY_STRASSE,
-  DemoElternDtoSpec.JSON_PROPERTY_HAUSNUMMER,
-  DemoElternDtoSpec.JSON_PROPERTY_PLZ,
-  DemoElternDtoSpec.JSON_PROPERTY_ORT,
-  DemoElternDtoSpec.JSON_PROPERTY_CO_ADRESSE,
-  DemoElternDtoSpec.JSON_PROPERTY_LAND,
-  DemoElternDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ,
-  DemoElternDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z,
-  DemoElternDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT,
-  DemoElternDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
-  DemoElternDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
-  DemoElternDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
-  DemoElternDtoSpec.JSON_PROPERTY_AUSWEISB_FLUECHTLING
+  DemoElternteilDtoSpec.JSON_PROPERTY_TYPE,
+  DemoElternteilDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
+  DemoElternteilDtoSpec.JSON_PROPERTY_NACHNAME,
+  DemoElternteilDtoSpec.JSON_PROPERTY_VORNAME,
+  DemoElternteilDtoSpec.JSON_PROPERTY_STRASSE,
+  DemoElternteilDtoSpec.JSON_PROPERTY_HAUSNUMMER,
+  DemoElternteilDtoSpec.JSON_PROPERTY_PLZ,
+  DemoElternteilDtoSpec.JSON_PROPERTY_ORT,
+  DemoElternteilDtoSpec.JSON_PROPERTY_CO_ADRESSE,
+  DemoElternteilDtoSpec.JSON_PROPERTY_LAND,
+  DemoElternteilDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ,
+  DemoElternteilDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_P_L_Z,
+  DemoElternteilDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT,
+  DemoElternteilDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
+  DemoElternteilDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DemoElternteilDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
+  DemoElternteilDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
+  DemoElternteilDtoSpec.JSON_PROPERTY_AUSWEISB_FLUECHTLING
 })
-@JsonTypeName("DemoEltern")
+@JsonTypeName("DemoElternteil")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class DemoElternDtoSpec {
+public class DemoElternteilDtoSpec {
+  public static final String JSON_PROPERTY_TYPE = "type";
+  private ElternTypDtoSpec type;
+
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
   private String sozialversicherungsnummer;
 
@@ -83,8 +90,11 @@ public class DemoElternDtoSpec {
   public static final String JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT = "identischerZivilrechtlicherWohnsitzOrt";
   private String identischerZivilrechtlicherWohnsitzOrt;
 
+  public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
+  private Integer wohnkosten;
+
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private String geburtsdatum;
+  private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_TELEFONNUMMER = "telefonnummer";
   private String telefonnummer;
@@ -95,10 +105,36 @@ public class DemoElternDtoSpec {
   public static final String JSON_PROPERTY_AUSWEISB_FLUECHTLING = "ausweisbFluechtling";
   private Boolean ausweisbFluechtling;
 
-  public DemoElternDtoSpec() {
+  public DemoElternteilDtoSpec() {
   }
 
-  public DemoElternDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
+  public DemoElternteilDtoSpec type(ElternTypDtoSpec type) {
+    
+    this.type = type;
+    return this;
+  }
+
+   /**
+   * Get type
+   * @return type
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public ElternTypDtoSpec getType() {
+    return type;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TYPE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setType(ElternTypDtoSpec type) {
+    this.type = type;
+  }
+
+
+  public DemoElternteilDtoSpec sozialversicherungsnummer(String sozialversicherungsnummer) {
     
     this.sozialversicherungsnummer = sozialversicherungsnummer;
     return this;
@@ -124,7 +160,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec nachname(String nachname) {
+  public DemoElternteilDtoSpec nachname(String nachname) {
     
     this.nachname = nachname;
     return this;
@@ -150,7 +186,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec vorname(String vorname) {
+  public DemoElternteilDtoSpec vorname(String vorname) {
     
     this.vorname = vorname;
     return this;
@@ -176,7 +212,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec strasse(String strasse) {
+  public DemoElternteilDtoSpec strasse(String strasse) {
     
     this.strasse = strasse;
     return this;
@@ -202,7 +238,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec hausnummer(String hausnummer) {
+  public DemoElternteilDtoSpec hausnummer(String hausnummer) {
     
     this.hausnummer = hausnummer;
     return this;
@@ -228,7 +264,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec plz(String plz) {
+  public DemoElternteilDtoSpec plz(String plz) {
     
     this.plz = plz;
     return this;
@@ -254,7 +290,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec ort(String ort) {
+  public DemoElternteilDtoSpec ort(String ort) {
     
     this.ort = ort;
     return this;
@@ -280,7 +316,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec coAdresse(String coAdresse) {
+  public DemoElternteilDtoSpec coAdresse(String coAdresse) {
     
     this.coAdresse = coAdresse;
     return this;
@@ -306,7 +342,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec land(String land) {
+  public DemoElternteilDtoSpec land(String land) {
     
     this.land = land;
     return this;
@@ -332,7 +368,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
     
     this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
     return this;
@@ -358,7 +394,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
     
     this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
     return this;
@@ -384,7 +420,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+  public DemoElternteilDtoSpec identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
     
     this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
     return this;
@@ -410,7 +446,33 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoElternteilDtoSpec wohnkosten(Integer wohnkosten) {
+    
+    this.wohnkosten = wohnkosten;
+    return this;
+  }
+
+   /**
+   * Get wohnkosten
+   * @return wohnkosten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getWohnkosten() {
+    return wohnkosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWohnkosten(Integer wohnkosten) {
+    this.wohnkosten = wohnkosten;
+  }
+
+
+  public DemoElternteilDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -424,19 +486,19 @@ public class DemoElternDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
 
-  public DemoElternDtoSpec telefonnummer(String telefonnummer) {
+  public DemoElternteilDtoSpec telefonnummer(String telefonnummer) {
     
     this.telefonnummer = telefonnummer;
     return this;
@@ -462,7 +524,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+  public DemoElternteilDtoSpec sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
     
     this.sozialhilfebeitraege = sozialhilfebeitraege;
     return this;
@@ -488,7 +550,7 @@ public class DemoElternDtoSpec {
   }
 
 
-  public DemoElternDtoSpec ausweisbFluechtling(Boolean ausweisbFluechtling) {
+  public DemoElternteilDtoSpec ausweisbFluechtling(Boolean ausweisbFluechtling) {
     
     this.ausweisbFluechtling = ausweisbFluechtling;
     return this;
@@ -521,34 +583,37 @@ public class DemoElternDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemoElternDtoSpec demoEltern = (DemoElternDtoSpec) o;
-    return Objects.equals(this.sozialversicherungsnummer, demoEltern.sozialversicherungsnummer) &&
-        Objects.equals(this.nachname, demoEltern.nachname) &&
-        Objects.equals(this.vorname, demoEltern.vorname) &&
-        Objects.equals(this.strasse, demoEltern.strasse) &&
-        Objects.equals(this.hausnummer, demoEltern.hausnummer) &&
-        Objects.equals(this.plz, demoEltern.plz) &&
-        Objects.equals(this.ort, demoEltern.ort) &&
-        Objects.equals(this.coAdresse, demoEltern.coAdresse) &&
-        Objects.equals(this.land, demoEltern.land) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitz, demoEltern.identischerZivilrechtlicherWohnsitz) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, demoEltern.identischerZivilrechtlicherWohnsitzPLZ) &&
-        Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, demoEltern.identischerZivilrechtlicherWohnsitzOrt) &&
-        Objects.equals(this.geburtsdatum, demoEltern.geburtsdatum) &&
-        Objects.equals(this.telefonnummer, demoEltern.telefonnummer) &&
-        Objects.equals(this.sozialhilfebeitraege, demoEltern.sozialhilfebeitraege) &&
-        Objects.equals(this.ausweisbFluechtling, demoEltern.ausweisbFluechtling);
+    DemoElternteilDtoSpec demoElternteil = (DemoElternteilDtoSpec) o;
+    return Objects.equals(this.type, demoElternteil.type) &&
+        Objects.equals(this.sozialversicherungsnummer, demoElternteil.sozialversicherungsnummer) &&
+        Objects.equals(this.nachname, demoElternteil.nachname) &&
+        Objects.equals(this.vorname, demoElternteil.vorname) &&
+        Objects.equals(this.strasse, demoElternteil.strasse) &&
+        Objects.equals(this.hausnummer, demoElternteil.hausnummer) &&
+        Objects.equals(this.plz, demoElternteil.plz) &&
+        Objects.equals(this.ort, demoElternteil.ort) &&
+        Objects.equals(this.coAdresse, demoElternteil.coAdresse) &&
+        Objects.equals(this.land, demoElternteil.land) &&
+        Objects.equals(this.identischerZivilrechtlicherWohnsitz, demoElternteil.identischerZivilrechtlicherWohnsitz) &&
+        Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, demoElternteil.identischerZivilrechtlicherWohnsitzPLZ) &&
+        Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, demoElternteil.identischerZivilrechtlicherWohnsitzOrt) &&
+        Objects.equals(this.wohnkosten, demoElternteil.wohnkosten) &&
+        Objects.equals(this.geburtsdatum, demoElternteil.geburtsdatum) &&
+        Objects.equals(this.telefonnummer, demoElternteil.telefonnummer) &&
+        Objects.equals(this.sozialhilfebeitraege, demoElternteil.sozialhilfebeitraege) &&
+        Objects.equals(this.ausweisbFluechtling, demoElternteil.ausweisbFluechtling);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, geburtsdatum, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling);
+    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten, geburtsdatum, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemoElternDtoSpec {\n");
+    sb.append("class DemoElternteilDtoSpec {\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
@@ -561,6 +626,7 @@ public class DemoElternDtoSpec {
     sb.append("    identischerZivilrechtlicherWohnsitz: ").append(toIndentedString(identischerZivilrechtlicherWohnsitz)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
+    sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");

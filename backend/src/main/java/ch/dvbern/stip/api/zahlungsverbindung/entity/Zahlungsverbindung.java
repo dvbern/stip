@@ -31,9 +31,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
@@ -49,6 +53,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Zahlungsverbindung extends AbstractMandantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)

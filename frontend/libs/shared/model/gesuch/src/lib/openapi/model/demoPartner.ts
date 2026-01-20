@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AusbildungsPensum } from './ausbildungsPensum';
 
 export interface DemoPartner { 
     sozialversicherungsnummer: string;
@@ -22,6 +23,8 @@ export interface DemoPartner {
     land: string;
     geburtsdatum: string;
     inAusbildung: boolean;
-    pensum?: number;
+    pensum?: AusbildungsPensum;
 }
+
+
 

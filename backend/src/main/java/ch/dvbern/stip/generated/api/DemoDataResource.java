@@ -4,6 +4,7 @@ import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import java.util.UUID;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -23,9 +24,9 @@ import jakarta.validation.Valid;
 public interface DemoDataResource {
 
     @POST
-    @Path("/{id}")
+    @Path("/{demoDataId}")
     @Produces({ "application/json", "text/plain" })
-    ApplyDemoDataResponseDto applyDemoData(@PathParam("id") String id);
+    ApplyDemoDataResponseDto applyDemoData(@PathParam("demoDataId") UUID demoDataId);
 
     @POST
     @Consumes({ "multipart/form-data" })
@@ -42,7 +43,7 @@ public interface DemoDataResource {
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDemoDataDokument(@QueryParam("token") @NotNull   String token);
 
     @GET
-    @Path("/dokument/token")
+    @Path("/dokument/{dokumentId}/token")
     @Produces({ "application/json", "text/plain" })
-    FileDownloadTokenDto getDemoDataDokumentDownloadToken();
+    FileDownloadTokenDto getDemoDataDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 }

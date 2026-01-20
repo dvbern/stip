@@ -28,7 +28,7 @@ public class DemoAusbildungDto  implements Serializable {
   private @Valid Boolean isAusbildungAusland;
   private @Valid LocalDate ausbildungBeginn;
   private @Valid LocalDate ausbildungEnd;
-  private @Valid Integer pensum;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
   private @Valid Boolean ausbildungNichtGefunden;
 
   /**
@@ -185,7 +185,7 @@ public class DemoAusbildungDto  implements Serializable {
 
   /**
    **/
-  public DemoAusbildungDto pensum(Integer pensum) {
+  public DemoAusbildungDto pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
     return this;
   }
@@ -193,12 +193,12 @@ public class DemoAusbildungDto  implements Serializable {
   
   @JsonProperty("pensum")
   @NotNull
-  public Integer getPensum() {
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
     return pensum;
   }
 
   @JsonProperty("pensum")
-  public void setPensum(Integer pensum) {
+  public void setPensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
   }
 

@@ -9,8 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ElternTyp } from './elternTyp';
 
 export interface DemoSteuererklaerung { 
+    type: ElternTyp;
     steuererklaerungInBern: boolean;
     unterhaltsbeitraege: number;
     renten: number;
@@ -18,4 +20,6 @@ export interface DemoSteuererklaerung {
     einnahmenBGSA: number;
     andereEinnahmen: number;
 }
+
+
 

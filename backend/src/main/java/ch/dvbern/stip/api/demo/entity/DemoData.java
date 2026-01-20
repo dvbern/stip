@@ -38,10 +38,10 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 import software.amazon.awssdk.annotations.NotNull;
 
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_TESTCASE_JSON_DATA_LENGTH;
 
 @Audited
 @Entity
@@ -85,8 +85,8 @@ public class DemoData extends AbstractMandantEntity {
     private String gesuchseingang;
 
     @NotNull
-    @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
-    @Column(name = "jsonData", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
+    @Size(max = DB_DEFAULT_STRING_TESTCASE_JSON_DATA_LENGTH)
+    @Column(name = "json_data", nullable = false, length = DB_DEFAULT_STRING_TESTCASE_JSON_DATA_LENGTH)
     private String jsonData;
 
     @Transient
@@ -94,7 +94,7 @@ public class DemoData extends AbstractMandantEntity {
     @Setter(AccessLevel.NONE)
     private DemoDataDto demoDataDto = new DemoDataDto();
 
-    public void persistDemoData() {
+    public void serializeDemoData() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         StringWriter writer = new StringWriter();

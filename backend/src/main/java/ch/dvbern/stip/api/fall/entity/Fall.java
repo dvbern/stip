@@ -61,6 +61,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
+import org.jilt.Opt;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
@@ -82,6 +83,7 @@ public class Fall extends AbstractMandantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "fall_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Opt
     private String fallNummer;
 
     @OneToOne(fetch = FetchType.LAZY)

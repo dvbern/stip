@@ -17,6 +17,7 @@ import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataListDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
+import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,13 +102,13 @@ public class DemoDataApiSpec {
      * Returns the created data after applying demo data
      * 
      *
-     * @see #idPath  (required)
+     * @see #demoDataIdPath  (required)
      * return ApplyDemoDataResponseDtoSpec
      */
     public static class ApplyDemoDataOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/demo-data/{id}";
+        public static final String REQ_URI = "/demo-data/{demoDataId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -119,7 +120,7 @@ public class DemoDataApiSpec {
         }
 
         /**
-         * POST /demo-data/{id}
+         * POST /demo-data/{demoDataId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -130,7 +131,7 @@ public class DemoDataApiSpec {
         }
 
         /**
-         * POST /demo-data/{id}
+         * POST /demo-data/{demoDataId}
          * @param handler handler
          * @return ApplyDemoDataResponseDtoSpec
          */
@@ -139,14 +140,14 @@ public class DemoDataApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String ID_PATH = "id";
+        public static final String DEMO_DATA_ID_PATH = "demoDataId";
 
         /**
-         * @param id (String)  (required)
+         * @param demoDataId (UUID)  (required)
          * @return operation
          */
-        public ApplyDemoDataOper idPath(Object id) {
-            reqSpec.addPathParam(ID_PATH, id);
+        public ApplyDemoDataOper demoDataIdPath(Object demoDataId) {
+            reqSpec.addPathParam(DEMO_DATA_ID_PATH, demoDataId);
             return this;
         }
 
@@ -394,12 +395,13 @@ public class DemoDataApiSpec {
      * get the Token to download the latest DemoData
      * 
      *
+     * @see #dokumentIdPath  (required)
      * return FileDownloadTokenDtoSpec
      */
     public static class GetDemoDataDokumentDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/demo-data/dokument/token";
+        public static final String REQ_URI = "/demo-data/dokument/{dokumentId}/token";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -411,7 +413,7 @@ public class DemoDataApiSpec {
         }
 
         /**
-         * GET /demo-data/dokument/token
+         * GET /demo-data/dokument/{dokumentId}/token
          * @param handler handler
          * @param <T> type
          * @return type
@@ -422,13 +424,24 @@ public class DemoDataApiSpec {
         }
 
         /**
-         * GET /demo-data/dokument/token
+         * GET /demo-data/dokument/{dokumentId}/token
          * @param handler handler
          * @return FileDownloadTokenDtoSpec
          */
         public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
             TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
             return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_ID_PATH = "dokumentId";
+
+        /**
+         * @param dokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GetDemoDataDokumentDownloadTokenOper dokumentIdPath(Object dokumentId) {
+            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
+            return this;
         }
 
         /**

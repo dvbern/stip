@@ -62,7 +62,15 @@ public class ServerExceptionMappers {
     public RestResponse<DemoDataErrorDto> mapException(DemoDataImportException e) {
         return RestResponse.status(
             RestResponse.Status.BAD_GATEWAY,
-            new DemoDataErrorDto(e.getMessage(), e.getCause().getClass().getTypeName())
+            new DemoDataErrorDto(e.getMessage(), e.getCause().getClass().getTypeName(), null)
+        );
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<DemoDataErrorDto> mapException(DemoDataApplyException e) {
+        return RestResponse.status(
+            RestResponse.Status.BAD_GATEWAY,
+            new DemoDataErrorDto(e.getMessage(), e.getClass().getTypeName(), e.validationErrors)
         );
     }
 

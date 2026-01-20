@@ -118,7 +118,7 @@ public abstract class GesuchMapper {
         return gesuchStatusService.canChangeGesuchsperiode(gesuch);
     }
 
-    static DateRange getGesuchDateRange(Gesuch gesuch) {
+    public static DateRange getGesuchDateRange(Gesuch gesuch) {
         final var tranchenStartEnd = gesuch.getTranchenTranchen().map(GesuchTranche::getGueltigkeit).toList();
         final var startDatum = tranchenStartEnd.stream()
             .min(Comparator.comparing(DateRange::getGueltigAb))

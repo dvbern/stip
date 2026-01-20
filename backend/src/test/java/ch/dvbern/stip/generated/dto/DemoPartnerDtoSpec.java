@@ -15,11 +15,13 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.AusbildungsPensumDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -71,13 +73,13 @@ public class DemoPartnerDtoSpec {
   private String land;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private String geburtsdatum;
+  private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_IN_AUSBILDUNG = "inAusbildung";
   private Boolean inAusbildung;
 
   public static final String JSON_PROPERTY_PENSUM = "pensum";
-  private Integer pensum;
+  private AusbildungsPensumDtoSpec pensum;
 
   public DemoPartnerDtoSpec() {
   }
@@ -316,7 +318,7 @@ public class DemoPartnerDtoSpec {
   }
 
 
-  public DemoPartnerDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoPartnerDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -330,14 +332,14 @@ public class DemoPartnerDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
@@ -368,7 +370,7 @@ public class DemoPartnerDtoSpec {
   }
 
 
-  public DemoPartnerDtoSpec pensum(Integer pensum) {
+  public DemoPartnerDtoSpec pensum(AusbildungsPensumDtoSpec pensum) {
     
     this.pensum = pensum;
     return this;
@@ -382,14 +384,14 @@ public class DemoPartnerDtoSpec {
   @JsonProperty(JSON_PROPERTY_PENSUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getPensum() {
+  public AusbildungsPensumDtoSpec getPensum() {
     return pensum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_PENSUM)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPensum(Integer pensum) {
+  public void setPensum(AusbildungsPensumDtoSpec pensum) {
     this.pensum = pensum;
   }
 

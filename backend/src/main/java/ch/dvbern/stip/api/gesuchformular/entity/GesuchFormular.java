@@ -23,7 +23,6 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenPartnerNeglectedFieldsNullConstraint;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
@@ -60,6 +59,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenVeranlagungsStatusNotNul
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.validation.SteuererklaerungPageValidation;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -78,13 +78,9 @@ import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.groups.Default;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import org.jilt.Builder;
-import org.jilt.BuilderStyle;
 
 @Audited
 @AusbildungIsDefinedConstraint(
@@ -307,9 +303,6 @@ import org.jilt.BuilderStyle;
 )
 @Getter
 @Setter
-@Builder(style = BuilderStyle.STAGED)
-@NoArgsConstructor
-@AllArgsConstructor
 public class GesuchFormular extends AbstractMandantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -348,7 +341,7 @@ public class GesuchFormular extends AbstractMandantEntity {
     @HasPageValidation(EinnahmenKostenPageValidation.class)
     private @Valid EinnahmenKosten einnahmenKosten;
 
-    @NullableUnlessGenerated
+    @Nullable
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
         name = "einnahmen_kosten_partner_id",

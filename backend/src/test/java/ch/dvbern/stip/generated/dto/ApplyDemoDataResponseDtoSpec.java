@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -27,18 +29,60 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * ApplyDemoDataResponseDtoSpec
  */
 @JsonPropertyOrder({
-  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_ID,
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GUELTIG_AB,
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_STATUS
 })
 @JsonTypeName("ApplyDemoDataResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class ApplyDemoDataResponseDtoSpec {
+  public static final String JSON_PROPERTY_GESUCH_ID = "gesuchId";
+  private UUID gesuchId;
+
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
-  private String gesuchTrancheId;
+  private UUID gesuchTrancheId;
+
+  public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
+  private LocalDate gueltigAb;
+
+  public static final String JSON_PROPERTY_GUELTIG_BIS = "gueltigBis";
+  private LocalDate gueltigBis;
+
+  public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
+  private String gesuchStatus;
 
   public ApplyDemoDataResponseDtoSpec() {
   }
 
-  public ApplyDemoDataResponseDtoSpec gesuchTrancheId(String gesuchTrancheId) {
+  public ApplyDemoDataResponseDtoSpec gesuchId(UUID gesuchId) {
+    
+    this.gesuchId = gesuchId;
+    return this;
+  }
+
+   /**
+   * Get gesuchId
+   * @return gesuchId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getGesuchId() {
+    return gesuchId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchId(UUID gesuchId) {
+    this.gesuchId = gesuchId;
+  }
+
+
+  public ApplyDemoDataResponseDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
@@ -52,15 +96,93 @@ public class ApplyDemoDataResponseDtoSpec {
   @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGesuchTrancheId() {
+  public UUID getGesuchTrancheId() {
     return gesuchTrancheId;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchTrancheId(String gesuchTrancheId) {
+  public void setGesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
+  }
+
+
+  public ApplyDemoDataResponseDtoSpec gueltigAb(LocalDate gueltigAb) {
+    
+    this.gueltigAb = gueltigAb;
+    return this;
+  }
+
+   /**
+   * Get gueltigAb
+   * @return gueltigAb
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGueltigAb() {
+    return gueltigAb;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GUELTIG_AB)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGueltigAb(LocalDate gueltigAb) {
+    this.gueltigAb = gueltigAb;
+  }
+
+
+  public ApplyDemoDataResponseDtoSpec gueltigBis(LocalDate gueltigBis) {
+    
+    this.gueltigBis = gueltigBis;
+    return this;
+  }
+
+   /**
+   * Get gueltigBis
+   * @return gueltigBis
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getGueltigBis() {
+    return gueltigBis;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GUELTIG_BIS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGueltigBis(LocalDate gueltigBis) {
+    this.gueltigBis = gueltigBis;
+  }
+
+
+  public ApplyDemoDataResponseDtoSpec gesuchStatus(String gesuchStatus) {
+    
+    this.gesuchStatus = gesuchStatus;
+    return this;
+  }
+
+   /**
+   * Get gesuchStatus
+   * @return gesuchStatus
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getGesuchStatus() {
+    return gesuchStatus;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchStatus(String gesuchStatus) {
+    this.gesuchStatus = gesuchStatus;
   }
 
   @Override
@@ -72,19 +194,27 @@ public class ApplyDemoDataResponseDtoSpec {
       return false;
     }
     ApplyDemoDataResponseDtoSpec applyDemoDataResponse = (ApplyDemoDataResponseDtoSpec) o;
-    return Objects.equals(this.gesuchTrancheId, applyDemoDataResponse.gesuchTrancheId);
+    return Objects.equals(this.gesuchId, applyDemoDataResponse.gesuchId) &&
+        Objects.equals(this.gesuchTrancheId, applyDemoDataResponse.gesuchTrancheId) &&
+        Objects.equals(this.gueltigAb, applyDemoDataResponse.gueltigAb) &&
+        Objects.equals(this.gueltigBis, applyDemoDataResponse.gueltigBis) &&
+        Objects.equals(this.gesuchStatus, applyDemoDataResponse.gesuchStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchTrancheId);
+    return Objects.hash(gesuchId, gesuchTrancheId, gueltigAb, gueltigBis, gesuchStatus);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ApplyDemoDataResponseDtoSpec {\n");
+    sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
+    sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
+    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -48,6 +48,7 @@ type DownloadOptions =
     }
   | {
       type: 'demoData';
+      id: string;
     };
 
 @Directive({
@@ -94,35 +95,37 @@ const getDownloadObservable$ = (
   massendruckService: MassendruckService,
   demoDataService: DemoDataService,
 ) => {
-  const type = downloadOptions.type;
+  const { type, id } = downloadOptions;
   switch (type) {
     case 'datenschutzbrief': {
       return datenschutzbriefService
         .getDatenschutzbriefDownloadToken$({
-          elternId: downloadOptions.id,
+          elternId: id,
         })
         .pipe(
-          map(
-            ({ token }) =>
-              `/api/v1/datenschutzbrief/${downloadOptions.gesuchTrancheId}/download?token=${token}`,
+          map(({ token }) =>
+            datenschutzbriefService.getDatenschutzbriefPath({
+              token,
+              trancheId: downloadOptions.gesuchTrancheId,
+            }),
           ),
         );
     }
     case 'darlehen': {
       return darlehenService
         .getDarlehenDownloadToken$({
-          dokumentId: downloadOptions.id,
+          dokumentId: id,
         })
         .pipe(
-          map(
-            ({ token }) => `/api/v1/darlehen/dokument/download?token=${token}`,
+          map(({ token }) =>
+            darlehenService.downloadDarlehenDokumentPath({ token }),
           ),
         );
     }
     case 'berechnungsblatt': {
       return gesuchService
         .getBerechnungsblattDownloadToken$({
-          gesuchId: downloadOptions.id,
+          gesuchId: id,
         })
         .pipe(
           map(({ token }) => `/api/v1/gesuch/berechnungsblatt?token=${token}`),
@@ -131,40 +134,47 @@ const getDownloadObservable$ = (
     case 'dokument': {
       return dokumentService
         .getDokumentDownloadToken$({
-          dokumentId: downloadOptions.id,
+          dokumentId: id,
         })
         .pipe(
-          map(
-            ({ token }) =>
-              `/api/v1/dokument/${downloadOptions.dokumentArt}/download?token=${token}`,
+          map(({ token }) =>
+            dokumentService.getDokumentPath({
+              token,
+              dokumentArt: downloadOptions.dokumentArt,
+            }),
           ),
         );
     }
     case 'verfuegung': {
       return verfuegungService
         .getVerfuegungDokumentDownloadToken$({
-          verfuegungDokumentId: downloadOptions.id,
+          verfuegungDokumentId: id,
         })
         .pipe(
-          map(
-            ({ token }) =>
-              `/api/v1/verfuegung/dokument/download?token=${token}`,
+          map(({ token }) =>
+            verfuegungService.getVerfuegungDokumentPath({ token }),
           ),
         );
     }
     case 'massendruck': {
       return massendruckService
         .getMassendruckDownloadToken$({
-          massendruckId: downloadOptions.id,
+          massendruckId: id,
         })
         .pipe(
-          map(({ token }) => `/api/v1/massendruck/download?token=${token}`),
+          map(({ token }) =>
+            massendruckService.downloadMassendruckDocumentPath({ token }),
+          ),
         );
     }
     case 'demoData': {
       return demoDataService
-        .getDemoDataDokumentDownloadToken$()
-        .pipe(map(({ token }) => `/api/v1/demo-data/download?token=${token}`));
+        .getDemoDataDokumentDownloadToken$({ dokumentId: id })
+        .pipe(
+          map(({ token }) =>
+            demoDataService.getDemoDataDokumentPath({ token }),
+          ),
+        );
     }
     default: {
       assertUnreachable(type);

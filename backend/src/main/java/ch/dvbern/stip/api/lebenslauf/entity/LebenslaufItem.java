@@ -64,7 +64,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @NoArgsConstructor
 @AllArgsConstructor
 public class LebenslaufItem extends AbstractMandantEntity {
-    @Nullable
+    @NullableUnlessGenerated
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "abschluss_id", nullable = true, foreignKey = @ForeignKey(name = "FK_lebenslauf_item_abschluss_id")

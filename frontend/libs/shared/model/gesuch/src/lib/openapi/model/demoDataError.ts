@@ -9,9 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ValidationMessage } from './validationMessage';
 
 export interface DemoDataError { 
     internalMessage: string;
     errorClass: string;
+    validationErrors?: Array<ValidationMessage>;
 }
 

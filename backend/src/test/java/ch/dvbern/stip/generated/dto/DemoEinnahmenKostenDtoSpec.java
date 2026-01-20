@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
+  DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
@@ -86,6 +87,9 @@ public class DemoEinnahmenKostenDtoSpec {
 
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
+
+  public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
+  private Integer verpflegungskosten;
 
   public static final String JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE = "auswaertigeMittagessenProWoche";
   private Integer auswaertigeMittagessenProWoche;
@@ -372,9 +376,9 @@ public class DemoEinnahmenKostenDtoSpec {
    * Get ausbildungskosten
    * @return ausbildungskosten
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAusbildungskosten() {
     return ausbildungskosten;
@@ -382,7 +386,7 @@ public class DemoEinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAusbildungskosten(Integer ausbildungskosten) {
     this.ausbildungskosten = ausbildungskosten;
   }
@@ -398,9 +402,9 @@ public class DemoEinnahmenKostenDtoSpec {
    * Get betreuungskostenKinder
    * @return betreuungskostenKinder
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getBetreuungskostenKinder() {
     return betreuungskostenKinder;
@@ -408,7 +412,7 @@ public class DemoEinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBetreuungskostenKinder(Integer betreuungskostenKinder) {
     this.betreuungskostenKinder = betreuungskostenKinder;
   }
@@ -440,6 +444,32 @@ public class DemoEinnahmenKostenDtoSpec {
   }
 
 
+  public DemoEinnahmenKostenDtoSpec verpflegungskosten(Integer verpflegungskosten) {
+    
+    this.verpflegungskosten = verpflegungskosten;
+    return this;
+  }
+
+   /**
+   * Get verpflegungskosten
+   * @return verpflegungskosten
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getVerpflegungskosten() {
+    return verpflegungskosten;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERPFLEGUNGSKOSTEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVerpflegungskosten(Integer verpflegungskosten) {
+    this.verpflegungskosten = verpflegungskosten;
+  }
+
+
   public DemoEinnahmenKostenDtoSpec auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
     
     this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
@@ -450,9 +480,9 @@ public class DemoEinnahmenKostenDtoSpec {
    * Get auswaertigeMittagessenProWoche
    * @return auswaertigeMittagessenProWoche
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getAuswaertigeMittagessenProWoche() {
     return auswaertigeMittagessenProWoche;
@@ -460,7 +490,7 @@ public class DemoEinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setAuswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
     this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
   }
@@ -476,9 +506,9 @@ public class DemoEinnahmenKostenDtoSpec {
    * Get wohnkosten
    * @return wohnkosten
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getWohnkosten() {
     return wohnkosten;
@@ -486,7 +516,7 @@ public class DemoEinnahmenKostenDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_WOHNKOSTEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setWohnkosten(Integer wohnkosten) {
     this.wohnkosten = wohnkosten;
   }
@@ -565,6 +595,7 @@ public class DemoEinnahmenKostenDtoSpec {
         Objects.equals(this.ausbildungskosten, demoEinnahmenKosten.ausbildungskosten) &&
         Objects.equals(this.betreuungskostenKinder, demoEinnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.fahrkosten, demoEinnahmenKosten.fahrkosten) &&
+        Objects.equals(this.verpflegungskosten, demoEinnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, demoEinnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.wohnkosten, demoEinnahmenKosten.wohnkosten) &&
         Objects.equals(this.vermoegen, demoEinnahmenKosten.vermoegen) &&
@@ -573,7 +604,7 @@ public class DemoEinnahmenKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, ausbildungskosten, betreuungskostenKinder, fahrkosten, auswaertigeMittagessenProWoche, wohnkosten, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, ausbildungskosten, betreuungskostenKinder, fahrkosten, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -593,6 +624,7 @@ public class DemoEinnahmenKostenDtoSpec {
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
+    sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");

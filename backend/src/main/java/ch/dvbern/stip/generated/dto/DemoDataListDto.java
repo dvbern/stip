@@ -26,10 +26,10 @@ public class DemoDataListDto  implements Serializable {
   private @Valid String importiertVon;
   private @Valid java.time.LocalDateTime letzteAktivitaet;
   private @Valid String kommentar;
+  private @Valid String documentId;
   private @Valid String filename;
   private @Valid String filepath;
   private @Valid Integer filesize;
-  private @Valid String objectId;
   private @Valid List<DemoDataSlimDto> demoDatas = new ArrayList<>();
 
   /**
@@ -91,6 +91,25 @@ public class DemoDataListDto  implements Serializable {
 
   /**
    **/
+  public DemoDataListDto documentId(String documentId) {
+    this.documentId = documentId;
+    return this;
+  }
+
+  
+  @JsonProperty("documentId")
+  @NotNull
+  public String getDocumentId() {
+    return documentId;
+  }
+
+  @JsonProperty("documentId")
+  public void setDocumentId(String documentId) {
+    this.documentId = documentId;
+  }
+
+  /**
+   **/
   public DemoDataListDto filename(String filename) {
     this.filename = filename;
     return this;
@@ -148,25 +167,6 @@ public class DemoDataListDto  implements Serializable {
 
   /**
    **/
-  public DemoDataListDto objectId(String objectId) {
-    this.objectId = objectId;
-    return this;
-  }
-
-  
-  @JsonProperty("objectId")
-  @NotNull
-  public String getObjectId() {
-    return objectId;
-  }
-
-  @JsonProperty("objectId")
-  public void setObjectId(String objectId) {
-    this.objectId = objectId;
-  }
-
-  /**
-   **/
   public DemoDataListDto demoDatas(List<DemoDataSlimDto> demoDatas) {
     this.demoDatas = demoDatas;
     return this;
@@ -213,16 +213,16 @@ public class DemoDataListDto  implements Serializable {
     return Objects.equals(this.importiertVon, demoDataList.importiertVon) &&
         Objects.equals(this.letzteAktivitaet, demoDataList.letzteAktivitaet) &&
         Objects.equals(this.kommentar, demoDataList.kommentar) &&
+        Objects.equals(this.documentId, demoDataList.documentId) &&
         Objects.equals(this.filename, demoDataList.filename) &&
         Objects.equals(this.filepath, demoDataList.filepath) &&
         Objects.equals(this.filesize, demoDataList.filesize) &&
-        Objects.equals(this.objectId, demoDataList.objectId) &&
         Objects.equals(this.demoDatas, demoDataList.demoDatas);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(importiertVon, letzteAktivitaet, kommentar, filename, filepath, filesize, objectId, demoDatas);
+    return Objects.hash(importiertVon, letzteAktivitaet, kommentar, documentId, filename, filepath, filesize, demoDatas);
   }
 
   @Override
@@ -233,10 +233,10 @@ public class DemoDataListDto  implements Serializable {
     sb.append("    importiertVon: ").append(toIndentedString(importiertVon)).append("\n");
     sb.append("    letzteAktivitaet: ").append(toIndentedString(letzteAktivitaet)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
+    sb.append("    documentId: ").append(toIndentedString(documentId)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filepath: ").append(toIndentedString(filepath)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
-    sb.append("    objectId: ").append(toIndentedString(objectId)).append("\n");
     sb.append("    demoDatas: ").append(toIndentedString(demoDatas)).append("\n");
     sb.append("}");
     return sb.toString();

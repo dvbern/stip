@@ -32,7 +32,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   private @Valid Boolean identischerZivilrechtlicherWohnsitz;
   private @Valid String email;
   private @Valid String telefonnummer;
-  private @Valid String geburtsdatum;
+  private @Valid LocalDate geburtsdatum;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
   private @Valid String nationalitaet;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
@@ -279,7 +279,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
 
   /**
    **/
-  public DemoPersonInAusbildungDto geburtsdatum(String geburtsdatum) {
+  public DemoPersonInAusbildungDto geburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -287,12 +287,12 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 

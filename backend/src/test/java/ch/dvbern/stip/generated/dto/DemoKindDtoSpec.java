@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -49,7 +50,7 @@ public class DemoKindDtoSpec {
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private String geburtsdatum;
+  private LocalDate geburtsdatum;
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA = "wohnsitzAnteilPia";
   private Integer wohnsitzAnteilPia;
@@ -127,7 +128,7 @@ public class DemoKindDtoSpec {
   }
 
 
-  public DemoKindDtoSpec geburtsdatum(String geburtsdatum) {
+  public DemoKindDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -141,14 +142,14 @@ public class DemoKindDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGeburtsdatum() {
+  public LocalDate getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(String geburtsdatum) {
+  public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
   }
 
