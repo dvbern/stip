@@ -192,7 +192,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setWohnkostenPersoenlich5pluspers(25260)
             .setGueltigkeitStatus(gueltigkeitStatus)
             .setPreisProMahlzeit(10)
-            .setMaxSaeule3a(7056)
+            .setMaxSaeule3a(7258)
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38)
             .setVermoegensanteilInProzent(15)
