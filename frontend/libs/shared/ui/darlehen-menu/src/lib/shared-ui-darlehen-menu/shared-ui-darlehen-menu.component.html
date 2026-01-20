@@ -1,11 +1,11 @@
 @let darlehens = darlehenListByStatusSig();
-@let fallId = fallIdSig();
+@let idType = idTypeValueSig();
 <button
   type="button"
   class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
   data-testid="header-nav-darlehen-menu"
   [matMenuTriggerFor]="darlehenMenu"
-  [disabled]="!darlehenListSig()?.length && gesuchIdSig()"
+  [disabled]="!darlehenListSig()?.length && !canCreateDarlehenSig()"
   [class.active]="darlehenRouteIdSig()"
 >
   <i class="material-symbols-rounded me-2 text-white">account_balance</i>
@@ -23,36 +23,36 @@
           <hr class="flex-grow-1" />
         </div>
         @for (darlehen of darlehens[state]; track $index) {
-          <a
-            [routerLink]="
-              gesuchIdSig() ? ['/', 'darlehen', darlehen.id, 'gesuch', gesuchIdSig()] : ['/', 'darlehen', darlehen.id]
-            "
-            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-            data-testid="header-nav-darlehen-menu-item"
-            [class.active]="darlehenRouteIdSig() === darlehen.id"
-            mat-menu-item
-          >
-            <span>
-              {{
-                'shared.header.darlehen.item'
-                  | transloco
-                    : {
-                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
-                      }
-              }}
-            </span>
-          </a>
+          @if (idType.id) {
+            <a
+              [routerLink]="['/', 'darlehen', darlehen.id, idType.type, idType.id]"
+              class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+              data-testid="header-nav-darlehen-menu-item"
+              [class.active]="darlehenRouteIdSig() === darlehen.id"
+              mat-menu-item
+            >
+              <span>
+                {{
+                  'shared.header.darlehen.item'
+                    | transloco
+                      : {
+                          date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+                        }
+                }}
+              </span>
+            </a>
+          }
         }
       }
     }
 
-    @if (fallId && canCreateDarlehenSig()) {
+    @if (idType.type === 'fall' && idType.id && canCreateDarlehenSig()) {
       <hr class="flex-grow-1 tw:hidden tw:not-first:block" />
       <button
         type="button"
         class="btn tw:font-normal tw:shadow-none!"
         data-testid="cockpit-gesuch-darlehen-create"
-        (click)="createDarlehen.emit({ fallId })"
+        (click)="createDarlehen.emit({ fallId: idType.id })"
         mat-menu-item
       >
         <div class="tw:flex tw:items-center tw:gap-2">

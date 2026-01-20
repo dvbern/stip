@@ -34,6 +34,7 @@ public class DarlehenDto  implements Serializable {
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
   private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+  private @Valid Boolean isDelegiert;
   private @Valid String timestampErstellt;
 
   /**
@@ -257,6 +258,24 @@ public class DarlehenDto  implements Serializable {
   }
   /**
    **/
+  public DarlehenDto isDelegiert(Boolean isDelegiert) {
+    this.isDelegiert = isDelegiert;
+    return this;
+  }
+
+  
+  @JsonProperty("isDelegiert")
+  public Boolean getIsDelegiert() {
+    return isDelegiert;
+  }
+
+  @JsonProperty("isDelegiert")
+  public void setIsDelegiert(Boolean isDelegiert) {
+    this.isDelegiert = isDelegiert;
+  }
+
+  /**
+   **/
   public DarlehenDto timestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
@@ -294,12 +313,13 @@ public class DarlehenDto  implements Serializable {
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
         Objects.equals(this.gruende, darlehen.gruende) &&
+        Objects.equals(this.isDelegiert, darlehen.isDelegiert) &&
         Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
   }
 
   @Override
@@ -318,6 +338,7 @@ public class DarlehenDto  implements Serializable {
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
+    sb.append("    isDelegiert: ").append(toIndentedString(isDelegiert)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -35,6 +35,7 @@ import org.mapstruct.Named;
 public abstract class DarlehenMapper {
     @Mapping(source = "fall.id", target = "fallId")
     @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
+    @Mapping(source = ".", target = "isDelegiert", qualifiedByName = "getIsDelegiert")
     public abstract DarlehenDto toDto(Darlehen darlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
@@ -91,5 +92,10 @@ public abstract class DarlehenMapper {
             .getSachbearbeiterZuordnung()
             .getSachbearbeiter()
             .getFullName();
+    }
+
+    @Named("getIsDelegiert")
+    public Boolean getIsDelegiert(Darlehen darlehen) {
+        return darlehen.getFall().isDelegiert();
     }
 }

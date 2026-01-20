@@ -83,19 +83,6 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
-  showDarlehenMenuSig = computed(() => {
-    const dashboardView = this.dashboardStore.dashboardViewSig();
-    const darlehenList = this.darlehenStore.darlehenListSig();
-
-    return (
-      dashboardView?.activeAusbildungen.some((ausbildung) =>
-        ausbildung.gesuchs.some(
-          (gesuch) => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS',
-        ),
-      ) || darlehenList?.length
-    );
-  });
-
   constructor() {
     effect(() => {
       if (this.closeMenuSig()?.value) {
@@ -109,6 +96,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
       const fallId = this.fallIdSig();
 
       if (fallId) {
+        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.dashboardStore.loadSozialdienstDashboard$({ fallId });
       }
     });

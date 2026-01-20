@@ -13,8 +13,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
-import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
 import { Darlehen, DarlehenStatus } from '@dv/shared/model/gesuch';
+
+export type IdType = 'gesuch' | 'fall';
 
 type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
 const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
@@ -34,15 +35,13 @@ const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
 })
 export class SharedUiDarlehenMenuComponent {
   /**
-   * If undefined, no create button is shown.
+   * A tuple containing
+   * - Type of ID to be used in the routes (either 'gesuch' or 'fall').
+   * - The actual ID value.
    */
-  fallIdSig = input<string | undefined>();
-  /**
-   * Set in SB app, so link is correct!
-   */
-  gesuchIdSig = input<string | undefined>();
+  idTypeSig = input.required<[IdType, string | undefined]>();
   darlehenListSig = input.required<Darlehen[] | undefined>();
-  dashboardViewSig = input<SharedModelGsDashboardView | undefined>();
+  canCreateDarlehenSig = input<boolean | undefined>();
   createDarlehen = output<{ fallId: string }>();
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -58,6 +57,11 @@ export class SharedUiDarlehenMenuComponent {
     'rejected',
     'accepted',
   ];
+
+  idTypeValueSig = computed(() => {
+    const [type, id] = this.idTypeSig();
+    return { type, id };
+  });
 
   darlehenListByStatusSig = computed(() => {
     const darlehenList = this.darlehenListSig() ?? [];
@@ -75,29 +79,5 @@ export class SharedUiDarlehenMenuComponent {
       },
       {} as Record<DarlehenCompleteStates, Darlehen[]>,
     );
-  });
-
-  canCreateDarlehenSig = computed((): boolean => {
-    const dashboardView = this.dashboardViewSig();
-    const darlehenList = this.darlehenListSig() ?? [];
-
-    if (!dashboardView) {
-      return false;
-    }
-
-    const hasActiveAusbildungWithGesuchNotInBearbeitung =
-      dashboardView.activeAusbildungen.some((ausbildung) =>
-        ausbildung.gesuchs.some(
-          (gesuch) => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS',
-        ),
-      );
-
-    const hasNoOpenDarlehen = darlehenList.every((darlehen) => {
-      return (
-        darlehen.status === 'ABGELEHNT' || darlehen.status === 'AKZEPTIERT'
-      );
-    });
-
-    return hasActiveAusbildungWithGesuchNotInBearbeitung && hasNoOpenDarlehen;
   });
 }

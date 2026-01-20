@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DarlehenDto;
+import ch.dvbern.stip.generated.dto.DarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import java.io.File;
@@ -96,7 +97,7 @@ public interface DarlehenResource {
     @GET
     @Path("/getAllDarlehenGs/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    List<DarlehenDto> getAllDarlehenGs(@PathParam("fallId") UUID fallId);
+    DarlehenGsResponseDto getAllDarlehenGs(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/getAllDarlehenSb/{gesuchId}")

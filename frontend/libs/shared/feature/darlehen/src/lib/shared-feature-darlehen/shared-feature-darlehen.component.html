@@ -35,11 +35,11 @@
       <span>{{ t('shared.menu.auszahlung') }}</span>
     </a>
 
-    @let darlehens = darlehenStore.darlehenListViewSig();
+    @let view = darlehenStore.darlehenGsViewSig();
     <dv-shared-ui-darlehen-menu
-      [dashboardViewSig]="dashboardStore.dashboardViewSig()"
-      [darlehenListSig]="darlehens.darlehenList"
-      [fallIdSig]="fallId"
+      [darlehenListSig]="view.list"
+      [canCreateDarlehenSig]="view.canCreateDarlehen"
+      [idTypeSig]="['fall', fallId]"
       (createDarlehen)="darlehenStore.createDarlehen$($event)"
     ></dv-shared-ui-darlehen-menu>
   </div>

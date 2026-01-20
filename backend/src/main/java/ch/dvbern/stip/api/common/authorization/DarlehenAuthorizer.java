@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenRepository;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -39,6 +40,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     private final DarlehenRepository darlehenRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
+    private final DarlehenService darlehenService;
 
     @Transactional
     public void canGetDarlehenGs(UUID darlehenId) {
@@ -71,7 +73,6 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canCreateDarlehen(UUID fallId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
         final var fall = fallRepository.requireById(fallId);
-        final var ausbildungs = fall.getAusbildungs();
 
         if (
             !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, benutzer, sozialdienstService)
@@ -79,21 +80,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        final var hasNoOpenDarlehen =
-            fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);
-        if (!hasNoOpenDarlehen) {
-            forbidden();
-        }
-
-        final var atLeastOneGesuchEingereicht = ausbildungs
-            .stream()
-            .anyMatch(
-                // has more than one Gesuch
-                ausbildung -> ausbildung.getGesuchs().size() > 1
-                // or has at least one eingereicht gesuch
-                || ausbildung.getGesuchs().stream().anyMatch(g -> g.getGesuchStatus().isEingereicht())
-            );
-        if (!atLeastOneGesuchEingereicht) {
+        if (!darlehenService.canCreateDarlehen(fallId)) {
             forbidden();
         }
     }
@@ -187,7 +174,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (
-            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 darlehen.getFall(),
                 benutzer,
                 sozialdienstService

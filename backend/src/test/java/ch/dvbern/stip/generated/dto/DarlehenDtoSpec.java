@@ -44,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
   DarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
   DarlehenDtoSpec.JSON_PROPERTY_GRUENDE,
+  DarlehenDtoSpec.JSON_PROPERTY_IS_DELEGIERT,
   DarlehenDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
 })
 @JsonTypeName("Darlehen")
@@ -81,6 +82,9 @@ public class DarlehenDtoSpec {
 
   public static final String JSON_PROPERTY_GRUENDE = "gruende";
   private List<DarlehenGrundDtoSpec> gruende;
+
+  public static final String JSON_PROPERTY_IS_DELEGIERT = "isDelegiert";
+  private Boolean isDelegiert;
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private String timestampErstellt;
@@ -386,6 +390,32 @@ public class DarlehenDtoSpec {
   }
 
 
+  public DarlehenDtoSpec isDelegiert(Boolean isDelegiert) {
+    
+    this.isDelegiert = isDelegiert;
+    return this;
+  }
+
+   /**
+   * Get isDelegiert
+   * @return isDelegiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_IS_DELEGIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getIsDelegiert() {
+    return isDelegiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IS_DELEGIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIsDelegiert(Boolean isDelegiert) {
+    this.isDelegiert = isDelegiert;
+  }
+
+
   public DarlehenDtoSpec timestampErstellt(String timestampErstellt) {
     
     this.timestampErstellt = timestampErstellt;
@@ -431,12 +461,13 @@ public class DarlehenDtoSpec {
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
         Objects.equals(this.gruende, darlehen.gruende) &&
+        Objects.equals(this.isDelegiert, darlehen.isDelegiert) &&
         Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
   }
 
   @Override
@@ -454,6 +485,7 @@ public class DarlehenDtoSpec {
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
+    sb.append("    isDelegiert: ").append(toIndentedString(isDelegiert)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();

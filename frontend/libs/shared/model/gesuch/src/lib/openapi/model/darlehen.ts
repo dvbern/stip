@@ -24,6 +24,7 @@ export interface Darlehen {
     schulden?: number;
     anzahlBetreibungen?: number;
     gruende?: Array<DarlehenGrund>;
+    isDelegiert?: boolean;
     timestampErstellt?: string;
 }
 

@@ -35,7 +35,6 @@ import { merge } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -104,7 +103,6 @@ export class SharedPatternDarlehenFormComponent {
   private elementRef = inject(ElementRef);
   private compileTimeConfig = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
-  private gesuchDashboardStore = inject(DashboardStore, { optional: true });
 
   private store = inject(Store);
   private config = this.store.selectSignal(selectSharedDataAccessConfigsView);
@@ -119,14 +117,13 @@ export class SharedPatternDarlehenFormComponent {
   maskitoNumber = maskitoNumber;
 
   darlehenPermissionsSig = computed(() => {
-    const delegierung =
-      this.gesuchDashboardStore?.dashboardViewSig()?.delegierung;
+    const darlehen = this.darlehenSig();
 
     return getDarlehenPermissions(
-      this.darlehenSig()?.status,
+      darlehen?.status,
       this.compileTimeConfig.appType,
       this.permissionStore.rolesMapSig(),
-      delegierung,
+      darlehen?.isDelegiert,
     ).permissions;
   });
 
@@ -152,7 +149,7 @@ export class SharedPatternDarlehenFormComponent {
 
   formSb = this.formBuilder.group({
     gewaehren: [<boolean | null>null, [Validators.required]],
-    betrag: [<string | null>null, [Validators.required]],
+    betrag: [<string | undefined>undefined],
     kommentar: [<string | null>null, [Validators.required]],
   });
 
@@ -260,10 +257,15 @@ export class SharedPatternDarlehenFormComponent {
 
     effect(() => {
       const gewaehren = this.showBetragFieldSig();
-      this.formService.setDisabledState(
-        this.formSb.controls.betrag,
-        !gewaehren,
-      );
+      const betragControl = this.formSb.controls.betrag;
+
+      this.formService.setDisabledState(betragControl, !gewaehren);
+      if (gewaehren) {
+        betragControl.setValidators([Validators.required]);
+      } else {
+        betragControl.clearValidators();
+      }
+      betragControl.updateValueAndValidity();
     });
   }
 
@@ -357,7 +359,6 @@ export class SharedPatternDarlehenFormComponent {
 
   private buildUpdatedSbFrom(): DarlehenUpdateSb {
     const realValues = convertTempFormToRealValues(this.formSb, [
-      'betrag',
       'kommentar',
       'gewaehren',
     ]);
