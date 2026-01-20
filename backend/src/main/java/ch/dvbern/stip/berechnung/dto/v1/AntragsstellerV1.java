@@ -130,14 +130,17 @@ public class AntragsstellerV1 {
             .vermoegen(einnahmenKosten.getVermoegen())
             .gemeindeInstitutionen(einnahmenKosten.getBeitraege());
 
-        einkommens.setPersonValue(piaName, einnahmenKosten.getNettoerwerbseinkommen());
+        var nettoerwerbseinkommen = einnahmenKosten.getNettoerwerbseinkommen();
+
+        if (ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
+            nettoerwerbseinkommen -= gesuchsperiode.getEinkommensfreibetrag();
+        }
+
+        einkommens.setPersonValue(piaName, nettoerwerbseinkommen);
         kinderAusbildungszulagens.setPersonValue(piaName, einnahmenKosten.getZulagen());
         andereEinnahmens.setPersonValue(piaName, einnahmenKosten.getAndereEinnahmen());
         taggelds.setPersonValue(piaName, einnahmenKosten.getTaggelderAHVIV());
-        unterhaltsbeitraeges.setPersonValue(
-            piaName,
-            toJahresWert(einnahmenKosten.getUnterhaltsbeitraege())
-        );
+        unterhaltsbeitraeges.setPersonValue(piaName, toJahresWert(einnahmenKosten.getUnterhaltsbeitraege()));
         rentens.setPersonValue(piaName, einnahmenKosten.getRenten());
         ergaenzungsleistungens.setPersonValue(piaName, einnahmenKosten.getErgaenzungsleistungen());
         eoLeistungens.setPersonValue(piaName, einnahmenKosten.getEoLeistungen());
@@ -211,8 +214,7 @@ public class AntragsstellerV1 {
         final boolean isLehre = abschluss.getBildungsrichtung()
             .equals(
                 Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG
-            )
-        && abschluss.isBerufsbefaehigenderAbschluss();
+            );
         builder.lehre(isLehre);
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 
@@ -233,10 +235,7 @@ public class AntragsstellerV1 {
             andereEinnahmens.setPartnerValue(partnerName, ekPartner.getAndereEinnahmen());
             taggelds.setPartnerValue(partnerName, ekPartner.getTaggelderAHVIV());
             einkommens.setPartnerValue(partnerName, ekPartner.getNettoerwerbseinkommen());
-            unterhaltsbeitraeges.setPartnerValue(
-                partnerName,
-                toJahresWert(ekPartner.getUnterhaltsbeitraege())
-            );
+            unterhaltsbeitraeges.setPartnerValue(partnerName, toJahresWert(ekPartner.getUnterhaltsbeitraege()));
             builder.steuernPartner(
                 // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
                 EinnahmenKostenMappingUtil.calculateSteuern(ekPartner, false)
@@ -261,8 +260,8 @@ public class AntragsstellerV1 {
 
         for (var kind : gesuchFormular.getKinds()) {
             if (kind.getWohnsitzAnteilPia() > 0) {
-                kinderAusbildungszulagens.addKindValue(kind, kind.getKinderUndAusbildungszulagen());
-                unterhaltsbeitraeges.addKindValue(kind, kind.getKinderUndAusbildungszulagen());
+                kinderAusbildungszulagens.addKindValue(kind, toJahresWert(kind.getKinderUndAusbildungszulagen()));
+                unterhaltsbeitraeges.addKindValue(kind, toJahresWert(kind.getUnterhaltsbeitraege()));
                 rentens.addKindValue(kind, kind.getRenten());
                 ergaenzungsleistungens.addKindValue(kind, kind.getErgaenzungsleistungen());
                 andereEinnahmens.addKindValue(kind, kind.getAndereEinnahmen());
