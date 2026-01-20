@@ -748,9 +748,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/buchhaltung/{fallId}:
+  /darlehen/buchhaltung/{gesuchId}:
     parameters:
-      - $ref: '#/components/parameters/fallId'
+      - $ref: '#/components/parameters/gesuchId'
     get:
       tags:
         - Darlehen
@@ -9899,11 +9899,11 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
-    fallId:
-      name: fallId
+    gesuchId:
+      name: gesuchId
       in: path
       required: true
-      description: Die ID vom Fall
+      description: Die ID vom Gesuch
       schema:
         $ref: '#/components/schemas/UUID'
     wohnort:
@@ -9939,6 +9939,13 @@ components:
       description: Die ID der Delegierung
       schema:
         $ref: '#/components/schemas/UUID'
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Fall
+      schema:
+        $ref: '#/components/schemas/UUID'
     sozialdienstId:
       name: sozialdienstId
       schema:
@@ -9966,13 +9973,6 @@ components:
       schema:
         type: string
         format: date
-    gesuchId:
-      name: gesuchId
-      in: path
-      required: true
-      description: Die ID vom Gesuch
-      schema:
-        $ref: '#/components/schemas/UUID'
     unterschriftenblattTyp:
       name: unterschriftenblattTyp
       schema:

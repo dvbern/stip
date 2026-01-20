@@ -537,9 +537,9 @@ paths:
       operationId: freiwilligDarlehenUpdateSb
       summary: Update darlehen as sb
 
-  /darlehen/buchhaltung/{fallId}:
+  /darlehen/buchhaltung/{gesuchId}:
     parameters:
-      - $ref: './components/parameters.yaml#/fallId'
+      - $ref: './components/parameters.yaml#/gesuchId'
     get:
       tags:
         - Darlehen
