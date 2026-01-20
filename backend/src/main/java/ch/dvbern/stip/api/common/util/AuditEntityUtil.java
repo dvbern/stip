@@ -15,20 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.api.common.util;
 
-import java.util.List;
+import lombok.experimental.UtilityClass;
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.criteria.AuditProperty;
 
-import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
-import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class BerechnungResult {
-    private final Integer stipendien;
-    private final Integer darlehen;
-    private final List<FamilienBudgetresultatDto> familienBudgetresultate;
-    private final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
+@UtilityClass
+public class AuditEntityUtil {
+    public AuditProperty<Object> revisionTimestamp() {
+        return AuditEntity.revisionProperty("timestamp");
+    }
 }

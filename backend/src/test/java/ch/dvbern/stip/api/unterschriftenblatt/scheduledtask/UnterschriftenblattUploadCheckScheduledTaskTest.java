@@ -85,10 +85,10 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
         Mockito.doNothing().when(buchhaltungRepository).persistAndFlush(any());
 
         var berechnungsresultatDto = new BerechnungsresultatDto();
-        berechnungsresultatDto.setBerechnung(0);
+        berechnungsresultatDto.setBerechnungTotal(0);
         berechnungsresultatDto.setYear(2025);
         var tranchenBerechnungsblattDto = new TranchenBerechnungsresultatDto();
-        tranchenBerechnungsblattDto.setBerechnung(0);
+        tranchenBerechnungsblattDto.setBerechnungAnteilTotal(0);
         berechnungsresultatDto.setTranchenBerechnungsresultate(List.of(tranchenBerechnungsblattDto));
 
         when(berechnungService.getBerechnungsresultatFromGesuch(any(), anyInt(), anyInt()))

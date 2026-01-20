@@ -39,13 +39,14 @@ type PermissionFlags =
 
 export type Permission = Permissions[PermissionFlag]['name'];
 export type PermissionMap = Partial<ReturnType<typeof parsePermissions>>;
-export type ShortRole = 'gs' | 'sb' | 'ju' | 'fe';
+export type ShortRole = 'gs' | 'sb' | 'ju' | 'fe' | 'soz';
 
 export const shortRoleMap = {
   gs: 'V0_Gesuchsteller',
   sb: 'V0_Sachbearbeiter',
   ju: 'V0_Jurist',
   fe: 'V0_Freigabestelle',
+  soz: 'V0_Sozialdienst-Mitarbeiter',
 } satisfies Partial<Record<ShortRole, AvailableBenutzerRole>>;
 
 const hasPermission = (p: PermissionFlags, perm: keyof typeof Permissions) =>
@@ -95,31 +96,31 @@ type PermissionCheck = ReturnType<typeof perm>;
  */
 // prettier-ignore
 export const permissionTableByBusinessAppType = {
-  IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF    ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  EINGEREICHT                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('WD UANJ', ['sb']) },
-  IN_FREIGABE                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['ju']) },
-  ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['sb']) },
-  FEHLENDE_DOKUMENTE               : { [GS_APP]: perm(' DF    ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  GESUCH_ABGELEHNT                 : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  JURISTISCHE_ABKLAERUNG           : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  KEIN_STIPENDIENANSPRUCH          : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  NICHT_ANSPRUCHSBERECHTIGT        : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U NJ', ['sb']) },
-  NICHT_BEITRAGSBERECHTIGT         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  STIPENDIENANSPRUCH               : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  WARTEN_AUF_UNTERSCHRIFTENBLATT   : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  DATENSCHUTZBRIEF_AM_GENERIEREN   : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  DATENSCHUTZBRIEF_DRUCKBEREIT     : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  DATENSCHUTZBRIEF_VERSANDBEREIT   : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  VERFUEGUNG_AM_GENERIEREN         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  VERFUEGUNG_DRUCKBEREIT           : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  VERFUEGUNG_VERSANDBEREIT         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  VERFUEGT                         : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
-  NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('   U   ', ['sb']) },
+  IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF    ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  EINGEREICHT                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  BEREIT_FUER_BEARBEITUNG          : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  IN_BEARBEITUNG_SB                : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('WD UANJ', ['sb']) },
+  IN_FREIGABE                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  ABKLAERUNG_DURCH_RECHSTABTEILUNG : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U NJ', ['ju']) },
+  ANSPRUCH_MANUELL_PRUEFEN         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U NJ', ['sb']) },
+  FEHLENDE_DOKUMENTE               : { [GS_APP]: perm(' DF    ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  GESUCH_ABGELEHNT                 : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  JURISTISCHE_ABKLAERUNG           : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  KEIN_STIPENDIENANSPRUCH          : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  NICHT_ANSPRUCHSBERECHTIGT        : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U NJ', ['sb']) },
+  NICHT_BEITRAGSBERECHTIGT         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  STIPENDIENANSPRUCH               : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  WARTEN_AUF_UNTERSCHRIFTENBLATT   : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  DATENSCHUTZBRIEF_AM_GENERIEREN   : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  DATENSCHUTZBRIEF_DRUCKBEREIT     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  DATENSCHUTZBRIEF_VERSANDBEREIT   : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_AM_GENERIEREN         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_DRUCKBEREIT           : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_VERSANDBEREIT         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  VERFUEGT                         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
+  NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
 } as const satisfies Record<Gesuchstatus, Record<BusinessAppType, PermissionCheck>>;
 
 /**
@@ -129,12 +130,12 @@ export const permissionTableByBusinessAppType = {
  */
 // prettier-ignore
 export const trancheReadWritestatusByBusinessAppType = {
-  IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF    ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  UEBERPRUEFEN:       { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('WD  A  ', ['sb']) },
-  FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D     ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  AKZEPTIERT:         { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  ABGELEHNT:          { [GS_APP]: perm('WD     ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
-  MANUELLE_AENDERUNG: { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm('       ', ['sb']) },
+  IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF    ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  UEBERPRUEFEN:       { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('WD  A  ', ['sb']) },
+  FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D     ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  AKZEPTIERT:         { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  ABGELEHNT:          { [GS_APP]: perm('WD     ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
+  MANUELLE_AENDERUNG: { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
 } as const satisfies Record<
   GesuchTrancheStatus,
   Record<BusinessAppType, PermissionCheck>
@@ -247,12 +248,11 @@ export const isNotReadonly = (
       const isDelegiert =
         typeof delegierung === 'boolean'
           ? delegierung
-          : delegierung?.delegierungAngenommen;
-      return (
-        !isDelegiert ||
-        // OK if it is delegated and current user is a sozialdienst-mitarbeiter
-        (!!isDelegiert && rolesMap['V0_Sozialdienst-Mitarbeiter'] === true)
-      );
+          : (delegierung?.delegierungAngenommen ?? false);
+      if (!isDelegiert) {
+        return true;
+      }
+      return rolesMap['V0_Sozialdienst-Mitarbeiter'] === true;
     }
     default:
       assertUnreachable(appType);

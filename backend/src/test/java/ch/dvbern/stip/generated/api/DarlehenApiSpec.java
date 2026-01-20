@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenGsResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
 import java.io.File;
@@ -1084,7 +1085,7 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #fallIdPath  (required)
-     * return List&lt;DarlehenDtoSpec&gt;
+     * return DarlehenGsResponseDtoSpec
      */
     public static class GetAllDarlehenGsOper implements Oper {
 
@@ -1114,10 +1115,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/getAllDarlehenGs/{fallId}
          * @param handler handler
-         * @return List&lt;DarlehenDtoSpec&gt;
+         * @return DarlehenGsResponseDtoSpec
          */
-        public List<DarlehenDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<DarlehenDtoSpec>> type = new TypeRef<List<DarlehenDtoSpec>>(){};
+        public DarlehenGsResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenGsResponseDtoSpec> type = new TypeRef<DarlehenGsResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 

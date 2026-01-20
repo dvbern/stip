@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -55,7 +56,7 @@ public class GesuchTrancheHistoryRepository {
         return (GesuchTranche) reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, true)
             .add(AuditEntity.id().eq(gesuchTrancheId))
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getSingleResult();
     }
@@ -66,7 +67,7 @@ public class GesuchTrancheHistoryRepository {
             .forRevisionsOfEntity(GesuchTranche.class, true, false)
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1);
     }
 
@@ -100,7 +101,7 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
             .add(AuditEntity.property("status").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -120,7 +121,7 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").eq(gesuchTrancheStatus))
             .add(AuditEntity.property("status").hasChanged())
-            .addOrder(AuditEntity.revisionNumber().asc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
             .setMaxResults(1)
             .getResultList()
             .stream()
@@ -169,7 +170,7 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("gesuch").isNotNull()) // Envers may have erroneous entries with null elements
                                                              // this filters those out
-            .addOrder(AuditEntity.revisionNumber().desc())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()

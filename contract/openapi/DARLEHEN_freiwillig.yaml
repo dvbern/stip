@@ -439,9 +439,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './components/common.yaml#/Darlehen'
+                $ref: '#/components/schemas/DarlehenGsResponse'
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -536,11 +534,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: darlehenUpdateSb
       summary: Update darlehen as sb
-
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
-
   schemas:
     SbDarlehenDashboardColumn:
       enum:
@@ -572,9 +568,8 @@ components:
       type: object
       required:
         - id
-        - gesuchId
-        - gesuchTrancheId
         - fallId
+        - relatedGesuchId
         - fallNummer
         - piaVorname
         - piaNachname
@@ -585,11 +580,9 @@ components:
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
-        gesuchId:
-          $ref: './components/common.yaml#/UUID'
-        gesuchTrancheId:
-          $ref: './components/common.yaml#/UUID'
         fallId:
+          $ref: './components/common.yaml#/UUID'
+        relatedGesuchId:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
@@ -647,6 +640,19 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/DarlehenDokument'
+
+    DarlehenGsResponse:
+      type: object
+      required:
+        - darlehenList
+        - canCreateDarlehen
+      properties:
+        darlehenList:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Darlehen'
+        canCreateDarlehen:
+          type: boolean
 
     DarlehenDokument:
       type: object

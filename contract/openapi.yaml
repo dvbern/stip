@@ -643,9 +643,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/DarlehenGsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -6254,9 +6252,8 @@ components:
       type: object
       required:
         - id
-        - gesuchId
-        - gesuchTrancheId
         - fallId
+        - relatedGesuchId
         - fallNummer
         - piaVorname
         - piaNachname
@@ -6267,11 +6264,9 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        gesuchId:
-          $ref: '#/components/schemas/UUID'
-        gesuchTrancheId:
-          $ref: '#/components/schemas/UUID'
         fallId:
+          $ref: '#/components/schemas/UUID'
+        relatedGesuchId:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
@@ -6325,6 +6320,18 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/DarlehenDokument'
+    DarlehenGsResponse:
+      type: object
+      required:
+        - darlehenList
+        - canCreateDarlehen
+      properties:
+        darlehenList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Darlehen'
+        canCreateDarlehen:
+          type: boolean
     DarlehenDokument:
       type: object
       required:
@@ -6383,6 +6390,8 @@ components:
           $ref: '#/components/schemas/UUID'
         fallId:
           $ref: '#/components/schemas/UUID'
+        relatedGesuchId:
+          $ref: '#/components/schemas/UUID'
         status:
           $ref: '#/components/schemas/DarlehenStatus'
         gewaehren:
@@ -6405,6 +6414,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DarlehenGrund'
+        isDelegiert:
+          type: boolean
         timestampErstellt:
           type: string
     FileDownloadToken:
@@ -8783,14 +8794,24 @@ components:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
         - year
-        - berechnung
+        - berechnungTotal
+        - berechnungStipendium
+        - berechnungDarlehen
         - tranchenBerechnungsresultate
       type: object
       properties:
         year:
           type: integer
-        berechnung:
+        berechnungTotal:
+          description: >-
+            Die Summe der berechneten Stpendiums- und Darlehensansprüche für das
+            Gesuch
+          type: integer
+        berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
+          type: integer
+        berechnungDarlehen:
+          description: Berechneter Darlehensanspruch für das Gesuch
           type: integer
         berechnungReduziert:
           description: >-
@@ -8808,7 +8829,9 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - berechnung
+        - berechnungAnteilTotal
+        - berechnungAnteilStipendium
+        - berechnungAnteilDarlehen
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -8820,8 +8843,16 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        berechnung:
+        berechnungAnteilTotal:
+          description: >-
+            Die Summe der berechneten Stpendiums- und Darlehensansprüche für
+            diese Tranche
+          type: integer
+        berechnungAnteilStipendium:
           description: Berechneter Stpendiumsanspruch für diese Tranche
+          type: integer
+        berechnungAnteilDarlehen:
+          description: Berechneter Darlehensanspruch für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'

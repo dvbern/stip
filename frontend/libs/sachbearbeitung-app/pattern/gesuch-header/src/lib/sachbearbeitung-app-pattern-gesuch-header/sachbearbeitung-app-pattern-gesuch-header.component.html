@@ -124,10 +124,11 @@
     <div class="text-body-tertiary vr my-1"></div>
 
     <!-- Darlehen Menu -->
-    @let darlehens = darlehenStore.darlehenListViewSig();
+    @let view = darlehenStore.darlehenListSbViewSig();
     <dv-shared-ui-darlehen-menu
-      [darlehenListSig]="darlehens.darlehenList"
-      [gesuchIdSig]="gesuchId"
+      [darlehenListSig]="view.list"
+      [canCreateDarlehenSig]="false"
+      [idTypeSig]="['gesuch', gesuchId]"
     ></dv-shared-ui-darlehen-menu>
 
     @if (isTrancheRouteSig()) {

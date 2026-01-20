@@ -49,6 +49,7 @@ import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -190,6 +191,7 @@ public class GesuchService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
+    private final DarlehenService darlehenService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -600,7 +602,7 @@ public class GesuchService {
             configService.getCurrentDmnMinorVersion()
         );
 
-        if (stipendien.getBerechnung() <= 0) {
+        if (stipendien.getBerechnungTotal() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
             gesuchStatusToVerfuegt(gesuchId);
         } else {
@@ -721,7 +723,7 @@ public class GesuchService {
                 configService.getCurrentDmnMinorVersion()
             );
 
-            if (stipendien.getBerechnung() > 0) {
+            if (stipendien.getBerechnungTotal() > 0) {
                 status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
             }
         }

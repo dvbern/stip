@@ -40,12 +40,36 @@ const hasPermission = (
 const GS_APP = 'gesuch-app' satisfies BusinessAppType;
 const SB_APP = 'sachbearbeitung-app' satisfies BusinessAppType;
 
+type MultiplePermissionFlags = [DarlehenPermissionFlags, ShortRole][];
+
+/**
+ * Check the permission for multiple roles, merging flags that are matching the rolesMap.
+ */
+const mPerm = (flagsByRoles: MultiplePermissionFlags) => {
+  return (rolesMap: RolesMap): DarlehenPermissionFlags => {
+    let combinedPermissions: DarlehenPermissionFlags = '       ';
+
+    for (const [flags, shortRole] of flagsByRoles) {
+      // If the rolesMap contains the shortRole, merge the flags into combinedPermissions.
+      if (rolesMap[shortRoleMap[shortRole]]) {
+        combinedPermissions = combinedPermissions
+          .split('')
+          .map((char, index) => (char !== ' ' ? char : flags.charAt(index)))
+          .join('') as DarlehenPermissionFlags;
+      }
+    }
+
+    return combinedPermissions;
+  };
+};
+
 const perm = (flags: DarlehenPermissionFlags, roles: ShortRole[]) => {
   return (rolesMap: RolesMap): DarlehenPermissionFlags =>
     roles.some((shortRole) => !!rolesMap[shortRoleMap[shortRole]])
       ? flags
       : '       ';
 };
+
 type PermissionCheck = ReturnType<typeof perm>;
 
 const parsePermissions = (permission: DarlehenPermissionFlags) => {
@@ -64,11 +88,16 @@ export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 
 // prettier-ignore
 export const darlehenPermissionTableByAppType = {
-  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
-  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm(' RK  F ', ['sb']) },
-  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs']), [SB_APP]: perm(' RK   A', ['fe']) },
-  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
-  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs']), [SB_APP]: perm(' R     ', ['sb']) },
+  IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
+  EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm([[' RK  F ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
+  IN_FREIGABE                     : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' RK   A', 'fe']]) },
+  AKZEPTIERT                      : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
+  ABGELEHNT                       : { [GS_APP]: perm(' R     ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
+                                                                                                 [' R     ', 'fe']]) },
 } as const satisfies Record<
   DarlehenStatus,
   Record<BusinessAppType, PermissionCheck>
@@ -78,7 +107,7 @@ const applyDelegatedDarlehenPermissions = (
   permissions: DarlehenPermissionMap,
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung?: DelegierungSlim,
+  delegierung?: DelegierungSlim | boolean | undefined,
 ): DarlehenPermissionMap => {
   if (isNotReadonly(appType, rolesMap, delegierung)) {
     return permissions;
@@ -96,7 +125,7 @@ export const getDarlehenPermissions = (
   status: DarlehenStatus | undefined,
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung?: DelegierungSlim,
+  delegierung?: DelegierungSlim | boolean | undefined,
 ) => {
   if (!status) {
     return { permissions: undefined, status };

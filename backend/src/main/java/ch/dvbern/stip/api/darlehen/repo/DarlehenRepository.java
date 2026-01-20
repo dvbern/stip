@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.darlehen.repo;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.entity.QSachbearbeiter;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.QDarlehen;
@@ -37,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DarlehenRepository implements BaseRepository<Darlehen> {
     private static final QDarlehen darlehen = QDarlehen.darlehen;
-    private static final QSachbearbeiter sachbearbeiter = QSachbearbeiter.sachbearbeiter;
     private static final QZuordnung zuordnung = QZuordnung.zuordnung;
 
     private final EntityManager entityManager;
@@ -59,7 +57,7 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
         var query = queryFactory
             .selectFrom(darlehen)
             .where(
-                darlehen.fall.ausbildungs.any().gesuchs.any().id.eq(gesuchId)
+                darlehen.relatedGesuch.id.eq(gesuchId)
             );
         return query.stream().toList();
     }
@@ -86,9 +84,23 @@ public class DarlehenRepository implements BaseRepository<Darlehen> {
 
     public Darlehen requireByDokumentId(final UUID dokumentId) {
         return getAlleQuery()
-            .where(darlehen.dokumente.any().dokumente.any().id.eq(dokumentId))
+            .where(
+                darlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
+            )
             .stream()
             .findFirst()
             .orElseThrow(NotFoundException::new);
     }
+
+    public Darlehen requireByDokumentOrDarlehensVerfuegungId(final UUID dokumentId) {
+        return getAlleQuery()
+            .where(
+                darlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
+                    .or(darlehen.darlehenVerfuegung.id.eq(dokumentId))
+            )
+            .stream()
+            .findFirst()
+            .orElseThrow(NotFoundException::new);
+    }
+
 }

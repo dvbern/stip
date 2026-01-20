@@ -17,13 +17,17 @@
 
 package ch.dvbern.stip.api.darlehen.service;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
@@ -40,10 +44,14 @@ import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.pdf.service.DarlehensVerfuegungPdfService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
+import ch.dvbern.stip.generated.dto.DarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -81,14 +89,70 @@ public class DarlehenService {
     private final DarlehenDashboardQueryBuilder darlehenDashboardQueryBuilder;
     private final NotificationService notificationService;
     private final Validator validator;
+    private final GesuchRepository gesuchRepository;
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
+    private final DarlehensVerfuegungPdfService darlehensVerfuegungPdfService;
+
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
+    private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
+
+    @Transactional
+    public void createPositiveDarlehensVerfuegung(Darlehen darlehen) {
+        final ByteArrayOutputStream out =
+            darlehensVerfuegungPdfService.generatePositiveDarlehensVerfuegungPdf(darlehen);
+
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+        );
+
+        var darlehensVerfuegung = new Dokument();
+        darlehensVerfuegung.setObjectId(objectId);
+        darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
+    }
+
+    @Transactional
+    public void createNegativeDarlehensVerfuegung(Darlehen darlehen) {
+        final ByteArrayOutputStream out =
+            darlehensVerfuegungPdfService.generateNegativeDarlehensVerfuegungPdf(darlehen);
+
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            out.toByteArray(),
+            NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            s3,
+            configService,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+        );
+
+        var darlehensVerfuegung = new Dokument();
+        darlehensVerfuegung.setObjectId(objectId);
+        darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
+        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
+        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
+    }
 
     @Transactional
     public DarlehenDto createDarlehen(final UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
+        final var gesuchs = gesuchRepository.findAllForFall(fallId);
+        final var relatedGesuch =
+            gesuchs.filter(gesuch -> gesuch.getGesuchStatus().isEingereicht())
+                .max(Comparator.comparing(gesuch -> gesuch.getGesuchsperiode().getGesuchsperiodeStopp()))
+                .orElseThrow();
 
         final var darlehen = new Darlehen();
         darlehen.setFall(fall);
         darlehen.setStatus(DarlehenStatus.IN_BEARBEITUNG_GS);
+        darlehen.setRelatedGesuch(relatedGesuch);
 
         darlehenRepository.persistAndFlush(darlehen);
         return darlehenMapper.toDto(darlehen);
@@ -108,9 +172,47 @@ public class DarlehenService {
     }
 
     @Transactional
-    public List<DarlehenDto> getDarlehenAllGs(final UUID fallId) {
+    public boolean canCreateDarlehen(UUID fallId) {
+        final var fall = fallRepository.requireById(fallId);
+        final var ausbildungs = fall.getAusbildungs();
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        // Check if user is authorized (either delegated Sozialdienst mitarbeiter or Gesuchsteller)
+        if (
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, benutzer, sozialdienstService)
+        ) {
+            return false;
+        }
+
+        final var hasNoOpenDarlehen =
+            fall.getDarlehens().stream().map(Darlehen::getStatus).allMatch(DarlehenStatus::isCompleted);
+        if (!hasNoOpenDarlehen) {
+            return false;
+        }
+
+        final var atLeastOneGesuchEingereicht = ausbildungs
+            .stream()
+            .anyMatch(
+                // has more than one Gesuch
+                ausbildung -> ausbildung.getGesuchs().size() > 1
+                // or has at least one eingereicht gesuch
+                || ausbildung.getGesuchs().stream().anyMatch(g -> g.getGesuchStatus().isEingereicht())
+            );
+        if (!atLeastOneGesuchEingereicht) {
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public DarlehenGsResponseDto getDarlehenAllGs(final UUID fallId) {
         final var darlehenList = darlehenRepository.findByFallId(fallId);
-        return darlehenList.stream().map(darlehenMapper::toDto).toList();
+        final var darlehenDto = new DarlehenGsResponseDto();
+        darlehenDto.setCanCreateDarlehen(canCreateDarlehen(fallId));
+        darlehenDto.setDarlehenList(
+            darlehenList.stream().map(darlehenMapper::toDto).toList()
+        );
+        return darlehenDto;
     }
 
     @Transactional
@@ -192,7 +294,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
 
         darlehenRepository.persistAndFlush(darlehen);
-
+        createNegativeDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAbgelehntNotification(darlehen);
 
         return darlehenMapper.toDto(darlehen);
@@ -205,7 +307,7 @@ public class DarlehenService {
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
 
         darlehenRepository.persistAndFlush(darlehen);
-
+        createPositiveDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAkzeptiertNotification(darlehen);
 
         return darlehenMapper.toDto(darlehen);
@@ -217,6 +319,7 @@ public class DarlehenService {
         assertDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
         removeSuperfluousDokumentsForDarlehen(darlehen);
         darlehen.setStatus(DarlehenStatus.EINGEGEBEN);
+        darlehen.setEingabedatum(LocalDate.now());
 
         ValidatorUtil.validate(validator, darlehen, DarlehenEinreichenValidationGroup.class);
         darlehenRepository.persistAndFlush(darlehen);
@@ -389,7 +492,7 @@ public class DarlehenService {
     @Transactional
     public void removeDokument(final UUID dokumentId) {
         final var dokument = dokumentRepository.requireById(dokumentId);
-        final var darlehen = darlehenRepository.requireByDokumentId(dokumentId);
+        final var darlehen = darlehenRepository.requireByDokumentOrDarlehensVerfuegungId(dokumentId);
         final var darlehenDokumente = darlehen.getDokumente();
 
         for (var darlehenDokument : darlehenDokumente) {

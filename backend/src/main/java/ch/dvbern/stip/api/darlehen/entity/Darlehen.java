@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -24,19 +25,26 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.DarlehenEinreichenValidationGroup;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -71,6 +79,11 @@ public class Darlehen extends AbstractMandantEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "fall_id", nullable = false)
     private Fall fall;
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "gesuch_id", nullable = false)
+    private Gesuch relatedGesuch;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -118,5 +131,28 @@ public class Darlehen extends AbstractMandantEntity {
 
     @OneToMany(mappedBy = "darlehen", orphanRemoval = true)
     private Set<DarlehenDokument> dokumente = new LinkedHashSet<>();
+
+    @Nullable
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(
+        name = "darlehen_verfuegung_id",
+        foreignKey = @ForeignKey(name = "FK_darlehen_verfuegung_dokument_id"),
+        nullable = true
+    )
+    private Dokument darlehenVerfuegung;
+
+    @Nullable
+    @Column(name = "eingabedatum")
+    private LocalDate eingabedatum;
+
+    @Transient
+    public String getDarlehenNr() {
+        // remove everything except numbers from fallNr.
+        // and fill missing spots with zeros (total length of 8 required)
+        final var fallNummer = this.getFall().getFallNummer();
+        final int darlehenNo = Integer.parseInt(fallNummer.substring(fallNummer.lastIndexOf('.') + 1));
+
+        return String.format("%08d", darlehenNo);
+    }
 
 }

@@ -18,19 +18,14 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.DarlehenDashboardDto;
 import ch.dvbern.stip.generated.dto.DarlehenDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDto;
-import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -39,12 +34,13 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class, uses = DarlehenDokumentMapper.class)
 public abstract class DarlehenMapper {
     @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
+    @Mapping(source = ".", target = "isDelegiert", qualifiedByName = "getIsDelegiert")
     public abstract DarlehenDto toDto(Darlehen darlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
     @Mapping(source = "fall.id", target = "fallId")
-    @Mapping(source = ".", target = "gesuchId", qualifiedByName = "getGesuchId")
-    @Mapping(source = ".", target = "gesuchTrancheId", qualifiedByName = "getGesuchTrancheId")
+    @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
     @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
     @Mapping(source = ".", target = "piaGeburtsdatum", qualifiedByName = "getPiaGeburtsdatum")
@@ -63,27 +59,6 @@ public abstract class DarlehenMapper {
         DarlehenUpdateSbDto darlehenDto,
         @MappingTarget Darlehen darlehen
     );
-
-    private Gesuch getGesuch(Darlehen darlehen) {
-        return darlehen
-            .getFall()
-            .getAusbildungs()
-            .stream()
-            .sorted(Comparator.comparing(Ausbildung::getTimestampErstellt).reversed())
-            .flatMap(a -> a.getGesuchs().stream().sorted(Comparator.comparing(Gesuch::getTimestampErstellt).reversed()))
-            .findFirst()
-            .orElseThrow(NotFoundException::new);
-    }
-
-    @Named("getGesuchId")
-    public UUID getGesuchId(Darlehen darlehen) {
-        return getGesuch(darlehen).getId();
-    }
-
-    @Named("getGesuchTrancheId")
-    public UUID getGesuchTrancheId(Darlehen darlehen) {
-        return getGesuch(darlehen).getLatestGesuchTranche().getId();
-    }
 
     @Named("getPiaNachname")
     public String getPiaNachname(Darlehen darlehen) {
@@ -117,5 +92,10 @@ public abstract class DarlehenMapper {
             .getSachbearbeiterZuordnung()
             .getSachbearbeiter()
             .getFullName();
+    }
+
+    @Named("getIsDelegiert")
+    public Boolean getIsDelegiert(Darlehen darlehen) {
+        return darlehen.getFall().isDelegiert();
     }
 }

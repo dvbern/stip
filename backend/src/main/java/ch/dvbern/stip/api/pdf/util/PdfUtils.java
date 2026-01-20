@@ -30,13 +30,16 @@ import java.util.Optional;
 
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
+import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.Constants;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
 import com.itextpdf.kernel.font.PdfFont;
@@ -64,10 +67,10 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_BOLD_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_SMALL;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.LOGO_PATH;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.NUMBER_FORMAT;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.RECHTSMITTELBELEHRUNG_TITLE_KEY;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_BIG;
@@ -92,12 +95,46 @@ public class PdfUtils {
         document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
     }
 
+    public String formatAusbildungsjahr(final LocalDate von, final LocalDate bis) {
+        return String.format(
+            " %d/%d",
+            von.getYear(),
+            bis.getYear()
+        );
+    }
+
+    public Paragraph getAnredeParagraph(
+        final PersonInAusbildung pia,
+        final PdfFont pdfFont,
+        final TL translator,
+        float fontSize,
+        float leftMargin
+    ) {
+        final String anredeTlKey = pia
+            .getAnrede()
+            .equals(Anrede.HERR)
+                ? "stip.pdf.begruessung.mann"
+                : "stip.pdf.begruessung.frau";
+
+        return PdfUtils.createParagraph(
+            pdfFont,
+            fontSize,
+            leftMargin,
+            translator.translate(anredeTlKey) + " ",
+            pia.getNachname()
+        );
+    }
+
     public PdfFont createFont() {
         return getPdfFont(PdfConstants.FONT_PATH);
     }
 
     public PdfFont createFontBold() {
-        return getPdfFont(FONT_BOLD_PATH);
+        return getPdfFont(PdfConstants.FONT_BOLD_PATH);
+    }
+
+    public PdfFont createFontItalic() {
+        return getPdfFont(PdfConstants.FONT_ITALIC_PATH);
     }
 
     private static PdfFont getPdfFont(String fontPath) {
@@ -115,17 +152,26 @@ public class PdfUtils {
     public Image getLogo(
         final PdfDocument pdfDocument,
         final String pathToSvg
-    ) throws IOException {
+    ) {
         final ByteArrayOutputStream svgOut = new ByteArrayOutputStream();
         try (final InputStream svgStream = PdfUtils.class.getResourceAsStream(pathToSvg)) {
             SvgConverter.createPdf(svgStream, svgOut);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
+
         try (
             final PdfReader reader = new PdfReader(new ByteArrayInputStream(svgOut.toByteArray()));
             final PdfDocument tempSvgDoc = new PdfDocument(reader)
         ) {
             final PdfFormXObject xObject = tempSvgDoc.getFirstPage().copyAsFormXObject(pdfDocument);
-            return new Image(xObject).scaleToFit(150, 87);
+            final Image logo = new Image(xObject);
+            logo.scaleToFit(150, 87);
+            logo.setMarginLeft(-25);
+            logo.setMarginTop(-35);
+            return logo;
+        } catch (IOException e) {
+            throw new InternalServerErrorException(e);
         }
     }
 
@@ -144,6 +190,28 @@ public class PdfUtils {
             paragraph.add(new Text(text));
         }
         return paragraph;
+    }
+
+    public Paragraph createParagraph(
+        float fontSize,
+        float leftMargin
+    ) {
+        final Paragraph paragraph = new Paragraph();
+        paragraph.setFontSize(fontSize);
+        paragraph.setMultipliedLeading(1f);
+        paragraph.setMarginLeft(leftMargin);
+        return paragraph;
+    }
+
+    public Text createText(
+        final PdfFont font,
+        float fontSize,
+        final String text
+    ) {
+        final Text textOut = new Text(text);
+        textOut.setFontSize(fontSize);
+        textOut.setFont(font);
+        return textOut;
     }
 
     public Table createTable(
@@ -178,6 +246,7 @@ public class PdfUtils {
     public void header(
         final Gesuch gesuch,
         final Document document,
+        final PdfDocument pdfDocument,
         final float leftMargin,
         final TL translator,
         final boolean isDeckblatt,
@@ -187,6 +256,7 @@ public class PdfUtils {
         header(
             gesuch,
             document,
+            pdfDocument,
             leftMargin,
             translator,
             isDeckblatt,
@@ -200,6 +270,7 @@ public class PdfUtils {
     public void header(
         final Gesuch gesuch,
         final Document document,
+        final PdfDocument pdfDocument,
         final float leftMargin,
         final TL translator,
         final boolean isDeckblatt,
@@ -208,6 +279,9 @@ public class PdfUtils {
         final Link ausbildungsbeitraegeUri,
         final Optional<Eltern> elternteilOptional
     ) {
+
+        final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
+        document.add(logo);
         final float[] columnWidths = { 50, 50 };
         final Table headerTable = PdfUtils.createTable(columnWidths, leftMargin);
 
@@ -456,6 +530,28 @@ public class PdfUtils {
         }
     }
 
+    public String getDelegierungKopieAnText(
+        final Delegierung delegierung
+    ) {
+        if (Objects.isNull(delegierung)) {
+            return "";
+        }
+        final List<String> kopieAn = new ArrayList<>();
+        final var sozialdienstName = delegierung.getSozialdienst().getName();
+        final var sozialdienstAdresse = delegierung
+            .getSozialdienst()
+            .getZahlungsverbindung()
+            .getAdresse();
+
+        kopieAn.add(sozialdienstName);
+        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
+            kopieAn.add(sozialdienstAdresse.getCoAdresse());
+        }
+        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
+        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
+        return String.join(", ", kopieAn);
+    }
+
     private void addCopieAnParagraph(
         final Gesuch gesuch,
         final TL translator,
@@ -467,22 +563,7 @@ public class PdfUtils {
             return;
         }
 
-        final List<String> kopieAn = new ArrayList<>();
-        final var sozialdienstName = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst().getName();
-        final var sozialdienstAdresse = gesuch.getAusbildung()
-            .getFall()
-            .getDelegierung()
-            .getSozialdienst()
-            .getZahlungsverbindung()
-            .getAdresse();
-
-        kopieAn.add(sozialdienstName);
-        if (Objects.nonNull(sozialdienstAdresse.getCoAdresse())) {
-            kopieAn.add(sozialdienstAdresse.getCoAdresse());
-        }
-        kopieAn.add(sozialdienstAdresse.getStrasse().concat(" ").concat(sozialdienstAdresse.getHausnummer()));
-        kopieAn.add(sozialdienstAdresse.getPlz().concat(" ").concat(sozialdienstAdresse.getOrt()));
-
+        final String kopieAn = getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getDelegierung());
         document.add(
             PdfUtils.createParagraph(
                 pdfFont,
@@ -490,7 +571,7 @@ public class PdfUtils {
                 leftMargin,
                 "- ",
                 translator.translate("stip.pdf.footer.kopieAn") + " ",
-                String.join(", ", kopieAn)
+                kopieAn
             )
         );
     }

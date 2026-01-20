@@ -9,20 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DarlehenStatus } from './darlehenStatus';
+import { Darlehen } from './darlehen';
 
-export interface DarlehenDashboard { 
-    id: string;
-    fallId: string;
-    relatedGesuchId: string;
-    fallNummer: string;
-    piaVorname: string;
-    piaNachname: string;
-    piaGeburtsdatum: string;
-    status: DarlehenStatus;
-    bearbeiter: string;
-    letzteAktivitaet: string;
+export interface DarlehenGsResponse { 
+    darlehenList: Array<Darlehen>;
+    canCreateDarlehen: boolean;
 }
-
-
 

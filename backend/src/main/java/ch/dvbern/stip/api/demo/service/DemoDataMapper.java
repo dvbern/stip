@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoDataImport;
 import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import org.mapstruct.Mapper;
@@ -57,11 +57,11 @@ public abstract class DemoDataMapper {
 
     @Named("getStartDate")
     static LocalDate getStartDate(Gesuch gesuch) {
-        return GesuchMapper.getGesuchDateRange(gesuch).getGueltigAb();
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigAb();
     }
 
     @Named("getEndDate")
     static LocalDate getEndDate(Gesuch gesuch) {
-        return GesuchMapper.getGesuchDateRange(gesuch).getGueltigBis();
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigBis();
     }
 }

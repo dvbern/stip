@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Darlehen } from '../model/darlehen';
 import { DarlehenDokumentType } from '../model/darlehenDokumentType';
+import { DarlehenGsResponse } from '../model/darlehenGsResponse';
 import { DarlehenUpdateGs } from '../model/darlehenUpdateGs';
 import { DarlehenUpdateSb } from '../model/darlehenUpdateSb';
 import { FileDownloadToken } from '../model/fileDownloadToken';
@@ -1385,9 +1386,9 @@ export class DarlehenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Darlehen>>;
-     public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Darlehen>>>;
-     public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Darlehen>>>;
+     public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<DarlehenGsResponse>;
+     public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<DarlehenGsResponse>>;
+     public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<DarlehenGsResponse>>;
      public getAllDarlehenGs$(requestParameters: DarlehenServiceGetAllDarlehenGsRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const fallId = requestParameters.fallId;
         if (fallId === null || fallId === undefined) {
@@ -1440,7 +1441,7 @@ export class DarlehenService {
         }
 
         const localVarPath = `/darlehen/getAllDarlehenGs/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<Array<Darlehen>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<DarlehenGsResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

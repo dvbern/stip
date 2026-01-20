@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DarlehenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID fallId;
+  private @Valid UUID relatedGesuchId;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
   private @Valid Boolean gewaehren;
   private @Valid Integer betrag;
@@ -33,6 +34,7 @@ public class DarlehenDto  implements Serializable {
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
   private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+  private @Valid Boolean isDelegiert;
   private @Valid String timestampErstellt;
 
   /**
@@ -70,6 +72,24 @@ public class DarlehenDto  implements Serializable {
   @JsonProperty("fallId")
   public void setFallId(UUID fallId) {
     this.fallId = fallId;
+  }
+
+  /**
+   **/
+  public DarlehenDto relatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
+    return this;
+  }
+
+  
+  @JsonProperty("relatedGesuchId")
+  public UUID getRelatedGesuchId() {
+    return relatedGesuchId;
+  }
+
+  @JsonProperty("relatedGesuchId")
+  public void setRelatedGesuchId(UUID relatedGesuchId) {
+    this.relatedGesuchId = relatedGesuchId;
   }
 
   /**
@@ -238,6 +258,24 @@ public class DarlehenDto  implements Serializable {
   }
   /**
    **/
+  public DarlehenDto isDelegiert(Boolean isDelegiert) {
+    this.isDelegiert = isDelegiert;
+    return this;
+  }
+
+  
+  @JsonProperty("isDelegiert")
+  public Boolean getIsDelegiert() {
+    return isDelegiert;
+  }
+
+  @JsonProperty("isDelegiert")
+  public void setIsDelegiert(Boolean isDelegiert) {
+    this.isDelegiert = isDelegiert;
+  }
+
+  /**
+   **/
   public DarlehenDto timestampErstellt(String timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
     return this;
@@ -266,6 +304,7 @@ public class DarlehenDto  implements Serializable {
     DarlehenDto darlehen = (DarlehenDto) o;
     return Objects.equals(this.id, darlehen.id) &&
         Objects.equals(this.fallId, darlehen.fallId) &&
+        Objects.equals(this.relatedGesuchId, darlehen.relatedGesuchId) &&
         Objects.equals(this.status, darlehen.status) &&
         Objects.equals(this.gewaehren, darlehen.gewaehren) &&
         Objects.equals(this.betrag, darlehen.betrag) &&
@@ -274,12 +313,13 @@ public class DarlehenDto  implements Serializable {
         Objects.equals(this.schulden, darlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, darlehen.anzahlBetreibungen) &&
         Objects.equals(this.gruende, darlehen.gruende) &&
+        Objects.equals(this.isDelegiert, darlehen.isDelegiert) &&
         Objects.equals(this.timestampErstellt, darlehen.timestampErstellt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
   }
 
   @Override
@@ -289,6 +329,7 @@ public class DarlehenDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
+    sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
@@ -297,6 +338,7 @@ public class DarlehenDto  implements Serializable {
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
+    sb.append("    isDelegiert: ").append(toIndentedString(isDelegiert)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("}");
     return sb.toString();

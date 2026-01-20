@@ -15,6 +15,7 @@ import { DarlehenGrund } from './darlehenGrund';
 export interface Darlehen { 
     id: string;
     fallId?: string;
+    relatedGesuchId?: string;
     status?: DarlehenStatus;
     gewaehren?: boolean;
     betrag?: number;
@@ -23,6 +24,7 @@ export interface Darlehen {
     schulden?: number;
     anzahlBetreibungen?: number;
     gruende?: Array<DarlehenGrund>;
+    isDelegiert?: boolean;
     timestampErstellt?: string;
 }
 
