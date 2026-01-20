@@ -3,7 +3,13 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { Verfuegung, VerfuegungService } from '@dv/shared/model/gesuch';
+import {
+  DarlehenBuchhaltungEntry,
+  DarlehenService,
+  DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams,
+  Verfuegung,
+  VerfuegungService,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -36,13 +42,13 @@ export interface DatenschutzbriefDokument {
 
 type InfosAdminState = {
   verfuegungen: CachedRemoteData<Verfuegung[]>;
-  darlehenDokumente: CachedRemoteData<DarlehenDokument[]>;
+  darlehenBuchhaltungEntrys: CachedRemoteData<DarlehenBuchhaltungEntry[]>;
   datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefDokument[]>;
 };
 
 const initialState: InfosAdminState = {
   verfuegungen: initial(),
-  darlehenDokumente: initial(),
+  darlehenBuchhaltungEntrys: initial(),
   datenschutzbriefeDokumente: initial(),
 };
 
@@ -52,6 +58,7 @@ export class InfosGesuchsdokumenteStore extends signalStore(
   withState(initialState),
 ) {
   private verfuegungService = inject(VerfuegungService);
+  private darlehenService = inject(DarlehenService);
 
   verfuegungenViewSig = computed(() => {
     return {
@@ -62,8 +69,8 @@ export class InfosGesuchsdokumenteStore extends signalStore(
 
   darlehenDokumenteViewSig = computed(() => {
     return {
-      darlehenDokumente: fromCachedDataSig(this.darlehenDokumente),
-      loading: isPending(this.darlehenDokumente()),
+      darlehenDokumente: fromCachedDataSig(this.darlehenBuchhaltungEntrys),
+      loading: isPending(this.darlehenBuchhaltungEntrys()),
     };
   });
 
@@ -95,31 +102,25 @@ export class InfosGesuchsdokumenteStore extends signalStore(
     ),
   );
 
-  loadDarlehenDokumente$ = rxMethod<{ gesuchId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          darlehenDokumente: cachedPending(state.darlehenDokumente),
-        }));
-      }),
-      tap(() => {
-        // Todo KSTIP-2697 : Dummy data - will be replaced with actual API call
-        const dummyData: DarlehenDokument[] = [
-          {
-            id: '1',
-            datum: new Date().toISOString(),
-            kategorie: 'Gesetzlich',
-            darlehensverfuegung: 'darlehen_verfuegung_1.pdf',
-            gesetzlichesDarlehen: 'gesetzlich_1.pdf',
-            kommentar: 'Test Kommentar',
-          },
-        ];
-        patchState(this, {
-          darlehenDokumente: { data: dummyData, type: 'success' },
-        });
-      }),
-    ),
-  );
+  loadDarlehenBuchhaltungEntrys$ =
+    rxMethod<DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            darlehenBuchhaltungEntrys: cachedPending(
+              state.darlehenBuchhaltungEntrys,
+            ),
+          }));
+        }),
+        switchMap((req) =>
+          this.darlehenService.getDarlehenBuchhaltungEntrys$(req).pipe(
+            handleApiResponse((darlehenBuchhaltungEntrys) => {
+              patchState(this, { darlehenBuchhaltungEntrys });
+            }),
+          ),
+        ),
+      ),
+    );
 
   loadDatenschutzbriefeDokumente$ = rxMethod<{ gesuchId: string }>(
     pipe(

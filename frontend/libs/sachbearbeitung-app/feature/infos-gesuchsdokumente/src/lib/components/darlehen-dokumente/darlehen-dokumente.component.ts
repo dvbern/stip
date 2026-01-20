@@ -71,7 +71,7 @@ export class DarlehenDokumenteComponent {
     effect(() => {
       const gesuchId = this.gesuchId();
       if (gesuchId) {
-        this.infosStore.loadDarlehenDokumente$({ gesuchId });
+        this.infosStore.loadDarlehenBuchhaltungEntrys$({ gesuchId });
       }
     });
   }
