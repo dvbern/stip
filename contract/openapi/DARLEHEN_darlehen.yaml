@@ -549,9 +549,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -725,6 +723,25 @@ components:
         - FREIWILLIG
         - GESETZLICH
         - MANUELLE_KORREKTUR
+
+    DarlehenBuchhaltungOverview:
+      type: object
+      required:
+        - total
+        - totalFreiwillig
+        - totalGesetzlich
+        - darlehenBuchhaltungEntrys
+      properties:
+        total:
+          type: integer
+        totalFreiwillig:
+          type: integer
+        totalGesetzlich:
+          type: integer
+        darlehenBuchhaltungEntrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
 
     DarlehenBuchhaltungEntry:
       type: object
