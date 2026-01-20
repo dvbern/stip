@@ -14,7 +14,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
 import { SharedModelGsDashboardView } from '@dv/shared/model/ausbildung';
-import { Darlehen, DarlehenStatus } from '@dv/shared/model/gesuch';
+import { DarlehenStatus, FreiwilligDarlehen } from '@dv/shared/model/gesuch';
 
 type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
 const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
@@ -41,7 +41,7 @@ export class SharedUiDarlehenMenuComponent {
    * Set in SB app, so link is correct!
    */
   gesuchIdSig = input<string | undefined>();
-  darlehenListSig = input.required<Darlehen[] | undefined>();
+  darlehenListSig = input.required<FreiwilligDarlehen[] | undefined>();
   dashboardViewSig = input<SharedModelGsDashboardView | undefined>();
   createDarlehen = output<{ fallId: string }>();
   router = inject(Router);
@@ -73,7 +73,7 @@ export class SharedUiDarlehenMenuComponent {
         acc[statusKey].push(darlehen);
         return acc;
       },
-      {} as Record<DarlehenCompleteStates, Darlehen[]>,
+      {} as Record<DarlehenCompleteStates, FreiwilligDarlehen[]>,
     );
   });
 
