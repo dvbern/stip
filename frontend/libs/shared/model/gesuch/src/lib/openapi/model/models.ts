@@ -53,6 +53,8 @@ export * from './customDokumentTyp';
 export * from './customDokumentTypCreate';
 export * from './darlehenBuchhaltungEntry';
 export * from './darlehenBuchhaltungEntryKategorie';
+export * from './darlehenBuchhaltungOverview';
+export * from './darlehenBuchhaltungSaldokorrektur';
 export * from './darlehenDokument';
 export * from './darlehenDokumentType';
 export * from './darlehenGrund';

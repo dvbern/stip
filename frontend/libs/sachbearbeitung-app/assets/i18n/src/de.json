@@ -503,6 +503,7 @@
   "sachbearbeitung-app.infos.notizen": "Notizen",
   "sachbearbeitung-app.infos.buchhaltung": "Buchhaltung",
   "sachbearbeitung-app.infos.beschwerden": "Beschwerden",
+  "sachbearbeitung-app.infos.darlehen": "Darlehen",
 
   "sachbearbeitung-app.infos.buchhaltung.title": "Buchhaltung",
   "sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung": "Wiederholen der fehlgeschlagenen Auszahlung",
@@ -660,8 +661,8 @@
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.description": "Übersicht aller Darlehensdokumente",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie": "Kategorie",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung": "Darlehensverfügung",
-  "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.gesetzlichesDarlehen": "Gesetzliches Darlehen",
-  "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.freiwilligesDarlehen": "Freiwilliges Darlehen",
+  "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.betrag": "Betrag",
+  "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.userErstellt": "Benutzer",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kommentar": "Kommentar",
 
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
