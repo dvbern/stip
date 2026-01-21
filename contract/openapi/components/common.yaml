@@ -1016,6 +1016,8 @@ FreiwilligDarlehen:
       type: array
       items:
         $ref: '#/DarlehenGrund'
+    isDelegiert:
+      type: boolean
     timestampErstellt:
       type: string
 DarlehenGrund:

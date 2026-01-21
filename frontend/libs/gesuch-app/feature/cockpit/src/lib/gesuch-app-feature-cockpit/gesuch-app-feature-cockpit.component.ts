@@ -104,19 +104,6 @@ export class GesuchAppFeatureCockpitComponent {
     );
   });
 
-  showDarlehenMenuSig = computed(() => {
-    const dashboardView = this.dashboardStore.dashboardViewSig();
-    const darlehenList = this.darlehenStore.darlehenListSig();
-
-    return (
-      dashboardView?.activeAusbildungen.some((ausbildung) =>
-        ausbildung.gesuchs.some(
-          (gesuch) => gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS',
-        ),
-      ) || darlehenList?.length
-    );
-  });
-
   private gotNewFallSig = computed(() => {
     return this.fallStore.currentFallViewSig()?.id;
   });

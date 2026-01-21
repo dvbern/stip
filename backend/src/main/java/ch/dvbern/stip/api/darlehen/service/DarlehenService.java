@@ -26,6 +26,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
@@ -51,10 +53,12 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.FreiwilligDarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.pdf.service.DarlehensVerfuegungPdfService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -93,6 +97,8 @@ public class DarlehenService {
     private final NotificationService notificationService;
     private final Validator validator;
     private final GesuchRepository gesuchRepository;
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
     private final DarlehensVerfuegungPdfService darlehensVerfuegungPdfService;
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final DarlehenBuchhaltungEntryMapper darlehenBuchhaltungEntryMapper;
@@ -192,9 +198,50 @@ public class DarlehenService {
     }
 
     @Transactional
-    public List<FreiwilligDarlehenDto> getDarlehenAllGs(final UUID fallId) {
+    public boolean canCreateDarlehen(UUID fallId) {
+        final var fall = fallRepository.requireById(fallId);
+        final var ausbildungs = fall.getAusbildungs();
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        // Check if user is authorized (either delegated Sozialdienst mitarbeiter or Gesuchsteller)
+        if (
+            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, benutzer, sozialdienstService)
+        ) {
+            return false;
+        }
+
+        final var hasNoOpenDarlehen =
+            fall.getFreiwilligDarlehens()
+                .stream()
+                .map(FreiwilligDarlehen::getStatus)
+                .allMatch(DarlehenStatus::isCompleted);
+        if (!hasNoOpenDarlehen) {
+            return false;
+        }
+
+        final var atLeastOneGesuchEingereicht = ausbildungs
+            .stream()
+            .anyMatch(
+                // has more than one Gesuch
+                ausbildung -> ausbildung.getGesuchs().size() > 1
+                // or has at least one eingereicht gesuch
+                || ausbildung.getGesuchs().stream().anyMatch(g -> g.getGesuchStatus().isEingereicht())
+            );
+        if (!atLeastOneGesuchEingereicht) {
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public FreiwilligDarlehenGsResponseDto getDarlehenAllGs(final UUID fallId) {
         final var darlehenList = freiwilligDarlehenRepository.findByFallId(fallId);
-        return darlehenList.stream().map(freiwilligDarlehenMapper::toDto).toList();
+        final var darlehenDto = new FreiwilligDarlehenGsResponseDto();
+        darlehenDto.setCanCreateDarlehen(canCreateDarlehen(fallId));
+        darlehenDto.setDarlehenList(
+            darlehenList.stream().map(freiwilligDarlehenMapper::toDto).toList()
+        );
+        return darlehenDto;
     }
 
     @Transactional

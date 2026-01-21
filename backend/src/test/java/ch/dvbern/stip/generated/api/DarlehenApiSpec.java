@@ -20,6 +20,7 @@ import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDtoSpec;
 import ch.dvbern.stip.generated.dto.GetFreiwilligDarlehenSbQueryTypeDtoSpec;
@@ -1181,7 +1182,7 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #fallIdPath  (required)
-     * return List&lt;FreiwilligDarlehenDtoSpec&gt;
+     * return FreiwilligDarlehenGsResponseDtoSpec
      */
     public static class GetAllFreiwilligDarlehenGsOper implements Oper {
 
@@ -1211,10 +1212,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/getAllDarlehenGs/{fallId}
          * @param handler handler
-         * @return List&lt;FreiwilligDarlehenDtoSpec&gt;
+         * @return FreiwilligDarlehenGsResponseDtoSpec
          */
-        public List<FreiwilligDarlehenDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<FreiwilligDarlehenDtoSpec>> type = new TypeRef<List<FreiwilligDarlehenDtoSpec>>(){};
+        public FreiwilligDarlehenGsResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenGsResponseDtoSpec> type = new TypeRef<FreiwilligDarlehenGsResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 

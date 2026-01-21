@@ -35,6 +35,7 @@ import org.mapstruct.Named;
 public abstract class FreiwilligDarlehenMapper {
     @Mapping(source = "fall.id", target = "fallId")
     @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
+    @Mapping(source = ".", target = "isDelegiert", qualifiedByName = "getIsDelegiert")
     public abstract FreiwilligDarlehenDto toDto(FreiwilligDarlehen freiwilligDarlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
@@ -91,5 +92,10 @@ public abstract class FreiwilligDarlehenMapper {
             .getSachbearbeiterZuordnung()
             .getSachbearbeiter()
             .getFullName();
+    }
+
+    @Named("getIsDelegiert")
+    public Boolean getIsDelegiert(FreiwilligDarlehen darlehen) {
+        return darlehen.getFall().isDelegiert();
     }
 }

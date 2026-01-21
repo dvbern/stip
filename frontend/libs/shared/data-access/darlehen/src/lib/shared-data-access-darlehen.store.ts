@@ -6,6 +6,8 @@ import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
+  FreiwilligDarlehen,
+  FreiwilligDarlehenGsResponse,
   DarlehenService,
   DarlehenServiceCreateFreiwilligDarlehenRequestParams,
   DarlehenServiceDeleteFreiwilligDarlehenGsRequestParams,
@@ -30,13 +32,15 @@ import {
 
 type DarlehenState = {
   cachedDarlehen: CachedRemoteData<FreiwilligDarlehen>;
-  darlehenList: CachedRemoteData<FreiwilligDarlehen[]>;
+  darlehenGs: CachedRemoteData<FreiwilligDarlehenGsResponse>;
+  darlehenListSb: CachedRemoteData<FreiwilligDarlehen[]>;
   paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbFreiwilligDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
   cachedDarlehen: initial(),
-  darlehenList: initial(),
+  darlehenGs: initial(),
+  darlehenListSb: initial(),
   paginatedSbDarlehenDashboard: initial(),
 };
 
@@ -63,14 +67,20 @@ export class DarlehenStore extends signalStore(
     };
   });
 
-  darlehenListSig = computed(() => {
-    return fromCachedDataSig(this.darlehenList);
+  darlehenListSbViewSig = computed(() => {
+    return {
+      list: fromCachedDataSig(this.darlehenListSb),
+      loading: isPending(this.darlehenListSb()),
+    };
   });
 
-  darlehenListViewSig = computed(() => {
+  darlehenGsViewSig = computed(() => {
+    const data = fromCachedDataSig(this.darlehenGs);
+
     return {
-      darlehenList: fromCachedDataSig(this.darlehenList),
-      loading: isPending(this.darlehenList()),
+      list: data?.darlehenList ?? [],
+      canCreateDarlehen: data?.canCreateDarlehen ?? false,
+      loading: isPending(this.darlehenGs()),
     };
   });
 
@@ -102,15 +112,15 @@ export class DarlehenStore extends signalStore(
       pipe(
         tap(() => {
           patchState(this, () => ({
-            darlehenList: pending(),
+            darlehenGs: pending(),
           }));
         }),
         switchMap((req) =>
           this.darlehenService
             .getAllFreiwilligDarlehenGs$(req)
             .pipe(
-              handleApiResponse((darlehen) =>
-                patchState(this, { darlehenList: darlehen }),
+              handleApiResponse((darlehenGs) =>
+                patchState(this, { darlehenGs }),
               ),
             ),
         ),
@@ -133,7 +143,12 @@ export class DarlehenStore extends signalStore(
               },
               {
                 onSuccess: (data) => {
-                  this.router.navigate(['/darlehen', data.id]);
+                  this.router.navigate([
+                    '/darlehen',
+                    data.id,
+                    'fall',
+                    req.fallId,
+                  ]);
                 },
               },
             ),
@@ -262,15 +277,15 @@ export class DarlehenStore extends signalStore(
       pipe(
         tap(() => {
           patchState(this, () => ({
-            darlehenList: pending(),
+            darlehenListSb: pending(),
           }));
         }),
         switchMap((req) =>
           this.darlehenService
             .getAllFreiwilligDarlehenSb$(req)
             .pipe(
-              handleApiResponse((darlehen) =>
-                patchState(this, { darlehenList: darlehen }),
+              handleApiResponse((darlehenListSb) =>
+                patchState(this, { darlehenListSb }),
               ),
             ),
         ),
@@ -278,7 +293,6 @@ export class DarlehenStore extends signalStore(
     );
 
   // SB Methoden
-
   darlehenUpdateAndFreigebenSb$ = rxMethod<{
     data: DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams;
     onSuccess: () => void;

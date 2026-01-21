@@ -130,7 +130,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
   /**
    * Enables sorting of the values by their display value.
    */
-  sortByValueSig = input<boolean>(false);
+  sortByValueSig = input<boolean>(true);
   /**
    * The width of the panel in pixels or as a percentage string.
    * Default is '100%' to fill the width of the parent container.
@@ -201,6 +201,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     const valueInput = this.autocompleteSearchValueChangesSig();
     const shouldSort = this.sortByValueSig();
     const displayValue = this.displayValueWithSig();
+
     let values = this.valuesSig();
 
     if (!values) {
@@ -217,6 +218,13 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
           ?.toLowerCase()
           .includes(valueInput.toLowerCase()),
       );
+    }
+
+    if (!valueInput) {
+      const firstItemValues = values.filter((v) => v.alwaysOnTop);
+      if (firstItemValues) {
+        values = [...firstItemValues, ...values.filter((v) => !v.alwaysOnTop)];
+      }
     }
 
     return values;

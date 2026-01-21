@@ -1417,14 +1417,22 @@ components:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
         - year
-        - berechnung
+        - berechnungTotal
+        - berechnungStipendium
+        - berechnungDarlehen
         - tranchenBerechnungsresultate
       type: object
       properties:
         year:
           type: integer
-        berechnung:
+        berechnungTotal:
+          description: 'Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch'
+          type: integer
+        berechnungStipendium:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
+          type: integer
+        berechnungDarlehen:
+          description: 'Berechneter Darlehensanspruch für das Gesuch'
           type: integer
         berechnungReduziert:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens'
@@ -1440,7 +1448,9 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - berechnung
+        - berechnungAnteilTotal
+        - berechnungAnteilStipendium
+        - berechnungAnteilDarlehen
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -1452,8 +1462,14 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        berechnung:
+        berechnungAnteilTotal:
+          description: 'Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche'
+          type: integer
+        berechnungAnteilStipendium:
           description: 'Berechneter Stpendiumsanspruch für diese Tranche'
+          type: integer
+        berechnungAnteilDarlehen:
+          description: 'Berechneter Darlehensanspruch für diese Tranche'
           type: integer
         gueltigAb:
           $ref: './components/common.yaml#/LocalDate'

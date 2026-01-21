@@ -6,6 +6,7 @@ import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -105,7 +106,7 @@ public interface DarlehenResource {
     @GET
     @Path("/getAllDarlehenGs/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenGs(@PathParam("fallId") UUID fallId);
+    FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/getAllDarlehenSb/{gesuchId}")

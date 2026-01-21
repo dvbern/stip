@@ -38,6 +38,7 @@ import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
@@ -249,7 +250,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Override
     @RolesAllowed(DARLEHEN_READ)
-    public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenGs(UUID fallId) {
+    public FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenByFallId(fallId);
         return darlehenService.getDarlehenAllGs(fallId);
     }

@@ -641,9 +641,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FreiwilligDarlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehenGsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -6241,6 +6239,18 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/DarlehenDokument'
+    FreiwilligDarlehenGsResponse:
+      type: object
+      required:
+        - darlehenList
+        - canCreateDarlehen
+      properties:
+        darlehenList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FreiwilligDarlehen'
+        canCreateDarlehen:
+          type: boolean
     DarlehenDokument:
       type: object
       required:
@@ -6376,6 +6386,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DarlehenGrund'
+        isDelegiert:
+          type: boolean
         timestampErstellt:
           type: string
     FileDownloadToken:
@@ -7950,14 +7962,24 @@ components:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
         - year
-        - berechnung
+        - berechnungTotal
+        - berechnungStipendium
+        - berechnungDarlehen
         - tranchenBerechnungsresultate
       type: object
       properties:
         year:
           type: integer
-        berechnung:
+        berechnungTotal:
+          description: >-
+            Die Summe der berechneten Stpendiums- und Darlehensansprüche für das
+            Gesuch
+          type: integer
+        berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
+          type: integer
+        berechnungDarlehen:
+          description: Berechneter Darlehensanspruch für das Gesuch
           type: integer
         berechnungReduziert:
           description: >-
@@ -7975,7 +7997,9 @@ components:
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - berechnung
+        - berechnungAnteilTotal
+        - berechnungAnteilStipendium
+        - berechnungAnteilDarlehen
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -7987,8 +8011,16 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        berechnung:
+        berechnungAnteilTotal:
+          description: >-
+            Die Summe der berechneten Stpendiums- und Darlehensansprüche für
+            diese Tranche
+          type: integer
+        berechnungAnteilStipendium:
           description: Berechneter Stpendiumsanspruch für diese Tranche
+          type: integer
+        berechnungAnteilDarlehen:
+          description: Berechneter Darlehensanspruch für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'

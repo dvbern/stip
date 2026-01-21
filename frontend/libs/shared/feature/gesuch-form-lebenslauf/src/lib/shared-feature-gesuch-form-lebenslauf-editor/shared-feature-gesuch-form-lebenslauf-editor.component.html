@@ -15,14 +15,15 @@
           [formControl]="form.controls.abschlussId"
           [labelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss'"
           [valuesSig]="abschluesseOptionsSig()"
-          [sortByValueSig]="true"
           [testIdSig]="'lebenslauf-editor-abschluss-select'"
           [clearTestIdSig]="'button-form-lebenslauf-abschluss-clear'"
           [languageSig]="languageSig()"
           [invalidValueLabelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss.error' | transloco"
         >
           <ng-container *dvSearchOptionLabel="ausbildungsstatteStore.abschluesseViewSig(); let abschluss">
-            {{ `${abschluss | translatedProp: 'bezeichnung' : languageSig()} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}` }}
+            {{
+              `${(abschluss | translatedProp: 'bezeichnung' : languageSig())} - ${(`shared.ausbildungskategorie.${abschluss.ausbildungskategorie}` | transloco)}`
+            }}
           </ng-container>
         </dv-shared-ui-select-search>
       </div>

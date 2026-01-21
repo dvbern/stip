@@ -93,6 +93,7 @@ export * from './ferienTyp';
 export * from './fileDownloadToken';
 export * from './freiwilligDarlehen';
 export * from './freiwilligDarlehenDashboard';
+export * from './freiwilligDarlehenGsResponse';
 export * from './freiwilligDarlehenUpdateGs';
 export * from './freiwilligDarlehenUpdateSb';
 export * from './geschwister';
