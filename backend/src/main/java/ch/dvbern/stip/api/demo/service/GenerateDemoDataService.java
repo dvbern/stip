@@ -144,6 +144,37 @@ public class GenerateDemoDataService {
             .build();
     }
 
+    private void anonymizeZahlungsverbindung(Gesuch gesuch) {
+        final var zahlungsverbindung = gesuch.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung();
+        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
+        zahlungsverbindung.setVorname("Vorname-%s".formatted(gesuchSuffix));
+        zahlungsverbindung.setNachname("Nachname-%s".formatted(gesuchSuffix));
+        anonymizeAdresse(gesuch, zahlungsverbindung.getAdresse());
+    }
+
+    private void anonymizePersonInAusbildung(Gesuch gesuch) {
+        final var personInAusbildung = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
+        personInAusbildung.setVorname("Vorname-%s".formatted(gesuchSuffix));
+        personInAusbildung.setNachname("Nachname-%s".formatted(gesuchSuffix));
+        anonymizeAdresse(gesuch, personInAusbildung.getAdresse());
+    }
+
+    private void anonymizeAdresse(Gesuch gesuch, Adresse adresse) {
+        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
+        adresse.setStrasse("%s %s".formatted(adresse.getStrasse(), gesuchSuffix));
+    }
+
+    private void anonymizeGesuch(Gesuch gesuch) {
+        anonymizeZahlungsverbindung(gesuch);
+        anonymizePersonInAusbildung(gesuch);
+    }
+
+    private String getLastGesuchNummerPart(Gesuch gesuch) {
+        final var gesuchNummer = gesuch.getGesuchNummer();
+        return gesuchNummer.substring(gesuchNummer.lastIndexOf('.') + 1);
+    }
+
     private SteuerdatenTyp getSteuerdatenTyp(DemoDataDto demoDataDto, ElternTyp type) {
         if (demoDataDto.getFamiliensituation().getElternVerheiratetZusammen()) {
             return SteuerdatenTyp.FAMILIE;
@@ -554,6 +585,8 @@ public class GenerateDemoDataService {
         gesuchFormular.getGeschwisters().addAll(geschwisters);
 
         gesuchFormularRepository.persist(gesuchFormular);
+        gesuchRepository.persistAndFlush(gesuch);
+        anonymizeGesuch(gesuch);
         gesuchRepository.persistAndFlush(gesuch);
 
         return gesuch.getId();
