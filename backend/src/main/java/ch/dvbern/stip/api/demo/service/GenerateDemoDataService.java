@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.demo.service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.entity.AdresseBuilder;
@@ -89,14 +91,15 @@ import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.keycloak.common.util.TriFunction;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -109,7 +112,7 @@ public class GenerateDemoDataService {
     private final DemoDataAbschlussRepository demoDataAbschlussRepository;
     private final BenutzerService benutzerService;
     private final GesuchService gesuchService;
-    private final S3Client s3;
+    private final S3AsyncClient s3;
     private final EntityCopyMapper copyMapper;
     private final ConfigService configService;
 
@@ -616,17 +619,21 @@ public class GenerateDemoDataService {
     }
 
     private void createS3EntriesForDokumente(List<Dokument> dokuments) {
-        final var pngBody = RequestBody.fromBytes(Base64.decodeBase64(configService.getSmallestPng()));
+        final var pngBody = AsyncRequestBody.fromBytes(Base64.decodeBase64(configService.getSmallestPng()));
         String firstDokumentKey = null;
+        CompletableFuture<String> dokumentUploadOrCopyRequest = CompletableFuture.supplyAsync(() -> "pending");
         for (Dokument dokument : dokuments) {
             final var objectId = FileUtil.generateUUIDWithFileExtension(dokument.getFilename());
             final var key = dokument.getFilepath() + objectId;
             if (Objects.isNull(firstDokumentKey)) {
-                s3.putObject(buildPutRequest(key), pngBody);
+                dokumentUploadOrCopyRequest
+                    .thenCombineAsync(s3.putObject(buildPutRequest(key), pngBody), (a, b) -> "ok");
                 firstDokumentKey = key;
             } else {
-                s3.copyObject(buildCopyRequest(firstDokumentKey, key));
+                dokumentUploadOrCopyRequest
+                    .thenCombineAsync(s3.copyObject(buildCopyRequest(firstDokumentKey, key)), (a, b) -> "ok");
             }
+            Uni.createFrom().completionStage(dokumentUploadOrCopyRequest).await().atMost(Duration.ofSeconds(30));
             dokument.setObjectId(objectId);
         }
     }
