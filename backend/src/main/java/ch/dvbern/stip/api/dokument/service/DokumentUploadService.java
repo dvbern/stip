@@ -42,7 +42,6 @@ import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
@@ -54,7 +53,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @Slf4j
 @ApplicationScoped
 @UnlessBuildProfile("test")
-@AllArgsConstructor
 public class DokumentUploadService {
     protected static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
 
