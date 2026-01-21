@@ -24,7 +24,7 @@
   </dv-shared-ui-drop-file>
   @let file = latestValueSig();
   @if (file) {
-    <div class="tw:flex">
+    <div class="tw:flex tw:items-center tw:gap-2">
       <div>
         <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
       </div>

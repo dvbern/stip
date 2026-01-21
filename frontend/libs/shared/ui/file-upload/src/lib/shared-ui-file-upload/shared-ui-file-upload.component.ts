@@ -10,6 +10,7 @@ import {
 import {
   ControlValueAccessor,
   FormControl,
+  NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -26,19 +27,26 @@ import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
     SharedUiAdvTranslocoDirective,
     SharedUiDropFileComponent,
   ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: SharedUiFileUploadComponent,
+    },
+  ],
   host: {
-    class: 'tw:flex',
+    class: 'tw:flex tw:flex-col tw:gap-2',
   },
   templateUrl: './shared-ui-file-upload.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiFileUploadComponent implements ControlValueAccessor {
   private touched = false;
-  allowedFileTypesSig = input.required<string[]>();
+  allowedFileTypesSig = input<string[]>();
   selectedFileSig = output<File | null>();
 
   fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
-  latestValueSig = signal<File | undefined>(undefined);
+  latestValueSig = signal<File | null>(null);
   fileControl = new FormControl<File | undefined>(
     undefined,
     Validators.required,
@@ -53,11 +61,11 @@ export class SharedUiFileUploadComponent implements ControlValueAccessor {
   }
 
   // ControlValueAccessor implementation
-  writeValue(file: File | undefined): void {
-    this.latestValueSig.set(file);
+  writeValue(): void {
+    // Empty, not writable
   }
 
-  registerOnChange(fn: (value: string | undefined) => void): void {
+  registerOnChange(fn: (value: File | null) => void): void {
     this.onChange = fn;
   }
 
@@ -74,7 +82,7 @@ export class SharedUiFileUploadComponent implements ControlValueAccessor {
   }
 
   // ControlValueAccessor methods - only deals with string IDs
-  private onChange: (value: string | undefined) => void = () => {
+  private onChange: (value: File | null) => void = () => {
     // Default empty implementation
   };
   private onTouched: () => void = () => {
@@ -85,16 +93,16 @@ export class SharedUiFileUploadComponent implements ControlValueAccessor {
     const input = event.target as HTMLInputElement;
     const files = input.files;
 
-    if (files && files.length > 0) {
-      this.selectedFileSig.emit(files[0]);
-    } else {
-      this.selectedFileSig.emit(null);
-    }
+    const value = files && files.length > 0 ? files[0] : null;
+    this.onChange(value);
+    this.selectedFileSig.emit(value);
+    this.latestValueSig.set(value);
   }
 
   resetSelectedFile() {
-    this.onChange(undefined);
+    this.onChange(null);
     this.selectedFileSig.emit(null);
+    this.latestValueSig.set(null);
     this.fileControl.patchValue(undefined);
     const input = this.fileInputSig()?.nativeElement;
     if (input) {
