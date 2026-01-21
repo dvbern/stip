@@ -759,7 +759,6 @@ components:
           $ref: './components/common.yaml#/Dokument'
         betrag:
           type: integer
-          minimum: 0
         userErstellt:
           type: string
         kommentar:

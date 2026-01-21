@@ -13,6 +13,9 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
@@ -70,6 +73,7 @@ public class DarlehenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                createDarlehenBuchhaltungSaldokorrektur(),
                 createDarlehenDokument(),
                 createFreiwilligDarlehen(),
                 deleteDarlehenDokument(),
@@ -84,12 +88,17 @@ public class DarlehenApiSpec {
                 freiwilligDarlehenZurueckweisen(),
                 getAllFreiwilligDarlehenGs(),
                 getAllFreiwilligDarlehenSb(),
+                getDarlehenBuchhaltungEntrys(),
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
                 getFreiwilligDarlehenDashboardSb(),
                 getFreiwilligDarlehenGs(),
                 getFreiwilligDarlehenSb()
         );
+    }
+
+    public CreateDarlehenBuchhaltungSaldokorrekturOper createDarlehenBuchhaltungSaldokorrektur() {
+        return new CreateDarlehenBuchhaltungSaldokorrekturOper(createReqSpec());
     }
 
     public CreateDarlehenDokumentOper createDarlehenDokument() {
@@ -148,6 +157,10 @@ public class DarlehenApiSpec {
         return new GetAllFreiwilligDarlehenSbOper(createReqSpec());
     }
 
+    public GetDarlehenBuchhaltungEntrysOper getDarlehenBuchhaltungEntrys() {
+        return new GetDarlehenBuchhaltungEntrysOper(createReqSpec());
+    }
+
     public GetDarlehenDokumentOper getDarlehenDokument() {
         return new GetDarlehenDokumentOper(createReqSpec());
     }
@@ -178,6 +191,90 @@ public class DarlehenApiSpec {
         return this;
     }
 
+    /**
+     * Create a darlehen buchhaltungsentry from a saldokorrektur
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #body  (required)
+     * return DarlehenBuchhaltungEntryDtoSpec
+     */
+    public static class CreateDarlehenBuchhaltungSaldokorrekturOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/buchhaltung/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateDarlehenBuchhaltungSaldokorrekturOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/buchhaltung/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /darlehen/buchhaltung/{gesuchId}
+         * @param handler handler
+         * @return DarlehenBuchhaltungEntryDtoSpec
+         */
+        public DarlehenBuchhaltungEntryDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenBuchhaltungEntryDtoSpec> type = new TypeRef<DarlehenBuchhaltungEntryDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param darlehenBuchhaltungSaldokorrekturDtoSpec (DarlehenBuchhaltungSaldokorrekturDtoSpec)  (required)
+         * @return operation
+         */
+        public CreateDarlehenBuchhaltungSaldokorrekturOper body(DarlehenBuchhaltungSaldokorrekturDtoSpec darlehenBuchhaltungSaldokorrekturDtoSpec) {
+            reqSpec.setBody(darlehenBuchhaltungSaldokorrekturDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CreateDarlehenBuchhaltungSaldokorrekturOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateDarlehenBuchhaltungSaldokorrekturOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateDarlehenBuchhaltungSaldokorrekturOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
     /**
      * 
      * 
@@ -1221,6 +1318,79 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetAllFreiwilligDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Gets all darlehen buchhaltungsentrys
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return DarlehenBuchhaltungOverviewDtoSpec
+     */
+    public static class GetDarlehenBuchhaltungEntrysOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/buchhaltung/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDarlehenBuchhaltungEntrysOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/buchhaltung/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/buchhaltung/{gesuchId}
+         * @param handler handler
+         * @return DarlehenBuchhaltungOverviewDtoSpec
+         */
+        public DarlehenBuchhaltungOverviewDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenBuchhaltungOverviewDtoSpec> type = new TypeRef<DarlehenBuchhaltungOverviewDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

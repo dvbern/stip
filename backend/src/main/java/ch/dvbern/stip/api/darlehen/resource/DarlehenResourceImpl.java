@@ -33,6 +33,9 @@ import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DarlehenResource;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
@@ -188,6 +191,16 @@ public class DarlehenResourceImpl implements DarlehenResource {
         return darlehenService.darlehenUpdateSb(darlehenId, darlehenUpdateSbDto);
     }
 
+    @Override
+    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    public DarlehenBuchhaltungEntryDto createDarlehenBuchhaltungSaldokorrektur(
+        UUID gesuchId,
+        DarlehenBuchhaltungSaldokorrekturDto darlehenBuchhaltungSaldokorrekturDto
+    ) {
+        darlehenAuthorizer.canCreateDarlehenBuchhaltungEntry();
+        return darlehenService.createDarlehenBuchhaltungSaldokorrektur(gesuchId, darlehenBuchhaltungSaldokorrekturDto);
+    }
+
     @Blocking
     @Override
     @RolesAllowed(DARLEHEN_UPDATE_GS)
@@ -225,6 +238,13 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehenAllSb(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed(DARLEHEN_READ)
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(UUID gesuchId) {
+        darlehenAuthorizer.canGetDarlehenBuchhaltungEntrys();
+        return darlehenService.getDarlehenBuchhaltungEntryOverviewByFallId(gesuchId);
     }
 
     @Override

@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.darlehen.resource;
 
 import java.util.List;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -32,6 +33,10 @@ import ch.dvbern.stip.generated.api.DarlehenApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryKategorieDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
@@ -51,12 +56,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class FreiwilligDarlehenResourceImplTest {
+public class DarlehenResourceImplTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
@@ -226,6 +233,98 @@ public class FreiwilligDarlehenResourceImplTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(11)
+    void darlehenEingebenAgian() {
+        darlehenApiSpec.freiwilligDarlehenEingeben()
+            .darlehenIdPath(darlehen.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(12)
+    void darlehenUpdateSbAkzeptieren() {
+        final var updateDto = new FreiwilligDarlehenUpdateSbDtoSpec();
+        updateDto.setBetrag(2500);
+        updateDto.setGewaehren(true);
+        updateDto.setKommentar("asd");
+        darlehenApiSpec.freiwilligDarlehenUpdateSb()
+            .darlehenIdPath(darlehen.getId())
+            .body(updateDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+        darlehenApiSpec.freiwilligDarlehenFreigeben()
+            .darlehenIdPath(darlehen.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsFreigabestelle
+    @Order(13)
+    void darlehenFreigeben() {
+        darlehenApiSpec.freiwilligDarlehenAkzeptieren()
+            .darlehenIdPath(darlehen.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(14)
+    void createManuellDarlehenBuchhaltungEntry() {
+        final var dto = new DarlehenBuchhaltungSaldokorrekturDtoSpec();
+        dto.setBetrag(123);
+        dto.setComment("comment");
+        var darlehenBuchhaltungEntryDtoSpec = darlehenApiSpec.createDarlehenBuchhaltungSaldokorrektur()
+            .gesuchIdPath(gesuch.getId())
+            .body(dto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DarlehenBuchhaltungEntryDtoSpec.class);
+
+        assertEquals(darlehenBuchhaltungEntryDtoSpec.getBetrag(), dto.getBetrag());
+        assertEquals(darlehenBuchhaltungEntryDtoSpec.getKommentar(), dto.getComment());
+        assertEquals(
+            darlehenBuchhaltungEntryDtoSpec.getKategorie(),
+            DarlehenBuchhaltungEntryKategorieDtoSpec.MANUELLE_KORREKTUR
+        );
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(14)
+    void getDarlehenBuchhatlungOverview() {
+        var darlehenBuchhaltungOverviewDtoSpec = darlehenApiSpec.getDarlehenBuchhaltungEntrys()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DarlehenBuchhaltungOverviewDtoSpec.class);
+
+        assertEquals(123 + 2500, darlehenBuchhaltungOverviewDtoSpec.getTotal());
+        assertEquals(2500, darlehenBuchhaltungOverviewDtoSpec.getTotalFreiwillig());
+        assertEquals(2, darlehenBuchhaltungOverviewDtoSpec.getDarlehenBuchhaltungEntrys().size());
     }
 
     @Test

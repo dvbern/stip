@@ -6302,7 +6302,6 @@ components:
           $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
-          minimum: 0
         userErstellt:
           type: string
         kommentar:

@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
+import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.darlehen.repo.FreiwilligDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class DarlehenAuthorizer extends BaseAuthorizer {
     private final FallRepository fallRepository;
     private final FreiwilligDarlehenRepository freiwilligDarlehenRepository;
+    private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
 
@@ -200,6 +202,14 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         }
     }
 
+    private void canGetVerfuegung(UUID verfuegungDokumentId) {
+        darlehenBuchhaltungEntryRepository.getByVerfuegungDokumentId(verfuegungDokumentId).orElseThrow();
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
+    }
+
     @Transactional
     public void canGetDarlehenDokument(UUID darlehenId) {
         final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
@@ -208,8 +218,28 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canGetDarlehenDokumentByDokumentId(UUID dokumentId) {
-        final var darlehen = freiwilligDarlehenRepository.requireByDokumentOrDarlehensVerfuegungId(dokumentId);
-        canGetDarlehenDokument(darlehen);
+        final var darlehenDokumentOpt = freiwilligDarlehenRepository.getByDokumentId(dokumentId);
+        if (darlehenDokumentOpt.isPresent()) {
+            canGetDarlehenDokument(darlehenDokumentOpt.get());
+            return;
+        }
+        canGetVerfuegung(dokumentId);
+    }
+
+    @Transactional
+    public void canCreateDarlehenBuchhaltungEntry() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
+    }
+
+    @Transactional
+    public void canGetDarlehenBuchhaltungEntrys() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+        if (!isSachbearbeiter(benutzer)) {
+            forbidden();
+        }
     }
 
     public void canDeleteDarlehenDokument(UUID dokumentId) {

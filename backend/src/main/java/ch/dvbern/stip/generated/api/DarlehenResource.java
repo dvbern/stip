@@ -1,5 +1,8 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
@@ -28,6 +31,12 @@ import jakarta.validation.Valid;
 @Path("/darlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface DarlehenResource {
+
+    @POST
+    @Path("/buchhaltung/{gesuchId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    DarlehenBuchhaltungEntryDto createDarlehenBuchhaltungSaldokorrektur(@PathParam("gesuchId") UUID gesuchId,@Valid @NotNull DarlehenBuchhaltungSaldokorrekturDto darlehenBuchhaltungSaldokorrekturDto);
 
     @POST
     @Path("/dokument/{darlehenId}/{dokumentType}")
@@ -102,6 +111,11 @@ public interface DarlehenResource {
     @Path("/getAllDarlehenSb/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/buchhaltung/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/dokument/{darlehenId}/{dokumentType}")

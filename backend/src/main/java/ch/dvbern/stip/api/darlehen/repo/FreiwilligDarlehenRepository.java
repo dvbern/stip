@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.darlehen.repo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
@@ -90,15 +91,13 @@ public class FreiwilligDarlehenRepository implements BaseRepository<FreiwilligDa
             .orElseThrow(NotFoundException::new);
     }
 
-    public FreiwilligDarlehen requireByDokumentOrDarlehensVerfuegungId(final UUID dokumentId) {
+    public Optional<FreiwilligDarlehen> getByDokumentId(final UUID dokumentId) {
         return getAlleQuery()
             .where(
                 freiwilligDarlehen.dokumente.any().dokumente.any().id.eq(dokumentId)
-                    .or(freiwilligDarlehen.darlehenVerfuegung.id.eq(dokumentId))
             )
             .stream()
-            .findFirst()
-            .orElseThrow(NotFoundException::new);
+            .findFirst();
     }
 
 }
