@@ -12,10 +12,10 @@
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
     <contract.version>1.24.0</contract.version>
-    <itext.version>9.1.0</itext.version>
-    <kie.version>10.0.0</kie.version>
-    <liquibase-maven-plugin.version>4.31.1</liquibase-maven-plugin.version>
-    <lombok.version>1.18.38</lombok.version>
+    <itext.version>9.4.0</itext.version>
+    <kie.version>10.1.0</kie.version>
+    <liquibase-maven-plugin.version>5.0.1</liquibase-maven-plugin.version>
+    <lombok.version>1.18.42</lombok.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <maven.compiler.release>21</maven.compiler.release>
     <package>ch.dvbern.stip</package>
@@ -23,9 +23,9 @@
     <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkiverse.sentry.version>2.1.3</quarkiverse.sentry.version>
+    <quarkiverse.sentry.version>2.3.0</quarkiverse.sentry.version>
     <quarkus-amazon-services.version>3.4.0</quarkus-amazon-services.version>
-    <quarkus-antivirus.version>1.2.4</quarkus-antivirus.version>
+    <quarkus-antivirus.version>1.3.0</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.21.2</quarkus.platform.version>
@@ -43,7 +43,7 @@
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
     <spotless.version>2.44.4</spotless.version>
     <surefire-plugin.version>3.5.3</surefire-plugin.version>
-    <testcontainers.version>1.20.6</testcontainers.version>
+    <testcontainers.version>2.0.3</testcontainers.version>
     <apache.commons-lang.version>3.17.0</apache.commons-lang.version>
     <apache.commons-validator.version>1.9.0</apache.commons-validator.version>
     <ci.disableConsole>false</ci.disableConsole>
