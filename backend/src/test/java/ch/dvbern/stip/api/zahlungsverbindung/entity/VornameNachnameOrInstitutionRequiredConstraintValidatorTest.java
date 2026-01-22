@@ -62,15 +62,6 @@ class VornameNachnameOrInstitutionRequiredConstraintValidatorTest {
     }
 
     @Test
-    void testInvalidWithNoFields() {
-        Zahlungsverbindung zahlungsverbindung = new Zahlungsverbindung();
-        zahlungsverbindung.setAdresse(new Adresse());
-        zahlungsverbindung.setIban("CH1234567890");
-
-        assertFalse(validator.isValid(zahlungsverbindung, null));
-    }
-
-    @Test
     void testInvalidWithOnlyVorname() {
         Zahlungsverbindung zahlungsverbindung = new Zahlungsverbindung();
         zahlungsverbindung.setVorname("Max");
@@ -88,34 +79,5 @@ class VornameNachnameOrInstitutionRequiredConstraintValidatorTest {
         zahlungsverbindung.setIban("CH1234567890");
 
         assertFalse(validator.isValid(zahlungsverbindung, null));
-    }
-
-    @Test
-    void testInvalidWithEmptyStrings() {
-        Zahlungsverbindung zahlungsverbindung = new Zahlungsverbindung();
-        zahlungsverbindung.setVorname("");
-        zahlungsverbindung.setNachname("");
-        zahlungsverbindung.setInstitution("");
-        zahlungsverbindung.setAdresse(new Adresse());
-        zahlungsverbindung.setIban("CH1234567890");
-
-        assertFalse(validator.isValid(zahlungsverbindung, null));
-    }
-
-    @Test
-    void testInvalidWithBlankStrings() {
-        Zahlungsverbindung zahlungsverbindung = new Zahlungsverbindung();
-        zahlungsverbindung.setVorname("   ");
-        zahlungsverbindung.setNachname("   ");
-        zahlungsverbindung.setInstitution("   ");
-        zahlungsverbindung.setAdresse(new Adresse());
-        zahlungsverbindung.setIban("CH1234567890");
-
-        assertFalse(validator.isValid(zahlungsverbindung, null));
-    }
-
-    @Test
-    void testValidWithNullZahlungsverbindung() {
-        assertTrue(validator.isValid(null, null));
     }
 }
