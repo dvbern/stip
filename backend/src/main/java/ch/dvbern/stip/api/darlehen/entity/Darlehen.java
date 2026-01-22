@@ -48,13 +48,9 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import org.jilt.Builder;
-import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
@@ -71,9 +67,6 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 )
 @Getter
 @Setter
-@Builder(style = BuilderStyle.STAGED)
-@NoArgsConstructor
-@AllArgsConstructor
 public class Darlehen extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
