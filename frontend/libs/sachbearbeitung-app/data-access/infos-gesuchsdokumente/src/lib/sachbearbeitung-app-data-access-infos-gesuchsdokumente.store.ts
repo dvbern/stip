@@ -6,6 +6,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 import {
   DarlehenBuchhaltungOverview,
   DarlehenService,
+  DarlehenServiceCreateDarlehenBuchhaltungSaldokorrekturRequestParams,
   DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams,
   Verfuegung,
   VerfuegungService,
@@ -105,6 +106,21 @@ export class InfosGesuchsdokumenteStore extends signalStore(
               patchState(this, { darlehenBuchhaltung });
             }),
           ),
+        ),
+      ),
+    );
+
+  createDarlehenBuchhaltungSaldokorrektur$ =
+    rxMethod<DarlehenServiceCreateDarlehenBuchhaltungSaldokorrekturRequestParams>(
+      pipe(
+        switchMap((req) =>
+          this.darlehenService
+            .createDarlehenBuchhaltungSaldokorrektur$(req)
+            .pipe(
+              handleApiResponse(() => {
+                this.loadDarlehenBuchhaltungEntrys$({ gesuchId: req.gesuchId });
+              }),
+            ),
         ),
       ),
     );

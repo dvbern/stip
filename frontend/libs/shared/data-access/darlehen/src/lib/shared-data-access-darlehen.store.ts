@@ -6,8 +6,6 @@ import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  FreiwilligDarlehen,
-  FreiwilligDarlehenGsResponse,
   DarlehenService,
   DarlehenServiceCreateFreiwilligDarlehenRequestParams,
   DarlehenServiceDeleteFreiwilligDarlehenGsRequestParams,
@@ -18,6 +16,7 @@ import {
   DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams,
   DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams,
   FreiwilligDarlehen,
+  FreiwilligDarlehenGsResponse,
   PaginatedSbFreiwilligDarlehenDashboard,
 } from '@dv/shared/model/gesuch';
 import {
