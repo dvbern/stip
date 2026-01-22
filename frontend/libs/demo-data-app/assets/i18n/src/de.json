@@ -10,7 +10,7 @@
   "demo-data-app.overview.import-details.file": "Datei",
   "demo-data-app.overview.import-details.download": "Letzte Import Datei herunterladen",
   "demo-data-app.overview.apply-demo-data.confirm.title": "Testdaten anwenden",
-  "demo-data-app.overview.apply-demo-data.confirm.description": "Sind Sie sicher, dass Sie die Testdaten für den aktuellen Benutzer anwenden möchten?",
+  "demo-data-app.overview.apply-demo-data.confirm.description": "Sind sie sicher, dass sie das Gesuch des aktuellen Benutzers mit diesen Testdaten anlegen möchten?",
   "demo-data-app.overview.apply-demo-data.button": "Testdaten anwenden",
   "demo-data-app.overview.apply-demo-data.error": "Fehler beim Anwenden der Testdaten",
   "demo-data-app.overview.apply-demo-data.error.validation": "Validierungsfehler:",
