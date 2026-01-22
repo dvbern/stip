@@ -95,8 +95,8 @@ export class SharedUiAuszahlungComponent {
     } else {
       controls.forEach((control) => {
         if (control.hasError(errorKey)) {
-          const errors = { ...control.errors };
-          delete errors[errorKey];
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { [errorKey]: _, ...errors } = control.errors ?? {};
           if (Object.keys(errors).length === 0) {
             control.setErrors(null, { emitEvent: false });
           } else {
@@ -117,9 +117,9 @@ export class SharedUiAuszahlungComponent {
         return null;
       }
 
-      const vorname = (group.get('vorname')?.value ?? '').trim();
-      const nachname = (group.get('nachname')?.value ?? '').trim();
-      const institution = (group.get('institution')?.value ?? '').trim();
+      const vorname = (vornameControl.value ?? '').trim();
+      const nachname = (nachnameControl.value ?? '').trim();
+      const institution = (institutionControl.value ?? '').trim();
 
       if ((vorname && nachname) || institution) {
         this.toggleErrorOnControls(
