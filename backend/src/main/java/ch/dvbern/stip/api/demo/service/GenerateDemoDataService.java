@@ -212,7 +212,7 @@ public class GenerateDemoDataService {
             .gesuchs(new ArrayList<>())
             .ausbildungsgang(
                 !ausbildungDto.getAusbildungNichtGefunden()
-                    ? demoDataAusbildungsgangRepository.requireAusbildungsgangByDemoData(demoDataDto)
+                    ? demoDataAusbildungsgangRepository.requireAusbildungsgangByDemoData(demoDataDto.getAusbildung())
                     : null
             )
             .besuchtBMS(DemoDataDefaults.AUSBILDUNG_BESUCHT_BMS)

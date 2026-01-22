@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.demo.repo;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildungsgang;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.generated.dto.DemoDataDto;
+import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -33,8 +33,7 @@ public class DemoDataAusbildungsgangRepository implements BaseRepository<Ausbild
 
     private static final QAusbildungsgang Q_AUSBILDUNGSGANG = QAusbildungsgang.ausbildungsgang;
 
-    public final Ausbildungsgang requireAusbildungsgangByDemoData(DemoDataDto demoDataDto) {
-        final var ausbildung = demoDataDto.getAusbildung();
+    public final Ausbildungsgang requireAusbildungsgangByDemoData(DemoAusbildungDto ausbildung) {
         return new JPAQueryFactory(em)
             .selectFrom(Q_AUSBILDUNGSGANG)
             .where(
