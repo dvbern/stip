@@ -56,37 +56,41 @@
       <aside>
         @if (demoDataList) {
           <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.import-details.title') }}</h2>
-          <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:text-base/2 tw:mb-6!">
+          <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
             <dt class="tw:whitespace-nowrap tw:!font-semibold">
               {{ t('demo-data-app.overview.import-details.imported-by') }}:
             </dt>
-            <dd>{{ demoDataList.importiertVon }}</dd>
+            <dd class="tw:mb-0!">{{ demoDataList.importiertVon }}</dd>
             <dt class="tw:whitespace-nowrap tw:!font-semibold">
               {{ t('demo-data-app.overview.import-details.last-updated') }}:
             </dt>
-            <dd>{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
+            <dd class="tw:mb-0!">{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
             <dt class="tw:whitespace-nowrap tw:!font-semibold">
               {{ t('demo-data-app.overview.import-details.total') }}:
             </dt>
-            <dd>{{ demoDataList.demoDatas.length }}</dd>
+            <dd class="tw:mb-0!">{{ demoDataList.demoDatas.length }}</dd>
             <dt class="tw:whitespace-nowrap tw:!font-semibold">
               {{ t('demo-data-app.overview.import-details.comment') }}:
             </dt>
-            <dd>{{ demoDataList.kommentar }}</dd>
+            <dd class="tw:mb-0!">{{ demoDataList.kommentar }}</dd>
             <dt class="tw:whitespace-nowrap tw:!font-semibold">
               {{ t('demo-data-app.overview.import-details.file') }}:
             </dt>
-            <dd>
+            <dd class="tw:mb-0 tw:min-w-0">
               <button
                 type="button"
-                class="btn btn-link tw:flex tw:max-w-full tw:p-0! tw:text-base/2!"
+                class="btn btn-link tw:flex! tw:max-w-full tw:p-0! tw:items-center"
                 [attr.aria-label]="t('demo-data-app.overview.import-details.download')"
                 [dvDownloadButton]="{
                   type: 'demoData',
                   id: demoDataList.documentId,
                 }"
               >
-                <span class="tw:truncate" [title]="demoDataList.filename">
+                <span
+                  class="tw:grow-0 tw:whitespace-nowrap tw:truncate"
+                  [title]="demoDataList.filename"
+                  [dvTruncateTooltip]="`${demoDataList.filename}`"
+                >
                   {{ demoDataList.filename }} {{ demoDataList.filesize | filesize }}
                 </span>
                 <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-xl/1!">download</span>
@@ -123,7 +127,7 @@
                 </div>
               </div>
               @if (error.type === 'demoDataError') {
-                <div class="tw:mr-3">{{ error.internalMessage }}</div>
+                <div class="tw:mr-3 tw:whitespace-pre-wrap">{{ error.internalMessage }}</div>
               }
               @if (error.allErrors?.length) {
                 <div class="tw:mr-3">

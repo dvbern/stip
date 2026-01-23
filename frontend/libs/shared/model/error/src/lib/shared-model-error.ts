@@ -72,7 +72,7 @@ export type NeskoError = Extends<z.infer<typeof NeskoError>, DvNeskoError>;
 export const DemoDataError = z.object({
   internalMessage: z.string(),
   errorClass: z.string(),
-  validationErrors: z.array(ValidationError).optional(),
+  validationErrors: z.array(ValidationError).optional().nullable(),
 });
 export type DemoDataError = Extends<
   z.infer<typeof DemoDataError>,

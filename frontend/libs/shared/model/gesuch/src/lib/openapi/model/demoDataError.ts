@@ -14,6 +14,7 @@ import { ValidationMessage } from './validationMessage';
 export interface DemoDataError { 
     internalMessage: string;
     errorClass: string;
+    cause?: string;
     validationErrors?: Array<ValidationMessage>;
 }
 

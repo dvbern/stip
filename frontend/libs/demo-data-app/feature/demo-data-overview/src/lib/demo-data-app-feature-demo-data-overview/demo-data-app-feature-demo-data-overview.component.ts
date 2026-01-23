@@ -28,6 +28,7 @@ import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 
 @Component({
   selector: 'dv-demo-data-app-feature-demo-data-overview',
@@ -46,6 +47,7 @@ import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
     SharedUiMaxLengthDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
+    SharedUiTruncateTooltipDirective,
     DemoDataAppUiAdvTranslocoDirective,
   ],
   templateUrl: './demo-data-app-feature-demo-data-overview.component.html',

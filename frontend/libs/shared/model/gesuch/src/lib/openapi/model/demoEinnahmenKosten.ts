@@ -27,6 +27,8 @@ export interface DemoEinnahmenKosten {
     verpflegungskosten?: number;
     auswaertigeMittagessenProWoche?: number;
     wohnkosten?: number;
+    wgWohnend?: boolean;
+    alternativeWohnformWohnend?: boolean;
     vermoegen: number;
     steuernKantonGemeinde: number;
 }
