@@ -15,7 +15,7 @@
   } @else {
     @let demoDataList = demoDataStore.cachedDemoDataListViewSig().data;
     <div class="tw:grid tw:grid-cols-3 tw:gap-6 tw:px-8 tw:items-start">
-      @if (demoDatasSig()?.length) {
+      @if (demoDataList?.demoDatas?.length) {
         <div class="tw:col-span-2">
           <mat-form-field [subscriptSizing]="'dynamic'" class="dense-control">
             <input type="text" matInput [formControl]="filterText" dvMaxLength [placeholder]="t('shared.search')" />
@@ -24,17 +24,17 @@
         </div>
       }
       <ul
-        class="tw:mb-4 tw:list-none tw:font-bold tw:col-span-2 tw:px-0! tw:grid tw:grid-cols-[auto_2fr_3fr_auto] tw:gap-6"
+        class="tw:mb-4 tw:list-none tw:col-span-2 tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6"
       >
         @for (demoData of demoDatasSig(); track $index) {
           <li
-            class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-center"
+            class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-center tw:items-start"
           >
-            <span>{{ demoData.testFall }}</span>
-            <span>{{ demoData.name }}</span>
-            <div>
-              {{ demoData.description }}
+            <div class="tw:flex tw:flex-col">
+              <span class="tw:font-bold">{{ demoData.testFall }}</span>
+              <span class="tw:font-semibold" [innerHTML]="demoData.name"></span>
             </div>
+            <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
             <button
               class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
               type="button"

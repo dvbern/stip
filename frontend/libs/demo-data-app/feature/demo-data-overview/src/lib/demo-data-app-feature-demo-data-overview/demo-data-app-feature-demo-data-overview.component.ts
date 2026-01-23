@@ -71,7 +71,10 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
         (item) =>
           item.testFall.toLowerCase().includes(filterText) ||
           item.name.toLowerCase().includes(filterText) ||
-          item.description.toLowerCase().includes(filterText),
+          item.description
+            .replace(/<[^>]*>?/gm, '')
+            .toLowerCase()
+            .includes(filterText),
       );
     }
     return list;
