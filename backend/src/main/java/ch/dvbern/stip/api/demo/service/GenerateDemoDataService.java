@@ -152,10 +152,11 @@ public class GenerateDemoDataService {
     private Zahlungsverbindung getDefaultZahlungsverbindung(DemoDataDto demoDataDto, Adresse adresse) {
         final var pia = demoDataDto.getPersonInAusbildung();
         return ZahlungsverbindungBuilder.zahlungsverbindung()
-            .vorname(pia.getVorname())
-            .nachname(pia.getNachname())
             .adresse(adresse)
             .iban(DemoDataDefaults.ZAHLUNGSVERBINBDUNG_IBAN)
+            .institution(null)
+            .vorname(pia.getVorname())
+            .nachname(pia.getNachname())
             .build();
     }
 
