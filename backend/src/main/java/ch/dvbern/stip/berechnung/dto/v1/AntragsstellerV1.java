@@ -133,7 +133,7 @@ public class AntragsstellerV1 {
         var nettoerwerbseinkommen = einnahmenKosten.getNettoerwerbseinkommen();
 
         if (ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
-            nettoerwerbseinkommen -= gesuchsperiode.getEinkommensfreibetrag();
+            nettoerwerbseinkommen = Math.max(nettoerwerbseinkommen - gesuchsperiode.getEinkommensfreibetrag(), 0);
         }
 
         einkommens.setPersonValue(piaName, nettoerwerbseinkommen);
