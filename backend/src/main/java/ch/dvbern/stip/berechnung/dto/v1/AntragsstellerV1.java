@@ -240,7 +240,7 @@ public class AntragsstellerV1 {
                 // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
                 EinnahmenKostenMappingUtil.calculateSteuern(ekPartner, false)
             );
-            builder.fahrkostenPartner(ekPartner.getFahrkosten());
+            builder.fahrkostenPartner(Objects.requireNonNullElse(ekPartner.getFahrkosten(), 0));
             builder.verpflegungskostenPartner(ekPartner.getVerpflegungskosten());
             rentens.setPartnerValue(partnerName, ekPartner.getRenten());
             ergaenzungsleistungens.setPartnerValue(partnerName, ekPartner.getErgaenzungsleistungen());
