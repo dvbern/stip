@@ -37,6 +37,8 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   private @Valid Integer verpflegungskosten;
   private @Valid Integer auswaertigeMittagessenProWoche;
   private @Valid Integer wohnkosten;
+  private @Valid Boolean wgWohnend;
+  private @Valid Boolean alternativeWohnformWohnend;
 
   /**
    **/
@@ -375,6 +377,42 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     this.wohnkosten = wohnkosten;
   }
 
+  /**
+   **/
+  public DemoEinnahmenKostenDto wgWohnend(Boolean wgWohnend) {
+    this.wgWohnend = wgWohnend;
+    return this;
+  }
+
+  
+  @JsonProperty("wgWohnend")
+  public Boolean getWgWohnend() {
+    return wgWohnend;
+  }
+
+  @JsonProperty("wgWohnend")
+  public void setWgWohnend(Boolean wgWohnend) {
+    this.wgWohnend = wgWohnend;
+  }
+
+  /**
+   **/
+  public DemoEinnahmenKostenDto alternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+    return this;
+  }
+
+  
+  @JsonProperty("alternativeWohnformWohnend")
+  public Boolean getAlternativeWohnformWohnend() {
+    return alternativeWohnformWohnend;
+  }
+
+  @JsonProperty("alternativeWohnformWohnend")
+  public void setAlternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -402,12 +440,14 @@ public class DemoEinnahmenKostenDto  implements Serializable {
         Objects.equals(this.betreuungskostenKinder, demoEinnahmenKosten.betreuungskostenKinder) &&
         Objects.equals(this.verpflegungskosten, demoEinnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, demoEinnahmenKosten.auswaertigeMittagessenProWoche) &&
-        Objects.equals(this.wohnkosten, demoEinnahmenKosten.wohnkosten);
+        Objects.equals(this.wohnkosten, demoEinnahmenKosten.wohnkosten) &&
+        Objects.equals(this.wgWohnend, demoEinnahmenKosten.wgWohnend) &&
+        Objects.equals(this.alternativeWohnformWohnend, demoEinnahmenKosten.alternativeWohnformWohnend);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, fahrkosten, vermoegen, steuernKantonGemeinde, ausbildungskosten, betreuungskostenKinder, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten);
+    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, fahrkosten, vermoegen, steuernKantonGemeinde, ausbildungskosten, betreuungskostenKinder, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, wgWohnend, alternativeWohnformWohnend);
   }
 
   @Override
@@ -433,6 +473,8 @@ public class DemoEinnahmenKostenDto  implements Serializable {
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
+    sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
     sb.append("}");
     return sb.toString();
   }

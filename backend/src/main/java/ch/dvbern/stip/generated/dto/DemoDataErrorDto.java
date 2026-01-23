@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoDataErrorDto  implements Serializable {
   private @Valid String internalMessage;
   private @Valid String errorClass;
+  private @Valid String cause;
   private @Valid List<ValidationMessageDto> validationErrors;
 
   /**
@@ -63,6 +64,24 @@ public class DemoDataErrorDto  implements Serializable {
   @JsonProperty("errorClass")
   public void setErrorClass(String errorClass) {
     this.errorClass = errorClass;
+  }
+
+  /**
+   **/
+  public DemoDataErrorDto cause(String cause) {
+    this.cause = cause;
+    return this;
+  }
+
+  
+  @JsonProperty("cause")
+  public String getCause() {
+    return cause;
+  }
+
+  @JsonProperty("cause")
+  public void setCause(String cause) {
+    this.cause = cause;
   }
 
   /**
@@ -111,12 +130,13 @@ public class DemoDataErrorDto  implements Serializable {
     DemoDataErrorDto demoDataError = (DemoDataErrorDto) o;
     return Objects.equals(this.internalMessage, demoDataError.internalMessage) &&
         Objects.equals(this.errorClass, demoDataError.errorClass) &&
+        Objects.equals(this.cause, demoDataError.cause) &&
         Objects.equals(this.validationErrors, demoDataError.validationErrors);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(internalMessage, errorClass, validationErrors);
+    return Objects.hash(internalMessage, errorClass, cause, validationErrors);
   }
 
   @Override
@@ -126,6 +146,7 @@ public class DemoDataErrorDto  implements Serializable {
     
     sb.append("    internalMessage: ").append(toIndentedString(internalMessage)).append("\n");
     sb.append("    errorClass: ").append(toIndentedString(errorClass)).append("\n");
+    sb.append("    cause: ").append(toIndentedString(cause)).append("\n");
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("}");
     return sb.toString();

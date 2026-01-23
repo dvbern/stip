@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DemoDataErrorDtoSpec.JSON_PROPERTY_INTERNAL_MESSAGE,
   DemoDataErrorDtoSpec.JSON_PROPERTY_ERROR_CLASS,
+  DemoDataErrorDtoSpec.JSON_PROPERTY_CAUSE,
   DemoDataErrorDtoSpec.JSON_PROPERTY_VALIDATION_ERRORS
 })
 @JsonTypeName("DemoDataError")
@@ -43,6 +44,9 @@ public class DemoDataErrorDtoSpec {
 
   public static final String JSON_PROPERTY_ERROR_CLASS = "errorClass";
   private String errorClass;
+
+  public static final String JSON_PROPERTY_CAUSE = "cause";
+  private String cause;
 
   public static final String JSON_PROPERTY_VALIDATION_ERRORS = "validationErrors";
   private List<ValidationMessageDtoSpec> validationErrors;
@@ -102,6 +106,32 @@ public class DemoDataErrorDtoSpec {
   }
 
 
+  public DemoDataErrorDtoSpec cause(String cause) {
+    
+    this.cause = cause;
+    return this;
+  }
+
+   /**
+   * Get cause
+   * @return cause
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CAUSE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getCause() {
+    return cause;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAUSE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCause(String cause) {
+    this.cause = cause;
+  }
+
+
   public DemoDataErrorDtoSpec validationErrors(List<ValidationMessageDtoSpec> validationErrors) {
     
     this.validationErrors = validationErrors;
@@ -146,12 +176,13 @@ public class DemoDataErrorDtoSpec {
     DemoDataErrorDtoSpec demoDataError = (DemoDataErrorDtoSpec) o;
     return Objects.equals(this.internalMessage, demoDataError.internalMessage) &&
         Objects.equals(this.errorClass, demoDataError.errorClass) &&
+        Objects.equals(this.cause, demoDataError.cause) &&
         Objects.equals(this.validationErrors, demoDataError.validationErrors);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(internalMessage, errorClass, validationErrors);
+    return Objects.hash(internalMessage, errorClass, cause, validationErrors);
   }
 
   @Override
@@ -160,6 +191,7 @@ public class DemoDataErrorDtoSpec {
     sb.append("class DemoDataErrorDtoSpec {\n");
     sb.append("    internalMessage: ").append(toIndentedString(internalMessage)).append("\n");
     sb.append("    errorClass: ").append(toIndentedString(errorClass)).append("\n");
+    sb.append("    cause: ").append(toIndentedString(cause)).append("\n");
     sb.append("    validationErrors: ").append(toIndentedString(validationErrors)).append("\n");
     sb.append("}");
     return sb.toString();

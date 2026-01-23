@@ -21,14 +21,17 @@
             <column name="mandant" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(255)">
+            <column name="anzahl_monate" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2200)">
                 <constraints nullable="false"/>
             </column>
             <column name="erfasser" type="VARCHAR(255)"/>
-            <column name="gesuchseingang" type="VARCHAR(255)">
+            <column name="gesuchseingang" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="gesuchsjahr" type="VARCHAR(255)">
+            <column name="gesuchsjahr" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
             <column name="json_data" type="VARCHAR(100000)">
@@ -38,6 +41,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="test_fall" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="typ" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -56,13 +62,15 @@
             <column name="user_erstellt" type="VARCHAR(255)"/>
             <column name="user_mutiert" type="VARCHAR(255)"/>
             <column name="mandant" type="VARCHAR(255)"/>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="anzahl_monate" type="INTEGER"/>
+            <column name="description" type="VARCHAR(2200)"/>
             <column name="erfasser" type="VARCHAR(255)"/>
-            <column name="gesuchseingang" type="VARCHAR(255)"/>
-            <column name="gesuchsjahr" type="VARCHAR(255)"/>
+            <column name="gesuchseingang" type="VARCHAR(20)"/>
+            <column name="gesuchsjahr" type="INTEGER"/>
             <column name="json_data" type="VARCHAR(100000)"/>
             <column name="name" type="VARCHAR(255)"/>
             <column name="test_fall" type="VARCHAR(255)"/>
+            <column name="typ" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet author="philipp.schaerer (generated)" id="1767606063704-3">

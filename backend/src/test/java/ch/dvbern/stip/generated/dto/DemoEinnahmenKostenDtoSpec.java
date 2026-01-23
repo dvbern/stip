@@ -43,6 +43,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_AUSWAERTIGE_MITTAGESSEN_PRO_WOCHE,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
+  DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_WG_WOHNEND,
+  DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_VERMOEGEN,
   DemoEinnahmenKostenDtoSpec.JSON_PROPERTY_STEUERN_KANTON_GEMEINDE
 })
@@ -96,6 +98,12 @@ public class DemoEinnahmenKostenDtoSpec {
 
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
   private Integer wohnkosten;
+
+  public static final String JSON_PROPERTY_WG_WOHNEND = "wgWohnend";
+  private Boolean wgWohnend;
+
+  public static final String JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND = "alternativeWohnformWohnend";
+  private Boolean alternativeWohnformWohnend;
 
   public static final String JSON_PROPERTY_VERMOEGEN = "vermoegen";
   private Integer vermoegen;
@@ -522,6 +530,58 @@ public class DemoEinnahmenKostenDtoSpec {
   }
 
 
+  public DemoEinnahmenKostenDtoSpec wgWohnend(Boolean wgWohnend) {
+    
+    this.wgWohnend = wgWohnend;
+    return this;
+  }
+
+   /**
+   * Get wgWohnend
+   * @return wgWohnend
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WG_WOHNEND)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getWgWohnend() {
+    return wgWohnend;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WG_WOHNEND)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWgWohnend(Boolean wgWohnend) {
+    this.wgWohnend = wgWohnend;
+  }
+
+
+  public DemoEinnahmenKostenDtoSpec alternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+    return this;
+  }
+
+   /**
+   * Get alternativeWohnformWohnend
+   * @return alternativeWohnformWohnend
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getAlternativeWohnformWohnend() {
+    return alternativeWohnformWohnend;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALTERNATIVE_WOHNFORM_WOHNEND)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAlternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+    this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+  }
+
+
   public DemoEinnahmenKostenDtoSpec vermoegen(Integer vermoegen) {
     
     this.vermoegen = vermoegen;
@@ -598,13 +658,15 @@ public class DemoEinnahmenKostenDtoSpec {
         Objects.equals(this.verpflegungskosten, demoEinnahmenKosten.verpflegungskosten) &&
         Objects.equals(this.auswaertigeMittagessenProWoche, demoEinnahmenKosten.auswaertigeMittagessenProWoche) &&
         Objects.equals(this.wohnkosten, demoEinnahmenKosten.wohnkosten) &&
+        Objects.equals(this.wgWohnend, demoEinnahmenKosten.wgWohnend) &&
+        Objects.equals(this.alternativeWohnformWohnend, demoEinnahmenKosten.alternativeWohnformWohnend) &&
         Objects.equals(this.vermoegen, demoEinnahmenKosten.vermoegen) &&
         Objects.equals(this.steuernKantonGemeinde, demoEinnahmenKosten.steuernKantonGemeinde);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, ausbildungskosten, betreuungskostenKinder, fahrkosten, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, vermoegen, steuernKantonGemeinde);
+    return Objects.hash(nettoerwerbseinkommen, unterhaltsbeitraege, zulagen, renten, eoLeistungen, ergaenzungsleistungen, beitraege, einnahmenBGSA, taggelderAHVIV, andereEinnahmen, ausbildungskosten, betreuungskostenKinder, fahrkosten, verpflegungskosten, auswaertigeMittagessenProWoche, wohnkosten, wgWohnend, alternativeWohnformWohnend, vermoegen, steuernKantonGemeinde);
   }
 
   @Override
@@ -627,6 +689,8 @@ public class DemoEinnahmenKostenDtoSpec {
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    auswaertigeMittagessenProWoche: ").append(toIndentedString(auswaertigeMittagessenProWoche)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    wgWohnend: ").append(toIndentedString(wgWohnend)).append("\n");
+    sb.append("    alternativeWohnformWohnend: ").append(toIndentedString(alternativeWohnformWohnend)).append("\n");
     sb.append("    vermoegen: ").append(toIndentedString(vermoegen)).append("\n");
     sb.append("    steuernKantonGemeinde: ").append(toIndentedString(steuernKantonGemeinde)).append("\n");
     sb.append("}");

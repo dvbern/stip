@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.demo.type;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,13 +36,13 @@ public final class DemoDataDefaults {
     public static final String ZAHLUNGSVERBINBDUNG_IBAN = "CH3908704016075473007";
     public static final AusbildungsPensum AUSBILDUNG_PENSUM = AusbildungsPensum.VOLLZEIT;
     public static final boolean AUSBILDUNG_BESUCHT_BMS = false;
+    public static final boolean PIA_VORMUNDSCHAFT = false;
     public static final WohnsitzKanton LEBENSLAUF_WOHNSITZ_KANTON = WohnsitzKanton.BE;
     public static final int EK_EINKOMMEN = 0;
     public static final int EK_FAHRKOSTEN = 0;
     public static final int EK_VERMOEGEN = 0;
     public static final int EK_VERPFLEGUNGSKOSTEN = 0;
-    public static final Boolean EK_WG_WOHNEND = false;
-    public static final Boolean EK_ALTERNATIVE_WOHNFORM_WOHNEND = false;
+    public static final int EK_WG_ANZAHL_PERSONEN = 2;
     public static final int EK_ARBEITSPENSUM = 100;
     public static final int STEUERDATEN_EIGENMIETWERT = 0;
     public static final int STEUERDATEN_VERMOEGEN = 0;
@@ -58,18 +59,26 @@ public final class DemoDataDefaults {
     public static String generateSVN() {
         final var svnWithoutCheckDigit = IntStream.concat(Arrays.stream(SVN_COUNTRY_CODE), randomDigits(9)).toArray();
         final var checkDigit =
-            AhvValidator.getCheckDigit(arrayToString(Arrays.stream(svnWithoutCheckDigit)).toCharArray());
+            AhvValidator.getCheckDigit(concatArrayToString(Arrays.stream(svnWithoutCheckDigit)).toCharArray());
         final var allDigits = IntStream.concat(
             Arrays.stream(svnWithoutCheckDigit),
             IntStream.of(checkDigit)
         ).toArray();
 
         return "%s.%s.%s.%s".formatted(
-            arrayToString(Arrays.stream(SVN_COUNTRY_CODE)),
-            arrayToString(Arrays.stream(allDigits, 3, 7)),
-            arrayToString(Arrays.stream(allDigits, 7, 11)),
-            arrayToString(Arrays.stream(allDigits, 11, 13))
+            concatArrayToString(Arrays.stream(allDigits, 0, 3)),
+            concatArrayToString(Arrays.stream(allDigits, 3, 7)),
+            concatArrayToString(Arrays.stream(allDigits, 7, 11)),
+            concatArrayToString(Arrays.stream(allDigits, 11, 13))
         );
+    }
+
+    public static BigDecimal bigDecimalNullable(Integer number) {
+        if (Objects.isNull(number)) {
+            return null;
+        }
+
+        return new BigDecimal(number);
     }
 
     public static Integer defaultByKindsIfNull(Integer value, DemoDataDto demoDataDto) {
@@ -82,7 +91,7 @@ public final class DemoDataDefaults {
         return 0;
     }
 
-    private static String arrayToString(IntStream array) {
+    private static String concatArrayToString(IntStream array) {
         return array.mapToObj(String::valueOf).collect(Collectors.joining());
     }
 

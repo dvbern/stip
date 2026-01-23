@@ -60,7 +60,6 @@ public class DemoDataService {
     private final DemoDataRepository demoDataRepository;
     private final DemoDataImportRepository demoDataImportRepository;
     private final DemoDataMapper demoDataMapper;
-    private final ParseDemoDataService parseDemoDataService;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
     private final GesuchRepository gesuchRepository;
@@ -97,7 +96,7 @@ public class DemoDataService {
                 .await()
                 .indefinitely()
                 .close();
-            final var demoDataList = parseDemoDataService.parseList(fileUpload.uploadedFile());
+            final var demoDataList = ParseDemoDataService.parseList(fileUpload.uploadedFile());
             demoDataRepository.deleteAll();
             demoDataRepository.persist(demoDataList);
             demoDataImportRepository.persist(demoDataImport);
@@ -149,7 +148,14 @@ public class DemoDataService {
     public ApplyDemoDataResponseDto applyDemoData(UUID demoDataId) {
         final var demoData = demoDataRepository.requireById(demoDataId);
 
-        final var gesuchId = generateDemoDataService.createEingereicht(demoData.parseDemoDataDto());
+        UUID gesuchId;
+        try {
+            gesuchId = generateDemoDataService.createEinreichableGesuch(demoData);
+        } catch (NullPointerException e) {
+            LOG.error("DemoDataApplyError", e);
+            throw new DemoDataApplyException("A required value was not set", e);
+        }
+
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var preValidation =

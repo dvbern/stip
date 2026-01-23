@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,15 +29,19 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import software.amazon.awssdk.annotations.NotNull;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
@@ -54,6 +59,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_TESTCAS
 @Getter
 @Setter
 public class DemoData extends AbstractMandantEntity {
+    @NotNull
+    @Column(name = "typ", nullable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private GesuchTrancheTyp typ;
+
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "test_fall", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
@@ -75,14 +85,19 @@ public class DemoData extends AbstractMandantEntity {
     private String erfasser;
 
     @NotNull
-    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
-    @Column(name = "gesuchsjahr", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
-    private String gesuchsjahr;
+    @Column(name = "gesuchsjahr", nullable = false)
+    private int gesuchsjahr;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "gesuchseingang", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String gesuchseingang;
+
+    @NotNull
+    @Min(1)
+    @Max(12)
+    @Column(name = "anzahl_monate", nullable = false)
+    private int anzahlMonate;
 
     @NotNull
     @Size(max = DB_DEFAULT_STRING_TESTCASE_JSON_DATA_LENGTH)

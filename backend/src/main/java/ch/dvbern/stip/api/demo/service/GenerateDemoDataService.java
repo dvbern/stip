@@ -17,14 +17,12 @@
 
 package ch.dvbern.stip.api.demo.service;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -32,22 +30,25 @@ import java.util.concurrent.CompletableFuture;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.entity.AdresseBuilder;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungBuilder;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.auszahlung.entity.AuszahlungBuilder;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntityBuilder;
 import ch.dvbern.stip.api.common.entity.AbstractPersonBuilder;
+import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoPerson;
 import ch.dvbern.stip.api.demo.repo.DemoDataAbschlussRepository;
 import ch.dvbern.stip.api.demo.repo.DemoDataAusbildungsgangRepository;
 import ch.dvbern.stip.api.demo.type.DemoDataDefaults;
-import ch.dvbern.stip.api.demo.type.DemoDataValueMap;
+import ch.dvbern.stip.api.demo.util.DemoDataAnonymizerUtil;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.DokumentBuilder;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -57,6 +58,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.dokument.util.RequiredDokumentUtil;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenBuilder;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.entity.ElternBuilder;
@@ -88,6 +90,7 @@ import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
+import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
@@ -126,12 +129,24 @@ public class GenerateDemoDataService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final DokumentRepository dokumentRepository;
 
-    private Land getLand(String landName) {
-        return getLandIso2(DemoDataValueMap.KNOWN_LANDS.get(landName));
+    private Land getLandIso2(String iso2Code) {
+        try {
+            return landRepository.getByIso2code(iso2Code).orElseThrow();
+        } catch (Exception e) {
+            throw new DemoDataApplyException("No Country with Iso Code \"%s\" found".formatted(iso2Code), e);
+        }
     }
 
-    private Land getLandIso2(String iso2Code) {
-        return landRepository.getByIso2code(iso2Code).orElseThrow(IllegalStateException::new);
+    private Ausbildungsgang getAusbildungsgang(DemoAusbildungDto ausbildungDto) {
+        try {
+            return demoDataAusbildungsgangRepository.requireAusbildungsgangByDemoData(ausbildungDto);
+        } catch (Exception e) {
+            throw new DemoDataApplyException(
+                "No Ausbildung found for Ausbildungsstätte \"%s\" and Ausbildungsgang \"%s\""
+                    .formatted(ausbildungDto.getAusbildungsstaette(), ausbildungDto.getAusbildungsgang()),
+                e
+            );
+        }
     }
 
     private Zahlungsverbindung getDefaultZahlungsverbindung(DemoDataDto demoDataDto, Adresse adresse) {
@@ -142,37 +157,6 @@ public class GenerateDemoDataService {
             .adresse(adresse)
             .iban(DemoDataDefaults.ZAHLUNGSVERBINBDUNG_IBAN)
             .build();
-    }
-
-    private void anonymizeZahlungsverbindung(Gesuch gesuch) {
-        final var zahlungsverbindung = gesuch.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        zahlungsverbindung.setVorname("Vorname-%s".formatted(gesuchSuffix));
-        zahlungsverbindung.setNachname("Nachname-%s".formatted(gesuchSuffix));
-        anonymizeAdresse(gesuch, zahlungsverbindung.getAdresse());
-    }
-
-    private void anonymizePersonInAusbildung(Gesuch gesuch) {
-        final var personInAusbildung = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        personInAusbildung.setVorname("Vorname-%s".formatted(gesuchSuffix));
-        personInAusbildung.setNachname("Nachname-%s".formatted(gesuchSuffix));
-        anonymizeAdresse(gesuch, personInAusbildung.getAdresse());
-    }
-
-    private void anonymizeAdresse(Gesuch gesuch, Adresse adresse) {
-        final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        adresse.setStrasse("%s %s".formatted(adresse.getStrasse(), gesuchSuffix));
-    }
-
-    private void anonymizeGesuch(Gesuch gesuch) {
-        anonymizeZahlungsverbindung(gesuch);
-        anonymizePersonInAusbildung(gesuch);
-    }
-
-    private String getLastGesuchNummerPart(Gesuch gesuch) {
-        final var gesuchNummer = gesuch.getGesuchNummer();
-        return gesuchNummer.substring(gesuchNummer.lastIndexOf('.') + 1);
     }
 
     private SteuerdatenTyp getSteuerdatenTyp(DemoDataDto demoDataDto, ElternTyp type) {
@@ -186,10 +170,11 @@ public class GenerateDemoDataService {
     }
 
     @Transactional
-    public UUID createEingereicht(DemoDataDto demoDataDto) {
+    public UUID createEinreichableGesuch(DemoData demoData) {
+        final var demoDataDto = demoData.parseDemoDataDto();
         final var piaDto = demoDataDto.getPersonInAusbildung();
         final var piaAdresse = AdresseBuilder.adresse()
-            .land(getLand(piaDto.getLand()))
+            .land(getLandIso2(piaDto.getLand()))
             .coAdresse(piaDto.getCoAdresse())
             .strasse(piaDto.getStrasse())
             .hausnummer(piaDto.getHausnummer())
@@ -210,11 +195,7 @@ public class GenerateDemoDataService {
         final var ausbildung = AusbildungBuilder.ausbildung()
             .fall(fall)
             .gesuchs(new ArrayList<>())
-            .ausbildungsgang(
-                !ausbildungDto.getAusbildungNichtGefunden()
-                    ? demoDataAusbildungsgangRepository.requireAusbildungsgangByDemoData(demoDataDto.getAusbildung())
-                    : null
-            )
+            .ausbildungsgang(!ausbildungDto.getAusbildungNichtGefunden() ? getAusbildungsgang(ausbildungDto) : null)
             .besuchtBMS(DemoDataDefaults.AUSBILDUNG_BESUCHT_BMS)
             .alternativeAusbildungsgang(
                 ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsgang() : null
@@ -251,24 +232,28 @@ public class GenerateDemoDataService {
                 )
                 .email(piaDto.getEmail())
                 .telefonnummer(piaDto.getTelefonnummer())
-                .nationalitaet(getLand(piaDto.getNationalitaet()))
+                .nationalitaet(getLandIso2(piaDto.getNationalitaet()))
                 .heimatort(piaDto.getHeimatort())
                 .heimatortPLZ(piaDto.getHeimatortPLZ())
                 .niederlassungsstatus(piaDto.getNiederlassungsstatus())
                 .einreisedatum(piaDto.getEinreisedatum())
                 .zivilstand(piaDto.getZivilstand())
                 .sozialhilfebeitraege(piaDto.getSozialhilfebeitraege())
-                .vormundschaft(piaDto.getVormundschaft())
+                .vormundschaft(
+                    Objects.requireNonNullElse(piaDto.getVormundschaft(), DemoDataDefaults.PIA_VORMUNDSCHAFT)
+                )
                 .korrespondenzSprache(DemoDataDefaults.SPRACHE)
                 .zustaendigeKESB(piaDto.getZustaendigeKESB()),
             AbstractFamilieEntityBuilder.abstractFamilieEntity()
                 .wohnsitz(piaDto.getWohnsitz())
                 .wohnsitzAnteilMutter(
-                    piaDto.getWohnsitz() == Wohnsitz.MUTTER_VATER ? BigDecimal.valueOf(piaDto.getWohnsitzAnteilMutter())
+                    piaDto.getWohnsitz() == Wohnsitz.MUTTER_VATER
+                        ? DemoDataDefaults.bigDecimalNullable(piaDto.getWohnsitzAnteilMutter())
                         : null
                 )
                 .wohnsitzAnteilVater(
-                    piaDto.getWohnsitz() == Wohnsitz.MUTTER_VATER ? BigDecimal.valueOf(piaDto.getWohnsitzAnteilVater())
+                    piaDto.getWohnsitz() == Wohnsitz.MUTTER_VATER
+                        ? DemoDataDefaults.bigDecimalNullable(piaDto.getWohnsitzAnteilVater())
                         : null
                 ),
             AbstractPersonBuilder.abstractPerson()
@@ -320,7 +305,7 @@ public class GenerateDemoDataService {
                 PartnerBuilder.partner()
                     .adresse(
                         AdresseBuilder.adresse()
-                            .land(getLand(demoPartnerDto.getLand()))
+                            .land(getLandIso2(demoPartnerDto.getLand()))
                             .coAdresse(demoPartnerDto.getCoAdresse())
                             .strasse(demoPartnerDto.getStrasse())
                             .hausnummer(demoPartnerDto.getHausnummer())
@@ -361,9 +346,9 @@ public class GenerateDemoDataService {
             .nettoerwerbseinkommen(ekDto.getNettoerwerbseinkommen())
             .fahrkosten(ekDto.getFahrkosten())
             .wohnkosten(ekDto.getWohnkosten())
-            .wgWohnend(DemoDataDefaults.EK_WG_WOHNEND)
-            .wgAnzahlPersonen(null)
-            .alternativeWohnformWohnend(DemoDataDefaults.EK_ALTERNATIVE_WOHNFORM_WOHNEND)
+            .wgWohnend(ekDto.getWgWohnend())
+            .wgAnzahlPersonen(ekDto.getWgWohnend() ? DemoDataDefaults.EK_WG_ANZAHL_PERSONEN : null)
+            .alternativeWohnformWohnend(ekDto.getAlternativeWohnformWohnend())
             .unterhaltsbeitraege(ekDto.getUnterhaltsbeitraege())
             .zulagen(DemoDataDefaults.defaultByKindsIfNull(ekDto.getZulagen(), demoDataDto))
             .renten(ekDto.getRenten())
@@ -384,9 +369,10 @@ public class GenerateDemoDataService {
             .andereEinnahmen(ekDto.getAndereEinnahmen())
             .arbeitspensumProzent(DemoDataDefaults.EK_ARBEITSPENSUM)
             .build();
-        final var ekPartnerDtoOpt = Optional.ofNullable(demoDataDto.getEinnahmenKostenPartner());
-        final var einnahmenKostenPartner = ekPartnerDtoOpt.map(
-            ekPartnerDto -> EinnahmenKostenBuilder.einnahmenKosten()
+        EinnahmenKosten einnahmenKostenPartner = null;
+        if (Objects.nonNull(demoPartnerDto)) {
+            var ekPartnerDto = demoDataDto.getEinnahmenKostenPartner();
+            einnahmenKostenPartner = EinnahmenKostenBuilder.einnahmenKosten()
                 .nettoerwerbseinkommen(
                     Objects.requireNonNullElse(ekPartnerDto.getNettoerwerbseinkommen(), DemoDataDefaults.EK_EINKOMMEN)
                 )
@@ -419,8 +405,8 @@ public class GenerateDemoDataService {
                 .taggelderAHVIV(ekPartnerDto.getTaggelderAHVIV())
                 .andereEinnahmen(ekPartnerDto.getAndereEinnahmen())
                 .arbeitspensumProzent(DemoDataDefaults.EK_ARBEITSPENSUM)
-                .build()
-        );
+                .build();
+        }
         final var famsitDto = demoDataDto.getFamiliensituation();
         final var familiensituation = FamiliensituationBuilder.familiensituation()
             .elternVerheiratetZusammen(famsitDto.getElternVerheiratetZusammen())
@@ -453,7 +439,7 @@ public class GenerateDemoDataService {
                     ElternBuilder.eltern()
                         .adresse(
                             AdresseBuilder.adresse()
-                                .land(getLand(elternDto.getLand()))
+                                .land(getLandIso2(elternDto.getLand()))
                                 .coAdresse(elternDto.getCoAdresse())
                                 .strasse(elternDto.getStrasse())
                                 .hausnummer(elternDto.getHausnummer())
@@ -549,8 +535,12 @@ public class GenerateDemoDataService {
                         .ausbildungssituation(geschwisterDto.getAusbildungssituation()),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
-                        .wohnsitzAnteilMutter(BigDecimal.valueOf(geschwisterDto.getWohnsitzAnteilMutter()))
-                        .wohnsitzAnteilVater(BigDecimal.valueOf(geschwisterDto.getWohnsitzAnteilVater())),
+                        .wohnsitzAnteilMutter(
+                            DemoDataDefaults.bigDecimalNullable(geschwisterDto.getWohnsitzAnteilMutter())
+                        )
+                        .wohnsitzAnteilVater(
+                            DemoDataDefaults.bigDecimalNullable(geschwisterDto.getWohnsitzAnteilVater())
+                        ),
                     AbstractPersonBuilder.abstractPerson()
                         .nachname(geschwisterDto.getNachname())
                         .vorname(geschwisterDto.getVorname())
@@ -565,7 +555,10 @@ public class GenerateDemoDataService {
             new GesuchCreateDto().ausbildungId(ausbildung.getId())
         );
         if (Objects.nonNull(createdGesuch.getRight())) {
-            throw new IllegalStateException("Unable to create the gesuch");
+            if (Objects.nonNull(createdGesuch.getRight().getRight())) {
+                createdGesuch.getRight().getRight().throwCustomValidation();
+            }
+            throw new RuntimeException("Unable to create the gesuch");
         }
         final var gesuch = gesuchRepository.requireById(createdGesuch.getLeft().getId());
         final var gesuchFormular = gesuch
@@ -575,7 +568,7 @@ public class GenerateDemoDataService {
             .setPersonInAusbildung(pia)
             .setPartner(partner)
             .setEinnahmenKosten(einnahmenKosten)
-            .setEinnahmenKostenPartner(einnahmenKostenPartner.orElse(null))
+            .setEinnahmenKostenPartner(einnahmenKostenPartner)
             .setFamiliensituation(familiensituation);
         gesuchFormular.getLebenslaufItems().addAll(lebenslaufItems);
         gesuchFormular.getKinds().addAll(kinds);
@@ -586,7 +579,7 @@ public class GenerateDemoDataService {
 
         gesuchFormularRepository.persist(gesuchFormular);
         gesuchRepository.persistAndFlush(gesuch);
-        anonymizeGesuch(gesuch);
+        DemoDataAnonymizerUtil.anonymizeGesuch(demoData, gesuch);
         gesuchRepository.persistAndFlush(gesuch);
 
         return gesuch.getId();

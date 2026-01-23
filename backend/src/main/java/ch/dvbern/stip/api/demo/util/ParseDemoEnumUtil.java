@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
@@ -32,10 +33,20 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 
 @UtilityClass
 public class ParseDemoEnumUtil {
+    public GesuchTrancheTyp parseTyp(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getStringCellValue()) {
+            case "Gesuch" -> GesuchTrancheTyp.TRANCHE;
+            case "Änderung" -> GesuchTrancheTyp.AENDERUNG;
+            default -> throw invalidValue(cell);
+        };
+    }
+
     public Anrede parseAnrede(Cell cell) {
         if (ParseDemoDataUtil.isBlank(cell)) {
             return null;
@@ -76,7 +87,7 @@ public class ParseDemoEnumUtil {
     }
 
     public Niederlassungsstatus parseNiederlassungsstatus(Cell cell) {
-        if (cell == null || cell.getCellType() == CellType.BLANK) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
             return null;
         }
 

@@ -25,6 +25,12 @@ import ch.dvbern.stip.generated.dto.ValidationMessageDto;
 public class DemoDataApplyException extends RuntimeException {
     public List<ValidationMessageDto> validationErrors = new ArrayList<>();
 
+    public DemoDataApplyException() {}
+
+    public DemoDataApplyException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public DemoDataApplyException(String message, List<ValidationMessageDto> validationErrors) {
         super(message);
         this.validationErrors.addAll(validationErrors);

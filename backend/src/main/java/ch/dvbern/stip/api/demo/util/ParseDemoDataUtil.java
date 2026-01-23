@@ -31,14 +31,18 @@ import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoPartnerDto;
 import ch.dvbern.stip.generated.dto.DemoSteuerdatenDto;
 import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
+import jakarta.ws.rs.BadRequestException;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @UtilityClass
@@ -57,18 +61,69 @@ public class ParseDemoDataUtil {
     }
 
     public boolean isBlank(Cell cell) {
-        return cell == null || cell.getCellType() == CellType.BLANK;
+        return cell == null || cell.getCellType() == CellType.BLANK
+        || (cell.getCellType() == CellType.STRING
+        && (cell.getStringCellValue().trim().isEmpty() || cell.getStringCellValue()
+            .trim()
+            .equals(" ")));
+    }
+
+    public static Pair<String, String> parseDescription(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            throw new IllegalStateException("No description provided");
+        }
+
+        final var fullText = cellToSimpleHtml(cell);
+        final var indexColon = fullText.indexOf(':');
+        final var substringIndex = indexColon > 0 ? indexColon : fullText.indexOf('.');
+
+        if (substringIndex == -1) {
+            throw new IllegalStateException("No description with '.' or ':' provided");
+        }
+
+        return Pair.of(fullText.substring(0, substringIndex).trim(), fullText.substring(substringIndex + 1).trim());
     }
 
     public Boolean parseBoolean(Cell cell) {
+        if (isBlank(cell)) {
+            throw new IllegalStateException("No Ja/Nein given");
+        }
         return cell.getStringCellValue().equals("Ja");
     }
 
-    public Integer parseInteger(Cell cell) {
-        if (ParseDemoDataUtil.isBlank(cell)) {
+    public Integer parseIntegerNullable(Cell cell) {
+        if (isBlank(cell)) {
             return null;
         }
         return (int) cell.getNumericCellValue();
+    }
+
+    public int parseInteger(Cell cell) {
+        if (isBlank(cell)) {
+            throw new IllegalStateException("No integer given");
+        }
+        return switch (cell.getCellType()) {
+            case NUMERIC -> (int) cell.getNumericCellValue();
+            case STRING -> Integer.parseInt(cell.getStringCellValue());
+            default -> throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+        };
+    }
+
+    public static Integer parsePercentageNullable(Cell cell) {
+        if (isBlank(cell)) {
+            return null;
+        }
+        return switch (cell.getCellType()) {
+            case NUMERIC -> {
+                final var value = cell.getNumericCellValue();
+                if (cell.getCellStyle().getDataFormatString().contains("%")) {
+                    yield (int) (value * 100);
+                }
+                yield (int) value;
+            }
+            case STRING -> Integer.parseInt(cell.getStringCellValue().replace('%', ' ').trim());
+            default -> throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+        };
     }
 
     public String parseDateString(Cell cell) {
@@ -76,33 +131,57 @@ public class ParseDemoDataUtil {
     }
 
     public LocalDate parseDate(Cell cell) {
+        if (isBlank(cell)) {
+            return null;
+        }
         return DateUtil.getLocalDateTime(cell.getNumericCellValue()).toLocalDate();
     }
 
     public Boolean parseBooleanNullable(Cell cell) {
-        if (ParseDemoDataUtil.isBlank(cell)) {
+        if (isBlank(cell)) {
             return null;
         }
         return parseBoolean(cell);
+    }
+
+    public String parseString(Cell cell) {
+        if (isBlank(cell)) {
+            throw new IllegalStateException("No string given");
+        }
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
+            default -> throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+        };
     }
 
     public String parseStringNullable(Cell cell) {
         if (isBlank(cell)) {
             return null;
         }
-        return cell.getStringCellValue();
+        return parseString(cell);
+    }
+
+    public String parseLandIsoCode(Cell cell) {
+        if (isBlank(cell)) {
+            return null;
+        }
+        final var landIsoCode = cell.getStringCellValue();
+        if (landIsoCode.length() != 2) {
+            throw new IllegalStateException("Invalid landIsoCode: " + landIsoCode);
+        }
+        return landIsoCode;
     }
 
     public LocalDate parseMonthYear(Cell cell, boolean endOfMonth) {
         if (isBlank(cell)) {
             return null;
         }
-        final var parts = String.valueOf(cell.getNumericCellValue()).split("\\.");
-        final var date = LocalDate.of(Integer.parseInt(parts[1]), Integer.parseInt(parts[0]), 1);
+        final var date = cell.getLocalDateTimeCellValue().toLocalDate();
         if (endOfMonth) {
             return date.with(lastDayOfMonth());
         }
-        return date;
+        return date.with(firstDayOfMonth());
     }
 
     public <T> T skipEntries(Iterator<T> iterator, int amount) {
@@ -177,7 +256,7 @@ public class ParseDemoDataUtil {
     }
 
     public boolean hasValue(DemoSteuererklaerungDto steuernerklaerungDto) {
-        return Objects.nonNull(steuernerklaerungDto.getErgaenzungsleistungen());
+        return Objects.nonNull(steuernerklaerungDto.getSteuererklaerungInBern());
     }
 
     public boolean hasValue(DemoSteuerdatenDto steuerdatenDto) {
@@ -193,11 +272,67 @@ public class ParseDemoDataUtil {
             parser.run();
         } catch (Exception e) {
             final var formatter = new DataFormatter();
-            throw new IllegalStateException(
-                "Cell was not accessed correctly, value: '%s' [%s]"
-                    .formatted(formatter.formatCellValue(cell), cell.getAddress().formatAsString()),
+            throw new BadRequestException(
+                "Cell was not accessed correctly, value: '%s' [%s]\n%s"
+                    .formatted(formatter.formatCellValue(cell), cell.getAddress().formatAsString(), e.getMessage()),
                 e
             );
         }
+    }
+
+    private static String cellToSimpleHtml(Cell cell) {
+        if (!(cell instanceof XSSFCell) || cell.getRichStringCellValue().numFormattingRuns() == 0) {
+            return cell.getStringCellValue();
+        }
+        final var rich = ((XSSFCell) cell).getRichStringCellValue();
+        String full = rich.getString();
+
+        StringBuilder taggedValue = new StringBuilder();
+
+        for (int i = 0; i < rich.numFormattingRuns(); i++) {
+            int start = rich.getIndexOfFormattingRun(i);
+            int length = rich.getLengthOfFormattingRun(i);
+
+            // If an empty formatting cell is found
+            if (length <= 0)
+                continue;
+
+            final var text = full.substring(start, start + length);
+            final var font = rich.getFontOfFormattingRun(i);
+
+            if (Objects.isNull(font)) {
+                taggedValue.append(escape(text));
+                continue;
+            }
+
+            final var hasUnderline = font.getUnderline() > 0;
+            final var hasBold = font.getBold();
+            final var hasItalic = font.getItalic();
+
+            if (hasUnderline)
+                taggedValue.append("<u>");
+            if (hasBold)
+                taggedValue.append("<b>");
+            if (hasItalic)
+                taggedValue.append("<i>");
+
+            taggedValue.append(escape(text));
+
+            if (hasItalic)
+                taggedValue.append("</i>");
+            if (hasBold)
+                taggedValue.append("</b>");
+            if (hasUnderline)
+                taggedValue.append("</u>");
+        }
+
+        return taggedValue.toString();
+    }
+
+    // Simple HTML escaper
+    private static String escape(String s) {
+        return s.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;");
     }
 }
