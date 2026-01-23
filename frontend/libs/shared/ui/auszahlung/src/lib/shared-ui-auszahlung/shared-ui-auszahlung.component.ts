@@ -11,9 +11,11 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -81,12 +83,68 @@ export class SharedUiAuszahlungComponent {
 
   MASK_IBAN = MASK_IBAN;
 
+  private toggleErrorOnControls(
+    controls: Array<AbstractControl>,
+    errorKey: string,
+    hasError: boolean,
+  ): void {
+    if (hasError) {
+      controls.forEach((control) => {
+        control.setErrors({ [errorKey]: true }, { emitEvent: false });
+      });
+    } else {
+      controls.forEach((control) => {
+        if (control.hasError(errorKey)) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { [errorKey]: _, ...errors } = control.errors ?? {};
+          if (Object.keys(errors).length === 0) {
+            control.setErrors(null, { emitEvent: false });
+          } else {
+            control.setErrors(errors, { emitEvent: false });
+          }
+        }
+      });
+    }
+  }
+
+  noNamesOrInstitutionValidator = (): ValidatorFn => {
+    return (group) => {
+      const vornameControl = group.get('vorname');
+      const nachnameControl = group.get('nachname');
+      const institutionControl = group.get('institution');
+
+      if (!vornameControl || !nachnameControl || !institutionControl) {
+        return null;
+      }
+
+      const vorname = (vornameControl.value ?? '').trim();
+      const nachname = (nachnameControl.value ?? '').trim();
+      const institution = (institutionControl.value ?? '').trim();
+
+      if ((vorname && nachname) || institution) {
+        this.toggleErrorOnControls(
+          [vornameControl, nachnameControl, institutionControl],
+          'noNamesOrInstitution',
+          false,
+        );
+        return null;
+      }
+      this.toggleErrorOnControls(
+        [vornameControl, nachnameControl, institutionControl],
+        'noNamesOrInstitution',
+        true,
+      );
+      return { noNamesOrInstitution: true };
+    };
+  };
+
   form = this.formBuilder.group({
     auszahlungAnSozialdienst: [false],
     zahlungsverbindung: this.formBuilder.group(
       {
-        nachname: [<string | undefined>undefined, [Validators.required]],
-        vorname: [<string | undefined>undefined, [Validators.required]],
+        nachname: [<string | undefined>undefined],
+        vorname: [<string | undefined>undefined],
+        institution: [<string | undefined>undefined],
         adresse: SharedUiFormAddressComponent.buildAddressFormGroup(
           this.formBuilder,
           Validators.required,
@@ -96,9 +154,12 @@ export class SharedUiAuszahlungComponent {
           [Validators.required, ibanValidator()],
         ],
       },
-      { validators: [Validators.required] },
+      {
+        validators: [this.noNamesOrInstitutionValidator(), Validators.required],
+      },
     ),
   });
+
   auszahlungAnSozialdienstChangedSig = toSignal(
     this.form.controls.auszahlungAnSozialdienst.valueChanges,
   );
@@ -163,7 +224,7 @@ export class SharedUiAuszahlungComponent {
     const formData = this.form.getRawValue();
     const zahlungsverbindungData = convertTempFormToRealValues(
       this.form.controls.zahlungsverbindung,
-      ['nachname', 'vorname', 'iban', 'adresse'],
+      ['iban', 'adresse'],
     );
     const addressData = SharedUiFormAddressComponent.getRealValues(
       this.form.controls.zahlungsverbindung.controls.adresse,

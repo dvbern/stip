@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.zahlungsverbindung.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +43,7 @@ import org.jilt.BuilderStyle;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
 @Iso2OnZahlungsverbindungMustBeSet(property = "adresse.land")
+@VornameNachnameOrInstitutionRequiredConstraint
 @Audited
 @Entity
 @Table(
@@ -57,14 +59,15 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @NoArgsConstructor
 @AllArgsConstructor
 public class Zahlungsverbindung extends AbstractMandantEntity {
-    @NotNull
+
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "vorname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "vorname", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
-    @NotNull
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
-    @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "nachname", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nachname;
 
     @NotNull
@@ -77,4 +80,8 @@ public class Zahlungsverbindung extends AbstractMandantEntity {
     @Column(name = "iban", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @IbanConstraint
     private String iban;
+
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "institution", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    private String institution;
 }
