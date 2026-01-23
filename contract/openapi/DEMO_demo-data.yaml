@@ -184,6 +184,8 @@ components:
           type: string
         errorClass:
           type: string
+        cause:
+          type: string
         validationErrors:
           type: array
           items:
@@ -502,6 +504,10 @@ components:
           type: integer
         wohnkosten:
           type: integer
+        wgWohnend:
+          type: boolean
+        alternativeWohnformWohnend:
+          type: boolean
         vermoegen:
           type: integer
         steuernKantonGemeinde:
