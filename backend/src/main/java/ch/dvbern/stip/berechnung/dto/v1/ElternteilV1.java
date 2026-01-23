@@ -238,7 +238,7 @@ public class ElternteilV1 {
         builder.totalEinkuenfte(steuerdaten.getTotalEinkuenfte());
         builder.eigenmietwert(steuerdaten.getEigenmietwert());
         builder.unterhaltsbeitraege(
-            toJahresWert(steuererklaerung.getUnterhaltsbeitraege())
+            toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0))
         );
         builder.einzahlungSaeule2(steuerdaten.getSaeule2());
         builder.einzahlungSaeule3a(steuerdaten.getSaeule3a());
