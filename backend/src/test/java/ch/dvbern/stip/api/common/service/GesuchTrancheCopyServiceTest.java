@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGr
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheCopyService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.util.TestUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.savoirtech.json.JsonComparatorBuilder;
@@ -36,7 +37,6 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE;
@@ -66,7 +66,7 @@ class GesuchTrancheCopyServiceTest {
     }
 
     @Test
-    void testCopy() throws JsonProcessingException, com.fasterxml.jackson.core.JsonProcessingException {
+    void testCopy() throws JsonProcessingException {
         final var gesuch = TestUtil.getFullGesuch();
 
         try {
