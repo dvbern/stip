@@ -12,9 +12,10 @@
 import { Adresse } from './adresse';
 
 export interface Zahlungsverbindung { 
-    vorname: string;
+    vorname?: string;
     adresse: Adresse;
     iban: string;
-    nachname: string;
+    nachname?: string;
+    institution?: string;
 }
 

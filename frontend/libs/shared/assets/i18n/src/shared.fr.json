@@ -824,6 +824,12 @@
   "shared.form.auszahlung.anSozialidenst": "Versement au service social",
   "shared.form.auszahlung.iban.label": "IBAN",
   "shared.form.auszahlung.iban.info": "Veuillez saisir le numéro IBAN (numéro de compte bancaire international) de la personne ou de l’institution bénéficiaire. Ce numéro doit commencer par « CH ». Les paiements en espèces et les versements à l’étranger ne sont pas possibles.",
+  "shared.form.auszahlung.institution.label": "Institution",
+  "shared.form.auszahlung.empfaenger.info.title": "Bénéficiaire du paiement",
+  "shared.form.auszahlung.empfaenger.info.message": "Le paiement ne peut pas être effectué à des tiers. Il peut être versé à la personne en formation (PiA), au père, à la mère, au service social, à la KESB ou au tuteur.",
+  "shared.form.auszahlung.lastname.error.required": "Requis si pas d'institution indiquée",
+  "shared.form.auszahlung.firstname.error.required": "Requis si pas d'institution indiquée",
+  "shared.form.auszahlung.institution.error.required": "Requis si pas de nom et prénom indiqués",
 
   "shared.partner.title": "Partenaire",
   "shared.partner.page.title": "Conjoint / concubin",

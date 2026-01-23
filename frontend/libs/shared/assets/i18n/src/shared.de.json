@@ -824,6 +824,12 @@
   "shared.form.auszahlung.anSozialidenst": "Auszahlung an Sozialdienst",
   "shared.form.auszahlung.iban.label": "IBAN",
   "shared.form.auszahlung.iban.info": "Es ist eine IBAN (internationale Bankkontonummer) der begünstigten Person/Institution zu erfassen. Diese muss mit «CH» beginnen. Barauszahlungen und Auszahlungen ins Ausland sind nicht möglich.",
+  "shared.form.auszahlung.institution.label": "Institution",
+  "shared.form.auszahlung.empfaenger.info.title": "Empfänger:in der Auszahlung",
+  "shared.form.auszahlung.empfaenger.info.message": "Die Auszahlung darf nicht an beliebige Dritte gehen. Die Auszahlung darf an PiA, Vater, Mutter, Sozialdienst, KESB, Beistand gehen.",
+  "shared.form.auszahlung.lastname.error.required": "Erforderlich, wenn keine Institution angegeben ist",
+  "shared.form.auszahlung.firstname.error.required": "Erforderlich, wenn keine Institution angegeben ist",
+  "shared.form.auszahlung.institution.error.required": "Erforderlich, wenn kein Name und Vorname angegeben sind",
 
   "shared.partner.title": "Partner:in",
   "shared.partner.page.title": "Ehe- / Konkubinatspartner:in",

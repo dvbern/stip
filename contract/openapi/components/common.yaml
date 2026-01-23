@@ -316,8 +316,6 @@ ZahlungsverbindungUpdate:
   required:
     - adresse
     - iban
-    - nachname
-    - vorname
   type: object
   properties:
     vorname:
@@ -327,6 +325,8 @@ ZahlungsverbindungUpdate:
     iban:
       type: string
     nachname:
+      type: string
+    institution:
       type: string
 Gesuch:
   required:

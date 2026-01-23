@@ -6579,8 +6579,6 @@ components:
       required:
         - adresse
         - iban
-        - nachname
-        - vorname
       type: object
       properties:
         vorname:
@@ -6590,6 +6588,8 @@ components:
         iban:
           type: string
         nachname:
+          type: string
+        institution:
           type: string
     Zahlungsverbindung:
       title: Root Type for Zahlungsverbindung
