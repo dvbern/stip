@@ -41,9 +41,13 @@ import { PositionComponent } from '../position/position.component';
       </dv-position>
 
       <!-- BGSA -->
-      <dv-position
+      <!-- <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [personValueItemsSig]="einnahmen.einnahmenBGSA"
+        [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
+      > -->
+      <dv-position
+        [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
