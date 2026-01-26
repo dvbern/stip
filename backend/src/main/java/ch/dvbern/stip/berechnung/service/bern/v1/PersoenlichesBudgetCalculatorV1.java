@@ -157,7 +157,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
         }
 
-        final var verpflegungPartner = Objects.requireNonNullElse(antragssteller.getVerpflegungskostenPartner(), 0);
+        final var verpflegungPartner = antragssteller.getVerpflegungskostenPartner();
         final var fremdbetreuung = antragssteller.getFremdbetreuung();
 
         final var anteilLebenshaltungskosten1 =
