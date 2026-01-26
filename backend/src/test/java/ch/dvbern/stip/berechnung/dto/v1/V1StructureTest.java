@@ -221,12 +221,12 @@ class V1StructureTest {
                   { "vorname": "a", "value": 1200 },
                   { "vorname": "a", "value": 1200 }
                 ],
-                "gemeindeInstitutionen": null,
+                "gemeindeInstitutionen": 0,
                 "andereEinnahmens": [
                   { "vorname": "a", "value": 0 },
                   { "vorname": "a", "value": 0 }
                 ],
-                "vermoegen": null,
+                "vermoegen": 0,
                 "ausbildungskosten": 450,
                 "fahrkosten": 523,
                 "auswaertigeMittagessenProWoche": 0,
