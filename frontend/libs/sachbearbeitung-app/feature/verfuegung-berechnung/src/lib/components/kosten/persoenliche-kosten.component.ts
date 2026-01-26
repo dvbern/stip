@@ -119,7 +119,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('fahrkostenPartner')"
         [infoSig]="
           t('fahrkostenPartner.info', {
-            fahrkosten: kosten.fahrkosten | formatChf,
+            fahrkosten: kosten.fahrkostenPartner | formatChf,
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
