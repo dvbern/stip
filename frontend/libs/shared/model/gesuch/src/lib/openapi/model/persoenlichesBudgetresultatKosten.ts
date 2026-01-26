@@ -23,8 +23,8 @@ export interface PersoenlichesBudgetresultatKosten {
     wohnkosten: number;
     medizinischeGrundversorgung: Array<PersonValueItem>;
     medizinischeGrundversorgungTotal: number;
-    fahrkostenPartner: number;
-    verpflegungPartner: number;
+    fahrkostenPartner?: number;
+    verpflegungPartner?: number;
     betreuungskostenKinder: number;
     kantonsGemeindesteuern: number;
     bundessteuern: number;

@@ -9093,8 +9093,6 @@ components:
         - wohnkosten
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
-        - fahrkostenPartner
-        - verpflegungPartner
         - betreuungskostenKinder
         - kantonsGemeindesteuern
         - bundessteuern
