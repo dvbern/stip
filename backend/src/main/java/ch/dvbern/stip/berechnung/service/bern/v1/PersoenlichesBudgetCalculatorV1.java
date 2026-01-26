@@ -126,7 +126,8 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
         }
 
-        final var steuern = antragssteller.getSteuern();
+        final var steuern =
+            antragssteller.getSteuern() + Objects.requireNonNullElse(antragssteller.getSteuernPartner(), 0);
         final var steuernPartner = antragssteller.getSteuernPartner();
 
         var fahrkosten = antragssteller.getFahrkosten();
