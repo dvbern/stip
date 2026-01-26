@@ -20,29 +20,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class ZahlungsverbindungDto  implements Serializable {
-  private @Valid String vorname;
   private @Valid AdresseDto adresse;
   private @Valid String iban;
+  private @Valid String vorname;
   private @Valid String nachname;
-
-  /**
-   **/
-  public ZahlungsverbindungDto vorname(String vorname) {
-    this.vorname = vorname;
-    return this;
-  }
-
-  
-  @JsonProperty("vorname")
-  @NotNull
-  public String getVorname() {
-    return vorname;
-  }
-
-  @JsonProperty("vorname")
-  public void setVorname(String vorname) {
-    this.vorname = vorname;
-  }
+  private @Valid String institution;
 
   /**
    **/
@@ -84,6 +66,24 @@ public class ZahlungsverbindungDto  implements Serializable {
 
   /**
    **/
+  public ZahlungsverbindungDto vorname(String vorname) {
+    this.vorname = vorname;
+    return this;
+  }
+
+  
+  @JsonProperty("vorname")
+  public String getVorname() {
+    return vorname;
+  }
+
+  @JsonProperty("vorname")
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
+  }
+
+  /**
+   **/
   public ZahlungsverbindungDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
@@ -91,7 +91,6 @@ public class ZahlungsverbindungDto  implements Serializable {
 
   
   @JsonProperty("nachname")
-  @NotNull
   public String getNachname() {
     return nachname;
   }
@@ -99,6 +98,24 @@ public class ZahlungsverbindungDto  implements Serializable {
   @JsonProperty("nachname")
   public void setNachname(String nachname) {
     this.nachname = nachname;
+  }
+
+  /**
+   **/
+  public ZahlungsverbindungDto institution(String institution) {
+    this.institution = institution;
+    return this;
+  }
+
+  
+  @JsonProperty("institution")
+  public String getInstitution() {
+    return institution;
+  }
+
+  @JsonProperty("institution")
+  public void setInstitution(String institution) {
+    this.institution = institution;
   }
 
 
@@ -111,15 +128,16 @@ public class ZahlungsverbindungDto  implements Serializable {
       return false;
     }
     ZahlungsverbindungDto zahlungsverbindung = (ZahlungsverbindungDto) o;
-    return Objects.equals(this.vorname, zahlungsverbindung.vorname) &&
-        Objects.equals(this.adresse, zahlungsverbindung.adresse) &&
+    return Objects.equals(this.adresse, zahlungsverbindung.adresse) &&
         Objects.equals(this.iban, zahlungsverbindung.iban) &&
-        Objects.equals(this.nachname, zahlungsverbindung.nachname);
+        Objects.equals(this.vorname, zahlungsverbindung.vorname) &&
+        Objects.equals(this.nachname, zahlungsverbindung.nachname) &&
+        Objects.equals(this.institution, zahlungsverbindung.institution);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, iban, nachname);
+    return Objects.hash(adresse, iban, vorname, nachname, institution);
   }
 
   @Override
@@ -127,10 +145,11 @@ public class ZahlungsverbindungDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class ZahlungsverbindungDto {\n");
     
-    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    institution: ").append(toIndentedString(institution)).append("\n");
     sb.append("}");
     return sb.toString();
   }
