@@ -32,7 +32,7 @@ import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
@@ -109,7 +109,7 @@ public class Fall extends AbstractMandantEntity {
     private List<Buchhaltung> buchhaltungs = new ArrayList<>();
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
-    private List<Darlehen> darlehens = new ArrayList<>();
+    private List<FreiwilligDarlehen> freiwilligDarlehens = new ArrayList<>();
 
     @NullableUnlessGenerated
     @OneToOne(mappedBy = "delegierterFall")

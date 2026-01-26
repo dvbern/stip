@@ -20,7 +20,8 @@ package ch.dvbern.stip.api.common.service;
 import java.util.Set;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -59,7 +60,10 @@ public abstract class EntityCopyMapper {
     public abstract void copyFromTo(EinnahmenKosten source, @MappingTarget EinnahmenKosten target);
 
     @IgnoreStandardFields
-    public abstract void copyFromTo(Darlehen source, @MappingTarget Darlehen target);
+    public abstract void copyFromTo(FreiwilligDarlehen source, @MappingTarget FreiwilligDarlehen target);
+
+    @IgnoreStandardFields
+    public abstract void copyFromTo(DarlehenBuchhaltungEntry source, @MappingTarget DarlehenBuchhaltungEntry target);
 
     public abstract void copyFromToEltern(Set<Eltern> source, @MappingTarget Set<Eltern> target);
 

@@ -696,8 +696,8 @@
                     DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
                     DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
                     DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                    GetDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType,
-                    SbDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn,
+                    GetFreiwilligDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType,
+                    SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
                     Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
@@ -748,7 +748,8 @@
                     MassendruckJobTyp=ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp,
                     MassendruckJobStatus=ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus,
                     MassendruckJobSortColumn=ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn,
-                    GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType
+                    GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType,
+                    DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

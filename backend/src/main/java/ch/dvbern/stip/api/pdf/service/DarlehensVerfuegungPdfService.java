@@ -29,7 +29,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -84,7 +84,7 @@ public class DarlehensVerfuegungPdfService {
         );
     }
 
-    public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final Darlehen darlehen) {
+    public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final FreiwilligDarlehen darlehen) {
         final PdfFont pdfFont = PdfUtils.createFont();
         final PdfFont pdfFontBold = PdfUtils.createFontBold();
         final PdfFont pdfFontItalic = PdfUtils.createFontItalic();
@@ -148,7 +148,7 @@ public class DarlehensVerfuegungPdfService {
     }
 
     private String getKopieAnSozialdienstString(
-        final Darlehen darlehen,
+        final FreiwilligDarlehen darlehen,
         final TL translator
     ) {
         if (Objects.isNull(darlehen.getFall().getDelegierung())) {
@@ -168,7 +168,7 @@ public class DarlehensVerfuegungPdfService {
     }
 
     private void addPositiveDarlehensVerfuegung(
-        final Darlehen darlehen,
+        final FreiwilligDarlehen darlehen,
         final Gesuch gesuch,
         final TL translator,
         final Document document,
@@ -419,7 +419,7 @@ public class DarlehensVerfuegungPdfService {
         document.add(mainTable);
     }
 
-    public ByteArrayOutputStream generateNegativeDarlehensVerfuegungPdf(final Darlehen darlehen) {
+    public ByteArrayOutputStream generateNegativeDarlehensVerfuegungPdf(final FreiwilligDarlehen darlehen) {
         final var out = new ByteArrayOutputStream();
         final PdfFont pdfFont = PdfUtils.createFont();
         final PdfFont pdfFontBold = PdfUtils.createFontBold();
@@ -479,7 +479,7 @@ public class DarlehensVerfuegungPdfService {
     }
 
     private void addNegativeDarlehensVerfuegung(
-        final Darlehen darlehen,
+        final FreiwilligDarlehen darlehen,
         final Gesuch gesuch,
         final TL translator,
         final Document document,
@@ -589,7 +589,7 @@ public class DarlehensVerfuegungPdfService {
 
     private void addDetailsForDarlehenTable(
         Document document,
-        final Darlehen darlehen,
+        final FreiwilligDarlehen darlehen,
         final TL translator,
         final PdfFont pdfFont,
         final PdfFont pdfFontBold

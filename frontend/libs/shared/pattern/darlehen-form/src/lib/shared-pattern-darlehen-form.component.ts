@@ -40,8 +40,8 @@ import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DarlehenDokumentType,
   DarlehenGrund,
-  DarlehenUpdateGs,
-  DarlehenUpdateSb,
+  FreiwilligDarlehenUpdateGs,
+  FreiwilligDarlehenUpdateSb,
 } from '@dv/shared/model/gesuch';
 import { getDarlehenPermissions } from '@dv/shared/model/permission-state';
 import {
@@ -276,7 +276,7 @@ export class SharedPatternDarlehenFormComponent {
       'anzahlBetreibungen',
     ]);
 
-    const darlehen: DarlehenUpdateGs = {
+    const darlehen: FreiwilligDarlehenUpdateGs = {
       betragGewuenscht: fromFormatedNumber(realValues.betragGewuenscht),
       schulden: fromFormatedNumber(realValues.schulden),
       anzahlBetreibungen: realValues.anzahlBetreibungen,
@@ -313,7 +313,7 @@ export class SharedPatternDarlehenFormComponent {
           this.darlehenStore.darlehenUpdateAndEingebenGs$({
             data: {
               darlehenId: darlehen.id,
-              darlehenUpdateGs: updatedDarlehen,
+              freiwilligDarlehenUpdateGs: updatedDarlehen,
             },
             onSuccess: () => {
               this.gsFormSavedSig.set(true);
@@ -357,7 +357,7 @@ export class SharedPatternDarlehenFormComponent {
 
   // Sachbearbeiter Actions
 
-  private buildUpdatedSbFrom(): DarlehenUpdateSb {
+  private buildUpdatedSbFrom(): FreiwilligDarlehenUpdateSb {
     const realValues = convertTempFormToRealValues(this.formSb, [
       'kommentar',
       'gewaehren',
@@ -392,7 +392,7 @@ export class SharedPatternDarlehenFormComponent {
           this.darlehenStore.darlehenUpdateAndFreigebenSb$({
             data: {
               darlehenId: darlehen.id,
-              darlehenUpdateSb: updatedDarlehen,
+              freiwilligDarlehenUpdateSb: updatedDarlehen,
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);
@@ -452,7 +452,7 @@ export class SharedPatternDarlehenFormComponent {
           this.darlehenStore.darlehenUpdateAndAbschliessenSb$({
             data: {
               darlehenId: darlehen.id,
-              darlehenUpdateSb: updatedDarlehen,
+              freiwilligDarlehenUpdateSb: updatedDarlehen,
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);

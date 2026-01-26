@@ -181,11 +181,11 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/dashboard/{getDarlehenSbQueryType}:
+  /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}:
     parameters:
-      - name: getDarlehenSbQueryType
+      - name: getFreiwilligDarlehenSbQueryType
         schema:
-          $ref: '#/components/schemas/GetDarlehenSbQueryType'
+          $ref: '#/components/schemas/GetFreiwilligDarlehenSbQueryType'
         in: path
         required: true
       - $ref: '#/components/parameters/fallNummer'
@@ -200,7 +200,7 @@ paths:
       - $ref: '#/components/parameters/pageSize'
       - name: sortColumn
         schema:
-          $ref: '#/components/schemas/SbDarlehenDashboardColumn'
+          $ref: '#/components/schemas/SbFreiwilligDarlehenDashboardColumn'
         in: query
       - $ref: '#/components/parameters/sortOrder'
     get:
@@ -211,7 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedSbDarlehenDashboard'
+                $ref: '#/components/schemas/PaginatedSbFreiwilligDarlehenDashboard'
           description: Returns gesuche filtered by status and sb
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -219,7 +219,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDarlehenDashboardSb
+      operationId: getFreiwilligDarlehenDashboardSb
       summary: Returns darlehen filtered by status and sb
       security:
         - auth-uat-bern: []
@@ -240,7 +240,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -249,7 +249,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: createDarlehen
+      operationId: createFreiwilligDarlehen
       summary: Create a new Darlehen
       security:
         - auth-uat-bern: []
@@ -409,7 +409,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -418,7 +418,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenEingeben
+      operationId: freiwilligDarlehenEingeben
       summary: Change darlehen status to eingegeben
       security:
         - auth-uat-bern: []
@@ -439,7 +439,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -448,7 +448,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenFreigeben
+      operationId: freiwilligDarlehenFreigeben
       summary: Change darlehen status to freigegeben
       security:
         - auth-uat-bern: []
@@ -475,7 +475,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -484,7 +484,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenZurueckweisen
+      operationId: freiwilligDarlehenZurueckweisen
       summary: Change darlehen status to in bearbeitung gs
       security:
         - auth-uat-bern: []
@@ -505,7 +505,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -514,7 +514,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenAkzeptieren
+      operationId: freiwilligDarlehenAkzeptieren
       summary: Change darlehen status to akzeptiert
       security:
         - auth-uat-bern: []
@@ -535,7 +535,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -544,7 +544,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenAblehen
+      operationId: freiwilligDarlehenAblehen
       summary: Change darlehen status to abgelehnt
       security:
         - auth-uat-bern: []
@@ -565,7 +565,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -574,7 +574,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDarlehenGs
+      operationId: getFreiwilligDarlehenGs
       summary: Return active darlehen darlehen if exists or else null
       security:
         - auth-uat-bern: []
@@ -587,14 +587,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DarlehenUpdateGs'
+              $ref: '#/components/schemas/FreiwilligDarlehenUpdateGs'
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -603,7 +603,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenUpdateGs
+      operationId: freiwilligDarlehenUpdateGs
       summary: Update darlehen as gs
       security:
         - auth-uat-bern: []
@@ -622,7 +622,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: deleteDarlehenGs
+      operationId: deleteFreiwilligDarlehenGs
       summary: Deletes a given darlehen by ID
       security:
         - auth-uat-bern: []
@@ -643,7 +643,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DarlehenGsResponse'
+                $ref: '#/components/schemas/FreiwilligDarlehenGsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -652,7 +652,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllDarlehenGs
+      operationId: getAllFreiwilligDarlehenGs
       summary: Return all darlehen for a given fallId
       security:
         - auth-uat-bern: []
@@ -675,7 +675,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Darlehen'
+                  $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -684,7 +684,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getAllDarlehenSb
+      operationId: getAllFreiwilligDarlehenSb
       summary: Return all darlehen for a given fallId
       security:
         - auth-uat-bern: []
@@ -705,7 +705,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -714,7 +714,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getDarlehenSb
+      operationId: getFreiwilligDarlehenSb
       summary: Return darlehen
       security:
         - auth-uat-bern: []
@@ -727,14 +727,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DarlehenUpdateSb'
+              $ref: '#/components/schemas/FreiwilligDarlehenUpdateSb'
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Darlehen'
+                $ref: '#/components/schemas/FreiwilligDarlehen'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -743,8 +743,63 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: darlehenUpdateSb
+      operationId: freiwilligDarlehenUpdateSb
       summary: Update darlehen as sb
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/buchhaltung/{gesuchId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenBuchhaltungEntrys
+      summary: Gets all darlehen buchhaltungsentrys
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DarlehenBuchhaltungSaldokorrektur'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
+          description: Create a darlehen buchhaltungsentry from a saldokorrektur
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createDarlehenBuchhaltungSaldokorrektur
+      summary: Create a darlehen buchhaltungsentry from a saldokorrektur
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6225,7 +6280,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
         absender:
           type: string
-    SbDarlehenDashboardColumn:
+    SbFreiwilligDarlehenDashboardColumn:
       enum:
         - FALLNUMMER
         - PIA_NACHNAME
@@ -6234,21 +6289,21 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    GetDarlehenSbQueryType:
+    GetFreiwilligDarlehenSbQueryType:
       enum:
         - ALLE_DARLEHEN
         - MEINE_DARLEHEN
         - ALLE_BEARBEITBAR
         - MEINE_BEARBEITBAR
-    PaginatedSbDarlehenDashboard:
+    PaginatedSbFreiwilligDarlehenDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
       properties:
         entries:
           type: array
           items:
-            $ref: '#/components/schemas/DarlehenDashboard'
-    DarlehenDashboard:
+            $ref: '#/components/schemas/FreiwilligDarlehenDashboard'
+    FreiwilligDarlehenDashboard:
       type: object
       required:
         - id
@@ -6289,7 +6344,7 @@ components:
         - AUFSTELLUNG_KOSTEN_ELTERN
         - KOPIE_SCHULGELDRECHNUNG
         - BELEGE_ANSCHAFFUNGEN
-    DarlehenUpdateSb:
+    FreiwilligDarlehenUpdateSb:
       type: object
       properties:
         gewaehren:
@@ -6299,7 +6354,7 @@ components:
           minimum: 0
         kommentar:
           type: string
-    DarlehenUpdateGs:
+    FreiwilligDarlehenUpdateGs:
       type: object
       properties:
         betragGewuenscht:
@@ -6320,7 +6375,7 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/DarlehenDokument'
-    DarlehenGsResponse:
+    FreiwilligDarlehenGsResponse:
       type: object
       required:
         - darlehenList
@@ -6329,7 +6384,7 @@ components:
         darlehenList:
           type: array
           items:
-            $ref: '#/components/schemas/Darlehen'
+            $ref: '#/components/schemas/FreiwilligDarlehen'
         canCreateDarlehen:
           type: boolean
     DarlehenDokument:
@@ -6354,6 +6409,59 @@ components:
       properties:
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
+    DarlehenBuchhaltungEntryKategorie:
+      enum:
+        - FREIWILLIG
+        - GESETZLICH
+        - MANUELLE_KORREKTUR
+    DarlehenBuchhaltungOverview:
+      type: object
+      required:
+        - total
+        - totalFreiwillig
+        - totalGesetzlich
+        - darlehenBuchhaltungEntrys
+      properties:
+        total:
+          type: integer
+        totalFreiwillig:
+          type: integer
+        totalGesetzlich:
+          type: integer
+        darlehenBuchhaltungEntrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
+    DarlehenBuchhaltungEntry:
+      type: object
+      required:
+        - timestampErstellt
+        - kategorie
+        - betrag
+      properties:
+        timestampErstellt:
+          type: string
+          format: date-time
+        kategorie:
+          $ref: '#/components/schemas/DarlehenBuchhaltungEntryKategorie'
+        verfuegung:
+          $ref: '#/components/schemas/Dokument'
+        betrag:
+          type: integer
+        userErstellt:
+          type: string
+        kommentar:
+          type: string
+    DarlehenBuchhaltungSaldokorrektur:
+      type: object
+      required:
+        - betrag
+        - comment
+      properties:
+        betrag:
+          type: integer
+        comment:
+          type: string
     SortOrder:
       enum:
         - ASCENDING
@@ -6381,7 +6489,7 @@ components:
         - HOHE_GEBUEHREN
         - ANSCHAFFUNGEN_FUER_AUSBILDUNG
         - ZWEITAUSBILDUNG
-    Darlehen:
+    FreiwilligDarlehen:
       type: object
       required:
         - id
@@ -10675,6 +10783,13 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
+    gesuchId:
+      name: gesuchId
+      in: path
+      required: true
+      description: Die ID vom Gesuch
+      schema:
+        $ref: '#/components/schemas/UUID'
     wohnort:
       in: query
       name: wohnort
@@ -10742,13 +10857,6 @@ components:
       schema:
         type: string
         format: date
-    gesuchId:
-      name: gesuchId
-      in: path
-      required: true
-      description: Die ID vom Gesuch
-      schema:
-        $ref: '#/components/schemas/UUID'
     unterschriftenblattTyp:
       name: unterschriftenblattTyp
       schema:
