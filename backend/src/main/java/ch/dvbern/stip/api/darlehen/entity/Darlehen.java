@@ -22,7 +22,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
-import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -83,34 +82,34 @@ public class Darlehen extends AbstractMandantEntity {
     @Column(name = "status")
     private DarlehenStatus status = DarlehenStatus.IN_BEARBEITUNG_GS;
 
-    @NullableUnlessGenerated
+    @Nullable
     @Column(name = "gewaehren")
     private Boolean gewaehren;
 
-    @NullableUnlessGenerated
+    @Nullable
     @Min(value = 0)
     @Column(name = "betrag")
     private Integer betrag;
 
-    @NullableUnlessGenerated
+    @Nullable
     @Size(max = DB_DEFAULT_STRING_MAX_LENGTH)
     @Column(name = "kommentar", length = DB_DEFAULT_STRING_MAX_LENGTH)
     private String kommentar;
 
-    @NullableUnlessGenerated
+    @Nullable
     @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Min(value = 0)
     @Column(name = "betrag_gewuenscht")
     private Integer betragGewuenscht;
 
     @Min(value = 0)
-    @NullableUnlessGenerated
+    @Nullable
     @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Column(name = "schulden")
     private Integer schulden;
 
     @Min(value = 0)
-    @NullableUnlessGenerated
+    @Nullable
     @NotNull(groups = { DarlehenEinreichenValidationGroup.class })
     @Column(name = "anzahl_betreibungen")
     private Integer anzahlBetreibungen;
