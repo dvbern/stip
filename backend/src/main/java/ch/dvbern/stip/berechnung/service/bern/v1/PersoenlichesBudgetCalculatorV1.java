@@ -130,14 +130,19 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var steuernPartner = antragssteller.getSteuernPartner();
 
         var fahrkosten = antragssteller.getFahrkosten();
+        var fahrkostenPartner = antragssteller.getFahrkostenPartner();
+
         if (antragssteller.isVerheiratetKonkubinat()) {
             fahrkosten = roundHalfUp(
                 BigDecimal.valueOf(fahrkosten)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
-        }
 
-        final var fahrkostenPartner = Objects.requireNonNullElse(antragssteller.getFahrkostenPartner(), 0);
+            fahrkostenPartner = roundHalfUp(
+                BigDecimal.valueOf(fahrkostenPartner)
+                    .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
+            );
+        }
 
         var verpflegung = 0;
         if (!antragssteller.isEigenerHaushalt()) {
