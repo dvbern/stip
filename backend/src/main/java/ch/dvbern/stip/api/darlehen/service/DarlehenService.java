@@ -141,7 +141,6 @@ public class DarlehenService {
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
         createDarlehenBuchhaltungEntry(darlehen, darlehensVerfuegung, darlehen.getBetrag());
-        // darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
     }
 
     @Transactional
@@ -163,7 +162,6 @@ public class DarlehenService {
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
         createDarlehenBuchhaltungEntry(darlehen, darlehensVerfuegung, null);
-        // darlehen.setDarlehenVerfuegung(darlehensVerfuegung);
     }
 
     @Transactional
