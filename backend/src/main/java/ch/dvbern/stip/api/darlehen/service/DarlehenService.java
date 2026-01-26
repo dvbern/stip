@@ -29,6 +29,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
@@ -97,6 +98,7 @@ public class DarlehenService {
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
     private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
+    private final MailService mailService;
 
     @Transactional
     public void createPositiveDarlehensVerfuegung(Darlehen darlehen) {
@@ -296,6 +298,7 @@ public class DarlehenService {
         darlehenRepository.persistAndFlush(darlehen);
         createNegativeDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAbgelehntNotification(darlehen);
+        mailService.sendStandardNotificationEmailForGesuch(darlehen.getRelatedGesuch());
 
         return darlehenMapper.toDto(darlehen);
     }
@@ -309,6 +312,7 @@ public class DarlehenService {
         darlehenRepository.persistAndFlush(darlehen);
         createPositiveDarlehensVerfuegung(darlehen);
         notificationService.createDarlehenAkzeptiertNotification(darlehen);
+        mailService.sendStandardNotificationEmailForGesuch(darlehen.getRelatedGesuch());
 
         return darlehenMapper.toDto(darlehen);
     }
@@ -325,6 +329,7 @@ public class DarlehenService {
         darlehenRepository.persistAndFlush(darlehen);
 
         notificationService.createDarlehenEingegebenNotification(darlehen);
+        mailService.sendStandardNotificationEmailForGesuch(darlehen.getRelatedGesuch());
 
         return darlehenMapper.toDto(darlehen);
     }
@@ -348,6 +353,7 @@ public class DarlehenService {
         darlehenRepository.persistAndFlush(darlehen);
 
         notificationService.createDarlehenZurueckgewiesenNotification(darlehen, kommentar.getText());
+        mailService.sendStandardNotificationEmailForGesuch(darlehen.getRelatedGesuch());
 
         return darlehenMapper.toDto(darlehen);
     }
