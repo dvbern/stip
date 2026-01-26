@@ -1,0 +1,157 @@
+<dv-shared-pattern-basic-layout *dvTranslocoDemo="let t">
+  <div class="tw:p-8 tw:flex">
+    <dv-shared-ui-icon-chip class="tw:mr-3">
+      <i class="material-symbols-rounded title-icon">science</i>
+    </dv-shared-ui-icon-chip>
+    <h1 class="tw:mb-4! tw:font-bold">
+      {{ t('demo-data-app.overview.title') }}
+    </h1>
+  </div>
+  @if (demoDataStore.lastDemoDataRun() | rdIsPending: { ignoreInitial: true }) {
+    <dv-shared-ui-loading [type]="'compact'" [overlay]="true"></dv-shared-ui-loading>
+  }
+  @if (demoDataStore.cachedDemoDataListViewSig() | rdIsPending: { ignoreInitial: true }) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else {
+    @let demoDataList = demoDataStore.cachedDemoDataListViewSig().data;
+    <div class="tw:grid tw:grid-cols-3 tw:gap-6 tw:px-8 tw:items-start">
+      @if (demoDataList?.demoDatas?.length) {
+        <div class="tw:col-span-2">
+          <mat-form-field [subscriptSizing]="'dynamic'" class="dense-control">
+            <input type="text" matInput [formControl]="filterText" dvMaxLength [placeholder]="t('shared.search')" />
+            <span matSuffix class="material-symbols-rounded tw:align-middle tw:mr-2">search</span>
+          </mat-form-field>
+        </div>
+      }
+      <ul
+        class="tw:mb-4 tw:list-none tw:col-span-2 tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6"
+      >
+        @for (demoData of demoDatasSig(); track $index) {
+          <li
+            class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-center tw:items-start"
+          >
+            <div class="tw:flex tw:flex-col">
+              <span class="tw:font-bold">{{ demoData.testFall }}</span>
+              <span class="tw:font-semibold" [innerHTML]="demoData.name"></span>
+            </div>
+            <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
+            <button
+              class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
+              type="button"
+              (click)="applyDemoData(demoData.id)"
+              [matTooltip]="t('demo-data-app.overview.apply-demo-data.button')"
+            >
+              <i class="material-symbols-rounded tw:text-sm">add</i>
+            </button>
+          </li>
+        } @empty {
+          <li>
+            <dv-shared-ui-info-container [type]="'info'">
+              <span class="text-info material-symbols-rounded me-3">info</span>
+              <div class="ms-3">{{ t('demo-data-app.overview.no-data') }}</div>
+            </dv-shared-ui-info-container>
+          </li>
+        }
+      </ul>
+      <aside>
+        @if (demoDataList) {
+          <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.import-details.title') }}</h2>
+          <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
+            <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              {{ t('demo-data-app.overview.import-details.imported-by') }}:
+            </dt>
+            <dd class="tw:mb-0!">{{ demoDataList.importiertVon }}</dd>
+            <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              {{ t('demo-data-app.overview.import-details.last-updated') }}:
+            </dt>
+            <dd class="tw:mb-0!">{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
+            <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              {{ t('demo-data-app.overview.import-details.total') }}:
+            </dt>
+            <dd class="tw:mb-0!">{{ demoDataList.demoDatas.length }}</dd>
+            <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              {{ t('demo-data-app.overview.import-details.comment') }}:
+            </dt>
+            <dd class="tw:mb-0!">{{ demoDataList.kommentar }}</dd>
+            <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              {{ t('demo-data-app.overview.import-details.file') }}:
+            </dt>
+            <dd class="tw:mb-0 tw:min-w-0">
+              <button
+                type="button"
+                class="btn btn-link tw:flex! tw:max-w-full tw:p-0! tw:items-center"
+                [attr.aria-label]="t('demo-data-app.overview.import-details.download')"
+                [dvDownloadButton]="{
+                  type: 'demoData',
+                  id: demoDataList.documentId,
+                }"
+              >
+                <span
+                  class="tw:grow-0 tw:whitespace-nowrap tw:truncate"
+                  [title]="demoDataList.filename"
+                  [dvTruncateTooltip]="`${demoDataList.filename}`"
+                >
+                  {{ demoDataList.filename }} {{ demoDataList.filesize | filesize }}
+                </span>
+                <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-xl/1!">download</span>
+              </button>
+            </dd>
+          </dl>
+        }
+        <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.file-upload.title') }}</h2>
+        <dv-shared-ui-file-upload
+          class="tw:mb-6"
+          [allowedFileTypesSig]="['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']"
+          (selectedFileSig)="selectedFileSig.set($event)"
+        ></dv-shared-ui-file-upload>
+
+        @if (selectedFileSig()?.size) {
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-testid="button-save"
+            (click)="createDemoDataImport()"
+            [disabled]="selectedFileSig()?.size === 0"
+          >
+            {{ t('demo-data-app.overview.file-upload.confirm.button') }}
+          </button>
+        }
+
+        @if (demoDataStore.demoDataErrorViewSig(); as error) {
+          <div class="tw:mt-4 tw:flex">
+            <dv-shared-ui-info-container [type]="'danger'" class="tw:flex-col tw:grow">
+              <div class="tw:flex tw:font-bold">
+                <span class="material-symbols-rounded tw:mr-3">error</span>
+                <div class="tw:mr-3">
+                  {{ t(`demo-data-app.overview.${error.demoErrorType ?? 'apply-demo-data'}.error`) }}
+                </div>
+              </div>
+              @if (error.type === 'demoDataError') {
+                <div class="tw:mr-3 tw:whitespace-pre-wrap">{{ error.internalMessage }}</div>
+              }
+              @if (error.allErrors?.length) {
+                <div class="tw:mr-3">
+                  {{ t('demo-data-app.overview.apply-demo-data.error.validation') }}
+                </div>
+                <ul class="tw:list-none tw:pl-0! tw:mb-0!">
+                  @for (item of error.allErrors; track $index) {
+                    <li>
+                      <details>
+                        <summary>{{ item.origin }}</summary>
+                        {{ item.message }}
+                        @if (item.technical) {
+                          <br />
+                          <span class="tw:italic">{{ item.technical }}</span>
+                        }
+                      </details>
+                    </li>
+                  }
+                </ul>
+              }
+            </dv-shared-ui-info-container>
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</dv-shared-pattern-basic-layout>

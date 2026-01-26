@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
@@ -39,9 +40,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -62,13 +67,16 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @ElternFieldsNullableUntilEinreichenConstraint(
     groups = { GesuchEinreichenValidationGroup.class, ElternPageValidation.class }
 )
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Eltern extends AbstractPerson {
     @NotNull
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "adresse_id", foreignKey = @ForeignKey(name = "FK_eltern_adresse_id"))
     private Adresse adresse;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String sozialversicherungsnummer;
@@ -91,16 +99,17 @@ public class Eltern extends AbstractPerson {
     @Column(name = "identischer_zivilrechtlicher_wohnsitz", nullable = false)
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String identischerZivilrechtlicherWohnsitzOrt;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String identischerZivilrechtlicherWohnsitzPLZ;
 
+    @Deprecated(forRemoval = true) // Not used anymore
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;

@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.partner.entity;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,9 +35,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
@@ -53,6 +57,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @AusbildungsPensumRequiredConstraint
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Partner extends AbstractPerson {
     @NotNull
     @OneToOne(
@@ -73,7 +80,7 @@ public class Partner extends AbstractPerson {
     @Column(name = "in_ausbildung", nullable = false)
     private boolean inAusbildung = false;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "ausbildungspensum")
     @Enumerated(EnumType.STRING)
     private AusbildungsPensum ausbildungspensum;

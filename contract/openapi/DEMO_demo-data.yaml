@@ -1,0 +1,855 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /demo-data:
+    get:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoDataList'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllDemoData
+      summary: Returns a list of available demo data
+    post:
+      tags:
+        - DemoData
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DemoDataImport'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoDataList'
+          description: Returns the created DemoDataList
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createNewDemoDataImport
+      summary: Creates a new demo data list
+  /demo-data/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - DemoData
+      responses:
+        200:
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returns the latest demo data file
+      operationId: getDemoDataDokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+  /demo-data/dokument/{dokumentId}/token:
+    get:
+      parameters:
+        - name: dokumentId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: path
+          required: true
+      tags:
+        - DemoData
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDemoDataDokumentDownloadToken
+      summary: get the Token to download the latest DemoData
+  /demo-data/{demoDataId}:
+    post:
+      parameters:
+        - name: demoDataId
+          in: path
+          required: true
+          schema:
+            $ref: './components/common.yaml#/UUID'
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyDemoDataResponse'
+          description: Apply the requested demo data
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: applyDemoData
+      summary: Returns the created data after applying demo data
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+  schemas:
+    DemoDataList:
+      required:
+        - importiertVon
+        - letzteAktivitaet
+        - kommentar
+        - documentId
+        - filename
+        - filepath
+        - filesize
+        - demoDatas
+      type: object
+      properties:
+        importiertVon:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date-time
+        kommentar:
+          type: string
+        documentId:
+          type: string
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: integer
+        demoDatas:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoDataSlim'
+    DemoDataImport:
+      required:
+        - kommentar
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
+    DemoDataError:
+      required:
+        - internalMessage
+        - errorClass
+      type: object
+      properties:
+        internalMessage:
+          type: string
+        errorClass:
+          type: string
+        cause:
+          type: string
+        validationErrors:
+          type: array
+          items:
+            $ref: './components/common.yaml#/ValidationMessage'
+    DemoDataSlim:
+      required:
+        - id
+        - testFall
+        - name
+        - description
+      type: object
+      properties:
+        id:
+          type: string
+        testFall:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    DemoAusbildung:
+      required:
+        - ausbildungsstaette
+        - ausbildungsgang
+        - berufsbezeichnungFachrichtung
+        - plz
+        - ort
+        - isAusbildungAusland
+        - ausbildungBeginn
+        - ausbildungEnd
+        - pensum
+      type: object
+      properties:
+        ausbildungsstaette:
+          type: string
+        ausbildungsgang:
+          type: string
+        berufsbezeichnungFachrichtung:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        isAusbildungAusland:
+          type: boolean
+        ausbildungNichtGefunden:
+          type: boolean
+        ausbildungBeginn:
+          type: string
+          format: date
+        ausbildungEnd:
+          type: string
+          format: date
+        pensum:
+          $ref: './components/common.yaml#/AusbildungsPensum'
+    DemoPersonInAusbildung:
+      required:
+        - sozialversicherungsnummer
+        - anrede
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - identischerZivilrechtlicherWohnsitz
+        - email
+        - telefonnummer
+        - geburtsdatum
+        - zivilstand
+        - nationalitaet
+        - niederlassungsstatus
+        - einreisedatum
+        - heimatort
+      type: object
+      properties:
+        sozialversicherungsnummer:
+          type: string
+        anrede:
+          $ref: './components/common.yaml#/Anrede'
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        identischerZivilrechtlicherWohnsitzPLZ:
+          type: string
+        identischerZivilrechtlicherWohnsitzOrt:
+          type: string
+        email:
+          type: string
+          format: email
+        telefonnummer:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        zivilstand:
+          $ref: './components/gesuch-formular.yaml#/Zivilstand'
+        nationalitaet:
+          type: string
+        niederlassungsstatus:
+          $ref: './components/gesuch-formular.yaml#/Niederlassungsstatus'
+        einreisedatum:
+          type: string
+          format: date
+        heimatort:
+          type: string
+        heimatortPLZ:
+          type: string
+        wohnsitz:
+          $ref: './components/gesuch-formular.yaml#/Wohnsitz'
+        wohnsitzAnteilVater:
+          type: integer
+        wohnsitzAnteilMutter:
+          type: integer
+        vormundschaft:
+          type: boolean
+        zustaendigeKESB:
+          $ref: './components/gesuch-formular.yaml#/ZustaendigeKESB'
+        sozialhilfebeitraege:
+          type: boolean
+
+    DemoLebenslaufAusbildung:
+      required:
+        - abschluss
+        - von
+        - bis
+        - wohnsitz
+        - ausbildungAbgeschlossen
+      type: object
+      properties:
+        abschluss:
+          type: string
+        berufsbezeichnungFachrichtung:
+          type: string
+        von:
+          type: string
+          format: date
+        bis:
+          type: string
+          format: date
+        wohnsitz:
+          $ref: './components/gesuch-formular.yaml#/WohnsitzKanton'
+        ausbildungAbgeschlossen:
+          type: boolean
+    DemoLebenslaufTaetigkeit:
+      required:
+        - taetigkeitsart
+        - taetigkeitsBeschreibung
+        - von
+        - bis
+        - wohnsitz
+      type: object
+      properties:
+        taetigkeitsart:
+          $ref: './components/gesuch-formular.yaml#/Taetigkeitsart'
+        taetigkeitsBeschreibung:
+          type: string
+        von:
+          type: string
+          format: date
+        bis:
+          type: string
+          format: date
+        wohnsitz:
+          $ref: './components/gesuch-formular.yaml#/WohnsitzKanton'
+    DemoLebenslauf:
+      required:
+        - ausbildung
+        - taetigkeiten
+      type: object
+      properties:
+        ausbildung:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoLebenslaufAusbildung'
+        taetigkeiten:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoLebenslaufTaetigkeit'
+    DemoPartner:
+      required:
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - geburtsdatum
+        - inAusbildung
+      type: object
+      properties:
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        inAusbildung:
+          type: boolean
+        pensum:
+          $ref: './components/common.yaml#/AusbildungsPensum'
+    DemoKind:
+      required:
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnsitzAnteilPia
+        - ausbildungssituation
+        - unterhaltsbeitraege
+        - kinderUndAusbildungszulagen
+        - renten
+        - ergaenzungsleistungen
+        - andereEinnahmen
+      type: object
+      properties:
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        wohnsitzAnteilPia:
+          type: integer
+        ausbildungssituation:
+          $ref: './components/gesuch-formular.yaml#/Ausbildungssituation'
+        unterhaltsbeitraege:
+          type: integer
+        kinderUndAusbildungszulagen:
+          type: integer
+        renten:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        andereEinnahmen:
+          type: integer
+    DemoEinnahmenKosten:
+      required:
+        - nettoerwerbseinkommen
+        - unterhaltsbeitraege
+        - zulagen
+        - renten
+        - eoLeistungen
+        - ergaenzungsleistungen
+        - beitraege
+        - einnahmenBGSA
+        - taggelderAHVIV
+        - andereEinnahmen
+        - fahrkosten
+        - vermoegen
+        - steuernKantonGemeinde
+      type: object
+      properties:
+        nettoerwerbseinkommen:
+          type: integer
+        unterhaltsbeitraege:
+          type: integer
+        zulagen:
+          type: integer
+        renten:
+          type: integer
+        eoLeistungen:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        beitraege:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        taggelderAHVIV:
+          type: integer
+        andereEinnahmen:
+          type: integer
+        ausbildungskosten:
+          type: integer
+        betreuungskostenKinder:
+          type: integer
+        fahrkosten:
+          type: integer
+        verpflegungskosten:
+          type: integer
+        auswaertigeMittagessenProWoche:
+          type: integer
+        wohnkosten:
+          type: integer
+        wgWohnend:
+          type: boolean
+        alternativeWohnformWohnend:
+          type: boolean
+        vermoegen:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+    DemoFamiliensituation:
+      required:
+        - elternVerheiratetZusammen
+      type: object
+      properties:
+        elternVerheiratetZusammen:
+          type: boolean
+        gerichtlicheAlimentenregelung:
+          type: boolean
+        werZahltAlimente:
+          $ref: './components/gesuch-formular.yaml#/Elternschaftsteilung'
+        mutterWiederverheiratetAlimente:
+          type: boolean
+        vaterWiederverheiratetAlimente:
+          type: boolean
+        elternteilUnbekanntVerstorben:
+          type: boolean
+        mutterVerstorben:
+          type: boolean
+        mutterUnbekannt:
+          type: boolean
+        mutterUnbekanntGrund:
+          $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
+        mutterKeineOptionen:
+          type: boolean
+        mutterWiederverheiratetUnbekannt:
+          type: boolean
+        vaterVerstorben:
+          type: boolean
+        vaterUnbekannt:
+          type: boolean
+        vaterUnbekanntGrund:
+          $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
+        vaterKeineOptionen:
+          type: boolean
+        vaterWiederverheiratetUnbekannt:
+          type: boolean
+        mutterWiederverheiratetUngewiss:
+          type: boolean
+        vaterWiederverheiratetUngewiss:
+          type: boolean
+    DemoElternteil:
+      required:
+        - type
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - identischerZivilrechtlicherWohnsitz
+        - geburtsdatum
+        - telefonnummer
+        - sozialhilfebeitraege
+        - ausweisbFluechtling
+      type: object
+      properties:
+        type:
+          $ref: './components/common.yaml#/ElternTyp'
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        identischerZivilrechtlicherWohnsitzPLZ:
+          type: string
+        identischerZivilrechtlicherWohnsitzOrt:
+          type: string
+        wohnkosten:
+          type: integer
+        geburtsdatum:
+          type: string
+          format: date
+        telefonnummer:
+          type: string
+        sozialhilfebeitraege:
+          type: boolean
+        ausweisbFluechtling:
+          type: boolean
+    DemoSteuererklaerung:
+      required:
+        - type
+        - steuererklaerungInBern
+        - unterhaltsbeitraege
+        - renten
+        - ergaenzungsleistungen
+        - einnahmenBGSA
+        - andereEinnahmen
+      type: object
+      properties:
+        type:
+          $ref: './components/common.yaml#/ElternTyp'
+        steuererklaerungInBern:
+          type: boolean
+        unterhaltsbeitraege:
+          type: integer
+        renten:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        andereEinnahmen:
+          type: integer
+    DemoSteuerdaten:
+      required:
+        - type
+        - totalEinkuenfte
+        - eigenmietwert
+        - isArbeitsverhaeltnisSelbstaendig
+        - saeule3a
+        - saeule2
+        - vermoegen
+        - steuernKantonGemeinde
+        - steuernBund
+        - fahrkosten
+        - fahrkostenPartner
+        - verpflegung
+        - verpflegungPartner
+        - steuerjahr
+        - veranlagungsStatus
+      type: object
+      properties:
+        type:
+          $ref: './components/common.yaml#/ElternTyp'
+        totalEinkuenfte:
+          type: integer
+        eigenmietwert:
+          type: integer
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
+        saeule3a:
+          type: integer
+        saeule2:
+          type: integer
+        vermoegen:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        steuernBund:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        steuerjahr:
+          type: integer
+        veranlagungsStatus:
+          type: string
+    DemoGeschwister:
+      required:
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnsitzBei
+        - ausbildungssituation
+      type: object
+      properties:
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        wohnsitzBei:
+          $ref: './components/gesuch-formular.yaml#/Wohnsitz'
+        wohnsitzAnteilVater:
+          type: integer
+        wohnsitzAnteilMutter:
+          type: integer
+        ausbildungssituation:
+          $ref: './components/gesuch-formular.yaml#/Ausbildungssituation'
+    DemoAuszahlung:
+      required:
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - iban
+      type: object
+      properties:
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        iban:
+          type: string
+    DemoDarlehen:
+      required:
+        - willDarlehen
+        - betragDarlehen
+        - schulden
+        - anzahlBetreibungen
+        - gruendeDarlehen
+      type: object
+      properties:
+        willDarlehen:
+          type: boolean
+        betragDarlehen:
+          type: string
+        schulden:
+          type: string
+        anzahlBetreibungen:
+          type: string
+        gruendeDarlehen:
+          type: object
+          properties:
+            grundNichtBerechtigt:
+              type: boolean
+            grundAusbildungZwoelfJahre:
+              type: boolean
+            grundHoheGebuehren:
+              type: boolean
+            grundAnschaffungenFuerAusbildung:
+              type: boolean
+            grundZweitausbildung:
+              type: boolean
+    DemoData:
+      required:
+        - ausbildung
+        - personInAusbildung
+        - lebenslauf
+        - kinder
+        - einnahmenKosten
+        - familiensituation
+        - elterns
+        - steuererklaerung
+        - steuerdaten
+        - geschwister
+        - auszahlung
+        - darlehen
+      type: object
+      properties:
+        ausbildung:
+          $ref: '#/components/schemas/DemoAusbildung'
+        personInAusbildung:
+          $ref: '#/components/schemas/DemoPersonInAusbildung'
+        lebenslauf:
+          $ref: '#/components/schemas/DemoLebenslauf'
+        partner:
+          $ref: '#/components/schemas/DemoPartner'
+        kinder:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoKind'
+        einnahmenKosten:
+          $ref: '#/components/schemas/DemoEinnahmenKosten'
+        einnahmenKostenPartner:
+          $ref: '#/components/schemas/DemoEinnahmenKosten'
+        familiensituation:
+          $ref: '#/components/schemas/DemoFamiliensituation'
+        elterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoElternteil'
+        steuererklaerung:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoSteuererklaerung'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoSteuerdaten'
+        geschwister:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoGeschwister'
+        auszahlung:
+          $ref: '#/components/schemas/DemoAuszahlung'
+        darlehen:
+          $ref: '#/components/schemas/DemoDarlehen'
+        stipendienanspruch:
+          required:
+            - status
+            - betrag
+          type: object
+          properties:
+            status:
+              type: string
+            betrag:
+              type: integer
+    ApplyDemoDataResponse:
+      required:
+        - gesuchId
+        - gesuchTrancheId
+        - gueltigAb
+        - gueltigBis
+        - gesuchStatus
+      type: object
+      properties:
+        gesuchId:
+          $ref: './components/common.yaml#/UUID'
+        gesuchTrancheId:
+          $ref: './components/common.yaml#/UUID'
+        gueltigAb:
+          type: string
+          format: date
+        gueltigBis:
+          type: string
+          format: date
+        gesuchStatus:
+          type: string
+security:
+  $ref: './components/security.yaml#/security'

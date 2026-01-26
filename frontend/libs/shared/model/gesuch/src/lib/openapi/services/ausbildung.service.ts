@@ -103,6 +103,22 @@ export class AusbildungService {
         return httpParams;
     }
 
+    public createAusbildungPath = (requestParameters: AusbildungServiceCreateAusbildungRequestParams) => {
+        const ausbildungUpdate = requestParameters.ausbildungUpdate;
+        if (ausbildungUpdate === null || ausbildungUpdate === undefined) {
+            throw new Error('Required parameter ausbildungUpdate was null or undefined when calling createAusbildung$.');
+        }
+        let path = `/api/v1/ausbildung`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert die erstellte Ausbildung
      * @param requestParameters
@@ -186,6 +202,22 @@ export class AusbildungService {
         );
     }
 
+    public getAusbildungPath = (requestParameters: AusbildungServiceGetAusbildungRequestParams) => {
+        const ausbildungId = requestParameters.ausbildungId;
+        if (ausbildungId === null || ausbildungId === undefined) {
+            throw new Error('Required parameter ausbildungId was null or undefined when calling getAusbildung$.');
+        }
+        let path = `/api/v1/ausbildung/${this.configuration.encodeParam({name: "ausbildungId", value: ausbildungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert die Ausbildung
      * @param requestParameters
@@ -257,6 +289,26 @@ export class AusbildungService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateAusbildungPath = (requestParameters: AusbildungServiceUpdateAusbildungRequestParams) => {
+        const ausbildungId = requestParameters.ausbildungId;
+        if (ausbildungId === null || ausbildungId === undefined) {
+            throw new Error('Required parameter ausbildungId was null or undefined when calling updateAusbildung$.');
+        }
+        const ausbildungUpdate = requestParameters.ausbildungUpdate;
+        if (ausbildungUpdate === null || ausbildungUpdate === undefined) {
+            throw new Error('Required parameter ausbildungUpdate was null or undefined when calling updateAusbildung$.');
+        }
+        let path = `/api/v1/ausbildung/${this.configuration.encodeParam({name: "ausbildungId", value: ausbildungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

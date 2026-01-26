@@ -2,10 +2,8 @@ import { A11yModule } from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   inject,
   signal,
-  viewChild,
 } from '@angular/core';
 import {
   FormsModule,
@@ -23,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
+import { SharedUiFileUploadComponent } from '@dv/shared/ui/file-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -54,7 +52,7 @@ export interface BeschwerdeentscheidUploadDialogResult {
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
     SharedUiFormFieldDirective,
-    SharedUiDropFileComponent,
+    SharedUiFileUploadComponent,
   ],
   templateUrl:
     './sachbearbeitung-app-dialog-beschwaerde-entscheid.component.html',
@@ -71,7 +69,6 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
   private formBuilder = inject(NonNullableFormBuilder);
 
   dialogData = inject<BeschwerdeentscheidUploadDialogData>(MAT_DIALOG_DATA);
-  fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   form = this.formBuilder.group({
     fileUpload: [<File | undefined>undefined, Validators.required],
     kommentar: [<string | null>null, [Validators.required]],
@@ -89,7 +86,7 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
 
   confirm() {
     this.form.markAllAsTouched();
-    const fileUpload = this.fileInputSig()?.nativeElement?.files?.[0];
+    const fileUpload = this.selectedFileSig();
 
     if (this.form.invalid || !fileUpload) {
       return;
@@ -106,24 +103,5 @@ export class SachbearbeitungAppDialogBeschwaerdeEntscheidComponent {
 
   close() {
     this.dialogRef.close();
-  }
-
-  updateFileList(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const files = input.files;
-
-    if (files && files.length > 0) {
-      this.selectedFileSig.set(files[0]);
-    } else {
-      this.selectedFileSig.set(null);
-    }
-  }
-
-  resetSelectedFile() {
-    this.selectedFileSig.set(null);
-    const input = this.fileInputSig()?.nativeElement;
-    if (input) {
-      input.value = '';
-    }
   }
 }

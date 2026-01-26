@@ -1,4 +1,4 @@
-import { Role } from './types';
+import { KnownEnv, Role } from './types';
 
 /**
  * Represents the association between roles and permissions.
@@ -39,9 +39,9 @@ export const PERMISSION_ROLE_LIST = [
     'AUSZAHLUNG_READ',
     'AUSZAHLUNG_CREATE',
     'AUSZAHLUNG_UPDATE',
-    'DARLEHEN_READ',
-    'DARLEHEN_UPDATE_GS',
-    'DARLEHEN_DELETE',
+    'FREIWILLIG_DARLEHEN_READ',
+    'FREIWILLIG_DARLEHEN_UPDATE_GS',
+    'FREIWILLIG_DARLEHEN_DELETE',
   ],
   [
     ['Freigabestelle'],
@@ -56,9 +56,9 @@ export const PERMISSION_ROLE_LIST = [
     'UNTERSCHRIFTENBLATT_READ',
     'AUSZAHLUNG_READ',
     'FALL_READ',
-    'DARLEHEN_READ',
-    'DARLEHEN_UPDATE_SB',
-    'DARLEHEN_FREIGABESTELLE',
+    'FREIWILLIG_DARLEHEN_READ',
+    'FREIWILLIG_DARLEHEN_UPDATE_SB',
+    'FREIWILLIG_DARLEHEN_FREIGABESTELLE',
   ],
   [
     ['Sachbearbeiter'],
@@ -86,8 +86,8 @@ export const PERMISSION_ROLE_LIST = [
     'UNTERSCHRIFTENBLATT_DELETE',
     'AUSZAHLUNG_READ',
     'FALL_READ',
-    'DARLEHEN_READ',
-    'DARLEHEN_UPDATE_SB',
+    'FREIWILLIG_DARLEHEN_READ',
+    'FREIWILLIG_DARLEHEN_UPDATE_SB',
   ],
   [
     ['Jurist'],
@@ -149,3 +149,5 @@ export const PERMISSION_ROLE_LIST = [
     'SEND_EMAIL',
   ],
 ] as const satisfies [Role[], ...string[]][];
+
+export const DEMO_DATA_PERMISSIONS = ['DEMO_DATA_APPLY'] as const;

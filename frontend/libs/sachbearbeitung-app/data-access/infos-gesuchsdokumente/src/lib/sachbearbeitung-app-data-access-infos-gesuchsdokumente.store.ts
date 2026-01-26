@@ -3,7 +3,14 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { Verfuegung, VerfuegungService } from '@dv/shared/model/gesuch';
+import {
+  DarlehenBuchhaltungOverview,
+  DarlehenService,
+  DarlehenServiceCreateDarlehenBuchhaltungSaldokorrekturRequestParams,
+  DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams,
+  Verfuegung,
+  VerfuegungService,
+} from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -12,17 +19,6 @@ import {
   initial,
   isPending,
 } from '@dv/shared/util/remote-data';
-
-// Todo KSTIP-2697 Dummy types until the contract is updated
-export interface DarlehenDokument {
-  id: string;
-  datum: string;
-  kategorie: string;
-  darlehensverfuegung?: string;
-  gesetzlichesDarlehen?: string;
-  freiwilligesDarlehen?: string;
-  kommentar?: string;
-}
 
 // Todo: Dummy types until the contract is updated Task unkown
 export interface DatenschutzbriefDokument {
@@ -36,13 +32,13 @@ export interface DatenschutzbriefDokument {
 
 type InfosAdminState = {
   verfuegungen: CachedRemoteData<Verfuegung[]>;
-  darlehenDokumente: CachedRemoteData<DarlehenDokument[]>;
+  darlehenBuchhaltung: CachedRemoteData<DarlehenBuchhaltungOverview>;
   datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefDokument[]>;
 };
 
 const initialState: InfosAdminState = {
   verfuegungen: initial(),
-  darlehenDokumente: initial(),
+  darlehenBuchhaltung: initial(),
   datenschutzbriefeDokumente: initial(),
 };
 
@@ -52,6 +48,7 @@ export class InfosGesuchsdokumenteStore extends signalStore(
   withState(initialState),
 ) {
   private verfuegungService = inject(VerfuegungService);
+  private darlehenService = inject(DarlehenService);
 
   verfuegungenViewSig = computed(() => {
     return {
@@ -60,10 +57,10 @@ export class InfosGesuchsdokumenteStore extends signalStore(
     };
   });
 
-  darlehenDokumenteViewSig = computed(() => {
+  darlehenBuchhaltungViewSig = computed(() => {
     return {
-      darlehenDokumente: fromCachedDataSig(this.darlehenDokumente),
-      loading: isPending(this.darlehenDokumente()),
+      darlehenBuchhaltung: fromCachedDataSig(this.darlehenBuchhaltung),
+      loading: isPending(this.darlehenBuchhaltung()),
     };
   });
 
@@ -95,31 +92,38 @@ export class InfosGesuchsdokumenteStore extends signalStore(
     ),
   );
 
-  loadDarlehenDokumente$ = rxMethod<{ gesuchId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          darlehenDokumente: cachedPending(state.darlehenDokumente),
-        }));
-      }),
-      tap(() => {
-        // Todo KSTIP-2697 : Dummy data - will be replaced with actual API call
-        const dummyData: DarlehenDokument[] = [
-          {
-            id: '1',
-            datum: new Date().toISOString(),
-            kategorie: 'Gesetzlich',
-            darlehensverfuegung: 'darlehen_verfuegung_1.pdf',
-            gesetzlichesDarlehen: 'gesetzlich_1.pdf',
-            kommentar: 'Test Kommentar',
-          },
-        ];
-        patchState(this, {
-          darlehenDokumente: { data: dummyData, type: 'success' },
-        });
-      }),
-    ),
-  );
+  loadDarlehenBuchhaltungEntrys$ =
+    rxMethod<DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            darlehenBuchhaltung: cachedPending(state.darlehenBuchhaltung),
+          }));
+        }),
+        switchMap((req) =>
+          this.darlehenService.getDarlehenBuchhaltungEntrys$(req).pipe(
+            handleApiResponse((darlehenBuchhaltung) => {
+              patchState(this, { darlehenBuchhaltung });
+            }),
+          ),
+        ),
+      ),
+    );
+
+  createDarlehenBuchhaltungSaldokorrektur$ =
+    rxMethod<DarlehenServiceCreateDarlehenBuchhaltungSaldokorrekturRequestParams>(
+      pipe(
+        switchMap((req) =>
+          this.darlehenService
+            .createDarlehenBuchhaltungSaldokorrektur$(req)
+            .pipe(
+              handleApiResponse(() => {
+                this.loadDarlehenBuchhaltungEntrys$({ gesuchId: req.gesuchId });
+              }),
+            ),
+        ),
+      ),
+    );
 
   loadDatenschutzbriefeDokumente$ = rxMethod<{ gesuchId: string }>(
     pipe(

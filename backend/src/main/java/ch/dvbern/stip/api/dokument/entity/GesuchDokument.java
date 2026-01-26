@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,9 +39,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Audited
 @Entity
@@ -64,19 +68,22 @@ import org.hibernate.envers.Audited;
 @Getter
 @Setter
 @OneOfDocumentTypesRequiredConstraint
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class GesuchDokument extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "dokument_typ", nullable = true)
     @Enumerated(EnumType.STRING)
     private DokumentTyp dokumentTyp;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Nullable
+    @NullableUnlessGenerated
     @JoinColumn(
         name = "custom_dokument_typ_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_custom_dokument_typ_id"),
         nullable = true

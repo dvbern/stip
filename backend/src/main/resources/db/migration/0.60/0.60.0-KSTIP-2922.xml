@@ -1,0 +1,331 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1768989028454-32">
+    <dropForeignKeyConstraint baseTableName="darlehen_darlehen_grund_aud" constraintName="FK1mrut1gxljad604r0qu1lfbry"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-33">
+    <dropForeignKeyConstraint baseTableName="darlehen" constraintName="FK4fdbbigqm8ht3u1of5qqegove"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-34">
+    <dropForeignKeyConstraint baseTableName="darlehen_aud" constraintName="FK5iamy68vf73alamtw17up9shx"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-35">
+    <dropForeignKeyConstraint baseTableName="darlehen_dokument_aud" constraintName="FK7pjnpk6hri2jh5ok2mf2exa0n"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-36">
+    <dropForeignKeyConstraint baseTableName="darlehendokument_dokument_aud" constraintName="FK9ya0t53nj205mab8k76e6917m"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-37">
+    <dropForeignKeyConstraint baseTableName="darlehen" constraintName="FK_darlehen_verfuegung_dokument_id"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-38">
+    <dropForeignKeyConstraint baseTableName="darlehen" constraintName="FKfvw7gh5aytrr5lc0vrta1bev6"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-39">
+    <dropForeignKeyConstraint baseTableName="darlehen_dokument" constraintName="FKoh23kac7ix5s104tecojehv9f"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-40">
+    <dropForeignKeyConstraint baseTableName="darlehen_darlehen_grund" constraintName="FKs36qkin0q9c98hj5bdsxlt88o"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-41">
+    <dropForeignKeyConstraint baseTableName="dokument" constraintName="FKt9sm7ynusivybbhgrrvgr6571"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-1">
+    <createTable tableName="darlehen_buchhaltung_entry">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="darlehen_buchhaltung_entryPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="betrag" type="INTEGER"/>
+      <column name="comment" type="VARCHAR(2200)"/>
+      <column name="kategorie" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="fall_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="darlehen_buchhaltung_entry_verfuegung_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-2">
+    <createTable tableName="darlehen_buchhaltung_entry_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="betrag" type="INTEGER"/>
+      <column name="comment" type="VARCHAR(2200)"/>
+      <column name="kategorie" type="VARCHAR(255)"/>
+      <column name="fall_id" type="UUID"/>
+      <column name="darlehen_buchhaltung_entry_verfuegung_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-3">
+    <createTable tableName="freiwillig_darlehen">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="freiwillig_darlehenPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="anzahl_betreibungen" type="INTEGER"/>
+      <column name="betrag" type="INTEGER"/>
+      <column name="betrag_gewuenscht" type="INTEGER"/>
+      <column name="eingabedatum" type="date"/>
+      <column name="gewaehren" type="BOOLEAN"/>
+      <column name="kommentar" type="VARCHAR(2200)"/>
+      <column name="schulden" type="INTEGER"/>
+      <column name="status" type="VARCHAR(255)"/>
+      <column name="fall_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-4">
+    <createTable tableName="freiwillig_darlehen_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="anzahl_betreibungen" type="INTEGER"/>
+      <column name="betrag" type="INTEGER"/>
+      <column name="betrag_gewuenscht" type="INTEGER"/>
+      <column name="eingabedatum" type="date"/>
+      <column name="gewaehren" type="BOOLEAN"/>
+      <column name="kommentar" type="VARCHAR(2200)"/>
+      <column name="schulden" type="INTEGER"/>
+      <column name="status" type="VARCHAR(255)"/>
+      <column name="fall_id" type="UUID"/>
+      <column name="gesuch_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-5">
+    <createTable tableName="freiwillig_darlehen_darlehen_grund">
+      <column name="freiwillig_darlehen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="freiwillig_darlehen_grund" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-6">
+    <createTable tableName="freiwillig_darlehen_darlehen_grund_aud">
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="freiwillig_darlehen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="freiwillig_darlehen_grund" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-7">
+    <createTable tableName="freiwillig_darlehen_dokument">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="freiwillig_darlehen_dokumentPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="dokument_type" type="VARCHAR(255)"/>
+      <column name="freiwillig_darlehen_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-8">
+    <createTable tableName="freiwillig_darlehen_dokument_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="dokument_type" type="VARCHAR(255)"/>
+      <column name="freiwillig_darlehen_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-9">
+    <createTable tableName="freiwilligdarlehendokument_dokument_aud">
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="freiwillig_darlehen_dokument_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-10">
+    <addColumn tableName="dokument">
+      <column name="freiwillig_darlehen_dokument_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-11">
+    <addPrimaryKey columnNames="rev, id" constraintName="darlehen_buchhaltung_entry_audPK" tableName="darlehen_buchhaltung_entry_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-12">
+    <addPrimaryKey columnNames="rev, id" constraintName="freiwillig_darlehen_audPK" tableName="freiwillig_darlehen_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-13">
+    <addPrimaryKey columnNames="freiwillig_darlehen_id, rev, freiwillig_darlehen_grund" constraintName="freiwillig_darlehen_darlehen_grund_audPK" tableName="freiwillig_darlehen_darlehen_grund_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-14">
+    <addPrimaryKey columnNames="rev, id" constraintName="freiwillig_darlehen_dokument_audPK" tableName="freiwillig_darlehen_dokument_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-15">
+    <addPrimaryKey columnNames="freiwillig_darlehen_dokument_id, rev, id" constraintName="freiwilligdarlehendokument_dokument_audPK" tableName="freiwilligdarlehendokument_dokument_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-16">
+    <addUniqueConstraint columnNames="darlehen_buchhaltung_entry_verfuegung_id" constraintName="UC_DARLEHEN_BUCHHALTUNG_ENTRYDARLEHEN_BUCHHALTUNG_ENTRY_VERFUEG" tableName="darlehen_buchhaltung_entry"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-17">
+    <createIndex indexName="IX_darlehen_buchhaltung_entry_mandant" tableName="darlehen_buchhaltung_entry">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-18">
+    <createIndex indexName="IX_freiwillig_darlehen_dokument_mandant" tableName="freiwillig_darlehen_dokument">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-19">
+    <createIndex indexName="IX_freiwillig_darlehen_mandant" tableName="freiwillig_darlehen">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-20">
+    <addForeignKeyConstraint baseColumnNames="freiwillig_darlehen_id" baseTableName="freiwillig_darlehen_dokument" constraintName="FK43qjm69j1e9gvpwyre0y6w5di" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="freiwillig_darlehen" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-21">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="darlehen_buchhaltung_entry_aud" constraintName="FK5uuons7br3smvsd4ot756bxya" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-22">
+    <addForeignKeyConstraint baseColumnNames="freiwillig_darlehen_id" baseTableName="freiwillig_darlehen_darlehen_grund" constraintName="FK7q3vc3mgfxjcpm2cw02rpd19n" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="freiwillig_darlehen" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-23">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="freiwillig_darlehen_dokument_aud" constraintName="FK80afbqh5ie1r3t1xp6ivl120w" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-24">
+    <addForeignKeyConstraint baseColumnNames="darlehen_buchhaltung_entry_verfuegung_id" baseTableName="darlehen_buchhaltung_entry" constraintName="FK_darlehen_buchhaltung_entry_verfuegung_id" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dokument" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-25">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="freiwillig_darlehen_darlehen_grund_aud" constraintName="FKa17rr440ugrv6aw92u3ghe318" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-26">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="freiwilligdarlehendokument_dokument_aud" constraintName="FKdegjtv7hb24pyvmb16a3e1k8b" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-27">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id" baseTableName="freiwillig_darlehen" constraintName="FKe00cn2b89ncns5faw8lp2kkbs" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="gesuch" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-28">
+    <addForeignKeyConstraint baseColumnNames="freiwillig_darlehen_dokument_id" baseTableName="dokument" constraintName="FKf9kp45tev0gb6pkuexg75cxda" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="freiwillig_darlehen_dokument" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-29">
+    <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="freiwillig_darlehen" constraintName="FKiq05ma22rndu3a6qecpi8fnbe" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-30">
+    <addForeignKeyConstraint baseColumnNames="fall_id" baseTableName="darlehen_buchhaltung_entry" constraintName="FKnp356nv4dh5tyhegwre6q3ei8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fall" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-31">
+    <addForeignKeyConstraint baseColumnNames="rev" baseTableName="freiwillig_darlehen_aud" constraintName="FKox7do10gxrtn9suv3sa974nv4" deferrable="false" initiallyDeferred="false" referencedColumnNames="rev" referencedTableName="revinfo" validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-42">
+    <dropUniqueConstraint constraintName="uc_darlehendarlehen_verfuegung_id_col" tableName="darlehen"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-43">
+    <dropTable tableName="darlehen"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-44">
+    <dropTable tableName="darlehen_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-45">
+    <dropTable tableName="darlehen_darlehen_grund"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-46">
+    <dropTable tableName="darlehen_darlehen_grund_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-47">
+    <dropTable tableName="darlehen_dokument"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-48">
+    <dropTable tableName="darlehen_dokument_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-49">
+    <dropTable tableName="darlehendokument_dokument_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1768989028454-50">
+    <dropColumn columnName="darlehen_dokument_id" tableName="dokument"/>
+  </changeSet>
+</databaseChangeLog>

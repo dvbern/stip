@@ -274,7 +274,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         break;
       case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
         SharedUiKommentarDialogComponent.open(this.dialog, {
-          entityId: gesuchTrancheId,
           titleKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.title`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message`,
           placeholderKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder`,
@@ -293,7 +292,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         break;
       case 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG':
         SharedUiKommentarDialogComponent.openOptional(this.dialog, {
-          entityId: gesuchTrancheId,
           titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
           placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
@@ -312,7 +310,6 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
         break;
       case 'ZURUECKWEISEN':
         SharedUiKommentarDialogComponent.open(this.dialog, {
-          entityId: gesuchTrancheId,
           titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
           messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
           placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,

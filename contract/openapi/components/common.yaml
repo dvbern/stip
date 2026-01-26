@@ -983,7 +983,7 @@ PersonValueItem:
       type: string
     value:
       type: integer
-Darlehen:
+FreiwilligDarlehen:
   type: object
   required:
     - id

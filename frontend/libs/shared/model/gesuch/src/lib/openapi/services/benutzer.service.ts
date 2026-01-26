@@ -127,6 +127,26 @@ export class BenutzerService {
         return httpParams;
     }
 
+    public createOrUpdateSachbearbeiterStammdatenPath = (requestParameters: BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenRequestParams) => {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling createOrUpdateSachbearbeiterStammdaten$.');
+        }
+        const sachbearbeiterZuordnungStammdaten = requestParameters.sachbearbeiterZuordnungStammdaten;
+        if (sachbearbeiterZuordnungStammdaten === null || sachbearbeiterZuordnungStammdaten === undefined) {
+            throw new Error('Required parameter sachbearbeiterZuordnungStammdaten was null or undefined when calling createOrUpdateSachbearbeiterStammdaten$.');
+        }
+        let path = `/api/v1/benutzer/stammdaten/sachbearbeiter/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -212,6 +232,19 @@ export class BenutzerService {
         );
     }
 
+    public createOrUpdateSachbearbeiterStammdatenListPath = (requestParameters: BenutzerServiceCreateOrUpdateSachbearbeiterStammdatenListRequestParams) => {
+        const sachbearbeiterZuordnungStammdatenList = requestParameters.sachbearbeiterZuordnungStammdatenList;
+        let path = `/api/v1/benutzer/stammdaten/sachbearbeiter`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -289,6 +322,22 @@ export class BenutzerService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createSachbearbeiterPath = (requestParameters: BenutzerServiceCreateSachbearbeiterRequestParams) => {
+        const sachbearbeiterUpdate = requestParameters.sachbearbeiterUpdate;
+        if (sachbearbeiterUpdate === null || sachbearbeiterUpdate === undefined) {
+            throw new Error('Required parameter sachbearbeiterUpdate was null or undefined when calling createSachbearbeiter$.');
+        }
+        let path = `/api/v1/benutzer/sachbearbeiter`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -374,6 +423,22 @@ export class BenutzerService {
         );
     }
 
+    public deleteBenutzerPath = (requestParameters: BenutzerServiceDeleteBenutzerRequestParams) => {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling deleteBenutzer$.');
+        }
+        let path = `/api/v1/benutzer/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Deletes a benutzer with the given id
      * @param requestParameters
@@ -445,6 +510,22 @@ export class BenutzerService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public deleteSachbearbeiterPath = (requestParameters: BenutzerServiceDeleteSachbearbeiterRequestParams) => {
+        const sachbearbeiterId = requestParameters.sachbearbeiterId;
+        if (sachbearbeiterId === null || sachbearbeiterId === undefined) {
+            throw new Error('Required parameter sachbearbeiterId was null or undefined when calling deleteSachbearbeiter$.');
+        }
+        let path = `/api/v1/benutzer/sachbearbeiter/${this.configuration.encodeParam({name: "sachbearbeiterId", value: sachbearbeiterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -519,6 +600,18 @@ export class BenutzerService {
         );
     }
 
+    public getSachbearbeitendePath = () => {
+        let path = `/api/v1/benutzer/stammdaten/sachbearbeiter`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -584,6 +677,22 @@ export class BenutzerService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getSachbearbeiterForManagementPath = (requestParameters: BenutzerServiceGetSachbearbeiterForManagementRequestParams) => {
+        const sachbearbeiterId = requestParameters.sachbearbeiterId;
+        if (sachbearbeiterId === null || sachbearbeiterId === undefined) {
+            throw new Error('Required parameter sachbearbeiterId was null or undefined when calling getSachbearbeiterForManagement$.');
+        }
+        let path = `/api/v1/benutzer/sachbearbeiter/${this.configuration.encodeParam({name: "sachbearbeiterId", value: sachbearbeiterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -659,6 +768,22 @@ export class BenutzerService {
         );
     }
 
+    public getSachbearbeiterStammdatenPath = (requestParameters: BenutzerServiceGetSachbearbeiterStammdatenRequestParams) => {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling getSachbearbeiterStammdaten$.');
+        }
+        let path = `/api/v1/benutzer/stammdaten/sachbearbeiter/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -731,6 +856,18 @@ export class BenutzerService {
         );
     }
 
+    public getSachbearbeitersForManagementPath = () => {
+        let path = `/api/v1/benutzer/sachbearbeiter`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Get all existing Sachbearbeiter (Sb/Jurist/Sb-Admin)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -799,6 +936,18 @@ export class BenutzerService {
         );
     }
 
+    public prepareCurrentBenutzerPath = () => {
+        let path = `/api/v1/benutzer/prepare/me`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Get or create and update current benutzer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -865,6 +1014,26 @@ export class BenutzerService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateSachbearbeiterPath = (requestParameters: BenutzerServiceUpdateSachbearbeiterRequestParams) => {
+        const sachbearbeiterId = requestParameters.sachbearbeiterId;
+        if (sachbearbeiterId === null || sachbearbeiterId === undefined) {
+            throw new Error('Required parameter sachbearbeiterId was null or undefined when calling updateSachbearbeiter$.');
+        }
+        const sachbearbeiterUpdate = requestParameters.sachbearbeiterUpdate;
+        if (sachbearbeiterUpdate === null || sachbearbeiterUpdate === undefined) {
+            throw new Error('Required parameter sachbearbeiterUpdate was null or undefined when calling updateSachbearbeiter$.');
+        }
+        let path = `/api/v1/benutzer/sachbearbeiter/${this.configuration.encodeParam({name: "sachbearbeiterId", value: sachbearbeiterId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

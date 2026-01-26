@@ -44,6 +44,14 @@ public class ConfigService {
     Set<String> allowedMimeTypes;
 
     @Getter
+    @ConfigProperty(name = "kstip.allowed.testcase-mimetypes")
+    Set<String> testcaseAllowedMimeTypes;
+
+    @Getter
+    @ConfigProperty(name = "kstip.demo.smallest-png")
+    String smallestPng;
+
+    @Getter
     @ConfigProperty(name = "kstip.pre-signed-request.issuer")
     String issuer;
 

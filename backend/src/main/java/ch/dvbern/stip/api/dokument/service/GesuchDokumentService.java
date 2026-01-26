@@ -62,13 +62,13 @@ import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+import static ch.dvbern.stip.api.common.util.DokumentDownloadConstants.GESUCH_DOKUMENT_PATH;
+
 @Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 @UnlessBuildProfile("test")
 public class GesuchDokumentService {
-    private static final String GESUCH_DOKUMENT_PATH = "gesuch/";
-
     private final GesuchDokumentMapper gesuchDokumentMapper;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;

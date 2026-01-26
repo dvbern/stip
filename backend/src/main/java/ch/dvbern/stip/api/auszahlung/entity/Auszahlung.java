@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.auszahlung.entity;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,9 +30,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Audited
 @Entity
@@ -44,8 +49,11 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Auszahlung extends AbstractMandantEntity {
-    @Nullable
+    @NullableUnlessGenerated
     @OneToOne(optional = true, cascade = CascadeType.PERSIST)
     @JoinColumn(
         name = "zahlungsverbindung_id", foreignKey = @ForeignKey(name = "FK_auszahlung_zahlungsverbindung_id"),
@@ -53,14 +61,15 @@ public class Auszahlung extends AbstractMandantEntity {
     )
     private Zahlungsverbindung zahlungsverbindung;
 
+    @NotNull
     @Column(name = "auszahlung_an_sozialdienst", nullable = false)
     private boolean auszahlungAnSozialdienst;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "sap_business_partner_id", nullable = true)
     private Integer sapBusinessPartnerId;
 
-    @Nullable
+    @NullableUnlessGenerated
     @ManyToOne(optional = true)
     @JoinColumn(
         name = "buchhaltung_id", foreignKey = @ForeignKey(name = "FK_zahlungsverbindung_buchhaltung_id"),

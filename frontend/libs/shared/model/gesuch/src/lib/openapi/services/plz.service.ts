@@ -88,6 +88,18 @@ export class PlzService {
         return httpParams;
     }
 
+    public getPlzPath = () => {
+        let path = `/api/v1/plz`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Gets all PLZs
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
