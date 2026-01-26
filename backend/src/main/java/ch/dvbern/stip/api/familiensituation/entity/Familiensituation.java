@@ -18,10 +18,10 @@
 package ch.dvbern.stip.api.familiensituation.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,9 +29,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Audited
 @WerZahltAlimenteRequiredFieldConstraint
@@ -42,48 +46,51 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Familiensituation extends AbstractMandantEntity {
     @NotNull
     @Column(name = "eltern_verheiratet_zusammen", nullable = false)
     private Boolean elternVerheiratetZusammen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "elternteil_unbekannt_verstorben")
     private Boolean elternteilUnbekanntVerstorben;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "gerichtliche_alimentenregelung")
     private Boolean gerichtlicheAlimentenregelung;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "mutter_unbekannt_verstorben")
     @Enumerated(EnumType.STRING)
     private ElternAbwesenheitsGrund mutterUnbekanntVerstorben;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "mutter_unbekannt_grund")
     @Enumerated(EnumType.STRING)
     private ElternUnbekanntheitsGrund mutterUnbekanntGrund;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "mutter_wiederverheiratet")
     private Boolean mutterWiederverheiratet;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "vater_unbekannt_verstorben")
     @Enumerated(EnumType.STRING)
     private ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "vater_unbekannt_grund")
     @Enumerated(EnumType.STRING)
     private ElternUnbekanntheitsGrund vaterUnbekanntGrund;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "vater_wiederverheiratet")
     private Boolean vaterWiederverheiratet;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "wer_zahlt_alimente")
     @Enumerated(EnumType.STRING)
     private Elternschaftsteilung werZahltAlimente;

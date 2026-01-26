@@ -20,9 +20,12 @@ package ch.dvbern.stip.api.common.util;
 public final class DokumentDownloadConstants {
     private DokumentDownloadConstants() {}
 
+    public static final String GESUCH_DOKUMENT_PATH = "gesuch/";
+
     public static final String GESUCH_ID_CLAIM = "gesuch_id";
     public static final String DOKUMENT_ID_CLAIM = "dokument_id";
     public static final String DARLEHEN_ID_CLAIM = "darlehen_id";
     public static final String VERFUEGUN_DOKUMENT_ID_CLAIM = "verfuegung_dokument_id";
     public static final String MASSENDRUCK_JOB_ID_CLAIM = "massendruck_id";
+    public static final String DEMO_DATA_IMPORT_ID_CLAIM = "demo_data_import_id";
 }

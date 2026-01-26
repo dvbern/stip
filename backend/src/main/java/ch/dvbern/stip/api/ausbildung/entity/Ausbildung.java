@@ -26,10 +26,10 @@ import ch.dvbern.stip.api.adresse.entity.NotStatelessConstraint;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.land.entity.Land;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,9 +46,13 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -71,6 +75,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ausbildung extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -89,17 +96,17 @@ public class Ausbildung extends AbstractMandantEntity {
     @Column(name = "besucht_bms", nullable = false)
     private boolean besuchtBMS = false;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "alternative_ausbildungsgang", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsgang;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "alternative_ausbildungsstaette", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String alternativeAusbildungsstaette;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "fachrichtung_berufsbezeichnung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fachrichtungBerufsbezeichnung;
@@ -121,12 +128,12 @@ public class Ausbildung extends AbstractMandantEntity {
     @Column(name = "pensum", nullable = false)
     private AusbildungsPensum pensum;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "ausbildungsort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String ausbildungsort;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "ausbildungsort_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String ausbildungsortPLZ;
@@ -135,7 +142,7 @@ public class Ausbildung extends AbstractMandantEntity {
     @Column(name = "is_ausbildung_ausland")
     private Boolean isAusbildungAusland = false;
 
-    @Nullable
+    @NullableUnlessGenerated
     @ManyToOne(optional = true)
     @JoinColumn(
         name = "land_id",

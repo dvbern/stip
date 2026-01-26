@@ -2,7 +2,15 @@ import { Injectable, computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, catchError, combineLatest, pipe, switchMap, tap } from 'rxjs';
+import {
+  EMPTY,
+  catchError,
+  combineLatest,
+  pipe,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -76,6 +84,8 @@ export class DokumentsStore extends signalStore(
         this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId }),
       'sachbearbeitung-app': () =>
         this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId }),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -97,6 +107,8 @@ export class DokumentsStore extends signalStore(
           gesuchTrancheId: trancheId,
           dokumentTyp,
         }),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -106,6 +118,8 @@ export class DokumentsStore extends signalStore(
         this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
       'sachbearbeitung-app': () =>
         this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId }),
+      'demo-data-app': () =>
+        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -439,6 +453,8 @@ export class DokumentsStore extends signalStore(
             this.dokumentService.getGesuchDokumentKommentareGS$(req),
           'sachbearbeitung-app': () =>
             this.dokumentService.getGesuchDokumentKommentareSB$(req),
+          'demo-data-app': () =>
+            throwError(() => new Error('Not implemented for this AppType')),
         });
         return service$.pipe(
           handleApiResponse((gesuchDokumentKommentare) =>

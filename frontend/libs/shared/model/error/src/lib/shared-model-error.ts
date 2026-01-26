@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { z } from 'zod';
 
 import {
+  DemoDataError as DvDemoDataError,
   NeskoError as DvNeskoError,
   ValidationMessage as DvValidationMessage,
   ValidationReport,
@@ -34,6 +35,18 @@ export type ValidationWarning = Extends<
   DvValidationMessage
 >;
 
+export const GenericValidationError = z.object({
+  type: z.literal('VALIDATION'),
+  violations: z.array(
+    z.object({
+      path: z.string(),
+      key: z.string(),
+      message: z.string(),
+    }),
+  ),
+});
+export type GenericValidationError = z.infer<typeof GenericValidationError>;
+
 export const UnknownHttpError = z.object({
   error: z.string().or(z.record(z.unknown())).or(z.null()),
   headers: z.unknown(),
@@ -56,12 +69,28 @@ export const NeskoError = z.object({
 });
 export type NeskoError = Extends<z.infer<typeof NeskoError>, DvNeskoError>;
 
+export const DemoDataError = z.object({
+  internalMessage: z.string(),
+  errorClass: z.string(),
+  validationErrors: z.array(ValidationError).optional().nullable(),
+});
+export type DemoDataError = Extends<
+  z.infer<typeof DemoDataError>,
+  DvDemoDataError
+>;
+
 export const ParseError = z.instanceof(z.ZodError);
 export type ParseError = z.infer<typeof ParseError>;
 
 const ErrorTypes = {
   neskoError: z.object({
     error: NeskoError,
+  }),
+  demoDataError: z.object({
+    error: DemoDataError,
+  }),
+  genericValidationError: z.object({
+    error: GenericValidationError,
   }),
   validationError: z.object({
     error: z.object({
@@ -95,6 +124,13 @@ export const SharedModelError = z.intersection(
         errorCode: neskoError,
       }),
     ),
+    ErrorTypes.genericValidationError.transform(({ error }) =>
+      createError('genericValidationError', {
+        messageKey: 'shared.genericError.validation',
+        messageKeys: error.violations.map((e) => e.key),
+        validationErrors: error.violations,
+      }),
+    ),
     ErrorTypes.validationError.transform(
       ({ error: { validationErrors, validationWarnings, hasDocuments } }) =>
         createError('validationError', {
@@ -107,6 +143,14 @@ export const SharedModelError = z.intersection(
           validationWarnings,
           hasDocuments,
         }),
+    ),
+    ErrorTypes.demoDataError.transform(({ error }) =>
+      createError('demoDataError', {
+        messageKey: 'demo-data-app.genericError.demoData',
+        internalMessage: error.internalMessage,
+        errorClass: error.errorClass,
+        validationErrors: error.validationErrors,
+      }),
     ),
     ErrorTypes.unknownHttpError.transform(({ error, ...http }) => {
       return createError('unknownHttpError', {

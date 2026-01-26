@@ -830,8 +830,5 @@
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Mettre à jour les données fiscales via Nesko",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Voulez-vous vraiment charger les données de Nesko pour l'année définie?<br>Les champs du formulaire seront écrasés.",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label": "Année fiscale pour charger les données de Nesko",
-  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Charger les données",
-
-  "sachbearbeitung-app.unauthorized.title": "Accès refusé",
-  "sachbearbeitung-app.unauthorized.text": "Vous n'avez pas l'autorisation de voir cette page."
+  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Charger les données"
 }

@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -53,9 +54,14 @@ import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
+import org.jilt.Opt;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 
@@ -70,10 +76,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Fall extends AbstractMandantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "fall_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Opt
     private String fallNummer;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -101,11 +111,12 @@ public class Fall extends AbstractMandantEntity {
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private List<Darlehen> darlehens = new ArrayList<>();
 
-    @Nullable
+    @NullableUnlessGenerated
     @OneToOne(mappedBy = "delegierterFall")
     private Delegierung delegierung;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @NullableUnlessGenerated
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = true)
     @JoinColumn(name = "auszahlung_id", foreignKey = @ForeignKey(name = "FK_fall_auszahlung_id"))
     private @Valid Auszahlung auszahlung;
 

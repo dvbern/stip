@@ -150,6 +150,7 @@
     "editor.suggest.preview": true,
     "eslint.useFlatConfig": true,
     "eslint.workingDirectories": ["frontend/"],
-    "eslint.validate": ["typescript", "json", "javascript"]
+    "eslint.validate": ["typescript", "json", "javascript"],
+    "nxConsole.nxWorkspacePath": "frontend"
   }
 }

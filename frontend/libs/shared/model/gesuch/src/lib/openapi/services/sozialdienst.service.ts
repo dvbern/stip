@@ -141,6 +141,19 @@ export class SozialdienstService {
         return httpParams;
     }
 
+    public createSozialdienstPath = (requestParameters: SozialdienstServiceCreateSozialdienstRequestParams) => {
+        const sozialdienstCreate = requestParameters.sozialdienstCreate;
+        let path = `/api/v1/sozialdienst`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create a new Sozialdienst
      * @param requestParameters
@@ -219,6 +232,19 @@ export class SozialdienstService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createSozialdienstBenutzerPath = (requestParameters: SozialdienstServiceCreateSozialdienstBenutzerRequestParams) => {
+        const sozialdienstBenutzerCreate = requestParameters.sozialdienstBenutzerCreate;
+        let path = `/api/v1/sozialdienst/benutzer`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -300,6 +326,22 @@ export class SozialdienstService {
         );
     }
 
+    public deleteSozialdienstPath = (requestParameters: SozialdienstServiceDeleteSozialdienstRequestParams) => {
+        const sozialdienstId = requestParameters.sozialdienstId;
+        if (sozialdienstId === null || sozialdienstId === undefined) {
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling deleteSozialdienst$.');
+        }
+        let path = `/api/v1/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Delete a Sozialdienst by Id
      * @param requestParameters
@@ -371,6 +413,22 @@ export class SozialdienstService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public deleteSozialdienstBenutzerPath = (requestParameters: SozialdienstServiceDeleteSozialdienstBenutzerRequestParams) => {
+        const sozialdienstBenutzerId = requestParameters.sozialdienstBenutzerId;
+        if (sozialdienstBenutzerId === null || sozialdienstBenutzerId === undefined) {
+            throw new Error('Required parameter sozialdienstBenutzerId was null or undefined when calling deleteSozialdienstBenutzer$.');
+        }
+        let path = `/api/v1/sozialdienst/benutzer/${this.configuration.encodeParam({name: "sozialdienstBenutzerId", value: sozialdienstBenutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -445,6 +503,18 @@ export class SozialdienstService {
         );
     }
 
+    public getAllSozialdienstePath = () => {
+        let path = `/api/v1/sozialdienst`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns all Sozialdienste
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -513,6 +583,18 @@ export class SozialdienstService {
         );
     }
 
+    public getAllSozialdiensteForDelegationPath = () => {
+        let path = `/api/v1/sozialdienst/delegation`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -578,6 +660,22 @@ export class SozialdienstService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getSozialdienstPath = (requestParameters: SozialdienstServiceGetSozialdienstRequestParams) => {
+        const sozialdienstId = requestParameters.sozialdienstId;
+        if (sozialdienstId === null || sozialdienstId === undefined) {
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling getSozialdienst$.');
+        }
+        let path = `/api/v1/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -653,6 +751,22 @@ export class SozialdienstService {
         );
     }
 
+    public getSozialdienstBenutzerPath = (requestParameters: SozialdienstServiceGetSozialdienstBenutzerRequestParams) => {
+        const sozialdienstBenutzerId = requestParameters.sozialdienstBenutzerId;
+        if (sozialdienstBenutzerId === null || sozialdienstBenutzerId === undefined) {
+            throw new Error('Required parameter sozialdienstBenutzerId was null or undefined when calling getSozialdienstBenutzer$.');
+        }
+        let path = `/api/v1/sozialdienst/benutzer/${this.configuration.encodeParam({name: "sozialdienstBenutzerId", value: sozialdienstBenutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -725,6 +839,18 @@ export class SozialdienstService {
         );
     }
 
+    public getSozialdienstBenutzerListPath = () => {
+        let path = `/api/v1/sozialdienst/benutzer`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -790,6 +916,23 @@ export class SozialdienstService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public replaceSozialdienstAdminPath = (requestParameters: SozialdienstServiceReplaceSozialdienstAdminRequestParams) => {
+        const sozialdienstId = requestParameters.sozialdienstId;
+        if (sozialdienstId === null || sozialdienstId === undefined) {
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling replaceSozialdienstAdmin$.');
+        }
+        const sozialdienstAdmin = requestParameters.sozialdienstAdmin;
+        let path = `/api/v1/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/replaceSozialdienstAdmin`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -875,6 +1018,26 @@ export class SozialdienstService {
         );
     }
 
+    public setSozialdienstAktivToPath = (requestParameters: SozialdienstServiceSetSozialdienstAktivToRequestParams) => {
+        const sozialdienstId = requestParameters.sozialdienstId;
+        if (sozialdienstId === null || sozialdienstId === undefined) {
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling setSozialdienstAktivTo$.');
+        }
+        const aktiv = requestParameters.aktiv;
+        if (aktiv === null || aktiv === undefined) {
+            throw new Error('Required parameter aktiv was null or undefined when calling setSozialdienstAktivTo$.');
+        }
+        let path = `/api/v1/sozialdienst/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/setSozialdienstAktivTo/${this.configuration.encodeParam({name: "aktiv", value: aktiv, in: "path", style: "simple", explode: false, dataType: "boolean", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Changes a Sozialdienst\&#39;s status to a given value
      * @param requestParameters
@@ -950,6 +1113,19 @@ export class SozialdienstService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateSozialdienstPath = (requestParameters: SozialdienstServiceUpdateSozialdienstRequestParams) => {
+        const sozialdienstUpdate = requestParameters.sozialdienstUpdate;
+        let path = `/api/v1/sozialdienst`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1032,6 +1208,19 @@ export class SozialdienstService {
         );
     }
 
+    public updateSozialdienstAdminPath = (requestParameters: SozialdienstServiceUpdateSozialdienstAdminRequestParams) => {
+        const sozialdienstBenutzerUpdate = requestParameters.sozialdienstBenutzerUpdate;
+        let path = `/api/v1/sozialdienst/admin`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1109,6 +1298,19 @@ export class SozialdienstService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateSozialdienstBenutzerPath = (requestParameters: SozialdienstServiceUpdateSozialdienstBenutzerRequestParams) => {
+        const sozialdienstBenutzerUpdate = requestParameters.sozialdienstBenutzerUpdate;
+        let path = `/api/v1/sozialdienst/benutzer`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

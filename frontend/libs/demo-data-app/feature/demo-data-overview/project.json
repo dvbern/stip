@@ -1,0 +1,16 @@
+{
+  "name": "demo-data-app-feature-demo-data-overview",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/demo-data-app/feature/demo-data-overview/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:demo-data-app"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/demo-data-app/feature/demo-data-overview/tsconfig.lib.json"
+      }
+    }
+  }
+}

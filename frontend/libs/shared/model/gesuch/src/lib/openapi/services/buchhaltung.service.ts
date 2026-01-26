@@ -111,6 +111,26 @@ export class BuchhaltungService {
         return httpParams;
     }
 
+    public createBuchhaltungSaldokorrekturPath = (requestParameters: BuchhaltungServiceCreateBuchhaltungSaldokorrekturRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling createBuchhaltungSaldokorrektur$.');
+        }
+        const buchhaltungSaldokorrektur = requestParameters.buchhaltungSaldokorrektur;
+        if (buchhaltungSaldokorrektur === null || buchhaltungSaldokorrektur === undefined) {
+            throw new Error('Required parameter buchhaltungSaldokorrektur was null or undefined when calling createBuchhaltungSaldokorrektur$.');
+        }
+        let path = `/api/v1/buchhaltung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create a buchhaltungsentry from a saldokorrektur
      * @param requestParameters
@@ -198,6 +218,22 @@ export class BuchhaltungService {
         );
     }
 
+    public getBuchhaltungEntrysPath = (requestParameters: BuchhaltungServiceGetBuchhaltungEntrysRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getBuchhaltungEntrys$.');
+        }
+        let path = `/api/v1/buchhaltung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Gets all buchhaltungsentrys
      * @param requestParameters
@@ -269,6 +305,34 @@ export class BuchhaltungService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getFailedAuszahlungBuchhaltungEntrysPath = (requestParameters: BuchhaltungServiceGetFailedAuszahlungBuchhaltungEntrysRequestParams) => {
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getFailedAuszahlungBuchhaltungEntrys$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getFailedAuszahlungBuchhaltungEntrys$.');
+        }
+        let path = `/api/v1/buchhaltung/failed`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -357,6 +421,22 @@ export class BuchhaltungService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public retryFailedAuszahlungBuchhaltungForGesuchPath = (requestParameters: BuchhaltungServiceRetryFailedAuszahlungBuchhaltungForGesuchRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling retryFailedAuszahlungBuchhaltungForGesuch$.');
+        }
+        let path = `/api/v1/buchhaltung/retry/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

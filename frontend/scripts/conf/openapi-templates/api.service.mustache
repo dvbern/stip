@@ -147,6 +147,50 @@ export class {{classname}} {
     }
 
 {{#operation}}
+    public {{nickname}}Path = ({{#allParams.0}}requestParameters: {{#prefixParameterInterfaces}}{{classname}}{{/prefixParameterInterfaces}}{{operationIdCamelCase}}RequestParams{{/allParams.0}}) => {
+{{#allParams}}
+{{#useSingleRequestParameter}}
+        const {{paramName}} = requestParameters.{{paramName}};
+{{/useSingleRequestParameter}}
+{{#required}}
+        if ({{paramName}} === null || {{paramName}} === undefined) {
+            throw new Error('Required parameter {{paramName}} was null or undefined when calling {{nickname}}$.');
+        }
+{{/required}}
+{{/allParams}}
+        let path = `{{basePath}}{{{path}}}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+{{#queryParams}}
+
+        {{#isArray}}
+        if ({{paramName}}) {
+        {{#isQueryParamObjectFormatJson}}
+        queryParams.append('{{baseName}}', {{paramName}}.toString());
+        {{/isQueryParamObjectFormatJson}}
+        {{^isQueryParamObjectFormatJson}}
+        {{#isCollectionFormatMulti}}
+            {{paramName}}.forEach((element) => {
+                queryParams.append('{{baseName}}', element.toString());
+            })
+        {{/isCollectionFormatMulti}}
+        {{/isQueryParamObjectFormatJson}}
+        }
+        {{/isArray}}
+        {{^isArray}}
+        if ({{paramName}} !== undefined && {{paramName}} !== null) {
+          queryParams.append('{{baseName}}', {{paramName}}.toString());
+        }
+        {{/isArray}}
+        {{/queryParams}}
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
 {{#summary}}
      * {{.}}

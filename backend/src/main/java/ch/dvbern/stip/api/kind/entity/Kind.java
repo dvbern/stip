@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.kind.entity;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -31,9 +32,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Audited
 @Entity
@@ -43,16 +48,20 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Kind extends AbstractPerson {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "ausbildungssituation", nullable = false)
     private Ausbildungssituation ausbildungssituation;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "unterhaltsbeitraege")
     private Integer unterhaltsbeitraege;
 
+    @Deprecated(forRemoval = true) // Not used anymore
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;
@@ -68,17 +77,17 @@ public class Kind extends AbstractPerson {
     @Min(0)
     private Integer ergaenzungsleistungen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "kinder_und_ausbildungszulagen")
     @Min(0)
     private Integer kinderUndAusbildungszulagen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "renten")
     @Min(0)
     private Integer renten;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "andere_einnahmen")
     @Min(0)
     private Integer andereEinnahmen;

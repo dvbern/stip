@@ -16,6 +16,8 @@ export * from './datenschutzbrief.service';
 // import { DatenschutzbriefService } from './datenschutzbrief.service';
 export * from './delegieren.service';
 // import { DelegierenService } from './delegieren.service';
+export * from './demoData.service';
+// import { DemoDataService } from './demoData.service';
 export * from './dokument.service';
 // import { DokumentService } from './dokument.service';
 export * from './eltern.service';
@@ -51,4 +53,4 @@ export * from './tenant.service';
 export * from './verfuegung.service';
 // import { VerfuegungService } from './verfuegung.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
-// export const APIS = [AusbildungService, AusbildungsstaetteService, AuszahlungService, BenutzerService, BuchhaltungService, ConfigurationService, DarlehenService, DatenschutzbriefService, DelegierenService, DokumentService, ElternService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, MassendruckService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];
+// export const APIS = [AusbildungService, AusbildungsstaetteService, AuszahlungService, BenutzerService, BuchhaltungService, ConfigurationService, DarlehenService, DatenschutzbriefService, DelegierenService, DemoDataService, DokumentService, ElternService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, MassendruckService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];

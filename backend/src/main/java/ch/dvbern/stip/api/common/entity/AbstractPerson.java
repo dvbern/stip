@@ -24,9 +24,13 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_NACHNAME_NOTBLANK_MESSAGE;
@@ -36,7 +40,10 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Audited
 @Getter
 @Setter
-public abstract class AbstractPerson extends AbstractMandantEntity {
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
+public class AbstractPerson extends AbstractMandantEntity {
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
