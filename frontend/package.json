@@ -46,7 +46,8 @@
     "openapi:extract-current-templates": "openapi-generator-cli author template -g typescript-angular -o scripts/conf/openapi-templates/default-6.5.0",
     "set-version": "ts-node scripts/version-from-env.ts",
     "sync-roles": "npx tsx scripts/keycloak/update.ts sync-roles",
-    "add-users": "npx tsx scripts/keycloak/update.ts add-users"
+    "add-users": "npx tsx scripts/keycloak/update.ts add-users",
+    "update-users": "npx tsx scripts/keycloak/update.ts update-users"
   },
   "private": true,
   "dependencies": {

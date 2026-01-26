@@ -42,7 +42,7 @@ export type DefinedNamedRoleRepresentation = NamedRoleRepresentation & {
   name: CurrentRoleOrPermission;
 };
 
-const unique = <T>(arr: T[]) => {
+export const unique = <T>(arr: T[]) => {
   return Array.from(new Set(arr));
 };
 const _v = <const T extends string>(roleOrPermission: T) => {
