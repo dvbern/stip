@@ -192,7 +192,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setWohnkostenPersoenlich5pluspers(25260)
             .setGueltigkeitStatus(gueltigkeitStatus)
             .setPreisProMahlzeit(10)
-            .setMaxSaeule3a(7258)
+            .setMaxSaeule3a(getMaxSaeule3a(jahr.getTechnischesJahr()))
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38)
             .setVermoegensanteilInProzent(15)
@@ -202,6 +202,13 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setZweiterAuszahlungsterminTag(1)
             .setFristNachreichenDokumente(30)
             .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+    }
+
+    private int getMaxSaeule3a(int year) {
+        if (year <= 2025) {
+            return 7056;
+        }
+        return 7258;
     }
 
     private enum Season {

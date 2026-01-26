@@ -209,6 +209,22 @@ export class DokumentService {
         return httpParams;
     }
 
+    public createCustomDokumentTypPath = (requestParameters: DokumentServiceCreateCustomDokumentTypRequestParams) => {
+        const customDokumentTypCreate = requestParameters.customDokumentTypCreate;
+        if (customDokumentTypCreate === null || customDokumentTypCreate === undefined) {
+            throw new Error('Required parameter customDokumentTypCreate was null or undefined when calling createCustomDokumentTyp$.');
+        }
+        let path = `/api/v1/gesuchDokument/customGesuchDokument`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * create CustomDokumentTyp
      * @param requestParameters
@@ -290,6 +306,30 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createDokumentGSPath = (requestParameters: DokumentServiceCreateDokumentGSRequestParams) => {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling createDokumentGS$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentGS$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentGS$.');
+        }
+        let path = `/api/v1/gesuchDokument/gs/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -395,6 +435,30 @@ export class DokumentService {
         );
     }
 
+    public createDokumentSBPath = (requestParameters: DokumentServiceCreateDokumentSBRequestParams) => {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling createDokumentSB$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentSB$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentSB$.');
+        }
+        let path = `/api/v1/gesuchDokument/sb/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Upload a file for the given Typ to the Tranche; SB Endpoint
      * @param requestParameters
@@ -496,6 +560,30 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createUnterschriftenblattPath = (requestParameters: DokumentServiceCreateUnterschriftenblattRequestParams) => {
+        const unterschriftenblattTyp = requestParameters.unterschriftenblattTyp;
+        if (unterschriftenblattTyp === null || unterschriftenblattTyp === undefined) {
+            throw new Error('Required parameter unterschriftenblattTyp was null or undefined when calling createUnterschriftenblatt$.');
+        }
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling createUnterschriftenblatt$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createUnterschriftenblatt$.');
+        }
+        let path = `/api/v1/unterschriftenblatt/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "unterschriftenblattTyp", value: unterschriftenblattTyp, in: "path", style: "simple", explode: false, dataType: "UnterschriftenblattDokumentTyp", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -600,6 +688,22 @@ export class DokumentService {
         );
     }
 
+    public deleteCustomDokumentTypPath = (requestParameters: DokumentServiceDeleteCustomDokumentTypRequestParams) => {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling deleteCustomDokumentTyp$.');
+        }
+        let path = `/api/v1/gesuchDokument/customGesuchDokument/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * delete a customDokumentTyp
      * @param requestParameters
@@ -670,6 +774,22 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public deleteDokumentGSPath = (requestParameters: DokumentServiceDeleteDokumentGSRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDokumentGS$.');
+        }
+        let path = `/api/v1/dokument/gs/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -744,6 +864,22 @@ export class DokumentService {
         );
     }
 
+    public deleteDokumentSBPath = (requestParameters: DokumentServiceDeleteDokumentSBRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDokumentSB$.');
+        }
+        let path = `/api/v1/dokument/sb/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * deletes a Dokument; SB Endpoint
      * @param requestParameters
@@ -816,6 +952,22 @@ export class DokumentService {
         );
     }
 
+    public deleteUnterschriftenblattDokumentPath = (requestParameters: DokumentServiceDeleteUnterschriftenblattDokumentRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteUnterschriftenblattDokument$.');
+        }
+        let path = `/api/v1/unterschriftenblatt/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * deletes a Unterschriftenblatt Dokument
      * @param requestParameters
@@ -886,6 +1038,23 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public gesuchDokumentAblehnenPath = (requestParameters: DokumentServiceGesuchDokumentAblehnenRequestParams) => {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling gesuchDokumentAblehnen$.');
+        }
+        const gesuchDokumentAblehnenRequest = requestParameters.gesuchDokumentAblehnenRequest;
+        let path = `/api/v1/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/ablehnen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -970,6 +1139,22 @@ export class DokumentService {
         );
     }
 
+    public gesuchDokumentAkzeptierenPath = (requestParameters: DokumentServiceGesuchDokumentAkzeptierenRequestParams) => {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling gesuchDokumentAkzeptieren$.');
+        }
+        let path = `/api/v1/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/akzeptieren`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1039,6 +1224,22 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getCustomGesuchDokumentForTypGSPath = (requestParameters: DokumentServiceGetCustomGesuchDokumentForTypGSRequestParams) => {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling getCustomGesuchDokumentForTypGS$.');
+        }
+        let path = `/api/v1/customGesuchDokument/gs/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1114,6 +1315,22 @@ export class DokumentService {
         );
     }
 
+    public getCustomGesuchDokumentForTypSBPath = (requestParameters: DokumentServiceGetCustomGesuchDokumentForTypSBRequestParams) => {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling getCustomGesuchDokumentForTypSB$.');
+        }
+        let path = `/api/v1/customGesuchDokument/sb/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
      * @param requestParameters
@@ -1185,6 +1402,30 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getDokumentPath = (requestParameters: DokumentServiceGetDokumentRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling getDokument$.');
+        }
+        const dokumentArt = requestParameters.dokumentArt;
+        if (dokumentArt === null || dokumentArt === undefined) {
+            throw new Error('Required parameter dokumentArt was null or undefined when calling getDokument$.');
+        }
+        let path = `/api/v1/dokument/${this.configuration.encodeParam({name: "dokumentArt", value: dokumentArt, in: "path", style: "simple", explode: false, dataType: "DokumentArt", dataFormat: undefined})}/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1259,6 +1500,22 @@ export class DokumentService {
         );
     }
 
+    public getDokumentDownloadTokenPath = (requestParameters: DokumentServiceGetDokumentDownloadTokenRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDokumentDownloadToken$.');
+        }
+        let path = `/api/v1/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * get Dokument Download Token
      * @param requestParameters
@@ -1330,6 +1587,26 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getGesuchDokumentForTypGSPath = (requestParameters: DokumentServiceGetGesuchDokumentForTypGSRequestParams) => {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokumentForTypGS$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypGS$.');
+        }
+        let path = `/api/v1/gesuchDokument/gs/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1409,6 +1686,26 @@ export class DokumentService {
         );
     }
 
+    public getGesuchDokumentForTypSBPath = (requestParameters: DokumentServiceGetGesuchDokumentForTypSBRequestParams) => {
+        const dokumentTyp = requestParameters.dokumentTyp;
+        if (dokumentTyp === null || dokumentTyp === undefined) {
+            throw new Error('Required parameter dokumentTyp was null or undefined when calling getGesuchDokumentForTypSB$.');
+        }
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypSB$.');
+        }
+        let path = `/api/v1/gesuchDokument/sb/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert das GesuchDokument mit der gegebenen Tranche Id und alle Dokumente die dazu gehoeren. Für den SB
      * @param requestParameters
@@ -1486,6 +1783,22 @@ export class DokumentService {
         );
     }
 
+    public getGesuchDokumentKommentareGSPath = (requestParameters: DokumentServiceGetGesuchDokumentKommentareGSRequestParams) => {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentareGS$.');
+        }
+        let path = `/api/v1/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert GesuchDokumentKommentare zu einem GesuchDokument.
      * @param requestParameters
@@ -1557,6 +1870,22 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getGesuchDokumentKommentareSBPath = (requestParameters: DokumentServiceGetGesuchDokumentKommentareSBRequestParams) => {
+        const gesuchDokumentId = requestParameters.gesuchDokumentId;
+        if (gesuchDokumentId === null || gesuchDokumentId === undefined) {
+            throw new Error('Required parameter gesuchDokumentId was null or undefined when calling getGesuchDokumentKommentareSB$.');
+        }
+        let path = `/api/v1/gesuchDokument/${this.configuration.encodeParam({name: "gesuchDokumentId", value: gesuchDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/kommentare/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1632,6 +1961,22 @@ export class DokumentService {
         );
     }
 
+    public getUnterschriftenblaetterForGesuchPath = (requestParameters: DokumentServiceGetUnterschriftenblaetterForGesuchRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getUnterschriftenblaetterForGesuch$.');
+        }
+        let path = `/api/v1/unterschriftenblatt/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1702,6 +2047,26 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public uploadCustomGesuchDokumentGSPath = (requestParameters: DokumentServiceUploadCustomGesuchDokumentGSRequestParams) => {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling uploadCustomGesuchDokumentGS$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling uploadCustomGesuchDokumentGS$.');
+        }
+        let path = `/api/v1/customGesuchDokument/gs/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1801,6 +2166,26 @@ export class DokumentService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public uploadCustomGesuchDokumentSBPath = (requestParameters: DokumentServiceUploadCustomGesuchDokumentSBRequestParams) => {
+        const customDokumentTypId = requestParameters.customDokumentTypId;
+        if (customDokumentTypId === null || customDokumentTypId === undefined) {
+            throw new Error('Required parameter customDokumentTypId was null or undefined when calling uploadCustomGesuchDokumentSB$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling uploadCustomGesuchDokumentSB$.');
+        }
+        let path = `/api/v1/customGesuchDokument/sb/${this.configuration.encodeParam({name: "customDokumentTypId", value: customDokumentTypId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

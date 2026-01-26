@@ -209,6 +209,9 @@
   "shared.dokumente.deleteCustomDokumentTyp.success": "Generisches Dokument gelöscht",
   "shared.dokumente.setToAdditionalDokumenteErhalten": "Unterschriftenblatt erhalten",
 
+  "shared.unauthorized.title": "Zugriff verweigert",
+  "shared.unauthorized.text": "Sie haben keine Berechtigung um diese Seite zu sehen.",
+
   "shared.dashboard.ausbildung.delete": "Ausbildung löschen",
   "shared.dashboard.ausbildung.delete.dialog.title": "Ausbildung löschen",
   "shared.dashboard.ausbildung.delete.dialog.message": "Wollen sie wirklich die Ausbildung löschen? Sie werden alle Daten verlieren.",

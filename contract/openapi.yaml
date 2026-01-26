@@ -27,6 +27,8 @@ tags:
     x-displayName: Delegieren
   - name: Sozialdienst
     x-displayName: Sozialdienst
+  - name: DemoData
+    x-displayName: DemoData
   - name: Datenschutzbrief
     x-displayName: Datenschutzbrief
   - name: Massendruck
@@ -1352,6 +1354,140 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: deleteSozialdienstBenutzer
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data:
+    get:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoDataList'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDemoData
+      summary: Returns a list of available demo data
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      tags:
+        - DemoData
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DemoDataImport'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoDataList'
+          description: Returns the created DemoDataList
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createNewDemoDataImport
+      summary: Creates a new demo data list
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returns the latest demo data file
+      operationId: getDemoDataDokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data/dokument/{dokumentId}/token:
+    get:
+      parameters:
+        - name: dokumentId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: path
+          required: true
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Returns a download token
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDemoDataDokumentDownloadToken
+      summary: get the Token to download the latest DemoData
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data/{demoDataId}:
+    post:
+      parameters:
+        - name: demoDataId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyDemoDataResponse'
+          description: Apply the requested demo data
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: applyDemoData
+      summary: Returns the created data after applying demo data
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6705,6 +6841,826 @@ components:
       allOf:
         - type: object
         - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
+    DemoDataList:
+      required:
+        - importiertVon
+        - letzteAktivitaet
+        - kommentar
+        - documentId
+        - filename
+        - filepath
+        - filesize
+        - demoDatas
+      type: object
+      properties:
+        importiertVon:
+          type: string
+        letzteAktivitaet:
+          type: string
+          format: date-time
+        kommentar:
+          type: string
+        documentId:
+          type: string
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: integer
+        demoDatas:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoDataSlim'
+    DemoDataImport:
+      required:
+        - kommentar
+        - fileUpload
+      type: object
+      properties:
+        kommentar:
+          type: string
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    DemoDataError:
+      required:
+        - internalMessage
+        - errorClass
+      type: object
+      properties:
+        internalMessage:
+          type: string
+        errorClass:
+          type: string
+        cause:
+          type: string
+        validationErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationMessage'
+    DemoDataSlim:
+      required:
+        - id
+        - testFall
+        - name
+        - description
+      type: object
+      properties:
+        id:
+          type: string
+        testFall:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    DemoAusbildung:
+      required:
+        - ausbildungsstaette
+        - ausbildungsgang
+        - berufsbezeichnungFachrichtung
+        - plz
+        - ort
+        - isAusbildungAusland
+        - ausbildungBeginn
+        - ausbildungEnd
+        - pensum
+      type: object
+      properties:
+        ausbildungsstaette:
+          type: string
+        ausbildungsgang:
+          type: string
+        berufsbezeichnungFachrichtung:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        isAusbildungAusland:
+          type: boolean
+        ausbildungNichtGefunden:
+          type: boolean
+        ausbildungBeginn:
+          type: string
+          format: date
+        ausbildungEnd:
+          type: string
+          format: date
+        pensum:
+          $ref: '#/components/schemas/AusbildungsPensum'
+    DemoPersonInAusbildung:
+      required:
+        - sozialversicherungsnummer
+        - anrede
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - identischerZivilrechtlicherWohnsitz
+        - email
+        - telefonnummer
+        - geburtsdatum
+        - zivilstand
+        - nationalitaet
+        - niederlassungsstatus
+        - einreisedatum
+        - heimatort
+      type: object
+      properties:
+        sozialversicherungsnummer:
+          type: string
+        anrede:
+          $ref: '#/components/schemas/Anrede'
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        identischerZivilrechtlicherWohnsitzPLZ:
+          type: string
+        identischerZivilrechtlicherWohnsitzOrt:
+          type: string
+        email:
+          type: string
+          format: email
+        telefonnummer:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        zivilstand:
+          $ref: '#/components/schemas/Zivilstand'
+        nationalitaet:
+          type: string
+        niederlassungsstatus:
+          $ref: '#/components/schemas/Niederlassungsstatus'
+        einreisedatum:
+          type: string
+          format: date
+        heimatort:
+          type: string
+        heimatortPLZ:
+          type: string
+        wohnsitz:
+          $ref: '#/components/schemas/Wohnsitz'
+        wohnsitzAnteilVater:
+          type: integer
+        wohnsitzAnteilMutter:
+          type: integer
+        vormundschaft:
+          type: boolean
+        zustaendigeKESB:
+          $ref: '#/components/schemas/ZustaendigeKESB'
+        sozialhilfebeitraege:
+          type: boolean
+    DemoLebenslaufAusbildung:
+      required:
+        - abschluss
+        - von
+        - bis
+        - wohnsitz
+        - ausbildungAbgeschlossen
+      type: object
+      properties:
+        abschluss:
+          type: string
+        berufsbezeichnungFachrichtung:
+          type: string
+        von:
+          type: string
+          format: date
+        bis:
+          type: string
+          format: date
+        wohnsitz:
+          $ref: '#/components/schemas/WohnsitzKanton'
+        ausbildungAbgeschlossen:
+          type: boolean
+    DemoLebenslaufTaetigkeit:
+      required:
+        - taetigkeitsart
+        - taetigkeitsBeschreibung
+        - von
+        - bis
+        - wohnsitz
+      type: object
+      properties:
+        taetigkeitsart:
+          $ref: '#/components/schemas/Taetigkeitsart'
+        taetigkeitsBeschreibung:
+          type: string
+        von:
+          type: string
+          format: date
+        bis:
+          type: string
+          format: date
+        wohnsitz:
+          $ref: '#/components/schemas/WohnsitzKanton'
+    DemoLebenslauf:
+      required:
+        - ausbildung
+        - taetigkeiten
+      type: object
+      properties:
+        ausbildung:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoLebenslaufAusbildung'
+        taetigkeiten:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoLebenslaufTaetigkeit'
+    DemoPartner:
+      required:
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - geburtsdatum
+        - inAusbildung
+      type: object
+      properties:
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        inAusbildung:
+          type: boolean
+        pensum:
+          $ref: '#/components/schemas/AusbildungsPensum'
+    DemoKind:
+      required:
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnsitzAnteilPia
+        - ausbildungssituation
+        - unterhaltsbeitraege
+        - kinderUndAusbildungszulagen
+        - renten
+        - ergaenzungsleistungen
+        - andereEinnahmen
+      type: object
+      properties:
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        wohnsitzAnteilPia:
+          type: integer
+        ausbildungssituation:
+          $ref: '#/components/schemas/Ausbildungssituation'
+        unterhaltsbeitraege:
+          type: integer
+        kinderUndAusbildungszulagen:
+          type: integer
+        renten:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        andereEinnahmen:
+          type: integer
+    DemoEinnahmenKosten:
+      required:
+        - nettoerwerbseinkommen
+        - unterhaltsbeitraege
+        - zulagen
+        - renten
+        - eoLeistungen
+        - ergaenzungsleistungen
+        - beitraege
+        - einnahmenBGSA
+        - taggelderAHVIV
+        - andereEinnahmen
+        - fahrkosten
+        - vermoegen
+        - steuernKantonGemeinde
+      type: object
+      properties:
+        nettoerwerbseinkommen:
+          type: integer
+        unterhaltsbeitraege:
+          type: integer
+        zulagen:
+          type: integer
+        renten:
+          type: integer
+        eoLeistungen:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        beitraege:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        taggelderAHVIV:
+          type: integer
+        andereEinnahmen:
+          type: integer
+        ausbildungskosten:
+          type: integer
+        betreuungskostenKinder:
+          type: integer
+        fahrkosten:
+          type: integer
+        verpflegungskosten:
+          type: integer
+        auswaertigeMittagessenProWoche:
+          type: integer
+        wohnkosten:
+          type: integer
+        wgWohnend:
+          type: boolean
+        alternativeWohnformWohnend:
+          type: boolean
+        vermoegen:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+    DemoFamiliensituation:
+      required:
+        - elternVerheiratetZusammen
+      type: object
+      properties:
+        elternVerheiratetZusammen:
+          type: boolean
+        gerichtlicheAlimentenregelung:
+          type: boolean
+        werZahltAlimente:
+          $ref: '#/components/schemas/Elternschaftsteilung'
+        mutterWiederverheiratetAlimente:
+          type: boolean
+        vaterWiederverheiratetAlimente:
+          type: boolean
+        elternteilUnbekanntVerstorben:
+          type: boolean
+        mutterVerstorben:
+          type: boolean
+        mutterUnbekannt:
+          type: boolean
+        mutterUnbekanntGrund:
+          $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
+        mutterKeineOptionen:
+          type: boolean
+        mutterWiederverheiratetUnbekannt:
+          type: boolean
+        vaterVerstorben:
+          type: boolean
+        vaterUnbekannt:
+          type: boolean
+        vaterUnbekanntGrund:
+          $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
+        vaterKeineOptionen:
+          type: boolean
+        vaterWiederverheiratetUnbekannt:
+          type: boolean
+        mutterWiederverheiratetUngewiss:
+          type: boolean
+        vaterWiederverheiratetUngewiss:
+          type: boolean
+    DemoElternteil:
+      required:
+        - type
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - identischerZivilrechtlicherWohnsitz
+        - geburtsdatum
+        - telefonnummer
+        - sozialhilfebeitraege
+        - ausweisbFluechtling
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ElternTyp'
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        identischerZivilrechtlicherWohnsitz:
+          type: boolean
+        identischerZivilrechtlicherWohnsitzPLZ:
+          type: string
+        identischerZivilrechtlicherWohnsitzOrt:
+          type: string
+        wohnkosten:
+          type: integer
+        geburtsdatum:
+          type: string
+          format: date
+        telefonnummer:
+          type: string
+        sozialhilfebeitraege:
+          type: boolean
+        ausweisbFluechtling:
+          type: boolean
+    DemoSteuererklaerung:
+      required:
+        - type
+        - steuererklaerungInBern
+        - unterhaltsbeitraege
+        - renten
+        - ergaenzungsleistungen
+        - einnahmenBGSA
+        - andereEinnahmen
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ElternTyp'
+        steuererklaerungInBern:
+          type: boolean
+        unterhaltsbeitraege:
+          type: integer
+        renten:
+          type: integer
+        ergaenzungsleistungen:
+          type: integer
+        einnahmenBGSA:
+          type: integer
+        andereEinnahmen:
+          type: integer
+    DemoSteuerdaten:
+      required:
+        - type
+        - totalEinkuenfte
+        - eigenmietwert
+        - isArbeitsverhaeltnisSelbstaendig
+        - saeule3a
+        - saeule2
+        - vermoegen
+        - steuernKantonGemeinde
+        - steuernBund
+        - fahrkosten
+        - fahrkostenPartner
+        - verpflegung
+        - verpflegungPartner
+        - steuerjahr
+        - veranlagungsStatus
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ElternTyp'
+        totalEinkuenfte:
+          type: integer
+        eigenmietwert:
+          type: integer
+        isArbeitsverhaeltnisSelbstaendig:
+          type: boolean
+        saeule3a:
+          type: integer
+        saeule2:
+          type: integer
+        vermoegen:
+          type: integer
+        steuernKantonGemeinde:
+          type: integer
+        steuernBund:
+          type: integer
+        fahrkosten:
+          type: integer
+        fahrkostenPartner:
+          type: integer
+        verpflegung:
+          type: integer
+        verpflegungPartner:
+          type: integer
+        steuerjahr:
+          type: integer
+        veranlagungsStatus:
+          type: string
+    DemoGeschwister:
+      required:
+        - nachname
+        - vorname
+        - geburtsdatum
+        - wohnsitzBei
+        - ausbildungssituation
+      type: object
+      properties:
+        nachname:
+          type: string
+        vorname:
+          type: string
+        geburtsdatum:
+          type: string
+          format: date
+        wohnsitzBei:
+          $ref: '#/components/schemas/Wohnsitz'
+        wohnsitzAnteilVater:
+          type: integer
+        wohnsitzAnteilMutter:
+          type: integer
+        ausbildungssituation:
+          $ref: '#/components/schemas/Ausbildungssituation'
+    DemoAuszahlung:
+      required:
+        - nachname
+        - vorname
+        - strasse
+        - hausnummer
+        - plz
+        - ort
+        - land
+        - iban
+      type: object
+      properties:
+        nachname:
+          type: string
+        vorname:
+          type: string
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        coAdresse:
+          type: string
+        land:
+          type: string
+        iban:
+          type: string
+    DemoDarlehen:
+      required:
+        - willDarlehen
+        - betragDarlehen
+        - schulden
+        - anzahlBetreibungen
+        - gruendeDarlehen
+      type: object
+      properties:
+        willDarlehen:
+          type: boolean
+        betragDarlehen:
+          type: string
+        schulden:
+          type: string
+        anzahlBetreibungen:
+          type: string
+        gruendeDarlehen:
+          type: object
+          properties:
+            grundNichtBerechtigt:
+              type: boolean
+            grundAusbildungZwoelfJahre:
+              type: boolean
+            grundHoheGebuehren:
+              type: boolean
+            grundAnschaffungenFuerAusbildung:
+              type: boolean
+            grundZweitausbildung:
+              type: boolean
+    DemoData:
+      required:
+        - ausbildung
+        - personInAusbildung
+        - lebenslauf
+        - kinder
+        - einnahmenKosten
+        - familiensituation
+        - elterns
+        - steuererklaerung
+        - steuerdaten
+        - geschwister
+        - auszahlung
+        - darlehen
+      type: object
+      properties:
+        ausbildung:
+          $ref: '#/components/schemas/DemoAusbildung'
+        personInAusbildung:
+          $ref: '#/components/schemas/DemoPersonInAusbildung'
+        lebenslauf:
+          $ref: '#/components/schemas/DemoLebenslauf'
+        partner:
+          $ref: '#/components/schemas/DemoPartner'
+        kinder:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoKind'
+        einnahmenKosten:
+          $ref: '#/components/schemas/DemoEinnahmenKosten'
+        einnahmenKostenPartner:
+          $ref: '#/components/schemas/DemoEinnahmenKosten'
+        familiensituation:
+          $ref: '#/components/schemas/DemoFamiliensituation'
+        elterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoElternteil'
+        steuererklaerung:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoSteuererklaerung'
+        steuerdaten:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoSteuerdaten'
+        geschwister:
+          type: array
+          items:
+            $ref: '#/components/schemas/DemoGeschwister'
+        auszahlung:
+          $ref: '#/components/schemas/DemoAuszahlung'
+        darlehen:
+          $ref: '#/components/schemas/DemoDarlehen'
+        stipendienanspruch:
+          required:
+            - status
+            - betrag
+          type: object
+          properties:
+            status:
+              type: string
+            betrag:
+              type: integer
+    ApplyDemoDataResponse:
+      required:
+        - gesuchId
+        - gesuchTrancheId
+        - gueltigAb
+        - gueltigBis
+        - gesuchStatus
+      type: object
+      properties:
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        gesuchTrancheId:
+          $ref: '#/components/schemas/UUID'
+        gueltigAb:
+          type: string
+          format: date
+        gueltigBis:
+          type: string
+          format: date
+        gesuchStatus:
+          type: string
+    AusbildungsPensum:
+      enum:
+        - VOLLZEIT
+        - TEILZEIT
+      type: string
+    Zivilstand:
+      enum:
+        - LEDIG
+        - VERHEIRATET
+        - KONKUBINAT
+        - EINGETRAGENE_PARTNERSCHAFT
+        - GESCHIEDEN_GERICHTLICH
+        - AUFGELOESTE_PARTNERSCHAFT
+        - VERWITWET
+      type: string
+    Niederlassungsstatus:
+      enum:
+        - SAISONARBEITEND_A
+        - AUFENTHALTSBEWILLIGUNG_B
+        - NIEDERLASSUNGSBEWILLIGUNG_C
+        - PARTNER_ERWERBSTAETIG_UND_KIND_CI
+        - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
+        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
+        - GRENZGAENGIG_G
+        - KURZAUFENTHALT_L
+        - ASYLSUCHEND_N
+        - SCHUTZBEDUERFTIG_S
+        - MELDEPFLICHTIG
+        - DIPLOMATISCHE_FUNKTION
+        - INTERNATIONALE_FUNKTION
+        - NICHT_ZUGETEILT
+      type: string
+    Wohnsitz:
+      enum:
+        - FAMILIE
+        - MUTTER_VATER
+        - EIGENER_HAUSHALT
+      type: string
+    ZustaendigeKESB:
+      enum:
+        - KESB_BERN
+        - KESB_ANDERER_KANTON
+      type: string
+    WohnsitzKanton:
+      enum:
+        - AG
+        - AI
+        - AR
+        - BL
+        - BS
+        - BE
+        - FR
+        - GE
+        - GL
+        - GR
+        - JU
+        - LU
+        - NE
+        - NW
+        - OW
+        - SG
+        - SH
+        - SZ
+        - SO
+        - TI
+        - TG
+        - UR
+        - VD
+        - VS
+        - ZG
+        - ZH
+        - AUSLAND
+      type: string
+    Taetigkeitsart:
+      enum:
+        - ERWERBSTAETIGKEIT
+        - ANDERE_TAETIGKEIT
+        - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
+      type: string
+    Ausbildungssituation:
+      enum:
+        - VORSCHULPFLICHTIG
+        - SCHULPFLICHTIG
+        - IN_AUSBILDUNG
+        - KEINE
+      type: string
+    Elternschaftsteilung:
+      enum:
+        - MUTTER
+        - VATER
+        - GEMEINSAM
+      type: string
+    ElternUnbekanntheitsGrund:
+      enum:
+        - UNBEKANNTER_AUFENTHALTSORT
+        - FEHLENDE_ANERKENNUNG
+      type: string
+    ElternTyp:
+      enum:
+        - VATER
+        - MUTTER
+      type: string
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -6822,11 +7778,6 @@ components:
         - ALLE_DRUCKBAR_DATENSCHUTZBRIEFE
         - MEINE_DRUCKBAR_DATENSCHUTZBRIEFE
       type: string
-    ElternTyp:
-      enum:
-        - VATER
-        - MUTTER
-      type: string
     VerfuegungDokumentTyp:
       enum:
         - BERECHNUNGSBLATT_PIA
@@ -6921,11 +7872,6 @@ components:
             Required wenn andere ausbildungNichtGefunden = false
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
-    AusbildungsPensum:
-      enum:
-        - VOLLZEIT
-        - TEILZEIT
-      type: string
     AusbildungsStatus:
       enum:
         - AKTIV
@@ -8457,45 +9403,6 @@ components:
             $ref: '#/components/schemas/PersonValueItem'
         verpflegungTotal:
           type: integer
-    Niederlassungsstatus:
-      enum:
-        - SAISONARBEITEND_A
-        - AUFENTHALTSBEWILLIGUNG_B
-        - NIEDERLASSUNGSBEWILLIGUNG_C
-        - PARTNER_ERWERBSTAETIG_UND_KIND_CI
-        - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
-        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
-        - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
-        - GRENZGAENGIG_G
-        - KURZAUFENTHALT_L
-        - ASYLSUCHEND_N
-        - SCHUTZBEDUERFTIG_S
-        - MELDEPFLICHTIG
-        - DIPLOMATISCHE_FUNKTION
-        - INTERNATIONALE_FUNKTION
-        - NICHT_ZUGETEILT
-      type: string
-    Zivilstand:
-      enum:
-        - LEDIG
-        - VERHEIRATET
-        - KONKUBINAT
-        - EINGETRAGENE_PARTNERSCHAFT
-        - GESCHIEDEN_GERICHTLICH
-        - AUFGELOESTE_PARTNERSCHAFT
-        - VERWITWET
-      type: string
-    Wohnsitz:
-      enum:
-        - FAMILIE
-        - MUTTER_VATER
-        - EIGENER_HAUSHALT
-      type: string
-    ZustaendigeKESB:
-      enum:
-        - KESB_BERN
-        - KESB_ANDERER_KANTON
-      type: string
     PersonInAusbildungUpdate:
       required:
         - adresse
@@ -8575,17 +9482,6 @@ components:
         - VERSTORBEN
         - UNBEKANNT
         - WEDER_NOCH
-      type: string
-    ElternUnbekanntheitsGrund:
-      enum:
-        - UNBEKANNTER_AUFENTHALTSORT
-        - FEHLENDE_ANERKENNUNG
-      type: string
-    Elternschaftsteilung:
-      enum:
-        - MUTTER
-        - VATER
-        - GEMEINSAM
       type: string
     FamiliensituationUpdate:
       required:
@@ -8686,13 +9582,6 @@ components:
             Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen
             falls Sie zusammen wohnen
           type: integer
-    Ausbildungssituation:
-      enum:
-        - VORSCHULPFLICHTIG
-        - SCHULPFLICHTIG
-        - IN_AUSBILDUNG
-        - KEINE
-      type: string
     GeschwisterUpdate:
       title: Root Type for Geschwister
       required:
@@ -8723,42 +9612,6 @@ components:
           type: number
         nachname:
           type: string
-    WohnsitzKanton:
-      enum:
-        - AG
-        - AI
-        - AR
-        - BL
-        - BS
-        - BE
-        - FR
-        - GE
-        - GL
-        - GR
-        - JU
-        - LU
-        - NE
-        - NW
-        - OW
-        - SG
-        - SH
-        - SZ
-        - SO
-        - TI
-        - TG
-        - UR
-        - VD
-        - VS
-        - ZG
-        - ZH
-        - AUSLAND
-      type: string
-    Taetigkeitsart:
-      enum:
-        - ERWERBSTAETIGKEIT
-        - ANDERE_TAETIGKEIT
-        - BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
-      type: string
     LebenslaufItemUpdate:
       title: Root Type for Lebenslauf
       required:

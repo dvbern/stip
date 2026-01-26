@@ -38,6 +38,7 @@ public final class OidcPermissions {
     public static final String JURIST_GESUCH_UPDATE = "V0_GESUCH_UPDATE_JURIST";
 
     public static final String ADMIN_GESUCH_DELETE = "V0_GESUCH_DELETE_ADMIN";
+    public static final String DEMO_DATA_APPLY = "V0_DEMO_DATA_APPLY";
 
     public static final String AENDERUNG_CREATE = "V0_AENDERUNG_CREATE";
     public static final String AENDERUNG_DELETE = "V0_AENDERUNG_DELETE";

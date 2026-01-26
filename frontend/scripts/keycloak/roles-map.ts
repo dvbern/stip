@@ -1,4 +1,4 @@
-import { Role } from './types';
+import { KnownEnv, Role } from './types';
 
 /**
  * Represents the association between roles and permissions.
@@ -149,3 +149,5 @@ export const PERMISSION_ROLE_LIST = [
     'SEND_EMAIL',
   ],
 ] as const satisfies [Role[], ...string[]][];
+
+export const DEMO_DATA_PERMISSIONS = ['DEMO_DATA_APPLY'] as const;

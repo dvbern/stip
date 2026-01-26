@@ -8,8 +8,8 @@ export const appRoutes: Route[] = [
   {
     path: 'unauthorized',
     loadChildren: () =>
-      import('@dv/sachbearbeitung-app/feature/unauthorized').then(
-        (m) => m.sachbearbeitungAppFeatureUnauthorizedRoutes,
+      import('@dv/shared/feature/unauthorized').then(
+        (m) => m.sharedFeatureUnauthorizedRoutes,
       ),
   },
   {

@@ -411,7 +411,6 @@ export class SharedPatternDarlehenFormComponent {
     }
 
     SharedUiKommentarDialogComponent.open(this.dialog, {
-      entityId: darlehen.id,
       titleKey: 'shared.form.darlehen.zurueckweisen.dialog.title',
       messageKey: 'shared.form.darlehen.zurueckweisen.dialog.message',
       placeholderKey: 'shared.form.darlehen.zurueckweisen.dialog.placeholder',

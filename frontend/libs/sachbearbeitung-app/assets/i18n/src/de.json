@@ -839,8 +839,5 @@
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Steuerdaten mittels Nesko aktualisieren",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Wollen sie wirklich die Daten für das definierte Jahr aus Nesko laden?<br>Die Formularfelder werden überschrieben.",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label": "Steuerjahr um die Daten aus Nesko zu laden",
-  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Daten laden",
-
-  "sachbearbeitung-app.unauthorized.title": "Zugriff verweigert",
-  "sachbearbeitung-app.unauthorized.text": "Sie haben keine Berechtigung um diese Seite zu sehen."
+  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Daten laden"
 }

@@ -89,6 +89,18 @@ export class TenantService {
         return httpParams;
     }
 
+    public getCurrentTenantPath = () => {
+        let path = `/api/v1/tenant/current`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Current Tenant
      * &#x60;Tenant&#x60; based on the current Request

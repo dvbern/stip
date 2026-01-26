@@ -5,6 +5,11 @@ import { SharedModelState } from '@dv/shared/model/state-colors';
 
 export const GESUCHSTELLER_ROLES = ['V0_Gesuchsteller'] as const;
 
+export const SPECIAL_PERMISSIONS = [
+  'V0_Super-User',
+  'V0_DEMO_DATA_APPLY',
+] as const;
+
 export const BENUTZER_ROLES = [
   'V0_Sachbearbeiter-Admin',
   'V0_Sachbearbeiter',
@@ -19,11 +24,13 @@ export const SOZIALDIENST_BENUTZER_ROLES = [
   'V0_Sozialdienst-Mitarbeiter',
 ] as const;
 
+export type SpecialPermission = (typeof SPECIAL_PERMISSIONS)[number];
 export type BenutzerRole = (typeof BENUTZER_ROLES)[number];
 export type SozialdienstBenutzerRole =
   (typeof SOZIALDIENST_BENUTZER_ROLES)[number];
 export type GesuchstellerRole = (typeof GESUCHSTELLER_ROLES)[number];
 export type AvailableBenutzerRole =
+  | SpecialPermission
   | BenutzerRole
   | SozialdienstBenutzerRole
   | GesuchstellerRole;

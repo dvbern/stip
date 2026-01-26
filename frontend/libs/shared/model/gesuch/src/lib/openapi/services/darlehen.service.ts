@@ -221,6 +221,26 @@ export class DarlehenService {
         return httpParams;
     }
 
+    public createDarlehenBuchhaltungSaldokorrekturPath = (requestParameters: DarlehenServiceCreateDarlehenBuchhaltungSaldokorrekturRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling createDarlehenBuchhaltungSaldokorrektur$.');
+        }
+        const darlehenBuchhaltungSaldokorrektur = requestParameters.darlehenBuchhaltungSaldokorrektur;
+        if (darlehenBuchhaltungSaldokorrektur === null || darlehenBuchhaltungSaldokorrektur === undefined) {
+            throw new Error('Required parameter darlehenBuchhaltungSaldokorrektur was null or undefined when calling createDarlehenBuchhaltungSaldokorrektur$.');
+        }
+        let path = `/api/v1/darlehen/buchhaltung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create a darlehen buchhaltungsentry from a saldokorrektur
      * @param requestParameters
@@ -306,6 +326,30 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createDarlehenDokumentPath = (requestParameters: DarlehenServiceCreateDarlehenDokumentRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling createDarlehenDokument$.');
+        }
+        const dokumentType = requestParameters.dokumentType;
+        if (dokumentType === null || dokumentType === undefined) {
+            throw new Error('Required parameter dokumentType was null or undefined when calling createDarlehenDokument$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createDarlehenDokument$.');
+        }
+        let path = `/api/v1/darlehen/dokument/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -410,6 +454,22 @@ export class DarlehenService {
         );
     }
 
+    public createFreiwilligDarlehenPath = (requestParameters: DarlehenServiceCreateFreiwilligDarlehenRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling createFreiwilligDarlehen$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create a new Darlehen
      * @param requestParameters
@@ -483,6 +543,22 @@ export class DarlehenService {
         );
     }
 
+    public deleteDarlehenDokumentPath = (requestParameters: DarlehenServiceDeleteDarlehenDokumentRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteDarlehenDokument$.');
+        }
+        let path = `/api/v1/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * deletes a Darlehen Dokument
      * @param requestParameters
@@ -553,6 +629,22 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public deleteFreiwilligDarlehenGsPath = (requestParameters: DarlehenServiceDeleteFreiwilligDarlehenGsRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling deleteFreiwilligDarlehenGs$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -628,6 +720,26 @@ export class DarlehenService {
         );
     }
 
+    public downloadDarlehenDokumentPath = (requestParameters: DarlehenServiceDownloadDarlehenDokumentRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadDarlehenDokument$.');
+        }
+        let path = `/api/v1/darlehen/dokument/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Download Darlehen Dokument
      * @param requestParameters
@@ -694,6 +806,22 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public freiwilligDarlehenAblehenPath = (requestParameters: DarlehenServiceFreiwilligDarlehenAblehenRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenAblehen$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/ablehnen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -769,6 +897,22 @@ export class DarlehenService {
         );
     }
 
+    public freiwilligDarlehenAkzeptierenPath = (requestParameters: DarlehenServiceFreiwilligDarlehenAkzeptierenRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenAkzeptieren$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/akzeptieren`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Change darlehen status to akzeptiert
      * @param requestParameters
@@ -840,6 +984,22 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public freiwilligDarlehenEingebenPath = (requestParameters: DarlehenServiceFreiwilligDarlehenEingebenRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenEingeben$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/eingeben`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -915,6 +1075,22 @@ export class DarlehenService {
         );
     }
 
+    public freiwilligDarlehenFreigebenPath = (requestParameters: DarlehenServiceFreiwilligDarlehenFreigebenRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenFreigeben$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/freigeben`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Change darlehen status to freigegeben
      * @param requestParameters
@@ -986,6 +1162,26 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public freiwilligDarlehenUpdateGsPath = (requestParameters: DarlehenServiceFreiwilligDarlehenUpdateGsRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenUpdateGs$.');
+        }
+        const freiwilligDarlehenUpdateGs = requestParameters.freiwilligDarlehenUpdateGs;
+        if (freiwilligDarlehenUpdateGs === null || freiwilligDarlehenUpdateGs === undefined) {
+            throw new Error('Required parameter freiwilligDarlehenUpdateGs was null or undefined when calling freiwilligDarlehenUpdateGs$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1075,6 +1271,26 @@ export class DarlehenService {
         );
     }
 
+    public freiwilligDarlehenUpdateSbPath = (requestParameters: DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenUpdateSb$.');
+        }
+        const freiwilligDarlehenUpdateSb = requestParameters.freiwilligDarlehenUpdateSb;
+        if (freiwilligDarlehenUpdateSb === null || freiwilligDarlehenUpdateSb === undefined) {
+            throw new Error('Required parameter freiwilligDarlehenUpdateSb was null or undefined when calling freiwilligDarlehenUpdateSb$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Update darlehen as sb
      * @param requestParameters
@@ -1160,6 +1376,26 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public freiwilligDarlehenZurueckweisenPath = (requestParameters: DarlehenServiceFreiwilligDarlehenZurueckweisenRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenZurueckweisen$.');
+        }
+        const kommentar = requestParameters.kommentar;
+        if (kommentar === null || kommentar === undefined) {
+            throw new Error('Required parameter kommentar was null or undefined when calling freiwilligDarlehenZurueckweisen$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/zurueckweisen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1249,6 +1485,22 @@ export class DarlehenService {
         );
     }
 
+    public getAllFreiwilligDarlehenGsPath = (requestParameters: DarlehenServiceGetAllFreiwilligDarlehenGsRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAllFreiwilligDarlehenGs$.');
+        }
+        let path = `/api/v1/darlehen/getAllDarlehenGs/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Return all darlehen for a given fallId
      * @param requestParameters
@@ -1320,6 +1572,22 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getAllFreiwilligDarlehenSbPath = (requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
+        }
+        let path = `/api/v1/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1395,6 +1663,22 @@ export class DarlehenService {
         );
     }
 
+    public getDarlehenBuchhaltungEntrysPath = (requestParameters: DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getDarlehenBuchhaltungEntrys$.');
+        }
+        let path = `/api/v1/darlehen/buchhaltung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Gets all darlehen buchhaltungsentrys
      * @param requestParameters
@@ -1466,6 +1750,26 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getDarlehenDokumentPath = (requestParameters: DarlehenServiceGetDarlehenDokumentRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling getDarlehenDokument$.');
+        }
+        const dokumentType = requestParameters.dokumentType;
+        if (dokumentType === null || dokumentType === undefined) {
+            throw new Error('Required parameter dokumentType was null or undefined when calling getDarlehenDokument$.');
+        }
+        let path = `/api/v1/darlehen/dokument/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentType", value: dokumentType, in: "path", style: "simple", explode: false, dataType: "DarlehenDokumentType", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1545,6 +1849,22 @@ export class DarlehenService {
         );
     }
 
+    public getDarlehenDownloadTokenPath = (requestParameters: DarlehenServiceGetDarlehenDownloadTokenRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDarlehenDownloadToken$.');
+        }
+        let path = `/api/v1/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * get Token to downlaod Darlehen Dokument
      * @param requestParameters
@@ -1616,6 +1936,88 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getFreiwilligDarlehenDashboardSbPath = (requestParameters: DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams) => {
+        const getFreiwilligDarlehenSbQueryType = requestParameters.getFreiwilligDarlehenSbQueryType;
+        if (getFreiwilligDarlehenSbQueryType === null || getFreiwilligDarlehenSbQueryType === undefined) {
+            throw new Error('Required parameter getFreiwilligDarlehenSbQueryType was null or undefined when calling getFreiwilligDarlehenDashboardSb$.');
+        }
+        const fallNummer = requestParameters.fallNummer;
+        const piaNachname = requestParameters.piaNachname;
+        const piaVorname = requestParameters.piaVorname;
+        const piaGeburtsdatum = requestParameters.piaGeburtsdatum;
+        const status = requestParameters.status;
+        const bearbeiter = requestParameters.bearbeiter;
+        const letzteAktivitaetFrom = requestParameters.letzteAktivitaetFrom;
+        const letzteAktivitaetTo = requestParameters.letzteAktivitaetTo;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getFreiwilligDarlehenDashboardSb$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getFreiwilligDarlehenDashboardSb$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+        let path = `/api/v1/darlehen/dashboard/${this.configuration.encodeParam({name: "getFreiwilligDarlehenSbQueryType", value: getFreiwilligDarlehenSbQueryType, in: "path", style: "simple", explode: false, dataType: "GetFreiwilligDarlehenSbQueryType", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (fallNummer !== undefined && fallNummer !== null) {
+          queryParams.append('fallNummer', fallNummer.toString());
+        }
+
+        if (piaNachname !== undefined && piaNachname !== null) {
+          queryParams.append('piaNachname', piaNachname.toString());
+        }
+
+        if (piaVorname !== undefined && piaVorname !== null) {
+          queryParams.append('piaVorname', piaVorname.toString());
+        }
+
+        if (piaGeburtsdatum !== undefined && piaGeburtsdatum !== null) {
+          queryParams.append('piaGeburtsdatum', piaGeburtsdatum.toString());
+        }
+
+        if (status !== undefined && status !== null) {
+          queryParams.append('status', status.toString());
+        }
+
+        if (bearbeiter !== undefined && bearbeiter !== null) {
+          queryParams.append('bearbeiter', bearbeiter.toString());
+        }
+
+        if (letzteAktivitaetFrom !== undefined && letzteAktivitaetFrom !== null) {
+          queryParams.append('letzteAktivitaetFrom', letzteAktivitaetFrom.toString());
+        }
+
+        if (letzteAktivitaetTo !== undefined && letzteAktivitaetTo !== null) {
+          queryParams.append('letzteAktivitaetTo', letzteAktivitaetTo.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1760,6 +2162,22 @@ export class DarlehenService {
         );
     }
 
+    public getFreiwilligDarlehenGsPath = (requestParameters: DarlehenServiceGetFreiwilligDarlehenGsRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling getFreiwilligDarlehenGs$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Return active darlehen darlehen if exists or else null
      * @param requestParameters
@@ -1831,6 +2249,22 @@ export class DarlehenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getFreiwilligDarlehenSbPath = (requestParameters: DarlehenServiceGetFreiwilligDarlehenSbRequestParams) => {
+        const darlehenId = requestParameters.darlehenId;
+        if (darlehenId === null || darlehenId === undefined) {
+            throw new Error('Required parameter darlehenId was null or undefined when calling getFreiwilligDarlehenSb$.');
+        }
+        let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

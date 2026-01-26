@@ -34,10 +34,10 @@ public class EinnahmenKostenPartnerNeglectedFieldsNullConstraintValidator
 
     @Override
     public boolean isValid(GesuchFormular gesuchFormular, ConstraintValidatorContext context) {
-
         if (gesuchFormular.getEinnahmenKostenPartner() == null) {
             return true;
         }
+
         final var einnahmeKostenPartner = gesuchFormular.getEinnahmenKostenPartner();
         return Objects.isNull(einnahmeKostenPartner.getAusbildungskosten())
         && Objects.isNull(einnahmeKostenPartner.getWohnkosten())

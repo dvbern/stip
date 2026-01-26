@@ -94,6 +94,26 @@ export class ElternService {
         return httpParams;
     }
 
+    public setVersteckteElternPath = (requestParameters: ElternServiceSetVersteckteElternRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling setVersteckteEltern$.');
+        }
+        const elternTyp = requestParameters.elternTyp;
+        if (elternTyp === null || elternTyp === undefined) {
+            throw new Error('Required parameter elternTyp was null or undefined when calling setVersteckteEltern$.');
+        }
+        let path = `/api/v1/setVersteckteEltern/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Set the list of versteckte Eltern for the given gesuchTrancheId
      * @param requestParameters

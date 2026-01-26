@@ -315,7 +315,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
       comment = (
         await firstValueFrom(
           SharedUiKommentarDialogComponent.open(this.dialog, {
-            entityId: aenderungId,
             titleKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.title',
             messageKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.description',
             labelKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label',

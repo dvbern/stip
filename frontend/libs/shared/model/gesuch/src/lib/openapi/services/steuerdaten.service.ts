@@ -104,6 +104,22 @@ export class SteuerdatenService {
         return httpParams;
     }
 
+    public getSteuerdatenPath = (requestParameters: SteuerdatenServiceGetSteuerdatenRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getSteuerdaten$.');
+        }
+        let path = `/api/v1/steuerdaten/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert die Steuerdaten der gegebenen gesuchTrancheId.
      * @param requestParameters
@@ -175,6 +191,26 @@ export class SteuerdatenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateSteuerdatenPath = (requestParameters: SteuerdatenServiceUpdateSteuerdatenRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdaten$.');
+        }
+        const steuerdaten = requestParameters.steuerdaten;
+        if (steuerdaten === null || steuerdaten === undefined) {
+            throw new Error('Required parameter steuerdaten was null or undefined when calling updateSteuerdaten$.');
+        }
+        let path = `/api/v1/steuerdaten/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -262,6 +298,26 @@ export class SteuerdatenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateSteuerdatenFromNeskoPath = (requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams) => {
+        const gesuchTrancheId = requestParameters.gesuchTrancheId;
+        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromNesko$.');
+        }
+        const neskoGetSteuerdatenRequest = requestParameters.neskoGetSteuerdatenRequest;
+        if (neskoGetSteuerdatenRequest === null || neskoGetSteuerdatenRequest === undefined) {
+            throw new Error('Required parameter neskoGetSteuerdatenRequest was null or undefined when calling updateSteuerdatenFromNesko$.');
+        }
+        let path = `/api/v1/steuerdaten/nesko/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

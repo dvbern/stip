@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.steuererklaerung.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,9 +28,13 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Audited
 @Entity
@@ -41,6 +46,9 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Steuererklaerung extends AbstractMandantEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
@@ -51,23 +59,28 @@ public class Steuererklaerung extends AbstractMandantEntity {
     @Column(name = "steuererklaerung_in_bern", nullable = false)
     private Boolean steuererklaerungInBern;
 
-    @Column(name = "ergaenzungsleistungen")
+    @NullableUnlessGenerated
+    @Column(name = "ergaenzungsleistungen", nullable = true)
     @Min(0)
     private Integer ergaenzungsleistungen;
 
-    @Column(name = "unterhaltsbeitraege")
+    @NullableUnlessGenerated
+    @Column(name = "unterhaltsbeitraege", nullable = true)
     @Min(0)
     private Integer unterhaltsbeitraege;
 
-    @Column(name = "renten")
+    @NullableUnlessGenerated
+    @Column(name = "renten", nullable = true)
     @Min(0)
     private Integer renten;
 
-    @Column(name = "einnahmen_bgsa")
+    @NullableUnlessGenerated
+    @Column(name = "einnahmen_bgsa", nullable = true)
     @Min(0)
     private Integer einnahmenBGSA;
 
-    @Column(name = "andere_einnahmen")
+    @NullableUnlessGenerated
+    @Column(name = "andere_einnahmen", nullable = true)
     @Min(0)
     private Integer andereEinnahmen;
 }

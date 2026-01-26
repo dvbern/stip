@@ -1,5 +1,9 @@
 import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
-import { AppType } from '@dv/shared/model/config';
+import {
+  AppType,
+  BusinessAppType,
+  ensureIsBusinessAppType,
+} from '@dv/shared/model/config';
 import {
   DelegierungSlim,
   GesuchTrancheStatus,
@@ -74,8 +78,8 @@ const parsePermissions = (permission: PermissionFlags) => {
   );
 };
 
-const GS_APP = 'gesuch-app' satisfies AppType;
-const SB_APP = 'sachbearbeitung-app' satisfies AppType;
+const GS_APP = 'gesuch-app' satisfies BusinessAppType;
+const SB_APP = 'sachbearbeitung-app' satisfies BusinessAppType;
 
 const perm = (flags: PermissionFlags, roles: ShortRole[]) => {
   return (rolesMap: RolesMap): PermissionFlags =>
@@ -88,10 +92,10 @@ type PermissionCheck = ReturnType<typeof perm>;
 /**
  * Define the permissions for the gesuch based on the status.
  *
- * * Format is: { [Gesuchstatus]: { [AppType]: 'WV  ' | 'W   ' | ..., ... other AppTypes } }
+ * * Format is: { [Gesuchstatus]: { [BusinessAppType]: 'WV  ' | 'W   ' | ..., ... other BusinessAppType } }
  */
 // prettier-ignore
-export const permissionTableByAppType = {
+export const permissionTableByBusinessAppType = {
   IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF    ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
   EINGEREICHT                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
   ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
@@ -117,15 +121,15 @@ export const permissionTableByAppType = {
   VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
   VERFUEGT                         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
   NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
-} as const satisfies Record<Gesuchstatus, Record<AppType, PermissionCheck>>;
+} as const satisfies Record<Gesuchstatus, Record<BusinessAppType, PermissionCheck>>;
 
 /**
- * Similar as `permissionTableByAppType` but for the tranches
+ * Similar as `permissionTableByBusinessAppType` but for the tranches
  *
- * @see {@link permissionTableByAppType}
+ * @see {@link permissionTableByBusinessAppType}
  */
 // prettier-ignore
-export const trancheReadWritestatusByAppType = {
+export const trancheReadWritestatusByBusinessAppType = {
   IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF    ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
   UEBERPRUEFEN:       { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('WD  A  ', ['sb']) },
   FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D     ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
@@ -134,7 +138,7 @@ export const trancheReadWritestatusByAppType = {
   MANUELLE_AENDERUNG: { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
 } as const satisfies Record<
   GesuchTrancheStatus,
-  Record<AppType, PermissionCheck>
+  Record<BusinessAppType, PermissionCheck>
 >;
 
 /**
@@ -148,6 +152,8 @@ export const preparePermissions = (
 ) => {
   if (!gesuch || !appType)
     return { readonly: false, permissions: {} as PermissionMap };
+
+  ensureIsBusinessAppType(appType);
   const getPermissions = {
     TRANCHE: () => getGesuchPermissions(gesuch, appType, rolesMap),
     AENDERUNG: () => getTranchePermissions(gesuch, appType, rolesMap),
@@ -176,8 +182,9 @@ export const getGesuchPermissions = (
 ): { permissions: PermissionMap; status?: Gesuchstatus } => {
   if (!gesuch || !appType) return { permissions: {} };
 
+  ensureIsBusinessAppType(appType);
   const state =
-    permissionTableByAppType[gesuch.gesuchStatus][appType](rolesMap);
+    permissionTableByBusinessAppType[gesuch.gesuchStatus][appType](rolesMap);
   const permissions = parsePermissions(state);
   return {
     permissions: applyDelegatedPermission(
@@ -203,10 +210,11 @@ export const getTranchePermissions = (
 ): { permissions: PermissionMap; status?: GesuchTrancheStatus } => {
   if (!gesuch || !appType) return { permissions: {} };
 
+  ensureIsBusinessAppType(appType);
   const state =
-    trancheReadWritestatusByAppType[gesuch.gesuchTrancheToWorkWith.status][
-      appType
-    ](rolesMap);
+    trancheReadWritestatusByBusinessAppType[
+      gesuch.gesuchTrancheToWorkWith.status
+    ][appType](rolesMap);
   const permissions = parsePermissions(state);
   return {
     permissions: applyDelegatedPermission(
@@ -230,6 +238,7 @@ export const isNotReadonly = (
   rolesMap: RolesMap,
   delegierung: DelegierungSlim | boolean | undefined,
 ) => {
+  ensureIsBusinessAppType(appType);
   switch (appType) {
     case 'sachbearbeitung-app':
       return (
