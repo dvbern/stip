@@ -186,7 +186,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         }
     }
 
-    private void canGetVerfuegung(UUID verfuegungDokumentId) {
+    private void canGetDarlehenVerfuegung(UUID verfuegungDokumentId) {
         darlehenBuchhaltungEntryRepository.getByVerfuegungDokumentId(verfuegungDokumentId).orElseThrow();
         final var benutzer = benutzerService.getCurrentBenutzer();
         if (!isSachbearbeiter(benutzer)) {
@@ -201,13 +201,13 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGetDarlehenDokumentByDokumentId(UUID dokumentId) {
+    public void canGetDarlehenDokumentOrDarlehenVerfuegungByDokumentId(UUID dokumentId) {
         final var darlehenDokumentOpt = freiwilligDarlehenRepository.getByDokumentId(dokumentId);
         if (darlehenDokumentOpt.isPresent()) {
             canGetDarlehenDokument(darlehenDokumentOpt.get());
             return;
         }
-        canGetVerfuegung(dokumentId);
+        canGetDarlehenVerfuegung(dokumentId);
     }
 
     @Transactional

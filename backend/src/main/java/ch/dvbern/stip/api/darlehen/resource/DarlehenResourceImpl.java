@@ -56,11 +56,11 @@ import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_DELETE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_FREIGABESTELLE;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_READ;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_UPDATE_GS;
-import static ch.dvbern.stip.api.common.util.OidcPermissions.DARLEHEN_UPDATE_SB;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_DELETE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_FREIGABESTELLE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_GS;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_SB;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -75,21 +75,21 @@ public class DarlehenResourceImpl implements DarlehenResource {
     private final DarlehenAuthorizer darlehenAuthorizer;
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenDto getFreiwilligDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenGs(darlehenId);
         return darlehenService.getDarlehen(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenDto getFreiwilligDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehen(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(
         GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,
         Integer page,
@@ -124,49 +124,49 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public FreiwilligDarlehenDto createFreiwilligDarlehen(UUID fallId) {
         darlehenAuthorizer.canCreateDarlehen(fallId);
         return darlehenService.createDarlehen(fallId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_FREIGABESTELLE)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_FREIGABESTELLE)
     public FreiwilligDarlehenDto freiwilligDarlehenAblehen(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
         return darlehenService.darlehenAblehnen(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_FREIGABESTELLE)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_FREIGABESTELLE)
     public FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
         return darlehenService.darlehenAkzeptieren(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public FreiwilligDarlehenDto freiwilligDarlehenEingeben(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenEingeben(darlehenId);
         return darlehenService.darlehenEingeben(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
     public FreiwilligDarlehenDto freiwilligDarlehenFreigeben(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenFreigeben(darlehenId);
         return darlehenService.darlehenFreigeben(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
     public FreiwilligDarlehenDto freiwilligDarlehenZurueckweisen(UUID darlehenId, KommentarDto kommentar) {
         darlehenAuthorizer.canDarlehenZurueckweisen(darlehenId);
         return darlehenService.darlehenZurueckweisen(darlehenId, kommentar);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public FreiwilligDarlehenDto freiwilligDarlehenUpdateGs(
         UUID darlehenId,
         FreiwilligDarlehenUpdateGsDto darlehenUpdateGsDto
@@ -176,14 +176,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_DELETE)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_DELETE)
     public void deleteFreiwilligDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenUpdateGs(darlehenId);
         darlehenService.deleteDarlehen(darlehenId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
     public FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(
         UUID darlehenId,
         FreiwilligDarlehenUpdateSbDto darlehenUpdateSbDto
@@ -193,7 +193,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_SB)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
     public DarlehenBuchhaltungEntryDto createDarlehenBuchhaltungSaldokorrektur(
         UUID gesuchId,
         DarlehenBuchhaltungSaldokorrekturDto darlehenBuchhaltungSaldokorrekturDto
@@ -204,7 +204,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Blocking
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public Uni<Response> createDarlehenDokument(
         UUID darlehenId,
         DarlehenDokumentType dokumentTyp,
@@ -215,7 +215,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public NullableDarlehenDokumentDto getDarlehenDokument(UUID darlehenId, DarlehenDokumentType dokumentTyp) {
         darlehenAuthorizer.canGetDarlehenDokument(darlehenId);
         return darlehenService.getDarlehenDokument(darlehenId, dokumentTyp);
@@ -235,30 +235,30 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getDarlehenAllSb(gesuchId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenBuchhaltungEntrys();
         return darlehenService.getDarlehenBuchhaltungEntryOverviewByFallId(gesuchId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenByFallId(fallId);
         return darlehenService.getDarlehenAllGs(fallId);
     }
 
     @Override
-    @RolesAllowed(DARLEHEN_READ)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FileDownloadTokenDto getDarlehenDownloadToken(UUID dokumentId) {
-        darlehenAuthorizer.canGetDarlehenDokumentByDokumentId(dokumentId);
+        darlehenAuthorizer.canGetDarlehenDokumentOrDarlehenVerfuegungByDokumentId(dokumentId);
 
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
@@ -270,7 +270,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
 
     @Blocking
     @Override
-    @RolesAllowed(DARLEHEN_UPDATE_GS)
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public void deleteDarlehenDokument(UUID dokumentId) {
         darlehenAuthorizer.canDeleteDarlehenDokument(dokumentId);
         darlehenService.removeDokument(dokumentId);

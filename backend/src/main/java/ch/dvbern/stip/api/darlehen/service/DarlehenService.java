@@ -598,10 +598,7 @@ public class DarlehenService {
             .filter(darlehenBuchhaltungEntry -> Objects.nonNull(darlehenBuchhaltungEntry.getBetrag()))
             .toList();
         final Integer total = nonNullBetragEntrys.stream()
-            .map(darlehenBuchhaltungEntry -> {
-                assert darlehenBuchhaltungEntry.getBetrag() != null;
-                return darlehenBuchhaltungEntry.getBetrag();
-            })
+            .map(DarlehenBuchhaltungEntry::getBetrag)
             .mapToInt(Integer::intValue)
             .sum();
 
@@ -610,10 +607,7 @@ public class DarlehenService {
                 darlehenBuchhaltungEntry -> (darlehenBuchhaltungEntry
                     .getKategorie() == DarlehenBuchhaltungEntryKategorie.FREIWILLIG)
             )
-            .map(darlehenBuchhaltungEntry -> {
-                assert darlehenBuchhaltungEntry.getBetrag() != null;
-                return darlehenBuchhaltungEntry.getBetrag();
-            })
+            .map(DarlehenBuchhaltungEntry::getBetrag)
             .mapToInt(Integer::intValue)
             .sum();
 
@@ -622,10 +616,7 @@ public class DarlehenService {
                 darlehenBuchhaltungEntry -> (darlehenBuchhaltungEntry
                     .getKategorie() == DarlehenBuchhaltungEntryKategorie.GESETZLICH)
             )
-            .map(darlehenBuchhaltungEntry -> {
-                assert darlehenBuchhaltungEntry.getBetrag() != null;
-                return darlehenBuchhaltungEntry.getBetrag();
-            })
+            .map(DarlehenBuchhaltungEntry::getBetrag)
             .mapToInt(Integer::intValue)
             .sum();
 

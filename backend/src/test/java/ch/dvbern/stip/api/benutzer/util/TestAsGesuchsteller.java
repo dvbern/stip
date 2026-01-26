@@ -62,9 +62,9 @@ import static ch.dvbern.stip.api.util.TestConstants.GESUCHSTELLER_TEST_ID;
         OidcPermissions.AUSZAHLUNG_CREATE,
         OidcPermissions.AUSZAHLUNG_UPDATE,
         OidcPermissions.AUSZAHLUNG_READ,
-        OidcPermissions.DARLEHEN_READ,
-        OidcPermissions.DARLEHEN_UPDATE_GS,
-        OidcPermissions.DARLEHEN_DELETE,
+        OidcPermissions.FREIWILLIG_DARLEHEN_READ,
+        OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_GS,
+        OidcPermissions.FREIWILLIG_DARLEHEN_DELETE,
         "default-roles-bern"
     }
 )

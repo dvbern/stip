@@ -184,19 +184,22 @@ public class DeleteChangedDocumentsUtil {
     }
 
     List<DokumentTyp> getDocumentsToDeleteForDarlehen(
-        final FreiwilligDarlehenDto newDarlehen,
+        final FreiwilligDarlehenDto newFreiwilligDarlehen,
         final FreiwilligDarlehen oldFreiwilligDarlehen
     ) {
-        if (newDarlehen == null || oldFreiwilligDarlehen == null) {
+        if (newFreiwilligDarlehen == null || oldFreiwilligDarlehen == null) {
             return List.of();
         }
 
         final var toDelete = new ArrayList<DokumentTyp>();
-        // if (
-        // hasChangedAndNewIsGreaterThanZero(oldDarlehen.getAnzahlBetreibungen(), newDarlehen.getAnzahlBetreibungen())
-        // ) {
-        // toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
-        // }
+        if (
+            hasChangedAndNewIsGreaterThanZero(
+                oldFreiwilligDarlehen.getAnzahlBetreibungen(),
+                newFreiwilligDarlehen.getAnzahlBetreibungen()
+            )
+        ) {
+            toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
+        }
 
         return toDelete;
     }
