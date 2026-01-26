@@ -159,8 +159,13 @@ public class BerechnungService {
         final int majorVersion,
         final int minorVersion
     ) {
+        final var gesuchsperiode = gesuchTranche.getGesuch().getGesuchsperiode();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var steuerdaten = gesuchFormular.getSteuerdaten();
+        final var yearRange = "%s/%s".formatted(
+            gesuchsperiode.getGesuchsperiodeStart().getYear(),
+            gesuchsperiode.getGesuchsperiodeStopp().getYear()
+        );
 
         List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
             gesuchFormular.getGeschwisters()
@@ -242,6 +247,7 @@ public class BerechnungService {
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
+                        yearRange,
                         gesuchTranche.getId(),
                         BigDecimal.ONE,
                         berechnungsStammdatenFromRequest(
@@ -293,6 +299,7 @@ public class BerechnungService {
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
+                        yearRange,
                         gesuchTranche.getId(),
                         kinderProzenteNormalized,
                         berechnungsStammdatenFromRequest(
