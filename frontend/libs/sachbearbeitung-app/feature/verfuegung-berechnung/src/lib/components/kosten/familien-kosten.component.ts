@@ -76,16 +76,15 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="
           t('integrationszulage', {
-            anzahlKinderInAusbildung: budget.anzahlKinderInAusbildung,
+            integrationszulageAnzahl: kosten.integrationszulageAnzahl,
           })
         "
         [infoSig]="
           t('integrationszulage.info', {
-            einkommensfreibetrag:
-              stammdatenSig().einkommensfreibetrag | formatChf,
+            abzugslimite: stammdatenSig().abzugslimite | formatChf,
           })
         "
-        [amountSig]="kosten.integrationszulage | formatChfPositive"
+        [amountSig]="kosten.integrationszulageTotal | formatChfPositive"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)

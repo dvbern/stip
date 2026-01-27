@@ -52,7 +52,7 @@ public class DokumentAuthorizer extends BaseAuthorizer {
         final var fall = dokument.getGesuchDokument().getGesuchTranche().getGesuch().getAusbildung().getFall();
 
         if (
-            AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+            AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 fall,
                 currentBenutzer,
                 sozialdienstService

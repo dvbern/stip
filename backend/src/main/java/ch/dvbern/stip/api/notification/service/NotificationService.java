@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.darlehen.entity.Darlehen;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -49,34 +49,46 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void createDarlehenAbgelehntNotification(final Darlehen darlehen) {
-        createDarlehenNotification(NotificationType.DARLEHEN_ABGELEHNT, darlehen, Optional.empty());
+    public void createDarlehenAbgelehntNotification(final FreiwilligDarlehen freiwilligDarlehen) {
+        createDarlehenNotification(NotificationType.DARLEHEN_ABGELEHNT, freiwilligDarlehen, Optional.empty());
     }
 
     @Transactional
-    public void createDarlehenAkzeptiertNotification(final Darlehen darlehen) {
-        createDarlehenNotification(NotificationType.DARLEHEN_AKZEPTIERT, darlehen, Optional.empty());
+    public void createDarlehenAkzeptiertNotification(final FreiwilligDarlehen freiwilligDarlehen) {
+        createDarlehenNotification(NotificationType.DARLEHEN_AKZEPTIERT, freiwilligDarlehen, Optional.empty());
     }
 
     @Transactional
-    public void createDarlehenEingegebenNotification(final Darlehen darlehen) {
-        createDarlehenNotification(NotificationType.DARLEHEN_EINGEGEBEN, darlehen, Optional.empty());
+    public void createDarlehenEingegebenNotification(final FreiwilligDarlehen freiwilligDarlehen) {
+        createDarlehenNotification(NotificationType.DARLEHEN_EINGEGEBEN, freiwilligDarlehen, Optional.empty());
     }
 
     @Transactional
-    public void createDarlehenZurueckgewiesenNotification(final Darlehen darlehen, String kommentar) {
-        createDarlehenNotification(NotificationType.DARLEHEN_ZURUECKGEWIESEN, darlehen, Optional.of(kommentar));
+    public void createDarlehenZurueckgewiesenNotification(
+        final FreiwilligDarlehen freiwilligDarlehen,
+        String kommentar
+    ) {
+        createDarlehenNotification(
+            NotificationType.DARLEHEN_ZURUECKGEWIESEN,
+            freiwilligDarlehen,
+            Optional.of(kommentar)
+        );
     }
 
     private void createDarlehenNotification(
         final NotificationType notificationType,
-        final Darlehen darlehen,
+        final FreiwilligDarlehen freiwilligDarlehen,
         Optional<String> kommentar
     ) {
-        final var fall = darlehen.getFall();
-        final var absender = darlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
+        final var fall = freiwilligDarlehen.getFall();
+        final var absender =
+            freiwilligDarlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
         final var pia =
-            darlehen.getFall().getLatestGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
+            freiwilligDarlehen.getFall()
+                .getLatestGesuch()
+                .getLatestGesuchTranche()
+                .getGesuchFormular()
+                .getPersonInAusbildung();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), pia.getKorrespondenzSprache());
 
         final Notification notification = new Notification()
@@ -86,13 +98,18 @@ public class NotificationService {
 
         final String msg = switch (notificationType) {
             case DARLEHEN_ABGELEHNT -> Templates
-                .getDarlehenAbgelehnt(anrede, pia.getNachname(), darlehen.getKommentar(), pia.getKorrespondenzSprache())
+                .getDarlehenAbgelehnt(
+                    anrede,
+                    pia.getNachname(),
+                    freiwilligDarlehen.getKommentar(),
+                    pia.getKorrespondenzSprache()
+                )
                 .render();
             case DARLEHEN_AKZEPTIERT -> Templates
                 .getDarlehenAkzeptiert(
                     anrede,
                     pia.getNachname(),
-                    darlehen.getKommentar(),
+                    freiwilligDarlehen.getKommentar(),
                     pia.getKorrespondenzSprache()
                 )
                 .render();

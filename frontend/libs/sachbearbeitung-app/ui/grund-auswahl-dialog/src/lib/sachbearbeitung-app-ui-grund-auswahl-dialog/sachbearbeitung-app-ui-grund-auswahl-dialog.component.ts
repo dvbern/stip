@@ -2,12 +2,10 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   computed,
   effect,
   inject,
   signal,
-  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -32,7 +30,7 @@ import {
   StipDecision,
   StipDecisionText,
 } from '@dv/shared/model/gesuch';
-import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
+import { SharedUiFileUploadComponent } from '@dv/shared/ui/file-upload';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -77,7 +75,7 @@ const GRUND_MANUELL = { id: undefined, stipDecision: 'MANUELL' as const };
     MatDividerModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    SharedUiDropFileComponent,
+    SharedUiFileUploadComponent,
     SharedUiMaxLengthDirective,
   ],
   templateUrl: './sachbearbeitung-app-ui-grund-auswahl-dialog.component.html',
@@ -94,7 +92,6 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   readonly kantone = Object.values(Kanton);
-  fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   selectedFileSig = signal<File | null>(null);
   dialogData = inject<GrundAuswahlDialogData>(MAT_DIALOG_DATA);
   store = inject(AblehnungGrundStore);
@@ -197,15 +194,6 @@ export class SachbearbeitungAppUiGrundAuswahlDialogComponent {
         verfuegungUpload,
       });
     }
-  }
-
-  resetSelectedFile() {
-    this.selectedFileSig.set(null);
-    const input = this.fileInputSig()?.nativeElement;
-    if (input) {
-      input.value = '';
-    }
-    this.form.controls.fileUpload.setValue(undefined);
   }
 
   cancel() {

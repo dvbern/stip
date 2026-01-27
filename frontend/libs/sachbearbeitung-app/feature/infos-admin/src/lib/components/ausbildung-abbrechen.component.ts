@@ -57,7 +57,6 @@ export class AusbildungAbbrechenComponent {
 
   gesuchAbbrechen() {
     SharedUiKommentarDialogComponent.open(this.dialog, {
-      entityId: 'gesuchId',
       titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
       messageKey:
         'sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message',

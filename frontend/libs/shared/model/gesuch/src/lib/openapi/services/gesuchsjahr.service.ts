@@ -111,6 +111,22 @@ export class GesuchsjahrService {
         return httpParams;
     }
 
+    public createGesuchsjahrPath = (requestParameters: GesuchsjahrServiceCreateGesuchsjahrRequestParams) => {
+        const gesuchsjahrCreate = requestParameters.gesuchsjahrCreate;
+        if (gesuchsjahrCreate === null || gesuchsjahrCreate === undefined) {
+            throw new Error('Required parameter gesuchsjahrCreate was null or undefined when calling createGesuchsjahr$.');
+        }
+        let path = `/api/v1/gesuchsjahr`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Creates a new Gesuchsjahr
      * @param requestParameters
@@ -194,6 +210,22 @@ export class GesuchsjahrService {
         );
     }
 
+    public deleteGesuchsjahrPath = (requestParameters: GesuchsjahrServiceDeleteGesuchsjahrRequestParams) => {
+        const gesuchsjahrId = requestParameters.gesuchsjahrId;
+        if (gesuchsjahrId === null || gesuchsjahrId === undefined) {
+            throw new Error('Required parameter gesuchsjahrId was null or undefined when calling deleteGesuchsjahr$.');
+        }
+        let path = `/api/v1/gesuchsjahr/${this.configuration.encodeParam({name: "gesuchsjahrId", value: gesuchsjahrId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Deletes a Gesuchsjahr with the given id
      * @param requestParameters
@@ -264,6 +296,22 @@ export class GesuchsjahrService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getGesuchsjahrPath = (requestParameters: GesuchsjahrServiceGetGesuchsjahrRequestParams) => {
+        const gesuchsjahrId = requestParameters.gesuchsjahrId;
+        if (gesuchsjahrId === null || gesuchsjahrId === undefined) {
+            throw new Error('Required parameter gesuchsjahrId was null or undefined when calling getGesuchsjahr$.');
+        }
+        let path = `/api/v1/gesuchsjahr/${this.configuration.encodeParam({name: "gesuchsjahrId", value: gesuchsjahrId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -339,6 +387,18 @@ export class GesuchsjahrService {
         );
     }
 
+    public getGesuchsjahrePath = () => {
+        let path = `/api/v1/gesuchsjahr`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Gets all Gesuchsjahre
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -405,6 +465,22 @@ export class GesuchsjahrService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public publishGesuchsjahrPath = (requestParameters: GesuchsjahrServicePublishGesuchsjahrRequestParams) => {
+        const gesuchsjahrId = requestParameters.gesuchsjahrId;
+        if (gesuchsjahrId === null || gesuchsjahrId === undefined) {
+            throw new Error('Required parameter gesuchsjahrId was null or undefined when calling publishGesuchsjahr$.');
+        }
+        let path = `/api/v1/gesuchsjahr/publish/${this.configuration.encodeParam({name: "gesuchsjahrId", value: gesuchsjahrId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -477,6 +553,23 @@ export class GesuchsjahrService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateGesuchsjahrPath = (requestParameters: GesuchsjahrServiceUpdateGesuchsjahrRequestParams) => {
+        const gesuchsjahrId = requestParameters.gesuchsjahrId;
+        if (gesuchsjahrId === null || gesuchsjahrId === undefined) {
+            throw new Error('Required parameter gesuchsjahrId was null or undefined when calling updateGesuchsjahr$.');
+        }
+        const gesuchsjahrUpdate = requestParameters.gesuchsjahrUpdate;
+        let path = `/api/v1/gesuchsjahr/${this.configuration.encodeParam({name: "gesuchsjahrId", value: gesuchsjahrId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

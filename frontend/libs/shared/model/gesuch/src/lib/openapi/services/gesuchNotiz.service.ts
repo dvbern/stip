@@ -117,6 +117,26 @@ export class GesuchNotizService {
         return httpParams;
     }
 
+    public answerJuristischeAbklaerungNotizPath = (requestParameters: GesuchNotizServiceAnswerJuristischeAbklaerungNotizRequestParams) => {
+        const notizId = requestParameters.notizId;
+        if (notizId === null || notizId === undefined) {
+            throw new Error('Required parameter notizId was null or undefined when calling answerJuristischeAbklaerungNotiz$.');
+        }
+        const juristischeAbklaerungNotizAntwort = requestParameters.juristischeAbklaerungNotizAntwort;
+        if (juristischeAbklaerungNotizAntwort === null || juristischeAbklaerungNotizAntwort === undefined) {
+            throw new Error('Required parameter juristischeAbklaerungNotizAntwort was null or undefined when calling answerJuristischeAbklaerungNotiz$.');
+        }
+        let path = `/api/v1/gesuch/notiz/juristischeAbklaerung/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Sets the Answer of a Juristische Abklaerung Notiz Antwort
      * @param requestParameters
@@ -204,6 +224,22 @@ export class GesuchNotizService {
         );
     }
 
+    public createNotizPath = (requestParameters: GesuchNotizServiceCreateNotizRequestParams) => {
+        const gesuchNotizCreate = requestParameters.gesuchNotizCreate;
+        if (gesuchNotizCreate === null || gesuchNotizCreate === undefined) {
+            throw new Error('Required parameter gesuchNotizCreate was null or undefined when calling createNotiz$.');
+        }
+        let path = `/api/v1/gesuch/notiz/create`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Creates a new Notiz for an existing gesuch
      * @param requestParameters
@@ -287,6 +323,22 @@ export class GesuchNotizService {
         );
     }
 
+    public deleteNotizPath = (requestParameters: GesuchNotizServiceDeleteNotizRequestParams) => {
+        const notizId = requestParameters.notizId;
+        if (notizId === null || notizId === undefined) {
+            throw new Error('Required parameter notizId was null or undefined when calling deleteNotiz$.');
+        }
+        let path = `/api/v1/gesuch/notiz/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * delete a Notiz of a Gesuch with the given Notiz-Id
      * @param requestParameters
@@ -357,6 +409,22 @@ export class GesuchNotizService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getNotizPath = (requestParameters: GesuchNotizServiceGetNotizRequestParams) => {
+        const notizId = requestParameters.notizId;
+        if (notizId === null || notizId === undefined) {
+            throw new Error('Required parameter notizId was null or undefined when calling getNotiz$.');
+        }
+        let path = `/api/v1/gesuch/notiz/${this.configuration.encodeParam({name: "notizId", value: notizId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -432,6 +500,22 @@ export class GesuchNotizService {
         );
     }
 
+    public getNotizenPath = (requestParameters: GesuchNotizServiceGetNotizenRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getNotizen$.');
+        }
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/notiz/all`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Get all notizen of a fall from given gesuch
      * @param requestParameters
@@ -503,6 +587,22 @@ export class GesuchNotizService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateNotizPath = (requestParameters: GesuchNotizServiceUpdateNotizRequestParams) => {
+        const gesuchNotizUpdate = requestParameters.gesuchNotizUpdate;
+        if (gesuchNotizUpdate === null || gesuchNotizUpdate === undefined) {
+            throw new Error('Required parameter gesuchNotizUpdate was null or undefined when calling updateNotiz$.');
+        }
+        let path = `/api/v1/gesuch/notiz`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

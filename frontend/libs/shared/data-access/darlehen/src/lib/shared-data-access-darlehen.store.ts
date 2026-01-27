@@ -6,18 +6,18 @@ import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
-  Darlehen,
-  DarlehenGsResponse,
   DarlehenService,
-  DarlehenServiceCreateDarlehenRequestParams,
-  DarlehenServiceDarlehenUpdateGsRequestParams,
-  DarlehenServiceDarlehenUpdateSbRequestParams,
-  DarlehenServiceDarlehenZurueckweisenRequestParams,
-  DarlehenServiceDeleteDarlehenGsRequestParams,
-  DarlehenServiceGetAllDarlehenGsRequestParams,
-  DarlehenServiceGetAllDarlehenSbRequestParams,
-  DarlehenServiceGetDarlehenDashboardSbRequestParams,
-  PaginatedSbDarlehenDashboard,
+  DarlehenServiceCreateFreiwilligDarlehenRequestParams,
+  DarlehenServiceDeleteFreiwilligDarlehenGsRequestParams,
+  DarlehenServiceFreiwilligDarlehenUpdateGsRequestParams,
+  DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams,
+  DarlehenServiceFreiwilligDarlehenZurueckweisenRequestParams,
+  DarlehenServiceGetAllFreiwilligDarlehenGsRequestParams,
+  DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams,
+  DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams,
+  FreiwilligDarlehen,
+  FreiwilligDarlehenGsResponse,
+  PaginatedSbFreiwilligDarlehenDashboard,
 } from '@dv/shared/model/gesuch';
 import {
   CachedRemoteData,
@@ -30,10 +30,10 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type DarlehenState = {
-  cachedDarlehen: CachedRemoteData<Darlehen>;
-  darlehenGs: CachedRemoteData<DarlehenGsResponse>;
-  darlehenListSb: CachedRemoteData<Darlehen[]>;
-  paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbDarlehenDashboard>;
+  cachedDarlehen: CachedRemoteData<FreiwilligDarlehen>;
+  darlehenGs: CachedRemoteData<FreiwilligDarlehenGsResponse>;
+  darlehenListSb: CachedRemoteData<FreiwilligDarlehen[]>;
+  paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbFreiwilligDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
@@ -95,7 +95,7 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap(({ darlehenId, onFailure }) =>
         this.darlehenService
-          .getDarlehenGs$({ darlehenId })
+          .getFreiwilligDarlehenGs$({ darlehenId })
           .pipe(
             handleApiResponse(
               (darlehen) => patchState(this, { cachedDarlehen: darlehen }),
@@ -106,54 +106,58 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  getAllDarlehenGs$ = rxMethod<DarlehenServiceGetAllDarlehenGsRequestParams>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          darlehenGs: pending(),
-        }));
-      }),
-      switchMap((req) =>
-        this.darlehenService
-          .getAllDarlehenGs$(req)
-          .pipe(
-            handleApiResponse((darlehenGs) => patchState(this, { darlehenGs })),
-          ),
+  getAllDarlehenGs$ =
+    rxMethod<DarlehenServiceGetAllFreiwilligDarlehenGsRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, () => ({
+            darlehenGs: pending(),
+          }));
+        }),
+        switchMap((req) =>
+          this.darlehenService
+            .getAllFreiwilligDarlehenGs$(req)
+            .pipe(
+              handleApiResponse((darlehenGs) =>
+                patchState(this, { darlehenGs }),
+              ),
+            ),
+        ),
       ),
-    ),
-  );
+    );
 
-  createDarlehen$ = rxMethod<DarlehenServiceCreateDarlehenRequestParams>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedDarlehen: cachedPending(state.cachedDarlehen),
-        }));
-      }),
-      switchMap((req) =>
-        this.darlehenService.createDarlehen$(req).pipe(
-          handleApiResponse(
-            (darlehen) => {
-              patchState(this, { cachedDarlehen: darlehen });
-            },
-            {
-              onSuccess: (data) => {
-                this.router.navigate([
-                  '/darlehen',
-                  data.id,
-                  'fall',
-                  req.fallId,
-                ]);
+  createDarlehen$ =
+    rxMethod<DarlehenServiceCreateFreiwilligDarlehenRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            cachedDarlehen: cachedPending(state.cachedDarlehen),
+          }));
+        }),
+        switchMap((req) =>
+          this.darlehenService.createFreiwilligDarlehen$(req).pipe(
+            handleApiResponse(
+              (darlehen) => {
+                patchState(this, { cachedDarlehen: darlehen });
               },
-            },
+              {
+                onSuccess: (data) => {
+                  this.router.navigate([
+                    '/darlehen',
+                    data.id,
+                    'fall',
+                    req.fallId,
+                  ]);
+                },
+              },
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
 
   darlehenUpdateAndEingebenGs$ = rxMethod<{
-    data: DarlehenServiceDarlehenUpdateGsRequestParams;
+    data: DarlehenServiceFreiwilligDarlehenUpdateGsRequestParams;
     onSuccess: () => void;
   }>(
     pipe(
@@ -163,10 +167,10 @@ export class DarlehenStore extends signalStore(
         }));
       }),
       switchMap(({ data, onSuccess }) =>
-        this.darlehenService.darlehenUpdateGs$(data).pipe(
+        this.darlehenService.freiwilligDarlehenUpdateGs$(data).pipe(
           switchMap((updatedDarlehen) =>
             this.darlehenService
-              .darlehenEingeben$({ darlehenId: updatedDarlehen.id })
+              .freiwilligDarlehenEingeben$({ darlehenId: updatedDarlehen.id })
               .pipe(
                 handleApiResponse(
                   (darlehen) => {
@@ -202,12 +206,12 @@ export class DarlehenStore extends signalStore(
   );
 
   darlehenDeleteGs$ = rxMethod<{
-    data: DarlehenServiceDeleteDarlehenGsRequestParams;
+    data: DarlehenServiceDeleteFreiwilligDarlehenGsRequestParams;
     onSuccess: () => void;
   }>(
     pipe(
       switchMap(({ data, onSuccess }) =>
-        this.darlehenService.deleteDarlehenGs$(data).pipe(
+        this.darlehenService.deleteFreiwilligDarlehenGs$(data).pipe(
           handleApiResponse(
             () => {
               patchState(this, { cachedDarlehen: initial() });
@@ -227,7 +231,7 @@ export class DarlehenStore extends signalStore(
   );
 
   getDarlehenDashboardSb$ =
-    rxMethod<DarlehenServiceGetDarlehenDashboardSbRequestParams>(
+    rxMethod<DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams>(
       pipe(
         tap(() => {
           patchState(this, () => ({
@@ -235,7 +239,7 @@ export class DarlehenStore extends signalStore(
           }));
         }),
         switchMap((req) =>
-          this.darlehenService.getDarlehenDashboardSb$(req).pipe(
+          this.darlehenService.getFreiwilligDarlehenDashboardSb$(req).pipe(
             handleApiResponse((darlehen) => {
               patchState(this, { paginatedSbDarlehenDashboard: darlehen });
             }),
@@ -256,7 +260,7 @@ export class DarlehenStore extends signalStore(
       }),
       switchMap(({ darlehenId, onFailure }) =>
         this.darlehenService
-          .getDarlehenSb$({ darlehenId })
+          .getFreiwilligDarlehenSb$({ darlehenId })
           .pipe(
             handleApiResponse(
               (darlehen) => patchState(this, { cachedDarlehen: darlehen }),
@@ -267,28 +271,29 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  getAllDarlehenSb$ = rxMethod<DarlehenServiceGetAllDarlehenSbRequestParams>(
-    pipe(
-      tap(() => {
-        patchState(this, () => ({
-          darlehenListSb: pending(),
-        }));
-      }),
-      switchMap((req) =>
-        this.darlehenService
-          .getAllDarlehenSb$(req)
-          .pipe(
-            handleApiResponse((darlehenListSb) =>
-              patchState(this, { darlehenListSb }),
+  getAllDarlehenSb$ =
+    rxMethod<DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, () => ({
+            darlehenListSb: pending(),
+          }));
+        }),
+        switchMap((req) =>
+          this.darlehenService
+            .getAllFreiwilligDarlehenSb$(req)
+            .pipe(
+              handleApiResponse((darlehenListSb) =>
+                patchState(this, { darlehenListSb }),
+              ),
             ),
-          ),
+        ),
       ),
-    ),
-  );
+    );
 
   // SB Methoden
   darlehenUpdateAndFreigebenSb$ = rxMethod<{
-    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    data: DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams;
     onSuccess: () => void;
   }>(
     pipe(
@@ -298,10 +303,10 @@ export class DarlehenStore extends signalStore(
         }));
       }),
       switchMap(({ data, onSuccess }) =>
-        this.darlehenService.darlehenUpdateSb$(data).pipe(
+        this.darlehenService.freiwilligDarlehenUpdateSb$(data).pipe(
           switchMap((updatedDarlehen) =>
             this.darlehenService
-              .darlehenFreigeben$({ darlehenId: updatedDarlehen.id })
+              .freiwilligDarlehenFreigeben$({ darlehenId: updatedDarlehen.id })
               .pipe(
                 handleApiResponse(
                   (darlehen) => {
@@ -336,7 +341,7 @@ export class DarlehenStore extends signalStore(
   );
 
   darlehenZurueckweisen$ =
-    rxMethod<DarlehenServiceDarlehenZurueckweisenRequestParams>(
+    rxMethod<DarlehenServiceFreiwilligDarlehenZurueckweisenRequestParams>(
       pipe(
         tap(() => {
           patchState(this, (state) => ({
@@ -344,7 +349,7 @@ export class DarlehenStore extends signalStore(
           }));
         }),
         switchMap((data) =>
-          this.darlehenService.darlehenZurueckweisen$(data).pipe(
+          this.darlehenService.freiwilligDarlehenZurueckweisen$(data).pipe(
             handleApiResponse(
               (darlehen) => {
                 patchState(this, { cachedDarlehen: darlehen });
@@ -377,7 +382,7 @@ export class DarlehenStore extends signalStore(
   // SB Freigabestelle Methoden
 
   darlehenUpdateAndAbschliessenSb$ = rxMethod<{
-    data: DarlehenServiceDarlehenUpdateSbRequestParams;
+    data: DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams;
     onSuccess: () => void;
   }>(
     pipe(
@@ -387,13 +392,13 @@ export class DarlehenStore extends signalStore(
         }));
       }),
       switchMap(({ data, onSuccess }) =>
-        this.darlehenService.darlehenUpdateSb$(data).pipe(
+        this.darlehenService.freiwilligDarlehenUpdateSb$(data).pipe(
           switchMap((updatedDarlehen) => {
             const action$ = updatedDarlehen.gewaehren
-              ? this.darlehenService.darlehenAkzeptieren$({
+              ? this.darlehenService.freiwilligDarlehenAkzeptieren$({
                   darlehenId: updatedDarlehen.id,
                 })
-              : this.darlehenService.darlehenAblehen$({
+              : this.darlehenService.freiwilligDarlehenAblehen$({
                   darlehenId: updatedDarlehen.id,
                 });
 

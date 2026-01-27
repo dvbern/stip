@@ -101,6 +101,26 @@ export class VerfuegungService {
         return httpParams;
     }
 
+    public getVerfuegungDokumentPath = (requestParameters: VerfuegungServiceGetVerfuegungDokumentRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling getVerfuegungDokument$.');
+        }
+        let path = `/api/v1/verfuegung/dokument/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -166,6 +186,22 @@ export class VerfuegungService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getVerfuegungDokumentDownloadTokenPath = (requestParameters: VerfuegungServiceGetVerfuegungDokumentDownloadTokenRequestParams) => {
+        const verfuegungDokumentId = requestParameters.verfuegungDokumentId;
+        if (verfuegungDokumentId === null || verfuegungDokumentId === undefined) {
+            throw new Error('Required parameter verfuegungDokumentId was null or undefined when calling getVerfuegungDokumentDownloadToken$.');
+        }
+        let path = `/api/v1/verfuegung/dokument/${this.configuration.encodeParam({name: "verfuegungDokumentId", value: verfuegungDokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -239,6 +275,22 @@ export class VerfuegungService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getVerfuegungenPath = (requestParameters: VerfuegungServiceGetVerfuegungenRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getVerfuegungen$.');
+        }
+        let path = `/api/v1/verfuegung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/verfuegungen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

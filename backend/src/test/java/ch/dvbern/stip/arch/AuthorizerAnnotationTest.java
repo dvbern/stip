@@ -50,7 +50,8 @@ class AuthorizerAnnotationTest {
             "ch.dvbern.stip.api.config.resource.ConfigResourceImpl.getDeploymentConfig",
             "ch.dvbern.stip.api.massendruck.resource.MassendruckJobResourceImpl.downloadMassendruckDocument",
             "ch.dvbern.stip.api.datenschutzbrief.resource.DatenschutzbriefRessourceImpl.getDatenschutzbrief",
-            "ch.dvbern.stip.api.darlehen.resource.DarlehenResourceImpl.downloadDarlehenDokument"
+            "ch.dvbern.stip.api.darlehen.resource.DarlehenResourceImpl.downloadDarlehenDokument",
+            "ch.dvbern.stip.api.demo.resource.DemoDataResourceImpl.getDemoDataDokument"
         )
     );
 

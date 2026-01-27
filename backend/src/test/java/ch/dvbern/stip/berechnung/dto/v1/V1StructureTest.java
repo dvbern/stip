@@ -73,7 +73,7 @@ class V1StructureTest {
                 "ergaenzungsleistungen": null,
                 "andereEinnahmen": null,
                 "eigenmietwert": 0,
-                "unterhaltsbeitraege": null,
+                "unterhaltsbeitraege": 0,
                 "einzahlungSaeule3a": null,
                 "einzahlungSaeule2": null,
                 "renten": null,
@@ -113,7 +113,7 @@ class V1StructureTest {
                 "ergaenzungsleistungen": null,
                 "andereEinnahmen": null,
                 "eigenmietwert": 0,
-                "unterhaltsbeitraege": null,
+                "unterhaltsbeitraege": 0,
                 "einzahlungSaeule3a": null,
                 "einzahlungSaeule2": null,
                 "renten": null,
@@ -149,7 +149,7 @@ class V1StructureTest {
                 "eigenerHaushalt": true,
                 "halbierungElternbeitrag": false,
                 "einkommens": [
-                  { "vorname": "a", "value": 12916 },
+                  { "vorname": "a", "value": 6916 },
                   { "vorname": "a", "value": 12916 }
                 ],
                 "einnahmenBGSAs": [
@@ -180,12 +180,12 @@ class V1StructureTest {
                   { "vorname": "a", "value": 1200 },
                   { "vorname": "a", "value": 1200 }
                 ],
-                "gemeindeInstitutionen": null,
+                "gemeindeInstitutionen": 0,
                 "andereEinnahmens": [
                   { "vorname": "a", "value": 0 },
                   { "vorname": "a", "value": 0 }
                 ],
-                "vermoegen": null,
+                "vermoegen": 0,
                 "ausbildungskosten": 450,
                 "fahrkosten": 523,
                 "auswaertigeMittagessenProWoche": 0,

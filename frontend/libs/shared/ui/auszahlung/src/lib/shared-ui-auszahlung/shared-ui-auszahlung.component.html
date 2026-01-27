@@ -33,23 +33,55 @@
           [formControl]="zahlungsverbindungControls.nachname"
           data-testid="form-auszahlung-nachname"
         />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
+        <mat-error *dvSharedUiFormMessageError="'noNamesOrInstitution'">
+          {{ 'shared.form.auszahlung.lastname.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
 
       <!-- Vorname -->
-      <mat-form-field dvSharedUiFormField>
-        <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
+      <div class="tw:flex tw:items-start tw:gap-2">
+        <mat-form-field dvSharedUiFormField class="tw:flex-1">
+          <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
+          <input
+            matInput
+            dvMaxLength
+            type="text"
+            [formControl]="zahlungsverbindungControls.vorname"
+            data-testid="form-auszahlung-vorname"
+          />
+          <mat-error *dvSharedUiFormMessageError="'noNamesOrInstitution'">
+            {{ 'shared.form.auszahlung.firstname.error.required' | transloco }}
+          </mat-error>
+        </mat-form-field>
+        <button
+          type="button"
+          (click)="beguenstigteInfoDialog.toggle()"
+          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+        >
+          <span class="material-symbols-rounded"> info </span>
+        </button>
+      </div>
+
+      <div
+        dvSharedUiInfoDialog
+        [dialogTitleKey]="'shared.form.auszahlung.empfaenger.info.title'"
+        [dialogMessageKey]="'shared.form.auszahlung.empfaenger.info.message'"
+        #beguenstigteInfoDialog="dvSharedUiInfoDialog"
+      ></div>
+
+      <!-- institution -->
+      <mat-form-field dvSharedUiFormField class="tw:col-span-2">
+        <mat-label>{{ 'shared.form.auszahlung.institution.label' | transloco }}</mat-label>
         <input
           matInput
           dvMaxLength
           type="text"
-          [formControl]="zahlungsverbindungControls.vorname"
-          data-testid="form-auszahlung-vorname"
+          [formControl]="zahlungsverbindungControls.institution"
+          data-testid="form-auszahlung-institution"
         />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
+        <mat-error *dvSharedUiFormMessageError="'noNamesOrInstitution'">
+          {{ 'shared.form.auszahlung.institution.error.required' | transloco }}
         </mat-error>
       </mat-form-field>
 

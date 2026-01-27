@@ -225,6 +225,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.formular.land.ungueltig}";
     public static final String VALIDATION_ZAHLUNGSVERBINDUNG_ISO2CODE_MUST_BE_SET =
         "{jakarta.validation.constraints.zahlungsverbindung.iso2code.must.be.set}";
+    public static final String VALIDATION_ZAHLUNGSVERBINDUNG_VORNAME_NACHNAME_OR_INSTITUTION_REQUIRED =
+        "{jakarta.validation.constraints.zahlungsverbindung.vornameNachnameOrInstitution.required}";
     public static final String VALIDATION_AUSBILDUNGSSTAETTE_NAME_NOT_UNIQUE =
         "{jakarta.validation.constraints.ausbildungsstaette.name.notunique}";
     public static final String VALIDATION_AUSBILDUNGSSTAETTE_NUMMER_TYP_NOT_VALID =

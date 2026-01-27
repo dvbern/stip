@@ -57,7 +57,6 @@ export class AusbildungAbschliessenComponent {
 
   gesuchAbschliessen() {
     SharedUiKommentarDialogComponent.open(this.dialog, {
-      entityId: 'gesuchId',
       titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-abschliessen',
       messageKey:
         'sachbearbeitung-app.infos.admin.ausbildung-abschliessen.message',

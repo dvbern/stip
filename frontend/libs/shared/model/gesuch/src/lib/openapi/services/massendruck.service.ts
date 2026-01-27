@@ -144,6 +144,22 @@ export class MassendruckService {
         return httpParams;
     }
 
+    public createMassendruckJobForQueryTypePath = (requestParameters: MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams) => {
+        const getGesucheSBQueryType = requestParameters.getGesucheSBQueryType;
+        if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
+            throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
+        }
+        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create a Massendruck Job for the given query type
      * @param requestParameters
@@ -215,6 +231,22 @@ export class MassendruckService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public deleteMassendruckJobPath = (requestParameters: MassendruckServiceDeleteMassendruckJobRequestParams) => {
+        const massendruckId = requestParameters.massendruckId;
+        if (massendruckId === null || massendruckId === undefined) {
+            throw new Error('Required parameter massendruckId was null or undefined when calling deleteMassendruckJob$.');
+        }
+        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "massendruckId", value: massendruckId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/delete`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -290,6 +322,26 @@ export class MassendruckService {
         );
     }
 
+    public downloadMassendruckDocumentPath = (requestParameters: MassendruckServiceDownloadMassendruckDocumentRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadMassendruckDocument$.');
+        }
+        let path = `/api/v1/massendruck/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -355,6 +407,68 @@ export class MassendruckService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getAllMassendruckJobsPath = (requestParameters: MassendruckServiceGetAllMassendruckJobsRequestParams) => {
+        const getMassendruckJobs = requestParameters.getMassendruckJobs;
+        if (getMassendruckJobs === null || getMassendruckJobs === undefined) {
+            throw new Error('Required parameter getMassendruckJobs was null or undefined when calling getAllMassendruckJobs$.');
+        }
+        const userErstellt = requestParameters.userErstellt;
+        const timestampErstellt = requestParameters.timestampErstellt;
+        const massendruckJobStatus = requestParameters.massendruckJobStatus;
+        const massendruckJobTyp = requestParameters.massendruckJobTyp;
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllMassendruckJobs$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllMassendruckJobs$.');
+        }
+        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getMassendruckJobs", value: getMassendruckJobs, in: "path", style: "simple", explode: false, dataType: "GetMassendruckJobQueryType", dataFormat: undefined})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (userErstellt !== undefined && userErstellt !== null) {
+          queryParams.append('userErstellt', userErstellt.toString());
+        }
+
+        if (timestampErstellt !== undefined && timestampErstellt !== null) {
+          queryParams.append('timestampErstellt', timestampErstellt.toString());
+        }
+
+        if (massendruckJobStatus !== undefined && massendruckJobStatus !== null) {
+          queryParams.append('massendruckJobStatus', massendruckJobStatus.toString());
+        }
+
+        if (massendruckJobTyp !== undefined && massendruckJobTyp !== null) {
+          queryParams.append('massendruckJobTyp', massendruckJobTyp.toString());
+        }
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -479,6 +593,22 @@ export class MassendruckService {
         );
     }
 
+    public getMassendruckDownloadTokenPath = (requestParameters: MassendruckServiceGetMassendruckDownloadTokenRequestParams) => {
+        const massendruckId = requestParameters.massendruckId;
+        if (massendruckId === null || massendruckId === undefined) {
+            throw new Error('Required parameter massendruckId was null or undefined when calling getMassendruckDownloadToken$.');
+        }
+        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "massendruckId", value: massendruckId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * get Token to downlaod Verfuegung
      * @param requestParameters
@@ -550,6 +680,22 @@ export class MassendruckService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getMassendruckJobDetailPath = (requestParameters: MassendruckServiceGetMassendruckJobDetailRequestParams) => {
+        const massendruckJobId = requestParameters.massendruckJobId;
+        if (massendruckJobId === null || massendruckJobId === undefined) {
+            throw new Error('Required parameter massendruckJobId was null or undefined when calling getMassendruckJobDetail$.');
+        }
+        let path = `/api/v1/massendruck/detail/${this.configuration.encodeParam({name: "massendruckJobId", value: massendruckJobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -625,6 +771,22 @@ export class MassendruckService {
         );
     }
 
+    public massendruckDatenschutzbriefVersendenPath = (requestParameters: MassendruckServiceMassendruckDatenschutzbriefVersendenRequestParams) => {
+        const massendruckDatenschutzbriefId = requestParameters.massendruckDatenschutzbriefId;
+        if (massendruckDatenschutzbriefId === null || massendruckDatenschutzbriefId === undefined) {
+            throw new Error('Required parameter massendruckDatenschutzbriefId was null or undefined when calling massendruckDatenschutzbriefVersenden$.');
+        }
+        let path = `/api/v1/massendruck/datenschutzbrief/versendet/${this.configuration.encodeParam({name: "massendruckDatenschutzbriefId", value: massendruckDatenschutzbriefId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Send a Massendruck Datenschutzbrief
      * @param requestParameters
@@ -698,6 +860,22 @@ export class MassendruckService {
         );
     }
 
+    public massendruckVerfuegungVersendenPath = (requestParameters: MassendruckServiceMassendruckVerfuegungVersendenRequestParams) => {
+        const massendruckVerfuegungId = requestParameters.massendruckVerfuegungId;
+        if (massendruckVerfuegungId === null || massendruckVerfuegungId === undefined) {
+            throw new Error('Required parameter massendruckVerfuegungId was null or undefined when calling massendruckVerfuegungVersenden$.');
+        }
+        let path = `/api/v1/massendruck/verfuegung/versendet/${this.configuration.encodeParam({name: "massendruckVerfuegungId", value: massendruckVerfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Send a Massendruck Verfuegung
      * @param requestParameters
@@ -769,6 +947,22 @@ export class MassendruckService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public retryMassendruckJobPath = (requestParameters: MassendruckServiceRetryMassendruckJobRequestParams) => {
+        const massendruckId = requestParameters.massendruckId;
+        if (massendruckId === null || massendruckId === undefined) {
+            throw new Error('Required parameter massendruckId was null or undefined when calling retryMassendruckJob$.');
+        }
+        let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "massendruckId", value: massendruckId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/retry`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

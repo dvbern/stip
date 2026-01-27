@@ -10,6 +10,7 @@ import { firstValueFrom, map } from 'rxjs';
 import {
   DarlehenService,
   DatenschutzbriefService,
+  DemoDataService,
   DokumentArt,
   DokumentService,
   GesuchService,
@@ -44,6 +45,10 @@ type DownloadOptions =
   | {
       type: 'massendruck';
       id: string;
+    }
+  | {
+      type: 'demoData';
+      id: string;
     };
 
 @Directive({
@@ -58,6 +63,7 @@ export class SharedUiDownloadButtonDirective {
   private gesuchService = inject(GesuchService);
   private verfuegungService = inject(VerfuegungService);
   private massendruckService = inject(MassendruckService);
+  private demoDataService = inject(DemoDataService);
   private dcmnt = inject(DOCUMENT, { optional: true });
 
   @HostListener('click')
@@ -71,6 +77,7 @@ export class SharedUiDownloadButtonDirective {
         this.gesuchService,
         this.verfuegungService,
         this.massendruckService,
+        this.demoDataService,
       ),
     ).then((href) => {
       this.dcmnt?.defaultView?.open(href, '_blank');
@@ -86,6 +93,7 @@ const getDownloadObservable$ = (
   gesuchService: GesuchService,
   verfuegungService: VerfuegungService,
   massendruckService: MassendruckService,
+  demoDataService: DemoDataService,
 ) => {
   const { type, id } = downloadOptions;
   switch (type) {
@@ -95,9 +103,11 @@ const getDownloadObservable$ = (
           elternId: id,
         })
         .pipe(
-          map(
-            ({ token }) =>
-              `/api/v1/datenschutzbrief/${downloadOptions.gesuchTrancheId}/download?token=${token}`,
+          map(({ token }) =>
+            datenschutzbriefService.getDatenschutzbriefPath({
+              token,
+              trancheId: downloadOptions.gesuchTrancheId,
+            }),
           ),
         );
     }
@@ -107,8 +117,8 @@ const getDownloadObservable$ = (
           dokumentId: id,
         })
         .pipe(
-          map(
-            ({ token }) => `/api/v1/darlehen/dokument/download?token=${token}`,
+          map(({ token }) =>
+            darlehenService.downloadDarlehenDokumentPath({ token }),
           ),
         );
     }
@@ -127,9 +137,11 @@ const getDownloadObservable$ = (
           dokumentId: id,
         })
         .pipe(
-          map(
-            ({ token }) =>
-              `/api/v1/dokument/${downloadOptions.dokumentArt}/download?token=${token}`,
+          map(({ token }) =>
+            dokumentService.getDokumentPath({
+              token,
+              dokumentArt: downloadOptions.dokumentArt,
+            }),
           ),
         );
     }
@@ -139,9 +151,8 @@ const getDownloadObservable$ = (
           verfuegungDokumentId: id,
         })
         .pipe(
-          map(
-            ({ token }) =>
-              `/api/v1/verfuegung/dokument/download?token=${token}`,
+          map(({ token }) =>
+            verfuegungService.getVerfuegungDokumentPath({ token }),
           ),
         );
     }
@@ -151,7 +162,18 @@ const getDownloadObservable$ = (
           massendruckId: id,
         })
         .pipe(
-          map(({ token }) => `/api/v1/massendruck/download?token=${token}`),
+          map(({ token }) =>
+            massendruckService.downloadMassendruckDocumentPath({ token }),
+          ),
+        );
+    }
+    case 'demoData': {
+      return demoDataService
+        .getDemoDataDokumentDownloadToken$({ dokumentId: id })
+        .pipe(
+          map(({ token }) =>
+            demoDataService.getDemoDataDokumentPath({ token }),
+          ),
         );
     }
     default: {

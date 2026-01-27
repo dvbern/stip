@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.AusbildungsPensumDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -24,7 +23,7 @@ public class AusbildungBaseDto  implements Serializable {
   private @Valid UUID fallId;
   private @Valid String ausbildungBegin;
   private @Valid String ausbildungEnd;
-  private @Valid AusbildungsPensumDto pensum;
+  private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
   private @Valid UUID id;
   private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid Boolean ausbildungNichtGefunden;
@@ -97,7 +96,7 @@ public class AusbildungBaseDto  implements Serializable {
 
   /**
    **/
-  public AusbildungBaseDto pensum(AusbildungsPensumDto pensum) {
+  public AusbildungBaseDto pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
     return this;
   }
@@ -105,12 +104,12 @@ public class AusbildungBaseDto  implements Serializable {
   
   @JsonProperty("pensum")
   @NotNull
-  public AusbildungsPensumDto getPensum() {
+  public ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum getPensum() {
     return pensum;
   }
 
   @JsonProperty("pensum")
-  public void setPensum(AusbildungsPensumDto pensum) {
+  public void setPensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
     this.pensum = pensum;
   }
 

@@ -8,10 +8,10 @@ import {
 } from '@dv/shared/model/dokument';
 import {
   CustomDokumentTyp,
-  Darlehen,
   DarlehenDokumentType,
   Dokument,
   DokumentTyp,
+  FreiwilligDarlehen,
   GesuchDokument,
   UnterschriftenblattDokument,
   UnterschriftenblattDokumentTyp,
@@ -361,7 +361,7 @@ export function createUploadOptionsFactory<
 
 export function createDarlehenUploadOptionsFactory<
   T extends {
-    darlehen: Signal<Darlehen | null | undefined>;
+    darlehen: Signal<FreiwilligDarlehen | null | undefined>;
     allowTypes: string | undefined;
     permissions: Signal<DarlehenPermissionMap | undefined>;
   },

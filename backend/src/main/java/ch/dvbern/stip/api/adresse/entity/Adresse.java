@@ -18,8 +18,8 @@
 package ch.dvbern.stip.api.adresse.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.land.entity.Land;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -30,9 +30,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -45,6 +49,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Audited
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Adresse extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
@@ -55,7 +62,7 @@ public class Adresse extends AbstractMandantEntity {
     @NotStatelessConstraint
     private Land land;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "co_adresse", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String coAdresse;
@@ -66,7 +73,7 @@ public class Adresse extends AbstractMandantEntity {
     @Column(name = "strasse", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String strasse;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "hausnummer", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String hausnummer;

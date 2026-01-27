@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.pdf.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Locale;
 
@@ -109,23 +108,23 @@ public class BerechnungsblattService {
         );
         document.add(getNewLineParagraph());
 
-        final Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
-            familienBudgetResultat,
-            tranchenBerechnungsResultat.getBerechnungsStammdaten(),
-            translator
-        );
-
-        document.add(familienBudgetTableEinnahmen);
-        document.add(getNewLineParagraph());
-
-        final Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
-            familienBudgetResultat,
-            translator
-        );
-
-        document.add(familienBudgetTableKosten);
-        document.add(getNewLineParagraph());
-        addFooterParagraph1(document, 15, translator);
+        // final Table familienBudgetTableEinnahmen = getFamilienBudgetTableEinnahmen(
+        // familienBudgetResultat,
+        // tranchenBerechnungsResultat.getBerechnungsStammdaten(),
+        // translator
+        // );
+        //
+        // document.add(familienBudgetTableEinnahmen);
+        // document.add(getNewLineParagraph());
+        //
+        // final Table familienBudgetTableKosten = getFamilienBudgetTableKosten(
+        // familienBudgetResultat,
+        // translator
+        // );
+        //
+        // document.add(familienBudgetTableKosten);
+        // document.add(getNewLineParagraph());
+        // addFooterParagraph1(document, 15, translator);
     }
 
     private void addBerechnungsblattPIA(
@@ -149,58 +148,58 @@ public class BerechnungsblattService {
         );
         document.add(getNewLineParagraph());
 
-        final Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
-            tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
-            tranchenBerechnungsResultat.getBerechnungsStammdaten(),
-            translator
-        );
-
-        document.add(persoenlichesBudgetTableEinnahmen);
-        document.add(getNewLineParagraph());
-
-        final Table persoenlichesBudgetTableKosten =
-            getPersoenlichesBudgetTableKosten(
-                tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
-                translator
-            );
-
-        document.add(persoenlichesBudgetTableKosten);
-        document.add(getNewLineParagraph());
-
-        final var persoenlichTotalCell = new Cell();
-        persoenlichTotalCell.add(
-            getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
-        );
-        if (
-            !(tranchenBerechnungsResultat.getBerechnungsanteilKinder() != null
-            && tranchenBerechnungsResultat.getBerechnungsanteilKinder().compareTo(BigDecimal.ONE) == 0)
-        ) {
-            persoenlichTotalCell.add(
-                getDefaultParagraphSmall(
-                    translator.translate(
-                        "stip.berechnung.persoenlich.geteilteBerechnung",
-                        "berechnungsanteilKinder",
-                        tranchenBerechnungsResultat.getBerechnungsanteilKinder()
-                    )
-                ).setFontColor(ColorConstants.WHITE)
-            );
-        }
-
-        final Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
-        persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell)
-            .setBackgroundColor(ColorConstants.LIGHT_GRAY);
-
-        persoenlichesBudgetTableTotal.addCell(
-            getDefaultParagraphNumber(
-                tranchenBerechnungsResultat.getBerechnungAnteilTotal()
-            ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
-        );
-
-        document.add(persoenlichesBudgetTableTotal);
-        document.add(getNewLineParagraph());
-
-        addFooterParagraph1(document, 40, translator);
-        addFooterParagraph2(document, 15, translator);
+        // final Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
+        // tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+        // tranchenBerechnungsResultat.getBerechnungsStammdaten(),
+        // translator
+        // );
+        //
+        // document.add(persoenlichesBudgetTableEinnahmen);
+        // document.add(getNewLineParagraph());
+        //
+        // final Table persoenlichesBudgetTableKosten =
+        // getPersoenlichesBudgetTableKosten(
+        // tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+        // translator
+        // );
+        //
+        // document.add(persoenlichesBudgetTableKosten);
+        // document.add(getNewLineParagraph());
+        //
+        // final var persoenlichTotalCell = new Cell();
+        // persoenlichTotalCell.add(
+        // getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
+        // );
+        // if (
+        // !(tranchenBerechnungsResultat.getBerechnungsanteilKinder() != null
+        // && tranchenBerechnungsResultat.getBerechnungsanteilKinder().compareTo(BigDecimal.ONE) == 0)
+        // ) {
+        // persoenlichTotalCell.add(
+        // getDefaultParagraphSmall(
+        // translator.translate(
+        // "stip.berechnung.persoenlich.geteilteBerechnung",
+        // "berechnungsanteilKinder",
+        // tranchenBerechnungsResultat.getBerechnungsanteilKinder()
+        // )
+        // ).setFontColor(ColorConstants.WHITE)
+        // );
+        // }
+        //
+        // final Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+        // persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell)
+        // .setBackgroundColor(ColorConstants.LIGHT_GRAY);
+        //
+        // persoenlichesBudgetTableTotal.addCell(
+        // getDefaultParagraphNumber(
+        // tranchenBerechnungsResultat.getBerechnungAnteilTotal()
+        // ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
+        // );
+        //
+        // document.add(persoenlichesBudgetTableTotal);
+        // document.add(getNewLineParagraph());
+        //
+        // addFooterParagraph1(document, 40, translator);
+        // addFooterParagraph2(document, 15, translator);
     }
 
     public ByteArrayOutputStream getAllElternTypeBerechnungsblaetterOfGesuch(
@@ -346,58 +345,60 @@ public class BerechnungsblattService {
                 );
                 document.add(getNewLineParagraph());
 
-                final Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
-                    tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
-                    tranchenBerechnungsResultat.getBerechnungsStammdaten(),
-                    translator
-                );
-
-                document.add(persoenlichesBudgetTableEinnahmen);
-                document.add(getNewLineParagraph());
-
-                final Table persoenlichesBudgetTableKosten =
-                    getPersoenlichesBudgetTableKosten(
-                        tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
-                        translator
-                    );
-
-                document.add(persoenlichesBudgetTableKosten);
-                document.add(getNewLineParagraph());
-
-                final var persoenlichTotalCell = new Cell();
-                persoenlichTotalCell.add(
-                    getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
-                );
-                if (
-                    !(tranchenBerechnungsResultat.getBerechnungsanteilKinder() != null
-                    && tranchenBerechnungsResultat.getBerechnungsanteilKinder().compareTo(BigDecimal.ONE) == 0)
-                ) {
-                    persoenlichTotalCell.add(
-                        getDefaultParagraphSmall(
-                            translator.translate(
-                                "stip.berechnung.persoenlich.geteilteBerechnung",
-                                "berechnungsanteilKinder",
-                                tranchenBerechnungsResultat.getBerechnungsanteilKinder()
-                            )
-                        ).setFontColor(ColorConstants.WHITE)
-                    );
-                }
-
-                final Table persoenlichesBudgetTableTotal = new Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
-                persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell)
-                    .setBackgroundColor(ColorConstants.LIGHT_GRAY);
-
-                persoenlichesBudgetTableTotal.addCell(
-                    getDefaultParagraphNumber(
-                        tranchenBerechnungsResultat.getBerechnungAnteilTotal()
-                    ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
-                );
-
-                document.add(persoenlichesBudgetTableTotal);
-                document.add(getNewLineParagraph());
-
-                addFooterParagraph1(document, 40, translator);
-                addFooterParagraph2(document, 15, translator);
+                // TODO KSTIP-2590: Why is this duplicated with addBerechnungsblattPIA?
+                // final Table persoenlichesBudgetTableEinnahmen = getPersoenlichesBudgetTableEinnahmen(
+                // tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+                // tranchenBerechnungsResultat.getBerechnungsStammdaten(),
+                // translator
+                // );
+                //
+                // document.add(persoenlichesBudgetTableEinnahmen);
+                // document.add(getNewLineParagraph());
+                //
+                // final Table persoenlichesBudgetTableKosten =
+                // getPersoenlichesBudgetTableKosten(
+                // tranchenBerechnungsResultat.getPersoenlichesBudgetresultat(),
+                // translator
+                // );
+                //
+                // document.add(persoenlichesBudgetTableKosten);
+                // document.add(getNewLineParagraph());
+                //
+                // final var persoenlichTotalCell = new Cell();
+                // persoenlichTotalCell.add(
+                // getDefaultParagraphTranslated("stip.berechnung.persoenlich.total", translator).setFont(pdfFontBold)
+                // );
+                // if (
+                // !(tranchenBerechnungsResultat.getBerechnungsanteilKinder() != null
+                // && tranchenBerechnungsResultat.getBerechnungsanteilKinder().compareTo(BigDecimal.ONE) == 0)
+                // ) {
+                // persoenlichTotalCell.add(
+                // getDefaultParagraphSmall(
+                // translator.translate(
+                // "stip.berechnung.persoenlich.geteilteBerechnung",
+                // "berechnungsanteilKinder",
+                // tranchenBerechnungsResultat.getBerechnungsanteilKinder()
+                // )
+                // ).setFontColor(ColorConstants.WHITE)
+                // );
+                // }
+                //
+                // final Table persoenlichesBudgetTableTotal = new
+                // Table(TABLE_WIDTH_PERCENTAGES).useAllAvailableWidth();
+                // persoenlichesBudgetTableTotal.addCell(persoenlichTotalCell)
+                // .setBackgroundColor(ColorConstants.LIGHT_GRAY);
+                //
+                // persoenlichesBudgetTableTotal.addCell(
+                // getDefaultParagraphNumber(
+                // tranchenBerechnungsResultat.getBerechnungAnteilTotal()
+                // ).setFont(pdfFontBold).setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                // );
+                //
+                // document.add(persoenlichesBudgetTableTotal);
+                // document.add(getNewLineParagraph());
+                //
+                // addFooterParagraph1(document, 40, translator);
+                // addFooterParagraph2(document, 15, translator);
             }
         } catch (IOException e) {
             throw new InternalServerErrorException(e);

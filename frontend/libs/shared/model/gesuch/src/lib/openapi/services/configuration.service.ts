@@ -88,6 +88,18 @@ export class ConfigurationService {
         return httpParams;
     }
 
+    public getDeploymentConfigPath = () => {
+        let path = `/api/v1/config/deployment`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert der Deployment Configuration.
      * Gibt zuerueck die Version und Stage aus das Backend

@@ -21,13 +21,13 @@ import java.time.LocalDate;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.validation.AhvConstraint;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,9 +45,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Pattern.Flag;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -70,6 +74,9 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class PersonInAusbildung extends AbstractFamilieEntity {
     @NotNull
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -91,12 +98,12 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(name = "identischer_zivilrechtlicher_wohnsitz", nullable = false)
     private boolean identischerZivilrechtlicherWohnsitz = true;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_ort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String identischerZivilrechtlicherWohnsitzOrt;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "identischer_zivilrechtlicher_wohnsitz_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String identischerZivilrechtlicherWohnsitzPLZ;
@@ -120,12 +127,12 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     )
     private Land nationalitaet;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "heimatort", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String heimatort;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "heimatort_plz", length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String heimatortPLZ;
@@ -134,7 +141,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(name = "niederlassungsstatus")
     private Niederlassungsstatus niederlassungsstatus;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "einreisedatum")
     private LocalDate einreisedatum;
 
@@ -155,7 +162,7 @@ public class PersonInAusbildung extends AbstractFamilieEntity {
     @Column(name = "korrespondenz_sprache", nullable = false)
     private Sprache korrespondenzSprache;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Enumerated(EnumType.STRING)
     @Column(name = "zustaendige_kesb")
     private ZustaendigeKESB zustaendigeKESB;
