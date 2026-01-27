@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.delegieren.entity.PersoenlicheAngaben;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.notification.service.MailAlreadySentCheckerService;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;

@@ -170,7 +170,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public void createGesuchNachfristDokumenteChangedNotification(final Gesuch gesuch) {
+    public void createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(final Gesuch gesuch) {
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -188,10 +188,11 @@ public class NotificationService {
         String msg = Templates.getNachfristDokumenteChangedText(sprache, nachfristDokumente).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     @Transactional
-    public void createGesuchEingereichtNotification(final Gesuch gesuch) {
+    public void createGesuchEingereichtNotificationAndSendStdMail(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
             .setFall(gesuch.getAusbildung().getFall());
@@ -208,10 +209,11 @@ public class NotificationService {
         String msg = Templates.getGesuchEingereichtText(anrede, nachname, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     @Transactional
-    public void createAenderungEingereichtNotification(final Gesuch gesuch) {
+    public void createAenderungEingereichtNotificationAndSendStdMail(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.AENDERUNG_EINGEREICHT)
             .setFall(gesuch.getAusbildung().getFall());
@@ -225,10 +227,11 @@ public class NotificationService {
         final String msg = Templates.getAenderungEingereicht(anrede, nachname, sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     @Transactional
-    public void createAenderungAbgelehntNotification(
+    public void createAenderungAbgelehntNotificationAndSendStdMail(
         final Gesuch gesuch,
         final GesuchTranche aenderung,
         final KommentarDto kommentarDto
@@ -246,10 +249,14 @@ public class NotificationService {
         final String msg = Templates.getAenderungAbgelehnt(anrede, nachname, kommentarDto.getText(), sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     @Transactional
-    public void createGesuchStatusChangeWithCommentNotification(final Gesuch gesuch, final KommentarDto kommentar) {
+    public void createGesuchStatusChangeWithCommentNotificationAndSendStdMail(
+        final Gesuch gesuch,
+        final KommentarDto kommentar
+    ) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_STATUS_CHANGE_WITH_COMMENT)
             .setFall(gesuch.getAusbildung().getFall());
@@ -263,9 +270,10 @@ public class NotificationService {
             Templates.getGesuchStatusChangeWithKommentarText(anrede, nachname, kommentar.getText(), sprache).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
-    public void createMissingDocumentNotification(final Gesuch gesuch) {
+    public void createMissingDocumentNotificationAndSendStdMail(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.FEHLENDE_DOKUMENTE)
             .setFall(gesuch.getAusbildung().getFall());
@@ -294,9 +302,10 @@ public class NotificationService {
         ).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
-    public void createGesuchFehlendeDokumenteEinreichenNotification(final Gesuch gesuch) {
+    public void createGesuchFehlendeDokumenteEinreichenNotificationAndSendStdMail(final Gesuch gesuch) {
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -313,9 +322,10 @@ public class NotificationService {
         setAbsender(gesuch, notification);
 
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
-    public void createNeueVerfuegungNotification(final Verfuegung verfuegung) {
+    public void createNeueVerfuegungNotificationAndSendStdMail(final Verfuegung verfuegung) {
         final var pia = verfuegung.getGesuch()
             .getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
@@ -337,9 +347,10 @@ public class NotificationService {
             .setContextId(mostRecentVerfuegungsDokument.get().getId());
         setAbsender(verfuegung.getGesuch(), notification);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(verfuegung.getGesuch());
     }
 
-    public void createGesuchFehlendeDokumenteNichtEingereichtNotification(final Gesuch gesuch) {
+    public void createGesuchFehlendeDokumenteNichtEingereichtNotificationAndSendStdMail(final Gesuch gesuch) {
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -371,9 +382,10 @@ public class NotificationService {
             .setNotificationText(msg);
         setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
-    public void createFailedAuszahlungBuchhaltungNotification(final Gesuch gesuch) {
+    public void createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(final Gesuch gesuch) {
         final var pia = gesuch.getNewestGesuchTranche()
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
@@ -386,6 +398,7 @@ public class NotificationService {
             .setNotificationText(message);
         setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
     private void setAbsender(final Gesuch gesuch, Notification notification) {
