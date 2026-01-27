@@ -73,10 +73,16 @@ public class NeskoSteuerdatenMapper {
                 saeule2 += getMaxOrZeroFromEffSatzType(
                     steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson().getPersoenlicheBeitraegeSaeule2()
                 );
+                saeule2 -= getMaxOrZeroFromEffSatzType(
+                    steuerdatenNesko.getAufwaendeSelbstErwerbAngefragtePerson().getERBelasteteAnteileSaeule2()
+                );
             }
             if (Objects.nonNull(steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn())) {
                 saeule2 += getMaxOrZeroFromEffSatzType(
                     steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn().getPersoenlicheBeitraegeSaeule2()
+                );
+                saeule2 -= getMaxOrZeroFromEffSatzType(
+                    steuerdatenNesko.getAufwaendeSelbstErwerbEhepartnerIn().getERBelasteteAnteileSaeule2()
                 );
             }
         }
