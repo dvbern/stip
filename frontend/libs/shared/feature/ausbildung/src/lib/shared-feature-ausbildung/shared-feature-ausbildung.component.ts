@@ -569,16 +569,20 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
     effect(() => {
       const isWritable = this.isEditableSig();
+      const ausbildungNichtGefunden = ausbildungNichtGefundenSig();
+      const currentAusbildungsgang = this.currentAusbildungsgangSig();
+
+      const isDisabled =
+        ausbildungNichtGefunden || !isWritable || !currentAusbildungsgang;
 
       this.formUtils.setDisabledState(
         this.form.controls.fachrichtungBerufsbezeichnung,
-        !isWritable ||
-          !ausbildungNichtGefundenSig() ||
-          !this.currentAusbildungsgangSig(),
+        isDisabled,
         isWritable,
       );
     });
 
+    // Show / hide fachrichtungBerufsbezeichnung based on zusatzfrage of ausbildungsgang
     effect(() => {
       const { readonly } = this.cachedGesuchViewSig();
       const ausbildungsgang = this.currentAusbildungsgangSig();
@@ -591,6 +595,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       this.form.controls.fachrichtungBerufsbezeichnung.updateValueAndValidity();
     });
 
+    // reset dependent fields on ausbildungsgang change
     let previousAusbildungsgangValue: string | null = null;
     effect(() => {
       const newAusbildungsgangValue = this.ausbildungsgangIdSig();

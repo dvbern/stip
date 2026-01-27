@@ -66,7 +66,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canGetDarlehenSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
+        if (!isSbOrFreigabestelleOrJurist(benutzer)) {
             forbidden();
         }
     }
