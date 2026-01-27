@@ -355,7 +355,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     );
     const controls = this.form.controls;
 
-    // todo: Timing Problems!
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(() => {
       const value = this.ausbildungNichtGefundenChangedSig();
@@ -471,7 +470,6 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       }
     });
 
-    // todo: Timing Problems!
     effect(() => {
       const readonly = !this.isEditableSig();
       const { invalidFormularProps } = this.einreichenStore.validationViewSig();
