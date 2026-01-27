@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.darlehen.entity.Darlehen;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -47,28 +48,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    private final MailService mailService;
 
     @Transactional
-    public void createDarlehenAbgelehntNotification(final Darlehen darlehen) {
-        createDarlehenNotification(NotificationType.DARLEHEN_ABGELEHNT, darlehen, Optional.empty());
+    public void createDarlehenAbgelehntNotificationAndSendStdMail(final Darlehen darlehen) {
+        createDarlehenNotificationAndSendStdMail(NotificationType.DARLEHEN_ABGELEHNT, darlehen, Optional.empty());
     }
 
     @Transactional
-    public void createDarlehenAkzeptiertNotification(final Darlehen darlehen) {
-        createDarlehenNotification(NotificationType.DARLEHEN_AKZEPTIERT, darlehen, Optional.empty());
+    public void createDarlehenAkzeptiertNotificationAndSendStdMail(final Darlehen darlehen) {
+        createDarlehenNotificationAndSendStdMail(NotificationType.DARLEHEN_AKZEPTIERT, darlehen, Optional.empty());
     }
 
     @Transactional
-    public void createDarlehenEingegebenNotification(final Darlehen darlehen) {
-        createDarlehenNotification(NotificationType.DARLEHEN_EINGEGEBEN, darlehen, Optional.empty());
+    public void createDarlehenEingegebenNotificationAndSendStdMail(final Darlehen darlehen) {
+        createDarlehenNotificationAndSendStdMail(NotificationType.DARLEHEN_EINGEGEBEN, darlehen, Optional.empty());
     }
 
     @Transactional
-    public void createDarlehenZurueckgewiesenNotification(final Darlehen darlehen, String kommentar) {
-        createDarlehenNotification(NotificationType.DARLEHEN_ZURUECKGEWIESEN, darlehen, Optional.of(kommentar));
+    public void createDarlehenZurueckgewiesenNotificationAndSendStdMail(final Darlehen darlehen, String kommentar) {
+        createDarlehenNotificationAndSendStdMail(
+            NotificationType.DARLEHEN_ZURUECKGEWIESEN,
+            darlehen,
+            Optional.of(kommentar)
+        );
     }
 
-    private void createDarlehenNotification(
+    private void createDarlehenNotificationAndSendStdMail(
         final NotificationType notificationType,
         final Darlehen darlehen,
         Optional<String> kommentar
@@ -107,24 +113,28 @@ public class NotificationService {
 
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(darlehen.getRelatedGesuch());
     }
 
     @Transactional
-    public void createDelegierungAufgeloestNotification(final Delegierung delegierung) {
-        createDelegierungNotification(NotificationType.DELEGIERUNG_AUFGELOEST, delegierung);
+    public void createDelegierungAufgeloestNotificationAndSendStdMail(final Delegierung delegierung) {
+        createDelegierungNotificationAndSendStdMail(NotificationType.DELEGIERUNG_AUFGELOEST, delegierung);
     }
 
     @Transactional
-    public void createDelegierungAbgelehntNotification(final Delegierung delegierung) {
-        createDelegierungNotification(NotificationType.DELEGIERUNG_ABGELEHNT, delegierung);
+    public void createDelegierungAbgelehntNotificationAndSendStdMail(final Delegierung delegierung) {
+        createDelegierungNotificationAndSendStdMail(NotificationType.DELEGIERUNG_ABGELEHNT, delegierung);
     }
 
     @Transactional
-    public void createDelegierungAngenommenNotification(final Delegierung delegierung) {
-        createDelegierungNotification(NotificationType.DELEGIERUNG_ANGENOMMEN, delegierung);
+    public void createDelegierungAngenommenNotificationAndSendStdMail(final Delegierung delegierung) {
+        createDelegierungNotificationAndSendStdMail(NotificationType.DELEGIERUNG_ANGENOMMEN, delegierung);
     }
 
-    private void createDelegierungNotification(final NotificationType notificationType, final Delegierung delegierung) {
+    private void createDelegierungNotificationAndSendStdMail(
+        final NotificationType notificationType,
+        final Delegierung delegierung
+    ) {
         final var fall = delegierung.getDelegierterFall();
         final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
         final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
@@ -148,6 +158,10 @@ public class NotificationService {
         };
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForFall(
+            delegierung.getPersoenlicheAngaben(),
+            delegierung.getDelegierterFall()
+        );
     }
 
     @Transactional
