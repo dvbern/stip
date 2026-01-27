@@ -259,7 +259,11 @@ export class SachbearbeitungAppFeatureCockpitComponent
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
 
-  private readonly quickFilterConfig = [
+  private readonly quickFilterConfig: {
+    filter: GesuchFilter;
+    roles: BenutzerRole[];
+    group: QuickFilterGroup;
+  }[] = [
     {
       filter: 'MEINE_GESUCHE',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
@@ -336,18 +340,14 @@ export class SachbearbeitungAppFeatureCockpitComponent
   );
 
   availableQuickFiltersSig = computed<AvailableFilters>(() => {
-    const activeRoles = this.permissionStore.rolesMapSig() as
-      | Partial<Record<BenutzerRole, true>>
-      | undefined;
+    const activeRoles = this.permissionStore.rolesMapSig();
 
     const filters = this.quickFilterConfig
-      .filter(({ roles }) =>
-        roles.some((r) => activeRoles?.[r as BenutzerRole]),
-      )
+      .filter(({ roles }) => roles.some((r) => activeRoles?.[r]))
       .map(({ filter, roles, group }) => ({
-        typ: filter as GesuchFilter,
-        roles: roles as BenutzerRole[],
-        group: group as QuickFilterGroup,
+        typ: filter,
+        roles,
+        group,
       }));
 
     return filters.reduce((groups, { typ, roles, group }) => {
