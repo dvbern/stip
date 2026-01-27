@@ -166,6 +166,9 @@ quarkus:
     multitenant: 'DISCRIMINATOR'
     jdbc:
       timezone: 'Europe/Zurich'
+    mapping:
+      format:
+        global: "ignore"
   default-locale: 'de'
   security:
     jaxrs:
@@ -221,6 +224,10 @@ quarkus:
       url: 'https://nesko-int.sv.fin.be.ch/sso/auth/realms/hades-int/protocol/openid-connect'
 #   store-type: jdbc-tx
 '%dev':
+  mp:
+    jwt:
+      verify:
+        issuer: "NONE"
   quarkus:
     log:
       sentry:
@@ -269,6 +276,10 @@ quarkus:
       expires-in-minutes: 5
 
 '%test':
+  mp:
+    jwt:
+      verify:
+        issuer: "NONE"
   quarkus:
     http:
       test-port: 0

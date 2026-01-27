@@ -26,6 +26,9 @@ import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGr
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheCopyService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.util.TestUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.savoirtech.json.JsonComparatorBuilder;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -34,8 +37,6 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_WG_WOHNEND_REQUIRED_MESSAGE;
@@ -95,8 +96,10 @@ class GesuchTrancheCopyServiceTest {
             gesuchTrancheCopyService.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
         var copyDto = gesuchTrancheMapper.toDtoWithVersteckteEltern(trancheCopy);
 
-        final var expected = "{\"templateJson\":" + new ObjectMapper().writeValueAsString(trancheDto) + '}';
-        final var actual = new ObjectMapper().writeValueAsString(copyDto);
+        final var objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        final var expected = "{\"templateJson\":" + objectMapper.writeValueAsString(trancheDto) + '}';
+        final var actual = objectMapper.writeValueAsString(copyDto);
         final var comparator = new JsonComparatorBuilder().build();
 
         final var result = comparator.compare(expected, actual);
