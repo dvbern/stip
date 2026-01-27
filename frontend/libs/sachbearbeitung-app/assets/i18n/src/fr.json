@@ -812,7 +812,7 @@
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_BEARBEITBAR": "Toutes les demandes traitables",
   "sachbearbeitung-app.cockpit.quick-filter.MEINE_BEARBEITBAR": "Mes demandes traitables",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_JURISTISCHE_ABKLAERUNG": "Toutes les clarifications juridiques",
-  "sachbearbeitung-app.cockpit.quick-filter.MEINE_JURISTISCHE_ABKLAERUNG": "Mes clarifications juridiques",
+  "sachbearbeitung-app.cockpit.quick-filter.ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG": "Toutes investigations par le service juridique",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_DRUCKBAR_VERFUEGUNGEN": "Toutes les décisions imprimables",
   "sachbearbeitung-app.cockpit.quick-filter.MEINE_DRUCKBAR_VERFUEGUNGEN": "Mes décisions imprimables",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_DRUCKBAR_DATENSCHUTZBRIEFE": "Toutes les lettres de protection des données imprimables",
