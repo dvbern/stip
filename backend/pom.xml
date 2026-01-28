@@ -492,11 +492,6 @@
         <version>${liquibase-maven-plugin.version}</version>
         <dependencies>
           <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm</artifactId>
-            <version>${quarkus.platform.version}</version>
-          </dependency>
-          <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase-maven-plugin.version}</version>
@@ -505,11 +500,6 @@
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-hibernate6</artifactId>
             <version>${liquibase-maven-plugin.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-postgresql</artifactId>
-            <version>${quarkus.platform.version}</version>
           </dependency>
         </dependencies>
         <configuration>
