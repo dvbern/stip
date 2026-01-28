@@ -1319,10 +1319,10 @@ public class GesuchService {
         final var keinAnspruch = new ArrayList<Gesuch>();
         for (final var gesuch : gesuche) {
             final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
-            if (latestVerfuegung.isNegativeVerfuegung()) {
-                keinAnspruch.add(gesuch);
-            } else {
+            if (latestVerfuegung.isAnspruchVerfuegung()) {
                 anspruch.add(gesuch);
+            } else {
+                keinAnspruch.add(gesuch);
             }
         }
 

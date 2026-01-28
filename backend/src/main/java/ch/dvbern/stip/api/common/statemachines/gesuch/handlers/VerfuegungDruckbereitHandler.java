@@ -51,6 +51,10 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
+        if (berechnungsresultat > 0 && !latestVerfuegung.isNegativeVerfuegung()) {
+            latestVerfuegung.setAnspruchVerfuegung(true);
+        }
+
         if ((berechnungsresultat > 0 || !gesuch.isFirstVerfuegung()) && !latestVerfuegung.isNegativeVerfuegung()) {
             buchhaltungService.createStipendiumBuchhaltungEntry(
                 gesuch,
