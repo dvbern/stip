@@ -33,6 +33,7 @@ export interface TranchenBerechnungsresultat {
     gueltigBis: string;
     ausbildungAb: string;
     ausbildungBis: string;
+    yearRange: string;
     gesuchTrancheId: string;
     /**
      * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.

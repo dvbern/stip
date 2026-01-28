@@ -73,15 +73,11 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       this.indexSig(),
     );
 
-    const yearRange = [r.gueltigAb, r.gueltigBis]
-      .map((d) => d.split('-')[0])
-      .join('/');
-
     const view: BerechnungView = {
       persoenlich: {
         ...r.persoenlichesBudgetresultat,
         typ: 'persoenlich',
-        yearRange,
+        yearRange: r.yearRange,
         name: `${r.persoenlichesBudgetresultat.vorname} ${r.persoenlichesBudgetresultat.nachname}`,
         gueltigAb: r.gueltigAb,
         gueltigBis: r.gueltigBis,
@@ -89,11 +85,11 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       familien: r.familienBudgetresultate.map((v) => ({
         ...v,
         typ: 'familien',
+        yearRange: r.yearRange,
         name: `${v.vorname} ${v.nachname}`,
         gueltigAb: r.gueltigAb,
         gueltigBis: r.gueltigBis,
         anzahlMonate: r.persoenlichesBudgetresultat.anzahlMonate,
-        yearRange,
       })),
       berechnungsStammdaten: r.berechnungsStammdaten,
     };

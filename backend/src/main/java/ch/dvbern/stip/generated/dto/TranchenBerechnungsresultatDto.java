@@ -37,6 +37,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   private @Valid LocalDate gueltigBis;
   private @Valid String ausbildungAb;
   private @Valid String ausbildungBis;
+  private @Valid String yearRange;
   private @Valid UUID gesuchTrancheId;
   private @Valid BigDecimal berechnungsanteilKinder;
   private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
@@ -181,6 +182,25 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   /**
    **/
+  public TranchenBerechnungsresultatDto yearRange(String yearRange) {
+    this.yearRange = yearRange;
+    return this;
+  }
+
+  
+  @JsonProperty("yearRange")
+  @NotNull
+  public String getYearRange() {
+    return yearRange;
+  }
+
+  @JsonProperty("yearRange")
+  public void setYearRange(String yearRange) {
+    this.yearRange = yearRange;
+  }
+
+  /**
+   **/
   public TranchenBerechnungsresultatDto gesuchTrancheId(UUID gesuchTrancheId) {
     this.gesuchTrancheId = gesuchTrancheId;
     return this;
@@ -309,6 +329,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
         Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
+        Objects.equals(this.yearRange, tranchenBerechnungsresultat.yearRange) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
         Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
@@ -318,7 +339,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnungAnteilTotal, berechnungAnteilStipendium, berechnungAnteilDarlehen, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnungAnteilTotal, berechnungAnteilStipendium, berechnungAnteilDarlehen, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -333,6 +354,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
     sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
+    sb.append("    yearRange: ").append(toIndentedString(yearRange)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");

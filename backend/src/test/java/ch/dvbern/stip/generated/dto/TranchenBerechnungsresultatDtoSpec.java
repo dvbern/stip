@@ -43,6 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_BIS,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR_RANGE,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
@@ -72,6 +73,9 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNG_BIS = "ausbildungBis";
   private String ausbildungBis;
+
+  public static final String JSON_PROPERTY_YEAR_RANGE = "yearRange";
+  private String yearRange;
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
   private UUID gesuchTrancheId;
@@ -273,6 +277,32 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
+  public TranchenBerechnungsresultatDtoSpec yearRange(String yearRange) {
+    
+    this.yearRange = yearRange;
+    return this;
+  }
+
+   /**
+   * Get yearRange
+   * @return yearRange
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getYearRange() {
+    return yearRange;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setYearRange(String yearRange) {
+    this.yearRange = yearRange;
+  }
+
+
   public TranchenBerechnungsresultatDtoSpec gesuchTrancheId(UUID gesuchTrancheId) {
     
     this.gesuchTrancheId = gesuchTrancheId;
@@ -426,6 +456,7 @@ public class TranchenBerechnungsresultatDtoSpec {
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
         Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
+        Objects.equals(this.yearRange, tranchenBerechnungsresultat.yearRange) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
         Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
@@ -435,7 +466,7 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnungAnteilTotal, berechnungAnteilStipendium, berechnungAnteilDarlehen, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(berechnungAnteilTotal, berechnungAnteilStipendium, berechnungAnteilDarlehen, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -449,6 +480,7 @@ public class TranchenBerechnungsresultatDtoSpec {
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
     sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
+    sb.append("    yearRange: ").append(toIndentedString(yearRange)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
