@@ -61,23 +61,6 @@ export class AusbildungStore extends signalStore(
     }));
   };
 
-  loadAusbildung$ = rxMethod<{ ausbildungId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          ausbildung: cachedPending(state.ausbildung),
-        }));
-      }),
-      switchMap(({ ausbildungId }) =>
-        this.ausbildungService
-          .getAusbildung$({ ausbildungId })
-          .pipe(
-            handleApiResponse((ausbildung) => patchState(this, { ausbildung })),
-          ),
-      ),
-    ),
-  );
-
   createAusbildung$ = rxMethod<{
     ausbildung: AusbildungUpdate;
     onSuccess: (response: AusbildungCreateResponse) => void;
