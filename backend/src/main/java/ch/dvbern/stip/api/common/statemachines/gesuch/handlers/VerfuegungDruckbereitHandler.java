@@ -52,20 +52,19 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
 
-        if (berechnungsresultat > 0 && !latestVerfuegung.getVerfuegungStatus().isNegativ()) {
-            latestVerfuegung.setVerfuegungStatus(VerfuegungStatus.ANSPRUCH);
-        } else if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
-            latestVerfuegung.setVerfuegungStatus(VerfuegungStatus.KEIN_ANSPRUCH);
-        }
+        if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
+            final boolean hasAnspruch = berechnungsresultat > 0;
 
-        if (
-            (berechnungsresultat > 0 || !gesuch.isFirstVerfuegung())
-            && !latestVerfuegung.getVerfuegungStatus().isNegativ()
-        ) {
-            buchhaltungService.createStipendiumBuchhaltungEntry(
-                gesuch,
-                berechnungsresultat
+            latestVerfuegung.setVerfuegungStatus(
+                hasAnspruch ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH
             );
+
+            if (hasAnspruch || !gesuch.isFirstVerfuegung()) {
+                buchhaltungService.createStipendiumBuchhaltungEntry(
+                    gesuch,
+                    berechnungsresultat
+                );
+            }
         }
 
         verfuegungPdfService.createVerfuegungsDocuments(gesuch, stipendien);

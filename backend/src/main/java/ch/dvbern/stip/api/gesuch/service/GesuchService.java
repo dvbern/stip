@@ -706,32 +706,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        var relevantVerfuegung = gesuch.getVerfuegungs()
-            .stream()
-            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-            .orElseThrow(NotFoundException::new);
-
-        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
-
-        if (Objects.isNull(relevantVerfuegung.getStipDecision())) {
-            final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-                gesuch,
-                configService.getCurrentDmnMajorVersion(),
-                configService.getCurrentDmnMinorVersion()
-            );
-
-            if (stipendien.getBerechnungTotal() > 0) {
-                status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
-            }
-        }
-
-        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
-    }
-
-    @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuch);
