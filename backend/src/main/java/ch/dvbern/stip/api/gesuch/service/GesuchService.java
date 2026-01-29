@@ -922,9 +922,9 @@ public class GesuchService {
 
     @Transactional
     public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
-        var aenderung = gesuchTrancheHistoryService.getLatestTranche(aenderungId);
-        final var gesuch = getGesuchById(aenderung.getGesuch().getId());
-        aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
+        final var gesuchsId = gesuchTrancheHistoryService.getLatestTranche(aenderungId).getGesuch().getId();
+        final var gesuch = getGesuchById(gesuchsId);
+        final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
 
         return gesuchMapperUtil.toWithChangesDto(
