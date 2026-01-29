@@ -423,9 +423,16 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Bei Mutter",
   "shared.form.shared.wohnsitzanteil.vater": "Bei Vater",
 
+  "shared.export.tranche.header": "{{ fallnummer }}\t{{ gesuchsnummer }}\t{{ gueltigAb }} - {{ gueltigBis }}",
+  "shared.export.shared.sozialversicherungsnummer": "SV-Nummer",
+  "shared.export.lebenslauf.ausbildungen": "Ausbildungen",
+  "shared.export.lebenslauf.taetigkeiten": "Tätigkeiten",
+
   "shared.tranche.title": "Übersicht",
   "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} vom",
   "shared.form.title.suffix.AENDERUNG": "Änderung {{ position }} vom",
+  "shared.form.tranche.export": "Export",
+  "shared.form.tranche.export.error": "Beim Exportieren der Tranche ist ein Fehler aufgetreten",
   "shared.form.tranche.status.label.GESUCH": "Status des Gesuchs",
   "shared.form.tranche.status.label.TRANCHE": "Status der Tranche",
   "shared.form.tranche.status.label.AENDERUNG": "Status der Änderung",

@@ -2,223 +2,273 @@
 @let tranche = view.tranche;
 @let gesuchId = view.gesuchId;
 
-<ng-template dvHeaderSuffix>
-  <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold">
-    @if (tranche) {
-      {{ 'shared.form.title.suffix.' + tranche.typ | transloco: { position: currentTrancheNumberSig() } }}
-      {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
-      {{ tranche.gueltigBis | date: 'MM.yyyy' }}
-    }
-  </h2>
-</ng-template>
-
-<form [formGroup]="form" class="tw:dv-form-grid tw:pt-12" [dvSharedUiFormReadonly]="true">
-  <!-- Status -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>
-      @if (view.isEditingAenderung) {
-        {{ 'shared.form.tranche.status.label.' + tranche?.typ | transloco }}
-      } @else {
-        {{ 'shared.form.tranche.status.label.GESUCH' | transloco }}
+<ng-container *dvTranslocoShared="let t">
+  <ng-template dvHeaderSuffix>
+    <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold tw:flex tw:gap-8 tw:items-center">
+      @if (tranche) {
+        {{ t(`shared.form.title.suffix.${tranche.typ}`, { position: currentTrancheNumberSig() }) }}
+        {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
+        {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
-    </mat-label>
-
-    <input readonly type="text" matInput formControlName="status" data-testid="form-tranche-status" />
-  </mat-form-field>
-
-  <!-- PiA -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.tranche.pia.label' | transloco }}</mat-label>
-
-    <input readonly type="text" matInput formControlName="pia" data-testid="form-tranche-pia" />
-  </mat-form-field>
-
-  <!-- Gesuchsnummer -->
-  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
-    <mat-label>{{ 'shared.form.tranche.gesuchsnummer.label' | transloco }}</mat-label>
-
-    <input readonly type="text" matInput formControlName="gesuchsnummer" data-testid="form-tranche-gesuchsnummer" />
-  </mat-form-field>
-
-  <!-- Fallnummer -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.tranche.fallnummer.label' | transloco }}</mat-label>
-
-    <input readonly type="text" matInput formControlName="fallnummer" data-testid="form-tranche-fallnummer" />
-  </mat-form-field>
-
-  <!-- Einreichedatum -->
-  <div class="tw:col-start-1 tw:flex tw:gap-2">
-    <mat-form-field dvSharedUiFormField class="tw:grow">
-      <mat-label>{{ 'shared.form.tranche.einreichedatum.label' | transloco }}</mat-label>
-      <input readonly type="text" matInput formControlName="einreichedatum" data-testid="form-tranche-einreichedatum" />
-    </mat-form-field>
-    @let einreichedatum = view.gesuch?.einreichedatum;
-    @let minDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStart;
-    @let maxDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStopp;
-    @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
-    @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
-      <button
-        type="button"
-        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
-        (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
-      >
-        <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
-      </button>
-    }
-  </div>
-
-  <!-- Gesuchsperiode -->
-  <div class="tw:col-start-1 tw:flex tw:gap-2">
-    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
-      <mat-label>{{ 'shared.form.tranche.gesuchsperiode.label' | transloco }}</mat-label>
-
-      <input readonly type="text" matInput formControlName="gesuchsperiode" data-testid="form-tranche-gesuchsperiode" />
-    </mat-form-field>
-    <!-- change gesuchsPeriode Button -->
-    @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
-      <button
-        type="button"
-        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
-        [attr.aria-label]="'shared.form.tranche.gesuchsperiode.change' | transloco"
-        data-testid="form-tranche-gesuchsperiode-change-button"
-        (click)="changeGesuchsperiode(tranche?.id)"
-      >
-        <i class="material-symbols-rounded tw:!text-3xl/none">format_indent_increase</i>
-      </button>
-    }
-  </div>
-
-  <!-- Einreichefrist -->
-  <mat-form-field dvSharedUiFormField>
-    <mat-label>{{ 'shared.form.tranche.einreichefrist.label' | transloco }}</mat-label>
-
-    <input readonly type="text" matInput formControlName="einreichefrist" data-testid="form-tranche-einreichefrist" />
-  </mat-form-field>
-
-  <ng-template #updateAenderungVonBisButton>
-    @let gesuch = view.gesuch;
-    @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
-      <button
-        type="button"
-        class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
-        [attr.aria-label]="'shared.form.tranche.aenderung.update-von-bis' | transloco"
-        data-testid="form-tranche-aenderung-von-bis-update"
-        (click)="updateAenderungVonBis(gesuch)"
-      >
-        <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
-      </button>
-    }
+      @if (exportValuesSig(); as exportValues) {
+        <div class="tw:relative">
+          @if (isExportingSig()) {
+            <dv-shared-ui-loading [type]="'icon'" [overlay]="true"></dv-shared-ui-loading>
+          }
+          <button *dvIfSachbearbeiter class="btn btn-primary" (click)="exportTranche(exportValues)">
+            {{ t('shared.form.tranche.export') }}
+          </button>
+        </div>
+      }
+    </h2>
   </ng-template>
 
-  <!-- Von -->
-  <div class="tw:col-start-1 tw:flex tw:gap-2">
-    <mat-form-field dvSharedUiFormField class="tw:grow">
-      <mat-label>{{ 'shared.form.tranche.von.label' | transloco }}</mat-label>
-
-      <input readonly type="text" matInput formControlName="von" data-testid="form-tranche-von" />
-    </mat-form-field>
-
-    <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
-  </div>
-
-  <!-- Bis -->
-  <div class="tw:flex tw:gap-2">
-    <mat-form-field dvSharedUiFormField class="tw:grow">
-      <mat-label>{{ 'shared.form.tranche.bis.label' | transloco }}</mat-label>
-
-      <input readonly type="text" matInput formControlName="bis" data-testid="form-tranche-bis" />
-    </mat-form-field>
-
-    <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
-  </div>
-
-  <!-- Bemerkung -->
-  <mat-form-field dvSharedUiFormField class="tw:md:col-span-2">
-    <mat-label>{{ 'shared.form.tranche.bemerkung.label' | transloco }}</mat-label>
-    <textarea
-      readonly
-      rows="3"
-      type="text"
-      matInput
-      formControlName="bemerkung"
-      data-testid="form-tranche-bemerkung"
-    ></textarea>
-  </mat-form-field>
-
-  <!-- Zuständiger Sachbearbeiter -->
-  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
-    <mat-label>{{ 'shared.form.tranche.sachbearbeiter.label' | transloco }}</mat-label>
-    <input readonly type="text" matInput formControlName="sachbearbeiter" data-testid="form-tranche-sachbearbeiter" />
-  </mat-form-field>
-</form>
-
-<ng-container *dvIfSachbearbeiter>
-  <div class="tw:mt-8">
-    @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
-    @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
-    @let hasValidationErrors = !!einreichenStore.einreichenValidationResult().data?.validationErrors?.length;
-    @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
-      @if (abschlussPhase === 'NOT_READY' && specialValidationErrors.length === 0) {
-        <div
-          class="alert alert-warning tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
-          role="alert"
-          data-testid="alert-warning"
-        >
-          <span class="text-warning material-symbols-rounded">warning</span>
-          <span [innerHTML]="'shared.form.tranche-abschluss.notReady' | transloco"></span>
-        </div>
-      } @else if (abschlussPhase === 'NOT_READY') {
-        @for (error of specialValidationErrors; track error) {
-          <div
-            class="alert alert-danger tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
-            role="alert"
-            data-testid="alert-danger"
-          >
-            <span class="text-danger material-symbols-rounded">error</span>
-            <div>
-              <span [innerHTML]="error.validationErrorKey | transloco"></span>
-              &nbsp;<a [routerLink]="['/gesuch', error.step.route, gesuchId]">{{ error.linkKey | transloco }}</a>
-            </div>
-          </div>
+  <form [formGroup]="form" class="tw:dv-form-grid tw:pt-12" [dvSharedUiFormReadonly]="true">
+    <!-- Status -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>
+        @if (tranche) {
+          @if (view.isEditingAenderung) {
+            {{ t(`shared.form.tranche.status.label.${tranche.typ}`) }}
+          } @else {
+            {{ t('shared.form.tranche.status.label.GESUCH') }}
+          }
         }
+      </mat-label>
+
+      <input readonly type="text" matInput [formControl]="form.controls.status" data-testid="form-tranche-status" />
+    </mat-form-field>
+
+    <!-- PiA -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ t('shared.form.tranche.pia.label') }}</mat-label>
+
+      <input readonly type="text" matInput [formControl]="form.controls.pia" data-testid="form-tranche-pia" />
+    </mat-form-field>
+
+    <!-- Gesuchsnummer -->
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+      <mat-label>{{ t('shared.form.tranche.gesuchsnummer.label') }}</mat-label>
+
+      <input
+        readonly
+        type="text"
+        matInput
+        [formControl]="form.controls.gesuchsnummer"
+        data-testid="form-tranche-gesuchsnummer"
+      />
+    </mat-form-field>
+
+    <!-- Fallnummer -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ t('shared.form.tranche.fallnummer.label') }}</mat-label>
+
+      <input
+        readonly
+        type="text"
+        matInput
+        [formControl]="form.controls.fallnummer"
+        data-testid="form-tranche-fallnummer"
+      />
+    </mat-form-field>
+
+    <!-- Einreichedatum -->
+    <div class="tw:col-start-1 tw:flex tw:gap-2">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
+        <mat-label>{{ t('shared.form.tranche.einreichedatum.label') }}</mat-label>
+        <input
+          readonly
+          type="text"
+          matInput
+          [formControl]="form.controls.einreichedatum"
+          data-testid="form-tranche-einreichedatum"
+        />
+      </mat-form-field>
+      @let einreichedatum = view.gesuch?.einreichedatum;
+      @let minDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStart;
+      @let maxDate = view.gesuch?.gesuchsperiode?.gesuchsperiodeStopp;
+      @let canAendern = einreichenStore.einreichedatumAendernStatus().data?.canAendern;
+      @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
+        <button
+          type="button"
+          class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
+          (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
+        >
+          <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
+        </button>
       }
+    </div>
 
-      <div class="tw:mt-8 tw:flex tw:items-center tw:gap-8 tw:xl:max-w-3xl tw:relative">
-        @if (isAenderungUpdatingSig()) {
-          <div>
-            <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+    <!-- Gesuchsperiode -->
+    <div class="tw:col-start-1 tw:flex tw:gap-2">
+      <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
+        <mat-label>{{ t('shared.form.tranche.gesuchsperiode.label') }}</mat-label>
+
+        <input
+          readonly
+          type="text"
+          matInput
+          [formControl]="form.controls.gesuchsperiode"
+          data-testid="form-tranche-gesuchsperiode"
+        />
+      </mat-form-field>
+      <!-- change gesuchsPeriode Button -->
+      @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.canChangeGesuchsperiode) {
+        <button
+          type="button"
+          class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
+          [attr.aria-label]="t('shared.form.tranche.gesuchsperiode.change')"
+          data-testid="form-tranche-gesuchsperiode-change-button"
+          (click)="changeGesuchsperiode(tranche?.id)"
+        >
+          <i class="material-symbols-rounded tw:!text-3xl/none">format_indent_increase</i>
+        </button>
+      }
+    </div>
+
+    <!-- Einreichefrist -->
+    <mat-form-field dvSharedUiFormField>
+      <mat-label>{{ t('shared.form.tranche.einreichefrist.label') }}</mat-label>
+
+      <input
+        readonly
+        type="text"
+        matInput
+        [formControl]="form.controls.einreichefrist"
+        data-testid="form-tranche-einreichefrist"
+      />
+    </mat-form-field>
+
+    <ng-template #updateAenderungVonBisButton>
+      @let gesuch = view.gesuch;
+      @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
+        <button
+          type="button"
+          class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
+          [attr.aria-label]="t('shared.form.tranche.aenderung.update-von-bis')"
+          data-testid="form-tranche-aenderung-von-bis-update"
+          (click)="updateAenderungVonBis(gesuch)"
+        >
+          <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
+        </button>
+      }
+    </ng-template>
+
+    <!-- Von -->
+    <div class="tw:col-start-1 tw:flex tw:gap-2">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
+        <mat-label>{{ t('shared.form.tranche.von.label') }}</mat-label>
+
+        <input readonly type="text" matInput [formControl]="form.controls.von" data-testid="form-tranche-von" />
+      </mat-form-field>
+
+      <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
+    </div>
+
+    <!-- Bis -->
+    <div class="tw:flex tw:gap-2">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
+        <mat-label>{{ t('shared.form.tranche.bis.label') }}</mat-label>
+
+        <input readonly type="text" matInput [formControl]="form.controls.bis" data-testid="form-tranche-bis" />
+      </mat-form-field>
+
+      <ng-container *ngTemplateOutlet="updateAenderungVonBisButton"></ng-container>
+    </div>
+
+    <!-- Bemerkung -->
+    <mat-form-field dvSharedUiFormField class="tw:md:col-span-2">
+      <mat-label>{{ t('shared.form.tranche.bemerkung.label') }}</mat-label>
+      <textarea
+        readonly
+        rows="3"
+        type="text"
+        matInput
+        [formControl]="form.controls.bemerkung"
+        data-testid="form-tranche-bemerkung"
+      ></textarea>
+    </mat-form-field>
+
+    <!-- Zuständiger Sachbearbeiter -->
+    <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+      <mat-label>{{ t('shared.form.tranche.sachbearbeiter.label') }}</mat-label>
+      <input
+        readonly
+        type="text"
+        matInput
+        [formControl]="form.controls.sachbearbeiter"
+        data-testid="form-tranche-sachbearbeiter"
+      />
+    </mat-form-field>
+  </form>
+
+  <ng-container *dvIfSachbearbeiter>
+    <div class="tw:mt-8">
+      @let abschlussPhase = einreichenStore.einreichenViewSig().abschlussPhase;
+      @let specialValidationErrors = einreichenStore.einreichenViewSig().specialValidationErrors;
+      @let hasValidationErrors = !!einreichenStore.einreichenValidationResult().data?.validationErrors?.length;
+      @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
+        @if (abschlussPhase === 'NOT_READY' && specialValidationErrors.length === 0) {
+          <div
+            class="alert alert-warning tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
+            role="alert"
+            data-testid="alert-warning"
+          >
+            <span class="text-warning material-symbols-rounded">warning</span>
+            <span [innerHTML]="t('shared.form.tranche-abschluss.notReady')"></span>
           </div>
+        } @else if (abschlussPhase === 'NOT_READY') {
+          @for (error of specialValidationErrors; track error) {
+            <div
+              class="alert alert-danger tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
+              role="alert"
+              data-testid="alert-danger"
+            >
+              <span class="text-danger material-symbols-rounded">error</span>
+              <div>
+                <span [innerHTML]="t($any(error.validationErrorKey))"></span>
+                &nbsp;<a [routerLink]="['/gesuch', error.step.route, gesuchId]">{{ t($any(error.linkKey)) }}</a>
+              </div>
+            </div>
+          }
         }
-        <button
-          class="btn btn-outline-primary flex-grow-1"
-          data-testid="aenderung-reject"
-          type="button"
-          (click)="changeAenderungState(tranche.id, 'ABGELEHNT', gesuchId)"
-          [disabled]="isAenderungUpdatingSig()"
-        >
-          {{ 'shared.form.aenderung.action.reject' | transloco }}
-        </button>
-        <button
-          class="btn btn-primary flex-grow-1"
-          data-testid="aenderung-accept"
-          type="button"
-          (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
-          [disabled]="hasValidationErrors || isAenderungUpdatingSig()"
-        >
-          {{ 'shared.form.aenderung.action.accept' | transloco }}
-        </button>
-        <button
-          class="btn btn-link"
-          data-testid="aenderung-manually-change"
-          type="button"
-          [disabled]="hasValidationErrors"
-          (click)="changeAenderungState(tranche.id, 'MANUELLE_AENDERUNG', gesuchId)"
-          [disabled]="isAenderungUpdatingSig()"
-        >
-          {{ 'shared.form.aenderung.action.manuallyChange' | transloco }}
-        </button>
-      </div>
-    }
-  </div>
+
+        <div class="tw:mt-8 tw:flex tw:items-center tw:gap-8 tw:xl:max-w-3xl tw:relative">
+          @if (isAenderungUpdatingSig()) {
+            <div>
+              <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+            </div>
+          }
+          <button
+            class="btn btn-outline-primary flex-grow-1"
+            data-testid="aenderung-reject"
+            type="button"
+            (click)="changeAenderungState(tranche.id, 'ABGELEHNT', gesuchId)"
+            [disabled]="isAenderungUpdatingSig()"
+          >
+            {{ t('shared.form.aenderung.action.reject') }}
+          </button>
+          <button
+            class="btn btn-primary flex-grow-1"
+            data-testid="aenderung-accept"
+            type="button"
+            (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
+            [disabled]="hasValidationErrors || isAenderungUpdatingSig()"
+          >
+            {{ t('shared.form.aenderung.action.accept') }}
+          </button>
+          <button
+            class="btn btn-link"
+            data-testid="aenderung-manually-change"
+            type="button"
+            [disabled]="hasValidationErrors"
+            (click)="changeAenderungState(tranche.id, 'MANUELLE_AENDERUNG', gesuchId)"
+            [disabled]="isAenderungUpdatingSig()"
+          >
+            {{ t('shared.form.aenderung.action.manuallyChange') }}
+          </button>
+        </div>
+      }
+    </div>
+  </ng-container>
 </ng-container>

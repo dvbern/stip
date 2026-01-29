@@ -47,6 +47,11 @@
           },
           {
             "glob": "**/*",
+            "input": "libs/shared/assets/fonts",
+            "output": "assets/fonts"
+          },
+          {
+            "glob": "**/*",
             "input": "libs/shared/assets/i18n/src",
             "output": "assets/i18n"
           },
