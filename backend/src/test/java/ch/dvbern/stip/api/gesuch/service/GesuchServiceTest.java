@@ -94,7 +94,8 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
@@ -180,6 +181,9 @@ class GesuchServiceTest {
     @InjectMock
     UnterschriftenblattService unterschriftenblattService;
 
+    @InjectMock
+    VerfuegungRepository verfuegungRepository;
+
     @Inject
     GesuchTrancheService gesuchTrancheService;
 
@@ -194,9 +198,6 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
-
-    @InjectMock
-    VerfuegungService verfuegungService;
 
     @InjectSpy
     MailService mailService;
@@ -1145,6 +1146,8 @@ class GesuchServiceTest {
     @Test
     void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        // gesuch.getVerfuegungs().add((Verfuegung) new
+        // Verfuegung().setVerfuegungStatus(VerfuegungStatus.ANSPRUCH).setTimestampErstellt(LocalDateTime.now()));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(any()))
             .thenReturn(true);
@@ -1162,6 +1165,11 @@ class GesuchServiceTest {
     @Test
     void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        gesuch.getVerfuegungs()
+            .add(
+                (Verfuegung) new Verfuegung().setVerfuegungStatus(VerfuegungStatus.ANSPRUCH)
+                    .setTimestampErstellt(LocalDateTime.now())
+            );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(any()))
             .thenReturn(false);

@@ -28,12 +28,14 @@ import java.util.UUID;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungDokumentRepository;
 import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.type.Kanton;
@@ -98,7 +100,7 @@ public class VerfuegungService {
             objectId -> {
                 final var verfuegung = new Verfuegung();
                 verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
-                verfuegung.setNegativeVerfuegung(true);
+                verfuegung.setVerfuegungStatus(VerfuegungStatus.NEGATIV);
 
                 final var verfuegungsDokument = new VerfuegungDokument();
                 verfuegungsDokument.setVerfuegung(verfuegung);
@@ -129,12 +131,16 @@ public class VerfuegungService {
         verfuegung.setStipDecision(stipDecision.getStipDecision());
         verfuegung.setGesuch(gesuchRepository.requireById(gesuchId));
         verfuegung.setKanton(kanton.orElse(null));
-        verfuegung.setNegativeVerfuegung(true);
+        verfuegung.setVerfuegungStatus(VerfuegungStatus.NEGATIV);
         verfuegungRepository.persistAndFlush(verfuegung);
     }
 
     public Verfuegung getLatestVerfuegung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        return getLatestVerfuegung(gesuch);
+    }
+
+    public Verfuegung getLatestVerfuegung(final Gesuch gesuch) {
         return gesuch.getVerfuegungs()
             .stream()
             .max(Comparator.comparing(Verfuegung::getTimestampErstellt))

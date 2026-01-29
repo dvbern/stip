@@ -795,7 +795,7 @@ public class GesuchService {
         final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
 
         if (
-            !latestVerfuegung.isNegativeVerfuegung()
+            !latestVerfuegung.getVerfuegungStatus().isNegativ()
             && !unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)
         ) {
             throw new CustomValidationsException(
@@ -1319,7 +1319,7 @@ public class GesuchService {
         final var keinAnspruch = new ArrayList<Gesuch>();
         for (final var gesuch : gesuche) {
             final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
-            if (latestVerfuegung.isAnspruchVerfuegung()) {
+            if (latestVerfuegung.getVerfuegungStatus().isAnspruch()) {
                 anspruch.add(gesuch);
             } else {
                 keinAnspruch.add(gesuch);
