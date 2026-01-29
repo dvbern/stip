@@ -25,7 +25,6 @@ import javax.net.ssl.SSLContext;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import com.github.javaparser.utils.Log;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
 import jakarta.annotation.PostConstruct;
@@ -198,7 +197,7 @@ public class KeycloakBenutzerService {
         ) {
             response.bufferEntity();
             if (response.getStatus() != Status.NO_CONTENT.getStatusCode()) {
-                Log.error(String.format("Failed to delete Keycloak user with id: %s", keycloakId));
+                LOG.error(String.format("Failed to delete Keycloak user with id: %s", keycloakId));
                 throw new WebApplicationException(response);
             }
         }

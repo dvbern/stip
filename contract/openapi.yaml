@@ -8950,6 +8950,7 @@ components:
         - gueltigBis
         - ausbildungAb
         - ausbildungBis
+        - yearRange
         - gesuchTrancheId
         - berechnungsanteilKinder
         - berechnungsStammdaten
@@ -8975,6 +8976,8 @@ components:
         ausbildungAb:
           type: string
         ausbildungBis:
+          type: string
+        yearRange:
           type: string
         gesuchTrancheId:
           description: >-

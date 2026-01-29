@@ -51,6 +51,10 @@ export const selectTrancheTyp = createSelector(
     return isExistingTrancheTyp(typ) ? typ : undefined;
   },
 );
+export const isHistorizedView = createSelector(
+  selectTrancheTyp,
+  (trancheTyp) => trancheTyp !== 'TRANCHE',
+);
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
 export const selectRevision = createSelector(

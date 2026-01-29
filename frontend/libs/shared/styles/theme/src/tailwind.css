@@ -42,3 +42,7 @@
 @utility dv-form-half {
   @apply tw:flex tw:flex-col tw:gap-6 tw:xl:max-w-[50%];
 }
+
+@utility dv-historized {
+  @apply tw:bg-[repeating-linear-gradient(45deg,_#ffffff00_0,_#ffffff50_3px,_transparent_0,_transparent_50%)] tw:bg-[size:20px_20px];
+}
