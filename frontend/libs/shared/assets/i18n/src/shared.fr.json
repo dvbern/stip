@@ -361,6 +361,7 @@
 
   "gesuch-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "gesuch-app.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
+  "gesuch-app.gesuch.status.contract.ANSPRUCH_PRUEFEN": "Complètement soumis",
   "gesuch-app.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Complètement soumis",
   "gesuch-app.gesuch.status.contract.IN_BEARBEITUNG_SB": "Complètement soumis",
   "gesuch-app.gesuch.status.contract.IN_FREIGABE": "Complètement soumis",
