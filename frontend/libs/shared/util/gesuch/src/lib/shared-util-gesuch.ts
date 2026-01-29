@@ -10,7 +10,11 @@ import {
 } from 'rxjs';
 
 import { AvailableBenutzerRole } from '@dv/shared/model/benutzer';
-import { Gesuchstatus } from '@dv/shared/model/gesuch';
+import {
+  Gesuchstatus,
+  Niederlassungsstatus,
+  ZustaendigerKanton,
+} from '@dv/shared/model/gesuch';
 import { PermissionMap } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 
@@ -252,4 +256,97 @@ export const StatusUebergaengeOptions: Record<
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
+};
+
+export const VORLAEUFIG_AUFGENOMMEN_F = 'VORLAEUFIG_AUFGENOMMEN_F';
+type VorlaeufigAufgenommenF = typeof VORLAEUFIG_AUFGENOMMEN_F;
+
+type AllNiederlassungsstatusExceptF = Exclude<
+  Niederlassungsstatus,
+  `${VorlaeufigAufgenommenF}${string}`
+>;
+export type AvailableNiederlassungsstatus =
+  | AllNiederlassungsstatusExceptF
+  | VorlaeufigAufgenommenF;
+
+type IsNiederlassungsstatusBerechtigt<T extends AvailableNiederlassungsstatus> =
+  // Only B and C are considered as "berechtigt" for the gesuch (KSTIP-1993)
+  // F is also considered as "berechtigt" but only if fluechtlingsstatus is true
+  T extends `${string}_${'B' | 'C'}` ? true : false;
+export const BERECHTIGTE_NIEDERLASSUNGSSTATUS = {
+  SAISONARBEITEND_A: false,
+  AUFENTHALTSBEWILLIGUNG_B: true,
+  NIEDERLASSUNGSBEWILLIGUNG_C: true,
+  PARTNER_ERWERBSTAETIG_UND_KIND_CI: false,
+  GRENZGAENGIG_G: false,
+  KURZAUFENTHALT_L: false,
+  ASYLSUCHEND_N: false,
+  SCHUTZBEDUERFTIG_S: false,
+  MELDEPFLICHTIG: false,
+  DIPLOMATISCHE_FUNKTION: false,
+  INTERNATIONALE_FUNKTION: false,
+  NICHT_ZUGETEILT: false,
+} satisfies {
+  [T in AllNiederlassungsstatusExceptF]: IsNiederlassungsstatusBerechtigt<T>;
+};
+
+type KnownNiederlassungsValues = {
+  niederlassungsstatus: AvailableNiederlassungsstatus | undefined;
+  fluechtlingsstatus: boolean | undefined;
+  zustaendigerKanton: ZustaendigerKanton | undefined;
+};
+
+export const niederlassungsStatusConverter = {
+  from: (
+    value: Niederlassungsstatus | undefined,
+  ): KnownNiederlassungsValues => {
+    switch (value) {
+      case 'VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS':
+        return {
+          niederlassungsstatus: VORLAEUFIG_AUFGENOMMEN_F,
+          fluechtlingsstatus: false,
+          zustaendigerKanton: undefined,
+        };
+      case 'VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON':
+        return {
+          niederlassungsstatus: VORLAEUFIG_AUFGENOMMEN_F,
+          fluechtlingsstatus: true,
+          zustaendigerKanton: ZustaendigerKanton.ANDERER_KANTON,
+        };
+      case 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT':
+        return {
+          niederlassungsstatus: VORLAEUFIG_AUFGENOMMEN_F,
+          fluechtlingsstatus: true,
+          zustaendigerKanton: ZustaendigerKanton.BERN,
+        };
+      case undefined:
+        return {
+          niederlassungsstatus: undefined,
+          fluechtlingsstatus: undefined,
+          zustaendigerKanton: undefined,
+        };
+      default:
+        return {
+          niederlassungsstatus: value,
+          fluechtlingsstatus: undefined,
+          zustaendigerKanton: undefined,
+        };
+    }
+  },
+  to: (value: KnownNiederlassungsValues): Niederlassungsstatus | undefined => {
+    if (value.niederlassungsstatus === VORLAEUFIG_AUFGENOMMEN_F) {
+      if (value.fluechtlingsstatus === false) {
+        return 'VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS';
+      }
+      switch (value.zustaendigerKanton) {
+        case ZustaendigerKanton.BERN:
+          return 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT';
+        case ZustaendigerKanton.ANDERER_KANTON:
+          return 'VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON';
+        default:
+          return undefined;
+      }
+    }
+    return value.niederlassungsstatus;
+  },
 };
