@@ -180,7 +180,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
                 freiwilligDarlehen.getFall(),
                 benutzer,
                 sozialdienstService
-            ) && !isSachbearbeiterOrFreigabestelle(benutzer)
+            ) && !isSbOrFreigabestelleOrJurist(benutzer)
         ) {
             forbidden();
         }
