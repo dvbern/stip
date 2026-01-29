@@ -138,7 +138,7 @@ public class NotificationService {
 
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
-        mailService.sendStandardNotificationEmailForGesuch(darlehen.getRelatedGesuch());
+        mailService.sendStandardNotificationEmailForGesuch(freiwilligDarlehen.getRelatedGesuch());
     }
 
     @Transactional
