@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.exception;
 
+import ch.dvbern.stip.generated.dto.DemoDataErrorDto;
 import ch.dvbern.stip.generated.dto.NeskoErrorDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import jakarta.ws.rs.BadRequestException;
@@ -54,6 +55,22 @@ public class ServerExceptionMappers {
         return RestResponse.status(
             RestResponse.Status.BAD_GATEWAY,
             NeskoExceptionMapper.toDto(e)
+        );
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<DemoDataErrorDto> mapException(DemoDataImportException e) {
+        return RestResponse.status(
+            RestResponse.Status.BAD_GATEWAY,
+            DemoDataExceptionMapper.toDto(e)
+        );
+    }
+
+    @ServerExceptionMapper
+    public RestResponse<DemoDataErrorDto> mapException(DemoDataApplyException e) {
+        return RestResponse.status(
+            RestResponse.Status.BAD_GATEWAY,
+            DemoDataExceptionMapper.toDto(e)
         );
     }
 

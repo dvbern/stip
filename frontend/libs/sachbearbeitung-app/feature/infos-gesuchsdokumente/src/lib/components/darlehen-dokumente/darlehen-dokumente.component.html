@@ -1,8 +1,30 @@
+@let overview = infosStore.darlehenBuchhaltungViewSig();
 <div class="tw:dv-table tw:my-3">
   <div class="tw:relative tw:overflow-auto">
-    @if (infosStore.darlehenDokumenteViewSig().loading) {
+    @if (infosStore.darlehenBuchhaltungViewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
     }
+
+    <!-- Summary -->
+    <div class="tw:p-4 tw:flex tw:gap-4 tw:justify-between">
+      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-semibold tw:text-lg">
+        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen' | transloco }}:</div>
+        <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
+        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen' | transloco }}:</div>
+        <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
+      </div>
+      <div class="tw:flex tw:gap-2 tw:font-semibold tw:text-xl">
+        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total' | transloco }}</div>
+        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
+      </div>
+      <!-- manuelle korrektur -->
+      <div class="">
+        <button type="button" class="btn btn-outline-primary" (click)="createDarlehenBuchhaltungSaldokorrektur()">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.manuelleKorrektur' | transloco }}
+        </button>
+      </div>
+    </div>
+
     <table
       mat-table
       [dataSource]="paginatedDokumenteSig()"
@@ -15,80 +37,44 @@
         }}
       </caption>
 
-      <!-- Datum -->
-      <ng-container matColumnDef="datum">
+      <!-- timestampErstellt -->
+      <ng-container matColumnDef="timestampErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
           {{ 'sachbearbeitung-app.infos.gesuchsdokumente.table.datum' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.datum | date: 'dd.MM.yyyy' }}
+          {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
         </td>
       </ng-container>
 
       <!-- Kategorie -->
       <ng-container matColumnDef="kategorie">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie' | transloco }}
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie.label' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.kategorie }}
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.kategorie.' + dokument.kategorie | transloco }}
         </td>
       </ng-container>
 
       <!-- Darlehensverfügung -->
-      <ng-container matColumnDef="darlehensverfuegung">
+      <ng-container matColumnDef="verfuegung">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
           {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          @if (dokument.darlehensverfuegung) {
-            <!-- TODO KSTIP-2697 remove disabled -->
-            <button disabled type="button" class="btn btn-link tw:!flex tw:max-w-full tw:!p-0">
-              <span class="tw:truncate tw:!text-sm/none">{{ dokument.darlehensverfuegung }}</span>
-              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
-                >download</span
-              >
-            </button>
-          } @else {
-            <span class="tw:text-gray-400">-</span>
-          }
-        </td>
-      </ng-container>
-
-      <!-- Gesetzliches Darlehen -->
-      <ng-container matColumnDef="gesetzlichesDarlehen">
-        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.gesetzlichesDarlehen' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          <!-- TODO KSTIP-2697 remove disabled -->
-          @if (dokument.gesetzlichesDarlehen) {
-            <button disabled type="button" class="btn btn-link tw:!flex tw:max-w-full tw:!p-0">
-              <span class="tw:truncate tw:!text-sm/none">{{ dokument.gesetzlichesDarlehen }}</span>
-              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
-                >download</span
-              >
-            </button>
-          } @else {
-            <span class="tw:text-gray-400">-</span>
-          }
-        </td>
-      </ng-container>
-
-      <!-- Freiwilliges Darlehen -->
-      <ng-container matColumnDef="freiwilligesDarlehen">
-        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.freiwilligesDarlehen' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          @if (dokument.freiwilligesDarlehen) {
+          @if (dokument.verfuegung) {
             <button
-              disabled
               type="button"
               class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
-              [attr.aria-label]="dokument.freiwilligesDarlehen"
+              [dvDownloadButton]="{
+                type: 'darlehen',
+                id: dokument.verfuegung.id,
+              }"
             >
-              <span class="tw:truncate tw:!text-sm/none">{{ dokument.freiwilligesDarlehen }}</span>
+              <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument.verfuegung.filename">{{
+                'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung' | transloco
+              }}</span>
               <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
               >
@@ -96,6 +82,26 @@
           } @else {
             <span class="tw:text-gray-400">-</span>
           }
+        </td>
+      </ng-container>
+
+      <!-- Betrag -->
+      <ng-container matColumnDef="betrag">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.betrag' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.betrag | formatChf }}
+        </td>
+      </ng-container>
+
+      <!-- User Erstellt -->
+      <ng-container matColumnDef="userErstellt">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.userErstellt' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.userErstellt || '-' }}
         </td>
       </ng-container>
 

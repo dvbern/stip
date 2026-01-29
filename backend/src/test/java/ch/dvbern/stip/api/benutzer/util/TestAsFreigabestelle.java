@@ -44,6 +44,7 @@ import static ch.dvbern.stip.api.util.TestConstants.FREIGABESTELLE_ID;
         OidcPermissions.CUSTOM_DOKUMENT_READ,
         OidcPermissions.DOKUMENT_READ,
         OidcPermissions.FALL_READ,
+        OidcPermissions.FREIWILLIG_DARLEHEN_FREIGABESTELLE
     }
 )
 @OidcSecurity(

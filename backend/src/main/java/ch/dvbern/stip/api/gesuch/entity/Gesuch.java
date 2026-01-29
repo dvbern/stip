@@ -60,11 +60,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
+import org.jilt.Opt;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_MAX_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
@@ -85,6 +90,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Gesuch extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -106,11 +114,13 @@ public class Gesuch extends AbstractMandantEntity {
     @Audited(withModifiedFlag = true, modifiedColumnName = "gesuch_status_mod")
     private Gesuchstatus gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
+    @Opt
     @NotNull
     @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
     @Column(name = "gesuch_nummer", nullable = false, updatable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
     private String gesuchNummer;
 
+    @Opt
     @NotNull
     @Column(name = "gesuch_status_aenderung_datum", nullable = false)
     private LocalDateTime gesuchStatusAenderungDatum = LocalDateTime.now();
@@ -146,6 +156,7 @@ public class Gesuch extends AbstractMandantEntity {
             .get();
     }
 
+    @Opt
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinFormula(value = """
         (
@@ -181,6 +192,7 @@ public class Gesuch extends AbstractMandantEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private List<BeschwerdeEntscheid> beschwerdeEntscheids = new ArrayList<>();
 
+    @Opt
     @Column(name = "remainder_payment_executed", nullable = false)
     private boolean remainderPaymentExecuted = false;
 

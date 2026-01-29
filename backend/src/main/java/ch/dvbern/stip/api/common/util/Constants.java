@@ -25,6 +25,7 @@ public final class Constants {
     public static final int DB_DEFAULT_STRING_MAX_LENGTH = 2200;
     public static final int DB_DEFAULT_STRING_ISO3CODE_LENGTH = 3;
     public static final int DB_DEFAULT_STRING_ISO2CODE_LENGTH = 2;
+    public static final int DB_DEFAULT_STRING_TESTCASE_JSON_DATA_LENGTH = 100_000;
 
     public static final int MAX_AGE_AUSBILDUNGSBEGIN = 35;
     public static final int FALL_GESUCH_NUMBER_GEN_SEED = 184932;

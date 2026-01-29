@@ -29,9 +29,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Audited
 @Entity
@@ -41,12 +45,16 @@ import org.hibernate.envers.Audited;
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Geschwister extends AbstractFamilieEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "ausbildungssituation", nullable = false)
     private Ausbildungssituation ausbildungssituation;
 
+    @Deprecated(forRemoval = true) // Not used anymore
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;

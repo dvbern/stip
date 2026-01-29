@@ -209,6 +209,9 @@
   "shared.dokumente.deleteCustomDokumentTyp.success": "Document générique supprimé",
   "shared.dokumente.setToAdditionalDokumenteErhalten": "Feuille de signatures reçue",
 
+  "shared.unauthorized.title": "Accès refusé",
+  "shared.unauthorized.text": "Vous n'avez pas l'autorisation de voir cette page.",
+
   "shared.dashboard.ausbildung.delete": "Supprimer la formation",
   "shared.dashboard.ausbildung.delete.dialog.title": "Supprimer la formation",
   "shared.dashboard.ausbildung.delete.dialog.message": "Voulez-vous vraiment supprimer la formation? Vous perdrez toutes les données.",

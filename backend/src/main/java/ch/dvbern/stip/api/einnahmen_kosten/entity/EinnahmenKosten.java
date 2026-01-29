@@ -18,9 +18,9 @@
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAlternativeWohnformValidConstraint;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAnzahlPersonenWGValidConstraint;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -29,9 +29,13 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
@@ -47,6 +51,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @EinnahmenKostenAnzahlPersonenWGValidConstraint
 @EinnahmenKostenAlternativeWohnformValidConstraint
 @AnstellungsGradRequiredConstraint
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class EinnahmenKosten extends AbstractMandantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
@@ -58,75 +65,75 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Min(0)
     private Integer fahrkosten;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "wohnkosten")
     @Min(0)
     private Integer wohnkosten;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "wg_wohnend")
     private Boolean wgWohnend;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "wg_anzahl_personen")
     @Min(0)
     private Integer wgAnzahlPersonen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "alternative_wohnform_wohnend")
     private Boolean alternativeWohnformWohnend;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "unterhaltsbeitraege")
     @Min(0)
     private Integer unterhaltsbeitraege;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "zulagen")
     @Min(0)
     private Integer zulagen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "renten")
     @Min(0)
     private Integer renten;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "eo_leistungen")
     @Min(0)
     private Integer eoLeistungen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "ergaenzungsleistungen")
     @Min(0)
     private Integer ergaenzungsleistungen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "beitraege")
     @Min(0)
     private Integer beitraege;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "ausbildungskosten")
     @Min(0)
     private Integer ausbildungskosten;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "auswaertige_mittagessen_pro_woche")
     @Min(0)
     private Integer auswaertigeMittagessenProWoche;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "verpflegungskosten")
     @Min(0)
     private Integer verpflegungskosten;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "betreuungskosten_kinder")
     @Min(0)
     private Integer betreuungskostenKinder;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "status_veranlagung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String veranlagungsStatus;
@@ -137,30 +144,30 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     @Max(9999)
     private Integer steuerjahr;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "vermoegen")
     @Max(Integer.MAX_VALUE)
     @Min(0)
     private Integer vermoegen;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Min(0)
     @Column(name = "einnahmen_bgsa")
     private Integer einnahmenBGSA;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Min(0)
     @Column(name = "taggelder_ahv_iv")
     private Integer taggelderAHVIV;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Min(0)
     @Column(name = "andere_einnahmen")
     private Integer andereEinnahmen;
 
     @Min(0)
     @Max(100)
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "arbeitspensum_prozent")
     private Integer arbeitspensumProzent;
 

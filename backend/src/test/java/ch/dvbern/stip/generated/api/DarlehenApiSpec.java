@@ -13,19 +13,22 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDtoSpec;
+import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenGsResponseDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateGsDtoSpec;
-import ch.dvbern.stip.generated.dto.DarlehenUpdateSbDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
-import ch.dvbern.stip.generated.dto.GetDarlehenSbQueryTypeDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
+import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDtoSpec;
+import ch.dvbern.stip.generated.dto.GetFreiwilligDarlehenSbQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDtoSpec;
-import ch.dvbern.stip.generated.dto.PaginatedSbDarlehenDashboardDtoSpec;
-import ch.dvbern.stip.generated.dto.SbDarlehenDashboardColumnDtoSpec;
+import ch.dvbern.stip.generated.dto.PaginatedSbFreiwilligDarlehenDashboardDtoSpec;
+import ch.dvbern.stip.generated.dto.SbFreiwilligDarlehenDashboardColumnDtoSpec;
 import ch.dvbern.stip.generated.dto.SortOrderDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -71,86 +74,92 @@ public class DarlehenApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                createDarlehen(),
+                createDarlehenBuchhaltungSaldokorrektur(),
                 createDarlehenDokument(),
-                darlehenAblehen(),
-                darlehenAkzeptieren(),
-                darlehenEingeben(),
-                darlehenFreigeben(),
-                darlehenUpdateGs(),
-                darlehenUpdateSb(),
-                darlehenZurueckweisen(),
+                createFreiwilligDarlehen(),
                 deleteDarlehenDokument(),
-                deleteDarlehenGs(),
+                deleteFreiwilligDarlehenGs(),
                 downloadDarlehenDokument(),
-                getAllDarlehenGs(),
-                getAllDarlehenSb(),
-                getDarlehenDashboardSb(),
+                freiwilligDarlehenAblehen(),
+                freiwilligDarlehenAkzeptieren(),
+                freiwilligDarlehenEingeben(),
+                freiwilligDarlehenFreigeben(),
+                freiwilligDarlehenUpdateGs(),
+                freiwilligDarlehenUpdateSb(),
+                freiwilligDarlehenZurueckweisen(),
+                getAllFreiwilligDarlehenGs(),
+                getAllFreiwilligDarlehenSb(),
+                getDarlehenBuchhaltungEntrys(),
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
-                getDarlehenGs(),
-                getDarlehenSb()
+                getFreiwilligDarlehenDashboardSb(),
+                getFreiwilligDarlehenGs(),
+                getFreiwilligDarlehenSb()
         );
     }
 
-    public CreateDarlehenOper createDarlehen() {
-        return new CreateDarlehenOper(createReqSpec());
+    public CreateDarlehenBuchhaltungSaldokorrekturOper createDarlehenBuchhaltungSaldokorrektur() {
+        return new CreateDarlehenBuchhaltungSaldokorrekturOper(createReqSpec());
     }
 
     public CreateDarlehenDokumentOper createDarlehenDokument() {
         return new CreateDarlehenDokumentOper(createReqSpec());
     }
 
-    public DarlehenAblehenOper darlehenAblehen() {
-        return new DarlehenAblehenOper(createReqSpec());
-    }
-
-    public DarlehenAkzeptierenOper darlehenAkzeptieren() {
-        return new DarlehenAkzeptierenOper(createReqSpec());
-    }
-
-    public DarlehenEingebenOper darlehenEingeben() {
-        return new DarlehenEingebenOper(createReqSpec());
-    }
-
-    public DarlehenFreigebenOper darlehenFreigeben() {
-        return new DarlehenFreigebenOper(createReqSpec());
-    }
-
-    public DarlehenUpdateGsOper darlehenUpdateGs() {
-        return new DarlehenUpdateGsOper(createReqSpec());
-    }
-
-    public DarlehenUpdateSbOper darlehenUpdateSb() {
-        return new DarlehenUpdateSbOper(createReqSpec());
-    }
-
-    public DarlehenZurueckweisenOper darlehenZurueckweisen() {
-        return new DarlehenZurueckweisenOper(createReqSpec());
+    public CreateFreiwilligDarlehenOper createFreiwilligDarlehen() {
+        return new CreateFreiwilligDarlehenOper(createReqSpec());
     }
 
     public DeleteDarlehenDokumentOper deleteDarlehenDokument() {
         return new DeleteDarlehenDokumentOper(createReqSpec());
     }
 
-    public DeleteDarlehenGsOper deleteDarlehenGs() {
-        return new DeleteDarlehenGsOper(createReqSpec());
+    public DeleteFreiwilligDarlehenGsOper deleteFreiwilligDarlehenGs() {
+        return new DeleteFreiwilligDarlehenGsOper(createReqSpec());
     }
 
     public DownloadDarlehenDokumentOper downloadDarlehenDokument() {
         return new DownloadDarlehenDokumentOper(createReqSpec());
     }
 
-    public GetAllDarlehenGsOper getAllDarlehenGs() {
-        return new GetAllDarlehenGsOper(createReqSpec());
+    public FreiwilligDarlehenAblehenOper freiwilligDarlehenAblehen() {
+        return new FreiwilligDarlehenAblehenOper(createReqSpec());
     }
 
-    public GetAllDarlehenSbOper getAllDarlehenSb() {
-        return new GetAllDarlehenSbOper(createReqSpec());
+    public FreiwilligDarlehenAkzeptierenOper freiwilligDarlehenAkzeptieren() {
+        return new FreiwilligDarlehenAkzeptierenOper(createReqSpec());
     }
 
-    public GetDarlehenDashboardSbOper getDarlehenDashboardSb() {
-        return new GetDarlehenDashboardSbOper(createReqSpec());
+    public FreiwilligDarlehenEingebenOper freiwilligDarlehenEingeben() {
+        return new FreiwilligDarlehenEingebenOper(createReqSpec());
+    }
+
+    public FreiwilligDarlehenFreigebenOper freiwilligDarlehenFreigeben() {
+        return new FreiwilligDarlehenFreigebenOper(createReqSpec());
+    }
+
+    public FreiwilligDarlehenUpdateGsOper freiwilligDarlehenUpdateGs() {
+        return new FreiwilligDarlehenUpdateGsOper(createReqSpec());
+    }
+
+    public FreiwilligDarlehenUpdateSbOper freiwilligDarlehenUpdateSb() {
+        return new FreiwilligDarlehenUpdateSbOper(createReqSpec());
+    }
+
+    public FreiwilligDarlehenZurueckweisenOper freiwilligDarlehenZurueckweisen() {
+        return new FreiwilligDarlehenZurueckweisenOper(createReqSpec());
+    }
+
+    public GetAllFreiwilligDarlehenGsOper getAllFreiwilligDarlehenGs() {
+        return new GetAllFreiwilligDarlehenGsOper(createReqSpec());
+    }
+
+    public GetAllFreiwilligDarlehenSbOper getAllFreiwilligDarlehenSb() {
+        return new GetAllFreiwilligDarlehenSbOper(createReqSpec());
+    }
+
+    public GetDarlehenBuchhaltungEntrysOper getDarlehenBuchhaltungEntrys() {
+        return new GetDarlehenBuchhaltungEntrysOper(createReqSpec());
     }
 
     public GetDarlehenDokumentOper getDarlehenDokument() {
@@ -161,12 +170,16 @@ public class DarlehenApiSpec {
         return new GetDarlehenDownloadTokenOper(createReqSpec());
     }
 
-    public GetDarlehenGsOper getDarlehenGs() {
-        return new GetDarlehenGsOper(createReqSpec());
+    public GetFreiwilligDarlehenDashboardSbOper getFreiwilligDarlehenDashboardSb() {
+        return new GetFreiwilligDarlehenDashboardSbOper(createReqSpec());
     }
 
-    public GetDarlehenSbOper getDarlehenSb() {
-        return new GetDarlehenSbOper(createReqSpec());
+    public GetFreiwilligDarlehenGsOper getFreiwilligDarlehenGs() {
+        return new GetFreiwilligDarlehenGsOper(createReqSpec());
+    }
+
+    public GetFreiwilligDarlehenSbOper getFreiwilligDarlehenSb() {
+        return new GetFreiwilligDarlehenSbOper(createReqSpec());
     }
 
     /**
@@ -180,28 +193,30 @@ public class DarlehenApiSpec {
     }
 
     /**
-     * Create a new Darlehen
+     * Create a darlehen buchhaltungsentry from a saldokorrektur
      * 
      *
-     * @see #fallIdPath  (required)
-     * return DarlehenDtoSpec
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #body  (required)
+     * return DarlehenBuchhaltungEntryDtoSpec
      */
-    public static class CreateDarlehenOper implements Oper {
+    public static class CreateDarlehenBuchhaltungSaldokorrekturOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{fallId}";
+        public static final String REQ_URI = "/darlehen/buchhaltung/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public CreateDarlehenOper(RequestSpecBuilder reqSpec) {
+        public CreateDarlehenBuchhaltungSaldokorrekturOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * POST /darlehen/{fallId}
+         * POST /darlehen/buchhaltung/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -212,23 +227,32 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * POST /darlehen/{fallId}
+         * POST /darlehen/buchhaltung/{gesuchId}
          * @param handler handler
-         * @return DarlehenDtoSpec
+         * @return DarlehenBuchhaltungEntryDtoSpec
          */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
+        public DarlehenBuchhaltungEntryDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenBuchhaltungEntryDtoSpec> type = new TypeRef<DarlehenBuchhaltungEntryDtoSpec>(){};
             return execute(handler).as(type);
         }
 
-        public static final String FALL_ID_PATH = "fallId";
-
-        /**
-         * @param fallId (UUID)  (required)
+         /**
+         * @param darlehenBuchhaltungSaldokorrekturDtoSpec (DarlehenBuchhaltungSaldokorrekturDtoSpec)  (required)
          * @return operation
          */
-        public CreateDarlehenOper fallIdPath(Object fallId) {
-            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+        public CreateDarlehenBuchhaltungSaldokorrekturOper body(DarlehenBuchhaltungSaldokorrekturDtoSpec darlehenBuchhaltungSaldokorrekturDtoSpec) {
+            reqSpec.setBody(darlehenBuchhaltungSaldokorrekturDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public CreateDarlehenBuchhaltungSaldokorrekturOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
@@ -237,7 +261,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public CreateDarlehenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public CreateDarlehenBuchhaltungSaldokorrekturOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -247,7 +271,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public CreateDarlehenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public CreateDarlehenBuchhaltungSaldokorrekturOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -340,28 +364,28 @@ public class DarlehenApiSpec {
         }
     }
     /**
-     * Change darlehen status to abgelehnt
+     * Create a new Darlehen
      * 
      *
-     * @see #darlehenIdPath  (required)
-     * return DarlehenDtoSpec
+     * @see #fallIdPath  (required)
+     * return FreiwilligDarlehenDtoSpec
      */
-    public static class DarlehenAblehenOper implements Oper {
+    public static class CreateFreiwilligDarlehenOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/ablehnen";
+        public static final String REQ_URI = "/darlehen/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public DarlehenAblehenOper(RequestSpecBuilder reqSpec) {
+        public CreateFreiwilligDarlehenOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * POST /darlehen/{darlehenId}/ablehnen
+         * POST /darlehen/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -372,23 +396,23 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * POST /darlehen/{darlehenId}/ablehnen
+         * POST /darlehen/{fallId}
          * @param handler handler
-         * @return DarlehenDtoSpec
+         * @return FreiwilligDarlehenDtoSpec
          */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
             return execute(handler).as(type);
         }
 
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param darlehenId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public DarlehenAblehenOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+        public CreateFreiwilligDarlehenOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 
@@ -397,7 +421,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public DarlehenAblehenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public CreateFreiwilligDarlehenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -407,478 +431,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public DarlehenAblehenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Change darlehen status to akzeptiert
-     * 
-     *
-     * @see #darlehenIdPath  (required)
-     * return DarlehenDtoSpec
-     */
-    public static class DarlehenAkzeptierenOper implements Oper {
-
-        public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/akzeptieren";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DarlehenAkzeptierenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/akzeptieren
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/akzeptieren
-         * @param handler handler
-         * @return DarlehenDtoSpec
-         */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public DarlehenAkzeptierenOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DarlehenAkzeptierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DarlehenAkzeptierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Change darlehen status to eingegeben
-     * 
-     *
-     * @see #darlehenIdPath  (required)
-     * return DarlehenDtoSpec
-     */
-    public static class DarlehenEingebenOper implements Oper {
-
-        public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/eingeben";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DarlehenEingebenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/eingeben
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/eingeben
-         * @param handler handler
-         * @return DarlehenDtoSpec
-         */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public DarlehenEingebenOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DarlehenEingebenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DarlehenEingebenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Change darlehen status to freigegeben
-     * 
-     *
-     * @see #darlehenIdPath  (required)
-     * return DarlehenDtoSpec
-     */
-    public static class DarlehenFreigebenOper implements Oper {
-
-        public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/freigeben";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DarlehenFreigebenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/freigeben
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/freigeben
-         * @param handler handler
-         * @return DarlehenDtoSpec
-         */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public DarlehenFreigebenOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DarlehenFreigebenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DarlehenFreigebenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Update darlehen as gs
-     * 
-     *
-     * @see #darlehenIdPath  (required)
-     * @see #body  (required)
-     * return DarlehenDtoSpec
-     */
-    public static class DarlehenUpdateGsOper implements Oper {
-
-        public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DarlehenUpdateGsOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * PATCH /darlehen/{darlehenId}/gs
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * PATCH /darlehen/{darlehenId}/gs
-         * @param handler handler
-         * @return DarlehenDtoSpec
-         */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-         /**
-         * @param darlehenUpdateGsDtoSpec (DarlehenUpdateGsDtoSpec)  (required)
-         * @return operation
-         */
-        public DarlehenUpdateGsOper body(DarlehenUpdateGsDtoSpec darlehenUpdateGsDtoSpec) {
-            reqSpec.setBody(darlehenUpdateGsDtoSpec);
-            return this;
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public DarlehenUpdateGsOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DarlehenUpdateGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DarlehenUpdateGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Update darlehen as sb
-     * 
-     *
-     * @see #darlehenIdPath  (required)
-     * @see #body  (required)
-     * return DarlehenDtoSpec
-     */
-    public static class DarlehenUpdateSbOper implements Oper {
-
-        public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/sb";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DarlehenUpdateSbOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * PATCH /darlehen/{darlehenId}/sb
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * PATCH /darlehen/{darlehenId}/sb
-         * @param handler handler
-         * @return DarlehenDtoSpec
-         */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-         /**
-         * @param darlehenUpdateSbDtoSpec (DarlehenUpdateSbDtoSpec)  (required)
-         * @return operation
-         */
-        public DarlehenUpdateSbOper body(DarlehenUpdateSbDtoSpec darlehenUpdateSbDtoSpec) {
-            reqSpec.setBody(darlehenUpdateSbDtoSpec);
-            return this;
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public DarlehenUpdateSbOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DarlehenUpdateSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DarlehenUpdateSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Change darlehen status to in bearbeitung gs
-     * 
-     *
-     * @see #darlehenIdPath  (required)
-     * @see #body  (required)
-     * return DarlehenDtoSpec
-     */
-    public static class DarlehenZurueckweisenOper implements Oper {
-
-        public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/zurueckweisen";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public DarlehenZurueckweisenOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/zurueckweisen
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/zurueckweisen
-         * @param handler handler
-         * @return DarlehenDtoSpec
-         */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-         /**
-         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
-         * @return operation
-         */
-        public DarlehenZurueckweisenOper body(KommentarDtoSpec kommentarDtoSpec) {
-            reqSpec.setBody(kommentarDtoSpec);
-            return this;
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID)  (required)
-         * @return operation
-         */
-        public DarlehenZurueckweisenOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public DarlehenZurueckweisenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public DarlehenZurueckweisenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public CreateFreiwilligDarlehenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -951,7 +504,7 @@ public class DarlehenApiSpec {
      *
      * @see #darlehenIdPath  (required)
      */
-    public static class DeleteDarlehenGsOper implements Oper {
+    public static class DeleteFreiwilligDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = DELETE;
         public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
@@ -959,7 +512,7 @@ public class DarlehenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public DeleteDarlehenGsOper(RequestSpecBuilder reqSpec) {
+        public DeleteFreiwilligDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -982,7 +535,7 @@ public class DarlehenApiSpec {
          * @param darlehenId (UUID)  (required)
          * @return operation
          */
-        public DeleteDarlehenGsOper darlehenIdPath(Object darlehenId) {
+        public DeleteFreiwilligDarlehenGsOper darlehenIdPath(Object darlehenId) {
             reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
@@ -992,7 +545,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public DeleteDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public DeleteFreiwilligDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1002,7 +555,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public DeleteDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public DeleteFreiwilligDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1081,13 +634,557 @@ public class DarlehenApiSpec {
         }
     }
     /**
+     * Change darlehen status to abgelehnt
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenAblehenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/ablehnen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenAblehenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/ablehnen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/ablehnen
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenAblehenOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenAblehenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenAblehenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Change darlehen status to akzeptiert
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenAkzeptierenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/akzeptieren";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenAkzeptierenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/akzeptieren
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/akzeptieren
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenAkzeptierenOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenAkzeptierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenAkzeptierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Change darlehen status to eingegeben
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenEingebenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/eingeben";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenEingebenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/eingeben
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/eingeben
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenEingebenOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenEingebenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenEingebenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Change darlehen status to freigegeben
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenFreigebenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/freigeben";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenFreigebenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/freigeben
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/freigeben
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenFreigebenOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenFreigebenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenFreigebenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Update darlehen as gs
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * @see #body  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenUpdateGsOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenUpdateGsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /darlehen/{darlehenId}/gs
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /darlehen/{darlehenId}/gs
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param freiwilligDarlehenUpdateGsDtoSpec (FreiwilligDarlehenUpdateGsDtoSpec)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateGsOper body(FreiwilligDarlehenUpdateGsDtoSpec freiwilligDarlehenUpdateGsDtoSpec) {
+            reqSpec.setBody(freiwilligDarlehenUpdateGsDtoSpec);
+            return this;
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateGsOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Update darlehen as sb
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * @see #body  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenUpdateSbOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenUpdateSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /darlehen/{darlehenId}/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * PATCH /darlehen/{darlehenId}/sb
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param freiwilligDarlehenUpdateSbDtoSpec (FreiwilligDarlehenUpdateSbDtoSpec)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateSbOper body(FreiwilligDarlehenUpdateSbDtoSpec freiwilligDarlehenUpdateSbDtoSpec) {
+            reqSpec.setBody(freiwilligDarlehenUpdateSbDtoSpec);
+            return this;
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateSbOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenUpdateSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Change darlehen status to in bearbeitung gs
+     * 
+     *
+     * @see #darlehenIdPath  (required)
+     * @see #body  (required)
+     * return FreiwilligDarlehenDtoSpec
+     */
+    public static class FreiwilligDarlehenZurueckweisenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/zurueckweisen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public FreiwilligDarlehenZurueckweisenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/zurueckweisen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/zurueckweisen
+         * @param handler handler
+         * @return FreiwilligDarlehenDtoSpec
+         */
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenZurueckweisenOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID)  (required)
+         * @return operation
+         */
+        public FreiwilligDarlehenZurueckweisenOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenZurueckweisenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public FreiwilligDarlehenZurueckweisenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Return all darlehen for a given fallId
      * 
      *
      * @see #fallIdPath  (required)
-     * return DarlehenGsResponseDtoSpec
+     * return FreiwilligDarlehenGsResponseDtoSpec
      */
-    public static class GetAllDarlehenGsOper implements Oper {
+    public static class GetAllFreiwilligDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/darlehen/getAllDarlehenGs/{fallId}";
@@ -1095,7 +1192,7 @@ public class DarlehenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAllDarlehenGsOper(RequestSpecBuilder reqSpec) {
+        public GetAllFreiwilligDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -1115,10 +1212,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/getAllDarlehenGs/{fallId}
          * @param handler handler
-         * @return DarlehenGsResponseDtoSpec
+         * @return FreiwilligDarlehenGsResponseDtoSpec
          */
-        public DarlehenGsResponseDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenGsResponseDtoSpec> type = new TypeRef<DarlehenGsResponseDtoSpec>(){};
+        public FreiwilligDarlehenGsResponseDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenGsResponseDtoSpec> type = new TypeRef<FreiwilligDarlehenGsResponseDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1128,7 +1225,7 @@ public class DarlehenApiSpec {
          * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetAllDarlehenGsOper fallIdPath(Object fallId) {
+        public GetAllFreiwilligDarlehenGsOper fallIdPath(Object fallId) {
             reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
@@ -1138,7 +1235,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAllDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAllFreiwilligDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1148,7 +1245,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAllDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAllFreiwilligDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1158,9 +1255,9 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #gesuchIdPath  (required)
-     * return List&lt;DarlehenDtoSpec&gt;
+     * return List&lt;FreiwilligDarlehenDtoSpec&gt;
      */
-    public static class GetAllDarlehenSbOper implements Oper {
+    public static class GetAllFreiwilligDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/darlehen/getAllDarlehenSb/{gesuchId}";
@@ -1168,7 +1265,7 @@ public class DarlehenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAllDarlehenSbOper(RequestSpecBuilder reqSpec) {
+        public GetAllFreiwilligDarlehenSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -1188,10 +1285,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/getAllDarlehenSb/{gesuchId}
          * @param handler handler
-         * @return List&lt;DarlehenDtoSpec&gt;
+         * @return List&lt;FreiwilligDarlehenDtoSpec&gt;
          */
-        public List<DarlehenDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<DarlehenDtoSpec>> type = new TypeRef<List<DarlehenDtoSpec>>(){};
+        public List<FreiwilligDarlehenDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<FreiwilligDarlehenDtoSpec>> type = new TypeRef<List<FreiwilligDarlehenDtoSpec>>(){};
             return execute(handler).as(type);
         }
 
@@ -1201,7 +1298,7 @@ public class DarlehenApiSpec {
          * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetAllDarlehenSbOper gesuchIdPath(Object gesuchId) {
+        public GetAllFreiwilligDarlehenSbOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -1211,7 +1308,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAllDarlehenSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAllFreiwilligDarlehenSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1221,46 +1318,34 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAllDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAllFreiwilligDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
     }
     /**
-     * Returns darlehen filtered by status and sb
+     * Gets all darlehen buchhaltungsentrys
      * 
      *
-     * @see #getDarlehenSbQueryTypePath  (required)
-     * @see #pageQuery  (required)
-     * @see #pageSizeQuery  (required)
-     * @see #fallNummerQuery  (optional)
-     * @see #piaNachnameQuery  (optional)
-     * @see #piaVornameQuery  (optional)
-     * @see #piaGeburtsdatumQuery  (optional)
-     * @see #statusQuery  (optional)
-     * @see #bearbeiterQuery  (optional)
-     * @see #letzteAktivitaetFromQuery  (optional)
-     * @see #letzteAktivitaetToQuery  (optional)
-     * @see #sortColumnQuery  (optional)
-     * @see #sortOrderQuery  (optional)
-     * return PaginatedSbDarlehenDashboardDtoSpec
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return DarlehenBuchhaltungOverviewDtoSpec
      */
-    public static class GetDarlehenDashboardSbOper implements Oper {
+    public static class GetDarlehenBuchhaltungEntrysOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/dashboard/{getDarlehenSbQueryType}";
+        public static final String REQ_URI = "/darlehen/buchhaltung/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetDarlehenDashboardSbOper(RequestSpecBuilder reqSpec) {
+        public GetDarlehenBuchhaltungEntrysOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
+         * GET /darlehen/buchhaltung/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1271,155 +1356,23 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getDarlehenSbQueryType}
+         * GET /darlehen/buchhaltung/{gesuchId}
          * @param handler handler
-         * @return PaginatedSbDarlehenDashboardDtoSpec
+         * @return DarlehenBuchhaltungOverviewDtoSpec
          */
-        public PaginatedSbDarlehenDashboardDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<PaginatedSbDarlehenDashboardDtoSpec> type = new TypeRef<PaginatedSbDarlehenDashboardDtoSpec>(){};
+        public DarlehenBuchhaltungOverviewDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenBuchhaltungOverviewDtoSpec> type = new TypeRef<DarlehenBuchhaltungOverviewDtoSpec>(){};
             return execute(handler).as(type);
         }
 
-        public static final String GET_DARLEHEN_SB_QUERY_TYPE_PATH = "getDarlehenSbQueryType";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param getDarlehenSbQueryType (GetDarlehenSbQueryTypeDtoSpec)  (required)
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
          * @return operation
          */
-        public GetDarlehenDashboardSbOper getDarlehenSbQueryTypePath(Object getDarlehenSbQueryType) {
-            reqSpec.addPathParam(GET_DARLEHEN_SB_QUERY_TYPE_PATH, getDarlehenSbQueryType);
-            return this;
-        }
-
-        public static final String FALL_NUMMER_QUERY = "fallNummer";
-
-        /**
-         * @param fallNummer (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper fallNummerQuery(Object... fallNummer) {
-            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
-            return this;
-        }
-
-        public static final String PIA_NACHNAME_QUERY = "piaNachname";
-
-        /**
-         * @param piaNachname (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper piaNachnameQuery(Object... piaNachname) {
-            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
-            return this;
-        }
-
-        public static final String PIA_VORNAME_QUERY = "piaVorname";
-
-        /**
-         * @param piaVorname (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper piaVornameQuery(Object... piaVorname) {
-            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
-            return this;
-        }
-
-        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
-
-        /**
-         * @param piaGeburtsdatum (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
-            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
-            return this;
-        }
-
-        public static final String STATUS_QUERY = "status";
-
-        /**
-         * @param status (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper statusQuery(Object... status) {
-            reqSpec.addQueryParam(STATUS_QUERY, status);
-            return this;
-        }
-
-        public static final String BEARBEITER_QUERY = "bearbeiter";
-
-        /**
-         * @param bearbeiter (String)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper bearbeiterQuery(Object... bearbeiter) {
-            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
-            return this;
-        }
-
-        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
-
-        /**
-         * @param letzteAktivitaetFrom (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
-            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
-            return this;
-        }
-
-        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
-
-        /**
-         * @param letzteAktivitaetTo (LocalDate)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
-            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
-            return this;
-        }
-
-        public static final String PAGE_QUERY = "page";
-
-        /**
-         * @param page (Integer)  (required)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper pageQuery(Object... page) {
-            reqSpec.addQueryParam(PAGE_QUERY, page);
-            return this;
-        }
-
-        public static final String PAGE_SIZE_QUERY = "pageSize";
-
-        /**
-         * @param pageSize (Integer)  (required)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper pageSizeQuery(Object... pageSize) {
-            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
-            return this;
-        }
-
-        public static final String SORT_COLUMN_QUERY = "sortColumn";
-
-        /**
-         * @param sortColumn (SbDarlehenDashboardColumnDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper sortColumnQuery(Object... sortColumn) {
-            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
-            return this;
-        }
-
-        public static final String SORT_ORDER_QUERY = "sortOrder";
-
-        /**
-         * @param sortOrder (SortOrderDtoSpec)  (optional)
-         * @return operation
-         */
-        public GetDarlehenDashboardSbOper sortOrderQuery(Object... sortOrder) {
-            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+        public GetDarlehenBuchhaltungEntrysOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
@@ -1428,7 +1381,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetDarlehenDashboardSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetDarlehenBuchhaltungEntrysOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1438,7 +1391,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetDarlehenDashboardSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetDarlehenBuchhaltungEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1602,13 +1555,230 @@ public class DarlehenApiSpec {
         }
     }
     /**
+     * Returns darlehen filtered by status and sb
+     * 
+     *
+     * @see #getFreiwilligDarlehenSbQueryTypePath  (required)
+     * @see #pageQuery  (required)
+     * @see #pageSizeQuery  (required)
+     * @see #fallNummerQuery  (optional)
+     * @see #piaNachnameQuery  (optional)
+     * @see #piaVornameQuery  (optional)
+     * @see #piaGeburtsdatumQuery  (optional)
+     * @see #statusQuery  (optional)
+     * @see #bearbeiterQuery  (optional)
+     * @see #letzteAktivitaetFromQuery  (optional)
+     * @see #letzteAktivitaetToQuery  (optional)
+     * @see #sortColumnQuery  (optional)
+     * @see #sortOrderQuery  (optional)
+     * return PaginatedSbFreiwilligDarlehenDashboardDtoSpec
+     */
+    public static class GetFreiwilligDarlehenDashboardSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetFreiwilligDarlehenDashboardSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}
+         * @param handler handler
+         * @return PaginatedSbFreiwilligDarlehenDashboardDtoSpec
+         */
+        public PaginatedSbFreiwilligDarlehenDashboardDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<PaginatedSbFreiwilligDarlehenDashboardDtoSpec> type = new TypeRef<PaginatedSbFreiwilligDarlehenDashboardDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GET_FREIWILLIG_DARLEHEN_SB_QUERY_TYPE_PATH = "getFreiwilligDarlehenSbQueryType";
+
+        /**
+         * @param getFreiwilligDarlehenSbQueryType (GetFreiwilligDarlehenSbQueryTypeDtoSpec)  (required)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper getFreiwilligDarlehenSbQueryTypePath(Object getFreiwilligDarlehenSbQueryType) {
+            reqSpec.addPathParam(GET_FREIWILLIG_DARLEHEN_SB_QUERY_TYPE_PATH, getFreiwilligDarlehenSbQueryType);
+            return this;
+        }
+
+        public static final String FALL_NUMMER_QUERY = "fallNummer";
+
+        /**
+         * @param fallNummer (String)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper fallNummerQuery(Object... fallNummer) {
+            reqSpec.addQueryParam(FALL_NUMMER_QUERY, fallNummer);
+            return this;
+        }
+
+        public static final String PIA_NACHNAME_QUERY = "piaNachname";
+
+        /**
+         * @param piaNachname (String)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper piaNachnameQuery(Object... piaNachname) {
+            reqSpec.addQueryParam(PIA_NACHNAME_QUERY, piaNachname);
+            return this;
+        }
+
+        public static final String PIA_VORNAME_QUERY = "piaVorname";
+
+        /**
+         * @param piaVorname (String)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper piaVornameQuery(Object... piaVorname) {
+            reqSpec.addQueryParam(PIA_VORNAME_QUERY, piaVorname);
+            return this;
+        }
+
+        public static final String PIA_GEBURTSDATUM_QUERY = "piaGeburtsdatum";
+
+        /**
+         * @param piaGeburtsdatum (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper piaGeburtsdatumQuery(Object... piaGeburtsdatum) {
+            reqSpec.addQueryParam(PIA_GEBURTSDATUM_QUERY, piaGeburtsdatum);
+            return this;
+        }
+
+        public static final String STATUS_QUERY = "status";
+
+        /**
+         * @param status (String)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
+            return this;
+        }
+
+        public static final String BEARBEITER_QUERY = "bearbeiter";
+
+        /**
+         * @param bearbeiter (String)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper bearbeiterQuery(Object... bearbeiter) {
+            reqSpec.addQueryParam(BEARBEITER_QUERY, bearbeiter);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_FROM_QUERY = "letzteAktivitaetFrom";
+
+        /**
+         * @param letzteAktivitaetFrom (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper letzteAktivitaetFromQuery(Object... letzteAktivitaetFrom) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_FROM_QUERY, letzteAktivitaetFrom);
+            return this;
+        }
+
+        public static final String LETZTE_AKTIVITAET_TO_QUERY = "letzteAktivitaetTo";
+
+        /**
+         * @param letzteAktivitaetTo (LocalDate)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper letzteAktivitaetToQuery(Object... letzteAktivitaetTo) {
+            reqSpec.addQueryParam(LETZTE_AKTIVITAET_TO_QUERY, letzteAktivitaetTo);
+            return this;
+        }
+
+        public static final String PAGE_QUERY = "page";
+
+        /**
+         * @param page (Integer)  (required)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper pageQuery(Object... page) {
+            reqSpec.addQueryParam(PAGE_QUERY, page);
+            return this;
+        }
+
+        public static final String PAGE_SIZE_QUERY = "pageSize";
+
+        /**
+         * @param pageSize (Integer)  (required)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper pageSizeQuery(Object... pageSize) {
+            reqSpec.addQueryParam(PAGE_SIZE_QUERY, pageSize);
+            return this;
+        }
+
+        public static final String SORT_COLUMN_QUERY = "sortColumn";
+
+        /**
+         * @param sortColumn (SbFreiwilligDarlehenDashboardColumnDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper sortColumnQuery(Object... sortColumn) {
+            reqSpec.addQueryParam(SORT_COLUMN_QUERY, sortColumn);
+            return this;
+        }
+
+        public static final String SORT_ORDER_QUERY = "sortOrder";
+
+        /**
+         * @param sortOrder (SortOrderDtoSpec)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper sortOrderQuery(Object... sortOrder) {
+            reqSpec.addQueryParam(SORT_ORDER_QUERY, sortOrder);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Return active darlehen darlehen if exists or else null
      * 
      *
      * @see #darlehenIdPath  (required)
-     * return DarlehenDtoSpec
+     * return FreiwilligDarlehenDtoSpec
      */
-    public static class GetDarlehenGsOper implements Oper {
+    public static class GetFreiwilligDarlehenGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/darlehen/{darlehenId}/gs";
@@ -1616,7 +1786,7 @@ public class DarlehenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetDarlehenGsOper(RequestSpecBuilder reqSpec) {
+        public GetFreiwilligDarlehenGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -1636,10 +1806,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/{darlehenId}/gs
          * @param handler handler
-         * @return DarlehenDtoSpec
+         * @return FreiwilligDarlehenDtoSpec
          */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1649,7 +1819,7 @@ public class DarlehenApiSpec {
          * @param darlehenId (UUID)  (required)
          * @return operation
          */
-        public GetDarlehenGsOper darlehenIdPath(Object darlehenId) {
+        public GetFreiwilligDarlehenGsOper darlehenIdPath(Object darlehenId) {
             reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
@@ -1659,7 +1829,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetFreiwilligDarlehenGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1669,7 +1839,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetFreiwilligDarlehenGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1679,9 +1849,9 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #darlehenIdPath  (required)
-     * return DarlehenDtoSpec
+     * return FreiwilligDarlehenDtoSpec
      */
-    public static class GetDarlehenSbOper implements Oper {
+    public static class GetFreiwilligDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
         public static final String REQ_URI = "/darlehen/{darlehenId}/sb";
@@ -1689,7 +1859,7 @@ public class DarlehenApiSpec {
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetDarlehenSbOper(RequestSpecBuilder reqSpec) {
+        public GetFreiwilligDarlehenSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
@@ -1709,10 +1879,10 @@ public class DarlehenApiSpec {
         /**
          * GET /darlehen/{darlehenId}/sb
          * @param handler handler
-         * @return DarlehenDtoSpec
+         * @return FreiwilligDarlehenDtoSpec
          */
-        public DarlehenDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<DarlehenDtoSpec> type = new TypeRef<DarlehenDtoSpec>(){};
+        public FreiwilligDarlehenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FreiwilligDarlehenDtoSpec> type = new TypeRef<FreiwilligDarlehenDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1722,7 +1892,7 @@ public class DarlehenApiSpec {
          * @param darlehenId (UUID)  (required)
          * @return operation
          */
-        public GetDarlehenSbOper darlehenIdPath(Object darlehenId) {
+        public GetFreiwilligDarlehenSbOper darlehenIdPath(Object darlehenId) {
             reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
@@ -1732,7 +1902,7 @@ public class DarlehenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetDarlehenSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetFreiwilligDarlehenSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -1742,7 +1912,7 @@ public class DarlehenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetFreiwilligDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

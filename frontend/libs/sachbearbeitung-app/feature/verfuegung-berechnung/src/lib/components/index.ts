@@ -4,3 +4,4 @@ export * from './einnahmen/persoenliche-einnahmen.component';
 export * from './kosten/familien-kosten.component';
 export * from './kosten/persoenliche-kosten.component';
 export * from './position/person-value-item.component';
+export * from './position/position.component';

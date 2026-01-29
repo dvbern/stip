@@ -8,8 +8,8 @@ import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
 import { SharedUiKommentarDialogComponent } from './shared-ui-kommentar-dialog.component';
 
 describe('SharedUiKommentarDialogComponent', () => {
-  let component: SharedUiKommentarDialogComponent;
-  let fixture: ComponentFixture<SharedUiKommentarDialogComponent>;
+  let component: SharedUiKommentarDialogComponent<string>;
+  let fixture: ComponentFixture<SharedUiKommentarDialogComponent<string>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

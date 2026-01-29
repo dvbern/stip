@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
@@ -37,6 +38,7 @@ import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -52,7 +54,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @ApplicationScoped
 @UnlessBuildProfile("test")
 public class DokumentUploadService {
-
     protected static final String DOCUMENT_CONTENT_TYPE = "application/pdf";
 
     public Uni<Response> validateScanUploadDokument(
@@ -60,12 +61,20 @@ public class DokumentUploadService {
         final S3AsyncClient s3,
         final ConfigService configService,
         final Antivirus antivirus,
+        final Set<String> allowedMimetypes,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
     ) {
-        if (!checkFileUpload(fileUpload, configService)) {
-            return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
+        if (!checkFileUpload(fileUpload, allowedMimetypes)) {
+            throw new BadRequestException(
+                "Incompatible mimetype, allowed types are: %s".formatted(
+                    String.join(
+                        ",",
+                        allowedMimetypes
+                    )
+                )
+            );
         }
 
         scanDokument(antivirus, fileUpload);
@@ -86,9 +95,30 @@ public class DokumentUploadService {
         final ConfigService configService,
         final Antivirus antivirus,
         final String dokumentPathPrefix,
+        final Consumer<String> serviceCallback,
+        final @Nullable Consumer<Throwable> onFailure
+    ) {
+        return validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            configService.getAllowedMimeTypes(),
+            dokumentPathPrefix,
+            serviceCallback,
+            onFailure
+        );
+    }
+
+    public Uni<Response> validateScanUploadDokument(
+        final FileUpload fileUpload,
+        final S3AsyncClient s3,
+        final ConfigService configService,
+        final Antivirus antivirus,
+        final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
-        if (!checkFileUpload(fileUpload, configService)) {
+        if (!checkFileUpload(fileUpload, configService.getAllowedMimeTypes())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
@@ -184,19 +214,15 @@ public class DokumentUploadService {
         return objectId;
     }
 
-    public boolean checkFileUpload(final FileUpload fileUpload, final ConfigService configService) {
+    protected boolean checkFileUpload(final FileUpload fileUpload, final Set<String> allowedMimeTypes) {
         if (StringUtil.isNullOrEmpty(fileUpload.fileName()) || StringUtil.isNullOrEmpty(fileUpload.contentType())) {
             return false;
         }
 
-        if (!FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), configService.getAllowedMimeTypes())) {
-            return false;
-        }
-
-        return true;
+        return FileUtil.checkFileExtensionAllowed(fileUpload.uploadedFile(), allowedMimeTypes);
     }
 
-    public void scanDokument(final Antivirus antivirus, final FileUpload fileUpload) {
+    protected void scanDokument(final Antivirus antivirus, final FileUpload fileUpload) {
         try (
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(
                 IOUtils.toBufferedInputStream(Files.newInputStream(fileUpload.uploadedFile()))

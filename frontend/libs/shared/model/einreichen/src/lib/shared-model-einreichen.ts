@@ -1,4 +1,8 @@
-import { AppType } from '@dv/shared/model/config';
+import {
+  AppType,
+  BusinessAppType,
+  ensureIsBusinessAppType,
+} from '@dv/shared/model/config';
 import {
   GesuchTrancheStatus,
   Gesuchstatus,
@@ -13,8 +17,8 @@ export type AbschlussPhase =
   | 'AKZETPIERT'
   | 'ABGELEHNT';
 
-const gs = 'gesuch-app' satisfies AppType;
-const sb = 'sachbearbeitung-app' satisfies AppType;
+const gs = 'gesuch-app' satisfies BusinessAppType;
+const sb = 'sachbearbeitung-app' satisfies BusinessAppType;
 const ___ = null;
 const S__ = 'SUBMITTED';
 const _R_ = 'READY_TO_SEND';
@@ -55,7 +59,7 @@ const AbschlussPhaseMap = {
   TRANCHE_MANUELLE_AENDERUNG /**              */: { [gs]: S__, [sb]: S__ },
 } satisfies Record<
   `${`GESUCH_${Gesuchstatus}` | `TRANCHE_${GesuchTrancheStatus}`}`,
-  Record<AppType, AbschlussPhase | null>
+  Record<BusinessAppType, AbschlussPhase | null>
 >;
 
 export const toAbschlussPhase = (
@@ -70,6 +74,7 @@ export const toAbschlussPhase = (
   if (!gesuch || !appType) {
     return 'NOT_READY';
   }
+  ensureIsBusinessAppType(appType);
   const key = options.checkAenderung
     ? (`TRANCHE_${gesuch.gesuchTrancheToWorkWith.status}` as const)
     : (`GESUCH_${gesuch.gesuchStatus}` as const);

@@ -98,6 +98,27 @@ export class DatenschutzbriefService {
         return httpParams;
     }
 
+    public getDatenschutzbriefPath = (requestParameters: DatenschutzbriefServiceGetDatenschutzbriefRequestParams) => {
+        const trancheId = requestParameters.trancheId;
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling getDatenschutzbrief$.');
+        }
+        let path = `/api/v1/datenschutzbrief/${this.configuration.encodeParam({name: "trancheId", value: trancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * get Datenschutzbrief
      * @param requestParameters
@@ -165,6 +186,22 @@ export class DatenschutzbriefService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getDatenschutzbriefDownloadTokenPath = (requestParameters: DatenschutzbriefServiceGetDatenschutzbriefDownloadTokenRequestParams) => {
+        const elternId = requestParameters.elternId;
+        if (elternId === null || elternId === undefined) {
+            throw new Error('Required parameter elternId was null or undefined when calling getDatenschutzbriefDownloadToken$.');
+        }
+        let path = `/api/v1/datenschutzbrief/${this.configuration.encodeParam({name: "elternId", value: elternId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

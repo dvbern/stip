@@ -12,10 +12,10 @@
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <contract.path>${project.basedir}/../contract/openapi.yaml</contract.path>
     <contract.version>1.24.0</contract.version>
-    <itext.version>9.1.0</itext.version>
-    <kie.version>10.0.0</kie.version>
-    <liquibase-maven-plugin.version>4.31.1</liquibase-maven-plugin.version>
-    <lombok.version>1.18.38</lombok.version>
+    <itext.version>9.4.0</itext.version>
+    <kie.version>10.1.0</kie.version>
+    <liquibase-maven-plugin.version>5.0.1</liquibase-maven-plugin.version>
+    <lombok.version>1.18.42</lombok.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <maven.compiler.release>21</maven.compiler.release>
     <package>ch.dvbern.stip</package>
@@ -23,13 +23,13 @@
     <package.generated.test>${package.generated}</package.generated.test>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkiverse.sentry.version>2.1.3</quarkiverse.sentry.version>
-    <quarkus-amazon-services.version>3.4.0</quarkus-amazon-services.version>
-    <quarkus-antivirus.version>1.2.4</quarkus-antivirus.version>
+    <quarkiverse.sentry.version>2.3.0</quarkiverse.sentry.version>
+    <quarkus-amazon-services.version>3.9.1</quarkus-amazon-services.version>
+    <quarkus-antivirus.version>1.3.0</quarkus-antivirus.version>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.21.2</quarkus.platform.version>
-    <querydsl.version>5.1.0</querydsl.version>
+    <quarkus.platform.version>3.27.2</quarkus.platform.version>
+    <querydsl.version>6.12</querydsl.version>
     <rest-assured.gen.dir>${project.build.directory}/rest-assured</rest-assured.gen.dir>
     <rest-assured.version>5.5.1</rest-assured.version>
     <revision>local</revision>
@@ -41,10 +41,10 @@
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <sonar.customAssertionMethods>ch.dvbern.stip.api.util.TestUtil#executeAndAssert</sonar.customAssertionMethods>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
-    <spotless.version>2.44.4</spotless.version>
+    <spotless.version>3.1.0</spotless.version>
     <surefire-plugin.version>3.5.3</surefire-plugin.version>
-    <testcontainers.version>1.20.6</testcontainers.version>
-    <apache.commons-lang.version>3.17.0</apache.commons-lang.version>
+    <testcontainers.version>2.0.3</testcontainers.version>
+    <apache.commons-lang.version>3.20.0</apache.commons-lang.version>
     <apache.commons-validator.version>1.9.0</apache.commons-validator.version>
     <ci.disableConsole>false</ci.disableConsole>
     <ci.logLevel>INFO</ci.logLevel>
@@ -168,16 +168,9 @@
       <version>${checkerframework.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.querydsl</groupId>
+      <groupId>io.github.openfeign.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
       <version>${querydsl.version}</version>
-      <classifier>jakarta</classifier>
-    </dependency>
-    <dependency>
-      <groupId>com.querydsl</groupId>
-      <artifactId>querydsl-apt</artifactId>
-      <version>${querydsl.version}</version>
-      <classifier>jakarta</classifier>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -206,7 +199,17 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-core</artifactId>
-      <version>2.8.0</version>
+      <version>3.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>5.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>5.5.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -372,6 +375,12 @@
       <artifactId>svg</artifactId>
       <version>${itext.version}</version>
     </dependency>
+    <dependency>
+      <groupId>cc.jilt</groupId>
+      <artifactId>jilt</artifactId>
+      <version>1.8.4</version>
+      <scope>provided</scope> <!-- Jilt is not needed at runtime -->
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -387,23 +396,6 @@
               <goal>generate-code</goal>
               <goal>generate-code-tests</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.mysema.maven</groupId>
-        <artifactId>apt-maven-plugin</artifactId>
-        <version>1.1.3</version>
-        <executions>
-          <execution>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>process</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>target/generated-sources/querydsl</outputDirectory>
-              <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -426,7 +418,7 @@
               <version>${mapstruct.version}</version>
             </path>
             <path>
-              <groupId>com.querydsl</groupId>
+              <groupId>io.github.openfeign.querydsl</groupId>
               <artifactId>querydsl-apt</artifactId>
               <classifier>jpa</classifier>
               <classifier>jakarta</classifier>
@@ -437,12 +429,26 @@
               <artifactId>checker</artifactId>
               <version>${checkerframework.version}</version>
             </path>
+            <path>
+              <groupId>cc.jilt</groupId>
+              <artifactId>jilt</artifactId>
+              <version>1.8.4</version>
+            </path>
           </annotationProcessorPaths>
           <annotationProcessors>
             <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
             <annotationProcessor>org.mapstruct.ap.MappingProcessor</annotationProcessor>
+            <annotationProcessor>org.jilt.JiltAnnotationProcessor</annotationProcessor>
+            <annotationProcessor>com.querydsl.apt.jpa.JPAAnnotationProcessor</annotationProcessor>
           </annotationProcessors>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>io.github.openfeign.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -486,11 +492,6 @@
         <version>${liquibase-maven-plugin.version}</version>
         <dependencies>
           <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm</artifactId>
-            <version>${quarkus.platform.version}</version>
-          </dependency>
-          <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase-maven-plugin.version}</version>
@@ -499,11 +500,6 @@
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-hibernate6</artifactId>
             <version>${liquibase-maven-plugin.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-postgresql</artifactId>
-            <version>${quarkus.platform.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -690,8 +686,8 @@
                     DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
                     DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
                     DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                    GetDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetDarlehenSbQueryType,
-                    SbDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbDarlehenDashboardColumn,
+                    GetFreiwilligDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType,
+                    SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
                     Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
                     Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
@@ -715,6 +711,7 @@
                     GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
                     SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
                     SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
+                    AusbildungsPensum=ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum,
                     AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
                     StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
                     GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
@@ -741,7 +738,8 @@
                     MassendruckJobTyp=ch.dvbern.stip.api.massendruck.type.MassendruckJobTyp,
                     MassendruckJobStatus=ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus,
                     MassendruckJobSortColumn=ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn,
-                    GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType
+                    GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType,
+                    DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

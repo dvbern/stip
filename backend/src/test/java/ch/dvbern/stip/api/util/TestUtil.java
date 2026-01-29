@@ -642,6 +642,8 @@ public class TestUtil {
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
                 .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(Year.now().getValue()))
+                .setGesuchsperiodeStart(gueltigkeit.getGueltigAb())
+                .setGesuchsperiodeStopp(gueltigkeit.getGueltigBis())
                 .setMaxSaeule3a(7000)
                 .setEinkommensfreibetrag(6000)
                 .setFreibetragErwerbseinkommen(6000)

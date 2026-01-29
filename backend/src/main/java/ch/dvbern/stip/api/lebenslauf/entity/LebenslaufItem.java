@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import jakarta.annotation.Nullable;
@@ -39,9 +40,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
 
@@ -55,8 +60,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 )
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class LebenslaufItem extends AbstractMandantEntity {
-    @Nullable
+    @NullableUnlessGenerated
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "abschluss_id", nullable = true, foreignKey = @ForeignKey(name = "FK_lebenslauf_item_abschluss_id")
@@ -75,12 +83,12 @@ public class LebenslaufItem extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     private Taetigkeitsart taetigkeitsart;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "taetigkeits_beschreibung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String taetigkeitsBeschreibung;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "fachrichtung_berufsbezeichnung", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String fachrichtungBerufsbezeichnung;
@@ -93,6 +101,7 @@ public class LebenslaufItem extends AbstractMandantEntity {
     @Column(name = "wohnsitz", nullable = false)
     private WohnsitzKanton wohnsitz;
 
+    @Deprecated(forRemoval = true) // Not used anymore
     @Nullable
     @Column(name = "copy_of_id")
     private UUID copyOfId;

@@ -32,23 +32,25 @@ public class AhvValidator {
             return false;
         }
 
-        int[] relevantDigits = new int[12];
-        for (int i = 0; i < 12; i++) {
-            relevantDigits[i] = Character.getNumericValue(digitsArray[11 - i]);
-        }
-
-        int relevantDigitsSum = 0;
-        for (int i = 0; i < relevantDigits.length; i++) {
-            int multiplier = i % 2 == 0 ? 3 : 1;
-            relevantDigitsSum += relevantDigits[i] * multiplier;
-        }
-
-        int relevantDigitsRounded = (int) Math.ceil(relevantDigitsSum / 10.0) * 10;
-        int calculatedCheckDigit = relevantDigitsRounded - relevantDigitsSum;
+        int calculatedCheckDigit = getCheckDigit(digitsArray);
         int checkDigit = Character.getNumericValue(digitsArray[12]);
 
         String startDigits = ahvNummer.substring(0, 3);
 
         return checkDigit == calculatedCheckDigit && startDigits.equals(START_DIGITS);
+    }
+
+    public static int getCheckDigit(char[] digitsArray) {
+        int[] relevantDigits = new int[12];
+        for (int i = 0; i < 12; i++) {
+            relevantDigits[i] = Character.getNumericValue(digitsArray[11 - i]);
+        }
+        int digitsSum = 0;
+        for (int i = 0; i < relevantDigits.length; i++) {
+            int multiplier = i % 2 == 0 ? 3 : 1;
+            digitsSum += relevantDigits[i] * multiplier;
+        }
+        int relevantDigitsRounded = (int) Math.ceil(digitsSum / 10.0) * 10;
+        return relevantDigitsRounded - digitsSum;
     }
 }

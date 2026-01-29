@@ -88,6 +88,18 @@ export class NotificationService {
         return httpParams;
     }
 
+    public getNotificationsForCurrentUserPath = () => {
+        let path = `/api/v1/notifications`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Gets all notifications for the User
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

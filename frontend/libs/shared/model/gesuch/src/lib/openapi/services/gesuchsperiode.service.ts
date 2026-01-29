@@ -118,6 +118,22 @@ export class GesuchsperiodeService {
         return httpParams;
     }
 
+    public createGesuchsperiodePath = (requestParameters: GesuchsperiodeServiceCreateGesuchsperiodeRequestParams) => {
+        const gesuchsperiodeCreate = requestParameters.gesuchsperiodeCreate;
+        if (gesuchsperiodeCreate === null || gesuchsperiodeCreate === undefined) {
+            throw new Error('Required parameter gesuchsperiodeCreate was null or undefined when calling createGesuchsperiode$.');
+        }
+        let path = `/api/v1/gesuchsperiode`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -200,6 +216,22 @@ export class GesuchsperiodeService {
         );
     }
 
+    public deleteGesuchsperiodePath = (requestParameters: GesuchsperiodeServiceDeleteGesuchsperiodeRequestParams) => {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling deleteGesuchsperiode$.');
+        }
+        let path = `/api/v1/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Deletes a Gesuchsperiode with the given id
      * @param requestParameters
@@ -270,6 +302,22 @@ export class GesuchsperiodeService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getAllAssignableGesuchsperiodePath = (requestParameters: GesuchsperiodeServiceGetAllAssignableGesuchsperiodeRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllAssignableGesuchsperiode$.');
+        }
+        let path = `/api/v1/gesuchsperiode/get-all-assignable/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -345,6 +393,22 @@ export class GesuchsperiodeService {
         );
     }
 
+    public getGesuchsperiodePath = (requestParameters: GesuchsperiodeServiceGetGesuchsperiodeRequestParams) => {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling getGesuchsperiode$.');
+        }
+        let path = `/api/v1/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returniert die GesuchsperiodeWithDaten mit der gegebene Id.
      * @param requestParameters
@@ -418,6 +482,18 @@ export class GesuchsperiodeService {
         );
     }
 
+    public getGesuchsperiodenPath = () => {
+        let path = `/api/v1/gesuchsperiode`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -483,6 +559,18 @@ export class GesuchsperiodeService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getLatestPath = () => {
+        let path = `/api/v1/gesuchsperiode/latest`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -551,6 +639,22 @@ export class GesuchsperiodeService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public publishGesuchsperiodePath = (requestParameters: GesuchsperiodeServicePublishGesuchsperiodeRequestParams) => {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling publishGesuchsperiode$.');
+        }
+        let path = `/api/v1/gesuchsperiode/publish/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -623,6 +727,23 @@ export class GesuchsperiodeService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateGesuchsperiodePath = (requestParameters: GesuchsperiodeServiceUpdateGesuchsperiodeRequestParams) => {
+        const gesuchsperiodeId = requestParameters.gesuchsperiodeId;
+        if (gesuchsperiodeId === null || gesuchsperiodeId === undefined) {
+            throw new Error('Required parameter gesuchsperiodeId was null or undefined when calling updateGesuchsperiode$.');
+        }
+        const gesuchsperiodeUpdate = requestParameters.gesuchsperiodeUpdate;
+        let path = `/api/v1/gesuchsperiode/${this.configuration.encodeParam({name: "gesuchsperiodeId", value: gesuchsperiodeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

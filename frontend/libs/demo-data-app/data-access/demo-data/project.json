@@ -1,0 +1,16 @@
+{
+  "name": "demo-data-app-data-access-demo-data",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/demo-data-app/data-access/demo-data/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:demo-data-app"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/demo-data-app/data-access/demo-data/tsconfig.lib.json"
+      }
+    }
+  }
+}

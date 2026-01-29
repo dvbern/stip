@@ -179,6 +179,22 @@ export class AusbildungsstaetteService {
         return httpParams;
     }
 
+    public createAbschlussBrueckenangebotPath = (requestParameters: AusbildungsstaetteServiceCreateAbschlussBrueckenangebotRequestParams) => {
+        const brueckenangebotCreate = requestParameters.brueckenangebotCreate;
+        if (brueckenangebotCreate === null || brueckenangebotCreate === undefined) {
+            throw new Error('Required parameter brueckenangebotCreate was null or undefined when calling createAbschlussBrueckenangebot$.');
+        }
+        let path = `/api/v1/abschluss`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create an Abschluss for a Brueckenangebot
      * @param requestParameters
@@ -260,6 +276,22 @@ export class AusbildungsstaetteService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public createAusbildungsgangPath = (requestParameters: AusbildungsstaetteServiceCreateAusbildungsgangRequestParams) => {
+        const ausbildungsgangCreate = requestParameters.ausbildungsgangCreate;
+        if (ausbildungsgangCreate === null || ausbildungsgangCreate === undefined) {
+            throw new Error('Required parameter ausbildungsgangCreate was null or undefined when calling createAusbildungsgang$.');
+        }
+        let path = `/api/v1/ausbildungsgang`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -345,6 +377,22 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public createAusbildungsstaettePath = (requestParameters: AusbildungsstaetteServiceCreateAusbildungsstaetteRequestParams) => {
+        const ausbildungsstaetteCreate = requestParameters.ausbildungsstaetteCreate;
+        if (ausbildungsstaetteCreate === null || ausbildungsstaetteCreate === undefined) {
+            throw new Error('Required parameter ausbildungsstaetteCreate was null or undefined when calling createAusbildungsstaette$.');
+        }
+        let path = `/api/v1/ausbildungsstaette`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Create an Ausbildungsstaette
      * @param requestParameters
@@ -428,6 +476,18 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public getAllAbschluessForAuswahlPath = () => {
+        let path = `/api/v1/abschluss/slim`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns all AbschlussSlim
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -494,6 +554,69 @@ export class AusbildungsstaetteService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getAllAbschlussForUebersichtPath = (requestParameters: AusbildungsstaetteServiceGetAllAbschlussForUebersichtRequestParams) => {
+        const sortColumn = requestParameters.sortColumn;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllAbschlussForUebersicht$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllAbschlussForUebersicht$.');
+        }
+        const sortOrder = requestParameters.sortOrder;
+        const ausbildungskategorie = requestParameters.ausbildungskategorie;
+        const bildungsrichtung = requestParameters.bildungsrichtung;
+        const bezeichnungDe = requestParameters.bezeichnungDe;
+        const bezeichnungFr = requestParameters.bezeichnungFr;
+        const aktiv = requestParameters.aktiv;
+        let path = `/api/v1/abschluss`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+
+        if (ausbildungskategorie !== undefined && ausbildungskategorie !== null) {
+          queryParams.append('ausbildungskategorie', ausbildungskategorie.toString());
+        }
+
+        if (bildungsrichtung !== undefined && bildungsrichtung !== null) {
+          queryParams.append('bildungsrichtung', bildungsrichtung.toString());
+        }
+
+        if (bezeichnungDe !== undefined && bezeichnungDe !== null) {
+          queryParams.append('bezeichnungDe', bezeichnungDe.toString());
+        }
+
+        if (bezeichnungFr !== undefined && bezeichnungFr !== null) {
+          queryParams.append('bezeichnungFr', bezeichnungFr.toString());
+        }
+
+        if (aktiv !== undefined && aktiv !== null) {
+          queryParams.append('aktiv', aktiv.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -619,6 +742,18 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public getAllAusbildungsgaengeForAuswahlPath = () => {
+        let path = `/api/v1/ausbildungsgang/slim`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns all AusbildungsgaengeSlim
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -685,6 +820,74 @@ export class AusbildungsstaetteService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getAllAusbildungsgangForUebersichtPath = (requestParameters: AusbildungsstaetteServiceGetAllAusbildungsgangForUebersichtRequestParams) => {
+        const sortColumn = requestParameters.sortColumn;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllAusbildungsgangForUebersicht$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllAusbildungsgangForUebersicht$.');
+        }
+        const sortOrder = requestParameters.sortOrder;
+        const abschlussBezeichnungDe = requestParameters.abschlussBezeichnungDe;
+        const abschlussBezeichnungFr = requestParameters.abschlussBezeichnungFr;
+        const ausbildungskategorie = requestParameters.ausbildungskategorie;
+        const ausbildungsstaetteNameDe = requestParameters.ausbildungsstaetteNameDe;
+        const ausbildungsstaetteNameFr = requestParameters.ausbildungsstaetteNameFr;
+        const aktiv = requestParameters.aktiv;
+        let path = `/api/v1/ausbildungsgang`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+
+        if (abschlussBezeichnungDe !== undefined && abschlussBezeichnungDe !== null) {
+          queryParams.append('abschlussBezeichnungDe', abschlussBezeichnungDe.toString());
+        }
+
+        if (abschlussBezeichnungFr !== undefined && abschlussBezeichnungFr !== null) {
+          queryParams.append('abschlussBezeichnungFr', abschlussBezeichnungFr.toString());
+        }
+
+        if (ausbildungskategorie !== undefined && ausbildungskategorie !== null) {
+          queryParams.append('ausbildungskategorie', ausbildungskategorie.toString());
+        }
+
+        if (ausbildungsstaetteNameDe !== undefined && ausbildungsstaetteNameDe !== null) {
+          queryParams.append('ausbildungsstaetteNameDe', ausbildungsstaetteNameDe.toString());
+        }
+
+        if (ausbildungsstaetteNameFr !== undefined && ausbildungsstaetteNameFr !== null) {
+          queryParams.append('ausbildungsstaetteNameFr', ausbildungsstaetteNameFr.toString());
+        }
+
+        if (aktiv !== undefined && aktiv !== null) {
+          queryParams.append('aktiv', aktiv.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -815,6 +1018,18 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public getAllAusbildungsstaetteForAuswahlPath = () => {
+        let path = `/api/v1/ausbildungsstaette/slim`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Returns all AusbildungsstaetteSlim
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -881,6 +1096,69 @@ export class AusbildungsstaetteService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getAllAusbildungsstaetteForUebersichtPath = (requestParameters: AusbildungsstaetteServiceGetAllAusbildungsstaetteForUebersichtRequestParams) => {
+        const sortColumn = requestParameters.sortColumn;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllAusbildungsstaetteForUebersicht$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getAllAusbildungsstaetteForUebersicht$.');
+        }
+        const sortOrder = requestParameters.sortOrder;
+        const nameDe = requestParameters.nameDe;
+        const nameFr = requestParameters.nameFr;
+        const nummer = requestParameters.nummer;
+        const nummerTyp = requestParameters.nummerTyp;
+        const aktiv = requestParameters.aktiv;
+        let path = `/api/v1/ausbildungsstaette`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+
+        if (nameDe !== undefined && nameDe !== null) {
+          queryParams.append('nameDe', nameDe.toString());
+        }
+
+        if (nameFr !== undefined && nameFr !== null) {
+          queryParams.append('nameFr', nameFr.toString());
+        }
+
+        if (nummer !== undefined && nummer !== null) {
+          queryParams.append('nummer', nummer.toString());
+        }
+
+        if (nummerTyp !== undefined && nummerTyp !== null) {
+          queryParams.append('nummerTyp', nummerTyp.toString());
+        }
+
+        if (aktiv !== undefined && aktiv !== null) {
+          queryParams.append('aktiv', aktiv.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1006,6 +1284,26 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public renameAbschlussPath = (requestParameters: AusbildungsstaetteServiceRenameAbschlussRequestParams) => {
+        const abschlussId = requestParameters.abschlussId;
+        if (abschlussId === null || abschlussId === undefined) {
+            throw new Error('Required parameter abschlussId was null or undefined when calling renameAbschluss$.');
+        }
+        const renameAbschluss = requestParameters.renameAbschluss;
+        if (renameAbschluss === null || renameAbschluss === undefined) {
+            throw new Error('Required parameter renameAbschluss was null or undefined when calling renameAbschluss$.');
+        }
+        let path = `/api/v1/abschluss/rename/${this.configuration.encodeParam({name: "abschlussId", value: abschlussId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Renames a specified Abschluss
      * @param requestParameters
@@ -1091,6 +1389,26 @@ export class AusbildungsstaetteService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public renameAusbildungsstaettePath = (requestParameters: AusbildungsstaetteServiceRenameAusbildungsstaetteRequestParams) => {
+        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
+        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling renameAusbildungsstaette$.');
+        }
+        const renameAusbildungsstaette = requestParameters.renameAusbildungsstaette;
+        if (renameAusbildungsstaette === null || renameAusbildungsstaette === undefined) {
+            throw new Error('Required parameter renameAusbildungsstaette was null or undefined when calling renameAusbildungsstaette$.');
+        }
+        let path = `/api/v1/ausbildungsstaette/rename/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -1180,6 +1498,22 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public setAbschlussInaktivPath = (requestParameters: AusbildungsstaetteServiceSetAbschlussInaktivRequestParams) => {
+        const abschlussId = requestParameters.abschlussId;
+        if (abschlussId === null || abschlussId === undefined) {
+            throw new Error('Required parameter abschlussId was null or undefined when calling setAbschlussInaktiv$.');
+        }
+        let path = `/api/v1/abschluss/inaktiv/${this.configuration.encodeParam({name: "abschlussId", value: abschlussId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Set an Abschluss to Inaktiv
      * @param requestParameters
@@ -1253,6 +1587,22 @@ export class AusbildungsstaetteService {
         );
     }
 
+    public setAusbildungsgangInaktivPath = (requestParameters: AusbildungsstaetteServiceSetAusbildungsgangInaktivRequestParams) => {
+        const ausbildungsgangId = requestParameters.ausbildungsgangId;
+        if (ausbildungsgangId === null || ausbildungsgangId === undefined) {
+            throw new Error('Required parameter ausbildungsgangId was null or undefined when calling setAusbildungsgangInaktiv$.');
+        }
+        let path = `/api/v1/ausbildungsgang/inaktiv/${this.configuration.encodeParam({name: "ausbildungsgangId", value: ausbildungsgangId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * Set an Ausbildungsgang to Inaktiv
      * @param requestParameters
@@ -1324,6 +1674,22 @@ export class AusbildungsstaetteService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public setAusbildungsstaetteInaktivPath = (requestParameters: AusbildungsstaetteServiceSetAusbildungsstaetteInaktivRequestParams) => {
+        const ausbildungsstaetteId = requestParameters.ausbildungsstaetteId;
+        if (ausbildungsstaetteId === null || ausbildungsstaetteId === undefined) {
+            throw new Error('Required parameter ausbildungsstaetteId was null or undefined when calling setAusbildungsstaetteInaktiv$.');
+        }
+        let path = `/api/v1/ausbildungsstaette/inaktiv/${this.configuration.encodeParam({name: "ausbildungsstaetteId", value: ausbildungsstaetteId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

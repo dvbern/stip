@@ -13,7 +13,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
-import { Darlehen, DarlehenStatus } from '@dv/shared/model/gesuch';
+import { DarlehenStatus, FreiwilligDarlehen } from '@dv/shared/model/gesuch';
 
 export type IdType = 'gesuch' | 'fall';
 
@@ -40,7 +40,7 @@ export class SharedUiDarlehenMenuComponent {
    * - The actual ID value.
    */
   idTypeSig = input.required<[IdType, string | undefined]>();
-  darlehenListSig = input.required<Darlehen[] | undefined>();
+  darlehenListSig = input.required<FreiwilligDarlehen[] | undefined>();
   canCreateDarlehenSig = input<boolean | undefined>();
   createDarlehen = output<{ fallId: string }>();
   router = inject(Router);
@@ -77,7 +77,7 @@ export class SharedUiDarlehenMenuComponent {
         acc[statusKey].push(darlehen);
         return acc;
       },
-      {} as Record<DarlehenCompleteStates, Darlehen[]>,
+      {} as Record<DarlehenCompleteStates, FreiwilligDarlehen[]>,
     );
   });
 }

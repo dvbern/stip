@@ -4,53 +4,11 @@
   </h1>
 
   <form [formGroup]="form" (ngSubmit)="confirm()" class="tw:flex tw:flex-col tw:gap-3">
-    <dv-shared-ui-drop-file
-      class="tw:flex tw:flex-col tw:items-center tw:rounded-lg tw:border-2 tw:bg-white tw:p-4 tw:shadow-sm"
-    >
-      <label class="tw:flex tw:flex-col tw:items-center">
-        <div
-          class="text-muted text-italic d-md-block d-none my-4 text-center"
-          [innerHTML]="'shared.file.dropZone' | transloco"
-        ></div>
-        <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
-          {{ 'shared.file.upload' | transloco }}
-        </button>
-        <input
-          #fileInput
-          formControlName="fileUpload"
-          class="cdk-visually-hidden mb-2"
-          type="file"
-          tabindex="-1"
-          data-testid="file-input"
-          [attr.accept]="dialogData.allowedTypes"
-          (change)="updateFileList($event)"
-        />
-      </label>
-    </dv-shared-ui-drop-file>
-    @let file = selectedFileSig();
-    @if (file) {
-      <div class="tw:flex">
-        <div>
-          <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
-        </div>
-        <button
-          type="button"
-          class="dv-icon-button tw:ml-2 tw:h-auto tw:w-auto tw:self-end flex-shrink-0"
-          [attr.aria-label]="'shared.form.delete' | transloco"
-          (click)="resetSelectedFile()"
-        >
-          <span class="material-symbols-rounded text-muted tw:!text-xl/none align-middle">delete</span>
-        </button>
-      </div>
-    } @else {
-      <div class="group-errors tw:mb-[3px] tw:text-sm">
-        <mat-error>
-          @if (form.touched && form.controls.fileUpload.touched && fileInput.files?.length === 0) {
-            {{ 'shared.form.error.required' | transloco }}
-          }
-        </mat-error>
-      </div>
-    }
+    <dv-shared-ui-file-upload
+      formControlName="fileUpload"
+      [allowedFileTypesSig]="dialogData.allowedTypes"
+      (selectedFileSig)="selectedFileSig.set($event)"
+    ></dv-shared-ui-file-upload>
 
     <mat-form-field class="tw:mt-3 tw:w-full" dvSharedUiFormField>
       <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.kommentar.label' | transloco }}</mat-label>

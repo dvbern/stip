@@ -1,0 +1,117 @@
+{
+  "name": "demo-data-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/demo-data-app/src",
+  "tags": ["type:app", "scope:demo-data-app"],
+  "implicitDependencies": [
+    "libs/shared/assets/i18n",
+    "libs/shared/assets/images",
+    "libs/shared/styles/theme",
+    "libs/shared/styles/components"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/demo-data-app",
+        "browser": "apps/demo-data-app/src/main.ts",
+        "polyfills": ["@angular/localize/init", "zone.js"],
+        "tsConfig": "apps/demo-data-app/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "libs/demo-data-app/assets/i18n/src",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/i18n/src",
+            "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/images/src",
+            "output": "assets/images"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/auth/src",
+            "output": "assets/auth/"
+          }
+        ],
+        "styles": [
+          "apps/demo-data-app/src/styles.scss",
+          "libs/shared/styles/theme/src/tailwind.css"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/shared/styles/theme/src",
+            "libs/shared/styles/components/src"
+          ]
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1.7mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "options": {
+        "port": 4203,
+        "proxyConfig": "proxy.conf.js"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "demo-data-app:build:production"
+        },
+        "development": {
+          "buildTarget": "demo-data-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "buildTarget": "demo-data-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "demo-data-app:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/demo-data-app/browser",
+        "spa": true
+      }
+    }
+  }
+}

@@ -144,6 +144,26 @@ export class DelegierenService {
         return httpParams;
     }
 
+    public delegierterMitarbeiterAendernPath = (requestParameters: DelegierenServiceDelegierterMitarbeiterAendernRequestParams) => {
+        const delegierungId = requestParameters.delegierungId;
+        if (delegierungId === null || delegierungId === undefined) {
+            throw new Error('Required parameter delegierungId was null or undefined when calling delegierterMitarbeiterAendern$.');
+        }
+        const delegierterMitarbeiterAendern = requestParameters.delegierterMitarbeiterAendern;
+        if (delegierterMitarbeiterAendern === null || delegierterMitarbeiterAendern === undefined) {
+            throw new Error('Required parameter delegierterMitarbeiterAendern was null or undefined when calling delegierterMitarbeiterAendern$.');
+        }
+        let path = `/api/v1/delegierung/${this.configuration.encodeParam({name: "delegierungId", value: delegierungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/mitarbeiterDelegieren`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -229,6 +249,22 @@ export class DelegierenService {
         );
     }
 
+    public delegierungAblehnenPath = (requestParameters: DelegierenServiceDelegierungAblehnenRequestParams) => {
+        const delegierungId = requestParameters.delegierungId;
+        if (delegierungId === null || delegierungId === undefined) {
+            throw new Error('Required parameter delegierungId was null or undefined when calling delegierungAblehnen$.');
+        }
+        let path = `/api/v1/delegierung/${this.configuration.encodeParam({name: "delegierungId", value: delegierungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/ablehnen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -300,6 +336,22 @@ export class DelegierenService {
         );
     }
 
+    public delegierungAufloesenPath = (requestParameters: DelegierenServiceDelegierungAufloesenRequestParams) => {
+        const delegierungId = requestParameters.delegierungId;
+        if (delegierungId === null || delegierungId === undefined) {
+            throw new Error('Required parameter delegierungId was null or undefined when calling delegierungAufloesen$.');
+        }
+        let path = `/api/v1/delegierung/${this.configuration.encodeParam({name: "delegierungId", value: delegierungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/aufloesen`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -369,6 +421,30 @@ export class DelegierenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public fallDelegierenPath = (requestParameters: DelegierenServiceFallDelegierenRequestParams) => {
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling fallDelegieren$.');
+        }
+        const sozialdienstId = requestParameters.sozialdienstId;
+        if (sozialdienstId === null || sozialdienstId === undefined) {
+            throw new Error('Required parameter sozialdienstId was null or undefined when calling fallDelegieren$.');
+        }
+        const delegierungCreate = requestParameters.delegierungCreate;
+        if (delegierungCreate === null || delegierungCreate === undefined) {
+            throw new Error('Required parameter delegierungCreate was null or undefined when calling fallDelegieren$.');
+        }
+        let path = `/api/v1/delegieren/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "sozialdienstId", value: sozialdienstId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -458,6 +534,78 @@ export class DelegierenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getDelegierungsOfSozialdienstAdminPath = (requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams) => {
+        const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
+        if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
+        }
+        const fallNummer = requestParameters.fallNummer;
+        const nachname = requestParameters.nachname;
+        const vorname = requestParameters.vorname;
+        const geburtsdatum = requestParameters.geburtsdatum;
+        const wohnort = requestParameters.wohnort;
+        const delegierungAngenommen = requestParameters.delegierungAngenommen;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+        let path = `/api/v1/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryTypeAdmin", dataFormat: undefined})}/admin`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (fallNummer !== undefined && fallNummer !== null) {
+          queryParams.append('fallNummer', fallNummer.toString());
+        }
+
+        if (nachname !== undefined && nachname !== null) {
+          queryParams.append('nachname', nachname.toString());
+        }
+
+        if (vorname !== undefined && vorname !== null) {
+          queryParams.append('vorname', vorname.toString());
+        }
+
+        if (geburtsdatum !== undefined && geburtsdatum !== null) {
+          queryParams.append('geburtsdatum', geburtsdatum.toString());
+        }
+
+        if (wohnort !== undefined && wohnort !== null) {
+          queryParams.append('wohnort', wohnort.toString());
+        }
+
+        if (delegierungAngenommen !== undefined && delegierungAngenommen !== null) {
+          queryParams.append('delegierungAngenommen', delegierungAngenommen.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -590,6 +738,73 @@ export class DelegierenService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getDelegierungsOfSozialdienstMitarbeiterPath = (requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams) => {
+        const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
+        if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
+            throw new Error('Required parameter getDelegierungSozQueryType was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
+        }
+        const fallNummer = requestParameters.fallNummer;
+        const nachname = requestParameters.nachname;
+        const vorname = requestParameters.vorname;
+        const geburtsdatum = requestParameters.geburtsdatum;
+        const wohnort = requestParameters.wohnort;
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
+        }
+        const pageSize = requestParameters.pageSize;
+        if (pageSize === null || pageSize === undefined) {
+            throw new Error('Required parameter pageSize was null or undefined when calling getDelegierungsOfSozialdienstMitarbeiter$.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortOrder = requestParameters.sortOrder;
+        let path = `/api/v1/delegierung/${this.configuration.encodeParam({name: "getDelegierungSozQueryType", value: getDelegierungSozQueryType, in: "path", style: "simple", explode: false, dataType: "GetDelegierungSozQueryTypeMitarbeiter", dataFormat: undefined})}/ma`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (fallNummer !== undefined && fallNummer !== null) {
+          queryParams.append('fallNummer', fallNummer.toString());
+        }
+
+        if (nachname !== undefined && nachname !== null) {
+          queryParams.append('nachname', nachname.toString());
+        }
+
+        if (vorname !== undefined && vorname !== null) {
+          queryParams.append('vorname', vorname.toString());
+        }
+
+        if (geburtsdatum !== undefined && geburtsdatum !== null) {
+          queryParams.append('geburtsdatum', geburtsdatum.toString());
+        }
+
+        if (wohnort !== undefined && wohnort !== null) {
+          queryParams.append('wohnort', wohnort.toString());
+        }
+
+        if (page !== undefined && page !== null) {
+          queryParams.append('page', page.toString());
+        }
+
+        if (pageSize !== undefined && pageSize !== null) {
+          queryParams.append('pageSize', pageSize.toString());
+        }
+
+        if (sortColumn !== undefined && sortColumn !== null) {
+          queryParams.append('sortColumn', sortColumn.toString());
+        }
+
+        if (sortOrder !== undefined && sortOrder !== null) {
+          queryParams.append('sortOrder', sortOrder.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

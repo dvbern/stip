@@ -97,6 +97,22 @@ export class LandService {
         return httpParams;
     }
 
+    public createLandPath = (requestParameters: LandServiceCreateLandRequestParams) => {
+        const land = requestParameters.land;
+        if (land === null || land === undefined) {
+            throw new Error('Required parameter land was null or undefined when calling createLand$.');
+        }
+        let path = `/api/v1/land`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -179,6 +195,18 @@ export class LandService {
         );
     }
 
+    public getLaenderPath = () => {
+        let path = `/api/v1/land`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -244,6 +272,26 @@ export class LandService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public updateLandPath = (requestParameters: LandServiceUpdateLandRequestParams) => {
+        const landId = requestParameters.landId;
+        if (landId === null || landId === undefined) {
+            throw new Error('Required parameter landId was null or undefined when calling updateLand$.');
+        }
+        const land = requestParameters.land;
+        if (land === null || land === undefined) {
+            throw new Error('Required parameter land was null or undefined when calling updateLand$.');
+        }
+        let path = `/api/v1/land/${this.configuration.encodeParam({name: "landId", value: landId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

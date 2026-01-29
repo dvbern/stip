@@ -88,6 +88,18 @@ export class FallService {
         return httpParams;
     }
 
+    public createFallForGsPath = () => {
+        let path = `/api/v1/fall/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
     /**
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -153,6 +165,18 @@ export class FallService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getFaelleForSbPath = () => {
+        let path = `/api/v1/fall/sb`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**
@@ -221,6 +245,18 @@ export class FallService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    public getFallForGsPath = () => {
+        let path = `/api/v1/fall/gs`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
     }
 
     /**

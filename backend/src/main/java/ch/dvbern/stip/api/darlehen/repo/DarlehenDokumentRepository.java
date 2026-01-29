@@ -21,8 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenDokument;
-import ch.dvbern.stip.api.darlehen.entity.QDarlehenDokument;
+import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehenDokument;
+import ch.dvbern.stip.api.darlehen.entity.QFreiwilligDarlehenDokument;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,17 +31,20 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DarlehenDokumentRepository implements BaseRepository<DarlehenDokument> {
+public class DarlehenDokumentRepository implements BaseRepository<FreiwilligDarlehenDokument> {
     private final EntityManager entityManager;
 
-    public Optional<DarlehenDokument> findByDarlehenIdAndType(UUID darlehenId, DarlehenDokumentType dokumentType) {
+    public Optional<FreiwilligDarlehenDokument> findByDarlehenIdAndType(
+        UUID darlehenId,
+        DarlehenDokumentType dokumentType
+    ) {
         var queryFactory = new JPAQueryFactory(entityManager);
-        var darlehenDokument = QDarlehenDokument.darlehenDokument;
+        var freiwilligDarlehenDokument = QFreiwilligDarlehenDokument.freiwilligDarlehenDokument;
         var query = queryFactory
-            .selectFrom(darlehenDokument)
+            .selectFrom(freiwilligDarlehenDokument)
             .where(
-                darlehenDokument.darlehen.id.eq(darlehenId)
-                    .and(darlehenDokument.dokumentType.eq(dokumentType))
+                freiwilligDarlehenDokument.freiwilligDarlehen.id.eq(darlehenId)
+                    .and(freiwilligDarlehenDokument.dokumentType.eq(dokumentType))
             );
         return query.stream().findFirst();
     }

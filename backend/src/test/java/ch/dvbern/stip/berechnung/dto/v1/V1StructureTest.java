@@ -22,12 +22,13 @@ import java.util.UUID;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.NotFoundException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -59,21 +60,7 @@ class V1StructureTest {
                 "nachnamePartner": null,
                 "sozialversicherungsnummer": "756.1111.1114.10",
                 "sozialversicherungsnummerPartner": null,
-                "geburtsdatum": {
-                  "year": 1990,
-                  "month": "JANUARY",
-                  "monthValue": 1,
-                  "dayOfMonth": 1,
-                  "leapYear": false,
-                  "dayOfWeek": "MONDAY",
-                  "dayOfYear": 1,
-                  "era": "CE",
-                  "chronology": {
-                    "id": "ISO",
-                    "calendarType": "iso8601",
-                    "isoBased": true
-                  }
-                },
+                "geburtsdatum": [1990, 1, 1],
                 "geburtsdatumPartner": null,
                 "steuerdatenTyp": "VATER",
                 "selbststaendigErwerbend": false,
@@ -113,21 +100,7 @@ class V1StructureTest {
                 "nachnamePartner": null,
                 "sozialversicherungsnummer": "756.1111.1111.13",
                 "sozialversicherungsnummerPartner": null,
-                "geburtsdatum": {
-                  "year": 1990,
-                  "month": "JANUARY",
-                  "monthValue": 1,
-                  "dayOfMonth": 1,
-                  "leapYear": false,
-                  "dayOfWeek": "MONDAY",
-                  "dayOfYear": 1,
-                  "era": "CE",
-                  "chronology": {
-                    "id": "ISO",
-                    "calendarType": "iso8601",
-                    "isoBased": true
-                  }
-                },
+                "geburtsdatum": [1990, 1, 1],
                 "geburtsdatumPartner": null,
                 "steuerdatenTyp": "MUTTER",
                 "selbststaendigErwerbend": false,
@@ -165,21 +138,7 @@ class V1StructureTest {
                 "vornamePartner": "a",
                 "nachnamePartner": "a",
                 "sozialversicherungsnummer": "756.1111.1113.11",
-                "geburtsdatum": {
-                  "year": 2008,
-                  "month": "JANUARY",
-                  "monthValue": 1,
-                  "dayOfMonth": 1,
-                  "leapYear": true,
-                  "dayOfWeek": "TUESDAY",
-                  "dayOfYear": 1,
-                  "era": "CE",
-                  "chronology": {
-                    "id": "ISO",
-                    "calendarType": "iso8601",
-                    "isoBased": true
-                  }
-                },
+                "geburtsdatum": [2008, 1, 1],
                 "alter": 18,
                 "piaWohntInElternHaushalt": 0,
                 "anzahlPersonenImHaushalt": 2,
@@ -221,12 +180,12 @@ class V1StructureTest {
                   { "vorname": "a", "value": 1200 },
                   { "vorname": "a", "value": 1200 }
                 ],
-                "gemeindeInstitutionen": null,
+                "gemeindeInstitutionen": 0,
                 "andereEinnahmens": [
                   { "vorname": "a", "value": 0 },
                   { "vorname": "a", "value": 0 }
                 ],
-                "vermoegen": null,
+                "vermoegen": 0,
                 "ausbildungskosten": 450,
                 "fahrkosten": 523,
                 "auswaertigeMittagessenProWoche": 0,
@@ -293,7 +252,7 @@ class V1StructureTest {
             ElternTyp.VATER,
             BerechnungUtil.getPersonenImHaushaltService()
         );
-        final var mapper = new ObjectMapper();
+        final var mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         final var actual = mapper.writeValueAsString(request);
         // final var comparator = new JsonComparatorBuilder().build();
 

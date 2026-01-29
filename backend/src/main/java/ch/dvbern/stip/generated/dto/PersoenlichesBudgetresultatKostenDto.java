@@ -33,12 +33,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer wohnkosten;
   private @Valid List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
   private @Valid Integer medizinischeGrundversorgungTotal;
-  private @Valid Integer fahrkostenPartner;
-  private @Valid Integer verpflegungPartner;
   private @Valid Integer betreuungskostenKinder;
   private @Valid Integer kantonsGemeindesteuern;
   private @Valid Integer bundessteuern;
   private @Valid Integer anteilLebenshaltungskosten;
+  private @Valid Integer fahrkostenPartner;
+  private @Valid Integer verpflegungPartner;
 
   /**
    **/
@@ -210,44 +210,6 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto fahrkostenPartner(Integer fahrkostenPartner) {
-    this.fahrkostenPartner = fahrkostenPartner;
-    return this;
-  }
-
-  
-  @JsonProperty("fahrkostenPartner")
-  @NotNull
-  public Integer getFahrkostenPartner() {
-    return fahrkostenPartner;
-  }
-
-  @JsonProperty("fahrkostenPartner")
-  public void setFahrkostenPartner(Integer fahrkostenPartner) {
-    this.fahrkostenPartner = fahrkostenPartner;
-  }
-
-  /**
-   **/
-  public PersoenlichesBudgetresultatKostenDto verpflegungPartner(Integer verpflegungPartner) {
-    this.verpflegungPartner = verpflegungPartner;
-    return this;
-  }
-
-  
-  @JsonProperty("verpflegungPartner")
-  @NotNull
-  public Integer getVerpflegungPartner() {
-    return verpflegungPartner;
-  }
-
-  @JsonProperty("verpflegungPartner")
-  public void setVerpflegungPartner(Integer verpflegungPartner) {
-    this.verpflegungPartner = verpflegungPartner;
-  }
-
-  /**
-   **/
   public PersoenlichesBudgetresultatKostenDto betreuungskostenKinder(Integer betreuungskostenKinder) {
     this.betreuungskostenKinder = betreuungskostenKinder;
     return this;
@@ -322,6 +284,42 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
   }
 
+  /**
+   **/
+  public PersoenlichesBudgetresultatKostenDto fahrkostenPartner(Integer fahrkostenPartner) {
+    this.fahrkostenPartner = fahrkostenPartner;
+    return this;
+  }
+
+  
+  @JsonProperty("fahrkostenPartner")
+  public Integer getFahrkostenPartner() {
+    return fahrkostenPartner;
+  }
+
+  @JsonProperty("fahrkostenPartner")
+  public void setFahrkostenPartner(Integer fahrkostenPartner) {
+    this.fahrkostenPartner = fahrkostenPartner;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatKostenDto verpflegungPartner(Integer verpflegungPartner) {
+    this.verpflegungPartner = verpflegungPartner;
+    return this;
+  }
+
+  
+  @JsonProperty("verpflegungPartner")
+  public Integer getVerpflegungPartner() {
+    return verpflegungPartner;
+  }
+
+  @JsonProperty("verpflegungPartner")
+  public void setVerpflegungPartner(Integer verpflegungPartner) {
+    this.verpflegungPartner = verpflegungPartner;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -340,17 +338,17 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultatKosten.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
-        Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
-        Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
         Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
         Objects.equals(this.kantonsGemeindesteuern, persoenlichesBudgetresultatKosten.kantonsGemeindesteuern) &&
         Objects.equals(this.bundessteuern, persoenlichesBudgetresultatKosten.bundessteuern) &&
-        Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten);
+        Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten) &&
+        Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
+        Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
   }
 
   @Override
@@ -366,12 +364,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
-    sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
-    sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
     sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
+    sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
+    sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("}");
     return sb.toString();
   }

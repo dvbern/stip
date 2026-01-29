@@ -126,9 +126,10 @@ public class AntragsstellerV1 {
             .piaWohntInElternHaushalt(piaWohntInElternHaushalt)
             .tertiaerstufe(
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()
-            )
-            .vermoegen(einnahmenKosten.getVermoegen())
-            .gemeindeInstitutionen(einnahmenKosten.getBeitraege());
+            );
+
+        Integer vermoegen = Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0);
+        Integer beitraegeGemeindeInstitutionen = Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0);
 
         var nettoerwerbseinkommen = einnahmenKosten.getNettoerwerbseinkommen();
 
@@ -231,6 +232,8 @@ public class AntragsstellerV1 {
             final var partnerName = partner.getVorname();
             builder.vornamePartner(partnerName);
             builder.nachnamePartner(partner.getNachname());
+            vermoegen += Objects.requireNonNullElse(ekPartner.getVermoegen(), 0);
+            beitraegeGemeindeInstitutionen += Objects.requireNonNullElse(ekPartner.getBeitraege(), 0);
             kinderAusbildungszulagens.setPartnerValue(partnerName, ekPartner.getZulagen());
             andereEinnahmens.setPartnerValue(partnerName, ekPartner.getAndereEinnahmen());
             taggelds.setPartnerValue(partnerName, ekPartner.getTaggelderAHVIV());
@@ -284,6 +287,8 @@ public class AntragsstellerV1 {
         );
 
         builder.anzahlPersonenImHaushalt(anzahlPersonenImHaushalt);
+        builder.vermoegen(vermoegen);
+        builder.gemeindeInstitutionen(beitraegeGemeindeInstitutionen);
 
         builder.einkommens = einkommens.toList();
         builder.medizinischeGrundversorgungs = medizinischeGrundversorgungs.toList();
