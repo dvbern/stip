@@ -350,10 +350,9 @@ public class GesuchService {
     public Pair<GesuchDto, Pair<Gesuchsperiode, GesuchsperiodeSelectErrorType>> createGesuchForAusbildung(
         GesuchCreateDto gesuchCreateDto
     ) {
-        Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
-        gesuch.setAusbildung(ausbildungRepository.requireById(gesuch.getAusbildung().getId()));
+        Ausbildung ausbildung = ausbildungRepository.requireById(gesuchCreateDto.getAusbildungId());
         final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
-            gesuch.getAusbildung()
+            ausbildung
         );
 
         if (potential.getRight() != null) {
@@ -362,11 +361,13 @@ public class GesuchService {
 
         final var gesuchsperiode = potential.getLeft();
 
+        Gesuch gesuch = gesuchMapper.toNewEntity(gesuchCreateDto);
+        gesuch.setAusbildung(ausbildung);
         gesuch.setGesuchsperiode(gesuchsperiode);
         createInitialGesuchTranche(gesuch);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
         gesuch.getAusbildung().getGesuchs().add(gesuch);
-        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
+        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(ausbildung);
         if (!violations.isEmpty()) {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }

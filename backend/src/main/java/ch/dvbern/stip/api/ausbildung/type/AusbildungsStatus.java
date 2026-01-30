@@ -20,5 +20,12 @@ package ch.dvbern.stip.api.ausbildung.type;
 public enum AusbildungsStatus {
     AKTIV,
     ABGEBROCHEN,
-    ABGESCHLOSSEN
+    ABGESCHLOSSEN;
+
+    public boolean isCompleted() {
+        return switch (this) {
+            case AKTIV -> false;
+            case ABGEBROCHEN, ABGESCHLOSSEN -> true;
+        };
+    }
 }

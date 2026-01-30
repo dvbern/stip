@@ -38,10 +38,11 @@ public class CustomConstraintViolation {
     private final String messageTemplate;
     private final String propertyPath;
 
-    public CustomConstraintViolation(String messageTamplate, String propertyPath) {
-        this.messageTemplate = messageTamplate;
-        this.message = VALIDATION_MESSAGE_BUNDLE.containsKey(messageTamplate)
-            ? VALIDATION_MESSAGE_BUNDLE.getString(messageTamplate.replaceAll("(^\\{)|(}$)", ""))
+    public CustomConstraintViolation(String messageTemplate, String propertyPath) {
+        this.messageTemplate = messageTemplate;
+        final var cleanedMessage = messageTemplate.replaceAll("(^\\{)|(}$)", "");
+        this.message = VALIDATION_MESSAGE_BUNDLE.containsKey(cleanedMessage)
+            ? VALIDATION_MESSAGE_BUNDLE.getString(cleanedMessage)
             : "";
         this.propertyPath = propertyPath;
     }

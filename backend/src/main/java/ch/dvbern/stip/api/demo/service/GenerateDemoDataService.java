@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.demo.service;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.entity.AdresseBuilder;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungBuilder;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
@@ -193,28 +195,37 @@ public class GenerateDemoDataService {
         fall.setAuszahlung(auszahlung);
 
         final var ausbildungDto = demoDataDto.getAusbildung();
-        final var ausbildung = AusbildungBuilder.ausbildung()
-            .fall(fall)
-            .gesuchs(new ArrayList<>())
-            .ausbildungsgang(!ausbildungDto.getAusbildungNichtGefunden() ? getAusbildungsgang(ausbildungDto) : null)
-            .besuchtBMS(DemoDataDefaults.AUSBILDUNG_BESUCHT_BMS)
-            .alternativeAusbildungsgang(
-                ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsgang() : null
-            )
-            .alternativeAusbildungsstaette(
-                ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsstaette() : null
-            )
-            .fachrichtungBerufsbezeichnung(ausbildungDto.getBerufsbezeichnungFachrichtung())
-            .ausbildungNichtGefunden(ausbildungDto.getAusbildungNichtGefunden())
-            .ausbildungBegin(ausbildungDto.getAusbildungBeginn())
-            .ausbildungEnd(ausbildungDto.getAusbildungEnd())
-            .pensum(Objects.requireNonNullElse(ausbildungDto.getPensum(), DemoDataDefaults.AUSBILDUNG_PENSUM))
-            .ausbildungsort(ausbildungDto.getOrt())
-            .ausbildungsortPLZ(ausbildungDto.getPlz())
-            .isAusbildungAusland(ausbildungDto.getIsAusbildungAusland())
-            .land(null)
-            .status(AusbildungsStatus.AKTIV)
-            .build();
+        // Reuse a existing Ausbildung if it exists and is not completed, otherwise create a new one
+        final var ausbildung = fall.getAusbildungs()
+            .stream()
+            .filter(a -> !a.getStatus().isCompleted())
+            .max(Comparator.comparing(Ausbildung::getAusbildungBegin))
+            .orElseGet(
+                () -> AusbildungBuilder.ausbildung()
+                    .fall(fall)
+                    .gesuchs(new ArrayList<>())
+                    .ausbildungsgang(
+                        !ausbildungDto.getAusbildungNichtGefunden() ? getAusbildungsgang(ausbildungDto) : null
+                    )
+                    .besuchtBMS(DemoDataDefaults.AUSBILDUNG_BESUCHT_BMS)
+                    .alternativeAusbildungsgang(
+                        ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsgang() : null
+                    )
+                    .alternativeAusbildungsstaette(
+                        ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsstaette() : null
+                    )
+                    .fachrichtungBerufsbezeichnung(ausbildungDto.getBerufsbezeichnungFachrichtung())
+                    .ausbildungNichtGefunden(ausbildungDto.getAusbildungNichtGefunden())
+                    .ausbildungBegin(ausbildungDto.getAusbildungBeginn())
+                    .ausbildungEnd(ausbildungDto.getAusbildungEnd())
+                    .pensum(Objects.requireNonNullElse(ausbildungDto.getPensum(), DemoDataDefaults.AUSBILDUNG_PENSUM))
+                    .ausbildungsort(ausbildungDto.getOrt())
+                    .ausbildungsortPLZ(ausbildungDto.getPlz())
+                    .isAusbildungAusland(ausbildungDto.getIsAusbildungAusland())
+                    .land(null)
+                    .status(AusbildungsStatus.AKTIV)
+                    .build()
+            );
         final var pia = DemoPerson.createPersonInAusbildung(
             PersonInAusbildungBuilder.personInAusbildung()
                 .adresse(piaAdresse)
