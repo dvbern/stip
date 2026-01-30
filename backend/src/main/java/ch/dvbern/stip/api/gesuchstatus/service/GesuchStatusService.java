@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
@@ -48,7 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GesuchStatusService {
     private final GesuchValidatorService validationService;
-    private final MailService mailService;
     private final NotificationService notificationService;
     private final Validator validator;
     private final GesuchStatusConfigProducer configProducer;
@@ -70,8 +68,7 @@ public class GesuchStatusService {
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
         if (kommentarDto != null && sendNotificationIfPossible) {
-            mailService.sendStandardNotificationEmailForGesuch(gesuch);
-            notificationService.createGesuchStatusChangeWithCommentNotification(gesuch, kommentarDto);
+            notificationService.createGesuchStatusChangeWithCommentNotificationAndSendStdMail(gesuch, kommentarDto);
         }
     }
 

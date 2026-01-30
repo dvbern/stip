@@ -1274,7 +1274,7 @@ class GesuchServiceTest {
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
 
         // assert
-        Mockito.verify(notificationService).createMissingDocumentNotification(any());
+        Mockito.verify(notificationService).createMissingDocumentNotificationAndSendStdMail(any());
 
         // TODO KSTIP-1652: Deduplicate mail sending
         Mockito.verify(mailService, Mockito.atMost(2)).sendStandardNotificationEmail(any(), any(), any(), any());

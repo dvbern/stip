@@ -47,9 +47,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -180,7 +178,6 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
-    private final MailService mailService;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
@@ -191,7 +188,6 @@ public class GesuchService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
-    private final DarlehenService darlehenService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -844,7 +840,7 @@ public class GesuchService {
         }
         var gesuch = gesuchRepository.requireById(gesuchId);
         gesuch.setNachfristDokumente(nachfristDokumente);
-        notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
+        notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
@@ -1028,8 +1024,7 @@ public class GesuchService {
     }
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
-        notificationService.createMissingDocumentNotification(gesuch);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createMissingDocumentNotificationAndSendStdMail(gesuch);
     }
 
     public void setDefaultNachfristDokumente(Gesuch gesuch) {

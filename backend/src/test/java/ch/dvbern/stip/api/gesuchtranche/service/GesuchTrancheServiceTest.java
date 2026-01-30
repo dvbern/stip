@@ -256,6 +256,6 @@ class GesuchTrancheServiceTest {
 
         gesuchTrancheService.aenderungEinreichen(aenderung.getId());
 
-        Mockito.verify(notificationService).createAenderungEingereichtNotification(gesuch);
+        Mockito.verify(notificationService).createAenderungEingereichtNotificationAndSendStdMail(gesuch);
     }
 }
