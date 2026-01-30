@@ -53,9 +53,10 @@ public record FindEnum<T extends Enum<?>>(T enumValue, List<String> values) {
         Class<T> enumClass,
         Function<T, List<String>> switchResult
     ) {
-        final var test = enumClass.getEnumConstants();
-        return Stream.of(test)
+        final var allValues = enumClass.getEnumConstants();
+        return Stream.of(allValues)
             .map(t -> FindEnum.of(t, switchResult.apply(t)))
+            // Find the first matching Enum/List<String> pair that match the searched value or return empty
             .filter(available -> available.values.stream().anyMatch(v -> v.equalsIgnoreCase(value)))
             .map(FindEnum::enumValue)
             .findFirst();
