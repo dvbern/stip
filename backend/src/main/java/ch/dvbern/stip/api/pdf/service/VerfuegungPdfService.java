@@ -714,7 +714,7 @@ public class VerfuegungPdfService {
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
         ByteArrayOutputStream verfuegungsBrief;
-        if (verfuegung.isNegativeVerfuegung()) {
+        if (verfuegung.getVerfuegungStatus().isNegativ()) {
             verfuegungsBrief = createNegativeVerfuegungPdf(verfuegung, new ArrayList<>());
         } else if (berechnungsresultat == 0 && gesuch.isFirstVerfuegung()) {
             verfuegungsBrief = createVerfuegungOhneAnspruchPdf(
@@ -734,7 +734,7 @@ public class VerfuegungPdfService {
             verfuegungsBrief
         );
 
-        if (!verfuegung.isNegativeVerfuegung()) {
+        if (!verfuegung.getVerfuegungStatus().isNegativ()) {
             ByteArrayOutputStream berechnungsBlaetter;
 
             createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
