@@ -83,7 +83,6 @@ import ch.dvbern.stip.api.notification.repo.NotificationRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
-import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
@@ -94,7 +93,8 @@ import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
@@ -180,6 +180,9 @@ class GesuchServiceTest {
     @InjectMock
     UnterschriftenblattService unterschriftenblattService;
 
+    @InjectMock
+    VerfuegungRepository verfuegungRepository;
+
     @Inject
     GesuchTrancheService gesuchTrancheService;
 
@@ -194,9 +197,6 @@ class GesuchServiceTest {
 
     @InjectMock
     GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
-
-    @InjectMock
-    VerfuegungService verfuegungService;
 
     @InjectSpy
     MailService mailService;
@@ -1162,6 +1162,11 @@ class GesuchServiceTest {
     @Test
     void changeGesuchstatusCheckUnterschriftenblattToWartenAufUnterschriftenblatt() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        gesuch.getVerfuegungs()
+            .add(
+                (Verfuegung) new Verfuegung().setVerfuegungStatus(VerfuegungStatus.ANSPRUCH)
+                    .setTimestampErstellt(LocalDateTime.now())
+            );
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(any()))
             .thenReturn(false);
@@ -1169,38 +1174,6 @@ class GesuchServiceTest {
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
             Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
-        );
-    }
-
-    @TestAsSachbearbeiter
-    @Test
-    void changeGesuchstatusFromVersendetToKeinStipendienanspruch() {
-        final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGUNG_VERSENDET);
-        gesuch.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
-        assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
-        assertEquals(
-            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
-            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
-        );
-    }
-
-    @TestAsSachbearbeiter
-    @Test
-    void changeGesuchstatusFromVersendetToStipendienanspruch() {
-        final var gesuchOrig = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGUNG_VERSENDET);
-        gesuchOrig.getVerfuegungs().add((Verfuegung) new Verfuegung().setTimestampErstellt(LocalDateTime.now()));
-        final var gesuch = Mockito.spy(gesuchOrig);
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnungTotal(1).year(Year.now().getValue()));
-        QuarkusMock.installMockForType(Mockito.mock(SapService.class), SapService.class);
-        assertDoesNotThrow(() -> gesuchService.gesuchStatusToStipendienanspruch(gesuch.getId()));
-        assertEquals(
-            Gesuchstatus.STIPENDIENANSPRUCH,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
@@ -1274,7 +1247,7 @@ class GesuchServiceTest {
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
 
         // assert
-        Mockito.verify(notificationService).createMissingDocumentNotification(any());
+        Mockito.verify(notificationService).createMissingDocumentNotificationAndSendStdMail(any());
 
         // TODO KSTIP-1652: Deduplicate mail sending
         Mockito.verify(mailService, Mockito.atMost(2)).sendStandardNotificationEmail(any(), any(), any(), any());

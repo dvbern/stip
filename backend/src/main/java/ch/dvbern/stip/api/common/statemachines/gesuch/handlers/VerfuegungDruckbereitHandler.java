@@ -22,6 +22,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -49,13 +50,21 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             ? stipendien.getBerechnungReduziert()
             : stipendien.getBerechnungTotal();
 
-        final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
+        final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
 
-        if ((berechnungsresultat > 0 || !gesuch.isFirstVerfuegung()) && !latestVerfuegung.isNegativeVerfuegung()) {
-            buchhaltungService.createStipendiumBuchhaltungEntry(
-                gesuch,
-                berechnungsresultat
+        if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
+            final boolean hasAnspruch = berechnungsresultat > 0;
+
+            latestVerfuegung.setVerfuegungStatus(
+                hasAnspruch ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH
             );
+
+            if (hasAnspruch || !gesuch.isFirstVerfuegung()) {
+                buchhaltungService.createStipendiumBuchhaltungEntry(
+                    gesuch,
+                    berechnungsresultat
+                );
+            }
         }
 
         verfuegungPdfService.createVerfuegungsDocuments(gesuch, stipendien);

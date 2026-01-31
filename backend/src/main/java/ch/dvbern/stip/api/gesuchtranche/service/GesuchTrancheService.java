@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -119,7 +118,6 @@ public class GesuchTrancheService {
     private final GeschwisterMapper geschwisterMapper;
     private final KindMapper kindMapper;
     private final SteuererklaerungMapper steuererklaerungMapper;
-    private final MailService mailService;
     private final NotificationService notificationService;
     private final DokumenteToUploadMapper dokumenteToUploadMapper;
     private final UnterschriftenblattService unterschriftenblattService;
@@ -437,8 +435,7 @@ public class GesuchTrancheService {
     public void aenderungEinreichen(final UUID aenderungId) {
         final var aenderung = gesuchTrancheRepository.requireAenderungById(aenderungId);
         gesuchTrancheStatusService.triggerStateMachineEvent(aenderung, GesuchTrancheStatusChangeEvent.UEBERPRUEFEN);
-        notificationService.createAenderungEingereichtNotification(aenderung.getGesuch());
-        mailService.sendStandardNotificationEmailForGesuch(aenderung.getGesuch());
+        notificationService.createAenderungEingereichtNotificationAndSendStdMail(aenderung.getGesuch());
     }
 
     @Transactional
@@ -528,9 +525,8 @@ public class GesuchTrancheService {
             }
         }
 
-        mailService.sendStandardNotificationEmailForGesuch(aenderung.getGesuch());
-
-        notificationService.createAenderungAbgelehntNotification(aenderung.getGesuch(), aenderung, kommentarDto);
+        notificationService
+            .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
         return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
     }

@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
-import ch.dvbern.stip.api.notification.service.MailAlreadySentCheckerService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.MockMailbox;
 import io.quarkus.test.junit.QuarkusTest;

@@ -322,7 +322,7 @@ public class DarlehenService {
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
         createNegativeDarlehensVerfuegung(darlehen);
-        notificationService.createDarlehenAbgelehntNotification(darlehen);
+        notificationService.createDarlehenAbgelehntNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDto(darlehen);
     }
@@ -335,7 +335,7 @@ public class DarlehenService {
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
         createPositiveDarlehensVerfuegung(darlehen);
-        notificationService.createDarlehenAkzeptiertNotification(darlehen);
+        notificationService.createDarlehenAkzeptiertNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDto(darlehen);
     }
@@ -351,7 +351,7 @@ public class DarlehenService {
         ValidatorUtil.validate(validator, darlehen, FreiwilligDarlehenEinreichenValidationGroup.class);
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
 
-        notificationService.createDarlehenEingegebenNotification(darlehen);
+        notificationService.createDarlehenEingegebenNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDto(darlehen);
     }
@@ -374,7 +374,7 @@ public class DarlehenService {
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
 
-        notificationService.createDarlehenZurueckgewiesenNotification(darlehen, kommentar.getText());
+        notificationService.createDarlehenZurueckgewiesenNotificationAndSendStdMail(darlehen, kommentar.getText());
 
         return freiwilligDarlehenMapper.toDto(darlehen);
     }

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.notification.service;
+package ch.dvbern.stip.api.communication.mail.service;
 
 import io.quarkus.arc.profile.IfBuildProfile;
 import jakarta.enterprise.context.RequestScoped;

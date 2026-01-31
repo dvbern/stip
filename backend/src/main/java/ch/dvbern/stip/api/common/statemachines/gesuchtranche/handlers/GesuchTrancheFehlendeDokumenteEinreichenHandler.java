@@ -35,6 +35,7 @@ public class GesuchTrancheFehlendeDokumenteEinreichenHandler implements StateCha
         GesuchTranche gesuchTranche,
         String comment
     ) {
-        notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuchTranche.getGesuch());
+        notificationService
+            .createGesuchFehlendeDokumenteEinreichenNotificationAndSendStdMail(gesuchTranche.getGesuch());
     }
 }
