@@ -209,7 +209,7 @@
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
-      <version>5.5.0</version>
+      <version>5.5.1</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -739,7 +739,8 @@
                     MassendruckJobStatus=ch.dvbern.stip.api.massendruck.type.MassendruckJobStatus,
                     MassendruckJobSortColumn=ch.dvbern.stip.api.massendruck.type.MassendruckJobSortColumn,
                     GetMassendruckJobQueryType=ch.dvbern.stip.api.massendruck.type.GetMassendruckJobQueryType,
-                    DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie
+                    DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie,
+                    VerfuegungStatus=ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

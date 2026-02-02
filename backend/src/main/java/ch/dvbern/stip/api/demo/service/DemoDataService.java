@@ -173,6 +173,8 @@ public class DemoDataService {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
 
-        return demoDataMapper.toDto(gesuch);
+        final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+
+        return demoDataMapper.toDto(gesuch, stipendienanspruchDto);
     }
 }

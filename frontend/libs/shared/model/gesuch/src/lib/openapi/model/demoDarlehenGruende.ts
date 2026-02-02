@@ -9,13 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DemoDarlehenGruende } from './demoDarlehenGruende';
 
-export interface DemoDarlehen { 
-    willDarlehen: boolean;
-    betragGewuenscht: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    gruende: DemoDarlehenGruende;
+export interface DemoDarlehenGruende { 
+    grundNichtBerechtigt?: boolean;
+    grundAusbildungZwoelfJahre?: boolean;
+    grundHoheGebuehren?: boolean;
+    grundAnschaffungenFuerAusbildung?: boolean;
+    grundZweitausbildung?: boolean;
 }
 

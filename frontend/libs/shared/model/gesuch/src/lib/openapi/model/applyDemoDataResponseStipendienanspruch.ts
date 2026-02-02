@@ -9,13 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DemoDarlehenGruende } from './demoDarlehenGruende';
+import { VerfuegungStatus } from './verfuegungStatus';
 
-export interface DemoDarlehen { 
-    willDarlehen: boolean;
-    betragGewuenscht: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    gruende: DemoDarlehenGruende;
+export interface ApplyDemoDataResponseStipendienanspruch { 
+    success: boolean;
+    statusSoll?: VerfuegungStatus;
+    statusIst?: VerfuegungStatus;
+    betragStipendienSoll?: number;
+    betragStipendienIst?: number;
+    betragDarlehenSoll?: number;
+    betragDarlehenIst?: number;
 }
+
+
 

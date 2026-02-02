@@ -32,7 +32,8 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   private @Valid Boolean identischerZivilrechtlicherWohnsitz;
   private @Valid String email;
   private @Valid String telefonnummer;
-  private @Valid LocalDate geburtsdatum;
+  private @Valid String geburtsdatum;
+  private @Valid Integer alter;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
   private @Valid String nationalitaet;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
@@ -279,7 +280,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
 
   /**
    **/
-  public DemoPersonInAusbildungDto geburtsdatum(LocalDate geburtsdatum) {
+  public DemoPersonInAusbildungDto geburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -287,13 +288,32 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public LocalDate getGeburtsdatum() {
+ @Pattern(regexp="^\\d{2}.\\d{2}$")  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+  /**
+   **/
+  public DemoPersonInAusbildungDto alter(Integer alter) {
+    this.alter = alter;
+    return this;
+  }
+
+  
+  @JsonProperty("alter")
+  @NotNull
+  public Integer getAlter() {
+    return alter;
+  }
+
+  @JsonProperty("alter")
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
   /**
@@ -594,6 +614,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
         Objects.equals(this.email, demoPersonInAusbildung.email) &&
         Objects.equals(this.telefonnummer, demoPersonInAusbildung.telefonnummer) &&
         Objects.equals(this.geburtsdatum, demoPersonInAusbildung.geburtsdatum) &&
+        Objects.equals(this.alter, demoPersonInAusbildung.alter) &&
         Objects.equals(this.zivilstand, demoPersonInAusbildung.zivilstand) &&
         Objects.equals(this.nationalitaet, demoPersonInAusbildung.nationalitaet) &&
         Objects.equals(this.niederlassungsstatus, demoPersonInAusbildung.niederlassungsstatus) &&
@@ -613,7 +634,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, anrede, nachname, vorname, strasse, hausnummer, plz, ort, land, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, zivilstand, nationalitaet, niederlassungsstatus, einreisedatum, heimatort, coAdresse, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, heimatortPLZ, wohnsitz, wohnsitzAnteilVater, wohnsitzAnteilMutter, vormundschaft, zustaendigeKESB, sozialhilfebeitraege);
+    return Objects.hash(sozialversicherungsnummer, anrede, nachname, vorname, strasse, hausnummer, plz, ort, land, identischerZivilrechtlicherWohnsitz, email, telefonnummer, geburtsdatum, alter, zivilstand, nationalitaet, niederlassungsstatus, einreisedatum, heimatort, coAdresse, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, heimatortPLZ, wohnsitz, wohnsitzAnteilVater, wohnsitzAnteilMutter, vormundschaft, zustaendigeKESB, sozialhilfebeitraege);
   }
 
   @Override
@@ -634,6 +655,7 @@ public class DemoPersonInAusbildungDto  implements Serializable {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");
     sb.append("    nationalitaet: ").append(toIndentedString(nationalitaet)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");

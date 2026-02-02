@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,7 +21,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoKindDto  implements Serializable {
   private @Valid String nachname;
   private @Valid String vorname;
-  private @Valid LocalDate geburtsdatum;
+  private @Valid String geburtsdatum;
+  private @Valid Integer alter;
   private @Valid Integer wohnsitzAnteilPia;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
   private @Valid Integer unterhaltsbeitraege;
@@ -71,7 +71,7 @@ public class DemoKindDto  implements Serializable {
 
   /**
    **/
-  public DemoKindDto geburtsdatum(LocalDate geburtsdatum) {
+  public DemoKindDto geburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -79,13 +79,32 @@ public class DemoKindDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public LocalDate getGeburtsdatum() {
+ @Pattern(regexp="^\\d{2}.\\d{2}$")  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+  /**
+   **/
+  public DemoKindDto alter(Integer alter) {
+    this.alter = alter;
+    return this;
+  }
+
+  
+  @JsonProperty("alter")
+  @NotNull
+  public Integer getAlter() {
+    return alter;
+  }
+
+  @JsonProperty("alter")
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
   /**
@@ -234,6 +253,7 @@ public class DemoKindDto  implements Serializable {
     return Objects.equals(this.nachname, demoKind.nachname) &&
         Objects.equals(this.vorname, demoKind.vorname) &&
         Objects.equals(this.geburtsdatum, demoKind.geburtsdatum) &&
+        Objects.equals(this.alter, demoKind.alter) &&
         Objects.equals(this.wohnsitzAnteilPia, demoKind.wohnsitzAnteilPia) &&
         Objects.equals(this.ausbildungssituation, demoKind.ausbildungssituation) &&
         Objects.equals(this.unterhaltsbeitraege, demoKind.unterhaltsbeitraege) &&
@@ -245,7 +265,7 @@ public class DemoKindDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, geburtsdatum, wohnsitzAnteilPia, ausbildungssituation, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzAnteilPia, ausbildungssituation, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
   }
 
   @Override
@@ -256,6 +276,7 @@ public class DemoKindDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    wohnsitzAnteilPia: ").append(toIndentedString(wohnsitzAnteilPia)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");

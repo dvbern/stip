@@ -5,6 +5,36 @@ import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
 type Value = string | number | undefined;
 
+const formatChf = (value: Value, addNegativeSign: boolean): string => {
+  if (!isDefined(value)) {
+    return '';
+  }
+  if (addNegativeSign && +value > 0) {
+    return `${toFormatedNumber(+value)}`;
+  }
+  if (addNegativeSign && +value < 0) {
+    return `- ${toFormatedNumber(Math.abs(+value))}`;
+  }
+  return `${toFormatedNumber(Math.abs(+value))}`;
+};
+
+/**
+ * Formats a number to a CHF currency string or returns undefined/null if empty.
+ * @see {@link SharedUiFormatChfPipe}
+ */
+@Pipe({
+  name: 'formatChfNullable',
+  standalone: true,
+})
+export class SharedUiFormatChfNullablePipe implements PipeTransform {
+  transform(value: Value, addNegativeSign = true): string | undefined {
+    if (!isDefined(value)) {
+      return value;
+    }
+    return formatChf(value, addNegativeSign);
+  }
+}
+
 /**
  * Formats a number to a CHF currency string.
  * @param {Value}value The value to format. has to be a number.
@@ -21,16 +51,7 @@ type Value = string | number | undefined;
 })
 export class SharedUiFormatChfPipe implements PipeTransform {
   transform(value: Value, addNegativeSign = true): string {
-    if (!isDefined(value)) {
-      return '';
-    }
-    if (addNegativeSign && +value > 0) {
-      return `${toFormatedNumber(+value)}`;
-    }
-    if (addNegativeSign && +value < 0) {
-      return `- ${toFormatedNumber(Math.abs(+value))}`;
-    }
-    return `${toFormatedNumber(Math.abs(+value))}`;
+    return formatChf(value, addNegativeSign);
   }
 }
 

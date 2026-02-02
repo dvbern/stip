@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import lombok.experimental.UtilityClass;
 import org.apache.poi.ss.usermodel.Cell;
 
@@ -219,6 +220,22 @@ public class ParseDemoEnumUtil {
                 case FEHLENDE_ANERKENNUNG -> List
                     .of("fehlende Mutterschaftsanerkennung", "fehlende Vaterschaftsanerkennung");
                 case UNBEKANNTER_AUFENTHALTSORT -> List.of("unbekannter Aufenthaltsort");
+            }
+        ).orElseThrow(() -> invalidValue(cell));
+    }
+
+    public static VerfuegungStatus parseVerfuegungstatus(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return FindEnum.findEnumValue(
+            cell.getStringCellValue(),
+            VerfuegungStatus.class,
+            (verfuegungStatus) -> switch (verfuegungStatus) {
+                case ANSPRUCH -> List.of("Stipendienanspruch");
+                case NEGATIV -> List.of("Nicht stipendienberechtigt");
+                case KEIN_ANSPRUCH -> List.of("kein Stipendienanspruch");
+                case AUSSTEHEND -> List.of();
             }
         ).orElseThrow(() -> invalidValue(cell));
     }

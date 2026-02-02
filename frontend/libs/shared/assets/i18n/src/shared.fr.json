@@ -387,6 +387,11 @@
   "shared.gesuch.tranche.typ.AENDERUNG": "Changement",
   "shared.gesuch.tranche.typ.TRANCHE": "Demande",
 
+  "shared.verfuegung.status.AUSSTEHEND": "En attente de décision",
+  "shared.verfuegung.status.ANSPRUCH": "Droit à la bourse",
+  "shared.verfuegung.status.KEIN_ANSPRUCH": "Pas de droit à la bourse",
+  "shared.verfuegung.status.NEGATIV": "Décision négative",
+
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
   "shared.form.gonext": "Continuer",

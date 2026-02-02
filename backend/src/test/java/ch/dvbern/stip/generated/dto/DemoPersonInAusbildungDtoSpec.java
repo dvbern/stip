@@ -49,6 +49,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_EMAIL,
   DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
   DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_ALTER,
   DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_ZIVILSTAND,
   DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_NATIONALITAET,
   DemoPersonInAusbildungDtoSpec.JSON_PROPERTY_NIEDERLASSUNGSSTATUS,
@@ -111,7 +112,10 @@ public class DemoPersonInAusbildungDtoSpec {
   private String telefonnummer;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private LocalDate geburtsdatum;
+  private String geburtsdatum;
+
+  public static final String JSON_PROPERTY_ALTER = "alter";
+  private Integer alter;
 
   public static final String JSON_PROPERTY_ZIVILSTAND = "zivilstand";
   private ZivilstandDtoSpec zivilstand;
@@ -542,7 +546,7 @@ public class DemoPersonInAusbildungDtoSpec {
   }
 
 
-  public DemoPersonInAusbildungDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DemoPersonInAusbildungDtoSpec geburtsdatum(String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -556,15 +560,41 @@ public class DemoPersonInAusbildungDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGeburtsdatum() {
+  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public DemoPersonInAusbildungDtoSpec alter(Integer alter) {
+    
+    this.alter = alter;
+    return this;
+  }
+
+   /**
+   * Get alter
+   * @return alter
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAlter() {
+    return alter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
 
@@ -904,6 +934,7 @@ public class DemoPersonInAusbildungDtoSpec {
         Objects.equals(this.email, demoPersonInAusbildung.email) &&
         Objects.equals(this.telefonnummer, demoPersonInAusbildung.telefonnummer) &&
         Objects.equals(this.geburtsdatum, demoPersonInAusbildung.geburtsdatum) &&
+        Objects.equals(this.alter, demoPersonInAusbildung.alter) &&
         Objects.equals(this.zivilstand, demoPersonInAusbildung.zivilstand) &&
         Objects.equals(this.nationalitaet, demoPersonInAusbildung.nationalitaet) &&
         Objects.equals(this.niederlassungsstatus, demoPersonInAusbildung.niederlassungsstatus) &&
@@ -920,7 +951,7 @@ public class DemoPersonInAusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, anrede, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, email, telefonnummer, geburtsdatum, zivilstand, nationalitaet, niederlassungsstatus, einreisedatum, heimatort, heimatortPLZ, wohnsitz, wohnsitzAnteilVater, wohnsitzAnteilMutter, vormundschaft, zustaendigeKESB, sozialhilfebeitraege);
+    return Objects.hash(sozialversicherungsnummer, anrede, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, email, telefonnummer, geburtsdatum, alter, zivilstand, nationalitaet, niederlassungsstatus, einreisedatum, heimatort, heimatortPLZ, wohnsitz, wohnsitzAnteilVater, wohnsitzAnteilMutter, vormundschaft, zustaendigeKESB, sozialhilfebeitraege);
   }
 
   @Override
@@ -943,6 +974,7 @@ public class DemoPersonInAusbildungDtoSpec {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    zivilstand: ").append(toIndentedString(zivilstand)).append("\n");
     sb.append("    nationalitaet: ").append(toIndentedString(nationalitaet)).append("\n");
     sb.append("    niederlassungsstatus: ").append(toIndentedString(niederlassungsstatus)).append("\n");

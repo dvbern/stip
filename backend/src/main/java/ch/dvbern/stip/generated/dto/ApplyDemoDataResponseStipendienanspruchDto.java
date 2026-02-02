@@ -13,13 +13,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DemoData_stipendienanspruch")
+@JsonTypeName("ApplyDemoDataResponse_stipendienanspruch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DemoDataStipendienanspruchDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status;
+public class ApplyDemoDataResponseStipendienanspruchDto  implements Serializable {
+  private @Valid Boolean success;
+  private @Valid ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus statusSoll;
+  private @Valid ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus statusIst;
   private @Valid Integer betragStipendienSoll;
   private @Valid Integer betragStipendienIst;
   private @Valid Integer betragDarlehenSoll;
@@ -27,26 +29,62 @@ public class DemoDataStipendienanspruchDto  implements Serializable {
 
   /**
    **/
-  public DemoDataStipendienanspruchDto status(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status) {
-    this.status = status;
+  public ApplyDemoDataResponseStipendienanspruchDto success(Boolean success) {
+    this.success = success;
     return this;
   }
 
   
-  @JsonProperty("status")
+  @JsonProperty("success")
   @NotNull
-  public ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus getStatus() {
-    return status;
+  public Boolean getSuccess() {
+    return success;
   }
 
-  @JsonProperty("status")
-  public void setStatus(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status) {
-    this.status = status;
+  @JsonProperty("success")
+  public void setSuccess(Boolean success) {
+    this.success = success;
   }
 
   /**
    **/
-  public DemoDataStipendienanspruchDto betragStipendienSoll(Integer betragStipendienSoll) {
+  public ApplyDemoDataResponseStipendienanspruchDto statusSoll(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus statusSoll) {
+    this.statusSoll = statusSoll;
+    return this;
+  }
+
+  
+  @JsonProperty("statusSoll")
+  public ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus getStatusSoll() {
+    return statusSoll;
+  }
+
+  @JsonProperty("statusSoll")
+  public void setStatusSoll(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus statusSoll) {
+    this.statusSoll = statusSoll;
+  }
+
+  /**
+   **/
+  public ApplyDemoDataResponseStipendienanspruchDto statusIst(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus statusIst) {
+    this.statusIst = statusIst;
+    return this;
+  }
+
+  
+  @JsonProperty("statusIst")
+  public ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus getStatusIst() {
+    return statusIst;
+  }
+
+  @JsonProperty("statusIst")
+  public void setStatusIst(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus statusIst) {
+    this.statusIst = statusIst;
+  }
+
+  /**
+   **/
+  public ApplyDemoDataResponseStipendienanspruchDto betragStipendienSoll(Integer betragStipendienSoll) {
     this.betragStipendienSoll = betragStipendienSoll;
     return this;
   }
@@ -64,7 +102,7 @@ public class DemoDataStipendienanspruchDto  implements Serializable {
 
   /**
    **/
-  public DemoDataStipendienanspruchDto betragStipendienIst(Integer betragStipendienIst) {
+  public ApplyDemoDataResponseStipendienanspruchDto betragStipendienIst(Integer betragStipendienIst) {
     this.betragStipendienIst = betragStipendienIst;
     return this;
   }
@@ -82,7 +120,7 @@ public class DemoDataStipendienanspruchDto  implements Serializable {
 
   /**
    **/
-  public DemoDataStipendienanspruchDto betragDarlehenSoll(Integer betragDarlehenSoll) {
+  public ApplyDemoDataResponseStipendienanspruchDto betragDarlehenSoll(Integer betragDarlehenSoll) {
     this.betragDarlehenSoll = betragDarlehenSoll;
     return this;
   }
@@ -100,7 +138,7 @@ public class DemoDataStipendienanspruchDto  implements Serializable {
 
   /**
    **/
-  public DemoDataStipendienanspruchDto betragDarlehenIst(Integer betragDarlehenIst) {
+  public ApplyDemoDataResponseStipendienanspruchDto betragDarlehenIst(Integer betragDarlehenIst) {
     this.betragDarlehenIst = betragDarlehenIst;
     return this;
   }
@@ -125,25 +163,29 @@ public class DemoDataStipendienanspruchDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemoDataStipendienanspruchDto demoDataStipendienanspruch = (DemoDataStipendienanspruchDto) o;
-    return Objects.equals(this.status, demoDataStipendienanspruch.status) &&
-        Objects.equals(this.betragStipendienSoll, demoDataStipendienanspruch.betragStipendienSoll) &&
-        Objects.equals(this.betragStipendienIst, demoDataStipendienanspruch.betragStipendienIst) &&
-        Objects.equals(this.betragDarlehenSoll, demoDataStipendienanspruch.betragDarlehenSoll) &&
-        Objects.equals(this.betragDarlehenIst, demoDataStipendienanspruch.betragDarlehenIst);
+    ApplyDemoDataResponseStipendienanspruchDto applyDemoDataResponseStipendienanspruch = (ApplyDemoDataResponseStipendienanspruchDto) o;
+    return Objects.equals(this.success, applyDemoDataResponseStipendienanspruch.success) &&
+        Objects.equals(this.statusSoll, applyDemoDataResponseStipendienanspruch.statusSoll) &&
+        Objects.equals(this.statusIst, applyDemoDataResponseStipendienanspruch.statusIst) &&
+        Objects.equals(this.betragStipendienSoll, applyDemoDataResponseStipendienanspruch.betragStipendienSoll) &&
+        Objects.equals(this.betragStipendienIst, applyDemoDataResponseStipendienanspruch.betragStipendienIst) &&
+        Objects.equals(this.betragDarlehenSoll, applyDemoDataResponseStipendienanspruch.betragDarlehenSoll) &&
+        Objects.equals(this.betragDarlehenIst, applyDemoDataResponseStipendienanspruch.betragDarlehenIst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, betragStipendienSoll, betragStipendienIst, betragDarlehenSoll, betragDarlehenIst);
+    return Objects.hash(success, statusSoll, statusIst, betragStipendienSoll, betragStipendienIst, betragDarlehenSoll, betragDarlehenIst);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemoDataStipendienanspruchDto {\n");
+    sb.append("class ApplyDemoDataResponseStipendienanspruchDto {\n");
     
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    success: ").append(toIndentedString(success)).append("\n");
+    sb.append("    statusSoll: ").append(toIndentedString(statusSoll)).append("\n");
+    sb.append("    statusIst: ").append(toIndentedString(statusIst)).append("\n");
     sb.append("    betragStipendienSoll: ").append(toIndentedString(betragStipendienSoll)).append("\n");
     sb.append("    betragStipendienIst: ").append(toIndentedString(betragStipendienIst)).append("\n");
     sb.append("    betragDarlehenSoll: ").append(toIndentedString(betragDarlehenSoll)).append("\n");

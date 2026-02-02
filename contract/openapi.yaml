@@ -6964,6 +6964,7 @@ components:
         - email
         - telefonnummer
         - geburtsdatum
+        - alter
         - zivilstand
         - nationalitaet
         - niederlassungsstatus
@@ -7004,7 +7005,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: ^\d{2}.\d{2}$
+        alter:
+          type: integer
         zivilstand:
           $ref: '#/components/schemas/Zivilstand'
         nationalitaet:
@@ -7099,6 +7102,7 @@ components:
         - ort
         - land
         - geburtsdatum
+        - alter
         - inAusbildung
       type: object
       properties:
@@ -7122,7 +7126,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: ^\d{2}.\d{2}$
+        alter:
+          type: integer
         inAusbildung:
           type: boolean
         pensum:
@@ -7132,6 +7138,7 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - alter
         - wohnsitzAnteilPia
         - ausbildungssituation
         - unterhaltsbeitraege
@@ -7147,7 +7154,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: ^\d{2}.\d{2}$
+        alter:
+          type: integer
         wohnsitzAnteilPia:
           type: integer
         ausbildungssituation:
@@ -7273,6 +7282,7 @@ components:
         - land
         - identischerZivilrechtlicherWohnsitz
         - geburtsdatum
+        - alter
         - telefonnummer
         - sozialhilfebeitraege
         - ausweisbFluechtling
@@ -7308,7 +7318,9 @@ components:
           type: integer
         geburtsdatum:
           type: string
-          format: date
+          pattern: ^\d{2}.\d{2}$
+        alter:
+          type: integer
         telefonnummer:
           type: string
         sozialhilfebeitraege:
@@ -7394,6 +7406,7 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - alter
         - wohnsitzBei
         - ausbildungssituation
       type: object
@@ -7404,7 +7417,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: ^\d{2}.\d{2}$
+        alter:
+          type: integer
         wohnsitzBei:
           $ref: '#/components/schemas/Wohnsitz'
         wohnsitzAnteilVater:
@@ -7446,21 +7461,21 @@ components:
     DemoDarlehen:
       required:
         - willDarlehen
-        - betragDarlehen
+        - betragGewuenscht
         - schulden
         - anzahlBetreibungen
-        - gruendeDarlehen
+        - gruende
       type: object
       properties:
         willDarlehen:
           type: boolean
-        betragDarlehen:
-          type: string
+        betragGewuenscht:
+          type: integer
         schulden:
-          type: string
+          type: integer
         anzahlBetreibungen:
-          type: string
-        gruendeDarlehen:
+          type: integer
+        gruende:
           type: object
           properties:
             grundNichtBerechtigt:
@@ -7530,12 +7545,17 @@ components:
         stipendienanspruch:
           required:
             - status
-            - betrag
           type: object
           properties:
             status:
-              type: string
-            betrag:
+              $ref: '#/components/schemas/VerfuegungStatus'
+            betragStipendienSoll:
+              type: integer
+            betragStipendienIst:
+              type: integer
+            betragDarlehenSoll:
+              type: integer
+            betragDarlehenIst:
               type: integer
     ApplyDemoDataResponse:
       required:
@@ -7544,6 +7564,7 @@ components:
         - gueltigAb
         - gueltigBis
         - gesuchStatus
+        - stipendienanspruch
       type: object
       properties:
         gesuchId:
@@ -7557,7 +7578,60 @@ components:
           type: string
           format: date
         gesuchStatus:
-          type: string
+          $ref: '#/components/schemas/Gesuchstatus'
+        stipendienanspruch:
+          required:
+            - success
+          type: object
+          properties:
+            success:
+              type: boolean
+            statusSoll:
+              $ref: '#/components/schemas/VerfuegungStatus'
+            statusIst:
+              $ref: '#/components/schemas/VerfuegungStatus'
+            betragStipendienSoll:
+              type: integer
+            betragStipendienIst:
+              type: integer
+            betragDarlehenSoll:
+              type: integer
+            betragDarlehenIst:
+              type: integer
+    Gesuchstatus:
+      enum:
+        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        - VERFUEGT
+        - VERFUEGUNG_DRUCKBEREIT
+        - VERFUEGUNG_AM_GENERIEREN
+        - VERFUEGUNG_VERSANDBEREIT
+        - VERFUEGUNG_VERSENDET
+        - WARTEN_AUF_UNTERSCHRIFTENBLATT
+        - IN_BEARBEITUNG_SB
+        - IN_FREIGABE
+        - IN_BEARBEITUNG_GS
+        - ANSPRUCH_MANUELL_PRUEFEN
+        - ANSPRUCH_PRUEFEN
+        - BEREIT_FUER_BEARBEITUNG
+        - EINGEREICHT
+        - JURISTISCHE_ABKLAERUNG
+        - FEHLENDE_DOKUMENTE
+        - NICHT_ANSPRUCHSBERECHTIGT
+        - NICHT_BEITRAGSBERECHTIGT
+        - KEIN_STIPENDIENANSPRUCH
+        - STIPENDIENANSPRUCH
+        - GESUCH_ABGELEHNT
+        - NEGATIVE_VERFUEGUNG
+        - DATENSCHUTZBRIEF_DRUCKBEREIT
+        - DATENSCHUTZBRIEF_AM_GENERIEREN
+        - DATENSCHUTZBRIEF_VERSANDBEREIT
+      type: string
+    VerfuegungStatus:
+      enum:
+        - AUSSTEHEND
+        - ANSPRUCH
+        - KEIN_ANSPRUCH
+        - NEGATIV
     AusbildungsPensum:
       enum:
         - VOLLZEIT
@@ -9852,34 +9926,6 @@ components:
           type: integer
         fristNachreichenDokumente:
           type: integer
-    Gesuchstatus:
-      enum:
-        - ABKLAERUNG_DURCH_RECHSTABTEILUNG
-        - VERFUEGT
-        - VERFUEGUNG_DRUCKBEREIT
-        - VERFUEGUNG_AM_GENERIEREN
-        - VERFUEGUNG_VERSANDBEREIT
-        - VERFUEGUNG_VERSENDET
-        - WARTEN_AUF_UNTERSCHRIFTENBLATT
-        - IN_BEARBEITUNG_SB
-        - IN_FREIGABE
-        - IN_BEARBEITUNG_GS
-        - ANSPRUCH_MANUELL_PRUEFEN
-        - ANSPRUCH_PRUEFEN
-        - BEREIT_FUER_BEARBEITUNG
-        - EINGEREICHT
-        - JURISTISCHE_ABKLAERUNG
-        - FEHLENDE_DOKUMENTE
-        - NICHT_ANSPRUCHSBERECHTIGT
-        - NICHT_BEITRAGSBERECHTIGT
-        - KEIN_STIPENDIENANSPRUCH
-        - STIPENDIENANSPRUCH
-        - GESUCH_ABGELEHNT
-        - NEGATIVE_VERFUEGUNG
-        - DATENSCHUTZBRIEF_DRUCKBEREIT
-        - DATENSCHUTZBRIEF_AM_GENERIEREN
-        - DATENSCHUTZBRIEF_VERSANDBEREIT
-      type: string
     PersonInAusbildung:
       type: object
       allOf:

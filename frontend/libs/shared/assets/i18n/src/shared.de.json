@@ -387,6 +387,11 @@
   "shared.gesuch.tranche.typ.AENDERUNG": "Änderung",
   "shared.gesuch.tranche.typ.TRANCHE": "Gesuch",
 
+  "shared.verfuegung.status.AUSSTEHEND": "Verfügung ausstehend",
+  "shared.verfuegung.status.ANSPRUCH": "Stipendienanspruch",
+  "shared.verfuegung.status.KEIN_ANSPRUCH": "Kein Stipendienanspruch",
+  "shared.verfuegung.status.NEGATIV": "Negative Verfügung",
+
   "shared.form.next": "Nächstes",
   "shared.form.previous": "Vorheriges",
   "shared.form.gonext": "Weiter",

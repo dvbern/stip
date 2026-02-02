@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.dto.DemoSteuerdatenDto;
 import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
 import jakarta.ws.rs.BadRequestException;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -45,9 +46,11 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
+@Slf4j
 @UtilityClass
 public class ParseDemoDataUtil {
-    private final DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public final DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public final DateTimeFormatter dmFormatter = DateTimeFormatter.ofPattern("dd.MM");
 
     public int getNumberOfCells(Row row, int startCol) {
         int i;
@@ -109,6 +112,16 @@ public class ParseDemoDataUtil {
         };
     }
 
+    public Integer parseBerechnung(Cell cell) {
+        if (isBlank(cell)) {
+            return null;
+        }
+        if (cell.getCellType() == CellType.STRING) {
+            return null;
+        }
+        return parseInteger(cell);
+    }
+
     public static Integer parsePercentageNullable(Cell cell) {
         if (isBlank(cell)) {
             return null;
@@ -128,6 +141,13 @@ public class ParseDemoDataUtil {
 
     public String parseDateString(Cell cell) {
         return parseDate(cell).format(ParseDemoDataUtil.dmyFormatter);
+    }
+
+    public String parseGeburtsdatum(Cell cell) {
+        if (isBlank(cell)) {
+            return null;
+        }
+        return parseDate(cell).format(ParseDemoDataUtil.dmFormatter);
     }
 
     public LocalDate parseDate(Cell cell) {
@@ -271,6 +291,7 @@ public class ParseDemoDataUtil {
         try {
             parser.run();
         } catch (Exception e) {
+            LOG.error("Parse error:", e);
             final var formatter = new DataFormatter();
             throw new BadRequestException(
                 "Cell was not accessed correctly, value: '%s' [%s]\n%s"

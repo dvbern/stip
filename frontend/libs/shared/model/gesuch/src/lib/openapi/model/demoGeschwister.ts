@@ -16,6 +16,7 @@ export interface DemoGeschwister {
     nachname: string;
     vorname: string;
     geburtsdatum: string;
+    alter: number;
     wohnsitzBei: Wohnsitz;
     wohnsitzAnteilVater?: number;
     wohnsitzAnteilMutter?: number;

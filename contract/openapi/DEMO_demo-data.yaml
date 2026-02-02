@@ -256,6 +256,7 @@ components:
         - email
         - telefonnummer
         - geburtsdatum
+        - alter
         - zivilstand
         - nationalitaet
         - niederlassungsstatus
@@ -296,7 +297,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: '^\d{2}.\d{2}$'
+        alter:
+          type: integer
         zivilstand:
           $ref: './components/gesuch-formular.yaml#/Zivilstand'
         nationalitaet:
@@ -392,6 +395,7 @@ components:
         - ort
         - land
         - geburtsdatum
+        - alter
         - inAusbildung
       type: object
       properties:
@@ -415,7 +419,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: '^\d{2}.\d{2}$'
+        alter:
+          type: integer
         inAusbildung:
           type: boolean
         pensum:
@@ -425,6 +431,7 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - alter
         - wohnsitzAnteilPia
         - ausbildungssituation
         - unterhaltsbeitraege
@@ -440,7 +447,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: '^\d{2}.\d{2}$'
+        alter:
+          type: integer
         wohnsitzAnteilPia:
           type: integer
         ausbildungssituation:
@@ -566,6 +575,7 @@ components:
         - land
         - identischerZivilrechtlicherWohnsitz
         - geburtsdatum
+        - alter
         - telefonnummer
         - sozialhilfebeitraege
         - ausweisbFluechtling
@@ -601,7 +611,9 @@ components:
           type: integer
         geburtsdatum:
           type: string
-          format: date
+          pattern: '^\d{2}.\d{2}$'
+        alter:
+          type: integer
         telefonnummer:
           type: string
         sozialhilfebeitraege:
@@ -687,6 +699,7 @@ components:
         - nachname
         - vorname
         - geburtsdatum
+        - alter
         - wohnsitzBei
         - ausbildungssituation
       type: object
@@ -697,7 +710,9 @@ components:
           type: string
         geburtsdatum:
           type: string
-          format: date
+          pattern: '^\d{2}.\d{2}$'
+        alter:
+          type: integer
         wohnsitzBei:
           $ref: './components/gesuch-formular.yaml#/Wohnsitz'
         wohnsitzAnteilVater:
@@ -739,21 +754,21 @@ components:
     DemoDarlehen:
       required:
         - willDarlehen
-        - betragDarlehen
+        - betragGewuenscht
         - schulden
         - anzahlBetreibungen
-        - gruendeDarlehen
+        - gruende
       type: object
       properties:
         willDarlehen:
           type: boolean
-        betragDarlehen:
-          type: string
+        betragGewuenscht:
+          type: integer
         schulden:
-          type: string
+          type: integer
         anzahlBetreibungen:
-          type: string
-        gruendeDarlehen:
+          type: integer
+        gruende:
           type: object
           properties:
             grundNichtBerechtigt:
@@ -823,12 +838,17 @@ components:
         stipendienanspruch:
           required:
             - status
-            - betrag
           type: object
           properties:
             status:
-              type: string
-            betrag:
+              $ref: './components/common.yaml#/VerfuegungStatus'
+            betragStipendienSoll:
+              type: integer
+            betragStipendienIst:
+              type: integer
+            betragDarlehenSoll:
+              type: integer
+            betragDarlehenIst:
               type: integer
     ApplyDemoDataResponse:
       required:
@@ -837,6 +857,7 @@ components:
         - gueltigAb
         - gueltigBis
         - gesuchStatus
+        - stipendienanspruch
       type: object
       properties:
         gesuchId:
@@ -850,6 +871,25 @@ components:
           type: string
           format: date
         gesuchStatus:
-          type: string
+          $ref: './components/common.yaml#/Gesuchstatus'
+        stipendienanspruch:
+          required:
+            - success
+          type: object
+          properties:
+            success:
+              type: boolean
+            statusSoll:
+              $ref: './components/common.yaml#/VerfuegungStatus'
+            statusIst:
+              $ref: './components/common.yaml#/VerfuegungStatus'
+            betragStipendienSoll:
+              type: integer
+            betragStipendienIst:
+              type: integer
+            betragDarlehenSoll:
+              type: integer
+            betragDarlehenIst:
+              type: integer
 security:
   $ref: './components/security.yaml#/security'

@@ -32,6 +32,7 @@ export interface DemoPersonInAusbildung {
     email: string;
     telefonnummer: string;
     geburtsdatum: string;
+    alter: number;
     zivilstand: Zivilstand;
     nationalitaet: string;
     niederlassungsstatus: Niederlassungsstatus;

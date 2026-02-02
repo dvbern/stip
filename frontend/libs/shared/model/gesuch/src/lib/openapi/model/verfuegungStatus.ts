@@ -9,13 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DemoDarlehenGruende } from './demoDarlehenGruende';
 
-export interface DemoDarlehen { 
-    willDarlehen: boolean;
-    betragGewuenscht: number;
-    schulden: number;
-    anzahlBetreibungen: number;
-    gruende: DemoDarlehenGruende;
-}
+export type VerfuegungStatus = 'AUSSTEHEND' | 'ANSPRUCH' | 'KEIN_ANSPRUCH' | 'NEGATIV';
+
+export const VerfuegungStatus = {
+    AUSSTEHEND: 'AUSSTEHEND' as VerfuegungStatus,
+    ANSPRUCH: 'ANSPRUCH' as VerfuegungStatus,
+    KEIN_ANSPRUCH: 'KEIN_ANSPRUCH' as VerfuegungStatus,
+    NEGATIV: 'NEGATIV' as VerfuegungStatus
+};
 

@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -33,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoGeschwisterDtoSpec.JSON_PROPERTY_NACHNAME,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_VORNAME,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DemoGeschwisterDtoSpec.JSON_PROPERTY_ALTER,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_BEI,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
   DemoGeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
@@ -48,7 +48,10 @@ public class DemoGeschwisterDtoSpec {
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private LocalDate geburtsdatum;
+  private String geburtsdatum;
+
+  public static final String JSON_PROPERTY_ALTER = "alter";
+  private Integer alter;
 
   public static final String JSON_PROPERTY_WOHNSITZ_BEI = "wohnsitzBei";
   private WohnsitzDtoSpec wohnsitzBei;
@@ -117,7 +120,7 @@ public class DemoGeschwisterDtoSpec {
   }
 
 
-  public DemoGeschwisterDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DemoGeschwisterDtoSpec geburtsdatum(String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -131,15 +134,41 @@ public class DemoGeschwisterDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGeburtsdatum() {
+  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public DemoGeschwisterDtoSpec alter(Integer alter) {
+    
+    this.alter = alter;
+    return this;
+  }
+
+   /**
+   * Get alter
+   * @return alter
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAlter() {
+    return alter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
 
@@ -258,6 +287,7 @@ public class DemoGeschwisterDtoSpec {
     return Objects.equals(this.nachname, demoGeschwister.nachname) &&
         Objects.equals(this.vorname, demoGeschwister.vorname) &&
         Objects.equals(this.geburtsdatum, demoGeschwister.geburtsdatum) &&
+        Objects.equals(this.alter, demoGeschwister.alter) &&
         Objects.equals(this.wohnsitzBei, demoGeschwister.wohnsitzBei) &&
         Objects.equals(this.wohnsitzAnteilVater, demoGeschwister.wohnsitzAnteilVater) &&
         Objects.equals(this.wohnsitzAnteilMutter, demoGeschwister.wohnsitzAnteilMutter) &&
@@ -266,7 +296,7 @@ public class DemoGeschwisterDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, geburtsdatum, wohnsitzBei, wohnsitzAnteilVater, wohnsitzAnteilMutter, ausbildungssituation);
+    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzBei, wohnsitzAnteilVater, wohnsitzAnteilMutter, ausbildungssituation);
   }
 
   @Override
@@ -276,6 +306,7 @@ public class DemoGeschwisterDtoSpec {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    wohnsitzBei: ").append(toIndentedString(wohnsitzBei)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
