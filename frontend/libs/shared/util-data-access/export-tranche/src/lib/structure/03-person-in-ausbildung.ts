@@ -17,6 +17,7 @@ export const getPersonInAusbildung = (
   if (!personInAusbildung) {
     return [];
   }
+  const adresse = personInAusbildung.adresse;
 
   const { fluechtlingsstatus, niederlassungsstatus, zustaendigerKanton } =
     niederlassungsStatusConverter.from(personInAusbildung.niederlassungsstatus);
@@ -40,17 +41,14 @@ export const getPersonInAusbildung = (
           ],
           ['shared.lastname.label', personInAusbildung.nachname],
           ['shared.firstname.label', personInAusbildung.vorname],
-          ['shared.address.street.label', personInAusbildung.adresse.strasse],
-          [
-            'shared.address.number.label',
-            personInAusbildung.adresse.hausnummer,
-          ],
-          ['shared.address.zipcode.label', personInAusbildung.adresse.plz],
-          ['shared.address.city.label', personInAusbildung.adresse.ort],
-          ['shared.address.co.label', personInAusbildung.adresse.coAdresse],
+          ['shared.address.street.label', adresse.strasse],
+          ['shared.address.number.label', adresse.hausnummer],
+          ['shared.address.zipcode.label', adresse.plz],
+          ['shared.address.city.label', adresse.ort],
+          ['shared.address.co.label', adresse.coAdresse],
           [
             'shared.address.country.label',
-            getLandName(t, laender, personInAusbildung.adresse.landId),
+            getLandName(t, laender, adresse.landId),
           ],
           [
             'shared.alternative-civil-residence.title',
@@ -97,7 +95,7 @@ export const getPersonInAusbildung = (
               ? getLandName(t, laender, personInAusbildung.nationalitaetId)
               : '',
           ],
-          ['shared.address.zipcode.label', personInAusbildung.adresse.plz],
+          ['shared.address.zipcode.label', adresse.plz],
           ['person.origin.label', personInAusbildung.heimatort],
           [
             'person.niederlassungsstatus.label',
@@ -151,7 +149,7 @@ export const getPersonInAusbildung = (
             ),
           ],
           ['person.digital-communication.label', getBoolean(t, true)],
-        ] as const,
+        ],
         (key) => `shared.form.${key}`,
       ),
     ),

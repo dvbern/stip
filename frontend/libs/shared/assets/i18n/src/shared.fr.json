@@ -423,7 +423,6 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Chez la mère",
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
 
-  "shared.export.tranche.header": "{{ fallnummer }}\t{{ gesuchsnummer }}\t{{ gueltigAb }} - {{ gueltigBis }}",
   "shared.export.shared.sozialversicherungsnummer": "Numéro AVS",
   "shared.export.lebenslauf.ausbildungen": "Formations",
   "shared.export.lebenslauf.taetigkeiten": "Tâches",

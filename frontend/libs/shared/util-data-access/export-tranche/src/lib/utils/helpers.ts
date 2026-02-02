@@ -14,11 +14,18 @@ export const _t = <T extends object>(
   return t.translate<string>(key, params);
 };
 
-export const getFullname = (person?: { vorname: string; nachname: string }) => {
+export const getFullname = (
+  person?: { vorname: string; nachname: string },
+  limit?: number,
+) => {
   if (!person) {
     return '';
   }
-  return `${person.vorname} ${person.nachname}`;
+  const { vorname, nachname } = person;
+  if (!limit || vorname.length + nachname.length <= limit) {
+    return `${vorname} ${nachname}`;
+  }
+  return `${limitText(vorname, limit - 3)} ${nachname[0]}.`;
 };
 
 export const getBoolean = (
@@ -48,4 +55,11 @@ export const formatDate = (date: string | Date | undefined): string => {
     return '';
   }
   return format(date, 'dd.MM.yyyy');
+};
+
+export const limitText = (text: string, limit: number): string => {
+  if (!text || text.length <= limit) {
+    return text;
+  }
+  return `${text.slice(0, limit - 3)}...`;
 };

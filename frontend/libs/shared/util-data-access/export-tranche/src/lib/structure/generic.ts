@@ -14,13 +14,14 @@ import { toFormatedNumber } from '@dv/shared/util/maskito-util';
 
 import {
   AvailableFonts,
+  HEADER_NAME_LIMIT,
   MARGINS_FOOTER,
   MARGINS_HEADER,
   SEPARATOR_HEIGHT,
   Styles,
   TABLE_BG_COLORS,
 } from '../types';
-import { _t, formatDate } from '../utils/helpers';
+import { _t, formatDate, getFullname } from '../utils/helpers';
 
 export const getFonts = (origin: string) =>
   ({
@@ -52,15 +53,29 @@ export const getPageHeader = (
   gesuch: SharedModelGesuch,
   tranche: GesuchTranche,
 ): Content => {
+  const pia = tranche.gesuchFormular?.personInAusbildung;
   return {
     margin: MARGINS_HEADER,
-    text: _t(t, 'shared.export.tranche.header', {
-      fallnummer: gesuch.fallNummer,
-      gesuchsnummer: gesuch.gesuchNummer,
-      gueltigAb: formatDate(tranche.gueltigAb),
-      gueltigBis: formatDate(tranche.gueltigBis),
-    }),
-    style: type<Styles>('header'),
+    layout: 'noBorders',
+    table: {
+      widths: ['auto', '*', 'auto'],
+      body: [
+        [
+          {
+            text: `${gesuch.fallNummer} | ${gesuch.gesuchNummer}`,
+            alignment: 'left',
+          },
+          {
+            text: getFullname(pia, HEADER_NAME_LIMIT),
+            alignment: 'center',
+          },
+          {
+            text: `${formatDate(tranche.gueltigAb)} - ${formatDate(tranche.gueltigBis)}`,
+            alignment: 'right',
+          },
+        ],
+      ],
+    },
   };
 };
 export const getPageFooter =

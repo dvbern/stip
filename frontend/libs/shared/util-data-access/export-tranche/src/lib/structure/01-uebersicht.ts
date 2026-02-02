@@ -9,7 +9,7 @@ import {
 import { GesuchTranche, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
 import { getTable, getTitle, getValueList } from './generic';
-import { ExportView } from '../types';
+import { ExportView, UEBERSICHT_NAME_LIMIT } from '../types';
 import { _t, formatDate, getFullname } from '../utils/helpers';
 
 export const getUebersicht = (
@@ -27,7 +27,10 @@ export const getUebersicht = (
         [
           [
             'pia.label',
-            getFullname(tranche.gesuchFormular?.personInAusbildung),
+            getFullname(
+              tranche.gesuchFormular?.personInAusbildung,
+              UEBERSICHT_NAME_LIMIT,
+            ),
           ],
           ['gesuchsnummer.label', gesuch.gesuchNummer],
           ['fallnummer.label', gesuch.fallNummer],

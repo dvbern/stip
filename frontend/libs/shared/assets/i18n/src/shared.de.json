@@ -423,7 +423,6 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Bei Mutter",
   "shared.form.shared.wohnsitzanteil.vater": "Bei Vater",
 
-  "shared.export.tranche.header": "{{ fallnummer }}\t{{ gesuchsnummer }}\t{{ gueltigAb }} - {{ gueltigBis }}",
   "shared.export.shared.sozialversicherungsnummer": "SV-Nummer",
   "shared.export.lebenslauf.ausbildungen": "Ausbildungen",
   "shared.export.lebenslauf.taetigkeiten": "Tätigkeiten",
