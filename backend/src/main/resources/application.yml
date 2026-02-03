@@ -10,6 +10,9 @@ kstip:
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
     testcase-mimetypes: 'application/x-tika-ooxml'
+  darlehen:
+    verfuegung-email:
+      recipient: 'ausbildungsdarlehen@mailbucket.dvbern.ch'
   pre-signed-request:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1

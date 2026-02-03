@@ -29,6 +29,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
@@ -106,6 +107,7 @@ public class DarlehenService {
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final DarlehenBuchhaltungEntryMapper darlehenBuchhaltungEntryMapper;
     private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
+    private final MailService mailService;
 
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
     private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
@@ -158,6 +160,14 @@ public class DarlehenService {
 
         gesetzlichDarlehen.setVerfuegung(darlehensVerfuegung);
 
+        mailService.sendDarlehenVerfuegungEmail(
+            configService.getDarlehenVerfuegungEmailRecipient(),
+            DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            out.toByteArray(),
+            gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
+            gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter()
+        );
+
         createDarlehenBuchhaltungEntry(
             gesuch.getAusbildung().getFall(),
             darlehensVerfuegung,
@@ -184,6 +194,15 @@ public class DarlehenService {
         darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+
+        mailService.sendDarlehenVerfuegungEmail(
+            configService.getDarlehenVerfuegungEmailRecipient(),
+            DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+            out.toByteArray(),
+            darlehen.getRelatedGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
+            darlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter()
+        );
+
         createDarlehenBuchhaltungEntry(
             darlehen.getFall(),
             darlehensVerfuegung,
@@ -210,6 +229,7 @@ public class DarlehenService {
         darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+
         createDarlehenBuchhaltungEntry(
             darlehen.getFall(),
             darlehensVerfuegung,
