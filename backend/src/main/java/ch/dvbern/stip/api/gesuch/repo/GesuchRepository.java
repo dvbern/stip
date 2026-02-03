@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.repo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -242,6 +244,32 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public List<Gesuch> getAllFehlendeDokumente() {
         return addStatusFilter(getFindAlleQuery(), Gesuchstatus.FEHLENDE_DOKUMENTE).stream().toList();
+    }
+
+    public Optional<GesuchFormular> getLatestGesuchFormularWithPiaForBenutzer(final UUID benutzerId) {
+        final var gesuch = QGesuch.gesuch;
+        final var tranche = QGesuchTranche.gesuchTranche;
+        final var formular = QGesuchFormular.gesuchFormular;
+        final var pia = QPersonInAusbildung.personInAusbildung;
+        final var ausbildung = QAusbildung.ausbildung;
+        final var fall = QFall.fall;
+
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(formular)
+            .join(tranche)
+            .on(tranche.gesuch.id.eq(gesuch.id))
+            .join(formular)
+            .on(formular.tranche.id.eq(tranche.id))
+            .join(pia)
+            .on(formular.personInAusbildung.id.eq(pia.id))
+            .join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .join(fall)
+            .on(ausbildung.fall.id.eq(fall.id))
+            .where(fall.gesuchsteller.id.eq(benutzerId))
+            .orderBy(pia.timestampMutiert.desc())
+            .stream()
+            .findFirst();
     }
 
     public Gesuch requireGesuchForDokument(final UUID dokumentId) {
