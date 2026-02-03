@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -57,7 +56,6 @@ export interface DelegierungDialogData {
 @Component({
   selector: 'dv-sozialdienst-app-feature-delegierung-dialog',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,

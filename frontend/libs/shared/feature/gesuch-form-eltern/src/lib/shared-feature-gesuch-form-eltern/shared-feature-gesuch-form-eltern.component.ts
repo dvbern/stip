@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -46,7 +45,6 @@ const allEltern = Object.values(ElternTyp);
   selector: 'dv-shared-feature-gesuch-form-eltern',
   imports: [
     ReactiveFormsModule,
-    CommonModule,
     MatListModule,
     MatTooltipModule,
     ElternteilCardComponent,

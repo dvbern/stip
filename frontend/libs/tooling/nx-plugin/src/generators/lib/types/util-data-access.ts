@@ -9,7 +9,7 @@ export function utilDataAccessTypeFactory(
   options: NormalizedSchema,
 ): LibTypeGenerator {
   return {
-    libGenerator: libraryGenerator,
+    libGenerator: { type: 'angular', generator: libraryGenerator },
     libDefaultOptions: {
       skipModule: true,
       flat: true,
