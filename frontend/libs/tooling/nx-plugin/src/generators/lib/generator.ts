@@ -77,40 +77,19 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
   const { type } = normalizedOptions;
   const libTypeFactory = LIB_TYPE_GENERATOR_MAP[type];
 
-  const {
-    libGenerator: { type: generatorType, generator },
-    libDefaultOptions,
-    generators,
-    postprocess,
-  } = libTypeFactory(normalizedOptions);
+  const { libGenerator, libDefaultOptions, generators, postprocess } =
+    libTypeFactory(normalizedOptions);
 
-  switch (generatorType) {
-    case 'angular': {
-      await generator(tree, {
-        ...libDefaultOptions,
-        linter: 'none',
-        unitTestRunner: UnitTestRunner.None,
-        prefix: normalizedOptions.prefix,
-        name: normalizedOptions.projectName,
-        directory: normalizedOptions.projectDirectory,
-        importPath: normalizedOptions.projectImportPath,
-        tags: normalizedOptions.parsedTags.join(','),
-      });
-      break;
-    }
-    case 'library': {
-      await generator(tree, {
-        ...libDefaultOptions,
-        linter: 'none',
-        name: normalizedOptions.projectName,
-        directory: normalizedOptions.projectDirectory,
-        importPath: normalizedOptions.projectImportPath,
-        tags: normalizedOptions.parsedTags.join(','),
-      });
-      break;
-    }
-  }
-
+  await libGenerator(tree, {
+    ...libDefaultOptions,
+    linter: 'none',
+    unitTestRunner: UnitTestRunner.None,
+    prefix: normalizedOptions.prefix,
+    name: normalizedOptions.projectName,
+    directory: normalizedOptions.projectDirectory,
+    importPath: normalizedOptions.projectImportPath,
+    tags: normalizedOptions.parsedTags.join(','),
+  });
   const projectConfig = readProjectConfiguration(
     tree,
     normalizedOptions.projectName,

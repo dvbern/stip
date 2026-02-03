@@ -13,7 +13,6 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
-// import type { VerfuegungOption } from '@dv/sachbearbeitung-app/model/verfuegung';
 import {
   VERFUEGUNG_OPTIONS,
   VerfuegungOption,

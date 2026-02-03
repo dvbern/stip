@@ -8,7 +8,7 @@ import { updateTsConfig } from './helpers/tsconfig';
 
 export function dialogTypeFactory(): LibTypeGenerator {
   return {
-    libGenerator: { type: 'angular', generator: libraryGenerator },
+    libGenerator: libraryGenerator,
     libDefaultOptions: {
       standalone: true,
       skipModule: true,

@@ -1,4 +1,5 @@
 /* eslint-disable @angular-eslint/no-input-rename */
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,6 +22,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
 @Component({
   selector: 'dv-shared-feature-darlehen-feature',
   imports: [
+    CommonModule,
     RouterLink,
     TranslocoDirective,
     MatMenuModule,

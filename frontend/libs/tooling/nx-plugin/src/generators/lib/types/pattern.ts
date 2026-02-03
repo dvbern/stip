@@ -10,7 +10,7 @@ export function patternTypeFactory(
   options: NormalizedSchema,
 ): LibTypeGenerator {
   return {
-    libGenerator: { type: 'angular', generator: libraryGenerator },
+    libGenerator: libraryGenerator,
     libDefaultOptions: {
       skipModule: true,
       flat: true,

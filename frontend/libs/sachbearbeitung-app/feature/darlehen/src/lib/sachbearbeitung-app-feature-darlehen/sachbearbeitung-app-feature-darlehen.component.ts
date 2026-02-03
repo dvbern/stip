@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,6 +21,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-darlehen',
   imports: [
+    CommonModule,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +16,12 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 
 @Component({
   selector: 'dv-berechnungs-expansion-panel',
-  imports: [TranslocoPipe, MatExpansionModule, SharedUiFormatChfPipe],
+  imports: [
+    CommonModule,
+    TranslocoPipe,
+    MatExpansionModule,
+    SharedUiFormatChfPipe,
+  ],
   template: `
     @if (viewSig(); as view) {
       <mat-expansion-panel

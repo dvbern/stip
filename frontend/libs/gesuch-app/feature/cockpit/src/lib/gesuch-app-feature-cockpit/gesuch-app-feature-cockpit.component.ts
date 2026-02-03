@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -56,6 +57,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   imports: [
     MatSelectModule,
     RouterLink,
+    CommonModule,
     SharedPatternMainLayoutComponent,
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,

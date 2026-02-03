@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,6 +21,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
 
 @Component({
   imports: [
+    CommonModule,
     MatCardModule,
     TranslocoDirective,
     RouterLink,

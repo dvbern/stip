@@ -11,7 +11,7 @@ export function featureTypeFactory(
 ): LibTypeGenerator {
   const { scope } = options;
   return {
-    libGenerator: { type: 'angular', generator: libraryGenerator },
+    libGenerator: libraryGenerator,
     libDefaultOptions: {
       lazy: true,
       routing: true,

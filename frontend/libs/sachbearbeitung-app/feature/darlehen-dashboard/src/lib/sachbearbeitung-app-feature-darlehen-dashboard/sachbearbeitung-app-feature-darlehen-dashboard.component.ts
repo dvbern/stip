@@ -28,7 +28,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, isDefined } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import {
   differenceInCalendarMonths,
@@ -53,7 +53,7 @@ import {
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
-import { AppendFromTo, isDefined } from '@dv/shared/model/type-util';
+import { AppendFromTo } from '@dv/shared/model/type-util';
 import {
   DEFAULT_PAGE_SIZE,
   INPUT_DELAY,

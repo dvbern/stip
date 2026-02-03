@@ -44,7 +44,7 @@ export class TimelineBlock {
 
 export class TimelineBusyBlock extends TimelineBlock {
   id!: string;
-  declare col: 'LEFT' | 'RIGHT';
+  override col!: 'LEFT' | 'RIGHT';
   label!: TimelineLabel;
   editable!: boolean;
   ausbildungAbgeschlossen!: boolean;
@@ -61,7 +61,7 @@ export class TimelineBusyBlockChild {
 }
 
 export class TimelineGapBlock extends TimelineBlock {
-  declare col: 'BOTH';
+  override col!: 'BOTH';
 }
 
 export function isTimelineBusyBlock(block: TimelineBlock) {

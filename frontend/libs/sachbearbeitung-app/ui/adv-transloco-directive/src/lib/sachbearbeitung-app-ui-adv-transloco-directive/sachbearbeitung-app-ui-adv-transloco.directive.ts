@@ -1,11 +1,9 @@
 import { Directive } from '@angular/core';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { HashMap, TranslocoDirective } from '@jsverse/transloco';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type HashMap<T = any> = Record<string, T>;
 type TranslateFn<
   T extends SachbearbeitungAppTranslationKey | SharedTranslationKey,
 > = (key: T, params?: HashMap) => string;

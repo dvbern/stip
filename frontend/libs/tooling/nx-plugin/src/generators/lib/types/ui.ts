@@ -8,7 +8,7 @@ import { updateTsConfig } from './helpers/tsconfig';
 
 export function uiTypeFactory(options: NormalizedSchema): LibTypeGenerator {
   return {
-    libGenerator: { type: 'angular', generator: libraryGenerator },
+    libGenerator: libraryGenerator,
     libDefaultOptions: {
       standalone: true,
       skipModule: true,
