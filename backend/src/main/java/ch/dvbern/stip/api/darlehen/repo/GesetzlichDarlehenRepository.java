@@ -18,12 +18,11 @@
 package ch.dvbern.stip.api.darlehen.repo;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
-import ch.dvbern.stip.api.darlehen.entity.QDarlehenBuchhaltungEntry;
+import ch.dvbern.stip.api.darlehen.entity.GesetzlichDarlehen;
+import ch.dvbern.stip.api.darlehen.entity.QGesetzlichDarlehen;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -31,28 +30,14 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class DarlehenBuchhaltungEntryRepository implements BaseRepository<DarlehenBuchhaltungEntry> {
-    private static final QDarlehenBuchhaltungEntry darlehenBuchhaltungEntry =
-        QDarlehenBuchhaltungEntry.darlehenBuchhaltungEntry;
+public class GesetzlichDarlehenRepository implements BaseRepository<GesetzlichDarlehen> {
 
     private final EntityManager entityManager;
 
-    public List<DarlehenBuchhaltungEntry> getByFallId(final UUID fallId) {
+    public List<GesetzlichDarlehen> findAllByFallId(final UUID fallId) {
         return new JPAQueryFactory(entityManager)
-            .selectFrom(darlehenBuchhaltungEntry)
-            .where(darlehenBuchhaltungEntry.fall.id.eq(fallId))
-            .stream()
-            .toList()
-            .reversed();
-    }
-
-    public Optional<DarlehenBuchhaltungEntry> getByVerfuegungDokumentId(final UUID verfuegungDokumentId) {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(darlehenBuchhaltungEntry)
-            .where(
-                darlehenBuchhaltungEntry.verfuegung.id.eq(verfuegungDokumentId)
-            )
-            .stream()
-            .findFirst();
+            .selectFrom(QGesetzlichDarlehen.gesetzlichDarlehen)
+            .where(QGesetzlichDarlehen.gesetzlichDarlehen.fall.id.eq(fallId))
+            .fetch();
     }
 }

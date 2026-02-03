@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.berechnung.service.bern.v1;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -50,9 +52,25 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
         final var persoenlichesBudget =
             calculatePersoenlichesBudgetresult(model, familienbudgets.get(0), familienbudgets.get(1));
 
+        var stipendium = persoenlichesBudget.getTotal();
+        var darlehen = 0;
+
+        if (model.getInputPersoenlichesBudget().getAntragssteller().getMonateTertiaerstufe() > 36) {
+            var darlehenUngekuerzt = BigDecimal.valueOf(stipendium)
+                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .intValue();
+            var remainingQuota = Math.max(
+                0,
+                50000 - model.getInputPersoenlichesBudget().getAntragssteller().getBisherigeDarlehen()
+            );
+            darlehen = Math.max(darlehenUngekuerzt, -remainingQuota);
+            stipendium -= darlehenUngekuerzt;
+        }
+
         return new BerechnungResult(
-            persoenlichesBudget.getTotal(),
-            0, // TODO KSTIP-2584: add correct value once it is calculated
+            stipendium,
+            darlehen,
             familienbudgets.stream().flatMap(Optional::stream).toList(),
             persoenlichesBudget
         );
