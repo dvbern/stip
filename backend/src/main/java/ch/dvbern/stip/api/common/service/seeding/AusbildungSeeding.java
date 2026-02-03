@@ -20,8 +20,9 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
@@ -39,13 +40,12 @@ import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.exception.CancelInvocationException;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVReaderHeaderAwareBuilder;
 import io.quarkus.runtime.configuration.ConfigUtils;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.stream.Streams;
 
 @Singleton
 @RequiredArgsConstructor
@@ -98,34 +98,37 @@ public class AusbildungSeeding extends Seeder {
             if (resource == null) {
                 throw new FileNotFoundException("Could not load CSV to seed abschluesse: " + PATH_TO_CSV_ABSCHLUSS);
             }
-
+            final var csvParser = new CSVParserBuilder()
+                .withSeparator(';')
+                .build();
             try (
-                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
-                    .withSkipLines(1)
-                    .withCSVParser(
-                        new CSVParserBuilder()
-                            .withSeparator(';')
-                            .build()
-                    )
-                    .build();
+                final var reader =
+                    new CSVReaderHeaderAwareBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                        .withCSVParser(csvParser)
+                        .build()
             ) {
-                return Streams.of(reader.iterator())
-                    .map(
-                        abschlussLine -> new Abschluss()
-                            .setBezeichnungDe(abschlussLine[0])
-                            .setBezeichnungFr(abschlussLine[1])
-                            .setAusbildungskategorie(Ausbildungskategorie.valueOf(abschlussLine[2]))
-                            .setBildungskategorie(Bildungskategorie.valueOf(abschlussLine[3]))
-                            .setBildungsrichtung(Bildungsrichtung.valueOf(abschlussLine[4]))
-                            .setBfsKategorie(Integer.valueOf(abschlussLine[5]))
-                            .setBerufsbefaehigenderAbschluss(Boolean.valueOf(abschlussLine[6]))
-                            .setFerien(FerienTyp.valueOf(abschlussLine[7]))
-                            .setZusatzfrage(
-                                abschlussLine[8].isEmpty() ? null : AbschlussZusatzfrage.valueOf(abschlussLine[8])
-                            )
-                            .setAskForBerufsmaturitaet(Boolean.valueOf(abschlussLine[9]))
-                    )
-                    .toList();
+                List<Abschluss> abschluesses = new ArrayList<>();
+                Map<String, String> rowMap;
+                while ((rowMap = reader.readMap()) != null) {
+                    final var abschluss = new Abschluss()
+                        .setBezeichnungDe(rowMap.get("bezeichnungDe"))
+                        .setBezeichnungFr(rowMap.get("bezeichnungFr"))
+                        .setAusbildungskategorie(Ausbildungskategorie.valueOf(rowMap.get("ausbildungskategorie")))
+                        .setBildungskategorie(Bildungskategorie.valueOf(rowMap.get("bildungskategorie")))
+                        .setBildungsrichtung(Bildungsrichtung.valueOf(rowMap.get("bildungsrichtung")))
+                        .setBfsKategorie(Integer.valueOf(rowMap.get("bfsKategorie")))
+                        .setBerufsbefaehigenderAbschluss(
+                            Boolean.parseBoolean(rowMap.get("berufsbefaehigenderAbschluss"))
+                        )
+                        .setFerien(FerienTyp.valueOf(rowMap.get("ferien")))
+                        .setZusatzfrage(
+                            rowMap.get("zusatzfrage").isEmpty() ? null
+                                : AbschlussZusatzfrage.valueOf(rowMap.get("zusatzfrage"))
+                        )
+                        .setAskForBerufsmaturitaet(Boolean.parseBoolean(rowMap.get("askForBerufsmaturitaet")));
+                    abschluesses.add(abschluss);
+                }
+                return abschluesses;
             }
         }
     }
@@ -139,48 +142,51 @@ public class AusbildungSeeding extends Seeder {
                 );
             }
 
+            final var csvParser = new CSVParserBuilder()
+                .withSeparator(';')
+                .build();
             try (
-                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
-                    .withSkipLines(1)
-                    .withCSVParser(
-                        new CSVParserBuilder()
-                            .withSeparator(';')
-                            .build()
-                    )
-                    .build();
+                final var reader =
+                    new CSVReaderHeaderAwareBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                        .withCSVParser(csvParser)
+                        .build()
             ) {
-                return Streams.of(reader.iterator())
-                    .map(
-                        ausbildungsstaetteLine -> new Ausbildungsstaette()
-                            .setNameDe(ausbildungsstaetteLine[0])
-                            .setNameFr(ausbildungsstaetteLine[1])
-                            .setNummerTyp(parseAusbildungsstaetteNummerTyp(ausbildungsstaetteLine))
-                            .setNummer(parseAusbildungsstaetteNummer(ausbildungsstaetteLine))
-                    )
-                    .toList();
+                List<Ausbildungsstaette> ausbildungsstaettes = new ArrayList<>();
+                Map<String, String> rowMap;
+                while ((rowMap = reader.readMap()) != null) {
+                    final var ausbildungsstaette = new Ausbildungsstaette()
+                        .setNameDe(rowMap.get("nameDe"))
+                        .setNameFr(rowMap.get("nameFr"))
+                        .setNummerTyp(parseAusbildungsstaetteNummerTyp(rowMap))
+                        .setNummer(parseAusbildungsstaetteNummer(rowMap));
+                    ausbildungsstaettes.add(ausbildungsstaette);
+                }
+                return ausbildungsstaettes;
             }
         }
     }
 
-    private AusbildungsstaetteNummerTyp parseAusbildungsstaetteNummerTyp(final String[] ausbildungsstaetteLine) {
-        if (!ausbildungsstaetteLine[2].isEmpty()) {
+    private AusbildungsstaetteNummerTyp parseAusbildungsstaetteNummerTyp(
+        final Map<String, String> ausbildungsstaetteRowMap
+    ) {
+        if (!ausbildungsstaetteRowMap.get("chShis").isEmpty()) {
             return AusbildungsstaetteNummerTyp.CH_SHIS;
-        } else if (!ausbildungsstaetteLine[3].isEmpty()) {
+        } else if (!ausbildungsstaetteRowMap.get("burNo").isEmpty()) {
             return AusbildungsstaetteNummerTyp.BUR_NO;
-        } else if (!ausbildungsstaetteLine[4].isEmpty()) {
+        } else if (!ausbildungsstaetteRowMap.get("ctNo").isEmpty()) {
             return AusbildungsstaetteNummerTyp.CT_NO;
         } else {
             return AusbildungsstaetteNummerTyp.OHNE_NO;
         }
     }
 
-    private String parseAusbildungsstaetteNummer(final String[] ausbildungsstaetteLine) {
-        if (!ausbildungsstaetteLine[2].isEmpty()) {
-            return ausbildungsstaetteLine[2];
-        } else if (!ausbildungsstaetteLine[3].isEmpty()) {
-            return ausbildungsstaetteLine[3];
-        } else if (!ausbildungsstaetteLine[4].isEmpty()) {
-            return ausbildungsstaetteLine[4];
+    private String parseAusbildungsstaetteNummer(final Map<String, String> ausbildungsstaetteRowMap) {
+        if (!ausbildungsstaetteRowMap.get("chShis").isEmpty()) {
+            return ausbildungsstaetteRowMap.get("chShis");
+        } else if (!ausbildungsstaetteRowMap.get("burNo").isEmpty()) {
+            return ausbildungsstaetteRowMap.get("burNo");
+        } else if (!ausbildungsstaetteRowMap.get("ctNo").isEmpty()) {
+            return ausbildungsstaetteRowMap.get("ctNo");
         } else {
             return null;
         }
@@ -197,74 +203,72 @@ public class AusbildungSeeding extends Seeder {
                     "Could not load CSV to seed ausbildungsgang: " + PATH_TO_CSV_AUSBILDUNGSGANG
                 );
             }
+            final var csvParser = new CSVParserBuilder()
+                .withSeparator(';')
+                .build();
             try (
-                final var reader = new CSVReaderBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
-                    .withSkipLines(1)
-                    .withCSVParser(
-                        new CSVParserBuilder()
-                            .withSeparator(';')
-                            .build()
-                    )
-                    .build();
+                final var reader =
+                    new CSVReaderHeaderAwareBuilder(new InputStreamReader(resource, StandardCharsets.UTF_8))
+                        .withCSVParser(csvParser)
+                        .build()
             ) {
-                return Streams.of(reader.iterator())
-                    .map(
-                        ausbildungsgangLine -> {
-                            final var abschlussBezeichnungDe = ausbildungsgangLine[0];
-                            final var ausbildungskategorie = Ausbildungskategorie.valueOf(ausbildungsgangLine[1]);
-                            final var ausbildungsstaetteNameDe = ausbildungsgangLine[2];
-                            final var bildungsrichtungOpt = Optional.ofNullable(ausbildungsgangLine[3]);
-                            final boolean isBildungsrichtungPresent =
-                                bildungsrichtungOpt.isPresent() && !bildungsrichtungOpt.get().isEmpty();
-                            var possibleMatchingAbschluesse = abschluesse.stream()
-                                .filter(
-                                    abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
-                                    && abschluss1.getAusbildungskategorie() == ausbildungskategorie
-                                )
-                                .toList();
-                            Optional<Abschluss> abschlussOpt = possibleMatchingAbschluesse.stream().findFirst();
+                List<Ausbildungsgang> ausbildungsgangs = new ArrayList<>();
+                Map<String, String> rowMap;
+                while ((rowMap = reader.readMap()) != null) {
+                    final var abschlussBezeichnungDe = rowMap.get("abschlussDe");
+                    final var ausbildungskategorie = Ausbildungskategorie.valueOf(rowMap.get("ausbildungskategorie"));
+                    final var ausbildungsstaetteNameDe = rowMap.get("ausbildungsstaetteDe");
+                    final var bildungsrichtungOpt = Optional.ofNullable(rowMap.get("Bildungsrichtung (Optional)"));
+                    final boolean isBildungsrichtungPresent =
+                        bildungsrichtungOpt.isPresent() && !bildungsrichtungOpt.get().isEmpty();
+                    var possibleMatchingAbschluesse = abschluesse.stream()
+                        .filter(
+                            abschluss1 -> abschluss1.getBezeichnungDe().equalsIgnoreCase(abschlussBezeichnungDe)
+                            && abschluss1.getAusbildungskategorie() == ausbildungskategorie
+                        )
+                        .toList();
+                    Optional<Abschluss> abschlussOpt = possibleMatchingAbschluesse.stream().findFirst();
 
-                            if (isBildungsrichtungPresent) {
-                                final Bildungsrichtung bildungsrichtung =
-                                    Bildungsrichtung.valueOf(bildungsrichtungOpt.get());
-                                abschlussOpt = possibleMatchingAbschluesse.stream()
-                                    .filter(abschluss1 -> abschluss1.getBildungsrichtung().equals(bildungsrichtung))
-                                    .findFirst();
-                            }
+                    if (isBildungsrichtungPresent) {
+                        final Bildungsrichtung bildungsrichtung =
+                            Bildungsrichtung.valueOf(bildungsrichtungOpt.get());
+                        abschlussOpt = possibleMatchingAbschluesse.stream()
+                            .filter(abschluss1 -> abschluss1.getBildungsrichtung().equals(bildungsrichtung))
+                            .findFirst();
+                    }
 
-                            final var ausbildungsstaetteOpt = ausbildungsstaetten.stream()
-                                .filter(
-                                    ausbildungsstaette1 -> ausbildungsstaette1.getNameDe()
-                                        .equalsIgnoreCase(ausbildungsstaetteNameDe)
-                                )
-                                .findFirst();
+                    final var ausbildungsstaetteOpt = ausbildungsstaetten.stream()
+                        .filter(
+                            ausbildungsstaette1 -> ausbildungsstaette1.getNameDe()
+                                .equalsIgnoreCase(ausbildungsstaetteNameDe)
+                        )
+                        .findFirst();
 
-                            if (abschlussOpt.isEmpty()) {
-                                handleMissingOrMismatchingEntries(
-                                    String.format(
-                                        "Could not find Abschluss %s in seeded abschluesse",
-                                        abschlussBezeichnungDe
-                                    )
-                                );
-                                return null;
-                            }
-                            if (ausbildungsstaetteOpt.isEmpty()) {
-                                handleMissingOrMismatchingEntries(
-                                    String.format(
-                                        "Could not find Ausbildungsstaette %s in seeded Ausbildungsstaetten",
-                                        ausbildungsstaetteNameDe
-                                    )
-                                );
-                                return null;
-                            }
+                    if (abschlussOpt.isEmpty()) {
+                        handleMissingOrMismatchingEntries(
+                            String.format(
+                                "Could not find Abschluss %s in seeded abschluesse",
+                                abschlussBezeichnungDe
+                            )
+                        );
+                        continue;
+                    }
+                    if (ausbildungsstaetteOpt.isEmpty()) {
+                        handleMissingOrMismatchingEntries(
+                            String.format(
+                                "Could not find Ausbildungsstaette %s in seeded Ausbildungsstaetten",
+                                ausbildungsstaetteNameDe
+                            )
+                        );
+                        continue;
+                    }
 
-                            return new Ausbildungsgang()
-                                .setAbschluss(abschlussOpt.get())
-                                .setAusbildungsstaette(ausbildungsstaetteOpt.get());
-                        }
-                    )
-                    .filter(Objects::nonNull)
-                    .toList();
+                    final var ausbildungsgang = new Ausbildungsgang()
+                        .setAbschluss(abschlussOpt.get())
+                        .setAusbildungsstaette(ausbildungsstaetteOpt.get());
+                    ausbildungsgangs.add(ausbildungsgang);
+                }
+                return ausbildungsgangs;
             }
         }
     }

@@ -36,6 +36,6 @@ public class FehlendeDokumenteEinreichenHandler implements GesuchStatusChangeHan
             .stream()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
-        notificationService.createGesuchFehlendeDokumenteEinreichenNotification(gesuch);
+        notificationService.createGesuchFehlendeDokumenteEinreichenNotificationAndSendStdMail(gesuch);
     }
 }

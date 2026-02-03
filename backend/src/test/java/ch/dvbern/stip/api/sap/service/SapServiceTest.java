@@ -267,7 +267,8 @@ public class SapServiceTest {
         sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
 
         // Assert
-        Mockito.verify(notificationServiceMock, Mockito.times(1)).createFailedAuszahlungBuchhaltungNotification(any());
+        Mockito.verify(notificationServiceMock, Mockito.times(1))
+            .createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(any());
         assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(3));
         assertThat(relevantBuchhaltung.getSapStatus(), Matchers.equalTo(SapStatus.FAILURE));
         assertThrows(

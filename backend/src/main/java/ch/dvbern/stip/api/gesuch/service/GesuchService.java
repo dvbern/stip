@@ -47,9 +47,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -180,7 +178,6 @@ public class GesuchService {
     private final GesuchHistoryRepository gesuchHistoryRepository;
     private final UnterschriftenblattService unterschriftenblattService;
     private final BuchhaltungService buchhaltungService;
-    private final MailService mailService;
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
@@ -191,7 +188,6 @@ public class GesuchService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
-    private final DarlehenService darlehenService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -706,32 +702,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void gesuchStatusToStipendienanspruch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-
-        var relevantVerfuegung = gesuch.getVerfuegungs()
-            .stream()
-            .max(Comparator.comparing(Verfuegung::getTimestampErstellt))
-            .orElseThrow(NotFoundException::new);
-
-        var status = GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH;
-
-        if (Objects.isNull(relevantVerfuegung.getStipDecision())) {
-            final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-                gesuch,
-                configService.getCurrentDmnMajorVersion(),
-                configService.getCurrentDmnMinorVersion()
-            );
-
-            if (stipendien.getBerechnungTotal() > 0) {
-                status = GesuchStatusChangeEvent.STIPENDIENANSPRUCH;
-            }
-        }
-
-        gesuchStatusService.triggerStateMachineEvent(gesuch, status);
-    }
-
-    @Transactional
     public void gesuchFehlendeDokumenteUebermitteln(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuch);
@@ -795,7 +765,7 @@ public class GesuchService {
         final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
 
         if (
-            !latestVerfuegung.isNegativeVerfuegung()
+            !latestVerfuegung.getVerfuegungStatus().isNegativ()
             && !unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)
         ) {
             throw new CustomValidationsException(
@@ -844,7 +814,7 @@ public class GesuchService {
         }
         var gesuch = gesuchRepository.requireById(gesuchId);
         gesuch.setNachfristDokumente(nachfristDokumente);
-        notificationService.createGesuchNachfristDokumenteChangedNotification(gesuch);
+        notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
@@ -922,9 +892,10 @@ public class GesuchService {
 
     @Transactional
     public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
-        final var gesuch = gesuchTrancheRepository.requireAenderungById(aenderungId).getGesuch();
-        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
         final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
+        final var gesuch = getGesuchById(aenderung.getGesuch().getId());
+        final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
+
         return gesuchMapperUtil.toWithChangesDto(
             gesuch,
             aenderung,
@@ -1028,8 +999,7 @@ public class GesuchService {
     }
 
     public void sendFehlendeDokumenteNotifications(Gesuch gesuch) {
-        notificationService.createMissingDocumentNotification(gesuch);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+        notificationService.createMissingDocumentNotificationAndSendStdMail(gesuch);
     }
 
     public void setDefaultNachfristDokumente(Gesuch gesuch) {
@@ -1319,10 +1289,10 @@ public class GesuchService {
         final var keinAnspruch = new ArrayList<Gesuch>();
         for (final var gesuch : gesuche) {
             final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
-            if (latestVerfuegung.isNegativeVerfuegung()) {
-                keinAnspruch.add(gesuch);
-            } else {
+            if (latestVerfuegung.getVerfuegungStatus().isAnspruch()) {
                 anspruch.add(gesuch);
+            } else {
+                keinAnspruch.add(gesuch);
             }
         }
 

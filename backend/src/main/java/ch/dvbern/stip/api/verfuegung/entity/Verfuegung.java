@@ -23,6 +23,7 @@ import java.util.List;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.stipdecision.type.Kanton;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -66,8 +67,10 @@ public class Verfuegung extends AbstractMandantEntity {
     @Column(name = "wohnsitz_kanton")
     private Kanton kanton;
 
-    @Column(name = "is_negative_verfuegung", nullable = false)
-    private boolean isNegativeVerfuegung = false;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "verfuegung_status", nullable = false)
+    private VerfuegungStatus verfuegungStatus = VerfuegungStatus.AUSSTEHEND;
 
     @NotNull
     @Column(name = "is_versendet")

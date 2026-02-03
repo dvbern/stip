@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
-import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AenderungFehlendeDokumenteNichtEingereichtHandler implements GesuchStatusChangeHandler {
     private final NotificationService notificationService;
-    private final MailService mailService;
     private final GesuchService gesuchService;
 
     @Override
@@ -38,9 +36,8 @@ public class AenderungFehlendeDokumenteNichtEingereichtHandler implements Gesuch
         if (!gesuch.isVerfuegt()) {
             illegalHandleCall();
         }
-        notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotification(gesuch);
+        notificationService.createGesuchFehlendeDokumenteNichtEingereichtNotificationAndSendStdMail(gesuch);
         gesuch.setNachfristDokumente(null);
         gesuchService.resetGesuchZurueckweisen(gesuch);
-        mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 }
