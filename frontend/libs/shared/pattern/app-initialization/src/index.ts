@@ -1,4 +1,4 @@
-import { NgZone, inject, provideAppInitializer } from '@angular/core';
+import { inject, provideAppInitializer } from '@angular/core';
 import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { lastValueFrom, of } from 'rxjs';
@@ -26,7 +26,6 @@ function initializeOidc(
   tenantService: TenantService,
   oauthService: OAuthService,
   compileTimeConfig: SharedModelCompileTimeConfig,
-  zone: NgZone,
 ) {
   return () =>
     lastValueFrom(
@@ -37,48 +36,44 @@ function initializeOidc(
         .pipe(
           switchMap((tenantInfo) => {
             tenantConfigService.setTenantInfo(tenantInfo);
-            // It is important to run the configuration outside of the Angular zone
-            // to prevent Angular Application Ref from always switching between ready and not ready
-            return zone.runOutsideAngular(() => {
-              const { clientAuth } = tenantInfo;
-              oauthService.configure({
-                issuer: `${clientAuth.authServerUrl}/realms/${clientAuth.realm}`,
-                redirectUri: window.location.origin + window.location.pathname,
-                clientId: compileTimeConfig.authClientId,
-                scope: 'openid profile email offline_access',
-                responseType: 'code',
-                showDebugInformation: false,
-                silentRefreshRedirectUri:
-                  window.location.origin + '/assets/auth/silent-refresh.html',
-                sessionChecksEnabled: true,
-                clearHashAfterLogin: false,
-                useSilentRefresh: true,
-                nonceStateSeparator: 'semicolon',
-              });
-              return oauthService
-                .loadDiscoveryDocumentAndTryLogin()
-                .then((success) => {
-                  let nextStep = Promise.resolve(true);
-                  // perform a silent refresh when the access token is expired
-                  if (!oauthService.hasValidAccessToken()) {
-                    nextStep = oauthService
-                      .silentRefresh()
-                      .then(() => true)
-                      .catch(() => {
-                        // if the silent refresh fails, redirect to the login page
-                        oauthService.initLoginFlow();
-                        return false;
-                      });
-                  }
-
-                  goBackToPreviousUrlIfAvailable(oauthService, router);
-                  oauthService.setupAutomaticSilentRefresh();
-
-                  return nextStep.then(
-                    (nextStepSuccess) => success && nextStepSuccess,
-                  );
-                });
+            const { clientAuth } = tenantInfo;
+            oauthService.configure({
+              issuer: `${clientAuth.authServerUrl}/realms/${clientAuth.realm}`,
+              redirectUri: window.location.origin + window.location.pathname,
+              clientId: compileTimeConfig.authClientId,
+              scope: 'openid profile email offline_access',
+              responseType: 'code',
+              showDebugInformation: false,
+              silentRefreshRedirectUri:
+                window.location.origin + '/assets/auth/silent-refresh.html',
+              sessionChecksEnabled: true,
+              clearHashAfterLogin: false,
+              useSilentRefresh: true,
+              nonceStateSeparator: 'semicolon',
             });
+            return oauthService
+              .loadDiscoveryDocumentAndTryLogin()
+              .then((success) => {
+                let nextStep = Promise.resolve(true);
+                // perform a silent refresh when the access token is expired
+                if (!oauthService.hasValidAccessToken()) {
+                  nextStep = oauthService
+                    .silentRefresh()
+                    .then(() => true)
+                    .catch(() => {
+                      // if the silent refresh fails, redirect to the login page
+                      oauthService.initLoginFlow();
+                      return false;
+                    });
+                }
+
+                goBackToPreviousUrlIfAvailable(oauthService, router);
+                oauthService.setupAutomaticSilentRefresh();
+
+                return nextStep.then(
+                  (nextStepSuccess) => success && nextStepSuccess,
+                );
+              });
           }),
           switchMap((success) =>
             !success
@@ -106,7 +101,6 @@ export const provideSharedPatternAppInitialization = () => {
         inject(TenantService),
         inject(OAuthService),
         inject(SharedModelCompileTimeConfig),
-        inject(NgZone),
       );
       return initializerFn();
     }),

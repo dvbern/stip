@@ -36,7 +36,7 @@
         "outputPath": "dist/apps/sozialdienst-app",
         "index": "apps/sozialdienst-app/src/index.html",
         "browser": "apps/sozialdienst-app/src/main.ts",
-        "polyfills": ["@angular/localize/init", "zone.js"],
+        "polyfills": ["@angular/localize/init"],
         "tsConfig": "apps/sozialdienst-app/tsconfig.app.json",
         "assets": [
           {
