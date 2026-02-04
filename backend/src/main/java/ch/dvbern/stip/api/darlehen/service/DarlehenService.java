@@ -109,7 +109,7 @@ public class DarlehenService {
     private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
     private final MailService mailService;
 
-    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
+    public static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
     private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
@@ -129,11 +129,7 @@ public class DarlehenService {
 
     }
 
-    public void createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
-        if (betrag < 0) {
-            return;
-        }
-
+    public ByteArrayOutputStream createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
         final var gesetzlichDarlehen = new GesetzlichDarlehen();
         gesetzlichDarlehen.setFall(gesuch.getAusbildung().getFall());
         gesetzlichDarlehen.setGesuch(gesuch);
@@ -174,6 +170,8 @@ public class DarlehenService {
             betrag,
             DarlehenBuchhaltungEntryKategorie.GESETZLICH
         );
+
+        return out;
     }
 
     @Transactional

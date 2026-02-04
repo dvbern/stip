@@ -17,27 +17,12 @@
 
 package ch.dvbern.stip.api.darlehen.repo;
 
-import java.util.List;
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.darlehen.entity.GesetzlichDarlehen;
-import ch.dvbern.stip.api.darlehen.entity.QGesetzlichDarlehen;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesetzlichDarlehenRepository implements BaseRepository<GesetzlichDarlehen> {
-
-    private final EntityManager entityManager;
-
-    public List<GesetzlichDarlehen> findAllByFallId(final UUID fallId) {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(QGesetzlichDarlehen.gesetzlichDarlehen)
-            .where(QGesetzlichDarlehen.gesetzlichDarlehen.fall.id.eq(fallId))
-            .fetch();
-    }
 }

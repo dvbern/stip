@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
-import ch.dvbern.stip.api.darlehen.repo.GesetzlichDarlehenRepository;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -60,7 +59,6 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
-    private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(

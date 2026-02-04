@@ -104,7 +104,8 @@ public class BerechnungUtil {
             requestBuilders,
             berechnungStammdatenMapper,
             calculators,
-            new MockTenantService()
+            new MockTenantService(),
+            null
         );
     }
 

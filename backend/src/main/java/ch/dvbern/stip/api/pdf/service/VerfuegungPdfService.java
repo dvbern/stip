@@ -35,6 +35,9 @@ import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
+import ch.dvbern.stip.api.darlehen.repo.GesetzlichDarlehenRepository;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -82,6 +85,9 @@ public class VerfuegungPdfService {
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
     private final BerechnungsblattService berechnungsblattService;
+    private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final DarlehenService darlehenService;
 
     private ByteArrayOutputStream createNegativeVerfuegungPdf(
         final Verfuegung verfuegung,
@@ -722,9 +728,13 @@ public class VerfuegungPdfService {
                 new ArrayList<>()
             );
         } else {
+            List<Anhangs> anhangs = new ArrayList<>(List.of(Anhangs.BERECHNUNGSBLAETTER));
+            if (stipendien.getBerechnungDarlehen() > 0) {
+                anhangs.add(Anhangs.DARLEHENS_VERFUEGUNG);
+            }
             verfuegungsBrief = createVerfuegungMitAnspruchPdf(
                 verfuegung,
-                new ArrayList<>(List.of(Anhangs.BERECHNUNGSBLAETTER))
+                anhangs
             );
         }
 
@@ -736,6 +746,7 @@ public class VerfuegungPdfService {
 
         if (!verfuegung.getVerfuegungStatus().isNegativ()) {
             ByteArrayOutputStream berechnungsBlaetter;
+            ByteArrayOutputStream darlehensVerfuegung = new ByteArrayOutputStream();
 
             createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
             createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.VATER);
@@ -752,9 +763,15 @@ public class VerfuegungPdfService {
 
             berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, stipendien);
 
+            if (stipendien.getBerechnungDarlehen() > 0) {
+                darlehensVerfuegung =
+                    darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen());
+            }
+
             final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
                 verfuegungsBrief,
-                berechnungsBlaetter
+                berechnungsBlaetter,
+                darlehensVerfuegung
             );
             verfuegungService.createAndStoreVerfuegungDokument(
                 verfuegung,
@@ -802,7 +819,8 @@ public class VerfuegungPdfService {
 
     private ByteArrayOutputStream createVersendeteVerfuegung(
         final ByteArrayOutputStream verfuegungsbrief,
-        final ByteArrayOutputStream mergedBerechnungsblaetter
+        final ByteArrayOutputStream mergedBerechnungsblaetter,
+        final ByteArrayOutputStream darlehenVerfuegung
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -823,6 +841,14 @@ public class VerfuegungPdfService {
                 )
             ) {
                 merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
+            }
+
+            try (
+                final PdfDocument darlehen = new PdfDocument(
+                    new PdfReader(new ByteArrayInputStream(darlehenVerfuegung.toByteArray()))
+                )
+            ) {
+                merger.merge(darlehen, 1, darlehen.getNumberOfPages());
             }
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to merge PDFs for Versendete Verfügung", e);

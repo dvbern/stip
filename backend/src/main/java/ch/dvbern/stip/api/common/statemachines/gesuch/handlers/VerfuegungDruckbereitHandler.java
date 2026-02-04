@@ -66,9 +66,6 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
                     gesuch,
                     berechnungsresultat
                 );
-                if (stipendien.getBerechnungDarlehen() > 0) {
-                    darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen());
-                }
             }
         }
 
