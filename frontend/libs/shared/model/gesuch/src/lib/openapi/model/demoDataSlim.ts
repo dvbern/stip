@@ -9,11 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GesuchTrancheTyp } from './gesuchTrancheTyp';
 
 export interface DemoDataSlim { 
     id: string;
+    typ: GesuchTrancheTyp;
     testFall: string;
     name: string;
     description: string;
 }
+
+
 

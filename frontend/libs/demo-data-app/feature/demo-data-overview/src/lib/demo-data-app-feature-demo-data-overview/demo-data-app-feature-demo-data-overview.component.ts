@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -61,6 +62,11 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   fallStore = inject(FallStore);
   filterText = new FormControl<string | null>(null);
   selectedFileSig = signal<File | null>(null);
+
+  validateBerechnungSig = input<boolean>(false, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
+    alias: 'validateBerechnung',
+  });
 
   private filterTextChangedSig = toSignal(this.filterText.valueChanges);
 
@@ -124,6 +130,7 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
         if (result) {
           this.demoDataStore.createNewDemoDataImport$({
             fileUpload,
+            ignoreBerechnungErrors: !this.validateBerechnungSig(),
             kommentar: result.kommentar,
             onSuccess: () => {
               this.selectedFileSig.set(null);
