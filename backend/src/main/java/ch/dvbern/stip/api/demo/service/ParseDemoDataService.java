@@ -83,7 +83,7 @@ public class ParseDemoDataService {
         this.evaluator = evaluator;
     }
 
-    public static List<DemoData> parseList(final Path file) {
+    public static List<DemoData> parseList(final Path file, final Boolean ignoreBerechnungErrors) {
         try (XSSFWorkbook workbook = new XSSFWorkbook(file.toFile())) {
             final var sheet = workbook.getSheetAt(0);
             final var rowIterator = sheet.iterator();
@@ -94,13 +94,13 @@ public class ParseDemoDataService {
                 WorkbookEvaluator.registerFunction("DATEDIF", new DemoDataDatedif());
             }
 
-            return new ParseDemoDataService(rowIterator, amountOfCells, evaluator).parseAll();
+            return new ParseDemoDataService(rowIterator, amountOfCells, evaluator).parseAll(ignoreBerechnungErrors);
         } catch (IOException | InvalidFormatException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<DemoData> parseAll() {
+    private List<DemoData> parseAll(final Boolean ignoreBerechnungErrors) {
         skipRows(UNUSED_START_LINES);
         final var demoDataList = prepareInfo();
         final var ausbildungen = prepareAusbildung();
@@ -116,7 +116,7 @@ public class ParseDemoDataService {
         final var geschwisters = prepareGeschwisters();
         final var auszahlungs = prepareAuszahlungs();
         final var darlehens = prepareDarlehens();
-        final var stipendienanspruchs = prepareStipendienanspruchs();
+        final var stipendienanspruchs = prepareStipendienanspruchs(ignoreBerechnungErrors);
 
         for (int i = 0; i < demoDataList.size(); i++) {
             final var demoData = demoDataList.get(i);
@@ -231,8 +231,8 @@ public class ParseDemoDataService {
         updateList(list, "Ort", 2, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitzOrt(ParseDemoDataUtil.parseStringNullable(c)));
         updateList(list, "Email", 1, (c, d) -> d.setEmail(c.getStringCellValue()));
         updateList(list, "Telefonnummer", 1, (c, d) -> d.setTelefonnummer(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(c)));
-        updateList(list, "Alter", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c)));
+        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c))));
+        updateList(list, "Alter.*", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c)));
         updateList(list, "Zivilstand", 1, (c, d) -> d.setZivilstand(ParseDemoEnumUtil.parseZivilstand(c)));
         updateList(list, "Nationalität", 1, (c, d) -> d.setNationalitaet(ParseDemoDataUtil.parseLandIsoCode(c)));
         updateList(list, "Niederlassungsstatus.*", 2, (c, d) -> d.setNiederlassungsstatus(ParseDemoEnumUtil.parseNiederlassungsstatus(c)));
@@ -364,8 +364,8 @@ public class ParseDemoDataService {
         updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c)));
         updateList(list, "Co-Adresse.*", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c)));
         updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c)));
-        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(c)));
-        updateList(list, "Alter", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c)));
+        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c))));
+        updateList(list, "Alter.*", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c)));
         updateList(list, "In Ausbildung", 1, (c, d) -> d.setInAusbildung(ParseDemoDataUtil.parseBooleanNullable(c)));
         updateList(list, "Pensum.*", 2, (c, d) -> d.setPensum(ParseDemoEnumUtil.parseAusbildungsPensum(c)));
         // spotless:on
@@ -395,8 +395,8 @@ public class ParseDemoDataService {
             int index = i;
             // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
             updateList(kinds, "Vorname", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVorname(c.getStringCellValue())));
-            updateList(kinds, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(c))));
-            updateList(kinds, "Alter", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c))));
+            updateList(kinds, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c)))));
+            updateList(kinds, "Alter.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c))));
             updateList(kinds, "Wieviel wohnt.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilPia(ParseDemoDataUtil.parseIntegerNullable(c))));
             updateList(kinds, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAusbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c))));
             updateList(kinds, ".*Unterhaltsbeiträge", 1, (c, o) -> o.get(index).ifPresent(d -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c))));
@@ -534,8 +534,8 @@ public class ParseDemoDataService {
             updateList(elterns, "PLZ", 2, (c, l) -> l.get(i).setIdentischerZivilrechtlicherWohnsitzPLZ(ParseDemoDataUtil.parseStringNullable(c)));
             updateList(elterns, "Ort", 2, (c, l) -> l.get(i).setIdentischerZivilrechtlicherWohnsitzOrt(ParseDemoDataUtil.parseStringNullable(c)));
             updateList(elterns, ".*Wohnkosten", 1, (c, l) -> l.get(i).setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(elterns, "Geburtsdatum", 1, (c, l) -> l.get(i).geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(c)));
-            updateList(elterns, "Alter", 1, (c, l) -> l.get(i).alter(ParseDemoDataUtil.parseIntegerNullable(c)));
+            updateList(elterns, "Geburtsdatum", 1, (c, l) -> l.get(i).geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c))));
+            updateList(elterns, "Alter.*", 1, (c, l) -> l.get(i).alter(ParseDemoDataUtil.parseIntegerNullable(c)));
             updateList(elterns, "Telefonnummer", 1, (c, l) -> l.get(i).setTelefonnummer(ParseDemoDataUtil.parseStringNullable(c)));
             updateList(elterns, ".*Sozialhilfebeiträge.*", 1, (c, l) -> l.get(i).setSozialhilfebeitraege(ParseDemoDataUtil.parseBooleanNullable(c)));
             updateList(elterns, ".*Ausweis B.*", 1, (c, l) -> l.get(i).ausweisbFluechtling(ParseDemoDataUtil.parseBooleanNullable(c)));
@@ -667,8 +667,8 @@ public class ParseDemoDataService {
             int index = i;
             // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
             updateList(geschwisters, "Vorname", 1, (c, o) -> o.get(index).ifPresent(d -> d.vorname(c.getStringCellValue())));
-            updateList(geschwisters, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(c))));
-            updateList(geschwisters, "Alter", 1, (c, o) -> o.get(index).ifPresent(d -> d.alter(ParseDemoDataUtil.parseIntegerNullable(c))));
+            updateList(geschwisters, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c)))));
+            updateList(geschwisters, "Alter.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.alter(ParseDemoDataUtil.parseIntegerNullable(c))));
             updateList(geschwisters, "Wohnsitz bei", 1, (c, o) -> o.get(index).ifPresent(d -> d.wohnsitzBei(ParseDemoEnumUtil.parseWohnsitz(c))));
             updateList(geschwisters, "bei Vater.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c))));
             updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c))));
@@ -728,7 +728,7 @@ public class ParseDemoDataService {
         return darlehens;
     }
 
-    private List<DemoDataStipendienanspruchDto> prepareStipendienanspruchs() {
+    private List<DemoDataStipendienanspruchDto> prepareStipendienanspruchs(final Boolean ignoreBerechnungErrors) {
         final List<DemoDataStipendienanspruchDto> list = new ArrayList<>();
         initList(
             list,
@@ -736,13 +736,20 @@ public class ParseDemoDataService {
             0,
             c -> new DemoDataStipendienanspruchDto().status(ParseDemoEnumUtil.parseVerfuegungstatus(c))
         );
-        // spotless:off
-        updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
-        updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
-        skipRows(1);
-        updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
-        updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
-        // spotless:on
+        try {
+            // spotless:off
+            updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
+            updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
+            skipRows(1);
+            updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
+            updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
+            // spotless:on
+        } catch (Exception e) {
+            if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {
+                return list;
+            }
+            throw e;
+        }
 
         return list;
     }

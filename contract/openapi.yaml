@@ -1367,7 +1367,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DemoDataList'
-          description: Returns the created Ausbildung
+          description: Returns the DemoData list
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -6875,11 +6875,14 @@ components:
     DemoDataImport:
       required:
         - kommentar
+        - ignoreBerechnungErrors
         - fileUpload
       type: object
       properties:
         kommentar:
           type: string
+        ignoreBerechnungErrors:
+          type: boolean
         fileUpload:
           $ref: '#/components/schemas/FileUpload'
     DemoDataError:
@@ -6901,6 +6904,7 @@ components:
     DemoDataSlim:
       required:
         - id
+        - typ
         - testFall
         - name
         - description
@@ -6908,6 +6912,8 @@ components:
       properties:
         id:
           type: string
+        typ:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
         testFall:
           type: string
         name:
@@ -7598,6 +7604,10 @@ components:
               type: integer
             betragDarlehenIst:
               type: integer
+    GesuchTrancheTyp:
+      enum:
+        - AENDERUNG
+        - TRANCHE
     Gesuchstatus:
       enum:
         - ABKLAERUNG_DURCH_RECHSTABTEILUNG
@@ -10021,10 +10031,6 @@ components:
         - AKZEPTIERT
         - ABGELEHNT
         - FEHLENDE_DOKUMENTE
-    GesuchTrancheTyp:
-      enum:
-        - AENDERUNG
-        - TRANCHE
     GesuchTranche:
       required:
         - id

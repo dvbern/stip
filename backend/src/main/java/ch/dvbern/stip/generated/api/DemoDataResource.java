@@ -31,7 +31,7 @@ public interface DemoDataResource {
     @POST
     @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
-    DemoDataListDto createNewDemoDataImport(@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+    DemoDataListDto createNewDemoDataImport(@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "ignoreBerechnungErrors")  Boolean ignoreBerechnungErrors,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
     @GET
     @Produces({ "application/json", "text/plain" })

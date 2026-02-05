@@ -73,7 +73,7 @@ public class ParseDemoDataUtil {
 
     public static Pair<String, String> parseDescription(Cell cell) {
         if (ParseDemoDataUtil.isBlank(cell)) {
-            throw new IllegalStateException("No description provided");
+            throw new BadRequestException("No description provided");
         }
 
         final var fullText = cellToSimpleHtml(cell);
@@ -81,7 +81,7 @@ public class ParseDemoDataUtil {
         final var substringIndex = indexColon > 0 ? indexColon : fullText.indexOf('.');
 
         if (substringIndex == -1) {
-            throw new IllegalStateException("No description with '.' or ':' provided");
+            throw new BadRequestException("No description with '.' or ':' provided");
         }
 
         return Pair.of(fullText.substring(0, substringIndex).trim(), fullText.substring(substringIndex + 1).trim());
@@ -89,7 +89,7 @@ public class ParseDemoDataUtil {
 
     public Boolean parseBoolean(Cell cell) {
         if (isBlank(cell)) {
-            throw new IllegalStateException("No Ja/Nein given");
+            throw new BadRequestException("No Ja/Nein given");
         }
         return cell.getStringCellValue().equals("Ja");
     }
@@ -103,12 +103,12 @@ public class ParseDemoDataUtil {
 
     public int parseInteger(Cell cell) {
         if (isBlank(cell)) {
-            throw new IllegalStateException("No integer given");
+            throw new BadRequestException("No integer given");
         }
         return switch (cell.getCellType()) {
             case NUMERIC -> (int) cell.getNumericCellValue();
             case STRING -> Integer.parseInt(cell.getStringCellValue());
-            default -> throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+            default -> throw new BadRequestException("Unexpected value: " + cell.getCellType());
         };
     }
 
@@ -116,8 +116,10 @@ public class ParseDemoDataUtil {
         if (isBlank(cell)) {
             return null;
         }
-        if (cell.getCellType() == CellType.STRING) {
-            return null;
+        switch (cell.getCellType()) {
+            case STRING, ERROR -> {
+                return null;
+            }
         }
         return parseInteger(cell);
     }
@@ -135,7 +137,7 @@ public class ParseDemoDataUtil {
                 yield (int) value;
             }
             case STRING -> Integer.parseInt(cell.getStringCellValue().replace('%', ' ').trim());
-            default -> throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+            default -> throw new BadRequestException("Unexpected value: " + cell.getCellType());
         };
     }
 
@@ -166,12 +168,12 @@ public class ParseDemoDataUtil {
 
     public String parseString(Cell cell) {
         if (isBlank(cell)) {
-            throw new IllegalStateException("No string given");
+            throw new BadRequestException("No string given");
         }
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue();
             case NUMERIC -> String.valueOf(cell.getNumericCellValue());
-            default -> throw new IllegalStateException("Unexpected value: " + cell.getCellType());
+            default -> throw new BadRequestException("Unexpected value: " + cell.getCellType());
         };
     }
 
@@ -188,7 +190,7 @@ public class ParseDemoDataUtil {
         }
         final var landIsoCode = cell.getStringCellValue();
         if (landIsoCode.length() != 2) {
-            throw new IllegalStateException("Invalid landIsoCode: " + landIsoCode);
+            throw new BadRequestException("Invalid landIsoCode: " + landIsoCode);
         }
         return landIsoCode;
     }
@@ -218,7 +220,7 @@ public class ParseDemoDataUtil {
         final var value = cell.getStringCellValue();
         final var matches = Pattern.compile(pattern, Pattern.DOTALL).matcher(value).matches();
         if (!matches) {
-            throw new IllegalStateException(
+            throw new BadRequestException(
                 "Current cell did not match expected definition. Expected: \"%s\", got: \"%s\" [%s]"
                     .formatted(pattern, value, cell.getAddress().formatAsString())
             );
@@ -238,9 +240,12 @@ public class ParseDemoDataUtil {
         checkCellContains(currentRow, pattern, column);
         for (int i = firstValueColumn; i < amountOfEntries; i++) {
             final var cell = currentRow.getCell(i);
-            tryParseData(() -> {
-                listIterator.add(createValue.apply(cell));
-            }, cell);
+            tryParseData(
+                () -> {
+                    listIterator.add(createValue.apply(cell));
+                },
+                cell
+            );
         }
     }
 
@@ -258,12 +263,15 @@ public class ParseDemoDataUtil {
         for (int i = firstValueColumn; i < amountOfEntries; i++) {
             final var cell = currentRow.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
             if (!listIterator.hasNext()) {
-                throw new IllegalStateException("List hast not enough entries");
+                throw new BadRequestException("List hast not enough entries");
             }
             final var listItem = listIterator.next();
-            tryParseData(() -> {
-                updateValue.accept(cell, listItem);
-            }, cell);
+            tryParseData(
+                () -> {
+                    updateValue.accept(cell, listItem);
+                },
+                cell
+            );
         }
     }
 
@@ -315,8 +323,9 @@ public class ParseDemoDataUtil {
             int length = rich.getLengthOfFormattingRun(i);
 
             // If an empty formatting cell is found
-            if (length <= 0)
+            if (length <= 0) {
                 continue;
+            }
 
             final var text = full.substring(start, start + length);
             final var font = rich.getFontOfFormattingRun(i);
@@ -330,21 +339,27 @@ public class ParseDemoDataUtil {
             final var hasBold = font.getBold();
             final var hasItalic = font.getItalic();
 
-            if (hasUnderline)
+            if (hasUnderline) {
                 taggedValue.append("<u>");
-            if (hasBold)
+            }
+            if (hasBold) {
                 taggedValue.append("<b>");
-            if (hasItalic)
+            }
+            if (hasItalic) {
                 taggedValue.append("<i>");
+            }
 
             taggedValue.append(escape(text));
 
-            if (hasItalic)
+            if (hasItalic) {
                 taggedValue.append("</i>");
-            if (hasBold)
+            }
+            if (hasBold) {
                 taggedValue.append("</b>");
-            if (hasUnderline)
+            }
+            if (hasUnderline) {
                 taggedValue.append("</u>");
+            }
         }
 
         return taggedValue.toString();

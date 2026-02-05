@@ -19,15 +19,16 @@ package ch.dvbern.stip.api.demo.type;
 
 import java.time.temporal.ChronoUnit;
 
+import jakarta.ws.rs.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.LazyRefEval;
 import org.apache.poi.ss.formula.eval.BlankEval;
-import org.apache.poi.ss.formula.eval.ErrorEval;
 import org.apache.poi.ss.formula.eval.NumberEval;
 import org.apache.poi.ss.formula.eval.StringEval;
 import org.apache.poi.ss.formula.eval.ValueEval;
 import org.apache.poi.ss.formula.functions.Function;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.util.CellAddress;
 
 /**
  * Apache POI doesn't have an implementation for DATEDIF
@@ -36,42 +37,62 @@ import org.apache.poi.ss.usermodel.DateUtil;
  */
 @Slf4j
 public class DemoDataDatedif implements Function {
+    private static final String DATEDIF_ERROR =
+        "Current DATEDIF implementation only works with DATEDIF(CELL_REF->DATE, DATE, \"Y\")";
+
     @Override
     public ValueEval evaluate(ValueEval[] args, int srcRowIndex, int srcColumnIndex) {
         if (args.length != 3) {
-            LOG.error("This DATEDIF implementation only works with DATEDIF(CELL_REF->DATE,DATE,\"Y\")");
-            return ErrorEval.FUNCTION_NOT_IMPLEMENTED;
+            throw new BadRequestException(DATEDIF_ERROR);
         }
 
-        final var date1RefRaw = args[0];
+        final var date1Raw = args[0];
         final var date2Raw = args[1];
         final var datePartRaw = args[2];
 
         if (!(datePartRaw instanceof StringEval datePart) || !datePart.getStringValue().equalsIgnoreCase("y")) {
-            LOG.error("This DATEDIF implementation only works with DATEDIF(CELL_REF->DATE,DATE,\"Y\")");
-            return ErrorEval.FUNCTION_NOT_IMPLEMENTED;
-        }
-        if (!(date2Raw instanceof NumberEval date2Number)) {
-            if (date2Raw instanceof BlankEval) {
-                return NumberEval.ZERO;
-            }
-            LOG.error("This DATEDIF implementation only works with DATEDIF(CELL_REF->DATE,DATE,\"Y\")");
-            return ErrorEval.FUNCTION_NOT_IMPLEMENTED;
-        }
-        if (!(date1RefRaw instanceof LazyRefEval date1Ref)) {
-            return BlankEval.instance;
-        }
-        if (!(date1Ref.getInnerValueEvalForFirstSheet() instanceof NumberEval date1Number)) {
-            if (date1Ref.getInnerValueEvalForFirstSheet() instanceof BlankEval) {
-                return NumberEval.ZERO;
-            }
-            LOG.error("This DATEDIF implementation only works with DATEDIF(CELL_REF->DATE,DATE,\"Y\")");
-            return ErrorEval.FUNCTION_NOT_IMPLEMENTED;
+            throw new BadRequestException(
+                "%s\nCell (unknown sheet) [%s]".formatted(DATEDIF_ERROR, new CellAddress(srcRowIndex, srcColumnIndex))
+            );
         }
 
-        final var date1 = DateUtil.getLocalDateTime(date1Number.getNumberValue()).toLocalDate();
-        final var date2 = DateUtil.getLocalDateTime(date2Number.getNumberValue()).toLocalDate();
+        try {
+            final var date1 = DateUtil.getLocalDateTime(tryGetNumberEvalOrRef(date1Raw).getNumberValue()).toLocalDate();
+            final var date2 = DateUtil.getLocalDateTime(tryGetNumberEvalOrRef(date2Raw).getNumberValue()).toLocalDate();
 
-        return new NumberEval(ChronoUnit.YEARS.between(date1, date2));
+            return new NumberEval(ChronoUnit.YEARS.between(date1, date2));
+        } catch (BadRequestException e) {
+            throw new BadRequestException(
+                "%s\n%sCell (unknown sheet) [%s]"
+                    .formatted(e.getMessage(), new CellAddress(srcRowIndex, srcColumnIndex))
+            );
+        }
+    }
+
+    private NumberEval tryGetNumberEval(ValueEval eval) {
+        if (eval instanceof NumberEval numberEval) {
+            return numberEval;
+        }
+        if (eval instanceof BlankEval) {
+            return NumberEval.ZERO;
+        }
+        if (eval instanceof StringEval stringValue && stringValue.getStringValue().trim().isEmpty()) {
+            return NumberEval.ZERO;
+        }
+        throw new BadRequestException(DATEDIF_ERROR);
+    }
+
+    private NumberEval tryGetNumberEvalOrRef(ValueEval eval) {
+        if (eval instanceof LazyRefEval lazyRef) {
+            try {
+                return tryGetNumberEval(lazyRef.getInnerValueEvalForFirstSheet());
+            } catch (BadRequestException e) {
+                throw new BadRequestException(
+                    "%s\nRef (unknown sheet) [%s]"
+                        .formatted(DATEDIF_ERROR, new CellAddress(lazyRef.getRow(), lazyRef.getColumn()))
+                );
+            }
+        }
+        return tryGetNumberEval(eval);
     }
 }

@@ -21,7 +21,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DemoDataList'
-          description: Returns the created Ausbildung
+          description: Returns the DemoData list
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -167,11 +167,14 @@ components:
     DemoDataImport:
       required:
         - kommentar
+        - ignoreBerechnungErrors
         - fileUpload
       type: object
       properties:
         kommentar:
           type: string
+        ignoreBerechnungErrors:
+          type: boolean
         fileUpload:
           $ref: './components/common.yaml#/FileUpload'
     DemoDataError:
@@ -193,6 +196,7 @@ components:
     DemoDataSlim:
       required:
         - id
+        - typ
         - testFall
         - name
         - description
@@ -200,6 +204,8 @@ components:
       properties:
         id:
           type: string
+        typ:
+          $ref: './components/common.yaml#/GesuchTrancheTyp'
         testFall:
           type: string
         name:

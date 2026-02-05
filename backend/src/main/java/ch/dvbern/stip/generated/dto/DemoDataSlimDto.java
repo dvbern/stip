@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DemoDataSlimDto  implements Serializable {
   private @Valid String id;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String testFall;
   private @Valid String name;
   private @Valid String description;
@@ -41,6 +42,25 @@ public class DemoDataSlimDto  implements Serializable {
   @JsonProperty("id")
   public void setId(String id) {
     this.id = id;
+  }
+
+  /**
+   **/
+  public DemoDataSlimDto typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
+    this.typ = typ;
+    return this;
+  }
+
+  
+  @JsonProperty("typ")
+  @NotNull
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getTyp() {
+    return typ;
+  }
+
+  @JsonProperty("typ")
+  public void setTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
+    this.typ = typ;
   }
 
   /**
@@ -111,6 +131,7 @@ public class DemoDataSlimDto  implements Serializable {
     }
     DemoDataSlimDto demoDataSlim = (DemoDataSlimDto) o;
     return Objects.equals(this.id, demoDataSlim.id) &&
+        Objects.equals(this.typ, demoDataSlim.typ) &&
         Objects.equals(this.testFall, demoDataSlim.testFall) &&
         Objects.equals(this.name, demoDataSlim.name) &&
         Objects.equals(this.description, demoDataSlim.description);
@@ -118,7 +139,7 @@ public class DemoDataSlimDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, testFall, name, description);
+    return Objects.hash(id, typ, testFall, name, description);
   }
 
   @Override
@@ -127,6 +148,7 @@ public class DemoDataSlimDto  implements Serializable {
     sb.append("class DemoDataSlimDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

@@ -633,19 +633,27 @@ public class GenerateDemoDataService {
         }
 
         final var total = berechnungsresultat.getBerechnungTotal();
+        final var stipendienSoll = Objects.requireNonNullElse(
+            stipendienanspruchDto.getBetragStipendienSoll(),
+            stipendienanspruchDto.getBetragStipendienIst()
+        );
+        final var darlehenSoll = Objects.requireNonNullElse(
+            stipendienanspruchDto.getBetragDarlehenSoll(),
+            stipendienanspruchDto.getBetragDarlehenIst()
+        );
 
         return new ApplyDemoDataResponseStipendienanspruchDto()
             .success(
                 Objects.equals(
-                    stipendienanspruchDto.getBetragStipendienSoll(),
+                    stipendienSoll,
                     berechnungsresultat.getBerechnungStipendium()
                 )
             )
             .statusSoll(stipendienanspruchDto.getStatus())
             .statusIst(total > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH)
-            .betragStipendienSoll(stipendienanspruchDto.getBetragStipendienSoll())
+            .betragStipendienSoll(stipendienSoll)
             .betragStipendienIst(berechnungsresultat.getBerechnungStipendium())
-            .betragDarlehenSoll(stipendienanspruchDto.getBetragDarlehenSoll())
+            .betragDarlehenSoll(darlehenSoll)
             .betragDarlehenIst(berechnungsresultat.getBerechnungDarlehen());
     }
 
