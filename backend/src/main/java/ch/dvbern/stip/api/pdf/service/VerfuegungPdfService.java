@@ -35,9 +35,7 @@ import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.util.LocaleUtil;
-import ch.dvbern.stip.api.darlehen.repo.GesetzlichDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
-import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -85,8 +83,6 @@ public class VerfuegungPdfService {
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
     private final BerechnungsblattService berechnungsblattService;
-    private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
-    private final DokumentDownloadService dokumentDownloadService;
     private final DarlehenService darlehenService;
 
     private ByteArrayOutputStream createNegativeVerfuegungPdf(

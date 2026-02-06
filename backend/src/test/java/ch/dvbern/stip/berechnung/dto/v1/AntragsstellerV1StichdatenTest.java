@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
@@ -54,6 +55,7 @@ class AntragsstellerV1StichdatenTest {
             new Abschluss().setZusatzfrage(AbschlussZusatzfrage.BERUFSBEZEICHNUNG)
                 .setAskForBerufsmaturitaet(true)
                 .setBerufsbefaehigenderAbschluss(true)
+                .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B)
         );
         lebenslaufitem.setBis(ausbildung.getAusbildungBegin().minusMonths(1));
         lebenslaufitem.setVon(ausbildung.getAusbildungBegin().minusYears(1));

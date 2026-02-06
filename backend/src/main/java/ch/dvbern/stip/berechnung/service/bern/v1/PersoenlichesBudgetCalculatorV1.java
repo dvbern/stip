@@ -80,6 +80,22 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
         total = budgetTranche;
 
+        var stipendium = roundHalfUp(total);
+        var darlehen = 0;
+
+        if (antragssteller.getMonateTertiaerstufe() > 36) {
+            var darlehenUngekuerzt = BigDecimal.valueOf(stipendium)
+                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .intValue();
+            var remainingQuota = Math.max(
+                0,
+                50000 - antragssteller.getBisherigeDarlehen()
+            );
+            darlehen = Math.max(darlehenUngekuerzt, -remainingQuota);
+            stipendium -= darlehenUngekuerzt;
+        }
+
         return new PersoenlichesBudgetresultatDto()
             .vorname(antragssteller.getVorname())
             .nachname(antragssteller.getNachname())
@@ -92,8 +108,8 @@ public class PersoenlichesBudgetCalculatorV1 {
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
             .budgetTranche(roundHalfUp(budgetTranche))
             .anzahlMonate(anzahlMonate)
-            .gesetzlichesDarlehen(0) // TODO KSTIP-2584: will be definable once gesetztliche Darlehen are defined
-            .gesetzlichesDarlehenStipendium(0) // TODO KSTIP-2584: same as above
+            .gesetzlichesDarlehen(darlehen)
+            .gesetzlichesDarlehenStipendium(stipendium)
             .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
             .einnahmen(einnahmen)
             .kosten(kosten)

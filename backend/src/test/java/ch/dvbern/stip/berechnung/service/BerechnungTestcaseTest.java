@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -63,10 +64,13 @@ public class BerechnungTestcaseTest {
     SteuerdatenMapper steuerdatenMapper;
     @InjectMock
     LandService landService;
+    @InjectMock
+    DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
 
     @BeforeEach
     void setup() {
         Mockito.when(landService.requireLandById(Mockito.any())).thenReturn(new Land());
+        Mockito.when(darlehenBuchhaltungEntryRepository.getByFallId(Mockito.any())).thenReturn(List.of());
     }
 
     @ParameterizedTest

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.darlehen.repo.GesetzlichDarlehenRepository;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
@@ -50,7 +50,7 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     BuchhaltungService buchhaltungService,
     VerfuegungService verfuegungService,
     BerechnungsblattService berechnungsblattService,
-    GesetzlichDarlehenRepository gesetzlichDarlehenRepository
+    DarlehenService darlehenService
     ) {
         super(
             stipDecisionTextRepository,
@@ -58,7 +58,7 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
             buchhaltungService,
             verfuegungService,
             berechnungsblattService,
-            gesetzlichDarlehenRepository
+            darlehenService
         );
     }
 

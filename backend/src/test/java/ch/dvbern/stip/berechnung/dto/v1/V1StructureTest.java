@@ -148,6 +148,8 @@ class V1StructureTest {
                 "lehre": false,
                 "eigenerHaushalt": true,
                 "halbierungElternbeitrag": false,
+                "monateTertiaerstufe": 72,
+                "bisherigeDarlehen": 0,
                 "einkommens": [
                   { "vorname": "a", "value": 6916 },
                   { "vorname": "a", "value": 12916 }
