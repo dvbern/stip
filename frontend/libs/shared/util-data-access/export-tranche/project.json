@@ -1,0 +1,16 @@
+{
+  "name": "shared-util-data-access-export-tranche",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/util-data-access/export-tranche/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:util-data-access", "scope:shared"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/util-data-access/export-tranche/tsconfig.lib.json"
+      }
+    }
+  }
+}
