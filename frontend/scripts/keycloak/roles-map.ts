@@ -108,6 +108,7 @@ export const PERMISSION_ROLE_LIST = [
     'SEND_EMAIL',
     'BUCHHALTUNG_ENTRY_READ',
     'AUSZAHLUNG_READ',
+    'FREIWILLIG_DARLEHEN_READ',
   ],
   [['Super-User'], 'GESUCH_DELETE_ADMIN'],
   [

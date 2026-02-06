@@ -61,7 +61,8 @@ public class SbDashboardQueryBuilder {
             case ALLE_PENDENTE_GESUCHE -> gesuchRepository.getFindAllePendenteQuery();
             case MEINE_PENDENTE_GESUCHE -> gesuchRepository.getFindAlleMeinePendenteQuery(meId);
             case ALLE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleJurBearbeitungQuery();
-            case MEINE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleMeineJurBearbeitungQuery(meId);
+            case ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG -> gesuchRepository
+                .getFindAlleAbklaerungDurchRechstabteilungQuery();
             case MEINE_GESUCHE -> gesuchRepository.getFindAlleMeineQuery(meId);
             case ALLE_GESUCHE -> gesuchRepository.getFindAlleQuery();
             case ALLE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleWithDruckbareVerfuegung();

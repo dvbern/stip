@@ -79,13 +79,17 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         final var query = getFindAlleQuery();
         return addStatusFilter(
             query,
-            Gesuchstatus.JURISTISCHE_ABKLAERUNG,
-            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+            Gesuchstatus.JURISTISCHE_ABKLAERUNG
         );
     }
 
-    public JPAQuery<Gesuch> getFindAlleMeineJurBearbeitungQuery(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAlleJurBearbeitungQuery());
+    public JPAQuery<Gesuch> getFindAlleAbklaerungDurchRechstabteilungQuery() {
+        // TODO KSTIP-1587/ 1590: Implement Status Filter?
+        final var query = getFindAlleQuery();
+        return addStatusFilter(
+            query,
+            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+        );
     }
 
     public JPAQuery<Gesuch> getFindAllePendenteQuery() {

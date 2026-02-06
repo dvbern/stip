@@ -66,7 +66,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     public void canGetDarlehenSb() {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
-        if (!isSachbearbeiterOrFreigabestelle(benutzer)) {
+        if (!isSbOrFreigabestelleOrJurist(benutzer)) {
             forbidden();
         }
     }
@@ -180,7 +180,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
                 freiwilligDarlehen.getFall(),
                 benutzer,
                 sozialdienstService
-            ) && !isSachbearbeiterOrFreigabestelle(benutzer)
+            ) && !isSbOrFreigabestelleOrJurist(benutzer)
         ) {
             forbidden();
         }
